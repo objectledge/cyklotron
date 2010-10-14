@@ -24,8 +24,6 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.encodings.HTMLEntityDecoder;
-import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.html.HTMLException;
 import org.objectledge.html.HTMLService;
 import org.objectledge.parameters.Parameters;
@@ -40,6 +38,7 @@ import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.DirectoryResourceImpl;
@@ -134,11 +133,6 @@ public class ProposedDocumentData
     // validation
     private String validationFailure;
 
-    // helper objects
-    private static final HTMLEntityEncoder ENCODER = new HTMLEntityEncoder();
-
-    private static final HTMLEntityDecoder DECODER = new HTMLEntityDecoder();
-
     private final DateFormat format = DateFormat.getDateTimeInstance();
 
     // origin (node where ProposeDocument screen is embedded)
@@ -178,22 +172,22 @@ public class ProposedDocumentData
     public void fromParameters(Parameters parameters, CoralSession coralSession)
         throws EntityDoesNotExistException
     {
-        name = stripTags(dec(parameters.get("name", "")));
-        title = stripTags(dec(parameters.get("title", "")));
-        docAbstract = stripTags(dec(parameters.get("abstract", "")));
+        name = stripTags(DocumentMetadataHelper.dec(parameters.get("name", "")));
+        title = stripTags(DocumentMetadataHelper.dec(parameters.get("title", "")));
+        docAbstract = stripTags(DocumentMetadataHelper.dec(parameters.get("abstract", "")));
         content = parameters.get("content", "");
-        eventPlace = stripTags(dec(parameters.get("event_place", "")));
-        eventProvince = stripTags(dec(parameters.get("event_province", "")));
-        eventPostCode = stripTags(dec(parameters.get("event_postCode", "")));
-        eventCity = stripTags(dec(parameters.get("event_city", "")));
-        eventStreet = stripTags(dec(parameters.get("event_street", "")));
+        eventPlace = stripTags(DocumentMetadataHelper.dec(parameters.get("event_place", "")));
+        eventProvince = stripTags(DocumentMetadataHelper.dec(parameters.get("event_province", "")));
+        eventPostCode = stripTags(DocumentMetadataHelper.dec(parameters.get("event_postCode", "")));
+        eventCity = stripTags(DocumentMetadataHelper.dec(parameters.get("event_city", "")));
+        eventStreet = stripTags(DocumentMetadataHelper.dec(parameters.get("event_street", "")));
         organizations = OrganizationData.fromParameters(parameters);
-        sourceName = stripTags(dec(parameters.get("source_name", "")));
-        sourceUrl = stripTags(dec(parameters.get("source_url", "")));
-        proposerCredentials = stripTags(dec(parameters.get("proposer_credentials", "")));
-        proposerEmail = stripTags(dec(parameters.get("proposer_email", "")));
-        description = stripTags(dec(parameters.get("description", "")));
-        editorialNote = stripTags(dec(parameters.get("editorial_note", "")));
+        sourceName = stripTags(DocumentMetadataHelper.dec(parameters.get("source_name", "")));
+        sourceUrl = stripTags(DocumentMetadataHelper.dec(parameters.get("source_url", "")));
+        proposerCredentials = stripTags(DocumentMetadataHelper.dec(parameters.get("proposer_credentials", "")));
+        proposerEmail = stripTags(DocumentMetadataHelper.dec(parameters.get("proposer_email", "")));
+        description = stripTags(DocumentMetadataHelper.dec(parameters.get("description", "")));
+        editorialNote = stripTags(DocumentMetadataHelper.dec(parameters.get("editorial_note", "")));
 
         validityStart = getDate(parameters, "validity_start");
         validityEnd = getDate(parameters, "validity_end");
@@ -222,7 +216,7 @@ public class ProposedDocumentData
             attachmentDescriptions = new ArrayList<String>(attachmentsMaxCount);
             for(int i = 1; i <= attachmentsMaxCount; i++)
             {
-                attachmentDescriptions.add(stripTags(dec(parameters.get("attachment_description_"
+                attachmentDescriptions.add(stripTags(DocumentMetadataHelper.dec(parameters.get("attachment_description_"
                     + i, ""))));
             }
             attachments = new ArrayList<Resource>(attachmentsMaxCount);
@@ -247,21 +241,21 @@ public class ProposedDocumentData
      */
     public void toTemplatingContext(TemplatingContext templatingContext)
     {
-        templatingContext.put("name", enc(name));
-        templatingContext.put("title", enc(title));
-        templatingContext.put("abstract", enc(docAbstract));
-        templatingContext.put("content", enc(content));
-        templatingContext.put("event_place", enc(eventPlace));
-        templatingContext.put("event_province", enc(eventProvince));
-        templatingContext.put("event_postCode", enc(eventPostCode));
-        templatingContext.put("event_city", enc(eventCity));
-        templatingContext.put("event_street", enc(eventStreet));
+        templatingContext.put("name", DocumentMetadataHelper.enc(name));
+        templatingContext.put("title", DocumentMetadataHelper.enc(title));
+        templatingContext.put("abstract", DocumentMetadataHelper.enc(docAbstract));
+        templatingContext.put("content", DocumentMetadataHelper.enc(content));
+        templatingContext.put("event_place", DocumentMetadataHelper.enc(eventPlace));
+        templatingContext.put("event_province", DocumentMetadataHelper.enc(eventProvince));
+        templatingContext.put("event_postCode", DocumentMetadataHelper.enc(eventPostCode));
+        templatingContext.put("event_city", DocumentMetadataHelper.enc(eventCity));
+        templatingContext.put("event_street", DocumentMetadataHelper.enc(eventStreet));
         OrganizationData.toTemplatingContext(organizations, templatingContext);
-        templatingContext.put("source_name", enc(sourceName));
-        templatingContext.put("source_url", enc(sourceUrl));
-        templatingContext.put("proposer_credentials", enc(proposerCredentials));
-        templatingContext.put("proposer_email", enc(proposerEmail));
-        templatingContext.put("description", enc(description));
+        templatingContext.put("source_name", DocumentMetadataHelper.enc(sourceName));
+        templatingContext.put("source_url", DocumentMetadataHelper.enc(sourceUrl));
+        templatingContext.put("proposer_credentials", DocumentMetadataHelper.enc(proposerCredentials));
+        templatingContext.put("proposer_email", DocumentMetadataHelper.enc(proposerEmail));
+        templatingContext.put("description", DocumentMetadataHelper.enc(description));
         setDate(templatingContext, "validity_start", validityStart);
         setDate(templatingContext, "validity_end", validityEnd);
         setDate(templatingContext, "event_start", eventStart);
@@ -282,9 +276,9 @@ public class ProposedDocumentData
             {
                 attachmentDescriptions.add("");
             }
-            templatingContext.put("attachment_descriptions", enc(attachmentDescriptions));
+            templatingContext.put("attachment_descriptions", DocumentMetadataHelper.enc(attachmentDescriptions));
         }
-        templatingContext.put("editorial_note", enc(editorialNote));
+        templatingContext.put("editorial_note", DocumentMetadataHelper.enc(editorialNote));
         templatingContext.put("add_document_visual_editor", addDocumentVisualEditor);
     }
 
@@ -349,7 +343,7 @@ public class ProposedDocumentData
     public void toNode(DocumentNodeResource node)
     {
         // set attributes to new node
-        node.setDescription(enc(description));
+        node.setDescription(DocumentMetadataHelper.enc(description));
         if(addDocumentVisualEditor)
         {
             node.setContent(content);
@@ -358,12 +352,12 @@ public class ProposedDocumentData
         {
             node.setContent(makePara(stripTags(content)));
         }
-        node.setAbstract(enc(docAbstract));
+        node.setAbstract(DocumentMetadataHelper.enc(docAbstract));
         node.setValidityStart(validityStart);
         node.setValidityEnd(validityEnd);
         node.setEventStart(eventStart);
         node.setEventEnd(eventEnd);
-        node.setEventPlace(enc(eventPlace));
+        node.setEventPlace(DocumentMetadataHelper.enc(eventPlace));
         Document doc = doc(getMetaElm());
         node.setMeta(dom4jToText(doc));
         node.setOrganizationIds(OrganizationData.getOrganizationIds(organizations));
@@ -371,11 +365,11 @@ public class ProposedDocumentData
 
     private Element getMetaElm()
     {
-        return elm("meta", elm("authors", elm("author", elm("name", enc(proposerCredentials)), elm(
-            "e-mail", enc(proposerEmail)))), elm("sources", elm("source", elm("name",
-            enc(sourceName)), elm("url", enc(sourceUrl)))), elm("editor"), elm("event", elm(
-            "address", elm("street", enc(eventStreet)), elm("postcode", enc(eventPostCode)), elm(
-                "city", enc(eventCity)), elm("province", enc(eventProvince)))), OrganizationData
+        return elm("meta", elm("authors", elm("author", elm("name", DocumentMetadataHelper.enc(proposerCredentials)), elm(
+            "e-mail", DocumentMetadataHelper.enc(proposerEmail)))), elm("sources", elm("source", elm("name",
+            DocumentMetadataHelper.enc(sourceName)), elm("url", DocumentMetadataHelper.enc(sourceUrl)))), elm("editor"), elm("event", elm(
+            "address", elm("street", DocumentMetadataHelper.enc(eventStreet)), elm("postcode", DocumentMetadataHelper.enc(eventPostCode)), elm(
+                "city", DocumentMetadataHelper.enc(eventCity)), elm("province", DocumentMetadataHelper.enc(eventProvince)))), OrganizationData
             .toMeta(organizations));
     }
 
@@ -384,29 +378,29 @@ public class ProposedDocumentData
         try
         {
             Document proposalDom = textToDom4j(node.getProposedContent());
-            name = dec(selectFirstText(proposalDom, "/document/name"));
-            title = dec(selectFirstText(proposalDom, "/document/title"));
-            docAbstract = dec(selectFirstText(proposalDom, "/document/abstract"));
+            name = DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/name"));
+            title = DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/title"));
+            docAbstract = DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/abstract"));
             // DECODE HTML
-            content = dec(selectFirstText(proposalDom, "/document/content"));
-            description = dec(selectFirstText(proposalDom, "/document/description"));
-            validityStart = text2date(dec(selectFirstText(proposalDom, "/document/validity/start")));
-            validityEnd = text2date(dec(selectFirstText(proposalDom, "/document/validity/end")));
-            eventPlace = dec(selectFirstText(proposalDom, "/document/event/place"));
-            eventProvince = dec(selectFirstText(proposalDom,
+            content = DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/content"));
+            description = DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/description"));
+            validityStart = text2date(DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/validity/start")));
+            validityEnd = text2date(DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/validity/end")));
+            eventPlace = DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/event/place"));
+            eventProvince = DocumentMetadataHelper.dec(selectFirstText(proposalDom,
                 "/document/meta/event/address/province"));
-            eventPostCode = dec(selectFirstText(proposalDom,
+            eventPostCode = DocumentMetadataHelper.dec(selectFirstText(proposalDom,
                 "/document/meta/event/address/postcode"));
-            eventCity = dec(selectFirstText(proposalDom, "/document/meta/event/address/city"));
-            eventStreet = dec(selectFirstText(proposalDom, "/document/meta/event/address/street"));
-            eventStart = text2date(dec(selectFirstText(proposalDom, "/document/event/start")));
-            eventEnd = text2date(dec(selectFirstText(proposalDom, "/document/event/end")));
+            eventCity = DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/meta/event/address/city"));
+            eventStreet = DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/meta/event/address/street"));
+            eventStart = text2date(DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/event/start")));
+            eventEnd = text2date(DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/event/end")));
             organizations = OrganizationData.fromMeta(proposalDom, "/document/meta/organizations");
-            sourceName = dec(selectFirstText(proposalDom, "/document/meta/sources/source/name"));
-            sourceUrl = dec(selectFirstText(proposalDom, "/document/meta/sources/source/url"));
-            proposerCredentials = dec(selectFirstText(proposalDom,
+            sourceName = DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/meta/sources/source/name"));
+            sourceUrl = DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/meta/sources/source/url"));
+            proposerCredentials = DocumentMetadataHelper.dec(selectFirstText(proposalDom,
                 "/document/meta/authors/author/name"));
-            proposerEmail = dec(selectFirstText(proposalDom, "/document/meta/authors/author/e-mail"));
+            proposerEmail = DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/meta/authors/author/e-mail"));
             selectedCategories = new HashSet<CategoryResource>();
             for(Element categoryNode : (List<Element>)proposalDom
                 .selectNodes("/document/categories/category/ref"))
@@ -432,7 +426,7 @@ public class ProposedDocumentData
                 try
                 {
                     attachments.add(FileResourceImpl.getFileResource(coralSession, fileId));
-                    attachmentDescriptions.add(dec(attachmentNode.elementText("description")));
+                    attachmentDescriptions.add(DocumentMetadataHelper.dec(attachmentNode.elementText("description")));
                 }
                 catch(EntityDoesNotExistException e)
                 {
@@ -443,7 +437,7 @@ public class ProposedDocumentData
             removalRequested = selectFirstText(proposalDom, "/document/request").equals("remove");
             long originId = Long.parseLong(selectFirstText(proposalDom, "/document/origin/ref"));
             origin = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, originId);
-            editorialNote = dec(selectFirstText(proposalDom, "/document/editorial/note"));
+            editorialNote = DocumentMetadataHelper.dec(selectFirstText(proposalDom, "/document/editorial/note"));
         }
         catch(HTMLException e)
         {
@@ -474,12 +468,12 @@ public class ProposedDocumentData
             }
         }
         Document doc = doc(elm("document", elm("request", removalRequested ? "remove" : "update"),
-            elm("origin", elm("ref", origin.getIdString())), elm("name", enc(name)), elm("title",
-                enc(title)), elm("abstract", enc(docAbstract)), elm("content", cdata(content)),
-            elm("description", enc(description)),
-            elm("editorial", elm("note", enc(editorialNote))), elm("validity", elm("start",
+            elm("origin", elm("ref", origin.getIdString())), elm("name", DocumentMetadataHelper.enc(name)), elm("title",
+                DocumentMetadataHelper.enc(title)), elm("abstract", DocumentMetadataHelper.enc(docAbstract)), elm("content", cdata(content)),
+            elm("description", DocumentMetadataHelper.enc(description)),
+            elm("editorial", elm("note", DocumentMetadataHelper.enc(editorialNote))), elm("validity", elm("start",
                 date2text(validityStart)), elm("end", date2text(validityEnd))), elm("event", elm(
-                "place", enc(eventPlace)), elm("start", date2text(eventStart)), elm("end",
+                "place", DocumentMetadataHelper.enc(eventPlace)), elm("start", date2text(eventStart)), elm("end",
                 date2text(eventEnd))), getMetaElm(), categoriesElm, attachmentsElm));
         node.setProposedContent(dom4jToText(doc));
     }
@@ -1041,26 +1035,6 @@ public class ProposedDocumentData
         content = "<p>" + content + "</p>";
         content = content.replaceAll("<p>\\s*</p>", "");
         return content;
-    }
-
-    public static String enc(String s)
-    {
-        return ENCODER.encodeAttribute(s, "UTF-16");
-    }
-
-    public static List<String> enc(List<String> l)
-    {
-        List<String> result = new ArrayList<String>(l.size());
-        for(String s : l)
-        {
-            result.add(enc(s));
-        }
-        return l;
-    }
-
-    public static String dec(String s)
-    {
-        return DECODER.decode(s);
     }
 
     public static String getAttachmentName(String fileName)

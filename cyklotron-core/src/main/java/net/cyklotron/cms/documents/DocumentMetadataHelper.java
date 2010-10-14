@@ -2,17 +2,22 @@ package net.cyklotron.cms.documents;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.dom4j.Attribute;
 import org.dom4j.CDATA;
 import org.dom4j.Document;
 import org.dom4j.DocumentFactory;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.dom4j.Text;
 import org.dom4j.dom.DOMDocument;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import org.objectledge.encodings.HTMLEntityDecoder;
+import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.html.HTMLException;
 
 /**
@@ -24,6 +29,11 @@ public class DocumentMetadataHelper
 {
     /** The singleton instance of Dom4j DocumentFactory */
     private final static DocumentFactory FACTORY = DocumentFactory.getInstance();
+
+    // helper objects
+    private static final HTMLEntityEncoder ENCODER = new HTMLEntityEncoder();
+
+    private static final HTMLEntityDecoder DECODER = new HTMLEntityDecoder();
 
     /**
      * Parse metadata into Dom4j document.
@@ -169,6 +179,24 @@ public class DocumentMetadataHelper
     }
     
     /**
+     * Creates a Dom4J Text node with specified text contents.
+     * 
+     * @param text the text content of the Text node.
+     * @return an Text node.
+     */
+    public static Text text(String text)
+    {
+        return FACTORY.createText(text);
+    }
+    
+    public static Element attr(Element elm, String name, String value)
+    {
+        Attribute attr = FACTORY.createAttribute(elm, FACTORY.createQName(name), value);
+        elm.add(attr);
+        return elm;
+    }
+    
+    /**
      * Creates a Dom4j Element with specified name and contents.
      *  
      * @param name of the element.
@@ -194,5 +222,43 @@ public class DocumentMetadataHelper
     public static Document doc(Element rootElement)
     {
         return FACTORY.createDocument(rootElement);
+    }
+
+    /**
+     * Encode non-ASCII characters in the string as HTML entities.
+     * 
+     * @param s string to encode.
+     * @return encoded string.
+     */
+    public static String enc(String s)
+    {
+        return ENCODER.encodeAttribute(s, "UTF-16");
+    }
+
+    /**
+     * Encode non-ASCII characters in the string as HTML entities.
+     * 
+     * @param l list of strings to encode.
+     * @return list of encoded strings.
+     */
+    public static List<String> enc(List<String> l)
+    {
+        List<String> result = new ArrayList<String>(l.size());
+        for(String s : l)
+        {
+            result.add(enc(s));
+        }
+        return l;
+    }
+
+    /**
+     * Decode HTML entities in the string into corresponding Unicode characters.
+     * 
+     * @param s strint to decode.
+     * @return decoded string.
+     */
+    public static String dec(String s)
+    {
+        return DECODER.decode(s);
     }
 }

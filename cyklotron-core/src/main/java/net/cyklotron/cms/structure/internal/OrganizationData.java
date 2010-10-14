@@ -2,17 +2,16 @@ package net.cyklotron.cms.structure.internal;
 
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.selectFirstText;
-import static net.cyklotron.cms.structure.internal.ProposedDocumentData.dec;
-import static net.cyklotron.cms.structure.internal.ProposedDocumentData.enc;
 import static net.cyklotron.cms.structure.internal.ProposedDocumentData.stripTags;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dom4j.Element;
 import org.dom4j.Node;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
+
+import net.cyklotron.cms.documents.DocumentMetadataHelper;
 
 public class OrganizationData
 {
@@ -59,16 +58,16 @@ public class OrganizationData
 
     public void fromParmeters(Parameters parameters, String prefix)
     {
-        name = stripTags(dec(parameters.get(prefix + "_name", "")));
-        province = stripTags(dec(parameters.get(prefix + "_province", "")));
-        postCode = stripTags(dec(parameters.get(prefix + "_postCode", "")));
-        city = stripTags(dec(parameters.get(prefix + "_city", "")));
-        street = stripTags(dec(parameters.get(prefix + "_street", "")));
-        phone = stripTags(dec(parameters.get(prefix + "_phone", "")));
-        fax = stripTags(dec(parameters.get(prefix + "_fax", "")));
-        email = stripTags(dec(parameters.get(prefix + "_email", "")));
-        www = stripTags(dec(parameters.get(prefix + "_www", "")));
-        id = stripTags(dec(parameters.get(prefix + "_id", "0")));
+        name = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_name", "")));
+        province = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_province", "")));
+        postCode = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_postCode", "")));
+        city = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_city", "")));
+        street = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_street", "")));
+        phone = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_phone", "")));
+        fax = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_fax", "")));
+        email = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_email", "")));
+        www = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_www", "")));
+        id = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_id", "0")));
     }
 
     public static List<OrganizationData> fromParameters(Parameters parameters)
@@ -90,16 +89,16 @@ public class OrganizationData
 
     public void toTemplatingContext(TemplatingContext templatingContext, String prefix)
     {
-        templatingContext.put(prefix + "_name", enc(name));
-        templatingContext.put(prefix + "_province", enc(province));
-        templatingContext.put(prefix + "_postCode", enc(postCode));
-        templatingContext.put(prefix + "_city", enc(city));
-        templatingContext.put(prefix + "_street", enc(street));
-        templatingContext.put(prefix + "_phone", enc(phone));
-        templatingContext.put(prefix + "_fax", enc(fax));
-        templatingContext.put(prefix + "_email", enc(email));
-        templatingContext.put(prefix + "_www", enc(www));
-        templatingContext.put(prefix + "_id", enc(id));
+        templatingContext.put(prefix + "_name", DocumentMetadataHelper.enc(name));
+        templatingContext.put(prefix + "_province", DocumentMetadataHelper.enc(province));
+        templatingContext.put(prefix + "_postCode", DocumentMetadataHelper.enc(postCode));
+        templatingContext.put(prefix + "_city", DocumentMetadataHelper.enc(city));
+        templatingContext.put(prefix + "_street", DocumentMetadataHelper.enc(street));
+        templatingContext.put(prefix + "_phone", DocumentMetadataHelper.enc(phone));
+        templatingContext.put(prefix + "_fax", DocumentMetadataHelper.enc(fax));
+        templatingContext.put(prefix + "_email", DocumentMetadataHelper.enc(email));
+        templatingContext.put(prefix + "_www", DocumentMetadataHelper.enc(www));
+        templatingContext.put(prefix + "_id", DocumentMetadataHelper.enc(id));
     }
 
     public static void toTemplatingContext(List<OrganizationData> organizations,
@@ -116,16 +115,16 @@ public class OrganizationData
 
     public void fromMeta(Node node)
     {
-        name = dec(selectFirstText(node, "name"));
-        province = dec(selectFirstText(node, "address/province"));
-        postCode = dec(selectFirstText(node, "address/postcode"));
-        city = dec(selectFirstText(node, "address/city"));
-        street = dec(selectFirstText(node, "address/street"));
-        phone = dec(selectFirstText(node, "tel"));
-        fax = dec(selectFirstText(node, "fax"));
-        email = dec(selectFirstText(node, "e-mail"));
-        www = dec(selectFirstText(node, "url"));
-        id = dec(selectFirstText(node, "id"));
+        name = DocumentMetadataHelper.dec(selectFirstText(node, "name"));
+        province = DocumentMetadataHelper.dec(selectFirstText(node, "address/province"));
+        postCode = DocumentMetadataHelper.dec(selectFirstText(node, "address/postcode"));
+        city = DocumentMetadataHelper.dec(selectFirstText(node, "address/city"));
+        street = DocumentMetadataHelper.dec(selectFirstText(node, "address/street"));
+        phone = DocumentMetadataHelper.dec(selectFirstText(node, "tel"));
+        fax = DocumentMetadataHelper.dec(selectFirstText(node, "fax"));
+        email = DocumentMetadataHelper.dec(selectFirstText(node, "e-mail"));
+        www = DocumentMetadataHelper.dec(selectFirstText(node, "url"));
+        id = DocumentMetadataHelper.dec(selectFirstText(node, "id"));
     }
 
     public static List<OrganizationData> fromMeta(Node metaNode, String xpath)
@@ -143,10 +142,10 @@ public class OrganizationData
 
     public Node toMeta()
     {
-        return elm("organization", elm("name", enc(name)), elm("address",
-            elm("street", enc(street)), elm("postcode", enc(postCode)), elm("city", enc(city)),
-            elm("province", enc(province))), elm("tel", enc(phone)), elm("fax", enc(fax)), elm(
-            "e-mail", enc(email)), elm("url", enc(www)), elm("id", enc(id)));
+        return elm("organization", elm("name", DocumentMetadataHelper.enc(name)), elm("address",
+            elm("street", DocumentMetadataHelper.enc(street)), elm("postcode", DocumentMetadataHelper.enc(postCode)), elm("city", DocumentMetadataHelper.enc(city)),
+            elm("province", DocumentMetadataHelper.enc(province))), elm("tel", DocumentMetadataHelper.enc(phone)), elm("fax", DocumentMetadataHelper.enc(fax)), elm(
+            "e-mail", DocumentMetadataHelper.enc(email)), elm("url", DocumentMetadataHelper.enc(www)), elm("id", DocumentMetadataHelper.enc(id)));
     }
     
     public static String getOrganizationIds(List<OrganizationData> organizations)
