@@ -14,9 +14,9 @@ public class UpdateNgoDatabase
 
     /** The NGO database service. */
     private NgoDatabaseService ngoDatabaseService;
-    
+
     /**
-     *  Constructor
+     * Constructor
      */
     public UpdateNgoDatabase(NgoDatabaseService ngoDatabaseService)
     {
@@ -24,21 +24,12 @@ public class UpdateNgoDatabase
     }
 
     // Job interface ////////////////////////////////////////////////////////
-    
+
     /**
      * Performs the mainteance.
      */
     public void run(String[] arguments)
     {
-        try
-        {
-            ngoDatabaseService.downloadSource();
-            ngoDatabaseService.update();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-
+        ngoDatabaseService.updateIncoming();
     }
 }

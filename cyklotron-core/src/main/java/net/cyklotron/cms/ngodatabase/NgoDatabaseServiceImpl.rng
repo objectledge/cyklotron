@@ -1,38 +1,87 @@
 <?xml version="1.0"?>
-<!--  
- Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
- All rights reserved. 
- 
- Redistribution and use in source and binary forms, with or without modification,  
- are permitted provided that the following conditions are met: 
- 
- * Redistributions of source code must retain the above copyright notice,  
-   this list of conditions and the following disclaimer. 
- * Redistributions in binary form must reproduce the above copyright notice,  
-   this list of conditions and the following disclaimer in the documentation  
-   and/or other materials provided with the distribution. 
- * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
-   nor the names of its contributors may be used to endorse or promote products  
-   derived from this software without specific prior written permission. 
- 
- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
- WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
- IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
- INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
- BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
- OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
- WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
- POSSIBILITY OF SUCH DAMAGE. 
---> 
+  <!--
+    Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.
+    All rights reserved. Redistribution and use in source and binary
+    forms, with or without modification, are permitted provided that the
+    following conditions are met: * Redistributions of source code must
+    retain the above copyright notice, this list of conditions and the
+    following disclaimer. * Redistributions in binary form must
+    reproduce the above copyright notice, this list of conditions and
+    the following disclaimer in the documentation and/or other materials
+    provided with the distribution. * Neither the name of the Caltha -
+    Gajda, Krzewski, Mach, Potempski Sp.J. nor the names of its
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission. THIS
+    SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+    IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+    FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+    COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+    INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+    BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+    CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+    LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+    ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+  -->
 
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <define name="sites">
+    <element name="sites">
+      <oneOrMore>
+        <element name="site">
+          <!-- name of site within cyklotron -->
+          <text />
+        </element>
+      </oneOrMore>
+    </element>
+  </define>
+  <start>
+    <element name="config">
+      <interleave>
+        <element name="incoming">
+          <interleave>
+            <element name="sourceURL">
+              <data name="anyURI" />
+            </element>
+          </interleave>
+        </element>
+        <element name="outgoing">
+          <interleave>
+            <ref name="sites" />
+          </interleave>
+        </element>
+        <element name="newsFeed">
+          <interleave>
+            <ref name="sites" />
+            <element name="cacheTime">
+              <!-- caching time for generated feeds in seconds -->
+              <data name="integer" />
+            </element>
+            <element name="queryDays">
+              <!--
+                documents added more recently than this number of days
+                will be included
+              -->
+              <data name="integer" />
+            </element>
+            <element name="type">
+              <choice>
+                <value type="string">atom_0.3</value>
+                <value type="string">rss_1.0</value>
+                <value type="string">rss_2.0</value>
+              </choice>
+            </element>
+            <element name="title">
+              <text />
+            </element>
+            <elemnt name="description" />
+          </interleave>
+        </element>
+      </interleave>
+    </element>
+  </start>
+</grammar>
 
-<element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
-  <element name="data_source_path">
-    <text/>
-  </element>
-  <element name="data_local_dir">
-    <text/>
-  </element>
-</element>

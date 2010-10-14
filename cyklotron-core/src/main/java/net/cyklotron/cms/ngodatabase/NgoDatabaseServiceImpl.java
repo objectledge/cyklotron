@@ -28,8 +28,9 @@
 
 package net.cyklotron.cms.ngodatabase;
 
+import static org.objectledge.filesystem.FileSystem.directoryPath;
+
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
@@ -47,52 +48,47 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 import org.picocontainer.Startable;
 
-/**
- * An implementation of <code>related.relationships</code> Coral resource class.
- * 
- * @author Coral Maven plugin
- */
 public class NgoDatabaseServiceImpl
     implements NgoDatabaseService, Startable
 {
+    private static final String INCOMING_FILE = "ngo/database/incoming/organizations.xml";
+    
+    private static final String OUTGOING_DIR = "ngo/database/outgoing";
+    
+    private static final String FEEDS_DIR = "ngo/database/feeds";
+    
     private Logger logger;
 
-    private String dataSourcePath;
-
-    private String dataLocalDir;
+    private String sourceURL;
 
     private FileSystem fileSystem;
 
-    private Organizations organizations;
+    private Organizations organizations = new Organizations();
 
     public NgoDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem)
     {
         this.logger = logger;
-        this.dataSourcePath = config.getChild("data_source_path").getValue("");
-        this.dataLocalDir = config.getChild("data_local_dir").getValue("/ngo/database");
+        this.sourceURL = config.getChild("incoming").getChild("sourceURL").getValue("");
         this.fileSystem = fileSystem;
-        this.organizations = new Organizations();
     }
 
-    @Override
-    public void downloadSource()
+    private void downloadIncoming()
         throws IOException
     {
         HttpClient client = new HttpClient();
-        HttpMethod method = new GetMethod(dataSourcePath);
+        HttpMethod method = new GetMethod(sourceURL);
         client.executeMethod(method);
-        String sourceXmlPath = dataLocalDir + "/organizations.xml";
-        String sourceTmpPath = sourceXmlPath + ".tmp";
+        String incomingTempFile = INCOMING_FILE + ".tmp";
         try
         {
-            if(!fileSystem.isDirectory(dataLocalDir))
+            if(!fileSystem.isDirectory(directoryPath(INCOMING_FILE)))
             {
-                fileSystem.mkdirs(dataLocalDir);
+                fileSystem.mkdirs(directoryPath(INCOMING_FILE));
             }
-            fileSystem.write(sourceTmpPath, method.getResponseBodyAsStream());
+            fileSystem.write(incomingTempFile, method.getResponseBodyAsStream());
             method.releaseConnection();
 
-            fileSystem.rename(sourceTmpPath, sourceXmlPath);
+            fileSystem.rename(incomingTempFile, INCOMING_FILE);
         }
         catch(UnsupportedCharactersInFilePathException e)
         {
@@ -101,18 +97,23 @@ public class NgoDatabaseServiceImpl
     }
 
     @Override
-    public void update()
+    public void updateIncoming()
+    {        
+        readIncoming(true);
+    }
+
+    private void readIncoming(boolean updateFromSource)
     {
-        Document doc = new DOMDocument();
-        String sourceXmlPath = dataLocalDir + "/organizations.xml";
+        Document doc = new DOMDocument();        
         try
         {
-            if(!fileSystem.isFile(sourceXmlPath))
+            if(updateFromSource || !fileSystem.isFile(INCOMING_FILE))
             {
-                downloadSource();
+                downloadIncoming();
             }
             organizations.Clear();
-            doc = streamToDom4j(fileSystem.getInputStream(sourceXmlPath));
+            SAXReader saxReader = new SAXReader();
+            doc = saxReader.read(fileSystem.getInputStream(INCOMING_FILE));
             for(Element ogranization : (List<Element>)doc
                 .selectNodes("/organizacje/organizacjaInfo"))
             {
@@ -129,27 +130,18 @@ public class NgoDatabaseServiceImpl
         }
         catch(DocumentException e)
         {
-            logger.info("Could not read ngo data source file " + sourceXmlPath + " "
-                + e.getMessage());
+            logger.info("Could not read source file ", e);
         }
         catch(IOException e)
         {
-            logger.info("Could not read ngo data source file " + sourceXmlPath + " "
-                + e.getMessage());
+            logger.info("Could not read source file ", e);
         }
-    }
-
-    public Document streamToDom4j(InputStream in)
-        throws DocumentException
-    {
-        SAXReader saxReader = new SAXReader();
-        return saxReader.read(in);
     }
 
     @Override
     public void start()
     {
-        update();
+        readIncoming(false);
     }
 
     @Override
@@ -159,7 +151,7 @@ public class NgoDatabaseServiceImpl
     }
 
     @Override
-    public Organization getOrganization(Long id)
+    public Organization getOrganization(long id)
     {
         return organizations.getOrganization(id);
     }

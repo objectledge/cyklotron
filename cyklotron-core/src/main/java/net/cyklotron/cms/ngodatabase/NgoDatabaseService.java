@@ -1,10 +1,9 @@
 package net.cyklotron.cms.ngodatabase;
 
-import java.io.IOException;
 import java.util.Set;
 
 /**
- * DocumentService is used to operate on CMS documents.
+ * Integration between Cyklotron and bazy.ngo.pl
  * 
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @version $Id: DocumentService.java,v 1.4 2007-11-18 21:23:07 rafal Exp $
@@ -12,28 +11,29 @@ import java.util.Set;
 public interface NgoDatabaseService
 {
     /**
-     * @return <code>orgniazations</code>
+     * Retrieve all organizations.
+     * 
+     * @return list of organizations.
      */
     public Organizations getOrganizations();
 
     /**
-     * @return <code>list of orgniazations witch name contians</code>
+     * Retrieve organizations with matching names.
+     * 
+     * @param substring substring to be searched withing organization names.
+     * @return list of organizations.
      */
     public Set<Organization> getOrganizations(String substring);
 
     /**
-     * @return <code>organization whit id is set as parameter</code>
+     * Retrieve organization data.
+     * 
+     * @return organization with specified id.
      */
-    public Organization getOrganization(Long id);
+    public Organization getOrganization(long id);
 
     /**
-     * update ogranizations from metadata.
+     * Update incoming organizations data from source.
      */
-    public void update();
-
-    /**
-     * Download medatata.
-     */
-    public void downloadSource()
-        throws IOException;
+    public void updateIncoming();
 }
