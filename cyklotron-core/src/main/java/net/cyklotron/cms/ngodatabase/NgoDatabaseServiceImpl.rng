@@ -43,7 +43,7 @@
         documents added more recently than this number of days will be
         retrieved
       -->
-      <data name="integer" />
+      <data type="integer" />
     </element>
   </define>
   <start>
@@ -52,16 +52,18 @@
         <element name="incoming">
           <interleave>
             <element name="sourceURL">
-              <data name="anyURI" />
+              <data type="anyURI" />
             </element>
           </interleave>
         </element>
         <element name="outgoing">
           <interleave>
             <ref name="query" />
-            <element name="dateFormat">
-              <text />
-            </element>
+            <optional>
+              <element name="dateFormat">
+                <text />
+              </element>
+            </optional>
           </interleave>
         </element>
         <element name="newsFeed">
@@ -69,7 +71,7 @@
             <ref name="query" />
             <element name="cacheTime">
               <!-- caching time for generated feeds in seconds -->
-              <data name="integer" />
+              <data type="integer" />
             </element>
             <element name="type">
               <choice>
@@ -81,7 +83,9 @@
             <element name="title">
               <text />
             </element>
-            <elemnt name="description" />
+            <element name="description">
+              <text />
+            </element>
           </interleave>
         </element>
       </interleave>

@@ -29,11 +29,11 @@
 package net.cyklotron.cms.ngodatabase;
 
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.attr;
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.cdata;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.doc;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
-import static net.cyklotron.cms.documents.DocumentMetadataHelper.text;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.enc;
-import static net.cyklotron.cms.documents.DocumentMetadataHelper.textToDom4j;
+import static net.cyklotron.cms.documents.DocumentMetadataHelper.text;
 import static org.objectledge.filesystem.FileSystem.directoryPath;
 
 import java.io.IOException;
@@ -265,7 +265,8 @@ public class NgoDatabaseServiceImpl
         // build DOM tree
         List<Long> organizationIdList = new ArrayList<Long>(orgMap.keySet());
         Collections.sort(organizationIdList);
-        Element update = attr(elm("update"), "time", "");
+        DateFormat dateFormat = (DateFormat)this.dateFormat.clone();
+        Element update = attr(elm("update"), "time", dateFormat.format(new Date()));
         for(Long organizationId : organizationIdList)
         {
             Element orgElm = organizationElm(organizationId);
@@ -275,11 +276,11 @@ public class NgoDatabaseServiceImpl
             {
                 try
                 {
-                    orgElm.add(documentElm(doc, organizationId));
+                    orgElm.add(documentElm(doc, organizationId, dateFormat));
                 }
                 catch(DocumentException e)
                 {
-                    logger.error("invalid metadata in document #"+doc.getIdString(), e);
+                    logger.error("invalid metadata in document #" + doc.getIdString(), e);
                     orgElm.add(attr(elm("invalidDocument"), "id", doc.getIdString()));
                 }
             }
@@ -290,6 +291,10 @@ public class NgoDatabaseServiceImpl
         // serialize DOM to XML
         try
         {
+            if(!fileSystem.isDirectory(directoryPath(OUTGOING_FILE)))
+            {
+                fileSystem.mkdirs(directoryPath(OUTGOING_FILE));
+            }
             OutputStream outputStream = fileSystem.getOutputStream(OUTGOING_FILE);
             XMLWriter xmlWriter = new XMLWriter(outputStream, OUTGOING_FORMAT);
             xmlWriter.write(doc);
@@ -298,6 +303,10 @@ public class NgoDatabaseServiceImpl
         catch(IOException e)
         {
             logger.error("failed to write outgoing data", e);
+        }
+        catch(UnsupportedCharactersInFilePathException e)
+        {
+            throw new RuntimeException("internal error", e);
         }
     }
 
@@ -357,7 +366,7 @@ public class NgoDatabaseServiceImpl
             {
                 query.append("AND organizationIds != '' ");
             }
-            query.append("AND customModificationDate > ");
+            query.append("AND customModificationTime > ");
             query.append(getDateLiteral(new Date(), queryDays, coralSession));
             QueryResults results = coralSession.getQuery().executeQuery(query.toString());
             return (List<DocumentNodeResource>)results.getList(1);
@@ -390,19 +399,19 @@ public class NgoDatabaseServiceImpl
         return attr(elm("organization"), "id", organizationId.toString());
     }
 
-    private Element documentElm(DocumentNodeResource document, Long orgId) throws DocumentException
+    private Element documentElm(DocumentNodeResource document, Long orgId, DateFormat dateFormat)
+        throws DocumentException
     {
-        DateFormat dateFormat = (DateFormat)this.dateFormat.clone();
         Document meta = DocumentHelper.parseText(document.getMeta());
         Element doc = attr(elm("document"), "id", document.getIdString());
         doc.add(elm("creationTime", dateFormat.format(document.getCreationTime())));
         doc.add(elm("modificationTime", dateFormat.format(document.getCustomModificationTime())));
         doc.add(elm("createdBy", getUid(document.getCreatedBy())));
         doc.add(elm("modifiedBy", getUid(document.getModifiedBy())));
-        doc.add(elm("title", text(enc(document.getTitle()))));
-        doc.add(elm("subTitle", text(enc(document.getSubTitle()))));
-        doc.add(elm("abstract", text(enc(document.getAbstract()))));
-        doc.add(elm("content", text(enc(document.getContent()))));
+        doc.add(elm("title", text(nvl(enc(document.getTitle())))));
+        doc.add(elm("subTitle", text(nvl(enc(document.getSubTitle())))));
+        doc.add(elm("abstract", cdata(nvl(document.getAbstract()))));
+        doc.add(elm("content", cdata(nvl((document.getContent())))));
         Node authors = meta.selectSingleNode("/meta/authors");
         authors.detach();
         doc.add(authors);
@@ -411,9 +420,10 @@ public class NgoDatabaseServiceImpl
         doc.add(sources);
         Node event = meta.selectSingleNode("/meta/event");
         event.detach();
-        ((Branch)event).content().add(0, elm("place", enc(document.getEventPlace())));
+        ((Branch)event).content().add(0, elm("place", nvl(enc(document.getEventPlace()))));
         doc.add(event);
-        Node organization = meta.selectSingleNode("/meta/organizations/organization[id='" + orgId + "']");
+        Node organization = meta.selectSingleNode("/meta/organizations/organization[id='" + orgId
+            + "']");
         organization.detach();
         doc.add(organization);
         return doc;
@@ -430,7 +440,7 @@ public class NgoDatabaseServiceImpl
             return doc1.getCustomModificationTime().compareTo(doc2.getCustomModificationTime());
         }
     }
-    
+
     private static String getUid(Subject subject)
     {
         if(subject == null)
@@ -442,5 +452,10 @@ public class NgoDatabaseServiceImpl
             String dn = subject.getName();
             return dn.substring(4, dn.indexOf(','));
         }
+    }
+
+    private static String nvl(String s)
+    {
+        return s != null ? s : "";
     }
 }

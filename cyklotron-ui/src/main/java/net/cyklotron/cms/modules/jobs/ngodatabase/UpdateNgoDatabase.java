@@ -1,8 +1,8 @@
 package net.cyklotron.cms.modules.jobs.ngodatabase;
 
-import java.io.IOException;
-
+import org.jcontainer.dna.Logger;
 import org.objectledge.scheduler.Job;
+
 import net.cyklotron.cms.ngodatabase.NgoDatabaseService;
 
 /**
@@ -15,12 +15,15 @@ public class UpdateNgoDatabase
     /** The NGO database service. */
     private NgoDatabaseService ngoDatabaseService;
 
+    private final Logger logger;
+
     /**
      * Constructor
      */
-    public UpdateNgoDatabase(NgoDatabaseService ngoDatabaseService)
+    public UpdateNgoDatabase(NgoDatabaseService ngoDatabaseService, Logger logger)
     {
         this.ngoDatabaseService = ngoDatabaseService;
+        this.logger = logger;
     }
 
     // Job interface ////////////////////////////////////////////////////////
@@ -30,6 +33,20 @@ public class UpdateNgoDatabase
      */
     public void run(String[] arguments)
     {
-        ngoDatabaseService.updateIncoming();
+        if(arguments.length == 1)
+        {
+            if(arguments[0].contains("incoming"))
+            {
+                logger.info("loading data from ngo database");
+                ngoDatabaseService.updateIncoming();
+                logger.info("done loading data from ngo database");
+            }
+            if(arguments[0].contains("outgoing"))
+            {
+                logger.info("exporting data for ngo database");
+                ngoDatabaseService.updateOutgoing();
+                logger.info("done exporting data for ngo database");
+            }
+        }
     }
 }
