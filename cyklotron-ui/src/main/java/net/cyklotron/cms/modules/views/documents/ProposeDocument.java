@@ -233,7 +233,7 @@ public class ProposeDocument
             String query = "FIND RESOURCE FROM documents.document_node WHERE created_by = "
                 + coralSession.getUserSubject().getIdString() + " AND site = "
                 + cmsData.getSite().getIdString();
-            List<Resource> myDocuments = coralSession.getQuery().executeQuery(query).getList(1);
+            List<Resource> myDocuments = (List<Resource>)coralSession.getQuery().executeQuery(query).getList(1);
 
             TableColumn<Resource> columns[] = new TableColumn[2];
             columns[0] = new TableColumn<Resource>("creation.time", new CreationTimeComparator());

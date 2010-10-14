@@ -44,10 +44,9 @@ public class CYKLO430
             Comparator comp = new NameComparator(i18nContext.getLocale());
             QueryResults res = coralSession.getQuery().executeQuery(
                 "FIND RESOURCE FROM category.query.pool");
-            List<Resource> queryPools = res.getList(1);
-            for(Resource r : queryPools)
+            List<CategoryQueryPoolResource> queryPools = (List<CategoryQueryPoolResource>)res.getList(1);
+            for(CategoryQueryPoolResource queryPool : queryPools)
             {
-                CategoryQueryPoolResource queryPool = (CategoryQueryPoolResource)r;
                 ResourceList queries = queryPool.getQueries();
                 Collections.sort(queries, comp);
                 queryPool.setQueries(queries);

@@ -37,7 +37,7 @@ public class SecurityServiceHelper
         throws Exception
     {
         Map<String, Object> result = new HashMap<String, Object>();
-        List<Resource> qRes = coralSession.getQuery().executeQuery(
+        List<RoleResource> qRes = (List<RoleResource>)coralSession.getQuery().executeQuery(
             "FIND RESOURCE FROM cms.security.role WHERE role = " + role.getIdString()).getList(1);
         if(qRes.size() > 1)
         {
@@ -49,7 +49,7 @@ public class SecurityServiceHelper
         }
         else
         {            
-            RoleResource roleResource = (RoleResource )qRes.get(0);
+            RoleResource roleResource = qRes.get(0);
             result.put("role", roleResource);
             for(Resource r = roleResource.getParent(); r != null ; r = r.getParent())
             {

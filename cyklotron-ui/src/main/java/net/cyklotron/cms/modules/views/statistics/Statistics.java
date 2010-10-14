@@ -304,7 +304,7 @@ public class Statistics extends CategoryList
         try
         {
             QueryResults results = coralSession.getQuery().executeQuery(query);
-            List<Resource> nodes = results.getList(1);
+            List<NavigationNodeResource> nodes = (List<NavigationNodeResource>)results.getList(1);
             if(selectedCategory)
             {
                 nodes.retainAll(fromCategorySet);
@@ -314,9 +314,9 @@ public class Statistics extends CategoryList
             if(site != null)
             {
                 Map<Subject, StatisticsItem> statistics = new HashMap<Subject, StatisticsItem>();
-                for(Resource node : nodes)
+                for(NavigationNodeResource node : nodes)
                 {
-                    updateStatistics(statistics, (NavigationNodeResource)node);
+                    updateStatistics(statistics, node);
                 }
                 
                 TableModel<StatisticsItem> model = new ListTableModel<StatisticsItem>(
