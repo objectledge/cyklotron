@@ -343,7 +343,7 @@ public class ProposedDocumentData
     public void toNode(DocumentNodeResource node)
     {
         // set attributes to new node
-        node.setDescription(DocumentMetadataHelper.enc(description));
+        node.setDescription(description);
         if(addDocumentVisualEditor)
         {
             node.setContent(content);
@@ -352,12 +352,12 @@ public class ProposedDocumentData
         {
             node.setContent(makePara(stripTags(content)));
         }
-        node.setAbstract(DocumentMetadataHelper.enc(docAbstract));
+        node.setAbstract(docAbstract);
         node.setValidityStart(validityStart);
         node.setValidityEnd(validityEnd);
         node.setEventStart(eventStart);
         node.setEventEnd(eventEnd);
-        node.setEventPlace(DocumentMetadataHelper.enc(eventPlace));
+        node.setEventPlace(eventPlace);
         Document doc = doc(getMetaElm());
         node.setMeta(dom4jToText(doc));
         node.setOrganizationIds(OrganizationData.getOrganizationIds(organizations));
@@ -365,12 +365,11 @@ public class ProposedDocumentData
 
     private Element getMetaElm()
     {
-        return elm("meta", elm("authors", elm("author", elm("name", DocumentMetadataHelper.enc(proposerCredentials)), elm(
-            "e-mail", DocumentMetadataHelper.enc(proposerEmail)))), elm("sources", elm("source", elm("name",
-            DocumentMetadataHelper.enc(sourceName)), elm("url", DocumentMetadataHelper.enc(sourceUrl)))), elm("editor"), elm("event", elm(
-            "address", elm("street", DocumentMetadataHelper.enc(eventStreet)), elm("postcode", DocumentMetadataHelper.enc(eventPostCode)), elm(
-                "city", DocumentMetadataHelper.enc(eventCity)), elm("province", DocumentMetadataHelper.enc(eventProvince)))), OrganizationData
-            .toMeta(organizations));
+        return elm("meta", elm("authors", elm("author", elm("name", proposerCredentials), elm(
+            "e-mail", proposerEmail))), elm("sources", elm("source", elm("name", sourceName), elm(
+            "url", sourceUrl))), elm("editor"), elm("event", elm("address", elm("street",
+            eventStreet), elm("postcode", eventPostCode), elm("city", eventCity), elm("province",
+            eventProvince))), OrganizationData.toMeta(organizations));
     }
 
     public void fromProposal(DocumentNodeResource node, CoralSession coralSession)
@@ -468,13 +467,13 @@ public class ProposedDocumentData
             }
         }
         Document doc = doc(elm("document", elm("request", removalRequested ? "remove" : "update"),
-            elm("origin", elm("ref", origin.getIdString())), elm("name", DocumentMetadataHelper.enc(name)), elm("title",
-                DocumentMetadataHelper.enc(title)), elm("abstract", DocumentMetadataHelper.enc(docAbstract)), elm("content", cdata(content)),
-            elm("description", DocumentMetadataHelper.enc(description)),
-            elm("editorial", elm("note", DocumentMetadataHelper.enc(editorialNote))), elm("validity", elm("start",
-                date2text(validityStart)), elm("end", date2text(validityEnd))), elm("event", elm(
-                "place", DocumentMetadataHelper.enc(eventPlace)), elm("start", date2text(eventStart)), elm("end",
-                date2text(eventEnd))), getMetaElm(), categoriesElm, attachmentsElm));
+            elm("origin", elm("ref", origin.getIdString())), elm("name", name),
+            elm("title", title), elm("abstract", docAbstract), elm("content", cdata(content)), elm(
+                "description", description), elm("editorial", elm("note", editorialNote)), elm(
+                "validity", elm("start", date2text(validityStart)), elm("end",
+                    date2text(validityEnd))), elm("event", elm("place", eventPlace), elm("start",
+                date2text(eventStart)), elm("end", date2text(eventEnd))), getMetaElm(),
+            categoriesElm, attachmentsElm));
         node.setProposedContent(dom4jToText(doc));
     }
 

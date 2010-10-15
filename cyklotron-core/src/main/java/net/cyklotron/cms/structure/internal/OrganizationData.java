@@ -142,10 +142,10 @@ public class OrganizationData
 
     public Node toMeta()
     {
-        return elm("organization", elm("name", DocumentMetadataHelper.enc(name)), elm("address",
-            elm("street", DocumentMetadataHelper.enc(street)), elm("postcode", DocumentMetadataHelper.enc(postCode)), elm("city", DocumentMetadataHelper.enc(city)),
-            elm("province", DocumentMetadataHelper.enc(province))), elm("tel", DocumentMetadataHelper.enc(phone)), elm("fax", DocumentMetadataHelper.enc(fax)), elm(
-            "e-mail", DocumentMetadataHelper.enc(email)), elm("url", DocumentMetadataHelper.enc(www)), elm("id", DocumentMetadataHelper.enc(id)));
+        return elm("organization", elm("name", name), elm("address", elm("street", street), elm(
+            "postcode", postCode), elm("city", city), elm("province", province)),
+            elm("tel", phone), elm("fax", fax), elm("e-mail", email), elm("url", www),
+            elm("id", id));
     }
     
     public static String getOrganizationIds(List<OrganizationData> organizations)
