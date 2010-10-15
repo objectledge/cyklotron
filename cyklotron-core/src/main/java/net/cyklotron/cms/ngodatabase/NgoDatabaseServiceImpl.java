@@ -82,6 +82,7 @@ import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.util.ProtectedValidityFilter;
 
 public class NgoDatabaseServiceImpl
     implements NgoDatabaseService, Startable
@@ -242,9 +243,9 @@ public class NgoDatabaseServiceImpl
     public void updateOutgoing()
     {
         // query documents
-        List<DocumentNodeResource> documents = queryNavigationNodes(outgoingSites,
+        List<DocumentNodeResource> documents = queryDocuments(outgoingSites,
             outgoingQueryDays, null);
-
+        
         // group documents by organization id
         Map<Long, List<DocumentNodeResource>> orgMap = new HashMap<Long, List<DocumentNodeResource>>();
         for(DocumentNodeResource doc : documents)
@@ -340,7 +341,7 @@ public class NgoDatabaseServiceImpl
         }
     }
 
-    private List<DocumentNodeResource> queryNavigationNodes(SiteResource[] sites, int queryDays,
+    private List<DocumentNodeResource> queryDocuments(SiteResource[] sites, int queryDays,
         String organizationId)
     {
         CoralSession coralSession = coralSessionFactory.getAnonymousSession();
@@ -369,9 +370,25 @@ public class NgoDatabaseServiceImpl
             query.append("AND customModificationTime > ");
             query.append(getDateLiteral(new Date(), queryDays, coralSession));
             QueryResults results = coralSession.getQuery().executeQuery(query.toString());
-            return (List<DocumentNodeResource>)results.getList(1);
+            List<DocumentNodeResource> documents = new ArrayList<DocumentNodeResource>();
+            
+            // trim down the results to publicly visible documents
+            Subject anonymousSubject = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
+            ProtectedValidityFilter filter = new ProtectedValidityFilter(coralSession, anonymousSubject, new Date());
+            for(QueryResults.Row row : results)
+            {
+                if(filter.accept(row.get()))
+                {
+                    documents.add((DocumentNodeResource)row.get());
+                }
+            }
+            return documents;
         }
         catch(MalformedQueryException e)
+        {
+            throw new RuntimeException("internal error", e);
+        }
+        catch(EntityDoesNotExistException e)
         {
             throw new RuntimeException("internal error", e);
         }
