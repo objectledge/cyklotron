@@ -352,7 +352,7 @@ function deleteConform(url)
   </tr>
   #end
   
-#set($orgFields = [['name','Organization name'],['province','Organization's address (Province)'],['postCode','Organization's address (Post code)'],['city','Organization's address (City)'],['street','Organization's address (Street)'],['phone','Organization's phone'],['fax','Organization's fax'],['email','Organization's e-mail'],['www','Organization's website address']]); 
+#set($orgFields = [['name',"Organization name"],['province',"Organization's address (Province)"],['postCode',"Organization's address (Post code)"],['city',"Organization's address (City)"],['street',"Organization's address (Street)"],['phone',"Organization's phone"],['fax',"Organization's fax"],['email',"Organization's e-mail"],['www',"Organization's website address"]]); 
 
 #foreach($index in [1 .. $organizations_count]) ## organization loop
 #foreach($field in $orgFields) ## field loop 

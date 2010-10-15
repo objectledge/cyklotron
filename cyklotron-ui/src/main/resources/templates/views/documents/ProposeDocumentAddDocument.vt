@@ -5,6 +5,7 @@ $pageTool.addScriptLink('script/jquery/ui/ui.position.js')##
 $pageTool.addScriptLink('script/jquery/ui/ui.autocomplete.js')##
 $pageTool.addScriptLink('script/jquery/ui/plugin/jquery.autocomplete.js')##
 $pageTool.addScriptLink("script/ngodatabase/autocomplete.js")##
+$pageTool.addScriptLink("script/urlsformatter.js")##
 $pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.base.css')##
 $pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.theme.css')##
 $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
@@ -18,6 +19,11 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
    {
      initProposeDocumentAutocomplete(5, '$link.view('ngodatabase.JsonOrganizations')', '$link.view('ngodatabase.JsonLocations')');
    });
+     
+   function formatUrlFileds()
+   {
+      convertProposeDocumentUrlFileds(5);
+   }
 </script>
 
 ##
@@ -101,7 +107,7 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
   </tr>
 </table>
 
-#set($orgFields = [['name','Organization name'],['province','Organization's address (Province)'],['postCode','Organization's address (Post code)'],['city','Organization's address (City)'],['street','Organization's address (Street)'],['phone','Organization's phone'],['fax','Organization's fax'],['email','Organization's e-mail'],['www','Organization's website address']]) 
+#set($orgFields = [['name',"Organization name"],['province',"Organization's address (Province)"],['postCode',"Organization's address (Post code)"],['city',"Organization's address (City)"],['street',"Organization's address (Street)"],['phone',"Organization's phone"],['fax',"Organization's fax"],['email',"Organization's e-mail"],['www',"Organization's website address"]]) 
 #set($max_organizations = 5)
 <script>
 function addOrganization(i)
@@ -209,7 +215,7 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   </div>
   <div class="modification">
 #if($cms_data.userData.hasPermission($parent_node, "cms.structure.submit"))
-    <a href="javascript:document.propose_document.submit();">Add document</a>
+    <a OnClick="javascript:formatUrlFileds();" href="javascript:document.propose_document.submit();">Add document</a>
 #end
   </div>
 </div>

@@ -5,6 +5,7 @@ $pageTool.addScriptLink('script/jquery/ui/ui.position.js')##
 $pageTool.addScriptLink('script/jquery/ui/ui.autocomplete.js')##
 $pageTool.addScriptLink('script/jquery/ui/plugin/jquery.autocomplete.js')##
 $pageTool.addScriptLink("script/ngodatabase/autocomplete.js")##
+$pageTool.addScriptLink("script/urlsformatter.js")##
 $pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.base.css')##
 $pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.theme.css')##
 $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
@@ -13,10 +14,16 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 #set($formAction = $nodeLink.action('structure.ProposeDocument'))
 ##
 
-<script>  
-   jQuery(document).ready(function() {
+<script>
+   jQuery(document).ready(function()
+   {
      initProposeDocumentAutocomplete(5, '$link.view('ngodatabase.JsonOrganizations')', '$link.view('ngodatabase.JsonLocations')');
    });
+   
+   function formatUrlFileds()
+   {
+      convertProposeDocumentUrlFileds(5);
+   }
 </script>
 
 ##
@@ -208,7 +215,7 @@ $pageTool.addStyleLink('style/action-buttons.css')##
   </div>
   <div class="modification">
 #if($cms_data.userData.hasPermission($parent_node, "cms.structure.submit"))
-    <a href="javascript:document.propose_document.submit();">Dodaj dokument</a>
+    <a OnClick="javascript:formatUrlFileds();" href="javascript:document.propose_document.submit();">Dodaj dokument</a>
 #end
   </div>
 </div>
