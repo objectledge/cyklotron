@@ -77,11 +77,6 @@ implements IncomingFeedsManager
             {
                 throw new ComponentInitializationError("cannot create templates dir", e);
             }
-            catch(UnsupportedCharactersInFilePathException e)
-            {
-                throw new ComponentInitializationError(
-                    "templates dir path has unsupported characters", e);
-            }
         }
     }
 

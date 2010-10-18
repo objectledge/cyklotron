@@ -201,10 +201,6 @@ public class IndexingFacilityImpl implements IndexingFacility
         {
             throw new SearchException("failed to reindex resources", e);
         }
-        catch(UnsupportedCharactersInFilePathException e)
-        {
-            throw new SearchException("failed to reindex resources", e);
-        }
     }
 
     public void indexMissing(CoralSession coralSession, IndexResource index) throws SearchException

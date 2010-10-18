@@ -85,10 +85,6 @@ public class PNALocationsProvider
             logger.error("failed to download source from " + SOURCE_LOCATION, e);
             return false;
         }
-        catch(UnsupportedCharactersInFilePathException e)
-        {
-            throw new RuntimeException(e);
-        }
     }
 
     /**
