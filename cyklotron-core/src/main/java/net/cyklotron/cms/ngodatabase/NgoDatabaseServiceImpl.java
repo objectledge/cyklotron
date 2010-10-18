@@ -137,7 +137,7 @@ public class NgoDatabaseServiceImpl
 
     private final CoralSessionFactory coralSessionFactory;
 
-    private final Organizations organizations = new Organizations();
+    private final Organizations organizations;
 
     private final int outgoingQueryDays;
 
@@ -184,6 +184,7 @@ public class NgoDatabaseServiceImpl
         this.offlineLinkRenderingService = offlineLinkRenderingService;
         this.dateFormatter = dateFormatter;
         this.categoryService = categoryService;
+        this.organizations = new Organizations(fileSystem, logger);
         CoralSession coralSession = coralSessionFactory.getAnonymousSession();
         try
         {
@@ -258,7 +259,7 @@ public class NgoDatabaseServiceImpl
             {
                 downloadIncoming();
             }
-            organizations.Clear();
+            organizations.startInput();
             SAXReader saxReader = new SAXReader();
             doc = saxReader.read(fileSystem.getInputStream(INCOMING_FILE));
             for(Element ogranization : (List<Element>)doc
@@ -274,6 +275,7 @@ public class NgoDatabaseServiceImpl
                 this.organizations.addOrganization(new Organization(id, name, province, city,
                     street, post_code));
             }
+            organizations.endInput();
         }
         catch(DocumentException e)
         {
@@ -306,13 +308,7 @@ public class NgoDatabaseServiceImpl
     }
 
     @Override
-    public Organizations getOrganizations()
-    {
-        return organizations;
-    }
-
-    @Override
-    public Set<Organization> getOrganizations(String substring)
+    public List<Organization> getOrganizations(String substring)
     {
         return organizations.getOrganizations(substring);
     }

@@ -25,60 +25,56 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
- 
+
 package net.cyklotron.cms.ngodatabase;
 
-import java.util.Date;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.NumericField;
 
-import org.objectledge.coral.store.Resource;
-
-import net.cyklotron.cms.CmsNodeResource;
-import net.cyklotron.cms.ProtectedResource;
-import net.cyklotron.cms.search.IndexableResource;
-import net.cyklotron.cms.workflow.StatefulResource;
-
-/**
- * @author Coral Maven plugin
- */
 public class Organization
 {
     // constants /////////////////////////////////////////////////////////////
 
-    /** The name of the Coral resource class. */    
-    public static final String CLASS_NAME = "cms.ngodatabase.organization";
-    
     public Long id;
-    
+
     private String name;
-    
+
     private String province;
-    
+
     private String city;
-    
+
     private String street;
-    
+
     private String postCode;
-    
+
     private String tel;
-    
+
     private String fax;
-    
+
     private String url;
-    
+
     private String email;
-    
-    public Organization(long id,String name,String province,String city,String street, String postCode)
+
+    public Organization(long id, String name, String province, String city, String street,
+        String postCode, String tel, String fax, String url, String email)
     {
-       this.id = id;
-       this.name = name;
-       this.province = province;
-       this.city = city;
-       this.street = street;
-       this.postCode = postCode;
-       this.tel = "";
-       this.fax = "";
-       this.url = "";
-       this.email = "";
+        this.id = id;
+        this.name = name;
+        this.province = province;
+        this.city = city;
+        this.street = street;
+        this.postCode = postCode;
+        this.tel = tel;
+        this.fax = fax;
+        this.url = url;
+        this.email = email;
+    }
+    
+    public Organization(long id, String name, String province, String city, String street,
+        String postCode)
+    {
+        this(id, name, province, city, street, postCode, "", "", "", "");
     }
     
     public Long getId()
@@ -115,7 +111,7 @@ public class Organization
     {
         this.city = city;
     }
-    
+
     public String getStreet()
     {
         return street;
@@ -135,7 +131,7 @@ public class Organization
     {
         this.postCode = postCode;
     }
-    
+
     public String getTel()
     {
         return tel;
@@ -145,8 +141,7 @@ public class Organization
     {
         this.tel = tel;
     }
-    
-    
+
     public String getFax()
     {
         return fax;
@@ -156,8 +151,7 @@ public class Organization
     {
         this.fax = fax;
     }
-    
-    
+
     public String getUrl()
     {
         return url;
@@ -167,7 +161,7 @@ public class Organization
     {
         this.url = url;
     }
-    
+
     public String getEmail()
     {
         return email;
@@ -177,9 +171,40 @@ public class Organization
     {
         this.email = email;
     }
-    
+
     public boolean matches(String name)
     {
         return this.name.toLowerCase().contains(name.toLowerCase());
+    }
+
+    // lucene integration ////////////////////////////////////////////////////////////////////////
+
+    public static Document toDocument(Organization organization)
+    {
+        Document document = new Document();
+        document
+            .add(new NumericField("id", 4, Field.Store.YES, true).setLongValue(organization.id));
+        document.add(new Field("name", organization.name, Field.Store.YES, Field.Index.ANALYZED,
+            Field.TermVector.WITH_POSITIONS_OFFSETS));
+        document.add(new Field("province", organization.province, Field.Store.YES,
+            Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+        document.add(new Field("city", organization.city, Field.Store.YES, Field.Index.ANALYZED,
+            Field.TermVector.WITH_POSITIONS_OFFSETS));
+        document.add(new Field("street", organization.street, Field.Store.YES,
+            Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+        document.add(new Field("postCode", organization.postCode, Field.Store.YES,
+            Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+        return document;
+    }
+
+    public static Organization fromDocument(Document document)
+    {
+        long id = Long.parseLong(document.get("id"));
+        String name = document.get("name");
+        String province = document.get("province");
+        String city = document.get("city");
+        String street = document.get("street");
+        String postCode = document.get("postCode");
+        return new Organization(id, name, province, city, street, postCode);
     }
 }

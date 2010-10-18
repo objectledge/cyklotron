@@ -1,14 +1,14 @@
 package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
-import java.util.Set;
+import java.util.List;
 
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 
-import net.cyklotron.cms.category.CategoryException;
-
 import com.sun.syndication.io.FeedException;
+
+import net.cyklotron.cms.category.CategoryException;
 
 /**
  * Integration between Cyklotron and bazy.ngo.pl
@@ -19,19 +19,12 @@ import com.sun.syndication.io.FeedException;
 public interface NgoDatabaseService
 {
     /**
-     * Retrieve all organizations.
-     * 
-     * @return list of organizations.
-     */
-    public Organizations getOrganizations();
-
-    /**
      * Retrieve organizations with matching names.
      * 
-     * @param substring substring to be searched withing organization names.
+     * @param substring substring to be searched within organization names.
      * @return list of organizations.
      */
-    public Set<Organization> getOrganizations(String substring);
+    public List<Organization> getOrganizations(String substring);
 
     /**
      * Retrieve organization data.

@@ -25,75 +25,127 @@
 // ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
- 
+
 package net.cyklotron.cms.ngodatabase;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.objectledge.coral.store.Resource;
-
-import net.cyklotron.cms.CmsNodeResource;
-import net.cyklotron.cms.ProtectedResource;
-import net.cyklotron.cms.search.IndexableResource;
-import net.cyklotron.cms.workflow.StatefulResource;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.TermAttribute;
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.NumericRangeQuery;
+import org.apache.lucene.search.PhraseQuery;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.NIOFSDirectory;
+import org.apache.lucene.util.Version;
+import org.jcontainer.dna.Logger;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.filesystem.LocalFileSystemProvider;
 
 /**
- * @author Coral Maven plugin
+ * @author lukasz, rafal
  */
 public class Organizations
 {
     // constants /////////////////////////////////////////////////////////////
 
-    /** The name of the Coral resource class. */    
-    public static final String CLASS_NAME = "cms.ngodatabase.organizations";
+    private static final String INDEX_PATH = "ngo/database/incoming/index";
     
-    private Map<Long,Organization> organizations; 
+    private static final StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
+
+    private final IndexWriter writer;
+
+    private final IndexSearcher searcher;
     
-    public Organizations()
+    private final Logger log;
+
+    public Organizations(FileSystem fileSystem, Logger log)
+        throws IOException
     {
-        organizations = new HashMap<Long, Organization>();
-    }
-    
-    public Organization getOrganization(Long id)
-    {
-        return organizations.get(id);
-    }
-    
-    public void addOrganization(Organization organization)
-    {
-        if(!organizations.containsKey(organization.getId()))
-        {
-            organizations.put(organization.getId(), organization);
-        }
+        File indexLocation = ((LocalFileSystemProvider)fileSystem.getProvider("local"))
+            .getFile(INDEX_PATH);
+        Directory directory = new NIOFSDirectory(indexLocation);
+        this.writer = new IndexWriter(directory, analyzer,
+            IndexWriter.MaxFieldLength.LIMITED);
+        this.searcher = new IndexSearcher(writer.getReader());
+        this.log = log;
     }
 
-    public Set<Organization> getOrganizations(String substring)
+    public void startInput()
+        throws IOException
     {
-        if(substring.isEmpty())
+        writer.deleteAll();
+    }
+
+    public void addOrganization(Organization organization)
+        throws CorruptIndexException, IOException
+    {
+        writer.addDocument(Organization.toDocument(organization));
+    }
+
+    public void endInput()
+        throws CorruptIndexException, IOException
+    {
+        writer.optimize();
+        writer.commit();
+    }
+
+    public Organization getOrganization(Long id)
+    {
+        Query query = NumericRangeQuery.newLongRange("id", id, id, true, true);
+        try
         {
-            return new HashSet<Organization>(organizations.values());
-        }
-        else
-        {
-            Set<Organization> machedOrganizations = new HashSet<Organization>();
-            for(Organization org : organizations.values())
+            TopDocs result = searcher.search(query, 1);
+            if(result.totalHits == 1)
             {
-                if(org.matches(substring))
-                {
-                    machedOrganizations.add(org);
-                }
+                return Organization.fromDocument(searcher.doc(result.scoreDocs[0].doc));
             }
-            return machedOrganizations;
         }
-    }  
-    
-    public void Clear()
+        catch(Exception e)
+        {
+            log.error("search error", e);
+        }
+        return null;
+    }
+
+    public List<Organization> getOrganizations(String substring)
     {
-        organizations.clear();
+        List<Organization> organizations = new ArrayList<Organization>();
+        try
+        {
+            PhraseQuery query = new PhraseQuery();
+            TokenStream ts = analyzer.reusableTokenStream("name", new StringReader(substring));
+            ts.reset();
+            TermAttribute ta = ts.getAttribute(TermAttribute.class);
+            while(ts.incrementToken())
+            {
+                query.add(new Term("name", ta.term()));
+            }
+            ts.end();
+            ts.close();
+            TopDocs result = searcher.search(query, null, 20, new Sort(new SortField(null, SortField.SCORE)));
+            for(ScoreDoc scoreDoc : result.scoreDocs)
+            {
+                organizations.add(Organization.fromDocument(searcher.doc(scoreDoc.doc)));
+            }
+        }
+        catch(Exception e)
+        {
+            log.error("search error", e);
+        }
+        return organizations;
     }
 }

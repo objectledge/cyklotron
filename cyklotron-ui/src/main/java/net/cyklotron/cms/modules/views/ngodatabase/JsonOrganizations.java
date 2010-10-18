@@ -1,10 +1,9 @@
 package net.cyklotron.cms.modules.views.ngodatabase;
 
-import java.util.Set;
+import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -19,8 +18,8 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.ngodatabase.NgoDatabaseService;
 import net.cyklotron.cms.ngodatabase.Organization;
 import net.cyklotron.cms.preferences.PreferencesService;
+
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * The screen for serving files.
@@ -54,7 +53,7 @@ public class JsonOrganizations
         JSONArray jsonArray = new JSONArray();
         try 
         {
-            Set<Organization> organizations = getRequestedOrganizations(context);
+            List<Organization> organizations = getRequestedOrganizations(context);
             jsonArray = OrganizationsToJson(organizations);
         }
         catch(Exception e)
@@ -99,10 +98,9 @@ public class JsonOrganizations
         return EnclosingView.TOP;
     }
     
-    private Set<Organization> getRequestedOrganizations(Context context)
+    private List<Organization> getRequestedOrganizations(Context context)
         throws ProcessingException
     {
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         String organization = parameters.get("q", "");
 
@@ -116,7 +114,7 @@ public class JsonOrganizations
         }
     }
     
-    private JSONArray OrganizationsToJson(Set<Organization> organizations)
+    private JSONArray OrganizationsToJson(List<Organization> organizations)
     {
         JSONArray jsonArray = JSONArray.fromObject(organizations);
         return jsonArray;
