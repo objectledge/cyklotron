@@ -49,6 +49,20 @@
   <start>
     <element name="config">
       <interleave>
+        <optional>
+          <element name="dateFormat">
+            <interleave>
+              <element name="pattern">
+                <text />
+              </element>
+              <element name="locale">
+                <data type="string">
+                  <param name="pattern">[a-z]{2}_[A-Z]{2}</param>
+                </data>
+              </element>
+            </interleave>
+          </element>
+        </optional>
         <element name="incoming">
           <interleave>
             <element name="sourceURL">
@@ -59,11 +73,6 @@
         <element name="outgoing">
           <interleave>
             <ref name="query" />
-            <optional>
-              <element name="dateFormat">
-                <text />
-              </element>
-            </optional>
           </interleave>
         </element>
         <element name="newsFeed">
@@ -79,6 +88,12 @@
                 <value type="string">rss_1.0</value>
                 <value type="string">rss_2.0</value>
               </choice>
+            </element>
+            <element name="baseURL">
+              <text />
+            </element>
+            <element name="idParameter">
+              <text />
             </element>
             <element name="title">
               <text />

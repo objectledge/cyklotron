@@ -38,6 +38,10 @@ import static org.objectledge.filesystem.FileSystem.directoryPath;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,6 +52,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -74,15 +79,40 @@ import org.objectledge.coral.schema.AttributeHandler;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
+import org.objectledge.i18n.DateFormatTool;
+import org.objectledge.i18n.DateFormatter;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.MergingException;
+import org.objectledge.templating.Templating;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.StringUtils;
 import org.picocontainer.Startable;
 
+import net.cyklotron.cms.category.CategoryException;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.util.OfflineLinkRenderingService;
 import net.cyklotron.cms.util.ProtectedValidityFilter;
+
+import com.sun.syndication.feed.synd.SyndCategory;
+import com.sun.syndication.feed.synd.SyndCategoryImpl;
+import com.sun.syndication.feed.synd.SyndContent;
+import com.sun.syndication.feed.synd.SyndContentImpl;
+import com.sun.syndication.feed.synd.SyndEntry;
+import com.sun.syndication.feed.synd.SyndEntryImpl;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.feed.synd.SyndFeedImpl;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.SyndFeedOutput;
 
 public class NgoDatabaseServiceImpl
     implements NgoDatabaseService, Startable
@@ -91,11 +121,13 @@ public class NgoDatabaseServiceImpl
 
     private static final String OUTGOING_FILE = "ngo/database/outgoing/update.xml";
 
-    private static final String FEEDS_DIR = "ngo/database/feeds";
+    private static final String FEEDS_DIR = "ngo/database/feeds/";
 
     private static final OutputFormat OUTGOING_FORMAT = new OutputFormat("  ", true, "UTF-8");
 
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm";
+
+    private static final String DEFAULT_LOCALE = "pl_PL";
 
     private final Logger logger;
 
@@ -113,25 +145,73 @@ public class NgoDatabaseServiceImpl
 
     private final DateFormat dateFormat;
 
+    private final String newsFeedType;
+
+    private final String newsFeedTitle;
+
+    private final int newsFeedQueryDays;
+
+    private final String newsFeedURL;
+
+    private final String newsFeedIdParam;
+
+    private final SiteResource[] newsFeedSites;
+
+    private final String newsFeedDescription;
+
+    private final long newsFeedCacheTime;
+
+    private final Templating templating;
+
+    private final OfflineLinkRenderingService offlineLinkRenderingService;
+
+    private final DateFormatter dateFormatter;
+
+    private final Locale locale;
+
+    private final CategoryService categoryService;
+
     public NgoDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem,
-        SiteService siteService, CoralSessionFactory coralSessionFactory)
+        SiteService siteService, CoralSessionFactory coralSessionFactory, Templating templating,
+        OfflineLinkRenderingService offlineLinkRenderingService, DateFormatter dateFormatter,
+        CategoryService categoryService)
         throws Exception
     {
         this.logger = logger;
         this.fileSystem = fileSystem;
         this.coralSessionFactory = coralSessionFactory;
+        this.templating = templating;
+        this.offlineLinkRenderingService = offlineLinkRenderingService;
+        this.dateFormatter = dateFormatter;
+        this.categoryService = categoryService;
         CoralSession coralSession = coralSessionFactory.getAnonymousSession();
         try
         {
+            // date format
+            Configuration dateFormatConfig = config.getChild("dateFormat");
+            this.dateFormat = new SimpleDateFormat(dateFormatConfig.getChild("pattern").getValue(
+                DEFAULT_DATE_FORMAT));
+            this.locale = StringUtils.getLocale(dateFormatConfig.getChild("locale").getValue(
+                DEFAULT_LOCALE));
             // incoming
-            this.sourceURL = config.getChild("incoming").getChild("sourceURL").getValue();
+            Configuration incomingConfig = config.getChild("incoming");
+            this.sourceURL = incomingConfig.getChild("sourceURL").getValue();
             // outgoing
-            this.outgoingQueryDays = config.getChild("outgoing").getChild("queryDays")
-                .getValueAsInteger();
-            this.outgoingSites = getSites(config.getChild("outgoing").getChild("sites"),
-                siteService, coralSession);
-            this.dateFormat = new SimpleDateFormat(config.getChild("outgoing").getChild(
-                "dateFormat").getValue(DEFAULT_DATE_FORMAT));
+            Configuration outgoingConfig = config.getChild("outgoing");
+            this.outgoingQueryDays = outgoingConfig.getChild("queryDays").getValueAsInteger();
+            this.outgoingSites = getSites(outgoingConfig.getChild("sites"), siteService,
+                coralSession);
+            // news feed
+            Configuration newsFeedConfig = config.getChild("newsFeed");
+            this.newsFeedURL = newsFeedConfig.getChild("baseURL").getValue();
+            this.newsFeedIdParam = newsFeedConfig.getChild("idParameter").getValue();
+            this.newsFeedType = newsFeedConfig.getChild("type").getValue();
+            this.newsFeedTitle = newsFeedConfig.getChild("title").getValue();
+            this.newsFeedDescription = newsFeedConfig.getChild("description").getValue();
+            this.newsFeedQueryDays = newsFeedConfig.getChild("queryDays").getValueAsInteger();
+            this.newsFeedCacheTime = newsFeedConfig.getChild("cacheTime").getValueAsLong();
+            this.newsFeedSites = getSites(newsFeedConfig.getChild("sites"), siteService,
+                coralSession);
         }
         finally
         {
@@ -243,9 +323,18 @@ public class NgoDatabaseServiceImpl
     public void updateOutgoing()
     {
         // query documents
-        List<DocumentNodeResource> documents = queryDocuments(outgoingSites,
-            outgoingQueryDays, null);
-        
+        List<DocumentNodeResource> documents = null;
+        Date endDate = offsetDate(new Date(), outgoingQueryDays);
+        CoralSession coralSession = coralSessionFactory.getAnonymousSession();
+        try
+        {
+            documents = queryDocuments(outgoingSites, endDate, -1L, coralSession);
+        }
+        finally
+        {
+            coralSession.close();
+        }
+
         // group documents by organization id
         Map<Long, List<DocumentNodeResource>> orgMap = new HashMap<Long, List<DocumentNodeResource>>();
         for(DocumentNodeResource doc : documents)
@@ -305,10 +394,6 @@ public class NgoDatabaseServiceImpl
         {
             logger.error("failed to write outgoing data", e);
         }
-        catch(UnsupportedCharactersInFilePathException e)
-        {
-            throw new RuntimeException("internal error", e);
-        }
     }
 
     private static SiteResource[] getSites(Configuration config, SiteService siteService,
@@ -324,16 +409,14 @@ public class NgoDatabaseServiceImpl
         return sites;
     }
 
-    private String getDateLiteral(Date date, int offset, CoralSession coralSession)
+    @SuppressWarnings("unchecked")
+    private static String getDateLiteral(Date date, CoralSession coralSession)
     {
         try
         {
-            GregorianCalendar cal = new GregorianCalendar();
-            cal.setTime(date);
-            cal.add(Calendar.DAY_OF_MONTH, -offset);
             AttributeHandler<Date> handler = (AttributeHandler<Date>)coralSession.getSchema()
                 .getAttributeClass("date").getHandler();
-            return handler.toExternalString(cal.getTime());
+            return handler.toExternalString(date);
         }
         catch(EntityDoesNotExistException e)
         {
@@ -341,10 +424,17 @@ public class NgoDatabaseServiceImpl
         }
     }
 
-    private List<DocumentNodeResource> queryDocuments(SiteResource[] sites, int queryDays,
-        String organizationId)
+    private static Date offsetDate(Date date, int offsetDays)
     {
-        CoralSession coralSession = coralSessionFactory.getAnonymousSession();
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        cal.add(Calendar.DAY_OF_MONTH, -offsetDays);
+        return cal.getTime();
+    }
+
+    private List<DocumentNodeResource> queryDocuments(SiteResource[] sites, Date endDate,
+        long organizationId, CoralSession coralSession)
+    {
         try
         {
             StringBuilder query = new StringBuilder();
@@ -359,7 +449,7 @@ public class NgoDatabaseServiceImpl
                 }
             }
             query.append(") ");
-            if(organizationId != null)
+            if(organizationId != -1L)
             {
                 query.append("AND organizationIds LIKE '%," + organizationId + ",%' ");
             }
@@ -368,13 +458,14 @@ public class NgoDatabaseServiceImpl
                 query.append("AND organizationIds != '' ");
             }
             query.append("AND customModificationTime > ");
-            query.append(getDateLiteral(new Date(), queryDays, coralSession));
+            query.append(getDateLiteral(endDate, coralSession));
             QueryResults results = coralSession.getQuery().executeQuery(query.toString());
             List<DocumentNodeResource> documents = new ArrayList<DocumentNodeResource>();
-            
+
             // trim down the results to publicly visible documents
             Subject anonymousSubject = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
-            ProtectedValidityFilter filter = new ProtectedValidityFilter(coralSession, anonymousSubject, new Date());
+            ProtectedValidityFilter filter = new ProtectedValidityFilter(coralSession,
+                anonymousSubject, new Date());
             for(QueryResults.Row row : results)
             {
                 if(filter.accept(row.get()))
@@ -391,10 +482,6 @@ public class NgoDatabaseServiceImpl
         catch(EntityDoesNotExistException e)
         {
             throw new RuntimeException("internal error", e);
-        }
-        finally
-        {
-            coralSession.close();
         }
     }
 
@@ -474,5 +561,183 @@ public class NgoDatabaseServiceImpl
     private static String nvl(String s)
     {
         return s != null ? s : "";
+    }
+
+    // RSS/Atom news feed for organization
+
+    public String getOrganizationNewsFeed(Parameters parameters)
+        throws IOException, FeedException, ProcessingException, CategoryException
+    {
+        long organizationId = parameters.getLong(newsFeedIdParam);
+        String feedContents = loadCachedFeed(organizationId);
+        if(feedContents == null)
+        {
+            CoralSession coralSession = coralSessionFactory.getAnonymousSession();
+            try
+            {
+                Organization organization = organizations.getOrganization(organizationId);
+                if(organization == null)
+                {
+                    throw new ProcessingException("organization " + organizationId + " not found");
+                }
+                Date startDate = new Date();
+                Date endDate = offsetDate(startDate, outgoingQueryDays);
+                List<DocumentNodeResource> documents = queryDocuments(outgoingSites, endDate,
+                    organizationId, coralSession);
+                SyndFeed feed = buildFeed(organization, documents, startDate, endDate, coralSession);
+                feedContents = saveCachedFeed(organizationId, feed);
+            }
+            finally
+            {
+                coralSession.close();
+            }
+        }
+        return feedContents;
+    }
+
+    private String cachedFeedPath(String id)
+    {
+        return FEEDS_DIR + id.substring(0, Math.min(2, id.length())) + "/" + id + ".xml";
+    }
+
+    private String loadCachedFeed(long organizationId)
+        throws IOException
+    {
+        String path = cachedFeedPath(Long.toString(organizationId));
+        if(fileSystem.exists(path))
+        {
+            if((System.currentTimeMillis() - fileSystem.lastModified(path)) / 1000 < newsFeedCacheTime)
+            {
+                return fileSystem.read(path, "UTF-8");
+            }
+        }
+        return null;
+    }
+
+    private String saveCachedFeed(long organizationId, SyndFeed feed)
+        throws IOException, FeedException
+    {
+        String path = cachedFeedPath(Long.toString(organizationId));
+        if(!fileSystem.exists(FileSystem.directoryPath(path)))
+        {
+            fileSystem.mkdirs(FileSystem.directoryPath(path));
+        }
+        SyndFeedOutput feedOutput = new SyndFeedOutput();
+        String feedContents = feedOutput.outputString(feed);
+        fileSystem.write(path, feedContents, "UTF-8");
+        return feedContents;
+    }
+
+    private SyndFeed buildFeed(Organization organization, List<DocumentNodeResource> documents,
+        Date startDate, Date endDate, CoralSession coralSession)
+        throws CategoryException
+    {
+        List<SyndEntry> entries = new ArrayList<SyndEntry>();
+        SyndEntry entry;
+        SyndContent description;
+        LinkRenderer linkRenderer = offlineLinkRenderingService.getLinkRenderer();
+
+        for(DocumentNodeResource doc : documents)
+        {
+            entry = new SyndEntryImpl();
+            entry.setTitle(doc.getTitle());
+            try
+            {
+                entry.setLink(linkRenderer.getNodeURL(coralSession, doc));
+            }
+            catch(ProcessingException e)
+            {
+                throw new RuntimeException("internal error", e);
+            }
+
+            if(doc.getValidityStart() == null)
+            {
+                entry.setPublishedDate(doc.getCreationTime());
+            }
+            else
+            {
+                entry.setPublishedDate(doc.getValidityStart());
+            }
+            String docDescription = "";
+            if(doc.getAbstract() != null)
+            {
+                docDescription = doc.getAbstract();
+            }
+            description = new SyndContentImpl();
+            description.setType("text/plain");
+            description.setValue(docDescription);
+            entry.setDescription(description);
+            entry.setCategories(documentCategories(doc, coralSession));
+            entries.add(entry);
+        }
+
+        SyndFeed feed = new SyndFeedImpl();
+        feed.setFeedType(newsFeedType);
+        feed.setEncoding("UTF-8");
+        feed.setLink(newsFeedURL + organization.getId());
+        feed.setTitle(renderFeedDescription(newsFeedTitle, organization, startDate, endDate));
+        feed.setDescription(renderFeedDescription(newsFeedDescription, organization, startDate,
+            endDate));
+
+        feed.setPublishedDate(endDate);
+        feed.setEncoding("UTF-8");
+        feed.setEntries(entries);
+
+        return feed;
+    }
+
+    private String renderFeedDescription(String template, Organization organization,
+        Date startDate, Date endDate)
+    {
+        TemplatingContext templatingContext = templating.createContext();
+        templatingContext.put("organization", organization);
+        DateFormatTool dateFormatTool = new DateFormatTool(dateFormatter, locale, dateFormat);
+        templatingContext.put("dateFormat", dateFormatTool);
+        templatingContext.put("startDate", startDate);
+        templatingContext.put("endDate", endDate);
+        StringWriter writer = new StringWriter();
+        try
+        {
+            templating.merge(templatingContext, new StringReader(template), writer, "<inline>");
+            return writer.toString();
+        }
+        catch(MergingException e)
+        {
+            logger.error("error while rendering feed description", e);
+            return "";
+        }
+    }
+
+    private List<SyndCategory> documentCategories(DocumentNodeResource document,
+        CoralSession coralSession)
+        throws CategoryException
+    {
+        List<SyndCategory> syndCategories = new ArrayList<SyndCategory>();
+        CategoryResource[] categories = categoryService
+            .getCategories(coralSession, document, false);
+        Resource globalCategoryRoot = categoryService.getCategoryRoot(coralSession, null);
+        Resource siteCategoryRoot = categoryService.getCategoryRoot(coralSession, document
+            .getSite());
+        for(CategoryResource category : categories)
+        {
+            String categoryURI = null;
+            if(coralSession.getStore().isAncestor(globalCategoryRoot, category))
+            {
+                categoryURI = category.getPath().substring(globalCategoryRoot.getPath().length());
+            }
+            if(coralSession.getStore().isAncestor(siteCategoryRoot, category))
+            {
+                categoryURI = "/" + document.getSite().getName()
+                    + category.getPath().substring(siteCategoryRoot.getPath().length());
+            }
+            if(categoryURI != null)
+            {
+                SyndCategory syndCategory = new SyndCategoryImpl();
+                syndCategory.setName(category.getName());
+                syndCategory.setTaxonomyUri(categoryURI);
+                syndCategories.add(syndCategory);
+            }
+        }
+        return syndCategories;
     }
 }

@@ -1,6 +1,14 @@
 package net.cyklotron.cms.ngodatabase;
 
+import java.io.IOException;
 import java.util.Set;
+
+import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
+
+import net.cyklotron.cms.category.CategoryException;
+
+import com.sun.syndication.io.FeedException;
 
 /**
  * Integration between Cyklotron and bazy.ngo.pl
@@ -36,9 +44,21 @@ public interface NgoDatabaseService
      * Update incoming organizations data from source.
      */
     public void updateIncoming();
-    
+
     /**
      * Update outgoing organizations data file.
      */
     public void updateOutgoing();
+
+    /**
+     * Returns the contents of RSS/Atom news feed for an organization.
+     * <P>
+     * Content-Type header for the response should be text/xml and encoding should be UTF-8.
+     * </p>
+     * 
+     * @param parameters request parameters, containing organization id
+     * @return contents of the feed.
+     */
+    public String getOrganizationNewsFeed(Parameters parameters)
+        throws IOException, FeedException, ProcessingException, CategoryException;
 }
