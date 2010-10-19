@@ -40,8 +40,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,7 +52,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
@@ -65,7 +62,6 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
-import org.dom4j.dom.DOMDocument;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
@@ -577,8 +573,8 @@ public class NgoDatabaseServiceImpl
                     throw new ProcessingException("organization " + organizationId + " not found");
                 }
                 Date startDate = new Date();
-                Date endDate = offsetDate(startDate, outgoingQueryDays);
-                List<DocumentNodeResource> documents = queryDocuments(outgoingSites, endDate,
+                Date endDate = offsetDate(startDate, newsFeedQueryDays);
+                List<DocumentNodeResource> documents = queryDocuments(newsFeedSites, endDate,
                     organizationId, coralSession);
                 SyndFeed feed = buildFeed(organization, documents, startDate, endDate, coralSession);
                 feedContents = saveCachedFeed(organizationId, feed);
