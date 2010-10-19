@@ -252,30 +252,30 @@ public class NgoDatabaseServiceImpl
 
     private void readIncoming(boolean updateFromSource)
     {
-        Document doc = new DOMDocument();
         try
         {
             if(updateFromSource || !fileSystem.isFile(INCOMING_FILE))
             {
                 downloadIncoming();
+                
+                organizations.startInput();
+                SAXReader saxReader = new SAXReader();
+                Document doc = saxReader.read(fileSystem.getInputStream(INCOMING_FILE));
+                for(Element ogranization : (List<Element>)doc
+                                .selectNodes("/organizacje/organizacjaInfo"))
+                {
+                    String name = ogranization.selectSingleNode("Nazwa_polska").getStringValue();
+                    Long id = Long.parseLong(ogranization.selectSingleNode("ID_Adresowego")
+                        .getStringValue());
+                    String city = ogranization.selectSingleNode("Miasto").getStringValue();
+                    String province = ogranization.selectSingleNode("Wojewodztwo").getStringValue();
+                    String street = ogranization.selectSingleNode("Ulica").getStringValue();
+                    String post_code = ogranization.selectSingleNode("Kod_pocztowy").getStringValue();
+                    this.organizations.addOrganization(new Organization(id, name, province, city,
+                        street, post_code));
+                }
+                organizations.endInput();
             }
-            organizations.startInput();
-            SAXReader saxReader = new SAXReader();
-            doc = saxReader.read(fileSystem.getInputStream(INCOMING_FILE));
-            for(Element ogranization : (List<Element>)doc
-                .selectNodes("/organizacje/organizacjaInfo"))
-            {
-                String name = ogranization.selectSingleNode("Nazwa_polska").getStringValue();
-                Long id = Long.parseLong(ogranization.selectSingleNode("ID_Adresowego")
-                    .getStringValue());
-                String city = ogranization.selectSingleNode("Miasto").getStringValue();
-                String province = ogranization.selectSingleNode("Wojewodztwo").getStringValue();
-                String street = ogranization.selectSingleNode("Ulica").getStringValue();
-                String post_code = ogranization.selectSingleNode("Kod_pocztowy").getStringValue();
-                this.organizations.addOrganization(new Organization(id, name, province, city,
-                    street, post_code));
-            }
-            organizations.endInput();
         }
         catch(DocumentException e)
         {
