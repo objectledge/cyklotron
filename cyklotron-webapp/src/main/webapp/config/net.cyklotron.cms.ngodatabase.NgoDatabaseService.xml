@@ -46,5 +46,7 @@
     <type>rss_2.0</type>
     <title>${organization.name}</title>
     <description>Wiadomości opublikowane w serwisie ngo.pl</description>
+    <baseURL>http://ngo.pl/view/ngodatabase.NewsFeed?org=</baseURL>
+    <idParameter>org</idParameter>    
   </newsFeed>
 </config>
