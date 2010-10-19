@@ -161,6 +161,14 @@ public interface IndexingFacility
         throws SearchException;
     
     /**
+     * remove index lock file.
+     * 
+     * @param index
+     */
+    public void removeIndexLock(IndexResource index)
+        throws SearchException;
+    
+    /**
      * Added given indexable resources to the index in a batch mode.
      * 
      * @param index

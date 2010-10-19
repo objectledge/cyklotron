@@ -160,6 +160,19 @@ public class SearchServiceImpl
 
     public void start()
     {
+        CoralSession coralSession = sessionFactory.getRootSession();
+        try
+        {
+            this.removeIndexesLocks(coralSession);
+        }
+        catch(SearchException e)
+        {
+            throw new RuntimeException(e);
+        }
+        catch(InvalidResourceNameException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
     
     public void stop()
@@ -594,6 +607,24 @@ public class SearchServiceImpl
             throw new IllegalStateException("the security relation already exists");
         }
         return branchesRelation;
+    }
+    
+    private void removeIndexesLocks(CoralSession coralSession)
+        throws SearchException, InvalidResourceNameException
+    {
+        SiteResource[] sites = siteService.getSites(coralSession);
+        for(int i = 0; i < sites.length; i++)
+        {
+            Resource parent = getIndexesRoot(coralSession, sites[i]);
+            Resource[] indexes = coralSession.getStore().getResource(parent);
+            for(Resource index : indexes)
+            {
+                if(index instanceof IndexResource)
+                {
+                    indexingFacility.removeIndexLock((IndexResource)index);
+                }
+            }
+        }
     }
     
     /**
