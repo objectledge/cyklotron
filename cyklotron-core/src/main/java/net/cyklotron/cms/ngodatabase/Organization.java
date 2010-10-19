@@ -28,9 +28,6 @@
 
 package net.cyklotron.cms.ngodatabase;
 
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.document.NumericField;
 
 public class Organization
 {
@@ -38,15 +35,15 @@ public class Organization
 
     public Long id;
 
-    private String name;
+    String name;
 
-    private String province;
+    String province;
 
-    private String city;
+    String city;
 
-    private String street;
+    String street;
 
-    private String postCode;
+    String postCode;
 
     private String tel;
 
@@ -175,36 +172,5 @@ public class Organization
     public boolean matches(String name)
     {
         return this.name.toLowerCase().contains(name.toLowerCase());
-    }
-
-    // lucene integration ////////////////////////////////////////////////////////////////////////
-
-    public static Document toDocument(Organization organization)
-    {
-        Document document = new Document();
-        document
-            .add(new NumericField("id", 4, Field.Store.YES, true).setLongValue(organization.id));
-        document.add(new Field("name", organization.name, Field.Store.YES, Field.Index.ANALYZED,
-            Field.TermVector.WITH_POSITIONS_OFFSETS));
-        document.add(new Field("province", organization.province, Field.Store.YES,
-            Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-        document.add(new Field("city", organization.city, Field.Store.YES, Field.Index.ANALYZED,
-            Field.TermVector.WITH_POSITIONS_OFFSETS));
-        document.add(new Field("street", organization.street, Field.Store.YES,
-            Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-        document.add(new Field("postCode", organization.postCode, Field.Store.YES,
-            Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-        return document;
-    }
-
-    public static Organization fromDocument(Document document)
-    {
-        long id = Long.parseLong(document.get("id"));
-        String name = document.get("name");
-        String province = document.get("province");
-        String city = document.get("city");
-        String street = document.get("street");
-        String postCode = document.get("postCode");
-        return new Organization(id, name, province, city, street, postCode);
     }
 }

@@ -133,7 +133,7 @@ public class NgoDatabaseServiceImpl
 
     private final CoralSessionFactory coralSessionFactory;
 
-    private final Organizations organizations;
+    private final OrganizationsIndex organizations;
 
     private final int outgoingQueryDays;
 
@@ -180,7 +180,7 @@ public class NgoDatabaseServiceImpl
         this.offlineLinkRenderingService = offlineLinkRenderingService;
         this.dateFormatter = dateFormatter;
         this.categoryService = categoryService;
-        this.organizations = new Organizations(fileSystem, logger);
+        this.organizations = new OrganizationsIndex(fileSystem, logger);
         CoralSession coralSession = coralSessionFactory.getAnonymousSession();
         try
         {
@@ -254,7 +254,7 @@ public class NgoDatabaseServiceImpl
             {
                 downloadIncoming();
                 
-                organizations.startInput();
+                organizations.startUpdate();
                 SAXReader saxReader = new SAXReader();
                 Document doc = saxReader.read(fileSystem.getInputStream(INCOMING_FILE));
                 for(Element ogranization : (List<Element>)doc
@@ -267,10 +267,10 @@ public class NgoDatabaseServiceImpl
                     String province = ogranization.selectSingleNode("Wojewodztwo").getStringValue();
                     String street = ogranization.selectSingleNode("Ulica").getStringValue();
                     String post_code = ogranization.selectSingleNode("Kod_pocztowy").getStringValue();
-                    this.organizations.addOrganization(new Organization(id, name, province, city,
+                    this.organizations.addItem(new Organization(id, name, province, city,
                         street, post_code));
                 }
-                organizations.endInput();
+                organizations.endUpdate();
             }
         }
         catch(DocumentException e)

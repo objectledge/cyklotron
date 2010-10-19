@@ -28,20 +28,17 @@
 
 package net.cyklotron.cms.ngodatabase;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
-import org.apache.lucene.index.CheckIndex;
-import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.NumericField;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
@@ -49,78 +46,22 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.NIOFSDirectory;
-import org.apache.lucene.util.Version;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.LocalFileSystemProvider;
 
 /**
  * @author lukasz, rafal
  */
-public class Organizations
+public class OrganizationsIndex extends AbstractIndex<Organization>
 {
     // constants /////////////////////////////////////////////////////////////
 
     private static final String INDEX_PATH = "ngo/database/incoming/index";
     
-    private static final StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
-
-    private final IndexWriter writer;
-
-    private final IndexSearcher searcher;
-    
-    private final Logger log;
-
-    public Organizations(FileSystem fileSystem, Logger log)
+    public OrganizationsIndex(FileSystem fileSystem, Logger log)
         throws IOException
     {
-        File indexLocation = ((LocalFileSystemProvider)fileSystem.getProvider("local"))
-            .getFile(INDEX_PATH);
-        Directory directory = new NIOFSDirectory(indexLocation);
-        // remove stale write lock if one exists
-        if(directory.fileExists("write.lock"))
-        {
-            directory.deleteFile("write.lock");
-        }
-        IndexWriter writer = null;
-        try
-        {
-            writer = new IndexWriter(directory, analyzer,
-                IndexWriter.MaxFieldLength.LIMITED);
-        }
-        catch(CorruptIndexException e)
-        {
-            log.error("corrupt index detected, attempting to recover", e);
-            CheckIndex checkIndex = new CheckIndex(directory);
-            checkIndex.checkIndex();
-            // try to reopen index
-            writer = new IndexWriter(directory, analyzer,
-                IndexWriter.MaxFieldLength.LIMITED);
-        }             
-        this.writer = writer;
-        this.searcher = new IndexSearcher(writer.getReader());
-        this.log = log;
-    }
-
-    public void startInput()
-        throws IOException
-    {
-        writer.deleteAll();
-    }
-
-    public void addOrganization(Organization organization)
-        throws CorruptIndexException, IOException
-    {
-        writer.addDocument(Organization.toDocument(organization));
-    }
-
-    public void endInput()
-        throws CorruptIndexException, IOException
-    {
-        writer.optimize();
-        writer.commit();
+        super(fileSystem, log, INDEX_PATH);
     }
 
     public Organization getOrganization(Long id)
@@ -131,12 +72,12 @@ public class Organizations
             TopDocs result = searcher.search(query, 1);
             if(result.totalHits == 1)
             {
-                return Organization.fromDocument(searcher.doc(result.scoreDocs[0].doc));
+                return fromDocument(searcher.doc(result.scoreDocs[0].doc));
             }
         }
         catch(Exception e)
         {
-            log.error("search error", e);
+            logger.error("search error", e);
         }
         return null;
     }
@@ -159,13 +100,42 @@ public class Organizations
             TopDocs result = searcher.search(query, null, 20, new Sort(new SortField(null, SortField.SCORE)));
             for(ScoreDoc scoreDoc : result.scoreDocs)
             {
-                organizations.add(Organization.fromDocument(searcher.doc(scoreDoc.doc)));
+                organizations.add(fromDocument(searcher.doc(scoreDoc.doc)));
             }
         }
         catch(Exception e)
         {
-            log.error("search error", e);
+            logger.error("search error", e);
         }
         return organizations;
+    }
+
+    public Document toDocument(Organization organization)
+    {
+        Document document = new Document();
+        document
+            .add(new NumericField("id", 4, Field.Store.YES, true).setLongValue(organization.id));
+        document.add(new Field("name", organization.name, Field.Store.YES, Field.Index.ANALYZED,
+            Field.TermVector.WITH_POSITIONS_OFFSETS));
+        document.add(new Field("province", organization.province, Field.Store.YES,
+            Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+        document.add(new Field("city", organization.city, Field.Store.YES, Field.Index.ANALYZED,
+            Field.TermVector.WITH_POSITIONS_OFFSETS));
+        document.add(new Field("street", organization.street, Field.Store.YES,
+            Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+        document.add(new Field("postCode", organization.postCode, Field.Store.YES,
+            Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
+        return document;
+    }
+
+    public Organization fromDocument(Document document)
+    {
+        long id = Long.parseLong(document.get("id"));
+        String name = document.get("name");
+        String province = document.get("province");
+        String city = document.get("city");
+        String street = document.get("street");
+        String postCode = document.get("postCode");
+        return new Organization(id, name, province, city, street, postCode);
     }
 }
