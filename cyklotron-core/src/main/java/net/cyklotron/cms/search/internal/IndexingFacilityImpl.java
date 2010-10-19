@@ -477,21 +477,23 @@ public class IndexingFacilityImpl implements IndexingFacility
      * @param index
      */    
     public void removeIndexLock(IndexResource index)
-    throws SearchException
+        throws SearchException
     {
         Directory dir = getIndexDirectory(index);
         synchronized(index)
         {
             try
             {
-                if(dir.fileExists("write.lock"))
+                if(dir.fileExists(IndexWriter.WRITE_LOCK_NAME))
                 {
-                 dir.clearLock("write.lock");
+                    dir.clearLock(IndexWriter.WRITE_LOCK_NAME);
                 }
             }
-            catch (IOException e)
+            catch(IOException e)
             {
-                throw new SearchException("IndexingLock: Could not remove the index lock file for index: " + index.getPath(), e);
+                throw new SearchException(
+                    "IndexingLock: Could not remove the index lock file for index: "
+                        + index.getPath(), e);
             }
         }
     }
