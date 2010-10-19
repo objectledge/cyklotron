@@ -9,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
+import org.dom4j.Branch;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -24,9 +25,9 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.mvc.tools.EmailTool;
 
 import net.cyklotron.cms.documents.DocumentException;
+import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.LinkRenderer;
-import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -42,6 +43,8 @@ import net.cyklotron.cms.util.URI.MalformedURIException;
  */
 public class DocumentRenderingHelper
 {
+    private final Pattern EMAIL_PATTERN = Pattern.compile("[a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+\\.[a-zA-Z]{1,4}");
+    
     private HTMLService htmlService;
 
     private HTMLEntityDecoder entityDecoder = new HTMLEntityDecoder();
@@ -452,24 +455,23 @@ public class DocumentRenderingHelper
     {
         EmailTool emailTool = new EmailTool();
         
-        List links = dom4jDoc.selectNodes("//A");
-        for(Iterator i=links.iterator(); i.hasNext();)
+        List<Element> links = (List<Element>)dom4jDoc.selectNodes("//A");
+        for(Element element : links)
         {
-            Element element = (Element)(i.next());
             Attribute attribute = element.attribute("href");
             
             if(attribute.getValue().toLowerCase().startsWith("mailto:"))
             {
                 String mailTo = attribute.getValue().toLowerCase().substring("mailto:".length());
-                String mailText = element.getTextTrim();
+                String mailText = element.asXML();
                 
-                Element newElement = DocumentHelper.createElement("script");
-                newElement.addAttribute("language", "javascript");
-                newElement.setText("/* Email obfuscator. Prevents e-mail harvesting by spammers. */ " + emailTool.encodeLink(mailTo, mailText,false));
+                Element scriptElement = DocumentHelper.createElement("SCRIPT");
+                scriptElement.addAttribute("type", "text/javascript");
+                scriptElement.setText(emailTool.encodeLink(mailTo, mailText));
                 
-                List elements = element.getParent().content();
-                int mailToIndex = elements.indexOf(element);
-                elements.set(mailToIndex, newElement);
+                List<Node> branchContent = (List<Node>)element.getParent().content();
+                int mailToIndex = branchContent.indexOf(element);
+                branchContent.set(mailToIndex, scriptElement);
             }
             else
             {
@@ -477,19 +479,37 @@ public class DocumentRenderingHelper
             }
         }
         
-        Pattern email_pattern = Pattern.compile("[a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+.[a-zA-Z]{1,4}");
         List<Text> content = dom4jDoc.selectNodes("descendant::text()");
-        for(Iterator i = content.iterator(); i.hasNext();)
+        for(Text node : content)
         {
-            StringBuffer sb = new StringBuffer();
-            Text node = (Text)(i.next());
-            Matcher matcher = email_pattern.matcher(node.getText());
-            while(matcher.find())
+            String text = node.getText();
+            Matcher matcher = EMAIL_PATTERN.matcher(text);
+            if(matcher.find())
             {
-                matcher.appendReplacement(sb, matcher.quoteReplacement(emailTool.encodeLink(matcher.group(), matcher.group(), true)));
+                List<Node> newContent = new ArrayList<Node>(3);
+                int lastEnd = 0;
+                do
+                {
+                    // heading text
+                    newContent.add(DocumentHelper.createText(text.substring(lastEnd, matcher
+                        .start())));
+                    // replacement
+                    Element scriptElement = DocumentHelper.createElement("SCRIPT");
+                    scriptElement.addAttribute("type", "text/javascript");
+                    scriptElement.setText(emailTool.encodeAddress(matcher.group()));
+                    newContent.add(scriptElement);
+                    lastEnd = matcher.end();
+                }
+                while(matcher.find());
+                // trailing text
+                newContent.add(DocumentHelper
+                    .createText(text.substring(lastEnd, text.length())));
+
+                List<Node> branchContent = (List<Node>)node.getParent().content();
+                int nodeIndex = branchContent.indexOf(node);
+                branchContent.remove(nodeIndex);
+                branchContent.addAll(nodeIndex, newContent);
             }
-            matcher.appendTail(sb);
-            node.setText(sb.toString());
         }
     }
 }
