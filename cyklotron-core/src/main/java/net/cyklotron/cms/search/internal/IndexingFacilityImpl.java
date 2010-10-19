@@ -486,7 +486,7 @@ public class IndexingFacilityImpl implements IndexingFacility
             {
                 if(dir.fileExists(IndexWriter.WRITE_LOCK_NAME))
                 {
-                    dir.clearLock(IndexWriter.WRITE_LOCK_NAME);
+                    dir.deleteFile(IndexWriter.WRITE_LOCK_NAME);
                 }
             }
             catch(IOException e)
