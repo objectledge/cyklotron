@@ -165,7 +165,7 @@ public interface IndexingFacility
      * 
      * @param index
      */
-    public void removeIndexLock(IndexResource index)
+    public void removeStaleWriteLock(IndexResource index)
         throws SearchException;
     
     /**

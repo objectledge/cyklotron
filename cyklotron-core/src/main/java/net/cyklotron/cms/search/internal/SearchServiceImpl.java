@@ -163,7 +163,7 @@ public class SearchServiceImpl
         CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            this.removeIndexesLocks(coralSession);
+            this.removeStaleWriteLocks(coralSession);
         }
         catch(SearchException e)
         {
@@ -609,7 +609,7 @@ public class SearchServiceImpl
         return branchesRelation;
     }
     
-    private void removeIndexesLocks(CoralSession coralSession)
+    private void removeStaleWriteLocks(CoralSession coralSession)
         throws SearchException, InvalidResourceNameException
     {
         SiteResource[] sites = siteService.getSites(coralSession);
@@ -621,7 +621,7 @@ public class SearchServiceImpl
             {
                 if(index instanceof IndexResource)
                 {
-                    indexingFacility.removeIndexLock((IndexResource)index);
+                    indexingFacility.removeStaleWriteLock((IndexResource)index);
                 }
             }
         }
