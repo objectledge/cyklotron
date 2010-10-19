@@ -37,6 +37,7 @@ import java.util.List;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
+import org.apache.lucene.index.CheckIndex;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
@@ -78,8 +79,27 @@ public class Organizations
         File indexLocation = ((LocalFileSystemProvider)fileSystem.getProvider("local"))
             .getFile(INDEX_PATH);
         Directory directory = new NIOFSDirectory(indexLocation);
-        this.writer = new IndexWriter(directory, analyzer,
-            IndexWriter.MaxFieldLength.LIMITED);
+        // remove stale write lock if one exists
+        if(directory.fileExists("write.lock"))
+        {
+            directory.deleteFile("write.lock");
+        }
+        IndexWriter writer = null;
+        try
+        {
+            writer = new IndexWriter(directory, analyzer,
+                IndexWriter.MaxFieldLength.LIMITED);
+        }
+        catch(CorruptIndexException e)
+        {
+            log.error("corrupt index detected, attempting to recover", e);
+            CheckIndex checkIndex = new CheckIndex(directory);
+            checkIndex.checkIndex();
+            // try to reopen index
+            writer = new IndexWriter(directory, analyzer,
+                IndexWriter.MaxFieldLength.LIMITED);
+        }             
+        this.writer = writer;
         this.searcher = new IndexSearcher(writer.getReader());
         this.log = log;
     }
