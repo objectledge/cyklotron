@@ -1,7 +1,7 @@
 package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Provides access to a collection of location descriptors.
@@ -9,81 +9,50 @@ import java.util.Set;
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @version $Id: DocumentService.java,v 1.4 2007-11-18 21:23:07 rafal Exp $
  */
-public interface LocationDatabaseService 
+public interface LocationDatabaseService
 {
     /**
      * Update Locations data from source.
      */
     public void update();
+
+    /**
+     * Searches for locations with specified characteristics.
+     * <p>
+     * The field selected with requestedField parameter is searched using prefix match. All other
+     * fields are either matched exactly, or ignored when empty.
+     * </p>
+     * <p>
+     * This method logs and quenches IOExceptions and returns empty results, when index acess
+     * problems occur.
+     * </p>
+     * 
+     * @param requestedField one of "province", "city", "street", "postCode".
+     * @param province user supplied value.
+     * @param city user supplied value.
+     * @param street user supplied value.
+     * @param postCode user supplied value.
+     * @return list of locations sorted by relevance.
+     */
+    public List<Location> getLocations(String requestedField, String province, String city,
+        String street, String postCode);
     
     /**
-     * Get all defined locations.
-     * @return
+     * Returns all terms in given field of location index.
+     * 
+     * @param field of "province", "city", "street", "postCode".
+     * @return list of distict terms in the given field;
      */
-    public Set<Location> getAllLocations();
+    public List<String> getAllTerms(String field);
     
     /**
-     * Get all defined post codes
+     * Checks whether a Location exists with given field exactly matching a value.
+     * 
+     * @param field one of "province", "city", "street", "postCode"
+     * @param value field value.
+     * @return boolean if at least one exact match exits.
+     * @throws IOException on index access problems.
      */
-    public Set<String> getPostCodes();
-    
-    /**
-     * Get post codes matches substring.
-     */
-    public Set<String> getPostCodes(String substring);
-    
-    /**
-     * get Location set by post code
-     */
-    public Set<Location> getLocationsByPostCode(String postCode);
-    
-    /**
-     * check if Location set contains post code
-     */
-    public boolean containsPostCode(String postCode);
-    
-    /**
-     * Get all defined city names.
-     */
-    public Set<String> getCities();
-    
-    /**
-     * Get city names matches substring.
-     */
-    public Set<String> getCities(String substring);
-    
-    /**
-     * get Location set by city name
-     */
-    public Set<Location> getLocationsByCity(String city);
-    
-    /**
-     * check if Location set contains city name
-     */
-    public boolean containsCity(String city);
-    
-    /**
-     * Get all defined province names.
-     */
-    public Set<String> getProvinces();
-    
-    /**
-     * Get province names matches substring.
-     */
-    public Set<String> getProvinces(String substring);
-    
-    /**
-     * get Location set by province name
-     */
-    public Set<Location> getLocationsByProvince(String area);
-    
-    /**
-     * check if Location set contains province
-     */
-    public boolean containsProvince(String province);
-    
-    /**
-     * get Location subset with postCode, city, province
-     */
-    public Set<Location> getLocationByQuery(String postCode, String city, String province);
+    public boolean exactMatchExists(String field, String value)
+        throws IOException;
 }

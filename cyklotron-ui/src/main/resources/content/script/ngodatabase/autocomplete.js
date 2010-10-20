@@ -79,7 +79,7 @@ function initLocationAutocomplete(fields, jsonDataUrl) {
 			qprovince : function() {
 				return fields.province.val();
 			},
-			qtype : "city"
+			qfield : "city"
 		}
 	}).result(function(e, item) {
 		fields.postCode.flushCache();
@@ -98,7 +98,7 @@ function initLocationAutocomplete(fields, jsonDataUrl) {
 			qprovince : function() {
 				return fields.province.val();
 			},
-			qtype : "postCode"
+			qfield : "postCode"
 		}
 	}).result(function(e, item) {
 		fields.city.flushCache();
@@ -117,7 +117,7 @@ function initLocationAutocomplete(fields, jsonDataUrl) {
 			qpostCode : function() {
 				return fields.postCode.val();
 			},
-			qtype : "province"
+			qfield : "province"
 		}
 	}).result(function(e, item) {
 		fields.city.flushCache();

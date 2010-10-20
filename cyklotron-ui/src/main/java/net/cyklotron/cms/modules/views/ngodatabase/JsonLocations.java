@@ -1,17 +1,19 @@
 package net.cyklotron.cms.modules.views.ngodatabase;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
-
+import java.util.List;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.Template;
+import org.objectledge.utils.StackTrace;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.EnclosingView;
@@ -22,7 +24,6 @@ import net.cyklotron.cms.ngodatabase.Location;
 import net.cyklotron.cms.ngodatabase.LocationDatabaseService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * The screen for serving files.
@@ -34,18 +35,13 @@ public class JsonLocations
     extends AbstractBuilder
     implements SecurityChecking
 {
-    /** location types **/
-    public static final String LOCATION_TYPE_CITY = "city";
-
-    public static final String LOCATION_TYPE_POSTCODE = "postCode";
-
-    public static final String LOCATION_TYPE_PROVINCE = "province";
+    private static final int DEFAULT_LIMIT = 25;
 
     /** The logging service. */
-    Logger logger;
+    private Logger logger;
 
     /** The Location service. */
-    LocationDatabaseService locationDatabaseService;
+    private LocationDatabaseService locationDatabaseService;
 
     public JsonLocations(Context context, Logger logger, PreferencesService preferencesService,
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
@@ -59,17 +55,16 @@ public class JsonLocations
     public String build(Template template, String embeddedBuildResults)
         throws BuildException, ProcessingException
     {
-        JSONArray jsonArray = new JSONArray();
         try
         {
-            Set locations = getRequestedLocations(context);
-            jsonArray = LocationsToJson(locations);
+            List<String> fieldValues = getFieldValues(context);
+            return JSONArray.fromObject(fieldValues).toString();
         }
         catch(Exception e)
         {
             logger.error("exception occured", e);
+            return new StackTrace(e).toString();
         }
-        return jsonArray.toString();
     }
 
     /**
@@ -107,80 +102,75 @@ public class JsonLocations
         return EnclosingView.TOP;
     }
 
-    private Set getRequestedLocations(Context context)
+    private List<String> getFieldValues(Context context)
         throws ProcessingException
     {
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
-        String location = parameters.get("q", "");
-        String locationType = parameters.get("qtype", "");
-        String city = parameters.get("qcity", "");
-        String postCode = parameters.get("qpostCode", "");
-        String province = parameters.get("qprovince", "");
 
-        if(city.equals("") && postCode.equals("") && province.equals(""))
+        String requestedField = parameters.get("qfield", "");
+        String query = parameters.get("q", "");
+        String province = parameters.get("qprovince", "");
+        String city = parameters.get("qcity", "");
+        String street = parameters.get("qstreet", "");
+        String postCode = parameters.get("qpostCode", "");
+        int limit = parameters.getInt("limit", DEFAULT_LIMIT);
+
+        if("province".equals(requestedField))
         {
-            if(LOCATION_TYPE_POSTCODE.equals(locationType))
-            {
-                return locationDatabaseService.getPostCodes(location);
-            }
-            else if(LOCATION_TYPE_CITY.equals(locationType))
-            {
-                return locationDatabaseService.getCities(location);
-            }
-            else if(LOCATION_TYPE_PROVINCE.equals(locationType))
-            {
-                return locationDatabaseService.getProvinces(location);
-            }
-            else
-            {
-                return new HashSet<String>();
-            }
+            province = query;
+        }
+        if("city".equals(requestedField))
+        {
+            city = query;
+        }
+        if("street".equals(requestedField))
+        {
+            street = query;
+        }
+        if("postCode".equals(requestedField))
+        {
+            postCode = query;
+        }
+
+        if(requestedField.equals("province")
+            && province.length() + city.length() + street.length() + postCode.length() == 0)
+        {
+            return locationDatabaseService.getAllTerms("province");
         }
         else
         {
-            Set<Location> locations = locationDatabaseService.getLocationByQuery(postCode, city,
-                province);
-            Set<String> results = new HashSet<String>();
-            
-            if(LOCATION_TYPE_POSTCODE.equals(locationType))
-            {
-                for(Location l : locations)
-                {
-                    if(l.getPostCode().contains(location) && !results.contains(l.getPostCode()))
-                    {
-                        results.add(l.getPostCode());
-                    }
-                }
-            }
-            else if(LOCATION_TYPE_CITY.equals(locationType))
-            {
-                for(Location l : locations)
-                {
-                    if(l.getCity().contains(location) && !results.contains(l.getCity()))
-                    {
-                        results.add(l.getCity());
-                    }
-                }
-            }
-            else if(LOCATION_TYPE_PROVINCE.equals(locationType))
-            {
-                for(Location l : locations)
-                {
-                    if(l.getProvince().contains(location) && !results.contains(l.getProvince()))
-                    {
-                        results.add(l.getProvince());
-                    }
-                }
-            }
-            return results;
-        }
+            List<Location> locations = locationDatabaseService.getLocations(requestedField, province,
+                city, street, postCode);
+            return getFieldValues(requestedField, locations, limit);
+        }        
     }
 
-    private JSONArray LocationsToJson(Set locations)
+    private List<String> getFieldValues(String requestedField, List<Location> locations, int limit)
     {
-        JSONArray jsonArray = JSONArray.fromObject(locations);
-        return jsonArray;
+        Set<String> valueSet = new HashSet<String>(locations.size());
+        for(Location location : locations)
+        {
+            String fieldValue = null;
+            if("province".equals(requestedField))
+            {
+                fieldValue = location.getProvince();
+            }
+            if("city".equals(requestedField))
+            {
+                fieldValue = location.getCity();
+            }
+            if("street".equals(requestedField))
+            {
+                fieldValue = location.getStreet();
+            }
+            if("postCode".equals(requestedField))
+            {
+                fieldValue = location.getPostCode();
+            }
+            valueSet.add(fieldValue);
+        }
+        List<String> valueList = new ArrayList<String>(valueSet);
+        Collections.sort(valueList);
+        return valueList.subList(0, Math.min(limit, valueList.size()));
     }
-
 }

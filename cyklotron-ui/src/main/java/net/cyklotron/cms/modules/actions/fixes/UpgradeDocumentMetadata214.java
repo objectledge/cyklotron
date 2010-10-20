@@ -2,6 +2,7 @@ package net.cyklotron.cms.modules.actions.fixes;
 
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
@@ -110,6 +111,7 @@ public class UpgradeDocumentMetadata214
     }
 
     private Location parseOrganisationAddress(String organizationAddress)
+        throws IOException
     {
         String[] fields = organizationAddress.replaceAll("\\s*[-]\\s*", "-").replaceAll(",", " ")
             .split("\\s+");
@@ -122,12 +124,12 @@ public class UpgradeDocumentMetadata214
         {
             if(!field.isEmpty())
             {
-                if(locationDatabaseService.containsCity(field.substring(0, 1).toUpperCase()
+                if(locationDatabaseService.exactMatchExists("city", field.substring(0, 1).toUpperCase()
                     + field.substring(1).toLowerCase()))
                 {
                     city = field;
                 }
-                else if(locationDatabaseService.containsPostCode(field))
+                else if(locationDatabaseService.exactMatchExists("postCode", field))
                 {
                     postCode = field;
                 }
@@ -141,7 +143,7 @@ public class UpgradeDocumentMetadata214
     }
 
     private void convertMetaDom(Document doc)
-        throws DocumentException
+        throws DocumentException, IOException
     {
         Element address = (Element)ADDRESS_XPATH.selectSingleNode(doc);
         String organizationAddress = address.getTextTrim().replaceAll("<[^>]*?>", " ");

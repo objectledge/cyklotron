@@ -31,6 +31,7 @@ package net.cyklotron.cms.ngodatabase;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -131,13 +132,12 @@ public class OrganizationsIndex
         }
     }
 
-    public List<Organization> getOrganizations(String substring)
+    public List<Organization> getOrganizations(String name)
     {
-        List<Organization> organizations = new ArrayList<Organization>();
         try
         {
             BooleanQuery query = new BooleanQuery();
-            List<Term> terms = analyze(substring);
+            List<Term> terms = analyze("name", name);
             for(Term term : terms)
             {
                 Query fuzzyQuery = new FuzzyQuery(term, FUZZY_QUERY_MIN_SIMILARITY,
@@ -149,8 +149,8 @@ public class OrganizationsIndex
         catch(Exception e)
         {
             logger.error("search error", e);
+            return Collections.emptyList();
         }
-        return organizations;
     }
 
     private static class OrganizationNameAnalyzer

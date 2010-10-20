@@ -28,211 +28,109 @@
 
 package net.cyklotron.cms.ngodatabase;
 
+import java.io.IOException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.index.CorruptIndexException;
+import org.jcontainer.dna.Logger;
+import org.objectledge.filesystem.FileSystem;
 import org.picocontainer.Startable;
 
 public class LocationDatabaseServiceImpl
     implements LocationDatabaseService, Startable
-{  
+{
     private final LocationsProvider provider;
 
-    private final Set<Location> allLocations = new HashSet<Location>();
-    
-    private final Map<String, Set<Location>> locationsByProvince = new HashMap<String, Set<Location>>();
+    private final LocationsIndex index;
 
-    private final Map<String, Set<Location>> locationsByCity = new HashMap<String, Set<Location>>();
+    private final Logger logger;
 
-    private final Map<String, Set<Location>> locationsByPostCode = new HashMap<String, Set<Location>>();
-
-    public LocationDatabaseServiceImpl(LocationsProvider provider)
+    public LocationDatabaseServiceImpl(LocationsProvider provider, FileSystem fileSystem,
+        Logger logger)
+        throws IOException
     {
         this.provider = provider;
+        this.logger = logger;
+        this.index = new LocationsIndex(fileSystem, logger);
     }
 
     @Override
     public void start()
     {
-        load(provider.fromCache());
+        try
+        {
+            if(index.isEmpty())
+            {
+                load(provider.fromCache());
+            }
+        }
+        catch(IOException e)
+        {
+            logger.error("failed to rebuild location index");
+        }
     }
 
     @Override
     public void stop()
     {
-    
+
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void update()
     {
-        load(provider.fromSource());
-    }
-    
-    @Override
-    public Set<Location> getAllLocations()
-    {
-        return allLocations;
-    }
-
-    @Override
-    public Set<String> getPostCodes()
-    {
-        return locationsByPostCode.keySet();
-    }
-    
-    @Override
-    public Set<String> getPostCodes(String substring)
-    {
-        return getMachingSubset(locationsByPostCode.keySet(), substring);
-    }
-
-    @Override
-    public Set<Location> getLocationsByPostCode(String postCode)
-    {
-        return locationsByPostCode.get(postCode);
-    }
-    
-    @Override
-    public boolean containsPostCode(String postCode)
-    {
-        return locationsByPostCode.containsKey(postCode);
-    }
-
-    @Override
-    public Set<String> getCities()
-    {      
-        return locationsByCity.keySet();
-    }
-    
-    @Override
-    public Set<String> getCities(String substring)
-    {
-        return getMachingSubset(locationsByCity.keySet(), substring);
-    }
-
-    @Override
-    public Set<Location> getLocationsByCity(String city)
-    {
-        return locationsByCity.get(city);
-    }
-    
-    @Override
-    public boolean containsCity(String city)
-    {
-        return locationsByCity.containsKey(city);
-    }
-
-    @Override
-    public Set<String> getProvinces()
-    {
-        return locationsByProvince.keySet();
-    }
-    
-    @Override
-    public Set<String> getProvinces(String substring)
-    {
-        return getMachingSubset(locationsByProvince.keySet(), substring);
-    }
-
-    @Override
-    public Set<Location> getLocationsByProvince(String province)
-    {
-        return locationsByProvince.get(province);
-    }
-    
-    @Override
-    public boolean containsProvince(String province)
-    {
-        return locationsByProvince.containsKey(province);
-    }
-
-    @Override
-    public Set<Location> getLocationByQuery(String postCode, String city, String province)
-    {
-        Set<Location> cities = locationsByCity.get(city);
-        Set<Location> provinces = locationsByProvince.get(province);
-        Set<Location> postCodes = locationsByPostCode.get(postCode);
-        Set<Location> results = new HashSet<Location>();
-
-        if(cities != null)
+        try
         {
-            results = cities;
-            if(provinces != null)
-            {
-                results.retainAll(provinces);
-            }
-            if(postCodes != null)
-            {
-                results.retainAll(postCodes);
-            }
+            load(provider.fromSource());
         }
-        else if(provinces != null)
+        catch(IOException e)
         {
-            results = provinces;
-            if(cities != null)
-            {
-                results.retainAll(cities);
-            }
-            if(postCodes != null)
-            {
-                results.retainAll(postCodes);
-            }
+            logger.error("failed to rebuild location index");
         }
-        else if(postCodes != null)
-        {
-            results = postCodes;
-            if(cities != null)
-            {
-                results.retainAll(cities);
-            }
-            if(provinces != null)
-            {
-                results.retainAll(provinces);
-            }
-        }
-        return results;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public List<Location> getLocations(String requestedField, String province, String city,
+        String street, String postCode)
+    {
+        return index.getLocations(requestedField, province, city, street, postCode);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public List<String> getAllTerms(String field)
+    {
+       return index.getAllTerms(field); 
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean exactMatchExists(String field, String value)
+        throws IOException
+    {
+        return index.exactMatchExists(field, value);
     }
 
     private void load(Collection<Location> locations)
+        throws IOException
     {
-        allLocations.clear();
-        locationsByProvince.clear();
-        locationsByCity.clear();
-        locationsByPostCode.clear();
+        index.startUpdate();
         for(Location location : locations)
         {
-            allLocations.add(location);
-            add(location, location.getProvince(), locationsByProvince);
-            add(location, location.getCity(), locationsByCity);
-            add(location, location.getPostCode(), locationsByPostCode);
+            index.addItem(location);
         }
-    }
-
-    private void add(Location item, String key, Map<String, Set<Location>> map)
-    {
-        Set<Location> set = map.get(key);
-        if(set == null)
-        {
-            set = new HashSet<Location>();
-            map.put(key, set);
-        }
-        set.add(item);
-    }
-    
-    private Set<String> getMachingSubset(Set<String> keys, String substring)
-    {
-        Set<String> machingSubset = new HashSet<String>();
-        for(String key : keys)
-        {
-            if(key.toLowerCase().contains(substring.toLowerCase()))
-            {
-                machingSubset.add(key);
-            }
-        }
-        return machingSubset;
+        index.endUpdate();
     }
 }

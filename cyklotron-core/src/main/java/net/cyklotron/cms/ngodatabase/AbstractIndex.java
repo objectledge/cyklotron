@@ -13,6 +13,7 @@ import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CheckIndex;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
@@ -32,6 +33,8 @@ public abstract class AbstractIndex<T>
     protected final Logger logger;
     
     private final IndexWriter writer;
+    
+    protected final IndexReader reader;
 
     protected final Analyzer analyzer;
 
@@ -67,7 +70,8 @@ public abstract class AbstractIndex<T>
             writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
         }
         this.writer = writer;
-        this.searcher = new IndexSearcher(writer.getReader());
+        this.reader = writer.getReader();
+        this.searcher = new IndexSearcher(reader);
     }
 
     protected Analyzer getAnalyzer(FileSystem fileSystem)
@@ -101,20 +105,26 @@ public abstract class AbstractIndex<T>
         return results;
     }
 
-    protected List<Term> analyze(String string)
+    protected List<Term> analyze(String field, String value)
         throws IOException
     {
         List<Term> tokens = new ArrayList<Term>();
-        TokenStream ts = analyzer.reusableTokenStream("name", new StringReader(string));
+        TokenStream ts = analyzer.reusableTokenStream(field, new StringReader(value));
         ts.reset();
         TermAttribute ta = ts.getAttribute(TermAttribute.class);
         while(ts.incrementToken())
         {
-            tokens.add(new Term("name", ta.term()));
+            tokens.add(new Term(field, ta.term()));
         }
         ts.end();
         ts.close();
         return tokens;
+    }
+    
+    public boolean isEmpty()
+        throws IOException
+    {
+        return writer.getReader().numDocs() == 0;
     }
 
     public synchronized void startUpdate()
