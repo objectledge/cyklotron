@@ -2,13 +2,21 @@ package net.cyklotron.cms.ngodatabase;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CheckIndex;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.Version;
@@ -60,6 +68,43 @@ public abstract class AbstractIndex<T>
     protected abstract Document toDocument(T item);
     
     protected abstract T fromDocument(Document doc);
+
+    protected T singleResult(TopDocs result)
+        throws IOException
+    {
+        if(result.totalHits == 1)
+        {
+            return fromDocument(searcher.doc(result.scoreDocs[0].doc));
+        }
+        return null;
+    }
+    
+    protected List<T> results(TopDocs result)
+        throws IOException    
+    {
+        List<T> results = new ArrayList<T>();
+        for(ScoreDoc scoreDoc : result.scoreDocs)
+        {
+            results.add(fromDocument(searcher.doc(scoreDoc.doc)));
+        }
+        return results;
+    }
+    
+    protected List<Term> analyze(String string)
+        throws IOException
+    {
+        List<Term> tokens = new ArrayList<Term>();
+        TokenStream ts = analyzer.reusableTokenStream("name", new StringReader(string));
+        ts.reset();
+        TermAttribute ta = ts.getAttribute(TermAttribute.class);
+        while(ts.incrementToken())
+        {
+            tokens.add(new Term("name", ta.term()));
+        }
+        ts.end();
+        ts.close();
+        return tokens;
+    }
 
     public synchronized void startUpdate()
         throws IOException

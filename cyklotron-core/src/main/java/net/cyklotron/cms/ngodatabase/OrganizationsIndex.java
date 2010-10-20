@@ -29,12 +29,9 @@
 package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumericField;
@@ -42,22 +39,21 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.SortField;
-import org.apache.lucene.search.TopDocs;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 
 /**
  * @author lukasz, rafal
  */
-public class OrganizationsIndex extends AbstractIndex<Organization>
+public class OrganizationsIndex
+    extends AbstractIndex<Organization>
 {
     // constants /////////////////////////////////////////////////////////////
 
+    private static final int MAX_RESULTS = 25;
+
     private static final String INDEX_PATH = "ngo/database/incoming/index";
-    
+
     public OrganizationsIndex(FileSystem fileSystem, Logger log)
         throws IOException
     {
@@ -66,20 +62,16 @@ public class OrganizationsIndex extends AbstractIndex<Organization>
 
     public Organization getOrganization(Long id)
     {
-        Query query = NumericRangeQuery.newLongRange("id", id, id, true, true);
         try
         {
-            TopDocs result = searcher.search(query, 1);
-            if(result.totalHits == 1)
-            {
-                return fromDocument(searcher.doc(result.scoreDocs[0].doc));
-            }
+            Query query = NumericRangeQuery.newLongRange("id", id, id, true, true);
+            return singleResult(searcher.search(query, 1));
         }
         catch(Exception e)
         {
             logger.error("search error", e);
+            return null;
         }
-        return null;
     }
 
     public List<Organization> getOrganizations(String substring)
@@ -88,20 +80,12 @@ public class OrganizationsIndex extends AbstractIndex<Organization>
         try
         {
             PhraseQuery query = new PhraseQuery();
-            TokenStream ts = analyzer.reusableTokenStream("name", new StringReader(substring));
-            ts.reset();
-            TermAttribute ta = ts.getAttribute(TermAttribute.class);
-            while(ts.incrementToken())
+            List<Term> terms = analyze(substring);
+            for(Term term : terms)
             {
-                query.add(new Term("name", ta.term()));
+                query.add(term);
             }
-            ts.end();
-            ts.close();
-            TopDocs result = searcher.search(query, null, 20, new Sort(new SortField(null, SortField.SCORE)));
-            for(ScoreDoc scoreDoc : result.scoreDocs)
-            {
-                organizations.add(fromDocument(searcher.doc(scoreDoc.doc)));
-            }
+            return results(searcher.search(query, null, MAX_RESULTS));
         }
         catch(Exception e)
         {
