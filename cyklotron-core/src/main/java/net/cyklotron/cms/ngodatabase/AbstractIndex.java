@@ -6,6 +6,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.TermAttribute;
@@ -26,22 +27,27 @@ import org.objectledge.filesystem.LocalFileSystemProvider;
 
 public abstract class AbstractIndex<T>
 {
-    protected static final StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
-
+    protected final FileSystem fileSystem;
+    
+    protected final Logger logger;
+    
     private final IndexWriter writer;
 
-    protected final IndexSearcher searcher;
+    protected final Analyzer analyzer;
 
-    protected final Logger logger;
+    protected final IndexSearcher searcher;
 
     private Thread updateThread = null;
 
     public AbstractIndex(FileSystem fileSystem, Logger logger, String indexPath)
         throws IOException
     {
+        this.fileSystem = fileSystem;
+        this.logger = logger;
         File indexLocation = ((LocalFileSystemProvider)fileSystem.getProvider("local"))
             .getFile(indexPath);
         Directory directory = new NIOFSDirectory(indexLocation);
+        analyzer = getAnalyzer(fileSystem);
         // remove stale write lock if one exists
         if(directory.fileExists("write.lock"))
         {
@@ -62,11 +68,16 @@ public abstract class AbstractIndex<T>
         }
         this.writer = writer;
         this.searcher = new IndexSearcher(writer.getReader());
-        this.logger = logger;
+    }
+
+    protected Analyzer getAnalyzer(FileSystem fileSystem)
+        throws IOException
+    {
+        return new StandardAnalyzer(Version.LUCENE_30);
     }
 
     protected abstract Document toDocument(T item);
-    
+
     protected abstract T fromDocument(Document doc);
 
     protected T singleResult(TopDocs result)
@@ -78,9 +89,9 @@ public abstract class AbstractIndex<T>
         }
         return null;
     }
-    
+
     protected List<T> results(TopDocs result)
-        throws IOException    
+        throws IOException
     {
         List<T> results = new ArrayList<T>();
         for(ScoreDoc scoreDoc : result.scoreDocs)
@@ -89,7 +100,7 @@ public abstract class AbstractIndex<T>
         }
         return results;
     }
-    
+
     protected List<Term> analyze(String string)
         throws IOException
     {
