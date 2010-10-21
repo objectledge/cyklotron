@@ -1,15 +1,10 @@
 var acOrganizedByOptions = {
-	minChars : 5,
+	minChars : 1,
 	max : 25,
 	dataType : "json",
 	parse : function(data) {
 		var parsed = [];
 		for ( var i = 0; i < data.length; i++) {
-		    if(data[i+1] && data[i].name == data[i+1].name)
-		    {
-		      data[i].ambiguous = true;
-		      data[i+1].ambiguous = true;
-		    }
 			parsed[parsed.length] = {
 				data : data[i],
 				value : data[i].name,
@@ -19,11 +14,7 @@ var acOrganizedByOptions = {
 		return parsed;
 	},
 	formatItem : function(item) {
-		if (item.ambiguous) {
-			return item.name + " (" + item.city + ")";
-		} else {
-			return item.name;
-		}
+		return item.name + " (" + item.city + ")";
 	},
 	formatMatch : function(item) {
 		return item.name;
