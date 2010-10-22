@@ -1,19 +1,16 @@
 package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.search.TopDocs;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 
@@ -81,7 +78,7 @@ public class LocationsIndex
             addClause(query, requestedField, "city", city);
             addClause(query, requestedField, "street", street);
             addClause(query, requestedField, "postCode", postCode);
-            return results(searcher.search(query, MAX_RESULTS));
+            return results(getSearcher().search(query, MAX_RESULTS));
         }
         catch(IOException e)
         {
@@ -115,51 +112,5 @@ public class LocationsIndex
                 }
             }
         }
-    }
-
-    /**
-     * Returns all terms in given field of location index.
-     * 
-     * @param field of "province", "city", "street", "postCode".
-     * @return list of distict terms in the given field;
-     * @throws IOException on index access problems.
-     */
-    public List<String> getAllTerms(String field)
-    {
-        try
-        {
-            List<String> values = new ArrayList<String>();
-            TermEnum termEnum = reader.terms(new Term(field, ""));
-            while(termEnum.next())
-            {                
-                Term term = termEnum.term();
-                if(!term.field().equals(field))
-                {
-                    break;
-                }
-                values.add(term.text());
-            }
-            return values;            
-        }
-        catch(IOException e)
-        {
-            logger.error("index access error", e);
-            return Collections.emptyList();
-        }
-    }
-
-    /**
-     * Checks whether a Location exists with given field exactly matching a value.
-     * 
-     * @param field one of "province", "city", "street", "postCode"
-     * @param value field value.
-     * @return boolean if at least one exact match exits.
-     * @throws IOException on index access problems.
-     */
-    public boolean exactMatchExists(String field, String value)
-        throws IOException
-    {
-        TopDocs result = searcher.search(new TermQuery(new Term(field, value)), 1);
-        return result.totalHits > 0;
     }
 }

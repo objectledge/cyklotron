@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -15,9 +16,13 @@ import org.apache.lucene.index.CheckIndex;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.SegmentReader;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
@@ -32,13 +37,15 @@ public abstract class AbstractIndex<T>
     
     protected final Logger logger;
     
-    private final IndexWriter writer;
+    private final Analyzer analyzer;
+
+    private final Directory directory;
     
-    protected final IndexReader reader;
+    private IndexWriter writer;
+    
+    private IndexReader reader;
 
-    protected final Analyzer analyzer;
-
-    protected final IndexSearcher searcher;
+    private IndexSearcher searcher;
 
     private Thread updateThread = null;
 
@@ -49,17 +56,23 @@ public abstract class AbstractIndex<T>
         this.logger = logger;
         File indexLocation = ((LocalFileSystemProvider)fileSystem.getProvider("local"))
             .getFile(indexPath);
-        Directory directory = new NIOFSDirectory(indexLocation);
-        analyzer = getAnalyzer(fileSystem);
+        directory = new NIOFSDirectory(indexLocation);
+        analyzer = getAnalyzer(fileSystem);                
         // remove stale write lock if one exists
         if(directory.fileExists("write.lock"))
         {
             directory.deleteFile("write.lock");
         }
-        IndexWriter writer = null;
-        try
+        // if index directory is not there, create a blank index.
+        if(!indexLocation.exists())
         {
             writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+            writer.close();
+        }
+        // open reader
+        try
+        {
+            reader = SegmentReader.open(directory);
         }
         catch(CorruptIndexException e)
         {
@@ -67,17 +80,28 @@ public abstract class AbstractIndex<T>
             CheckIndex checkIndex = new CheckIndex(directory);
             checkIndex.checkIndex();
             // try to reopen index
-            writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+            reader = SegmentReader.open(directory);
         }
-        this.writer = writer;
-        this.reader = writer.getReader();
-        this.searcher = new IndexSearcher(reader);
+        searcher = new IndexSearcher(reader);
+        writer = null;
     }
 
+    /**
+     * Called by the constructor, subclasses may override it to provide custom analyzer.
+     * 
+     * @param fileSystem ledge files ystem for loading stopwords lists etc.
+     * @return Analyzer instance.
+     * @throws IOException
+     */
     protected Analyzer getAnalyzer(FileSystem fileSystem)
         throws IOException
     {
         return new StandardAnalyzer(Version.LUCENE_30);
+    }
+    
+    protected Searcher getSearcher()
+    {
+        return searcher;
     }
 
     protected abstract Document toDocument(T item);
@@ -124,7 +148,38 @@ public abstract class AbstractIndex<T>
     public boolean isEmpty()
         throws IOException
     {
-        return writer.getReader().numDocs() == 0;
+        return reader.numDocs() == 0;
+    }
+
+    /**
+     * Returns all terms in given field of location index.
+     * 
+     * @param field field name.
+     * @return list of distinct terms in the given field;
+     * @throws IOException on index access problems.
+     */
+    public List<String> getAllTerms(String field)
+    {
+        try
+        {
+            List<String> values = new ArrayList<String>();
+            TermEnum termEnum = reader.terms(new Term(field, ""));
+            while(termEnum.next())
+            {                
+                Term term = termEnum.term();
+                if(!term.field().equals(field))
+                {
+                    break;
+                }
+                values.add(term.text());
+            }
+            return values;            
+        }
+        catch(IOException e)
+        {
+            logger.error("index access error", e);
+            return Collections.emptyList();
+        }
     }
 
     public synchronized void startUpdate()
@@ -135,6 +190,7 @@ public abstract class AbstractIndex<T>
             throw new IllegalStateException("update in progress");
         }
         updateThread = Thread.currentThread();
+        writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
         writer.deleteAll();
     }
 
@@ -157,6 +213,31 @@ public abstract class AbstractIndex<T>
         }
         writer.optimize();
         writer.commit();
+        writer.close();
+        writer = null;
+        
+        IndexReader newReader = reader.reopen();
+        IndexReader oldReader = reader;
+        reader = newReader;      
+        oldReader.close();
+        
+        searcher = new IndexSearcher(reader);
+        
         updateThread = null;
+    }
+
+    /**
+     * Checks whether a Location exists with given field exactly matching a value.
+     * 
+     * @param field field name.
+     * @param value field value.
+     * @return boolean if at least one exact match exits.
+     * @throws IOException on index access problems.
+     */
+    public boolean exactMatchExists(String field, String value)
+        throws IOException
+    {
+        TopDocs result = searcher.search(new TermQuery(new Term(field, value)), 1);
+        return result.totalHits > 0;
     }
 }

@@ -30,7 +30,6 @@ package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -50,10 +49,12 @@ import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.NumericRangeQuery;
+import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.util.Version;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.utils.Timer;
 
 import net.cyklotron.cms.search.analysis.AlphanumericFilter;
 
@@ -123,7 +124,7 @@ public class OrganizationsIndex
         try
         {
             Query query = NumericRangeQuery.newLongRange("id", id, id, true, true);
-            return singleResult(searcher.search(query, 1));
+            return singleResult(getSearcher().search(query, 1));
         }
         catch(Exception e)
         {
@@ -142,9 +143,14 @@ public class OrganizationsIndex
             {
                 Query fuzzyQuery = new FuzzyQuery(term, FUZZY_QUERY_MIN_SIMILARITY,
                     FUZZY_QUERY_PREFIX_LENGTH);
-                query.add(fuzzyQuery, BooleanClause.Occur.MUST);
+                query.add(fuzzyQuery, BooleanClause.Occur.SHOULD);
+                query.add(new PrefixQuery(term), BooleanClause.Occur.SHOULD);
             }
-            return results(searcher.search(query, null, MAX_RESULTS));
+            Timer timer = new Timer();
+            List<Organization> results = results(getSearcher().search(query, null, MAX_RESULTS));
+            logger.debug("query: " + query.toString() + " " + results.size() + " in "
+                + timer.getElapsedMillis() + "ms");
+            return results;
         }
         catch(Exception e)
         {
