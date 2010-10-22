@@ -10,7 +10,7 @@ function formatUrlString(urls)
 
 function formatEmailString(emails)
 {  
-    return emails.replace(/[,]/," ").replace(/\s\s*/g,"; ").trim();
+    return emails.replace(/[,;]/," ").replace(/\s\s*/g,"; ").trim();
 }
 
 /*
