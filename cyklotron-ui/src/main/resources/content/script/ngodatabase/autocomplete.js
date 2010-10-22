@@ -1,6 +1,7 @@
 var acOrganizedByOptions = {
 	minChars : 1,
 	max : 25,
+	cacheLength: 0,	
 	dataType : "json",
 	parse : function(data) {
 		var parsed = [];
