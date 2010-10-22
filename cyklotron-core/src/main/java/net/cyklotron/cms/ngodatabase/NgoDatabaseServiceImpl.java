@@ -249,11 +249,15 @@ public class NgoDatabaseServiceImpl
     private void readIncoming(boolean updateFromSource)
     {
         try
-        {
+        {   
+            boolean sourceUpdated = false;
             if(updateFromSource || !fileSystem.isFile(INCOMING_FILE))
             {
                 downloadIncoming();
-                
+                sourceUpdated = true;
+            }
+            if(sourceUpdated || organizations.isEmpty())
+            {
                 organizations.startUpdate();
                 SAXReader saxReader = new SAXReader();
                 Document doc = saxReader.read(fileSystem.getInputStream(INCOMING_FILE));
