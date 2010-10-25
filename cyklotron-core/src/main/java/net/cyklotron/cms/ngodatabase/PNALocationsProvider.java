@@ -104,7 +104,8 @@ public class PNALocationsProvider
             cachedLocations = new ArrayList<Location>(content.size());
             for(String[] row : content)
             {
-                cachedLocations.add(new Location(row[6], stripCityName(row[1]), row[2], row[0]));
+                cachedLocations.add(new Location(row[6], stripCityName(row[1]),
+                    row[2] != null ? row[2] : "", row[0]));
             }
         }
         catch(IOException e)
