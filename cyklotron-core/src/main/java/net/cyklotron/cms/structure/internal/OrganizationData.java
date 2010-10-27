@@ -67,10 +67,6 @@ public class OrganizationData
         email = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_email", "")));
         www = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_www", "")));
         id = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_id", "0")));
-        if(id.trim().length() == 0)
-        {
-            id = "0";
-        }
     }
 
     public static List<OrganizationData> fromParameters(Parameters parameters)
@@ -147,8 +143,8 @@ public class OrganizationData
     {
         return elm("organization", elm("name", name), elm("address", elm("street", street), elm(
             "postcode", postCode), elm("city", city), elm("province", province)),
-            elm("tel", phone), elm("fax", fax), elm("e-mail", email), elm("url", www),
-            elm("id", id));
+            elm("tel", phone), elm("fax", fax), elm("e-mail", email), elm("url", www), elm("id", id
+                .trim().length() > 0 ? id : "0"));
     }
     
     public static String getOrganizationIds(List<OrganizationData> organizations)
