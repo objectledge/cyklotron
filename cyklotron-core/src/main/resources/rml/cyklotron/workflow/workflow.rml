@@ -1,0 +1,76 @@
+#
+# Initial script for the CMS workflow subsystem
+#
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: workflow.rml,v 1.5 2005-01-16 11:36:23 pablo Exp $
+#
+
+ECHO ' - workflow';
+
+CREATE RESOURCE CLASS 'workflow.automaton'
+JAVA CLASS 'net.cyklotron.cms.workflow.AutomatonResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED resource_class assignedClass,
+REQUIRED boolean primary
+);
+
+CREATE RESOURCE CLASS 'workflow.state'
+JAVA CLASS 'net.cyklotron.cms.workflow.StateResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED boolean initial, # is acceptable state for a new resource
+role assignee # resources entering this state should be brought
+# to attention of subject in the 'asigenee' role
+);
+
+CREATE RESOURCE CLASS ABSTRACT 'workflow.transition'
+JAVA CLASS 'net.cyklotron.cms.workflow.TransitionResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED resource(workflow.state) from,
+REQUIRED resource(workflow.state) to
+);
+
+CREATE RESOURCE CLASS 'workflow.temporal_transition'
+JAVA CLASS 'net.cyklotron.cms.workflow.TemporalTransitionResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'workflow.transition' )
+ATTRIBUTES (
+REQUIRED long delay # the transition is performed by the system
+# 'delay' milliseconds after the resource
+# enters the state. a state may have at most
+# one temporal transition.
+);
+
+CREATE RESOURCE CLASS 'workflow.protected_transition'
+JAVA CLASS 'net.cyklotron.cms.workflow.ProtectedTransitionResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'workflow.transition' )
+ATTRIBUTES (
+REQUIRED permission performPermission # can be used to restrict the
+# privilege to perfrom the transition on
+# specific objects, or object trees to
+# specific roles.
+);
+
+# Not sure about the name. Not very useful, but can be fun ;-)
+CREATE RESOURCE CLASS 'workflow.heuristic_transition'
+JAVA CLASS 'net.cyklotron.cms.workflow.HeuristicTransitionResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'workflow.transition' )
+ATTRIBUTES (
+REQUIRED number probability # the probability that this transition will be
+# automatically performed when the resource
+# enters the state.
+);
+
+CREATE RESOURCE CLASS ABSTRACT 'workflow.stateful'
+JAVA CLASS 'net.cyklotron.cms.workflow.StatefulResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+ATTRIBUTES (
+resource(workflow.state) state
+);
