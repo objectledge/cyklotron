@@ -2,7 +2,9 @@ package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -10,9 +12,11 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.PrefixQuery;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.utils.Timer;
 
 public class LocationsIndex
     extends AbstractIndex<Location>
@@ -74,11 +78,15 @@ public class LocationsIndex
         try
         {
             BooleanQuery query = new BooleanQuery();
-            addClause(query, requestedField, "province", province);
-            addClause(query, requestedField, "city", city);
-            addClause(query, requestedField, "street", street);
-            addClause(query, requestedField, "postCode", postCode);
-            return results(getSearcher().search(query, MAX_RESULTS));
+            addClause(query, requestedField, "province", province, false);
+            addClause(query, requestedField, "city", city, false);
+            addClause(query, requestedField, "street", street, true);
+            addClause(query, requestedField, "postCode", postCode, false);
+            Timer timer = new Timer();
+            List<Location> results = results(getSearcher().search(query, MAX_RESULTS));
+            logger.debug("query: " + query.toString() + " " + results.size() + " in "
+                + timer.getElapsedMillis() + "ms");
+            return results;
         }
         catch(IOException e)
         {
@@ -87,7 +95,7 @@ public class LocationsIndex
         }
     }
 
-    private void addClause(BooleanQuery query, String requestedField, String field, String value)
+    private void addClause(BooleanQuery query, String requestedField, String field, String value, boolean useSubquery)
         throws IOException
     {
         if(field.equals(requestedField))
@@ -95,9 +103,21 @@ public class LocationsIndex
             if(value.length() > 0)
             {
                 List<Term> terms = analyze(field, value);
-                for(Term term : terms)
+                if(useSubquery)
                 {
-                    query.add(new PrefixQuery(term), BooleanClause.Occur.MUST);
+                    BooleanQuery subQuery = new BooleanQuery();
+                    for(Term term : terms)
+                    {
+                        subQuery.add(new PrefixQuery(term), BooleanClause.Occur.SHOULD);
+                    }
+                    query.add(subQuery, BooleanClause.Occur.MUST);
+                }
+                else
+                {
+                    for(Term term : terms)
+                    {
+                        query.add(new PrefixQuery(term), BooleanClause.Occur.MUST);
+                    }
                 }
             }
         }
@@ -106,9 +126,21 @@ public class LocationsIndex
             if(value.length() > 0)
             {
                 List<Term> terms = analyze(field, value);
-                for(Term term : terms)
+                if(useSubquery)
                 {
-                    query.add(new TermQuery(term), BooleanClause.Occur.MUST);
+                    BooleanQuery subQuery = new BooleanQuery();
+                    for(Term term : terms)
+                    {
+                        subQuery.add(new TermQuery(term), BooleanClause.Occur.SHOULD);
+                    }
+                    query.add(subQuery, BooleanClause.Occur.MUST);
+                }
+                else
+                {
+                    for(Term term : terms)
+                    {
+                        query.add(new TermQuery(term), BooleanClause.Occur.MUST);
+                    }
                 }
             }
         }
