@@ -249,7 +249,7 @@ public class NgoDatabaseServiceImpl
     private void readIncoming(boolean updateFromSource)
     {
         try
-        {   
+        {
             boolean sourceUpdated = false;
             if(updateFromSource || !fileSystem.isFile(INCOMING_FILE))
             {
@@ -262,7 +262,7 @@ public class NgoDatabaseServiceImpl
                 SAXReader saxReader = new SAXReader();
                 Document doc = saxReader.read(fileSystem.getInputStream(INCOMING_FILE));
                 for(Element ogranization : (List<Element>)doc
-                                .selectNodes("/organizacje/organizacjaInfo"))
+                    .selectNodes("/organizacje/organizacjaInfo"))
                 {
                     String name = ogranization.selectSingleNode("Nazwa_polska").getStringValue();
                     Long id = Long.parseLong(ogranization.selectSingleNode("ID_Adresowego")
@@ -270,9 +270,10 @@ public class NgoDatabaseServiceImpl
                     String city = ogranization.selectSingleNode("Miasto").getStringValue();
                     String province = ogranization.selectSingleNode("Wojewodztwo").getStringValue();
                     String street = ogranization.selectSingleNode("Ulica").getStringValue();
-                    String post_code = ogranization.selectSingleNode("Kod_pocztowy").getStringValue();
-                    this.organizations.addItem(new Organization(id, name, province, city,
-                        street, post_code));
+                    String post_code = ogranization.selectSingleNode("Kod_pocztowy")
+                        .getStringValue();
+                    this.organizations.addItem(new Organization(id, name, province, city, street,
+                        post_code));
                 }
                 organizations.endUpdate();
             }

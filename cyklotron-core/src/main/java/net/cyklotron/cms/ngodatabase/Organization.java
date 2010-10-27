@@ -28,7 +28,6 @@
 
 package net.cyklotron.cms.ngodatabase;
 
-
 public class Organization
 {
     // constants /////////////////////////////////////////////////////////////
@@ -67,13 +66,13 @@ public class Organization
         this.url = url;
         this.email = email;
     }
-    
+
     public Organization(long id, String name, String province, String city, String street,
         String postCode)
     {
         this(id, name, province, city, street, postCode, "", "", "", "");
     }
-    
+
     public Long getId()
     {
         return id;

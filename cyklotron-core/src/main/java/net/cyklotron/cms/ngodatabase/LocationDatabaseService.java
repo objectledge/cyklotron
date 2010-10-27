@@ -36,7 +36,7 @@ public interface LocationDatabaseService
      */
     public List<Location> getLocations(String requestedField, String province, String city,
         String street, String postCode);
-    
+
     /**
      * Returns all terms in given field of location index.
      * 
@@ -44,7 +44,7 @@ public interface LocationDatabaseService
      * @return list of distict terms in the given field;
      */
     public List<String> getAllTerms(String field);
-    
+
     /**
      * Checks whether a Location exists with given field exactly matching a value.
      * 

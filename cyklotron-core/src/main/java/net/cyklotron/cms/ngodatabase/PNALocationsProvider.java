@@ -124,7 +124,8 @@ public class PNALocationsProvider
             PNASourceParser.dump(content, writer);
             writer.close();
             rename(CACHE_TMP_FILE, CACHE_FILE);
-            logger.info("wrote " + content.size() + " items to cache in " + timer.getElapsedSeconds() + "s");
+            logger.info("wrote " + content.size() + " items to cache in "
+                + timer.getElapsedSeconds() + "s");
         }
         catch(UnsupportedEncodingException e)
         {
@@ -138,8 +139,7 @@ public class PNALocationsProvider
 
     private void parseCache()
     {
-        InputStream is = fileSystem.getInputStream(CACHE_DIRECTORY
-            + CACHE_FILE);
+        InputStream is = fileSystem.getInputStream(CACHE_DIRECTORY + CACHE_FILE);
         try
         {
             Timer timer = new Timer();
@@ -148,10 +148,11 @@ public class PNALocationsProvider
             cachedLocations = new ArrayList<Location>();
             while((line = csvReader.getNextLine()) != null)
             {
-                cachedLocations.add(new Location(line.get("Województwo"), stripCityName(line.get("Miejscowość")), line
-                    .get("Ulica"), line.get("PNA")));
+                cachedLocations.add(new Location(line.get("Województwo"), stripCityName(line
+                    .get("Miejscowość")), line.get("Ulica"), line.get("PNA")));
             }
-            logger.info("loaded " + cachedLocations.size() + " items from cache in " + timer.getElapsedSeconds() + "s");
+            logger.info("loaded " + cachedLocations.size() + " items from cache in "
+                + timer.getElapsedSeconds() + "s");
         }
         catch(IOException e)
         {
@@ -187,13 +188,13 @@ public class PNALocationsProvider
             throw new RuntimeException(e);
         }
     }
-    
+
     /**
      * Strip city name from extra information
      */
     private String stripCityName(String city)
     {
-        return city!= null ? city.replaceFirst("\\s[(].+[)]","") : null;
+        return city != null ? city.replaceFirst("\\s[(].+[)]", "") : null;
     }
 
     @Override

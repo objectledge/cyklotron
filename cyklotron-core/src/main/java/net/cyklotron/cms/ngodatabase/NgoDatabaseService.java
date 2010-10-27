@@ -6,9 +6,9 @@ import java.util.List;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 
-import com.sun.syndication.io.FeedException;
-
 import net.cyklotron.cms.category.CategoryException;
+
+import com.sun.syndication.io.FeedException;
 
 /**
  * Integration between Cyklotron and bazy.ngo.pl

@@ -30,12 +30,8 @@ package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.apache.lucene.index.CorruptIndexException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.picocontainer.Startable;
@@ -104,15 +100,14 @@ public class LocationDatabaseServiceImpl
     {
         return index.getLocations(requestedField, province, city, street, postCode);
     }
-    
+
     /**
      * {@inheritDoc}
      */
     public List<String> getAllTerms(String field)
     {
-       return index.getAllTerms(field); 
+        return index.getAllTerms(field);
     }
-
 
     /**
      * {@inheritDoc}

@@ -34,15 +34,15 @@ import org.objectledge.filesystem.LocalFileSystemProvider;
 public abstract class AbstractIndex<T>
 {
     protected final FileSystem fileSystem;
-    
+
     protected final Logger logger;
-    
+
     private final Analyzer analyzer;
 
     private final Directory directory;
-    
+
     private IndexWriter writer;
-    
+
     private IndexReader reader;
 
     private IndexSearcher searcher;
@@ -57,7 +57,7 @@ public abstract class AbstractIndex<T>
         File indexLocation = ((LocalFileSystemProvider)fileSystem.getProvider("local"))
             .getFile(indexPath);
         directory = new NIOFSDirectory(indexLocation);
-        analyzer = getAnalyzer(fileSystem);                
+        analyzer = getAnalyzer(fileSystem);
         // remove stale write lock if one exists
         if(directory.fileExists("write.lock"))
         {
@@ -98,7 +98,7 @@ public abstract class AbstractIndex<T>
     {
         return new StandardAnalyzer(Version.LUCENE_30);
     }
-    
+
     protected Searcher getSearcher()
     {
         return searcher;
@@ -144,7 +144,7 @@ public abstract class AbstractIndex<T>
         ts.close();
         return tokens;
     }
-    
+
     public boolean isEmpty()
         throws IOException
     {
@@ -165,7 +165,7 @@ public abstract class AbstractIndex<T>
             List<String> values = new ArrayList<String>();
             TermEnum termEnum = reader.terms(new Term(field, ""));
             while(termEnum.next())
-            {                
+            {
                 Term term = termEnum.term();
                 if(!term.field().equals(field))
                 {
@@ -173,7 +173,7 @@ public abstract class AbstractIndex<T>
                 }
                 values.add(term.text());
             }
-            return values;            
+            return values;
         }
         catch(IOException e)
         {
@@ -215,14 +215,14 @@ public abstract class AbstractIndex<T>
         writer.commit();
         writer.close();
         writer = null;
-        
+
         IndexReader newReader = reader.reopen();
         IndexReader oldReader = reader;
-        reader = newReader;      
+        reader = newReader;
         oldReader.close();
-        
+
         searcher = new IndexSearcher(reader);
-        
+
         updateThread = null;
     }
 

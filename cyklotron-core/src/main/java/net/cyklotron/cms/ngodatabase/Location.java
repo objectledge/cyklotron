@@ -29,10 +29,11 @@
 package net.cyklotron.cms.ngodatabase;
 
 /**
- * A location descriptor. 
- * 
- * <p> Locations are equal in the sense of {@link Object#equals(Object)} and
- * {@link Object#hashCode()} if their post codes are equal. </p>
+ * A location descriptor.
+ * <p>
+ * Locations are equal in the sense of {@link Object#equals(Object)} and {@link Object#hashCode()}
+ * if their post codes are equal.
+ * </p>
  */
 public class Location
 {
