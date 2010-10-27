@@ -52,8 +52,7 @@ public class OrganizationData
     public boolean isBlank()
     {
         return name.length() + province.length() + postCode.length() + city.length()
-            + street.length() + phone.length() + fax.length() + email.length() + www.length()
-            + id.length() == 0;
+            + street.length() + phone.length() + fax.length() + email.length() + www.length() == 0;
     }
 
     public void fromParmeters(Parameters parameters, String prefix)
