@@ -72,8 +72,6 @@ public class OrganizationsIndex
 
     private static final int MAX_RESULTS = 25;
 
-    private static final String STOPWORDS_LOCATION = "/net/cyklotron/cms/search/stopwords-pl_PL.txt";
-
     private static final int MAX_TOKEN_LENGTH = 25;
 
     private static final String INDEX_PATH = "ngo/database/incoming/index";
@@ -87,7 +85,7 @@ public class OrganizationsIndex
     protected Analyzer getAnalyzer(FileSystem fileSystem)
         throws IOException
     {
-        return new OrganizationNameAnalyzer(fileSystem);
+        return new OrganizationNameAnalyzer();
     }
 
     protected Document toDocument(Organization organization)
@@ -162,15 +160,6 @@ public class OrganizationsIndex
     private static class OrganizationNameAnalyzer
         extends Analyzer
     {
-        private final Set<String> stopSet;
-
-        public OrganizationNameAnalyzer(FileSystem fileSystem)
-            throws IOException
-        {
-            Reader reader = fileSystem.getReader(STOPWORDS_LOCATION, "UTF-8");
-            stopSet = WordlistLoader.getWordSet(reader);
-        }
-
         private static final class SavedStreams
         {
             StandardTokenizer tokenStream;
@@ -192,8 +181,6 @@ public class OrganizationsIndex
                 streams.filteredTokenStream = new StandardFilter(streams.tokenStream);
                 streams.filteredTokenStream = new LowerCaseFilter(streams.filteredTokenStream);
                 streams.filteredTokenStream = new AlphanumericFilter(streams.filteredTokenStream);
-                streams.filteredTokenStream = new StopFilter(true, streams.filteredTokenStream,
-                    stopSet);
             }
             else
             {
@@ -210,7 +197,6 @@ public class OrganizationsIndex
             TokenStream filteredTokenStream = new StandardFilter(tokenStream);
             filteredTokenStream = new LowerCaseFilter(filteredTokenStream);
             filteredTokenStream = new AlphanumericFilter(filteredTokenStream);
-            filteredTokenStream = new StopFilter(true, filteredTokenStream, stopSet);
             return filteredTokenStream;
         }
     }
