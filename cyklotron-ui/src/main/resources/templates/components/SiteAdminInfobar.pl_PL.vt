@@ -1,0 +1,27 @@
+  <div align="center">
+    <table width="100%" class="topInfo" cellspacing="0">
+      <tr>
+	<td>
+	  #if($cms_tool.subject)
+	  Użytkownik: <strong>#cms_personal_credentials($cms_tool.subject)</strong>
+	  #else
+	  <em>Nieistniejący użytkownik</em>
+	  #end
+	  #if($authenticationContext.isUserAuthenticated())
+		#set($prompt = "wyloguj się")
+	  #else
+		#set($prompt = "strona logowania")
+	  #end
+	  (<a href="$link.view('site.SiteList').unset('site_id').action('authentication.Logout')">$prompt</a>)
+	  #if($authenticationContext.isUserAuthenticated())
+	    $component.embed("im.PopupOpener")
+	  #end
+	</td>
+	<td align="right">
+          #if($site)
+	  Jesteś w serwisie: <strong>$cmsData.site.name</strong>
+          #end
+	</td>
+      </tr>
+    </table>
+  </div>
