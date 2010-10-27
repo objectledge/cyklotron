@@ -68,6 +68,10 @@ public class OrganizationData
         email = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_email", "")));
         www = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_www", "")));
         id = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_id", "0")));
+        if(id.trim().length() == 0)
+        {
+            id = "0";
+        }
     }
 
     public static List<OrganizationData> fromParameters(Parameters parameters)
