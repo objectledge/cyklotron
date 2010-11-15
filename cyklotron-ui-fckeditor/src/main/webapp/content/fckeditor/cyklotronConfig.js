@@ -195,7 +195,7 @@ FCKConfig.DefaultFontFormatLabel = '' ;
 FCKConfig.DefaultFontLabel = '' ;
 FCKConfig.DefaultFontSizeLabel = '' ;
 
-FCKConfig.DefaultLinkTarget = '' ;
+FCKConfig.DefaultLinkTarget = '_blank' ;
 
 // The option switches between trying to keep the html structure or do the changes so the content looks like it was in Word
 FCKConfig.CleanWordKeepsStructure = false ;
