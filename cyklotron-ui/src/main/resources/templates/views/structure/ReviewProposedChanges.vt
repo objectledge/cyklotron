@@ -68,6 +68,24 @@ function submitAndEdit()
   document.review_proposed_changes.action = "$link.action('structure.SaveProposedChanges').view('documents.EditDocument').set('from_list','true').set('node_id',$doc_id)";
   document.review_proposed_changes.submit();
 }
+function submitAndShowProperties()
+{
+  var theForm = document.review_proposed_changes;
+  var i = 0;
+
+  for(i=0; i<theForm.length;i++)
+  {
+   if(theForm[i].type == 'radio' && 
+      theForm[i].value == 'save' &&
+	  theForm[i].checked)
+   {
+	  theForm.save_doc_proposal.value="true";
+	  break;
+   }
+  }
+  document.review_proposed_changes.action = "$link.action('structure.SaveProposedChanges').view('structure.EditNode').set('from_list','true').set('node_id',$doc_id)";
+  document.review_proposed_changes.submit();
+}
 function discardConform(url)                                                                                                               
 {                                                                                                                                                                                                                                                                                                                                                                                                                                     
     document.location.href = url + "&redactors_note=" + document.review_proposed_changes.redactors_note.value;                                                                                                                                                                                                                                                                                
@@ -111,22 +129,25 @@ function deleteConform(url)
 	  <td nowrap="nowrap" align="left">
 		<a href="javascript:checkAll(document.review_proposed_changes,'accept');">Select accept all</a>
 	  </td>
-	  <td nowrap="nowrap" align="left" style="padding-left:20px;">
+	  <td nowrap="nowrap" align="left" style="padding-left:10px;">
 		<a href="javascript:checkAll(document.review_proposed_changes,'reject');">Select reject all</a>
 	  </td>
-	  <td nowrap="nowrap" align="left" style="padding-left:20px;">
+	  <td nowrap="nowrap" align="left" style="padding-left:10px;">
         <a href="$link.unsetView().unset('site_id').set('x',$doc_id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Page preview</a>
       </td>
-	  <td width="66%">
+	  <td width="50%">
 		&nbsp;
 	  </td>
 	  <td align="right" >
         <a href="javascript:submitDocument();">Save</a>
       </td>
-	  <td nowrap="nowrap" align="right" style="padding-left:20px;">
+	  <td nowrap="nowrap" align="right" style="padding-left:10px;">
         <a href="javascript:submitAndEdit();">Save and go to edit</a>
       </td>
-	  <td align="right" style="padding-left:20px;">
+      <td nowrap="nowrap" align="right" style="padding-left:10px;">
+        <a href="javascript:submitAndShowProperties();">Save and go to properties</a>
+      </td>
+	  <td align="right" style="padding-left:10px;">
         <a href="$link.view('structure.EditorialTasks')">Cancel</a>
       </td>
 	  #end
