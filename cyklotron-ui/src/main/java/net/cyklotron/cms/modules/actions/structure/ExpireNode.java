@@ -67,6 +67,12 @@ public class ExpireNode
             Calendar calendar = Calendar.getInstance();
             calendar.set(3000, 12, 31);
             node.setValidityStart(calendar.getTime());
+            // save node description if added at ReviewProposedChanges view.
+            if(parameters.isDefined("admin_description")
+                && !parameters.get("admin_description", "").equals(node.getDescription()))
+            {
+                node.setDescription(parameters.get("admin_description", ""));
+            }
             String state = node.getState().getName();
             String transition = "expire";
             List<String> transitions = Arrays.asList("new", "taken", "assigned", "prepared",

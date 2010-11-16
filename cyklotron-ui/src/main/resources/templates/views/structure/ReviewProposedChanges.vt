@@ -88,7 +88,7 @@ function submitAndShowProperties()
 }
 function discardConform(url)                                                                                                               
 {                                                                                                                                                                                                                                                                                                                                                                                                                                     
-    document.location.href = url + "&redactors_note=" + document.review_proposed_changes.redactors_note.value;                                                                                                                                                                                                                                                                                
+    document.location.href = url + "&redactors_note=" + document.review_proposed_changes.redactors_note.value + "&admin_description=" + document.review_proposed_changes.admin_description.value;                                                                                                                                                                                                                                                                                
 }
 function deleteConform(url)                                                                                                               
 {                                                                                                                                                            
@@ -120,7 +120,7 @@ function deleteConform(url)
 		<a href="javascript:discardConform('$link.view('structure.EditorialTasks').action('structure.UpdateRemovalRequest').set('doc_id', $doc_id)')">Remove requested</a>
       </td>
 	  <td nowrap="nowrap" align="right" style="padding-left:20px;">
-        <a href="$link.view('structure.EditorialTasks').action('structure.ExpireNode').set('node_id', $doc_id)">Set as expired</a>
+        <a href="javascript:discardConform('$link.view('structure.EditorialTasks').action('structure.ExpireNode').set('node_id', $doc_id)')">Set as expired</a>
       </td>
 	  <td nowrap="nowrap" align="right" style="padding-left:20px;">
         <a href="javascript:deleteConform('$link.view('structure.EditorialTasks').action('structure.DeleteNode').set('node_id', $doc_id)')">Delete document</a>
@@ -506,6 +506,14 @@ function deleteConform(url)
 	  <textarea rows="2" cols="" style="width: 100%;" name="redactors_note">$!redactors_note</textarea>
 	</td>
   </tr>
+#if($remove_request == 1)
+  <tr valign="top">
+    <td>Note to Administrator:</td>
+    <td colspan=2>
+	  <textarea rows="2" cols="" style="width: 100%;" name="admin_description">#if($admin_description=="")$!editorial_note#else$!admin_description#end</textarea>
+	</td>
+  </tr>
+#end 
   <tr>
 	<td colspan=3></td>
   </tr>

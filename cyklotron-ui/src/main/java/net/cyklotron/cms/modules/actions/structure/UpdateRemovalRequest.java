@@ -71,6 +71,7 @@ public class UpdateRemovalRequest
                     data.setOrigin(cmsData.getNode());
                 }
                 data.setEditorialNote(parameters.get("editorial_note", ""));
+                data.setDescription(parameters.get("admin_description", ""));
                 data.setRemovalRequested(true);
                 data.toProposal(node);
             }
@@ -80,6 +81,11 @@ public class UpdateRemovalRequest
                     && !parameters.get("redactors_note", "").equals(node.getRedactorsNote()))
                 {
                     node.setRedactorsNote(parameters.get("redactors_note", ""));
+                }
+                if(parameters.isDefined("admin_description")
+                   && !parameters.get("admin_description", "").equals(node.getDescription()))
+                {
+                    node.setDescription(parameters.get("admin_description", ""));
                 }
                 node.setProposedContent(null);
             }

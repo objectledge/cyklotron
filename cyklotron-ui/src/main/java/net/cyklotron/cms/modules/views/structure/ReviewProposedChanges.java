@@ -83,7 +83,7 @@ public class ReviewProposedChanges
 
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(
                 coralSession, docId);
-
+            
             boolean isDocEquals;
             Sequence<DetailElement<String>> title;
             Sequence<Sequence<DetailElement<String>>> docAbstract;
@@ -372,6 +372,7 @@ public class ReviewProposedChanges
                 templatingContext.put("editorial_note", proposedData.getEditorialNote());
             }
             templatingContext.put("redactors_note", node.getRedactorsNote());
+            templatingContext.put("admin_description", node.getDescription());
             templatingContext.put("remove_request", parameters.getLong("remove_request", 0L));
             templatingContext.put("isDocEquals", isDocEquals);
         }
