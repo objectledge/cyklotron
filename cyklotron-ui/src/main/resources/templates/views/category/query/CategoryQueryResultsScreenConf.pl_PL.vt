@@ -15,7 +15,7 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "maxResNumber", "publicationTimeOffset", "listSortColumn", "listSortDir", "cacheInterval" );
+var fieldNames = new Array( "maxResNumber", "publicationTimeOffset", "listSortColumn", "listSortDir", "categoryQueryName", "cacheInterval" );
 
 function sendConfig()
 {
@@ -68,6 +68,18 @@ Wybierz sposób sortowania:
 <select size="1" name="listSortDir">
 #set($opts = [["rosnąco", true], ["malejąco", false]])
 #options($opts $conf.sortDir)
+</select>
+</td>
+</tr>
+
+<tr>
+<td>
+Wybierz zapytanie:
+</td>
+<td>
+<select name="categoryQueryName">
+#option("" "niezdefiniowane" $conf.categoryQueryName)
+#options($queries $conf.categoryQueryName)
 </select>
 </td>
 </tr>

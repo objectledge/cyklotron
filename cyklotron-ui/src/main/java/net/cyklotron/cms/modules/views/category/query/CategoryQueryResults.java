@@ -83,6 +83,11 @@ public class CategoryQueryResults
 			{
                 categoryQuery = CategoryQueryUtil.getQuery(coralSession, parameters);
 			}
+            else if(getScreenConfig().isDefined("categoryQueryName")
+                && !getScreenConfig().get("categoryQueryName", "").isEmpty())
+            {
+                categoryQuery = getScreenConfigCategoryResource(context, coralSession);
+            }
 			else
 			{
                 categoryQuery = categoryQueryService.getDefaultQuery(coralSession, cmsData.getSite());
@@ -201,6 +206,37 @@ public class CategoryQueryResults
         {
             return categoryQueryService.forwardQuery(coralSession, query);
         }        
+    }
+    
+    private CategoryQueryResource getScreenConfigCategoryResource(Context context,
+        CoralSession coralSession)
+        throws ProcessingException, CategoryQueryException
+    {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        String categoryQueryName = getScreenConfig().get("categoryQueryName", "");
+        CategoryQueryResource categoryQuery = null;
+
+        if(!categoryQueryName.isEmpty())
+        {
+            Resource[] res = coralSession.getStore().getResource(
+                categoryQueryService.getCategoryQueryRoot(coralSession, cmsData.getSite()),
+                categoryQueryName);
+            if(res.length == 1)
+            {
+                categoryQuery = (CategoryQueryResource)res[0];
+            }
+            else if(res.length == 0)
+            {
+
+                screenError(cmsData.getNode(), context, "no category query with name '"
+                    + categoryQueryName + "'");
+            }
+            else
+            {
+                screenError(cmsData.getNode(), context, "too many category query objects");
+            }
+        }
+        return categoryQuery;
     }
     
     private class CacheEntry
