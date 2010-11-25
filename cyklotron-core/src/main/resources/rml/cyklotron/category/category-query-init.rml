@@ -57,6 +57,14 @@ ATTRIBUTES (
   configurationView = 'category.query.CategoryQueryResultsScreenConf'
 );
 
+CREATE RESOURCE 'category_query_persistent_list'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/category/components'
+ATTRIBUTES (
+  componentName = 'category.query.CategoryQueryPersistentList',
+  configurationView = 'category.query.CategoryQueryPersistentListComponentConf'
+);
+
 # // resources ////////////////////
 
 CREATE RESOURCE 'category.query'

@@ -55,6 +55,14 @@
           <value>Lista zapytań o zasoby z wykorzystaniem kategorii.</value>
         </prefix>
       </prefix>
+      <prefix name="category_query_persistent_list">
+        <prefix name="description">
+          <value>Wyświetla ostatnio wybraną listę zapytań zdefiniowanych przed administratora.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Zapamiętywana lista zapytań o zasoby z wykorzystaniem kategorii</value>
+        </prefix>
+      </prefix>
       <prefix name="document_resource_list">
         <prefix name="description">
           <value>Wyświetla dokumenty należące do wybranych kategorii.</value>

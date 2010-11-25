@@ -55,6 +55,14 @@
           <value>Category query list.</value>
         </prefix>
       </prefix>
+      <prefix name="category_query_persistent_list">
+        <prefix name="description">
+          <value>Displays resources according to persistent category query.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Category query persistent list</value>
+        </prefix>
+      </prefix>
       <prefix name="document_resource_list">
         <prefix name="description">
           <value>Displays documents from given category.</value>
