@@ -5,3 +5,23 @@ ATTRIBUTES (
   componentName = 'category.query.CategoryQueryPersistentList',
   configurationView = 'category.query.CategoryQueryPersistentListComponentConf'
 );
+
+CREATE RESOURCE 'reject_taken'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Take the document to moderate',
+  from = '/cms/workflow/automata/structure.navigation_node/states/taken',
+  to = '/cms/workflow/automata/structure.navigation_node/states/rejected',
+  performPermission = 'cms.structure.modify'
+);
+
+CREATE RESOURCE 'reject_new'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Take the document to moderate',
+  from = '/cms/workflow/automata/structure.navigation_node/states/new',
+  to = '/cms/workflow/automata/structure.navigation_node/states/rejected',
+  performPermission = 'cms.structure.modify'
+);
