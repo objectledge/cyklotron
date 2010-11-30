@@ -141,8 +141,7 @@ public class FireTransition
                transitionName.equals("reject_accepted") ||
                transitionName.equals("reject_published") ||
                transitionName.equals("reject_expired") ||
-               transitionName.equals("reject_taken") ||
-               transitionName.equals("reject_new") ||
+               transitionName.equals("reject_assigned") ||
                transitionName.equals("expire_new")
                 || transitionName.equals("expire_assigned")
                 || transitionName.equals("expire_taken")

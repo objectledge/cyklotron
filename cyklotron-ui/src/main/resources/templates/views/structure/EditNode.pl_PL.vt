@@ -316,8 +316,7 @@ Edytuj</a> |
    <a href="javascript:selectUser('login', 'state_new', 'subject_name', '$link.view('popup.UserList').set('res_id',$node.id).set('perm','cms.structure.modify_own').set('permission_filter','true')')">wybierz</a> |
    #if($user_data.hasPermission($node, 'cms.structure.modify'))
     <a href="javascript:document.state_new.submit();">Przydziel redaktora</a> |
-    <a href="javascript:document.state_me.submit();">Przydziel mi</a> |
-    <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_new')">Odrzuć do poprawki</a>
+    <a href="javascript:document.state_me.submit();">Przydziel mi</a>
    #end
    </form>
    
@@ -332,6 +331,9 @@ Edytuj</a> |
    #if($user_data.subject == $node.owner)
    - <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','take_assigned')">Przyjmij dokument</a>
    #end
+   #if($user_data.hasPermission($node, 'cms.structure.modify'))
+   | <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_assigned')">Odrzuć do poprawki</a>
+   #end
    #reassign( $node )
  #end
 
@@ -342,9 +344,6 @@ Edytuj</a> |
   #end
   #if($user_data.hasPermission($node, 'cms.structure.modify_own'))
   | <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','finish')">Przeslij do akceptacji</a>
-  #end
-  #if($user_data.hasPermission($node, 'cms.structure.modify'))
-  | <a href="$nodeLink.action('structure.workflow.FireTransition').set('transition','reject_taken')">Odrzuć do poprawki</a>
   #end
   #reassign( $node )
  #end
