@@ -273,7 +273,8 @@ public class PeriodicalsServiceImpl
         try
         {
             List<FileResource> results = generate(coralSession, periodical, time, update);
-            if(!results.isEmpty() && periodical instanceof EmailPeriodicalResource && send)
+            if(periodical instanceof EmailPeriodicalResource && send
+                && (!results.isEmpty() || ((EmailPeriodicalResource)periodical).getSendEmpty()))
             {
                 FileResource last = results.get(results.size() - 1);
                 send(coralSession, (EmailPeriodicalResource)periodical, last, time, recipient);
@@ -303,10 +304,11 @@ public class PeriodicalsServiceImpl
             try
             {
                 List<FileResource> results = generate(coralSession,p, time, true);
-                if(p instanceof EmailPeriodicalResource)
+                if(p instanceof EmailPeriodicalResource
+                    && (!results.isEmpty() || ((EmailPeriodicalResource)p).getSendEmpty()))
                 {
-                    FileResource last = results.get(results.size() - 1);                
-                    send(coralSession,(EmailPeriodicalResource)p, last, time, null);
+                    FileResource last = results.get(results.size() - 1);
+                    send(coralSession, (EmailPeriodicalResource)p, last, time, null);
                 }
             }
             catch(Exception e)
@@ -424,23 +426,27 @@ public class PeriodicalsServiceImpl
         List<FileResource> results = new LinkedList<FileResource>();
         String timestamp = timestamp(time);
         Map<CategoryQueryResource, Resource> queryResults = performQueries(coralSession, r, time);
-        FileResource contentFile = generate(coralSession, r, queryResults, r.getRenderer(), time, timestamp, 
-            r.getTemplate(), null);
-        results.add(contentFile);
-        if(r instanceof EmailPeriodicalResource)
+        if(!(r instanceof EmailPeriodicalResource)
+            || (!queryResults.isEmpty() || ((EmailPeriodicalResource)r).getSendEmpty()))
         {
-            EmailPeriodicalResource er = (EmailPeriodicalResource)r;
-            if(!er.getFullContent())
+            FileResource contentFile = generate(coralSession, r, queryResults, r.getRenderer(),time, timestamp,
+                r.getTemplate(), null);
+            results.add(contentFile);
+            if(r instanceof EmailPeriodicalResource)
             {
-                contentFile = generate(coralSession, r, queryResults, er.getNotificationRenderer(), time,
-                    timestamp, er.getNotificationTemplate(), contentFile);
-                results.add(contentFile);
+                EmailPeriodicalResource er = (EmailPeriodicalResource)r;
+                if(!er.getFullContent())
+                {
+                    contentFile = generate(coralSession, r, queryResults, er.getNotificationRenderer(), time,
+                       timestamp, er.getNotificationTemplate(),contentFile);
+                    results.add(contentFile);
+                }
             }
-        }
-        if(update)
-        {
-            r.setLastPublished(time);
-            r.update();            
+            if(update)
+            {
+                r.setLastPublished(time);
+                r.update();
+            }
         }
         return results;
     }
@@ -533,8 +539,12 @@ public class PeriodicalsServiceImpl
                     }                    
                 }
             }
-            Collections.sort(temp, getComparator(periodical));
-            results.put(cq, temp);
+            if(!(periodical instanceof EmailPeriodicalResource)
+                || (!temp.isEmpty() || ((EmailPeriodicalResource)periodical).getSendEmpty()))
+            {
+                Collections.sort(temp, getComparator(periodical));
+                results.put(cq, temp);
+            }
         }
         return results;
     }

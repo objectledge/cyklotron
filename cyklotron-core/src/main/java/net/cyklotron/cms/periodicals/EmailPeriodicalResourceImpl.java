@@ -73,6 +73,9 @@ public class EmailPeriodicalResourceImpl
     /** The AttributeDefinition object for the <code>replyToHeader</code> attribute. */
     private static AttributeDefinition replyToHeaderDef;
 
+    /** The AttributeDefinition object for the <code>sendEmpty</code> attribute. */
+    private static AttributeDefinition sendEmptyDef;
+
     /** The AttributeDefinition object for the <code>subject</code> attribute. */
     private static AttributeDefinition subjectDef;
 
@@ -530,6 +533,85 @@ public class EmailPeriodicalResourceImpl
     public boolean isReplyToHeaderDefined()
 	{
 	    return isDefined(replyToHeaderDef);
+	}
+
+    /**
+     * Returns the value of the <code>sendEmpty</code> attribute.
+     *
+     * @return the value of the <code>sendEmpty</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public boolean getSendEmpty()
+        throws IllegalStateException
+    {
+	    Boolean value = (Boolean)getInternal(sendEmptyDef, null);
+        if(value != null)
+        {
+            return value.booleanValue();
+        }
+        else
+        {
+            throw new IllegalStateException("value of attribute sendEmpty is undefined"+
+			    " for resource #"+getId());
+        }
+    }
+
+    /**
+     * Returns the value of the <code>sendEmpty</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>sendEmpty</code> attribute.
+     */
+    public boolean getSendEmpty(boolean defaultValue)
+    {
+		return ((Boolean)getInternal(sendEmptyDef, new Boolean(defaultValue))).booleanValue();
+	}
+
+    /**
+     * Sets the value of the <code>sendEmpty</code> attribute.
+     *
+     * @param value the value of the <code>sendEmpty</code> attribute.
+     */
+    public void setSendEmpty(boolean value)
+    {
+        try
+        {
+            set(sendEmptyDef, new Boolean(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+	
+	/**
+     * Removes the value of the <code>sendEmpty</code> attribute.
+     */
+    public void unsetSendEmpty()
+    {
+        try
+        {
+            unset(sendEmptyDef);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }     
+    } 
+   
+	/**
+	 * Checks if the value of the <code>sendEmpty</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>sendEmpty</code> attribute is defined.
+	 */
+    public boolean isSendEmptyDefined()
+	{
+	    return isDefined(sendEmptyDef);
 	}
  
     /**

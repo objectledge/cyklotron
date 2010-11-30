@@ -49,6 +49,7 @@ SUPERCLASSES ( 'cms.periodicals.periodical' )
 ATTRIBUTES (
 text addresses,
 boolean fullContent,
+boolean sendEmpty,
 string notificationRenderer,
 string notificationTemplate,
 string fromHeader,

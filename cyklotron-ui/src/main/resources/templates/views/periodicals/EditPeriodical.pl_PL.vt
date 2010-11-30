@@ -146,6 +146,10 @@ Szablon inny niż domyślny można wybrać na ekranie edycji periodyku.
 <td colspan="2"><input type="checkbox" name="full_content" value="true" #if($periodical_data.fullContent)checked #end /></td>
 </tr>
 <tr>
+<td align="right">Zezwalaj na wysłanie pustego biuletynu:</td>
+<td colspan="2"><input type="checkbox" name="send_empty" value="true" #if($periodical_data.sendEmpty)checked #end /></td>
+</tr>
+<tr>
 <td align="right">Renderer powiadomienia:</td>
 <td colspan="2">
 <select name="notification_renderer">

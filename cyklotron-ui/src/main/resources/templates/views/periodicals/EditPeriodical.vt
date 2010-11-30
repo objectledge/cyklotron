@@ -142,6 +142,10 @@ On periodical editing screen you can choose template other than default.
 <td colspan="2"><input type="checkbox" name="full_content" value="true" #if($periodical_data.fullContent)checked #end /></td>
 </tr>
 <tr>
+<td align="right">Allow send if empty:</td>
+<td colspan="2"><input type="checkbox" name="send_empty" value="true" #if($periodical_data.sendEmpty)checked #end /></td>
+</tr>
+<tr>
 <td align="right">Notification renderer:</td>
 <td colspan="2">
 <select name="notification_renderer">

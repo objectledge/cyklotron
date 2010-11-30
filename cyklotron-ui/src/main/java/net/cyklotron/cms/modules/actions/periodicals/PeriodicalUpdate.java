@@ -128,6 +128,7 @@ public class PeriodicalUpdate
 				((EmailPeriodicalResource)periodical).setReplyToHeader(periodicalData.getReplyToHeader());
 	            ((EmailPeriodicalResource)periodical).setSubject(periodicalData.getSubject());
 				((EmailPeriodicalResource)periodical).setFullContent(periodicalData.getFullContent());
+				((EmailPeriodicalResource)periodical).setSendEmpty(periodicalData.getSendEmpty());
                 ((EmailPeriodicalResource)periodical).setNotificationRenderer(periodicalData.getNotificationRenderer());                        
                 ((EmailPeriodicalResource)periodical).setNotificationTemplate(periodicalData.getNotificationTemplate());                		
 			}

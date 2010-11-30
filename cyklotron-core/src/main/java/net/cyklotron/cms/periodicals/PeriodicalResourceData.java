@@ -60,6 +60,7 @@ public class PeriodicalResourceData
     private String fromHeader;
     private String replyToHeader;
     private boolean fullContent;
+    private boolean sendEmpty;
     private String notificationRenderer;
     private String notificationTemplate;
     private List publicationTimes;
@@ -92,6 +93,7 @@ public class PeriodicalResourceData
         encoding = "";
         subject = "";
         fullContent = false;
+        sendEmpty = false;
         emailPeriodical = email;
         notificationRenderer = "";
         notificationTemplate = "";
@@ -127,6 +129,7 @@ public class PeriodicalResourceData
                 fromHeader = ((EmailPeriodicalResource)periodical).getFromHeader();
                 replyToHeader = ((EmailPeriodicalResource)periodical).getReplyToHeader();
                 fullContent = ((EmailPeriodicalResource)periodical).getFullContent();
+                sendEmpty = ((EmailPeriodicalResource)periodical).getSendEmpty();
                 notificationRenderer = ((EmailPeriodicalResource)periodical).getNotificationRenderer();
                 notificationTemplate = ((EmailPeriodicalResource)periodical).getNotificationTemplate();
                 subject = ((EmailPeriodicalResource)periodical).getSubject();
@@ -141,6 +144,7 @@ public class PeriodicalResourceData
                 notificationRenderer = "";
                 notificationTemplate = "";
                 fullContent = false;
+                sendEmpty = false;
             }
 			publicationTimes = new ArrayList();
 			Resource[] resources = resourceService.getStore().getResource(periodical);
@@ -175,6 +179,7 @@ public class PeriodicalResourceData
         subject = params.get("subject","");
         addresses = params.get("addresses","");
         fullContent = params.getBoolean("full_content",false);
+        sendEmpty = params.getBoolean("send_empty",false);
         notificationRenderer = params.get("notification_renderer","");
         notificationTemplate = params.get("notification_template","");
         if(params.getBoolean("last_published_enabled", false))
@@ -293,6 +298,11 @@ public class PeriodicalResourceData
     public boolean getFullContent()
     {
         return fullContent;
+    }
+    
+    public boolean getSendEmpty()
+    {
+        return sendEmpty;
     }
 
     public String getNotificationRenderer()

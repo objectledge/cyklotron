@@ -191,6 +191,43 @@ public interface EmailPeriodicalResource
 	 * @return <code>true</code> if the value of the <code>replyToHeader</code> attribute is defined.
 	 */
     public boolean isReplyToHeaderDefined();
+	
+    /**
+     * Returns the value of the <code>sendEmpty</code> attribute.
+     *
+     * @return the value of the the <code>sendEmpty</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public boolean getSendEmpty()
+		throws IllegalStateException;
+
+	/**
+     * Returns the value of the <code>sendEmpty</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>sendEmpty</code> attribute.
+     */
+    public boolean getSendEmpty(boolean defaultValue);
+
+    /**
+     * Sets the value of the <code>sendEmpty</code> attribute.
+     *
+     * @param value the value of the <code>sendEmpty</code> attribute.
+     */
+    public void setSendEmpty(boolean value);
+
+	/**
+     * Removes the value of the <code>sendEmpty</code> attribute.
+     */
+    public void unsetSendEmpty();
+   
+	/**
+	 * Checks if the value of the <code>sendEmpty</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>sendEmpty</code> attribute is defined.
+	 */
+    public boolean isSendEmptyDefined();
  
     /**
      * Returns the value of the <code>subject</code> attribute.

@@ -2,7 +2,7 @@
 
 #result_inline_message("results.periodicals")
 
-#if($periodical.resourceClass.name.contains('email'))
+#if($periodical.resourceClass.name.equals("cms.periodicals.email_periodical"))
 #set($type = 'bulletin')
 #set($email = 'Email')
 #else
@@ -11,10 +11,14 @@
 
 <p>Preview of $type $periodical.name</p>
 
+#if(!$isEmail || ( $isEmail && ($periodical.sendEmpty || !$results.empty)))
 <p>The following files were generated: </p>
 
 #foreach($file in $results)
 	<a href="$files.getLink($file)">$file.name</a> <br/>
+#end
+#else
+<p>Bulletin contains no messages. It has not been generated.</p>
 #end
 
 #if($isEmail)
