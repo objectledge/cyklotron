@@ -56,20 +56,27 @@ public class CmsPageTool extends PageTool
     /** Adds a style link to skin styles with a given priority. */
     public void addSkinStyleLink(String href, int priority)
     {
-        addStyleLink(new SkinContentLink(href), priority, null, null);
+        addStyleLink(new SkinContentLink(href), priority, null, null, null);
     }
 
     /** Adds a style link to skin styles with a given priority. */
     public void addSkinStyleLink(String href, int priority, String media)
     {
-        addStyleLink(new SkinContentLink(href), priority, media, null);
+        addStyleLink(new SkinContentLink(href), priority, media, null, null);
     }
     
     /** Adds a style link to skin styles with a given priority. */
     public void addSkinStyleLink(String href, int priority, String media, String rel)
     {
-        addStyleLink(new SkinContentLink(href), priority, media, rel);
+        addStyleLink(new SkinContentLink(href), priority, media, rel, null);
     }
+
+    /** Adds a style link to skin styles with a given priority. */
+    public void addSkinStyleLink(String href, int priority, String media, String rel, String type)
+    {
+        addStyleLink(new SkinContentLink(href), priority, media, rel, type);
+    }
+    
     //-------------------------------
     // SCRIPT LINKS
 
