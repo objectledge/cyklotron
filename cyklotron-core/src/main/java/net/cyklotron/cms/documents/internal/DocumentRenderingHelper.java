@@ -181,6 +181,7 @@ public class DocumentRenderingHelper
                 {
                     keywords.add(tokenizer.nextToken());
                 }
+                this.keywords = keywords;
             }
         }
         return keywords;
