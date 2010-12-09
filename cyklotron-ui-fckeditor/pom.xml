@@ -4,7 +4,7 @@
   <parent>
     <artifactId>cyklotron-common</artifactId>
     <groupId>org.cyklotron</groupId>
-    <version>2.15-SNAPSHOT</version>
+    <version>2.16-SNAPSHOT</version>
   </parent>
   <groupId>org.cyklotron</groupId>
   <artifactId>cyklotron-ui-fckeditor</artifactId>
