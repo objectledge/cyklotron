@@ -1,0 +1,8 @@
+$viewEnclosureTool.override('Page')
+$pageTool.addStyleLink('style/cms-admin.css')
+$pageTool.setTitle("404 - page not found")
+#if(!$userAgetnTool.family().equals("ie"))
+$pageTool.setStatus(404)
+#end
+<p>We are sorry, but the requested page does not exist.</p>
+<p>The page might have been deleted, or the link you clicked was incorrect.</p>

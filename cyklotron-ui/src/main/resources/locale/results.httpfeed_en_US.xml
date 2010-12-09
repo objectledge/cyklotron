@@ -1,0 +1,60 @@
+<strings>
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="feed_name_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="feed_url_bad">
+      <value>.</value>
+    </prefix>
+    <prefix name="feed_url_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="feed_with_same_name_exists">
+      <value>.</value>
+    </prefix>
+    <prefix name="many_feeds_with_same_name">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Deleted successfully.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Exception occured.</value>
+    </prefix>
+    <prefix name="feed_name_empty">
+      <value>Name of a feed cannot be empty.</value>
+    </prefix>
+    <prefix name="feed_url_bad">
+      <value>THe feed URL is invalid.</value>
+    </prefix>
+    <prefix name="feed_url_empty">
+      <value>The feed URL cannot be empty.</value>
+    </prefix>
+    <prefix name="feed_with_same_name_exists">
+      <value>A feed with the same name already exists.</value>
+    </prefix>
+    <prefix name="many_feeds_with_same_name">
+      <value>Many feeds with the same name.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Updated successfully.</value>
+    </prefix>
+  </prefix>
+</strings>

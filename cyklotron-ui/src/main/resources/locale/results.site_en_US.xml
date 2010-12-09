@@ -1,0 +1,78 @@
+<strings>
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="default_node_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="default_node_invalid">
+      <value>Click 'choose' to pick a document from the list.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="domain_name_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>You need to contact host administrator to correct this problem.</value>
+    </prefix>
+    <prefix name="owner_name_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="owner_name_invalid">
+      <value>Click 'choose' to pick an user from the list.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>You need to contact host administrator to correct this problem.</value>
+    </prefix>
+    <prefix name="site_name_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="site_template_empty">
+      <value>You need to contact host administrator to correct this problem.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="default_node_empty">
+      <value>You haven't choosen the default document.</value>
+    </prefix>
+    <prefix name="default_node_invalid">
+      <value>Document with the sepcified path does not exist.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Deleted successfully.</value>
+    </prefix>
+    <prefix name="domain_name_empty">
+      <value>You haven't entered domain name.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>An error has occured.</value>
+    </prefix>
+    <prefix name="owner_name_empty">
+      <value>You haven't entered site owner's login.</value>
+    </prefix>
+    <prefix name="owner_name_invalid">
+      <value>User with the specified login does not exist.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Required paramteter missing.</value>
+    </prefix>
+    <prefix name="site_name_empty">
+      <value>You haven't entered site name.</value>
+    </prefix>
+    <prefix name="site_template_empty">
+      <value>You haven't choosen site template.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Saved successfully.</value>
+    </prefix>
+  </prefix>
+</strings>

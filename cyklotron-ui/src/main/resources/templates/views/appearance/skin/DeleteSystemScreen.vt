@@ -1,0 +1,27 @@
+
+
+#set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${parametersTool.view}.buttons"))
+#set($skin_link = $link.set("site_id",$cmsData.site.id).set("skin",$skin))
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.appearance")
+
+<form name="form1" method="post" action='$skin_link.view('appearance.skin.EditSkin').action('appearance.skin.DeleteSystemScreen')'>
+  <input type="hidden" name="screen" value="$screen">
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="2">$ui_strings.get("subtitle")</th>
+    </tr>
+    <tr>
+      <td align="right"><b>$ui_labels.get("name"):</b></td>
+      <td width="90%">$screen</td>
+    </tr>
+  </table>
+</form>
+
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('delete')],[$skin_link.view('appearance.skin.EditSkin'),$ui_buttons.get('cancel')]])
+
+#genericScreenTrailer()

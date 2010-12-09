@@ -1,0 +1,42 @@
+#genericScreenHeader('Exporting sites')
+
+#result_inline_message('results.aggregation')
+
+$table.getColumn('name').set('label', 'Site name')
+
+#set($columnOrder = ['name'])
+#set($tableLink = $link.set('tableId',$table.getId()))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+<tr>
+#tableView_header($table $tableLink $columnOrder)
+</tr>
+
+#if ($table.getPageRowCount() == 0)
+<tr class="row1"><td colspan="$columnOrder.size()">
+None of the site is publically available.
+</td></tr>
+#else
+
+#foreach($row in $table.rows)
+#set($odd = $velocityCount % 2)
+
+<tr class="row$odd">
+<td width="35%">
+$row.object.site.name
+<a href="$link.unsetView().set('x',$row.object.id)">Preview</a>
+<br />
+<i>$!row.object.site.description</i>
+</td>
+</tr>
+#end
+#end
+
+<tr><td colspan="6" align="center" class="bottomLine">
+#tableView_pager($table $tableLink)
+#tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+</td></tr>
+</table>
+
+#genericScreenTrailer()
+

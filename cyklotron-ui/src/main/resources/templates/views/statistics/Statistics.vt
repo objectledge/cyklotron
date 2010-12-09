@@ -1,0 +1,182 @@
+$pageTool.addScriptLink('script/CMSPopups.js')
+$pageTool.addScriptLink('script/Forms.js')
+
+<script language="javascript">
+  function clear(item)
+  {
+      setValue('select',item,'');
+  }
+  function fSub(action)
+  {
+     document.select.action = action;
+     document.select.submit();
+  }
+</script>
+
+
+#if($site)
+#genericScreenHeader('SITE STATISTICS')
+#else
+#genericScreenHeader('GLOBAL STATISTICS')
+#end
+
+#result_inline_message("results.statistics")
+
+Wybierz warunki:
+
+<form name="select" action="$link" method="post">
+<input type="hidden" name="show" value="true">
+<table width="70%">
+  <tr>
+    <td align="left">State:</td> 
+    <td align="right">
+	  <select name="selected_state">
+	  	<option value="-1">any</option>
+	  	#foreach($state in $states)  
+	  	<option value="$state.id" #if($state.id == $selected_state.id) selected #end>$state.name</option>
+	  	#end
+	  </select>
+    </td>
+  </tr>
+  <tr><td colspan="2"><hr/>Publication date in:</td></tr>
+  <tr>
+    <td align="left">since:</td>
+    <td align="right">#dateSelectorOptionalTS("validity_start" $validity_start.time "no limit")</td>
+  </tr>
+  <tr>  
+    <td align="left">until:</td>
+    <td align="right">#dateSelectorOptionalTS("validity_end" $validity_end.time "no limit")</td>
+  </tr>
+  <tr><td colspan="2"><hr/>Creation date in:</td></tr>
+  <tr>
+    <td align="left">since:</td>
+    <td align="right">#dateSelectorOptionalTS("created_start" $created_start.time "no limit")</td>
+  </tr>
+  <tr>  
+    <td align="left">until:</td>
+    <td align="right">#dateSelectorOptionalTS("created_end" $created_end.time "no limit")</td>
+  </tr>  
+  <tr><td colspan="2"><hr/></td></tr>  
+  <tr>
+    <td align="left">Created by:</td>
+    <td align="right">
+      <input type="text" name="created_by" value="$!created_by">
+      <a href="#select_user('login' 'select' 'created_by')">choose</a>
+      <a href="javascript:clear('created_by')">clear</a>
+    </td>
+  </tr>
+  <tr><td colspan="2"><hr/></td></tr>  
+  <tr id="category_selector" style="display: table-row;">
+    <td align="left">Categorized with:</td>
+    <td align="right">
+#set($category_sel_opts = [["---", "unselected"], ["required", "required"], ["one of", "optional"]])
+##set($category_sel_opts = [[$ui_labels.get('unselected'), "unselected"], [$ui_labels.get('required'),"required"], [$ui_labels.get('optional'), "one of"]])
+<br />
+#category_tree($globaltable 'global categories')
+<br />
+#category_tree($sitetable 'site categories')
+    </td>
+  </tr>
+  <tr><td colspan="2"><hr/></td></tr>
+  <tr>  
+    <td colspan="2" align="right">
+      <input type="submit" value="See" name="B1">
+    </td>     
+  </tr>
+  
+</table>
+</form>
+
+#if($teamTable)
+
+<table width="70%">
+  <tr>
+    <th align="left">statistic</th>
+    <th align="right">value</th>
+  </tr>
+  <tr>
+    <td align="left">number of matched documents:</td> 
+    <td align="right">$!counter</td>
+  </tr>
+</table>
+
+#set($columnOrder = ['subject','redactorCount','acceptorCount','editorCount','creatorCount'])
+
+$teamTable.getColumn('subject').set('label','users')
+$teamTable.getColumn('redactorCount').set('label','redactor')
+$teamTable.getColumn('acceptorCount').set('label','acceptor')
+$teamTable.getColumn('editorCount').set('label','lead redactor')
+$teamTable.getColumn('creatorCount').set('label','creator')
+#set($teamTableLink = $link.set('tableId', $teamTable.id))
+
+<br/>
+Team members:
+<table width="70%" class="genericItemList" cellspacing="0">
+  <tr>
+     #tableView_header_Submit($teamTable $teamTableLink $columnOrder 'fSub')
+  </tr>
+  #foreach($row in $teamTable.rows)
+  #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td align="left">#cms_personal_credentials($row.object.subject)</td>
+      <td align="center">$row.object.redactorCount</td>
+      <td align="center">$row.object.acceptorCount</td>
+      <td align="center">$row.object.editorCount</td>
+      <td align="center">$row.object.creatorCount</td>
+    </tr>
+  #end
+  <tr class="row$odd" style="font-weight: bold;">
+      <td align="left">total</td>
+      <td align="center">$teamTotals.redactorCount</td>
+      <td align="center">$teamTotals.acceptorCount</td>
+      <td align="center">$teamTotals.editorCount</td>
+      <td align="center">$teamTotals.creatorCount</td>
+  </tr>  
+  <tr>
+    <td colspan="5" align="center" class="bottomLine">
+       #tableView_pager_Submit($teamTable $teamTableLink 'fSub')
+       #tableView_pageSizeChooser_Submit($teamTable $teamTableLink [50,100] 'fSub')
+    </td>
+  </tr>
+</table>
+
+$nonTeamTable.getColumn('subject').set('label','użytkownik')
+$nonTeamTable.getColumn('redactorCount').set('label','redaktor')
+$nonTeamTable.getColumn('acceptorCount').set('label','redaktor akceptujący')
+$nonTeamTable.getColumn('editorCount').set('label','redaktor prowadzący')
+$nonTeamTable.getColumn('creatorCount').set('label','twórca')
+#set($nonTeamTableLink = $link.set('tableId', $nonTeamTable.id))
+
+<br/>
+Other users:
+<table width="70%" class="genericItemList" cellspacing="0">
+  <tr>
+     #tableView_header_Submit($nonTeamTable $nonTeamTableLink $columnOrder 'fSub')
+  </tr>
+  #foreach($row in $nonTeamTable.rows)
+  #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td align="left">#cms_personal_credentials($row.object.subject)</td>
+      <td align="center">$row.object.redactorCount</td>
+      <td align="center">$row.object.acceptorCount</td>
+      <td align="center">$row.object.editorCount</td>
+      <td align="center">$row.object.creatorCount</td>
+    </tr>
+  #end
+  <tr class="row$odd" style="font-weight: bold;">
+      <td align="left">suma</td>
+      <td align="center">$nonTeamTotals.redactorCount</td>
+      <td align="center">$nonTeamTotals.acceptorCount</td>
+      <td align="center">$nonTeamTotals.editorCount</td>
+      <td align="center">$nonTeamTotals.creatorCount</td>
+  </tr>  
+  <tr>
+    <td colspan="5" align="center" class="bottomLine">
+       #tableView_pager_Submit($nonTeamTable $nonTeamTableLink 'fSub')
+       #tableView_pageSizeChooser_Submit($nonTeamTable $nonTeamTableLink [50,100] 'fSub')
+    </td>
+  </tr>
+</table>
+#end
+
+#genericScreenTrailer()
