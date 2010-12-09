@@ -1,0 +1,39 @@
+#
+# Initial script for the CMS security subsystem
+#
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: security.rml,v 1.5 2005-01-16 11:36:13 pablo Exp $
+#
+
+ECHO ' - security';
+
+# // security information for a site /////////////////////////////////////////
+
+CREATE RESOURCE CLASS 'cms.security.role'
+JAVA CLASS 'net.cyklotron.cms.security.RoleResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED role role,
+string descriptionKey, # i18n key of the role's description
+REQUIRED boolean deletable,  # can be deleted & recreated from UI
+REQUIRED boolean sharingWorkgroup
+);
+
+CREATE RESOURCE CLASS 'cms.security.subtree_role'
+JAVA CLASS 'net.cyklotron.cms.security.SubtreeRoleResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'cms.security.role' )
+ATTRIBUTES (
+REQUIRED resource subtreeRoot,
+REQUIRED boolean recursive
+);
+
+# structural constraints
+#
+# "cms" (node) 1
+#  "sites" (node) 1
+#   (site.site) 1+
+#    "security" (node) 1
+#     (security.role) 0+^
+
