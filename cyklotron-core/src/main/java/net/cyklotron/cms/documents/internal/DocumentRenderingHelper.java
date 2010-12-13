@@ -461,7 +461,7 @@ public class DocumentRenderingHelper
         {
             Attribute attribute = element.attribute("href");
             
-            if(attribute.getValue().toLowerCase().startsWith("mailto:"))
+            if(attribute != null && attribute.getValue().toLowerCase().startsWith("mailto:"))
             {
                 String mailTo = attribute.getValue().toLowerCase().substring("mailto:".length());
                 String mailText = element.asXML();
