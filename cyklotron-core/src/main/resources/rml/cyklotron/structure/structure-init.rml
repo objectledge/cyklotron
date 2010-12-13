@@ -1,0 +1,699 @@
+#
+# Initial script for the CMS structure subsystem
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# author <a href	="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: structure-init.rml,v 1.17 2008-07-31 15:44:26 rafal Exp $
+#
+
+ECHO ' - structure init data';
+
+# // workflow ///////////////////////////////////////////////////////////////
+
+CREATE RESOURCE 'structure.navigation_node'
+RESOURCE CLASS 'workflow.automaton'
+PARENT '/cms/workflow/automata'
+ATTRIBUTES (
+  assignedClass = 'structure.navigation_node',
+  primary = true,
+  description = 'Generic life cycle of a node'
+);
+
+CREATE RESOURCE 'states'
+RESOURCE CLASS 'node'
+PARENT '/cms/workflow/automata/structure.navigation_node'
+ATTRIBUTES (
+  description = 'Valid states of the nodes'
+);
+
+CREATE RESOURCE 'new'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/structure.navigation_node/states'
+ATTRIBUTES (
+  description = 'A newly created node',
+  initial = 'true'
+);
+
+CREATE RESOURCE 'assigned'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/structure.navigation_node/states'
+ATTRIBUTES (
+  description = 'A node assigned to minor editor',
+  initial = 'false'
+);
+
+CREATE RESOURCE 'taken'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/structure.navigation_node/states'
+ATTRIBUTES (
+  description = 'A node taken by minor editor',
+  initial = 'true'
+);
+
+CREATE RESOURCE 'locked'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/structure.navigation_node/states'
+ATTRIBUTES (
+  description = 'A node locked by minor editor',
+  initial = 'false'
+);
+
+CREATE RESOURCE 'rejected'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/structure.navigation_node/states'
+ATTRIBUTES (
+  description = 'A rejected node',
+  initial = 'false'
+);
+
+CREATE RESOURCE 'prepared'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/structure.navigation_node/states'
+ATTRIBUTES (
+  description = 'A node taken by minor editor',
+  initial = 'false'
+);
+
+CREATE RESOURCE 'accepted'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/structure.navigation_node/states'
+ATTRIBUTES (
+  description = 'A node taken by minor editor',
+  initial = 'false'
+);
+
+CREATE RESOURCE 'published'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/structure.navigation_node/states'
+ATTRIBUTES (
+  description = 'A node available for public access',
+  initial = 'false'
+);
+
+CREATE RESOURCE 'expired'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/structure.navigation_node/states'
+ATTRIBUTES (
+  description = 'An expired node',
+  initial = 'false'
+);
+
+
+CREATE RESOURCE 'transitions'
+RESOURCE CLASS 'node'
+PARENT '/cms/workflow/automata/structure.navigation_node';
+
+CREATE RESOURCE 'assign'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Assign an editor to a new node',
+  from = '/cms/workflow/automata/structure.navigation_node/states/new',
+  to = '/cms/workflow/automata/structure.navigation_node/states/assigned',
+  performPermission = 'cms.structure.modify'
+);
+
+CREATE RESOURCE 'take_assigned'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Take the document to moderate',
+  from = '/cms/workflow/automata/structure.navigation_node/states/assigned',
+  to = '/cms/workflow/automata/structure.navigation_node/states/taken',
+  performPermission = 'cms.structure.modify_own'
+);
+
+CREATE RESOURCE 'lock'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Take the document to moderate',
+  from = '/cms/workflow/automata/structure.navigation_node/states/taken',
+  to = '/cms/workflow/automata/structure.navigation_node/states/locked',
+  performPermission = 'cms.structure.modify_own'
+);
+
+CREATE RESOURCE 'unlock'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Take the document to moderate',
+  from = '/cms/workflow/automata/structure.navigation_node/states/locked',
+  to = '/cms/workflow/automata/structure.navigation_node/states/taken',
+  performPermission = 'cms.structure.modify_own'
+);
+
+CREATE RESOURCE 'reject_prepared'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Reject a prepared node',
+  from = '/cms/workflow/automata/structure.navigation_node/states/prepared',
+  to = '/cms/workflow/automata/structure.navigation_node/states/rejected',
+  performPermission = 'cms.structure.modify'
+);
+
+CREATE RESOURCE 'reject_accepted'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Reject an accepted node',
+  from = '/cms/workflow/automata/structure.navigation_node/states/accepted',
+  to = '/cms/workflow/automata/structure.navigation_node/states/rejected',
+  performPermission = 'cms.structure.modify'
+);
+
+CREATE RESOURCE 'reject_published'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Reject a published node',
+  from = '/cms/workflow/automata/structure.navigation_node/states/published',
+  to = '/cms/workflow/automata/structure.navigation_node/states/rejected',
+  performPermission = 'cms.structure.modify'
+);
+
+CREATE RESOURCE 'reject_expired'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Reject an expired node',
+  from = '/cms/workflow/automata/structure.navigation_node/states/expired',
+  to = '/cms/workflow/automata/structure.navigation_node/states/rejected',
+  performPermission = 'cms.structure.modify'
+);
+
+CREATE RESOURCE 'take_rejected'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Take the document to moderate',
+  from = '/cms/workflow/automata/structure.navigation_node/states/rejected',
+  to = '/cms/workflow/automata/structure.navigation_node/states/taken',
+  performPermission = 'cms.structure.modify_own'
+);
+
+CREATE RESOURCE 'finish'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Take the document to moderate',
+  from = '/cms/workflow/automata/structure.navigation_node/states/taken',
+  to = '/cms/workflow/automata/structure.navigation_node/states/prepared',
+  performPermission = 'cms.structure.modify_own'
+);
+
+CREATE RESOURCE 'accept'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Take the document to moderate',
+  from = '/cms/workflow/automata/structure.navigation_node/states/prepared',
+  to = '/cms/workflow/automata/structure.navigation_node/states/accepted',
+  performPermission = 'cms.structure.modify'
+);
+
+CREATE RESOURCE 'publish'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Publish an accepted node',
+  from = '/cms/workflow/automata/structure.navigation_node/states/accepted',
+  to = '/cms/workflow/automata/structure.navigation_node/states/published',
+  performPermission = 'cms.structure.modify_own'
+);
+
+CREATE RESOURCE 'expire'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Expire a published node',
+  from = '/cms/workflow/automata/structure.navigation_node/states/published',
+  to = '/cms/workflow/automata/structure.navigation_node/states/expired',
+  performPermission = 'cms.structure.modify_own'
+);
+
+# // integration /////////////////////////////////////////////////////////////
+
+CREATE RESOURCE 'structure'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 1,
+  enabled = true,
+  required = true
+);
+
+# // resources ////////////////////
+
+CREATE RESOURCE 'resources'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/structure';
+
+CREATE RESOURCE 'structure.navigation_node'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/structure/resources'
+ATTRIBUTES (
+  image = 'navigation_node.png', # resource icon
+  view = 'structure.NavigationNodeSearchResult',
+  editView = 'structure.GotoNode',
+  indexTitle = 'title',
+  indexDescription = 'abstract',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  pickerSupported = false,
+  categorizable = true
+);
+
+CREATE RESOURCE 'documents.document_node'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/structure/resources'
+ATTRIBUTES (
+  image = 'document_node.png', # resource icon
+  view = 'structure.NavigationNodeSearchResult',
+  editView = 'structure.GotoNode',
+  indexTitle = 'title',
+  indexDescription = 'abstract',
+  relatedSupported = 'true',
+  relatedQuickAddView = '',
+  pickerSupported = false,
+  categorizable = true,
+  aggregationCopyAction = 'documents.DocumentNodeAggregationCopy',
+  aggregationRecursiveCopyAction = 'documents.DocumentNodeAggregationRecursiveCopy',
+  aggregationTargetPaths = 'structure',
+  aggregationParentClasses = 'documents.document_node',
+  indexableFields = 'keywords titleCalendar eventStart eventEnd lastRedactor lastEditor authors sources validityStart'
+);
+
+CREATE RESOURCE 'documents.document_alias'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/structure/resources'
+ATTRIBUTES (
+  image = 'document_alias.png',
+  view = 'structure.NavigationNodeSearchResult',
+  editView = 'structure.GotoNode',
+  indexTitle = 'title',
+  indexDescription = 'abstract',
+  relatedSupported = false,
+  relatedQuickAddView = '',
+  pickerSupported = false,
+  categorizable = true,
+  indexableFields = 'keywords titleCalendar eventStart eventEnd lastRedactor lastEditor authors sources validityStart',  
+  aggregationTargetPaths = 'structure'  
+);
+
+# // roles for navigation node
+
+CREATE RESOURCE 'roles'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/structure/resources/structure.navigation_node';
+
+CREATE RESOURCE 'cms.structure.administrator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles'
+ATTRIBUTES (
+  roleAttributeName = 'administrator',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true
+);
+
+CREATE RESOURCE 'cms.structure.delete'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.structure.editor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'editor',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+);
+
+CREATE RESOURCE 'cms.structure.modify'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.structure.move'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.structure.acceptor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor'
+ATTRIBUTES (
+  roleAttributeName = 'acceptor',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor'
+);
+
+CREATE RESOURCE 'cms.structure.accept'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.structure.prioritize_any'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor'
+ATTRIBUTES (
+  recursive = true
+);
+
+# minor editor
+CREATE RESOURCE 'cms.structure.redactor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor'
+ATTRIBUTES (
+  roleAttributeName = 'redactor',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor'
+);
+
+CREATE RESOURCE 'cms.structure.view'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.structure.add'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.structure.modify_own'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.category.categorize'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.structure.reporter'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'reporter',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+);
+
+CREATE RESOURCE 'cms.structure.submit'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.reporter'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.structure.modify_own'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.reporter'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.structure.inbound_alias_creator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
+ATTRIBUTES (
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
+);
+
+CREATE RESOURCE 'cms.structure.add_inbound_alias'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor/cms.structure.inbound_alias_creator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.structure.visitor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'visitor',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+);
+
+CREATE RESOURCE 'cms.structure.view'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.visitor'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RESOURCE 'cms.structure.local_visitor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'localVisitor',
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = false,
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator'
+);
+
+CREATE RESOURCE 'cms.structure.view'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.local_visitor'
+ATTRIBUTES (
+  recursive = false
+);
+
+# // components ////////////////////
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/structure';
+
+CREATE RESOURCE 'tree_navigation'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/structure/components'
+ATTRIBUTES (
+  componentName = 'structure.TreeNavigation',
+  configurationView = 'structure.NavigationComponentConf'
+);
+
+CREATE RESOURCE 'bread_crumb_navigation'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/structure/components'
+ATTRIBUTES (
+  componentName = 'structure.BreadCrumbNavigation',
+  configurationView = 'structure.NavigationComponentConf'
+);
+
+CREATE RESOURCE 'site_map_navigation'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/structure/components'
+ATTRIBUTES (
+  componentName = 'structure.SiteMapNavigation',
+  configurationView = 'structure.NavigationComponentConf'
+);
+
+CREATE RESOURCE 'list_navigation'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/structure/components'
+ATTRIBUTES (
+  componentName = 'structure.ListNavigation',
+  configurationView = 'structure.NavigationComponentConf'
+);
+
+CREATE RESOURCE 'dynamic_navigation'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/structure/components'
+ATTRIBUTES (
+  componentName = 'structure.DynamicNavigation',
+  configurationView = 'structure.NavigationComponentConf'
+);
+
+CREATE RESOURCE 'documents'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 2,
+  enabled = true,
+  required = true
+);
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/documents';
+
+CREATE RESOURCE 'document_view'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.DocumentView',
+##  configurationView = 'documents.DocumentViewConf',
+  aggregationSourceView = 'documents.DocumentViewAggregationSource'
+);
+
+CREATE RESOURCE 'print_document'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.PrintDocument',
+  configurationView = 'documents.PrintDocumentConf'
+);
+
+CREATE RESOURCE 'propose_document'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.ProposeDocument'
+##  configurationView = 'documents.ProposeDocumentConf'
+);
+
+CREATE RESOURCE 'recommend_document'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.RecommendDocument',
+  configurationView = 'documents.RecommendDocumentConf'
+);
+
+CREATE RESOURCE 'calendar_events'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.CalendarEvents',
+  configurationView = 'documents.CalendarEventsConf'
+);
+
+
+CREATE RESOURCE 'screens'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/documents';
+
+CREATE RESOURCE 'print_document'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/documents/screens'
+ATTRIBUTES (
+  screenName = 'documents.PrintDocument'
+##  configurationView = 'documents.PrintDocumentScreenConf'
+);
+
+CREATE RESOURCE 'propose_document'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/documents/screens'
+ATTRIBUTES (
+  screenName = 'documents.ProposeDocument',
+  configurationView = 'documents.ProposeDocumentConf'
+);
+
+CREATE RESOURCE 'Anonymous'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/propose_document';
+
+CREATE RESOURCE 'MyDocuments'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/propose_document';
+
+CREATE RESOURCE 'AddDocument'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/propose_document';
+
+CREATE RESOURCE 'DocumentCategory'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/propose_document';
+
+CREATE RESOURCE 'EditDocument'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/propose_document';
+
+CREATE RESOURCE 'RemovalRequest'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/propose_document';
+
+CREATE RESOURCE 'RedactorsNote'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/propose_document';
+
+CREATE RESOURCE 'recommend_document'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/documents/screens'
+ATTRIBUTES (
+  screenName = 'documents.RecommendDocument'
+  ##configurationView = 'documents.RecommendDocumentScreenConf'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/recommend_document';
+
+CREATE RESOURCE 'ClosePopup'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/recommend_document';
+
+CREATE RESOURCE 'calendar'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/documents/screens'
+ATTRIBUTES (
+  screenName = 'documents.Calendar',
+  configurationView = 'documents.CalendarScreenConf'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/calendar';
+
+
+# Structure of structure branch in the site:
+#
+# "cms" (node) 1
+#  "sites" (node) 1
+#   (site.site) 1+
+#    "structure" (structure.navigation_node) 1^
+
+
+# A relation for tracking aliases
+
+CREATE RELATION 'structure.DocumentAliases';
+
