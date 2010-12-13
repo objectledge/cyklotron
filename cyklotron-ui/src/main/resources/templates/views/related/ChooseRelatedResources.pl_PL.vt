@@ -1,0 +1,259 @@
+## marker for ledge cyklo
+$viewEnclosureTool.override('popup.Default')
+
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.core.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.widget.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.mouse.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.sortable.js')##
+
+<script type="text/javascript">
+<!--
+function selCheckbox(id) {  
+
+    var obj = document.getElementById('res-' + id);
+    var chk = document.getElementById('resource-' + id); 
+	
+    if(chk.checked) {
+        obj.setAttribute("class","cms-category-yes");
+    } else { 
+        obj.setAttribute("class","cms-category-no");
+    } 
+}
+				    
+// --> 
+</script> 				    
+
+#macro( show_actions )
+<div class="action-buttons">
+  <div class="additional">
+  <a href="javascript:fSub('$link.action('related.ResetRelatedState')');">Usuń zmiany</a>
+  </div>
+
+  <div class="modification">
+#if($resource.canModify($cms_tool.coralSession,$cms_tool.getUserData().getSubject()))
+  <a href="javascript:fSub('$link.action('related.UpdateRelations')');">Zapisz zmiany</a>
+#end
+  </div>
+</div>
+#end
+
+##
+#genericScreenHeader('Wybór zasobów powiązanych')
+
+#if( $result == "resource is not documents.document_node" )
+	<script type="text/javascript">
+    <!--
+		alert("Wybrany zasób nie jest dokumentem.");
+    //-->
+	</script>
+#elseif( $result == "resource does not exist" )
+	<script type="text/javascript">
+    <!--
+		alert("Wybrany zasób nie istnieje.");
+    //-->
+	</script>
+#else
+	#result_inline_message('results.related')
+#end
+
+<script type="text/javascript">
+<!--
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+
+function orderSub()
+{
+ var params = "action=related.UpdateOrder&res_id=$resource.id&" + $("#related_order").sortable("serialize");
+ 
+  $##
+.post("$link", params,
+  function(data){
+    alert("Zapisano.");
+  });
+
+}
+
+function fSubConf(link, actionType)
+{
+ var message = "Czy napewno chcesz wykonać tą akcję?";
+ 
+ if(actionType == "delete"){
+     message = "Czy napewno chcesz usunąć ten plik?";
+ }
+ else if(actionType == "unbind"){
+	 message = "Czy napewno chcesz odwiązać ten zasób?";
+ }
+ 
+ if(confirm(message))
+ {
+   fSub(link);
+ }
+} 
+
+//-->
+</script>
+<style>
+ul#related_order  { margin:0; padding:0; }
+#related_order li { border:1px solid #DADADA; background-color:#EFEFEF; padding:3px 5px; margin-bottom:3px; margin-top:3px; width:500px; list-style-type:none;
+	color:#666666; }
+#related_order li:hover { 	background-color:#FFF; cursor:move; }
+
+</style>
+
+<div style="float: right;">
+<form name="form3" method="POST" action="$link">
+	<input type="hidden" name="res_id" value="$resource.id" />
+	<input type="hidden" name="res_class_id" value="$res_class_id" />
+    <input type="hidden" name="reset" value="false" />
+	<input type="text" name="search" value="$!search">
+	<a href="javascript:document.form3.submit();">szukaj</a>
+	<a href="$link.set('res_id', $resource.id).set('res_class_id', $res_class_id).set('reset', false)">wyczyść</a>
+</form>
+</div>
+
+<form name="form2" method="POST" action="$link">
+  <input type="hidden" name="res_id" value="$resource.id" />
+  <input type="hidden" name="reset" value="false" />
+  Typ zasobu: <select name="res_class_id" onChange="document.form2.submit()">
+  #set($appi18n = $i18n.usePrefix("cms.applications"))	
+  #foreach($app in $apps)
+    #set($classes = $apps_map.get($app))
+    #set($scope = "cms.applications.${app.name}.resources")
+    #set($classesi18n = $i18n.usePrefix($scope))	
+	#foreach($res_class in $classes)
+      <option value="$res_class.id"
+	  #if($res_class.id == $res_class_id) selected #end
+	  >$appi18n.get($app.name.concat(".name")): $classesi18n.get($res_class.name.concat(".name"))</option>
+	#end
+  #end  
+  </select>
+</form>
+
+#show_actions()
+
+#if($related_to.size() > 0)
+<h5>Ustaw kolejność zasobów powiązanych:</h5>
+<ul id="related_order">
+#foreach($row in $related_to)
+  #set($definition = $cms_tool.getClassDefinition($row))##
+  <li id="listItem_$row.id">
+  #resource_label($row) 
+  #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
+	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
+  #end
+  	<a href="javascript:fSubConf('$link.view('related.ChooseRelatedResources').action('related.RemoveRelation').set('item_id', $row.id)','unbind');">Odwiąż</a>
+  #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
+ 	<a href="javascript:fSubConf('$link.view('related.ChooseRelatedResources').action('files.DeleteRelatedFile').set('file_id',$row.id)','delete');">Usuń</a>
+  #end
+  </li>
+#end
+</ul>
+<a href="#" onclick="orderSub(); return false; ">Zapisz kolejność</a>
+
+<script type="text/javascript">
+<!--
+$("#related_order").sortable();
+// --> 
+</script>
+<br/><br/>
+#end
+
+
+<form name="form1" method="POST" action="">
+  <input type="hidden" name="res_id" value="$resource.id" />
+  <input type="hidden" name="res_class_id" value="$res_class_res.id" />
+  
+
+#if( $res_class_res.name == "documents.document_node" )
+<div style="float: left;" >
+		<input type="checkbox" name="sym_rel" value="true" #if($sym_rel) checked #end /><I> utwórz</I> / <I>usuń</I> powiązania symetryczne
+</div>
+<div style="float: right;" >	
+		id:<input size="5" maxlength="7" type="text" name="doc_res_id" value="$!doc_res_id" />
+		<a href="javascript:fSub('$link.view('related.ChooseRelatedResources').action('related.BindDocument')');">Powiąż</a>
+</div><br>
+#end
+
+##
+## get resources visibility
+#foreach($row in $table.rows)
+## only chosen resource class resources may be visible
+#if($res_class_filter.accept($row.object))
+<input type="hidden" name="resource-visible" value="$row.id" />
+#end
+#end
+
+##
+## get resource tree
+#set($tableLink = $link.set('tableId',$table.id))
+#if($search)
+#set($tableLink = $tableLink.set('search', $search))
+#end
+##
+
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+#foreach($row in $table.rows)
+<tr>
+
+
+##
+## show checkbox for relevant resource class
+<td width="20">
+#if(!$res_class_filter.accept($row.object))
+#set($row_css_class = '')
+&nbsp;
+#elseif($related_selection_state.getValue($row.object).equals('selected'))
+<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" checked="checked" onChange="selCheckbox($row.id)" />
+#set($row_css_class = ' class="cms-category-yes"')
+#else
+<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" onChange="selCheckbox($row.id)" />
+#set($row_css_class = ' class="cms-category-no"') 
+#end
+</td>
+
+#set($definition = $cms_tool.getClassDefinition($row.object))##
+##
+## list the resource
+<td>
+#set($toggleExpandLink = $tableLink.set('rowId',$row.id).action('table.ToggleExpanded'))
+#set($toggleExpandLink = "javascript:fSub('$toggleExpandLink')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink)
+
+#set($res_title = $cms_tool.resourceAttribute($row.object, $definition.indexTitle))
+
+#if(!$res_class_filter.accept($row.object))
+$res_title
+#else
+<label for="resource-$row.id" id="res-$row.id"$!row_css_class>$res_title</label>
+#end
+
+##$definition.name
+
+##
+## show quick add button
+#if($definition.relatedQuickAddView && $definition.relatedQuickAddView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.coralSession,$cms_tool.subject))
+<a href="javascript:fSub('$link.view($definition.relatedQuickAddView).action('related.RefreshRelations').set('parent_id', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Dodaj poniżej</a>
+#end
+##
+## show quick edit button
+#if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canModify($cms_tool.coralSession,$cms_tool.subject))
+<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
+#end
+</td>
+
+</tr>
+#end
+</table>
+
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+#show_actions()
+</form>
+
+#genericScreenTrailer()

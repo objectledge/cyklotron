@@ -1,0 +1,52 @@
+#genericScreenHeader('GROUPS')
+#result_inline_message('results.security')
+
+$table.getColumn('name').set('label','Name')
+$table.getColumn('description').set('label','Description')
+$table.getColumn('description').set('width','75%')
+$table.getColumn('operations').set('label','Operations')
+#set($columnOrder = ['name','description', 'operations'])
+#set($tableLink = $link.set('tableId',$table.id))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+  <tr class="row1">
+    <td>
+      team
+    </td>
+    <td>
+      Users that can access the administrative interface
+    </td>
+    <td>
+      <nobr>
+        <a href="$link.view('security.GroupMembers').set('group_id',$teamMember.id)">members</a>
+        <a href="$link.view('security.GroupAssignments').set('group_id',$teamMember.id)">roles</a>
+      </nobr>
+    </td>
+  </tr>
+#foreach($row in $table.rows)
+  #set($odd = ($velocityCount + 1) % 2)
+  <tr class="row$odd">
+    <td>
+      $security.getGroupName($row.object)
+    </td>
+    <td>
+      #if($row.object.description && $row.object.description.length() > 0)$row.object.description#else&nbsp;#end
+    </td>
+    <td>
+      <nobr>
+        <a href="$link.view('security.EditGroup').set('group_id',$row.object.id)">edit</a>
+        <a href="$link.view('security.GroupMembers').set('group_id',$row.object.id)">members</a>
+        <a href="$link.view('security.GroupAssignments').set('group_id',$row.object.id)">roles</a>
+        <a href="#confirm("Are you sure you wish to delete group $security.getGroupName($row.object)?" "$link.action('security.DeleteGroup').set('group_id',$row.object.id)")">usuń</a>
+      </nobr>
+    </td>
+  </tr>
+#end
+</table>
+
+#command_bar([["$link.view('security.AddGroup')",'Add group']])
+
+#genericScreenTrailer()

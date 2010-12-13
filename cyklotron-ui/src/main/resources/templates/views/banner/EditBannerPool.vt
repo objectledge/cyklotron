@@ -1,0 +1,83 @@
+##
+## Poll application: poll editing screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: EditBannerPool.vt,v 1.1 2005-06-16 13:53:26 zwierzem Exp $
+##
+##
+
+#set($bannerLink = $link.set('bsid',$pool.getParent().getId()))
+#set($monthNames = $i18n.usePrefix('calendar').usePrefix('ofmonths'))
+
+<form name="form1" method="post" action="$bannerLink.view("banner.EditBannerPool").action("banner.UpdateBannerPool")" class="defaultForm">
+<input type="hidden" name="pid" value="$pool.getId()" size="30">
+
+#genericScreenHeader("EDIT BANNER FOLDER <i>$pool.getName()</i>")
+#result_inline_message('results.banner')
+      
+<table class="genericScreen" width="100%" cellspacing="0">
+  <tr>
+	<td><b>Folder name:</b></td>
+	<td>
+	  <input type="text" name="title" value="$parametersTool.get('title',"$pool.getName()")" size="30">
+	</td>
+  </tr>
+  <tr>
+	<td><b>Short description:</b></td>
+	<td>
+	  <input type="text" name="description" value="$parametersTool.get('description',"$!pool.getDescription()")" size="30">
+	</td>
+  </tr>
+  <tr>
+    <td><b>Number of banners in the folder:</b></td>
+	<td>
+	  $pool.getBanners().size()
+	</td>
+  </tr>
+</table>
+
+## banner list container in pool
+##
+#set($tableLink = $link.set('tableId', $table.id))
+##
+<table width="100%" class="genericItemList" cellspacing="0">
+<tr>
+<th colspan="2">Choose banners in the folder</th>
+</tr>
+#foreach($row in $table.rows)
+
+#if($row.object.state.name.equals("active"))
+<tr>
+ #else
+<tr bgcolor="#DDDDDD">
+#end
+  <td style="width: 10px;">
+	#if($assigned.contains($row.object))
+	<input type="checkbox" name="resource-$row.object.id" id="resource-$row.object.id" value="selected" checked="checked" />
+	#else
+	<input type="checkbox" name="resource-$row.object.id" id="resource-$row.object.id" value="selected" />
+	#end
+  </td>
+  <td>
+    <label for="resource-$row.object.id">$row.object.name</label>
+  </td>
+</tr>
+#end
+</table>
+      
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+    <a href="javascript:document.form1.submit();">Save changes</a> &nbsp;
+	<a href="$bannerLink.view("banner.PoolList")">Cancel</a> &nbsp;
+  </div>
+</div>
+</form>
+#genericScreenTrailer()
+     
+
