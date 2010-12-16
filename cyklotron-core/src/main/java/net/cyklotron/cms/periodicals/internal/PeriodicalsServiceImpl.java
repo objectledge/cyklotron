@@ -426,8 +426,9 @@ public class PeriodicalsServiceImpl
         List<FileResource> results = new LinkedList<FileResource>();
         String timestamp = timestamp(time);
         Map<CategoryQueryResource, Resource> queryResults = performQueries(coralSession, r, time);
+        
         if(!(r instanceof EmailPeriodicalResource)
-            || (!queryResults.isEmpty() || ((EmailPeriodicalResource)r).getSendEmpty()))
+            || (!isQuerySetEmpty(queryResults) || ((EmailPeriodicalResource)r).getSendEmpty()))
         {
             FileResource contentFile = generate(coralSession, r, queryResults, r.getRenderer(),time, timestamp,
                 r.getTemplate(), null);
@@ -539,14 +540,23 @@ public class PeriodicalsServiceImpl
                     }                    
                 }
             }
-            if(!(periodical instanceof EmailPeriodicalResource)
-                || (!temp.isEmpty() || ((EmailPeriodicalResource)periodical).getSendEmpty()))
-            {
-                Collections.sort(temp, getComparator(periodical));
-                results.put(cq, temp);
-            }
+            Collections.sort(temp, getComparator(periodical));
+            results.put(cq, temp);
         }
         return results;
+    }
+    
+    private boolean isQuerySetEmpty(Map queryResults)
+    {
+        Map <CategoryQueryResource, ArrayList> queries = queryResults;
+        for(CategoryQueryResource cq : queries.keySet())
+        {
+            if(!queries.get(cq).isEmpty())
+            {
+                return false;
+            }
+        }
+        return true;
     }
     
     private Comparator getComparator(PeriodicalResource periodical)
