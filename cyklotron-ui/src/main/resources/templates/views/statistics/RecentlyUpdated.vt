@@ -1,0 +1,100 @@
+<script type="text/javascript">
+<!--
+function fSub(action)
+{
+  document.search.action = action;
+  document.search.submit();
+}
+//-->
+</script>
+
+#genericScreenHeader('RECENTLY UPDATED DOCUMENTS')
+
+#result_inline_message("results.statistics")
+
+<form name="search" action="$link" method="post">
+<input type="hidden" name="show" value="true">
+<table width="70%">
+  <tr>
+    <td align="left">Choose settings:</td>
+    <td align="right"><a href="javascript:fSub('$link.action('statistics.StoreRecentlyUpdatedConfiguration')')">Store settings</a></td>
+  </tr>
+  <tr><td colspan="2"><hr/></td></tr>
+  <tr>
+    <td>Last update date in:</td>
+    <td><input type="radio" name="range" value="true" #if($range)checked#end></td>
+  </tr>
+  <tr>
+    <td align="left">after:</td>
+    <td align="right">#dateSelectorTS("update_start" $update_start.time)</td>
+  </tr>
+  <tr>  
+    <td align="left">before:</td>
+    <td align="right">#dateSelectorTS("update_end" $update_end.time)</td>
+  </tr>
+  <tr>
+    <td>Last update date offset:</td>
+    <td><input type="radio" name="range" value="false" #if(!$range)checked#end></td>
+  </tr>
+  <tr>
+    <td align="left">offset in days:</td>
+    <td align="right">
+      <select name="offset">
+		#time_options([1,2,3,4,5,7,14,30] $!offset)
+	  </select>
+    </td>
+  </tr>
+  <tr><td colspan="2"><hr/></td></tr>  
+  <tr>
+    <td align="left">Sites:</td>
+    <td align="right">
+    <select multiple="multiple" size="6" name="selected_site_id">
+	  #foreach($site in $allSites)
+	  #if($selectedSites.contains($site.id))
+        <option value="$site.id" selected="selected">$site.name</option>
+      #else
+        <option value="$site.id">$site.name</option>
+      #end
+      #end
+    </select>
+    </td>
+  </tr>
+  <tr>  
+    <td colspan="2" align="right">
+      <input type="submit" value="Search" name="B1">
+    </td>     
+  </tr>
+</table>
+</form>
+
+<table width="70%">
+  <tr>
+    <th align="left">Service</th>
+    <th align="right">Total pages modified</th>
+  </tr>
+#foreach($site in $sites)
+ #if($sitesMap.containsKey($site.id))
+  #set($nodes = $sitesMap.get($site.id))
+  <tr>
+   <td align="left">$site.name</td> 
+   <td align="right">$nodes.size()</td>
+  </tr>
+  #foreach($node in $nodes)
+  <tr>
+   <td align="right"><a href="$link.unsetView().set('x',$node.id)">$node.title</a></td>
+   <td align="right">$node.customModificationTime</td>
+  </tr> 
+  #end
+ #else
+  <tr>
+      <td align="left">$site.name:</td> 
+      <td align="right">-</td>
+  </tr>
+ #end
+#end
+</table>
+
+##<hr/>
+##DEBUG: $selectedSites, $query, <br/>
+
+#genericScreenTrailer()
