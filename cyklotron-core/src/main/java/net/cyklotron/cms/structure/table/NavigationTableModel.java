@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.coral.table.comparator.TimeComparator;
 
 import net.cyklotron.cms.util.PriorityComparator;
 
@@ -23,9 +24,18 @@ public class NavigationTableModel extends CoralTableModel
         // add NavigationResource columns
         comparatorByColumnName.put("sequence", new SequenceComparator());
         comparatorByColumnName.put("title", new TitleComparator(locale));
-        comparatorByColumnName.put("validity.start", new ValidityStartComparator());
-        comparatorByColumnName.put("validity.end", new ValidityEndComparator());
-		comparatorByColumnName.put("priority", new PriorityComparator());
-		comparatorByColumnName.put("priority.validity.start", new PriorityAndValidityStartComparator());
+        comparatorByColumnName.put("validity.start", new ValidityStartComparator(
+            TimeComparator.SortNulls.LAST));
+        reverseComparatorByColumnName.put("validity.start", new ValidityStartComparator(
+            TimeComparator.SortNulls.FIRST));
+        comparatorByColumnName.put("validity.end", new ValidityEndComparator(
+            TimeComparator.SortNulls.LAST));
+        reverseComparatorByColumnName.put("validity.end", new ValidityEndComparator(
+            TimeComparator.SortNulls.FIRST));
+        comparatorByColumnName.put("priority", new PriorityComparator());
+        comparatorByColumnName.put("priority.validity.start",
+            new PriorityAndValidityStartComparator(TimeComparator.SortNulls.LAST));
+        reverseComparatorByColumnName.put("priority.validity.start",
+            new PriorityAndValidityStartComparator(TimeComparator.SortNulls.FIRST));
     }
 }

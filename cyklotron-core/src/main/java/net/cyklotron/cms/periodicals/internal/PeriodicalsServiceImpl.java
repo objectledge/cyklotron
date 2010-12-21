@@ -40,6 +40,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.CreationTimeComparator;
 import org.objectledge.coral.table.comparator.ModificationTimeComparator;
 import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.coral.table.comparator.TimeComparator;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.I18n;
 import org.objectledge.mail.LedgeMessage;
@@ -563,7 +564,8 @@ public class PeriodicalsServiceImpl
     {
         String sortOrder = periodical.isSortOrderDefined() ? periodical.getSortOrder() : "priority.validity.start";
         boolean sortDirectionAsc = periodical.isSortDirectionDefined() ? "asc".equals(periodical.getSortDirection()) : true;
-        Comparator comp = new PriorityAndValidityStartComparator();
+        Comparator comp = new PriorityAndValidityStartComparator(
+            sortDirectionAsc ? TimeComparator.SortNulls.LAST : TimeComparator.SortNulls.FIRST);
         if("sequence".equals(sortOrder)) 
         {
             comp = new SequenceComparator();
@@ -586,15 +588,18 @@ public class PeriodicalsServiceImpl
         }        
         else if("validity.start".equals(sortOrder)) 
         {
-            comp =new ValidityStartComparator();
+            comp = new ValidityStartComparator(sortDirectionAsc ? TimeComparator.SortNulls.LAST
+                : TimeComparator.SortNulls.FIRST);
         }
         else if("event.start".equals(sortOrder)) 
         {
-            comp = new EventStartComparator();
+            comp = new EventStartComparator(sortDirectionAsc ? TimeComparator.SortNulls.LAST
+                : TimeComparator.SortNulls.FIRST);
         }
         else if("event.end".equals(sortOrder)) 
         {
-            comp = new EventEndComparator();
+            comp = new EventEndComparator(sortDirectionAsc ? TimeComparator.SortNulls.LAST
+                : TimeComparator.SortNulls.FIRST);
         }        
         else if("priority".equals(sortOrder)) 
         {

@@ -16,6 +16,11 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 public class ValidityEndComparator
     extends TimeComparator
 {
+    public ValidityEndComparator(TimeComparator.SortNulls strategy)
+    {
+        super(strategy);
+    }
+    
     protected Date getDate(Resource r)
     {
         return ((NavigationNodeResource)r).getValidityEnd();

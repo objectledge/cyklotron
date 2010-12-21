@@ -7,6 +7,7 @@ import java.util.Locale;
 import org.objectledge.context.Context;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.ResourceListTableModel;
+import org.objectledge.coral.table.comparator.TimeComparator;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
 
@@ -58,10 +59,17 @@ public class CmsResourceListTableModel extends ResourceListTableModel
         }
         newCols[cols.length] = new TableColumn<Resource>("index.title", new IndexTitleComparator(context, integrationService, locale));
 		newCols[cols.length + 1] = new TableColumn<Resource>("priority", new PriorityComparator());
-		newCols[cols.length + 2] = new TableColumn<Resource>("validity.start", new ValidityStartComparator());
-		newCols[cols.length + 3] = new TableColumn<Resource>("priority.validity.start", new PriorityAndValidityStartComparator());
-        newCols[cols.length + 4] = new TableColumn<Resource>("event.start", new EventStartComparator());
-        newCols[cols.length + 5] = new TableColumn<Resource>("event.end", new EventEndComparator());
+        newCols[cols.length + 2] = new TableColumn<Resource>("validity.start",
+            new ValidityStartComparator(TimeComparator.SortNulls.LAST),
+            new ValidityStartComparator(TimeComparator.SortNulls.FIRST));
+        newCols[cols.length + 3] = new TableColumn<Resource>("priority.validity.start",
+            new PriorityAndValidityStartComparator(TimeComparator.SortNulls.LAST),
+            new PriorityAndValidityStartComparator(TimeComparator.SortNulls.FIRST));
+        newCols[cols.length + 4] = new TableColumn<Resource>("event.start",
+            new EventStartComparator(TimeComparator.SortNulls.LAST), new EventStartComparator(
+                TimeComparator.SortNulls.LAST));
+        newCols[cols.length + 5] = new TableColumn<Resource>("event.end", new EventEndComparator(
+            TimeComparator.SortNulls.LAST), new EventEndComparator(TimeComparator.SortNulls.FIRST));
         return newCols;
     }
 }
