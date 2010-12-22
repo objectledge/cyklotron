@@ -14,7 +14,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  */
 public class ValidityStartComparator extends TimeComparator<NavigationNodeResource>
 {
-    public ValidityStartComparator(TimeComparator.SortNulls strategy)
+    public ValidityStartComparator(TimeComparator.Nulls strategy)
     {
         super(strategy);
     }

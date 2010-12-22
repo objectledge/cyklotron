@@ -62,16 +62,16 @@ public class CmsResourceListTableModel extends ResourceListTableModel
         newCols[cols.length] = new TableColumn<Resource>("index.title", new IndexTitleComparator(context, integrationService, locale));
 		newCols[cols.length + 1] = new TableColumn<Resource>("priority", new PriorityComparator());
         newCols[cols.length + 2] = new TableColumn<NavigationNodeResource>("validity.start",
-            new ValidityStartComparator(TimeComparator.SortNulls.LAST),
-            new ValidityStartComparator(TimeComparator.SortNulls.FIRST));
+            new ValidityStartComparator(TimeComparator.Nulls.LATE),
+            new ValidityStartComparator(TimeComparator.Nulls.EARLY));
         newCols[cols.length + 3] = new TableColumn<NavigationNodeResource>("priority.validity.start",
-            new PriorityAndValidityStartComparator(TimeComparator.SortNulls.LAST),
-            new PriorityAndValidityStartComparator(TimeComparator.SortNulls.FIRST));
+            new PriorityAndValidityStartComparator(TimeComparator.Nulls.LATE),
+            new PriorityAndValidityStartComparator(TimeComparator.Nulls.EARLY));
         newCols[cols.length + 4] = new TableColumn<DocumentNodeResource>("event.start",
-            new EventStartComparator(TimeComparator.SortNulls.LAST), new EventStartComparator(
-                TimeComparator.SortNulls.LAST));
+            new EventStartComparator(TimeComparator.Nulls.LATE), new EventStartComparator(
+                TimeComparator.Nulls.EARLY));
         newCols[cols.length + 5] = new TableColumn<DocumentNodeResource>("event.end", new EventEndComparator(
-            TimeComparator.SortNulls.LAST), new EventEndComparator(TimeComparator.SortNulls.FIRST));
+            TimeComparator.Nulls.LATE), new EventEndComparator(TimeComparator.Nulls.EARLY));
         return (TableColumn<Resource>[])newCols;
     }
 }

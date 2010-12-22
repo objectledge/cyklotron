@@ -14,7 +14,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  */
 public class PriorityAndValidityStartComparator extends TimeComparator<NavigationNodeResource>
 {
-    public PriorityAndValidityStartComparator(TimeComparator.SortNulls strategy)
+    public PriorityAndValidityStartComparator(TimeComparator.Nulls strategy)
     {
         super(strategy);
     }

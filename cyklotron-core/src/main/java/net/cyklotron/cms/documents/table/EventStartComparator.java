@@ -15,7 +15,7 @@ import net.cyklotron.cms.documents.DocumentNodeResource;
  */
 public class EventStartComparator extends TimeComparator<DocumentNodeResource>
 {
-    public EventStartComparator(TimeComparator.SortNulls strategy)
+    public EventStartComparator(TimeComparator.Nulls strategy)
     {
         super(strategy);
     }

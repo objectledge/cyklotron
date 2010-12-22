@@ -25,17 +25,17 @@ public class NavigationTableModel extends CoralTableModel
         comparatorByColumnName.put("sequence", new SequenceComparator());
         comparatorByColumnName.put("title", new TitleComparator(locale));
         comparatorByColumnName.put("validity.start", new ValidityStartComparator(
-            TimeComparator.SortNulls.LAST));
+            TimeComparator.Nulls.LATE));
         reverseComparatorByColumnName.put("validity.start", new ValidityStartComparator(
-            TimeComparator.SortNulls.FIRST));
+            TimeComparator.Nulls.EARLY));
         comparatorByColumnName.put("validity.end", new ValidityEndComparator(
-            TimeComparator.SortNulls.LAST));
+            TimeComparator.Nulls.LATE));
         reverseComparatorByColumnName.put("validity.end", new ValidityEndComparator(
-            TimeComparator.SortNulls.FIRST));
+            TimeComparator.Nulls.EARLY));
         comparatorByColumnName.put("priority", new PriorityComparator());
         comparatorByColumnName.put("priority.validity.start",
-            new PriorityAndValidityStartComparator(TimeComparator.SortNulls.LAST));
+            new PriorityAndValidityStartComparator(TimeComparator.Nulls.LATE));
         reverseComparatorByColumnName.put("priority.validity.start",
-            new PriorityAndValidityStartComparator(TimeComparator.SortNulls.FIRST));
+            new PriorityAndValidityStartComparator(TimeComparator.Nulls.EARLY));
     }
 }
