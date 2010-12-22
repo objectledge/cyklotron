@@ -14,20 +14,24 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  */
 public class PriorityAndValidityStartComparator extends TimeComparator<NavigationNodeResource>
 {
-    public PriorityAndValidityStartComparator(TimeComparator.Nulls strategy)
+    public PriorityAndValidityStartComparator(TimeComparator.Direction direction)
     {
-        super(strategy);
+        super(direction);
     }
     
     @Override
-    protected Date getSortCriterionDate(NavigationNodeResource resource)
+    protected Date getDate(NavigationNodeResource resource)
     {
         return resource.getValidityStart();
     }    
 
     public int compare(NavigationNodeResource r1, NavigationNodeResource r2)
     {
-		int rel = r1.getPriority(0) - r2.getPriority(0);
+        int rel =  r1.getPriority(0) - r2.getPriority(0);
+        if(getDirection() == Direction.DESC)
+        {
+            rel = -rel;
+        }
         if(rel != 0)
         {
         	return rel;

@@ -565,7 +565,7 @@ public class PeriodicalsServiceImpl
         String sortOrder = periodical.isSortOrderDefined() ? periodical.getSortOrder() : "priority.validity.start";
         boolean sortDirectionAsc = periodical.isSortDirectionDefined() ? "asc".equals(periodical.getSortDirection()) : true;
         Comparator comp = new PriorityAndValidityStartComparator(
-            sortDirectionAsc ? TimeComparator.Nulls.LATE : TimeComparator.Nulls.EARLY);
+            sortDirectionAsc ? TimeComparator.Direction.ASC : TimeComparator.Direction.DESC);
         if("sequence".equals(sortOrder)) 
         {
             comp = new SequenceComparator();
@@ -588,18 +588,18 @@ public class PeriodicalsServiceImpl
         }        
         else if("validity.start".equals(sortOrder)) 
         {
-            comp = new ValidityStartComparator(sortDirectionAsc ? TimeComparator.Nulls.LATE
-                : TimeComparator.Nulls.EARLY);
+            comp = new ValidityStartComparator(sortDirectionAsc ? TimeComparator.Direction.ASC
+                : TimeComparator.Direction.DESC);
         }
         else if("event.start".equals(sortOrder)) 
         {
-            comp = new EventStartComparator(sortDirectionAsc ? TimeComparator.Nulls.LATE
-                : TimeComparator.Nulls.EARLY);
+            comp = new EventStartComparator(sortDirectionAsc ? TimeComparator.Direction.ASC
+                : TimeComparator.Direction.DESC);
         }
         else if("event.end".equals(sortOrder)) 
         {
-            comp = new EventEndComparator(sortDirectionAsc ? TimeComparator.Nulls.LATE
-                : TimeComparator.Nulls.EARLY);
+            comp = new EventEndComparator(sortDirectionAsc ? TimeComparator.Direction.ASC
+                : TimeComparator.Direction.DESC);
         }        
         else if("priority".equals(sortOrder)) 
         {

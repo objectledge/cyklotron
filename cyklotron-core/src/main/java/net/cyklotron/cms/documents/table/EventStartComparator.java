@@ -15,12 +15,12 @@ import net.cyklotron.cms.documents.DocumentNodeResource;
  */
 public class EventStartComparator extends TimeComparator<DocumentNodeResource>
 {
-    public EventStartComparator(TimeComparator.Nulls strategy)
+    public EventStartComparator(TimeComparator.Direction direction)
     {
-        super(strategy);
+        super(direction);
     }
         
-    protected Date getSortCriterionDate(DocumentNodeResource r)
+    protected Date getDate(DocumentNodeResource r)
     {
         return r.getEventStart();
     }
