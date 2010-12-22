@@ -13,26 +13,15 @@ import net.cyklotron.cms.documents.DocumentNodeResource;
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: EventEndComparator.java,v 1.3 2005-02-09 22:20:35 rafal Exp $
  */
-public class EventEndComparator extends TimeComparator
+public class EventEndComparator extends TimeComparator<DocumentNodeResource>
 {
     public EventEndComparator(TimeComparator.SortNulls strategy)
     {
         super(strategy);
     }
     
-    protected Date getDate(Resource r)
+    protected Date getSortCriterionDate(DocumentNodeResource r)
     {
-        return ((DocumentNodeResource)r).getEventEnd();
-    }
-
-    public int compare(Object o1, Object o2)
-    {
-        if (!((o1 instanceof DocumentNodeResource && o2 instanceof DocumentNodeResource)))
-        {
-            return 0;
-        }
-        DocumentNodeResource r1 = (DocumentNodeResource)o1;
-        DocumentNodeResource r2 = (DocumentNodeResource)o2;
-        return compareDates(r1.getEventEnd(), r2.getEventEnd());
+        return r.getEventEnd();
     }
 }

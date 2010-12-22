@@ -11,9 +11,11 @@ import org.objectledge.coral.table.comparator.TimeComparator;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
 
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.table.EventEndComparator;
 import net.cyklotron.cms.documents.table.EventStartComparator;
 import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.table.PriorityAndValidityStartComparator;
 import net.cyklotron.cms.structure.table.ValidityStartComparator;
 
@@ -52,24 +54,24 @@ public class CmsResourceListTableModel extends ResourceListTableModel
         throws TableException
     {
         TableColumn<Resource>[] cols = super.getColumns(locale, list);
-        TableColumn<Resource>[] newCols = new TableColumn[cols.length + 6];
+        TableColumn<?>[] newCols = new TableColumn[cols.length + 6];
         for(int i=0; i<cols.length; i++)
         {
             newCols[i] = cols[i];
         }
         newCols[cols.length] = new TableColumn<Resource>("index.title", new IndexTitleComparator(context, integrationService, locale));
 		newCols[cols.length + 1] = new TableColumn<Resource>("priority", new PriorityComparator());
-        newCols[cols.length + 2] = new TableColumn<Resource>("validity.start",
+        newCols[cols.length + 2] = new TableColumn<NavigationNodeResource>("validity.start",
             new ValidityStartComparator(TimeComparator.SortNulls.LAST),
             new ValidityStartComparator(TimeComparator.SortNulls.FIRST));
-        newCols[cols.length + 3] = new TableColumn<Resource>("priority.validity.start",
+        newCols[cols.length + 3] = new TableColumn<NavigationNodeResource>("priority.validity.start",
             new PriorityAndValidityStartComparator(TimeComparator.SortNulls.LAST),
             new PriorityAndValidityStartComparator(TimeComparator.SortNulls.FIRST));
-        newCols[cols.length + 4] = new TableColumn<Resource>("event.start",
+        newCols[cols.length + 4] = new TableColumn<DocumentNodeResource>("event.start",
             new EventStartComparator(TimeComparator.SortNulls.LAST), new EventStartComparator(
                 TimeComparator.SortNulls.LAST));
-        newCols[cols.length + 5] = new TableColumn<Resource>("event.end", new EventEndComparator(
+        newCols[cols.length + 5] = new TableColumn<DocumentNodeResource>("event.end", new EventEndComparator(
             TimeComparator.SortNulls.LAST), new EventEndComparator(TimeComparator.SortNulls.FIRST));
-        return newCols;
+        return (TableColumn<Resource>[])newCols;
     }
 }

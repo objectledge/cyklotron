@@ -2,7 +2,6 @@ package net.cyklotron.cms.structure.table;
 
 import java.util.Date;
 
-import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.TimeComparator;
 
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -13,36 +12,29 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @version $Id: PriorityAndValidityStartComparator.java,v 1.4 2005-04-15 04:34:26 pablo Exp $
  */
-public class PriorityAndValidityStartComparator extends TimeComparator
+public class PriorityAndValidityStartComparator extends TimeComparator<NavigationNodeResource>
 {
     public PriorityAndValidityStartComparator(TimeComparator.SortNulls strategy)
     {
         super(strategy);
     }
     
-    protected Date getDate(Resource r)
+    @Override
+    protected Date getSortCriterionDate(NavigationNodeResource resource)
     {
-        return ((NavigationNodeResource)r).getValidityStart();
-    }
+        return resource.getValidityStart();
+    }    
 
-    public int compare(Object o1, Object o2)
+    public int compare(NavigationNodeResource r1, NavigationNodeResource r2)
     {
-    	if (!((o1 instanceof NavigationNodeResource && o2 instanceof NavigationNodeResource)))
+		int rel = r1.getPriority(0) - r2.getPriority(0);
+        if(rel != 0)
         {
-            return 0;
+        	return rel;
         }
-	    NavigationNodeResource r1 = (NavigationNodeResource)o1;
-        NavigationNodeResource r2 = (NavigationNodeResource)o2;
-		int diff = r1.getPriority(0) - r2.getPriority(0);
-        if(diff != 0)
+        else
         {
-        	return diff;
+            return super.compare(r1, r2);
         }
-        diff = compareDates(r1.getValidityStart(), r2.getValidityStart());
-        if(diff != 0)
-        {
-            return diff;
-        }
-        return (int)(r1.getId() - r2.getId());
     }
 }
