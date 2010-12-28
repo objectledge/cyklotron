@@ -9,13 +9,13 @@ rml/cyklotron/site/site.rml
 rml/cyklotron/style/style.rml
 rml/cyklotron/skins/skins.rml
 rml/cyklotron/workflow/workflow.rml
+rml/cyklotron/link/link.rml
 rml/cyklotron/category/category.rml
 rml/cyklotron/files/files.rml
 rml/cyklotron/structure/structure.rml
 rml/cyklotron/search/search.rml
 rml/cyklotron/category/category-query.rml
 rml/cyklotron/related/related.rml
-rml/cyklotron/link/link.rml
 rml/cyklotron/forum/forum.rml
 rml/cyklotron/poll/poll.rml
 rml/cyklotron/banner/banner.rml

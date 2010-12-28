@@ -79,6 +79,12 @@ ADD PERMISSIONS (
   'cms.category.move'
 );
 
+ALTER RESOURCE CLASS 'cms.link.link_root'
+ADD PERMISSIONS (
+  'cms.category.categorize'
+);
+
+
 # notes
 #
 # R cms.category.administrator.<site_name>

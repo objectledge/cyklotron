@@ -52,6 +52,7 @@ PARENT '/cms/security'
 ATTRIBUTES (
   descriptionKey = 'cms.administrator',
   deletable = false,
+  sharingWorkgroup = false,
   role = 'cms.administrator',
   description = ''
 );
