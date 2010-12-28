@@ -612,6 +612,13 @@ public class SearchServiceImpl
     private void removeStaleWriteLocks(CoralSession coralSession)
         throws SearchException, InvalidResourceNameException
     {
+        Resource[] sitesRoot = coralSession.getStore().getResourceByPath("/cms/sites");
+        if(sitesRoot.length == 0)
+        {
+            // apparently, service is initialized by the installer
+            log.warn("failed to lookup sites root, skipping stale write lock removal");
+            return;
+        }
         SiteResource[] sites = siteService.getSites(coralSession);
         for(int i = 0; i < sites.length; i++)
         {
