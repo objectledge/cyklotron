@@ -137,7 +137,7 @@ public class NgoDatabaseServiceImpl
 
     private final int outgoingQueryDays;
 
-    private final SiteResource[] outgoingSites;
+    private final Configuration outgoingSites;
 
     private final DateFormat dateFormat;
 
@@ -151,7 +151,7 @@ public class NgoDatabaseServiceImpl
 
     private final String newsFeedIdParam;
 
-    private final SiteResource[] newsFeedSites;
+    private final Configuration newsFeedSites;
 
     private final String newsFeedDescription;
 
@@ -167,6 +167,8 @@ public class NgoDatabaseServiceImpl
 
     private final CategoryService categoryService;
 
+    private final SiteService siteService;
+
     public NgoDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem,
         SiteService siteService, CoralSessionFactory coralSessionFactory, Templating templating,
         OfflineLinkRenderingService offlineLinkRenderingService, DateFormatter dateFormatter,
@@ -175,6 +177,7 @@ public class NgoDatabaseServiceImpl
     {
         this.logger = logger;
         this.fileSystem = fileSystem;
+        this.siteService = siteService;
         this.coralSessionFactory = coralSessionFactory;
         this.templating = templating;
         this.offlineLinkRenderingService = offlineLinkRenderingService;
@@ -196,8 +199,7 @@ public class NgoDatabaseServiceImpl
             // outgoing
             Configuration outgoingConfig = config.getChild("outgoing");
             this.outgoingQueryDays = outgoingConfig.getChild("queryDays").getValueAsInteger();
-            this.outgoingSites = getSites(outgoingConfig.getChild("sites"), siteService,
-                coralSession);
+            this.outgoingSites = outgoingConfig.getChild("sites");                 
             // news feed
             Configuration newsFeedConfig = config.getChild("newsFeed");
             this.newsFeedURL = newsFeedConfig.getChild("baseURL").getValue();
@@ -207,8 +209,7 @@ public class NgoDatabaseServiceImpl
             this.newsFeedDescription = newsFeedConfig.getChild("description").getValue();
             this.newsFeedQueryDays = newsFeedConfig.getChild("queryDays").getValueAsInteger();
             this.newsFeedCacheTime = newsFeedConfig.getChild("cacheTime").getValueAsLong();
-            this.newsFeedSites = getSites(newsFeedConfig.getChild("sites"), siteService,
-                coralSession);
+            this.newsFeedSites = newsFeedConfig.getChild("sites");
         }
         finally
         {
@@ -325,7 +326,13 @@ public class NgoDatabaseServiceImpl
         CoralSession coralSession = coralSessionFactory.getAnonymousSession();
         try
         {
-            documents = queryDocuments(outgoingSites, endDate, -1L, coralSession);
+            documents = queryDocuments(getSites(outgoingSites, siteService,
+                coralSession), endDate, -1L, coralSession);
+        }
+        catch(Exception e)
+        {
+            logger.error("failed to retrieve documents", e);
+            return;
         }
         finally
         {
@@ -563,7 +570,7 @@ public class NgoDatabaseServiceImpl
     // RSS/Atom news feed for organization
 
     public String getOrganizationNewsFeed(Parameters parameters)
-        throws IOException, FeedException, ProcessingException, CategoryException
+        throws IOException, FeedException, ProcessingException, CategoryException, SiteException, ConfigurationException
     {
         long organizationId = parameters.getLong(newsFeedIdParam);
         String feedContents = loadCachedFeed(organizationId);
@@ -579,8 +586,9 @@ public class NgoDatabaseServiceImpl
                 }
                 Date startDate = new Date();
                 Date endDate = offsetDate(startDate, newsFeedQueryDays);
-                List<DocumentNodeResource> documents = queryDocuments(newsFeedSites, endDate,
-                    organizationId, coralSession);
+                List<DocumentNodeResource> documents = queryDocuments(
+                    getSites(newsFeedSites, siteService, coralSession), endDate, organizationId,
+                    coralSession);
                 SyndFeed feed = buildFeed(organization, documents, startDate, endDate, coralSession);
                 feedContents = saveCachedFeed(organizationId, feed);
             }

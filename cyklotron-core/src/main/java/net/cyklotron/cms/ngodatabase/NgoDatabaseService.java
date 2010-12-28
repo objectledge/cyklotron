@@ -3,10 +3,12 @@ package net.cyklotron.cms.ngodatabase;
 import java.io.IOException;
 import java.util.List;
 
+import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 
 import net.cyklotron.cms.category.CategoryException;
+import net.cyklotron.cms.site.SiteException;
 
 import com.sun.syndication.io.FeedException;
 
@@ -53,5 +55,6 @@ public interface NgoDatabaseService
      * @return contents of the feed.
      */
     public String getOrganizationNewsFeed(Parameters parameters)
-        throws IOException, FeedException, ProcessingException, CategoryException;
+        throws IOException, FeedException, ProcessingException, CategoryException, SiteException,
+        ConfigurationException;
 }
