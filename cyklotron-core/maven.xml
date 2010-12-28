@@ -30,10 +30,15 @@
 
 <!-- $Id: maven.xml,v 1.4 2005-03-21 10:43:48 zwierzem Exp $ -->
 <project xmlns:j="jelly:core"
-         xmlns:ant="jelly:ant">
+         xmlns:ant="jelly:ant"
+         xmlns:maven="jelly:maven">
 
   <preGoal name="java:compile">
     <attainGoal name="coral:generator"/>
+    <ant:path id="jflex.src.set"
+      location="src/main/jflex"/>
+    <maven:addPath id="maven.compile.src.set"
+      refid="jflex.src.set"/> 
   </preGoal>
 
 </project>
