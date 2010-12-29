@@ -1082,5 +1082,21 @@
     <prefix name="description">
       <value>Statystyki aktywności serwisu i zespołu edytorskiego.</value>
     </prefix>
+  </prefix>
+  
+  <prefix name="library">
+    <item name="name">Biblioteka</item>
+    <prefix name="screens">
+      <prefix name="index">
+        <item name="name">Indeks biblioteki</item>
+        <item name="description">Wyświetla indeks biblioteki w układzie tabelarycznym</item>
+        <prefix name="states">
+          <prefix name="Default">
+            <item name="description">Wyświetla indeks biblioteki w układzie tabelarycznym</item>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
   </prefix>    
+  
 </strings>
