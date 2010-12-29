@@ -56,6 +56,5 @@ CREATE PERMISSION 'cms.link.links.system';
 ALTER RESOURCE CLASS 'cms.link.link_root'
 ADD PERMISSIONS (
   'cms.link.links.administer',
-  'cms.link.links.system',
-  'cms.category.categorize'
+  'cms.link.links.system'
 );
