@@ -1,4 +1,4 @@
-<strings>
+<strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="edit">
     <prefix name="autoupdate">
       <prefix name="popup">

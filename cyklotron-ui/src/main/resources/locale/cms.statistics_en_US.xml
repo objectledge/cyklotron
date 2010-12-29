@@ -1,4 +1,4 @@
-<strings>
+<strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="ForumStatistics">
     <prefix name="strings">
       <item name="title">Forum statistics</item>    

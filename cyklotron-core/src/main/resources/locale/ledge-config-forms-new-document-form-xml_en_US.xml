@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<strings>
+<strings xmlns="http://objectledge.org/i18n/1.0">
 <prefix name="document.info"><value>Document information</value></prefix>
 
 <prefix name="document.language"><value>Language</value></prefix>

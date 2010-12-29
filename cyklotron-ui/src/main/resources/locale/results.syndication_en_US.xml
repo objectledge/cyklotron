@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
-<strings>
+<strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="msg">
     <prefix name="exception"><value>Exception occured.</value></prefix>
     <prefix name="FeedAlreadyExistsException"><value>A feed with the same name already exists.</value></prefix>

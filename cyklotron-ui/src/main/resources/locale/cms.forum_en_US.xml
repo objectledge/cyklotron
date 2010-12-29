@@ -1,4 +1,4 @@
-<strings>
+<strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="DeleteMessages">
     <prefix name="strings">
       <item name="title">Delete selected posts/comments</item>

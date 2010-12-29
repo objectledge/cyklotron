@@ -1,5 +1,5 @@
 
-<strings>
+<strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="role">
     <prefix name="cms">
       <prefix name="administrator">

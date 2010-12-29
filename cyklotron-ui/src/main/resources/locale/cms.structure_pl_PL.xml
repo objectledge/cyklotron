@@ -1,4 +1,4 @@
-<strings>
+<strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="DeleteNodes">
     <prefix name="strings">
       <item name="title">Skasuj wybrane węzły</item>

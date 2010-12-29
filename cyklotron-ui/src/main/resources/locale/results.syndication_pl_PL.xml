@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
-<strings>
+<strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="msg">
     <prefix name="exception"><value>Wystąpił błąd.</value></prefix>
     <prefix name="FeedAlreadyExistsException"><value>Kanał o tej nazwie już istnieje.</value></prefix>
