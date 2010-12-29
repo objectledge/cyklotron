@@ -151,7 +151,11 @@ extends BaseCategoryComponent
             synchronized(synchronizedKey)
             {
                 // get cached resource list together with creation time
-                CacheEntry entry = (CacheEntry) cache.get(key);
+                CacheEntry entry;
+                synchronized(cache)
+                {
+                    entry = (CacheEntry) cache.get(key);
+                }
                 // check entry validity
                 if(entry == null ||
                 System.currentTimeMillis() - entry.timeStamp > cacheInterval*1000L)
