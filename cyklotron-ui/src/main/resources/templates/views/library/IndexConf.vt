@@ -1,0 +1,45 @@
+#genericScreenHeader('Konfiguracja ekranu Indeks biblioteki')
+#set($from_component = true)
+#set($save_action = "$link.unsetView().action('structure.UpdateScreenPreferences').set('x',$node.id)")
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+    <!--
+    var fieldNames = new Array( "category", "search_pool" );
+    function sendConfig()
+    {
+    document.form1.action = "$save_action";
+    document.form1.target = "cyklotron_library_index_config_${cms_data.node.id}";
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+    }
+    //-->
+</script>
+<form name="form1" method="POST" action="">
+    <input type="hidden" name="node_id" value="$node.id" />
+    <input type="hidden" name="config" value="" />
+    <table border="0" class="genericScreen" width="100%">
+        <tr>
+            <td>kategoria</td>
+            <td>
+                <a href="#select_category('name id' 'form1' 'category_name category')">wybierz</a>
+                <input type="text" name="category_name" style="width:100%;" value="$!category.name" maxlength="150" readonly= "readonly" />
+                <input type="hidden" name="category" value="$!category.id"/>
+            </td>
+		</tr>
+		<tr>
+			<td colspan="2">kategoria którą oznaczone są dokumenty - karty indeksowe publikacji</td>
+		</tr>
+		<tr>
+            <td>zestaw indeksów</td>
+            <td>
+                <a href="#select_index_pool('name id' 'form1' 'search_pool_name search_pool')">wybierz</a>
+                <input type="text" name="search_pool_name" style="width:100%;" value="$!search_pool.name" maxlength="150" readonly= "readonly" />
+                <input type="hidden" name="search_pool" value="$!search_pool.id"/>
+            </td>
+        </tr>
+		<tr>
+			<td colspan="2">zestaw indeksów przeznaczony do wyszukiwania pełnotekstowego biblioteki</td>
+		</tr>
+    </table>
+</form>
+#command_bar([['javascript:sendConfig();','Zapisz'],['javascript:window.close();','Anuluj']])
+#genericScreenTrailer()
