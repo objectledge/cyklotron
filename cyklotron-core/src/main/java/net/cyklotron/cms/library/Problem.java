@@ -1,0 +1,12 @@
+package net.cyklotron.cms.library;
+
+public enum Problem
+{
+    INVALID_CLASS,
+    INVALID_METADATA,
+    MISSING_AUTHOR,
+    VALIDITY_START_UNSET,
+    MISSING_DESCRIPTION_DOC,
+    MULTIPLE_DESCRIPTION_DOCS,
+    LIBRARY_CATEGORY_MISSING
+}
