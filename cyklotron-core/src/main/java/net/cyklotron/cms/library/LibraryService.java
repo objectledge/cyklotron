@@ -9,15 +9,24 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryParser.QueryParser.Operator;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.util.Version;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.NameComparator;
-import org.objectledge.coral.table.comparator.PathComparator;
 
 import net.cyklotron.cms.category.CategoryException;
 import net.cyklotron.cms.category.CategoryResource;
@@ -25,23 +34,29 @@ import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.search.PoolResource;
+import net.cyklotron.cms.search.SearchConstants;
+import net.cyklotron.cms.search.SearchException;
+import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
 
 public class LibraryService
 {
-    private final SiteService siteService;
+    private final SearchService searchService;
 
     private final RelatedService relatedService;
 
     private final CategoryService categoryService;
+
+    private static final String[] SEARCH_FIELDS = { "index_title", "index_abbreviation",
+                    "index_content", "keywords", "authors", "sources" };
 
     /**
      * No-arg constructor for mocking.
      */
     protected LibraryService()
     {
-        this.siteService = null;
+        this.searchService = null;
         this.relatedService = null;
         this.categoryService = null;
     }
@@ -49,14 +64,14 @@ public class LibraryService
     /**
      * Create LibraryService instance.
      * 
-     * @param siteService site service.
+     * @param searchService site service.
      * @param relatedService related resources service.
      * @param categoryService category service.
      */
-    public LibraryService(SiteService siteService, RelatedService relatedService,
+    public LibraryService(SearchService searchService, RelatedService relatedService,
         CategoryService categoryService)
     {
-        this.siteService = siteService;
+        this.searchService = searchService;
         this.relatedService = relatedService;
         this.categoryService = categoryService;
     }
@@ -235,9 +250,10 @@ public class LibraryService
      * @throws NotConfiguredException when configuration for library in given site is missing.
      * @throws CategoryException when category service error occurs.
      */
-    public List<IndexCard> getAllLibraryItems(SiteResource site, CoralSession coralSession, Locale locale)
+    public List<IndexCard> getAllLibraryItems(SiteResource site, CoralSession coralSession,
+        Locale locale)
         throws NotConfiguredException, CategoryException
-    {        
+    {
         CategoryResource libraryCategory = getConfig(site, coralSession).getCategory();
         if(libraryCategory == null)
         {
@@ -252,6 +268,56 @@ public class LibraryService
             if(problems.isEmpty())
             {
                 indexCards.add(getIndexCard(res, site, coralSession, locale));
+            }
+        }
+        return new ArrayList<IndexCard>(indexCards);
+    }
+
+    public List<IndexCard> searchLibraryItems(String queryString, SiteResource site,
+        CoralSession coralSession, Locale locale)
+        throws NotConfiguredException, SearchException
+    {
+        PoolResource searchPool = getConfig(site, coralSession).getSearchPool();
+        if(searchPool == null)
+        {
+            throw new NotConfiguredException("searchPool is not set");
+        }
+        Analyzer analyzer = searchService.getAnalyzer(locale);
+        QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, SEARCH_FIELDS, analyzer);
+        parser.setDefaultOperator(Operator.AND);
+        Set<Long> uniqueIds = new HashSet<Long>();
+        try
+        {
+            Query query = parser.parse(queryString);
+            Searcher searcher = searchService.getSearchingFacility().getSearcher(
+                new PoolResource[] { searchPool }, coralSession.getUserSubject());
+            int numHits = searcher.maxDoc() > 0 ? searcher.maxDoc() : 1;
+            TopDocs hits = searcher.search(query, null, numHits);
+            for(ScoreDoc hit : hits.scoreDocs)
+            {
+                org.apache.lucene.document.Document doc = searcher.doc(hit.doc);
+                uniqueIds.add(Long.parseLong(doc.get(SearchConstants.FIELD_ID)));
+            }
+        }
+        catch(Exception e)
+        {
+            throw new SearchException("full text search failed", e);
+        }
+        Set<IndexCard> indexCards = new HashSet<IndexCard>();
+        for(long resId : uniqueIds)
+        {
+            try
+            {
+                Resource res = coralSession.getStore().getResource(resId);
+                Set<Problem> problems = validateIndexCardCandidate(res, site, coralSession);
+                if(problems.isEmpty())
+                {
+                    indexCards.add(getIndexCard(res, site, coralSession, locale));
+                }
+            }
+            catch(EntityDoesNotExistException e)
+            {
+                // id of deleted resource in stale index, most probably
             }
         }
         return new ArrayList<IndexCard>(indexCards);
