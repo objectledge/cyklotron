@@ -2,6 +2,7 @@ package net.cyklotron.cms.library;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +17,9 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.NameComparator;
+import org.objectledge.coral.table.comparator.PathComparator;
 
+import net.cyklotron.cms.category.CategoryException;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -178,6 +181,50 @@ public class LibraryService
     }
 
     /**
+     * Create a problem report for library in a given site.
+     * 
+     * @param site the site.
+     * @param coralSession coral session.
+     * @param locale locale used for sorting downloads by name, when manual ordering is not used.
+     * @return report contents.
+     * @throws NotConfiguredException when configuration for library in given site is missing.
+     * @throws CategoryException when category service error occurs.
+     */
+    public List<ProblemReportItem> getProblemReport(SiteResource site, CoralSession coralSession,
+        Locale locale)
+        throws NotConfiguredException, CategoryException
+    {
+        List<ProblemReportItem> report = new ArrayList<ProblemReportItem>();
+        CategoryResource libraryCategory = getConfig(site, coralSession).getCategory();
+        if(libraryCategory == null)
+        {
+            throw new NotConfiguredException("library category is not set");
+        }
+        Resource[] all = categoryService.getResources(coralSession, libraryCategory, false);
+        for(Resource res : all)
+        {
+            Set<Problem> problems = validateIndexCardCandidate(res, site, coralSession);
+            if(!problems.isEmpty())
+            {
+                List<DocumentNodeResource> descriptionDocCandidates = null;
+                List<FileResource> downloads = null;
+                if(res instanceof DocumentNodeResource)
+                {
+                    downloads = findDownloads((DocumentNodeResource)res, site, coralSession, locale);
+                }
+                if(res instanceof FileResource)
+                {
+                    descriptionDocCandidates = findDescriptionDocs((FileResource)res, site,
+                        coralSession);
+                }
+                report.add(new ProblemReportItem(res, descriptionDocCandidates, downloads, problems));
+            }
+        }
+        Collections.sort(report, new ProblemReportItem.Comparator(locale));
+        return report;
+    }
+
+    /**
      * Validate a document as candidate for a library index item.
      * 
      * @param doc the document.
@@ -202,7 +249,7 @@ public class LibraryService
         {
             problems.add(Problem.LIBRARY_CATEGORY_MISSING);
         }
-        
+
         Document metaDOM = null;
         if(doc.getMeta() == null || doc.getMeta().trim().length() == 0)
         {
@@ -219,7 +266,7 @@ public class LibraryService
                 problems.add(Problem.INVALID_METADATA);
             }
         }
-        
+
         if(metaDOM != null)
         {
             @SuppressWarnings("unchecked")
@@ -229,7 +276,7 @@ public class LibraryService
                 problems.add(Problem.MISSING_AUTHOR);
             }
         }
-        
+
         if(!doc.isValidityStartDefined())
         {
             problems.add(Problem.VALIDITY_START_UNSET);
@@ -299,9 +346,9 @@ public class LibraryService
         {
             throw new NotConfiguredException("library category is not set");
         }
-        
+
         Resource relatedFrom[] = relatedService.getRelatedFrom(coralSession, file);
-        
+
         List<DocumentNodeResource> descriptionDocCandidates = new ArrayList<DocumentNodeResource>();
         for(Resource res : relatedFrom)
         {
@@ -336,7 +383,7 @@ public class LibraryService
         {
             throw new NotConfiguredException("library category is not set");
         }
-        
+
         Comparator<Resource> autoSequence = null;
         if(locale != null)
         {
@@ -346,7 +393,7 @@ public class LibraryService
         ResourceList<Resource> maualSequence = doc.getRelatedResourcesSequence();
         Resource relatedTo[] = relatedService.getRelatedTo(coralSession, doc, maualSequence,
             autoSequence);
-        
+
         List<FileResource> downloads = new ArrayList<FileResource>();
         for(Resource res : relatedTo)
         {
