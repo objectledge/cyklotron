@@ -217,11 +217,44 @@ public class LibraryService
                     descriptionDocCandidates = findDescriptionDocs((FileResource)res, site,
                         coralSession);
                 }
-                report.add(new ProblemReportItem(res, descriptionDocCandidates, downloads, problems));
+                report
+                    .add(new ProblemReportItem(res, descriptionDocCandidates, downloads, problems));
             }
         }
         Collections.sort(report, new ProblemReportItem.Comparator(locale));
         return report;
+    }
+
+    /**
+     * Retrieve all library index items for a given site.
+     * 
+     * @param site the site.
+     * @param coralSession coral session.
+     * @param locale locale used for sorting downloads by name, when manual ordering is not used.
+     * @return unordered list of index items, intended to be used with {@link IndexCardTableModel}.
+     * @throws NotConfiguredException when configuration for library in given site is missing.
+     * @throws CategoryException when category service error occurs.
+     */
+    public List<IndexCard> getAllLibraryItems(SiteResource site, CoralSession coralSession, Locale locale)
+        throws NotConfiguredException, CategoryException
+    {        
+        CategoryResource libraryCategory = getConfig(site, coralSession).getCategory();
+        if(libraryCategory == null)
+        {
+            throw new NotConfiguredException("library category is not set");
+        }
+        Resource[] all = categoryService.getResources(coralSession, libraryCategory, false);
+        // a set is used to make sure we have a single index card per description document
+        Set<IndexCard> indexCards = new HashSet<IndexCard>();
+        for(Resource res : all)
+        {
+            Set<Problem> problems = validateIndexCardCandidate(res, site, coralSession);
+            if(problems.isEmpty())
+            {
+                indexCards.add(getIndexCard(res, site, coralSession, locale));
+            }
+        }
+        return new ArrayList<IndexCard>(indexCards);
     }
 
     /**
