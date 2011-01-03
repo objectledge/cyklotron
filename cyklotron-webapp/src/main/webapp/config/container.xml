@@ -423,6 +423,8 @@
 
   <component class-key="net.cyklotron.cms.syndication.SyndicationService"
              class="net.cyklotron.cms.syndication.internal.SyndicationServiceImpl"/>
+             
+  <component class="net.cyklotron.cms.library.LibraryService"/>             
 
   <component class="net.cyklotron.cms.site.SiteDestructionManager">
     <parameter/>
