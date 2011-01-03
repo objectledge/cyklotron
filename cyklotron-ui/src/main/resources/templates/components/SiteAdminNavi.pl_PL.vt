@@ -72,6 +72,10 @@
     #if($cms_tool.isAppEnabled('aggregation') || $block)
       #linkCell('' 'AGREGACJA' $siteLink.view('aggregation.Exported'))
       <td class="separator">|</td>
+	#end
+	#if($cms_tool.isAppEnabled('library') || $block)
+      #linkCell('' 'BIBLIOTEKA' $siteLink.view('library.Browse'))
+      <td class="separator">|</td>
     #end
     </tr>
   </table>
