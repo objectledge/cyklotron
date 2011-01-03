@@ -1,19 +1,13 @@
-#genericScreenHeader('Konfiguracja ekranu Indeks biblioteki')
-#set($from_component = true)
-#set($save_action = "$link.unsetView().action('structure.UpdateScreenPreferences').set('x',$node.id)")
-$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+#genericScreenHeader('Konfiguracja aplikacji')
 <script type="text/javascript">
-    <!--
-    var fieldNames = new Array( "category", "search_pool" );
+    <!--   
     function sendConfig()
     {
-    document.form1.action = "$save_action";
-    document.form1.target = "cyklotron_library_index_config_${cms_data.node.id}";
-    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+       document.form1.submit();
     }
     //-->
 </script>
-<form name="form1" method="POST" action="">
+<form name="form1" method="POST" action="$link.action('library.UpdateConfig')">
     <input type="hidden" name="node_id" value="$node.id" />
     <input type="hidden" name="config" value="" />
     <table border="0" class="genericScreen" width="100%">
@@ -41,5 +35,5 @@ $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 		</tr>
     </table>
 </form>
-#command_bar([['javascript:sendConfig();','Zapisz'],['javascript:window.close();','Anuluj']])
+#command_bar([['javascript:sendConfig();','Zapisz']])
 #genericScreenTrailer()

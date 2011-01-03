@@ -4,46 +4,37 @@ import java.util.Arrays;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.CoralTableModel;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableModel;
-import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
-import org.objectledge.table.TableTool;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.CategoryResourceImpl;
+import net.cyklotron.cms.library.LibraryConfigResource;
+import net.cyklotron.cms.library.LibraryService;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.search.PoolResource;
-import net.cyklotron.cms.search.PoolResourceImpl;
+import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
 
-/**
- * Configuration view for library index screen
- * 
- * @author rafal
- */
-public class IndexConf
+public class Config
     extends BaseCMSScreen
 {
+    private final LibraryService libraryService;
+
     private final SearchService searchService;
 
-    public IndexConf(Context context, Logger logger, PreferencesService preferencesService,
+    public Config(Context context, Logger logger, PreferencesService preferencesService,
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
-        SearchService searchService)
+        LibraryService libraryService, SearchService searchService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
+        this.libraryService = libraryService;
         this.searchService = searchService;
     }
 
@@ -53,31 +44,26 @@ public class IndexConf
         CoralSession coralSession)
         throws ProcessingException
     {
+        // current settings
         CmsData cmsData = getCmsData();
-        Parameters screenConfig = getScreenConfig();
+        LibraryConfigResource config = libraryService.getConfig(cmsData.getSite(), coralSession);
+        if(config.isCategoryDefined())
+        {
+            templatingContext.put("category", config.getCategory());
+        }
+        if(config.isSearchPoolDefined())
+        {
+            templatingContext.put("search_pool", config.getSearchPool());
+        }
+        // available search pools
         try
         {
-            // current settings
-            if(screenConfig.isDefined("category"))
-            {
-                CategoryResource category = CategoryResourceImpl.getCategoryResource(coralSession,
-                    screenConfig.getLong("category"));
-                templatingContext.put("category", category);
-            }
-            if(screenConfig.isDefined("search_pool"))
-            {
-                PoolResource searchPool = PoolResourceImpl.getPoolResource(coralSession,
-                    screenConfig.getLong("search_pool"));
-                templatingContext.put("search_pool", searchPool);
-            }
-            // available search pools
             templatingContext.put("search_pools", Arrays.asList(searchService.getPoolsRoot(
                 coralSession, cmsData.getSite()).getChildren()));
         }
-        catch(Exception e)
+        catch(SearchException e)
         {
-            throw new ProcessingException("invalid configuration for library.Index screen in node "
-                + cmsData.getNode(), e);
+            throw new ProcessingException("internal error", e);
         }
     }
 

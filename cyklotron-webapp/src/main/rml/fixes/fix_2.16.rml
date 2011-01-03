@@ -11,6 +11,15 @@ ATTRIBUTES (
   required = false
 );
 
+CREATE RESOURCE CLASS 'cms.library.config'
+JAVA CLASS 'net.cyklotron.cms.library.LibraryConfigResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  resource(category.category) category,
+  resource(search.pool) searchPool
+);
+
 CREATE RESOURCE 'screens'
 RESOURCE CLASS 'node'
 PARENT '/cms/applications/library';
@@ -19,8 +28,7 @@ CREATE RESOURCE 'index'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/library/screens'
 ATTRIBUTES (
-  screenName = 'library.Index',
-  configurationView = 'library.IndexConf'
+  screenName = 'library.Index'
 );
 
 CREATE RESOURCE 'Default'
