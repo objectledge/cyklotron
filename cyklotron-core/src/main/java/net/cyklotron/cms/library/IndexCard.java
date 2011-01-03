@@ -2,7 +2,6 @@ package net.cyklotron.cms.library;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Set;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
