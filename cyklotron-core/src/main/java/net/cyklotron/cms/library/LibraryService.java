@@ -2,7 +2,6 @@ package net.cyklotron.cms.library;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -236,7 +235,6 @@ public class LibraryService
                     .add(new ProblemReportItem(res, descriptionDocCandidates, downloads, problems));
             }
         }
-        Collections.sort(report, new ProblemReportItem.Comparator(locale));
         return report;
     }
 
