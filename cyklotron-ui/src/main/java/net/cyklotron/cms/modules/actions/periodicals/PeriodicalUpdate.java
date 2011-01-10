@@ -130,7 +130,8 @@ public class PeriodicalUpdate
 				((EmailPeriodicalResource)periodical).setFullContent(periodicalData.getFullContent());
 				((EmailPeriodicalResource)periodical).setSendEmpty(periodicalData.getSendEmpty());
                 ((EmailPeriodicalResource)periodical).setNotificationRenderer(periodicalData.getNotificationRenderer());                        
-                ((EmailPeriodicalResource)periodical).setNotificationTemplate(periodicalData.getNotificationTemplate());                		
+                ((EmailPeriodicalResource)periodical).setNotificationTemplate(periodicalData.getNotificationTemplate()); 
+                ((EmailPeriodicalResource)periodical).setSendEmpty(periodicalData.getSendEmpty());
 			}
 			if(!periodicalData.getName().equals(periodical.getName()))
 			{

@@ -143,6 +143,7 @@ public class PeriodicalAdd
 				((EmailPeriodicalResource)periodical).setReplyToHeader(periodicalData.getReplyToHeader());
 				((EmailPeriodicalResource)periodical).setFullContent(periodicalData.getFullContent());		
 				((EmailPeriodicalResource)periodical).setSubject(periodicalData.getSubject());
+				((EmailPeriodicalResource)periodical).setSendEmpty(periodicalData.getSendEmpty());
 			}
             periodical.setLastPublished(periodicalData.getLastPublished());
             periodical.setPublishAfter(periodicalData.getPublishAfter());
