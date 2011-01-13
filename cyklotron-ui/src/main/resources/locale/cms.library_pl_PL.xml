@@ -1,0 +1,23 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="Problems">
+    <prefix name="strings">
+     <item name="notConfigured">Aplikacja nie jest prawidłowo skonfigurowana</item>
+     <item name="noProblemsFound">Nie znaleziono problemów</item>
+    </prefix>   
+    <prefix name="columns">
+      <item name="resource">Zasób</item>
+      <item name="documents">Dokumenty</item>
+      <item name="files">Pliki</item>
+      <item name="problems">Problemy</item>
+    </prefix>
+    <prefix name="problems">
+      <item name="INVALID_CLASS">Niewłaściwa klasa zasobu</item>
+      <item name="INVALID_METADATA">Nieprawidłowe metadane (dokument uszkodzony)</item>
+      <item name="MISSING_AUTHOR">Nie wypełnione pole autor</item>
+      <item name="VALIDITY_START_UNSET">Nie ustawiona data publikacji</item>
+      <item name="MISSING_DESCRIPTION_DOC">Brak dokumentu - karty indeksowej dla pliku</item>
+      <item name="MULTIPLE_DESCRIPTION_DOCS">Wiele dokumentów - kart indeksowych dla jednego pliku</item>
+      <item name="LIBRARY_CATEGORY_MISSING">Nie nadano wymaganej kategorii</item>
+    </prefix>
+  </prefix>
+</strings>
