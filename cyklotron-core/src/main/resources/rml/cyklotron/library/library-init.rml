@@ -22,7 +22,8 @@ CREATE RESOURCE 'index'
 RESOURCE CLASS 'integration.screen'
 PARENT '/cms/applications/library/screens'
 ATTRIBUTES (
-  screenName = 'library.Index'
+  screenName = 'library.Index',
+  configurationView = 'library.IndexConf'
 );
 
 CREATE RESOURCE 'Default'
