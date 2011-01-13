@@ -239,6 +239,32 @@ public class LibraryService
     }
 
     /**
+     * Filter a problem report so that only items that have one or more problems from a predefined
+     * set are included.
+     * 
+     * @param in a list of problem report items.
+     * @param problemTypes a set of problems that should be included in the report.
+     * @return a filtered list of problem report items.
+     */
+    public List<ProblemReportItem> filterProblemReport(List<ProblemReportItem> in,
+        Set<Problem> problemTypes)
+    {
+        List<ProblemReportItem> out = new ArrayList<ProblemReportItem>(in.size());
+        itemLoop: for(ProblemReportItem item : in)
+        {
+            for(Problem problem : item.getProblems())
+            {
+                if(problemTypes.contains(problem))
+                {
+                    out.add(item);
+                    continue itemLoop;
+                }
+            }
+        }
+        return out;
+    }
+
+    /**
      * Retrieve all library index items for a given site.
      * 
      * @param site the site.
