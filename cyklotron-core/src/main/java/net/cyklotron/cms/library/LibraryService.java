@@ -376,7 +376,8 @@ public class LibraryService
         Document metaDOM = null;
         if(doc.getMeta() == null || doc.getMeta().trim().length() == 0)
         {
-            problems.add(Problem.INVALID_METADATA);
+            // new documents start with empty metadata, we report it as author has not been set
+            problems.add(Problem.MISSING_AUTHOR);
         }
         else
         {
@@ -397,6 +398,18 @@ public class LibraryService
             if(authorNames.size() == 0)
             {
                 problems.add(Problem.MISSING_AUTHOR);
+            }
+            else
+            {
+                StringBuilder buff = new StringBuilder();
+                for(Element authorName : authorNames)
+                {
+                    buff.append(authorName.getTextTrim());
+                }
+                if(buff.toString().trim().length() == 0)
+                {
+                    problems.add(Problem.MISSING_AUTHOR);
+                }
             }
         }
 
