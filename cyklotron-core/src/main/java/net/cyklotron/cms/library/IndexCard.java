@@ -59,7 +59,7 @@ public class IndexCard
         StringBuilder buff = new StringBuilder();
         for(int i = 0; i < authorNames.size(); i++)
         {
-            buff.append(authorNames.get(i));
+            buff.append(authorNames.get(i).getTextTrim());
             if(i < authorNames.size() - 1)
             {
                 buff.append(", ");
