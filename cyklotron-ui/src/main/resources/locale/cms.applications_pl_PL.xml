@@ -204,6 +204,21 @@
           </prefix>
         </prefix>
       </prefix>
+      <prefix name="calendar_events">
+        <prefix name="description">
+          <value>Aplikacja pozwala na przeglądanie dokumentów skojarzonych z wydarzeniami.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nowy kalendarz wydarzeń</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Ekran wyszukiwania.</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
       <prefix name="print_document">
         <prefix name="description">
           <value>Widok wydruku dokumentu.</value>

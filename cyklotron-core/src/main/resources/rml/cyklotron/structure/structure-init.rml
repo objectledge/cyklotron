@@ -680,6 +680,14 @@ ATTRIBUTES (
   configurationView = 'documents.CalendarScreenConf'
 );
 
+CREATE RESOURCE 'calendar_events'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/documents/screens'
+ATTRIBUTES (
+  screenName = 'documents.CalendarEvents',
+  configurationView = 'documents.CalendarEventsScreenConf'
+);
+
 CREATE RESOURCE 'Default'
 RESOURCE CLASS 'integration.screen_state'
 PARENT '/cms/applications/documents/screens/calendar';

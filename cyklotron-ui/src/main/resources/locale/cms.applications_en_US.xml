@@ -220,6 +220,24 @@
           </prefix>
         </prefix>
       </prefix>
+      <prefix name="calendar_events">
+        <prefix name="description">
+          <value>Allows browsing and searching documents with event information.</value>
+        </prefix>
+        <prefix name="name">
+          <value>New events calendar</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Search screen.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Search screen</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
       <prefix name="print_document">
         <prefix name="description">
           <value>Displays document in print layout.</value>
