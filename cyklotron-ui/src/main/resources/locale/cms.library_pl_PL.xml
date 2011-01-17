@@ -18,6 +18,8 @@
       <item name="MISSING_DESCRIPTION_DOC">Brak dokumentu - karty indeksowej dla pliku</item>
       <item name="MULTIPLE_DESCRIPTION_DOCS">Wiele dokumentów - kart indeksowych dla jednego pliku</item>
       <item name="LIBRARY_CATEGORY_MISSING">Nie nadano wymaganej kategorii</item>
+      <item name="DOCUMENT_NOT_ACCESSIBLE">Dokument niewidoczny dla niezalogowanych użytkowników</item>
+      <item name="FILE_NOT_ACCESSIBLE">Plik niewidoczny dla niezalogowanych użytkowników</item>
     </prefix>
   </prefix>
 </strings>

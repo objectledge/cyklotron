@@ -3,6 +3,7 @@ package net.cyklotron.cms.library;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -22,6 +23,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
@@ -372,7 +374,19 @@ public class LibraryService
         {
             problems.add(Problem.LIBRARY_CATEGORY_MISSING);
         }
-
+        try
+        {
+            Subject anonymous = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
+            if(!doc.canView(coralSession, anonymous, new Date()))
+            {
+                problems.add(Problem.DOCUMENT_NOT_ACCESSIBLE);
+            }
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new RuntimeException("internal error", e);
+        }
+        
         Document metaDOM = null;
         if(doc.getMeta() == null || doc.getMeta().trim().length() == 0)
         {
@@ -445,6 +459,19 @@ public class LibraryService
         {
             problems.add(Problem.LIBRARY_CATEGORY_MISSING);
         }
+        
+        try
+        {
+            Subject anonymous = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
+            if(!file.canView(coralSession, anonymous))
+            {
+                problems.add(Problem.FILE_NOT_ACCESSIBLE);
+            }
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new RuntimeException("internal error", e);
+        }        
 
         List<DocumentNodeResource> descriptionDocCandidates = findDescriptionDocs(file, site,
             coralSession);
