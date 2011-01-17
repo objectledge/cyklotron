@@ -39,7 +39,6 @@ import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.internal.CalendarEventsSearchMethod;
 import net.cyklotron.cms.documents.internal.CalendarSearchMethod;
-import net.cyklotron.cms.documents.table.ClosestEventStartComparator;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.SearchService;
