@@ -205,7 +205,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         {
             if("closestEventStart".equals(parameters.get("sort_field", "")))
             {
-                SortField field2 = new SortField("eventStart", new ClosestEventStartFieldComparator(startDate), "desc".equals("desc"));
+                SortField field2 = new SortField("eventStart", new ClosestEventStartFieldComparator(startDate), "desc".equals(parameters.get("sort_order","desc")));
                 return new SortField[] { field2 };
             }
             else
