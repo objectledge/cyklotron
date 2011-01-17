@@ -53,7 +53,7 @@
 <td>
 Result order
 <select name="sort_field">
-#set($opts = [["by score","score"],["by modified date","modification_time"],["by publish date","validityStart"],["by event start date","eventStart"],["by event end date","eventEnd"]])
+#set($opts = [["by score","score"],["by modified date","modification_time"],["by publish date","validityStart"],["by event start date","eventStart"],["by event end date","eventEnd"],["by closest event","closestEventStart"]])
 #options($opts $parametersTool.get('sort_field',"event_start"))
 </select>
 <select name="sort_order">

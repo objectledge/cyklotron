@@ -1,23 +1,29 @@
 package net.cyklotron.cms.documents.internal;
 
+import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.DateTools;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.FieldCache;
+import org.apache.lucene.search.FieldComparator;
+import org.apache.lucene.search.FieldComparatorSource;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
+import org.apache.lucene.search.FieldCache.LongParser;
 import org.apache.lucene.util.Version;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableState;
 import org.objectledge.templating.TemplatingContext;
@@ -197,7 +203,15 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         if(parameters.isDefined("sort_field") && 
            parameters.isDefined("sort_order"))
         {
-            return super.getSortFields();
+            if("closestEventStart".equals(parameters.get("sort_field", "")))
+            {
+                SortField field2 = new SortField("eventStart", new ClosestEventStartFieldComparator(startDate));
+                return new SortField[] { field2 };
+            }
+            else
+            {
+                return super.getSortFields();
+            }
         }
         else
         {
@@ -211,5 +225,132 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         super.storeQueryParameters(templatingContext);
         storeQueryParameter("field", templatingContext);
         storeQueryParameter("range", templatingContext);
+    }
+    
+    
+    public class ClosestEventStartFieldComparator extends FieldComparatorSource
+    {
+        private ClosestDateParser parser;
+        
+        public ClosestEventStartFieldComparator(Date date)
+        {
+            this.parser = new ClosestDateParser(date.getTime());
+        }
+        
+        public FieldComparator newComparator(String fieldname, int numHits, int sortPos, boolean reversed)
+        throws IOException
+        {
+            return new DataLongComparator(numHits, fieldname, parser);
+        }        
+        
+        public class DataLongComparator extends FieldComparator {
+          private final long[] values;
+          private long[] currentReaderValues;
+          private final String field;
+          private ClosestDateParser parser;
+          private long bottom;
+
+          DataLongComparator(int numHits, String field, FieldCache.Parser parser) {
+            values = new long[numHits];
+            this.field = field;
+            this.parser = (ClosestDateParser) parser;
+          }
+
+          @Override
+          public int compare(int slot1, int slot2) {
+            // TODO: there are sneaky non-branch ways to compute
+            // -1/+1/0 sign
+            final long v1 = values[slot1];
+            final long v2 = values[slot2];
+            if (v1 > v2) {
+              return 1;
+            } else if (v1 < v2) {
+              return -1;
+            } else {
+              return 0;
+            }
+          }
+
+          @Override
+          public int compareBottom(int doc) {
+            // TODO: there are sneaky non-branch ways to compute
+            // -1/+1/0 sign
+            final long v2 = currentReaderValues[doc];
+            if (bottom > v2) {
+              return 1;
+            } else if (bottom < v2) {
+              return -1;
+            } else {
+              return 0;
+            }
+          }
+
+          @Override
+          public void copy(int slot, int doc) {
+            values[slot] = currentReaderValues[doc];
+          }
+
+          @Override
+          public void setNextReader(IndexReader reader, int docBase) throws IOException {
+            currentReaderValues = FieldCache.DEFAULT.getLongs(reader, field, parser);
+          }
+          
+          @Override
+          public void setBottom(final int bottom) {
+            this.bottom = values[bottom];
+          }
+
+          @Override
+          public Comparable value(int slot) {
+            return Long.valueOf(values[slot]);
+          }
+        }
+        
+        public class ClosestDateParser
+            implements LongParser
+        {
+            private Long selectedTime;
+            Calendar calendar;
+
+            public ClosestDateParser(Long selectedTime)
+            {
+                this.calendar = java.util.Calendar.getInstance();
+                calendar.setTimeInMillis(selectedTime);
+                calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
+                calendar.set(java.util.Calendar.MINUTE, 0);
+                calendar.set(java.util.Calendar.SECOND, 0);
+                calendar.set(java.util.Calendar.MILLISECOND, 0);
+                
+                this.selectedTime = calendar.getTimeInMillis();
+            }
+
+            public long parseLong(String string)
+            {
+                Long result = 99999999999999999L;
+                try
+                {
+                    Date date = SearchUtil.dateFromString(string);
+                    calendar.setTimeInMillis(date.getTime());
+                    calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
+                    calendar.set(java.util.Calendar.MINUTE, 0);
+                    calendar.set(java.util.Calendar.SECOND, 0);
+                    calendar.set(java.util.Calendar.MILLISECOND, 0);
+
+                    result = Math.abs(selectedTime - date.getTime());
+                }
+                catch(Exception e){}
+                return result;
+            }
+
+            protected Object readResolve()
+            {
+                return new ClosestDateParser(selectedTime);
+            }
+
+            public String toString()
+            {
+                return FieldCache.class.getName() + ".CLOSEST_DATE_PARSER";
+            }
+        }
     }
 }
