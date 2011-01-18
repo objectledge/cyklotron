@@ -54,9 +54,9 @@ public class Browse
             try
             {
                 List<IndexCard> index;
-                if(parameters.isDefined("query"))
+                String query;
+                if(parameters.isDefined("query") && (query = parameters.get("query")).length() > 0)
                 {
-                    String query = parameters.get("query");
                     templatingContext.put("query", query);
                     index = libraryService.searchLibraryItems(query, site, coralSession, locale);
                 }
