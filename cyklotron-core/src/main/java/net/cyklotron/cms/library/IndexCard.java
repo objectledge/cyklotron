@@ -68,7 +68,14 @@ public class IndexCard
         this.authors = buff.toString();
         SimpleDateFormat df = new SimpleDateFormat("yyyy");
         this.pubYear = df.format(descriptionDoc.getValidityStart());
-        this.keywords = descriptionDoc.getKeywords();
+        if(descriptionDoc.isKeywordsDefined())
+        {
+            this.keywords = descriptionDoc.getKeywords();
+        }
+        else
+        {
+            this.keywords = "";
+        }
         this.descriptionDoc = descriptionDoc;
         this.downloads = downloads;
     }
