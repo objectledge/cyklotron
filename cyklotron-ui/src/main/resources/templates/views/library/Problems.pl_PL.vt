@@ -81,3 +81,4 @@ $table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
   </tr>
 </table>
 </form>
+#genericScreenTrailer()
