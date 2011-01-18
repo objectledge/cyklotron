@@ -1,9 +1,24 @@
 <strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="Browse">
+    <item name="title">Przeglądanie indeksu biblioteki</item>
+    <prefix name="search">
+      <item name="heading">Wyszukiwanie pełnotekstowe</item>
+      <item name="button">Szukaj</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="title">Tytył</item>
+      <item name="authors">Autorzy</item>
+      <item name="pubYear">Rok publikacji</item>
+      <item name="keywords">Słowa kluczowe</item>
+      <item name="downloads">Pliki do pobrania</item>
+    </prefix>
+  </prefix>
   <prefix name="Problems">
     <prefix name="strings">
-     <item name="notConfigured">Aplikacja nie jest prawidłowo skonfigurowana</item>
-     <item name="noProblemsFound">Nie znaleziono problemów</item>
-    </prefix>   
+      <item name="notConfigured">Aplikacja nie jest prawidłowo skonfigurowana
+      </item>
+      <item name="noProblemsFound">Nie znaleziono problemów</item>
+    </prefix>
     <prefix name="columns">
       <item name="resource">Zasób</item>
       <item name="documents">Dokumenty</item>
@@ -12,14 +27,18 @@
     </prefix>
     <prefix name="problems">
       <item name="INVALID_CLASS">Niewłaściwa klasa zasobu</item>
-      <item name="INVALID_METADATA">Nieprawidłowe metadane (dokument uszkodzony)</item>
+      <item name="INVALID_METADATA">Nieprawidłowe metadane (dokument uszkodzony)
+      </item>
       <item name="MISSING_AUTHOR">Nie wypełnione pole autor</item>
       <item name="VALIDITY_START_UNSET">Nie ustawiona data publikacji</item>
       <item name="MISSING_DESCRIPTION_DOC">Brak dokumentu - karty indeksowej dla pliku</item>
-      <item name="MULTIPLE_DESCRIPTION_DOCS">Wiele dokumentów - kart indeksowych dla jednego pliku</item>
+      <item name="MULTIPLE_DESCRIPTION_DOCS">Wiele dokumentów - kart indeksowych dla jednego
+        pliku</item>
       <item name="LIBRARY_CATEGORY_MISSING">Nie nadano wymaganej kategorii</item>
-      <item name="DOCUMENT_NOT_ACCESSIBLE">Dokument niewidoczny dla niezalogowanych użytkowników</item>
-      <item name="FILE_NOT_ACCESSIBLE">Plik niewidoczny dla niezalogowanych użytkowników</item>
+      <item name="DOCUMENT_NOT_ACCESSIBLE">Dokument niewidoczny dla niezalogowanych
+        użytkowników</item>
+      <item name="FILE_NOT_ACCESSIBLE">Plik niewidoczny dla niezalogowanych użytkowników
+      </item>
     </prefix>
   </prefix>
 </strings>
