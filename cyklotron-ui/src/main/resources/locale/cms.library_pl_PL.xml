@@ -47,4 +47,22 @@
       </item>
     </prefix>
   </prefix>
+  <prefix name="IndexConf">
+    <prefix name="strings">
+      <item name="title">Konfiguracja ekranu osadzonego</item>
+      <item name="sortColumn">Kryterium sortowania</item>
+      <item name="sortDirection">Kierunek sortowania</item>
+      <item name="asc">rosnąco</item>
+      <item name="desc">malejąco</item>
+      <item name="pageSize">Ilość dokumentów na stronie</item>
+      <item name="save">Zapisz</item>
+      <item name="cancel">Anuluj</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="title">Tytył</item>
+      <item name="authors">Autorzy</item>
+      <item name="pubYear">Rok publikacji</item>
+      <item name="keywords">Słowa kluczowe</item>
+    </prefix>
+  </prefix>
 </strings>
