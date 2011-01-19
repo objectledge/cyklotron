@@ -65,4 +65,29 @@
       <item name="keywords">Słowa kluczowe</item>
     </prefix>
   </prefix>
+  <prefix name="Config">
+    <prefix name="strings">
+      <item name="title">Konfiguracja aplikacji</item>
+      <item name="category">Kategoria</item>
+      <item name="indexPool">Zestaw indeksów</item>
+      <item name="select">wybierz</item>
+      <item name="save">zapisz</item>
+    </prefix>
+    <prefix name="help">
+      <item name="general"><![CDATA[<p>Każda pozycja biblioteki składa się z dokumentu (tzw. karty 
+      indeksowej) oraz, opcjonalnie, powiązanych z nim plików. Zarówno dokumenty jak i pliki muszą 
+      być oznaczone kateorią wybraną poniżej. Plik musi być dowiązany do dokładnie jednego 
+      dokumentu.</p>
+      <p>Autora i słowa kluczowe dla publikacji wpisujemy na ekranie edycji treści dokumentu - karty 
+      indeksowej, natomiast rok publikacji wybieramy ustawiając odpowiednio datę publikacji karty 
+      indeksowej.</p>
+      <p>Zestaw indeksów wyszukiwania powinien obejmować zarówno pliki jak i dokumenty, należy
+      ograniczyć zasoby indeksowane do najmniejszego komplentego zbioru, poprzez wybór odpowiednich
+      ścieżek i kategorii wymaganej, co pozwoli przyspieszyć wyszukiwanie.</p>]]>
+      </item>
+      <item name="category">kategoria którą oznaczone są zasoby biblioteki</item>
+      <item name="indexPool">zestaw indeksów przeznaczony do wyszukiwania
+        pełnotekstowego biblioteki</item>
+    </prefix>
+  </prefix>
 </strings>

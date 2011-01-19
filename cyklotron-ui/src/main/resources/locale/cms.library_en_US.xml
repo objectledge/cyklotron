@@ -41,4 +41,28 @@
       <item name="FILE_NOT_ACCESSIBLE">File not visible to anonymous site visitors</item>
     </prefix>
   </prefix>
+  <prefix name="Config">
+    <prefix name="strings">
+      <item name="title">Application configuration</item>
+      <item name="category">Category</item>
+      <item name="indexPool">Index pool</item>
+      <item name="select">select</item>
+      <item name="save">save</item>
+    </prefix>
+    <prefix name="help">
+      <item name="general"><![CDATA[<p>Each library item consists of a document (dubbed an index 
+        card) and optionally one or more attached files. Both files and and documents nedd to belong 
+        to the category selected below. A file must be attached to exactly one index card.</p> 
+        <p>Author and keywords for a library item are configured on the index card document contents 
+        editing screen. Publication year is determined from index card document's publication date.
+        </p>
+        <p>Search index pool should encompass both files and documents, but should be restricted to 
+        smallest suitable set, both by path selection and required categories to speed up searching.
+        </p>]]>
+      </item>
+      <item name="category">All library resources need to belong to this category
+      </item>
+      <item name="indexPool">Search index pool to use for full-text searching library contents</item>
+    </prefix>
+  </prefix>
 </strings>
