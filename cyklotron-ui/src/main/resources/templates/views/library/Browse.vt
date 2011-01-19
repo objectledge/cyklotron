@@ -47,9 +47,14 @@ $table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
 		<td>$row.object.authors</td>
 		<td>$row.object.pubYear</td>
 		<td>#if($row.object.keywords.length() > 0) $row.object.keywords #else &nbsp; #end</td>
-		<td>#foreach($download in $row.object.downloads)
+		<td>
+			#if($row.object.downloads && !$row.object.downloads.empty)
+			#foreach($download in $row.object.downloads)
 			<a href="$files.getLink($download)">$download.name</a> <br/>
-	    #end			
+			#end
+			#else
+			&nbsp;	
+			#end
 		</td>
 	</tr>
 #end
