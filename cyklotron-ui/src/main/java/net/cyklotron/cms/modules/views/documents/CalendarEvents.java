@@ -113,7 +113,7 @@ public class CalendarEvents
         calendar.set(java.util.Calendar.SECOND, 59);
         endDate = calendar.getTime();
 
-        String range = parameters.get("range","all");        
+        String range = parameters.get("range","ongoing");        
         String textQuery = parameters.get("text_query", "");
         long queryId = parameters.getLong("query_id", -1);
 
