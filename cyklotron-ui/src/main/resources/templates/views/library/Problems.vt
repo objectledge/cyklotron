@@ -47,11 +47,18 @@ $table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
  #foreach($row in $table.rows)
   #set($odd = $velocityCount % 2)
     <tr class="row$odd">
-    <td>#resource_edit_link($row.object.resource)</td>
+    <td>
+		#set($resource = $row.object.resource)
+		#if($resource.resourceClass.name == 'documents.document_node')
+		#resource_title_link($resource $link.view('structure.NaviInfo').set('node_id',$resource.id))
+		#else
+		#resource_link($resource $link.view('files.ListDirectory').set('dir_id',$resource.id))
+		#end
+	</td>
     <td>
       #if($row.object.descriptionDocCandidates && !$row.object.descriptionDocCandidates.empty)
       #foreach($doc in $row.object.descriptionDocCandidates)
-      #resource_view_link($doc) <br/>
+      #resource_title_link($doc $link.view('structure.NaviInfo').set('node_id',$doc.id)) <br/>
 	  #end    
 	  #else
 	  &nbsp;
@@ -60,7 +67,7 @@ $table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
     <td>
       #if($row.object.downloads && !$row.object.downloads.empty)
       #foreach($file in $row.object.downloads)
-      #resource_view_link($file) <br/>
+      #resource_link($file $link.view('files.ListDirectory').set('dir_id',$file.parent.id)) <br/>
 	  #end    
 	  #else
 	  &nbsp;
