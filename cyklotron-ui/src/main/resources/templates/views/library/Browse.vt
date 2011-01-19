@@ -6,11 +6,12 @@
 <table class="messageInlineTable">
 <tr><td><b>$strings.notConfigured</b></td></tr>
 </table>
-#elseif($table.rows.empty)
+#else
+#if($table.rows.empty)
 <table class="messageInlineTable">
 <tr><td><b>$strings.noItemsFound</b></td></tr>
 </table>	
-#else
+#end
 <form name="form1" method="POST">
 <script type="text/javascript">
   function send(action)
@@ -29,6 +30,7 @@
 </table>
 <br/>
 
+#if(!$table.rows.empty)
 #set($columnOrder = ['title','authors','pubYear','keywords','downloads'])
 #foreach($column in $columnOrder)
 $table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
@@ -59,5 +61,6 @@ $table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
   </tr>
 </table>
 </form>
+#end
 #end
 #genericScreenTrailer()	
