@@ -1,1 +1,95 @@
-#genericScreenHeader('Problems report')
+#set($vi18n = $i18n.usePrefix('cms.library.Problems'))
+#set($strings = $vi18n.usePrefix('strings'))
+#genericScreenHeader($strings.title)
+
+#if(!$applicationConfigured)
+<table class="messageInlineTable">
+<tr><td><b>$strings.notConfigured</b></td></tr>
+</table>
+#elseif($table.rows.empty)
+<table class="messageInlineTable">
+<tr><td><b>$strings.noProblemsFound</b></td></tr>
+</table>	
+#else
+<form name="form1" method="POST">
+<script type="text/javascript">
+  function send(action)
+  {
+    document.form1.action = action;
+    document.form1.submit();
+  }
+</script>
+
+<table  width="100%" class="genericItemList" cellspacing="0">
+<tr><th>$strings.filtersHeading</th></tr>
+<tr><td>
+<input type="hidden" name="filterDefined" value="true" />
+#foreach($problemType in $problemTypes)
+<input type="checkbox" name="filter" id="filter-${problemType}" value="$problemType" #if(!$filter || $filter.contains($problemType))checked #end/>  
+<label for="filter-${problemType}">$vi18n.get("problems.${problemType}")</label> <br/>
+#end
+<a href="javascript:send('$link')">$strings.filtersButton</a>
+</td></tr>
+</table>
+
+<br/>
+
+#set($columnOrder = ['resource','documents','files','problems'])
+#foreach($column in $columnOrder)
+$table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
+#end
+#set($tableLink = $link.set('tableId',$table.id))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+<tr>
+ #tableView_header_Submit($table $tableLink $columnOrder 'send')
+</tr>
+ #foreach($row in $table.rows)
+  #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+    <td>#resource_edit_link($row.object.resource)</td>
+    <td>
+      #if($row.object.descriptionDocCandidates && !$row.object.descriptionDocCandidates.empty)
+      #foreach($doc in $row.object.descriptionDocCandidates)
+      #resource_view_link($doc) <br/>
+	  #end    
+	  #else
+	  &nbsp;
+	  #end
+	  </td>
+    <td>
+      #if($row.object.downloads && !$row.object.downloads.empty)
+      #foreach($file in $row.object.downloads)
+      #resource_view_link($file) <br/>
+	  #end    
+	  #else
+	  &nbsp;
+	  #end
+    </td>
+    <td>    
+    #set($other = false)
+    #foreach($problemType in $problemTypes)
+    #if($row.object.problems.contains($problemType))
+    #if(!$filter || $filter.contains($problemType))
+    $vi18n.get("problems.${problemType}") <br/>
+    #else
+    #set($other = true)
+    #end    
+    #end
+    #end
+    #if($other == true)
+    &hellip;
+    #end    
+    </td>
+    </tr>
+ #end   
+ <tr>
+    <td colspan="5" align="center" class="bottomLine">
+       #tableView_pager_Submit($table $tableLink 'send')
+       #tableView_pageSizeChooser_Submit($table $tableLink [50,100] 'send')
+    </td>
+  </tr>
+</table>
+</form>
+#end
+#genericScreenTrailer()
