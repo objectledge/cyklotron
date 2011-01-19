@@ -55,7 +55,7 @@ public class Problems
         LibraryConfigResource config = libraryService.getConfig(site, coralSession);
         if(config.isCategoryDefined() && config.isSearchPoolDefined())
         {
-            templatingContext.put("application_configured", "true");
+            templatingContext.put("applicationConfigured", "true");
             Locale locale = i18nContext.getLocale();
             try
             {
