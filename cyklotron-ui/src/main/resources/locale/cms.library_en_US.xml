@@ -41,6 +41,24 @@
       <item name="FILE_NOT_ACCESSIBLE">File not visible to anonymous site visitors</item>
     </prefix>
   </prefix>
+  <prefix name="IndexConf">
+    <prefix name="strings">
+      <item name="title">Embedded screen configuration</item>
+      <item name="sortColumn">Sort column</item>
+      <item name="sortDirection">Sort direction</item>
+      <item name="asc">ascending</item>
+      <item name="desc">descending</item>
+      <item name="pageSize">Items per page</item>
+      <item name="save">Save</item>
+      <item name="cancel">Cancel</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="title">Title</item>
+      <item name="authors">Authors</item>
+      <item name="pubYear">Publication year</item>
+      <item name="keywords">Keywords</item>
+    </prefix>
+  </prefix>
   <prefix name="Config">
     <prefix name="strings">
       <item name="title">Application configuration</item>
