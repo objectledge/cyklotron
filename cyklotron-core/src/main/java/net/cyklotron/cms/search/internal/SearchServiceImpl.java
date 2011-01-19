@@ -160,9 +160,10 @@ public class SearchServiceImpl
 
     public void start()
     {
-        CoralSession coralSession = sessionFactory.getRootSession();
+        CoralSession coralSession = null;
         try
         {
+            coralSession = sessionFactory.getRootSession();
             this.removeStaleWriteLocks(coralSession);
         }
         catch(SearchException e)
@@ -172,6 +173,13 @@ public class SearchServiceImpl
         catch(InvalidResourceNameException e)
         {
             throw new RuntimeException(e);
+        }
+        finally
+        {
+            if(coralSession != null)
+            {
+                coralSession.close();
+            }
         }
     }
     
