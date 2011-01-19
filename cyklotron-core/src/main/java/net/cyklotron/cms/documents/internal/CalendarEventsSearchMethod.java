@@ -205,7 +205,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         {
             if("closestEventStart".equals(parameters.get("sort_field", "")))
             {
-                SortField field2 = new SortField("eventStart", new ClosestEventStartFieldComparator(startDate), "desc".equals(parameters.get("sort_order","desc")));
+                SortField field2 = new SortField("eventStart", new ClosestEventStartFieldComparator(startDate, parameters.getBoolean("eval_event_priority",true)), "desc".equals(parameters.get("sort_order","desc")));
                 return new SortField[] { field2 };
             }
             else
@@ -232,9 +232,9 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
     {
         private ClosestDateParser parser;
         
-        public ClosestEventStartFieldComparator(Date date)
+        public ClosestEventStartFieldComparator(Date date, boolean evalEventsHigher)
         {
-            this.parser = new ClosestDateParser(date.getTime());
+            this.parser = new ClosestDateParser(date.getTime(), evalEventsHigher);
         }
         
         public FieldComparator newComparator(String fieldname, int numHits, int sortPos, boolean reversed)
@@ -309,19 +309,21 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         public class ClosestDateParser
             implements LongParser
         {
-            private Long selectedTime;
-            Calendar calendar;
+            private Calendar selectedTime;
+            private Calendar calendar;
+            private boolean evalEventsHigher;
 
-            public ClosestDateParser(Long selectedTime)
+            public ClosestDateParser(Long selectedTime, boolean evalEventsHigher)
             {
-                this.calendar = java.util.Calendar.getInstance();
-                calendar.setTimeInMillis(selectedTime);
-                calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
-                calendar.set(java.util.Calendar.MINUTE, 0);
-                calendar.set(java.util.Calendar.SECOND, 0);
-                calendar.set(java.util.Calendar.MILLISECOND, 0);
+                this.selectedTime = java.util.Calendar.getInstance();
+                this.selectedTime.setTimeInMillis(selectedTime); 
+                this.selectedTime.set(java.util.Calendar.HOUR_OF_DAY, 0);
+                this.selectedTime.set(java.util.Calendar.MINUTE, 0);
+                this.selectedTime.set(java.util.Calendar.SECOND, 0);
+                this.selectedTime.set(java.util.Calendar.MILLISECOND, 0);
                 
-                this.selectedTime = calendar.getTimeInMillis();
+                this.calendar = java.util.Calendar.getInstance();
+                this.evalEventsHigher = evalEventsHigher;
             }
 
             public long parseLong(String string)
@@ -330,13 +332,29 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
                 try
                 {
                     Date date = SearchUtil.dateFromString(string);
+                    Long exactTimeDiff;
+                    
                     calendar.setTimeInMillis(date.getTime());
+                    exactTimeDiff = Math.abs(selectedTime.getTimeInMillis() - calendar.getTimeInMillis());
+                    
                     calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
                     calendar.set(java.util.Calendar.MINUTE, 0);
                     calendar.set(java.util.Calendar.SECOND, 0);
                     calendar.set(java.util.Calendar.MILLISECOND, 0);
-
-                    result = Math.abs(selectedTime - date.getTime());
+                    
+                    result = Math.abs(selectedTime.getTimeInMillis() - calendar.getTimeInMillis());
+                    // add converted time sufix to sort by event strat time.
+                    result += ((exactTimeDiff - result)/3600*60*24*1000);
+                    
+                    /* define sort order when distance from events is the same.
+                     * if event hasn't started yet add extra time to order that event after
+                     * all that has started and have the same distance from selected time.
+                     * or other way if evalEventsHigher is set to false.
+                     */
+                    if(evalEventsHigher == selectedTime.before(calendar))
+                    { 
+                        result++;
+                    } 
                 }
                 catch(Exception e){}
                 return result;
@@ -344,7 +362,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
 
             protected Object readResolve()
             {
-                return new ClosestDateParser(selectedTime);
+                return new ClosestDateParser(selectedTime.getTimeInMillis(), evalEventsHigher);
             }
 
             public String toString()

@@ -1,8 +1,6 @@
 package net.cyklotron.cms.modules.views.documents;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -11,15 +9,11 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.comparator.AttributeDefnitionsComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableColumn;
-import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
-import org.objectledge.table.TableRow;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
@@ -30,15 +24,11 @@ import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.components.BaseResourceListConfiguration;
-import net.cyklotron.cms.category.components.HoldingResourceListConfiguration;
-import net.cyklotron.cms.category.components.HoldingResourceList.HoldingComparator;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResourceImpl;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.internal.CalendarEventsSearchMethod;
-import net.cyklotron.cms.documents.internal.CalendarSearchMethod;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.SearchService;
@@ -98,11 +88,11 @@ public class CalendarEvents
         I18nContext i18nContext = I18nContext.getI18nContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         // setup search date
-    	java.util.Calendar calendar = java.util.Calendar.getInstance(i18nContext.getLocale());
-		calendar.setTime(cmsData.getDate());
-		int day = parameters.getInt("day",calendar.get(java.util.Calendar.DAY_OF_MONTH));
-		int month = parameters.getInt("month",calendar.get(java.util.Calendar.MONTH)+1);
-		int year = parameters.getInt("year",calendar.get(java.util.Calendar.YEAR));
+        java.util.Calendar calendar = java.util.Calendar.getInstance(i18nContext.getLocale());
+        calendar.setTime(cmsData.getDate());
+        int day = parameters.getInt("day",calendar.get(java.util.Calendar.DAY_OF_MONTH));
+        int month = parameters.getInt("month",calendar.get(java.util.Calendar.MONTH)+1);
+        int year = parameters.getInt("year",calendar.get(java.util.Calendar.YEAR));
         calendar.set(java.util.Calendar.DAY_OF_MONTH, day);
         calendar.set(java.util.Calendar.MONTH, month-1);
         calendar.set(java.util.Calendar.YEAR, year);
@@ -138,26 +128,26 @@ public class CalendarEvents
         templatingContext.put("end_date", endDate);
         
         
-		
-		try
-		{
-			SiteResource site = cmsData.getSite();
-			Parameters screenConfig = getScreenConfig();
-			Resource[] pools = null;
-			long indexId = screenConfig.getLong("index_id",-1);
+        
+        try
+        {
+            SiteResource site = cmsData.getSite();
+            Parameters screenConfig = getScreenConfig();
+            Resource[] pools = null;
+            long indexId = screenConfig.getLong("index_id",-1);
             long queryPoolId = screenConfig.getLong("query_pool_id", -1);
 
-			if(indexId == -1)
-			{
-				Resource parent = searchService.getPoolsRoot(coralSession, getSite());
-				pools = coralSession.getStore().getResource(parent);
-			}
-			else
-			{
-				Resource index = coralSession.getStore().getResource(indexId);
-				pools = new Resource[1];
-				pools[0] = index;
-			}
+            if(indexId == -1)
+            {
+                Resource parent = searchService.getPoolsRoot(coralSession, getSite());
+                pools = coralSession.getStore().getResource(parent);
+            }
+            else
+            {
+                Resource index = coralSession.getStore().getResource(indexId);
+                pools = new Resource[1];
+                pools[0] = index;
+            }
             if(queryPoolId != -1)
             {
                 CategoryQueryPoolResource queryPool = CategoryQueryPoolResourceImpl
@@ -167,15 +157,15 @@ public class CalendarEvents
 
             CalendarEventsSearchMethod method = new CalendarEventsSearchMethod(
                 searchService, parameters, i18nContext.getLocale(), logger, startDate, endDate, textQuery);
-			templatingContext.put("query", method.getQueryString(coralSession));
-			TableFilter filter = new HitsViewPermissionFilter(coralSession.getUserSubject(), coralSession);			
-			TableState state = tableStateManager.getState(context, "cms.documents.calendar_events.results."+site.getName());
-			method.setupTableState(state);
-			
-			// - prepare search handler
-			SearchHandler searchHandler = new LuceneSearchHandler(context, searchService, integrationService, cmsDataFactory);
-					
-			// - execute seach and put results into the context
+            templatingContext.put("query", method.getQueryString(coralSession));
+            TableFilter filter = new HitsViewPermissionFilter(coralSession.getUserSubject(), coralSession);         
+            TableState state = tableStateManager.getState(context, "cms.documents.calendar_events.results."+site.getName());
+            method.setupTableState(state);
+            
+            // - prepare search handler
+            SearchHandler searchHandler = new LuceneSearchHandler(context, searchService, integrationService, cmsDataFactory);
+                    
+            // - execute seach and put results into the context
             ArrayList filters = new ArrayList();
             filters.add(filter);
 
@@ -232,20 +222,20 @@ public class CalendarEvents
                 }
             }
 
-			TableTool hitsTable = searchHandler.search(coralSession, pools, method, state, filters, parameters, i18nContext);
-			
-			if(hitsTable == null)
-			{
-				hitsTable = new TableTool(state, null, new EmptyTableModel());
-			}
-			
-			templatingContext.put("hits_table", hitsTable);
-            prepareCategories(context, false);	
-		}
-		catch(Exception e)
-		{
-			throw new ProcessingException("Exception occurred",e);
-		}
-		
+            TableTool hitsTable = searchHandler.search(coralSession, pools, method, state, filters, parameters, i18nContext);
+            
+            if(hitsTable == null)
+            {
+                hitsTable = new TableTool(state, null, new EmptyTableModel());
+            }
+            
+            templatingContext.put("hits_table", hitsTable);
+            prepareCategories(context, false);  
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("Exception occurred",e);
+        }
+        
     }
 }
