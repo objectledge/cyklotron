@@ -1,12 +1,16 @@
 #genericScreenHeader('Raport problemów')
 #set($vi18n = $i18n.usePrefix('cms.library.Problems'))
+#set($strings = $vi18n.usePrefix('strings'))
 
-#set($columnOrder = ['resource','documents','files','problems'])
-#foreach($column in $columnOrder)
-$table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
-#end
-#set($tableLink = $link.set('tableId',$table.id))
-
+#if(!$applicationConfigured)
+<table class="messageInlineTable">
+<tr><td><b>$strings.notConfigured</b></td></tr>
+</table>
+#elseif($table.rows.empty)
+<table class="messageInlineTable">
+<tr><td><b>$strings.noProblemsFound</b></td></tr>
+</table>	
+#else
 <form name="form1" method="POST">
 <script type="text/javascript">
   function send(action)
@@ -24,11 +28,17 @@ $table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
 <input type="checkbox" name="filter" id="filter-${problemType}" value="$problemType" #if(!$filter || $filter.contains($problemType))checked #end/>  
 <label for="filter-${problemType}">$vi18n.get("problems.${problemType}")</label> <br/>
 #end
-<a href="javascript:send('$link')">zastosuj</a>
+<a href="javascript:send('$link')">$strings.apply</a>
 </td></tr>
 </table>
 
 <br/>
+
+#set($columnOrder = ['resource','documents','files','problems'])
+#foreach($column in $columnOrder)
+$table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
+#end
+#set($tableLink = $link.set('tableId',$table.id))
 
 <table width="100%" class="genericItemList" cellspacing="0">
 <tr>
@@ -81,4 +91,5 @@ $table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
   </tr>
 </table>
 </form>
+#end
 #genericScreenTrailer()

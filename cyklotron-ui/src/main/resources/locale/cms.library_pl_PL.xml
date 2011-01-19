@@ -18,6 +18,7 @@
       <item name="notConfigured">Aplikacja nie jest prawidłowo skonfigurowana
       </item>
       <item name="noProblemsFound">Nie znaleziono problemów</item>
+      <item name="apply">Zastosuj</item>
     </prefix>
     <prefix name="columns">
       <item name="resource">Zasób</item>
