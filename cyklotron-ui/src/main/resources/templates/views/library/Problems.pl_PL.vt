@@ -1,6 +1,6 @@
-#genericScreenHeader('Raport problemów')
 #set($vi18n = $i18n.usePrefix('cms.library.Problems'))
 #set($strings = $vi18n.usePrefix('strings'))
+#genericScreenHeader($strings.title)
 
 #if(!$applicationConfigured)
 <table class="messageInlineTable">
@@ -21,14 +21,14 @@
 </script>
 
 <table  width="100%" class="genericItemList" cellspacing="0">
-<tr><th>Filtry</th></tr>
+<tr><th>$strings.filtersHeading</th></tr>
 <tr><td>
 <input type="hidden" name="filterDefined" value="true" />
 #foreach($problemType in $problemTypes)
 <input type="checkbox" name="filter" id="filter-${problemType}" value="$problemType" #if(!$filter || $filter.contains($problemType))checked #end/>  
 <label for="filter-${problemType}">$vi18n.get("problems.${problemType}")</label> <br/>
 #end
-<a href="javascript:send('$link')">$strings.apply</a>
+<a href="javascript:send('$link')">$strings.filtersButton</a>
 </td></tr>
 </table>
 

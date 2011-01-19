@@ -1,9 +1,12 @@
 <strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="Browse">
-    <item name="title">Przeglądanie indeksu biblioteki</item>
-    <prefix name="search">
-      <item name="heading">Wyszukiwanie pełnotekstowe</item>
-      <item name="button">Szukaj</item>
+    <prefix name="strings">
+      <item name="title">Przeglądanie indeksu biblioteki</item>
+      <item name="notConfigured">Aplikacja nie jest prawidłowo skonfigurowana
+      </item>
+      <item name="noItemsFound">Nie znaleziono żadnych publikacji</item>
+      <item name="searchHeading">Wyszukiwanie pełnotekstowe</item>
+      <item name="searchButton">Szukaj</item>
     </prefix>
     <prefix name="columns">
       <item name="title">Tytył</item>
@@ -15,10 +18,12 @@
   </prefix>
   <prefix name="Problems">
     <prefix name="strings">
+      <item name="title">Raport błędów</item>
       <item name="notConfigured">Aplikacja nie jest prawidłowo skonfigurowana
       </item>
       <item name="noProblemsFound">Nie znaleziono problemów</item>
-      <item name="apply">Zastosuj</item>
+      <item name="filtersHeading">Filtry</item>
+      <item name="filtersButton">zastosuj</item>
     </prefix>
     <prefix name="columns">
       <item name="resource">Zasób</item>

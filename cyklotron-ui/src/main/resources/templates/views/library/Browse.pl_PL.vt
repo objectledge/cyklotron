@@ -1,12 +1,16 @@
 #set($vi18n = $i18n.usePrefix('cms.library.Browse'))
-#genericScreenHeader($vi18n.get('title'))
+#set($strings = $vi18n.usePrefix('strings'))
+#genericScreenHeader($strings.title)
 
-#set($columnOrder = ['title','authors','pubYear','keywords','downloads'])
-#foreach($column in $columnOrder)
-$table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
-#end
-#set($tableLink = $link.set('tableId',$table.id))
-
+#if(!$applicationConfigured)
+<table class="messageInlineTable">
+<tr><td><b>$strings.notConfigured</b></td></tr>
+</table>
+#elseif($table.rows.empty)
+<table class="messageInlineTable">
+<tr><td><b>$strings.noItemsFound</b></td></tr>
+</table>	
+#else
 <form name="form1" method="POST">
 <script type="text/javascript">
   function send(action)
@@ -15,13 +19,21 @@ $table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
     document.form1.submit();
   }
 </script>
+
 <table  width="100%" class="genericItemList" cellspacing="0">
-<tr><th>$vi18n.get('search.heading')</th></tr>
+<tr><th>$strings.searchHeading</th></tr>
 <tr><td align="right">
 <input type="text" name="query" value="$!query" />
-<a href="javascript:send('$link')"> $vi18n.get('search.button')</a>
+<a href="javascript:send('$link')">$strings.searchButton</a>
 </td></tr>
 </table>
+<br/>
+
+#set($columnOrder = ['title','authors','pubYear','keywords','downloads'])
+#foreach($column in $columnOrder)
+$table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
+#end
+#set($tableLink = $link.set('tableId',$table.id))
 <table width="100%" class="genericItemList" cellspacing="0">
 	<tr>
 		#tableView_header_Submit($table $tableLink $columnOrder 'send')
@@ -47,4 +59,5 @@ $table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
   </tr>
 </table>
 </form>
+#end
 #genericScreenTrailer()	
