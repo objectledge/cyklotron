@@ -243,6 +243,7 @@
   <component class="org.objectledge.upload.FileUploadValve"/>
   <component class="org.objectledge.coral.session.CoralSessionInitValve"/>
   <component class="org.objectledge.coral.session.CoralSessionVerificationValve"/>
+  <component class="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/>
   <component class="net.cyklotron.cms.CmsDataInitializerValve"/>
   <component class="org.objectledge.web.mvc.security.PolicyCheckingValve"/>
   <component class="org.objectledge.web.SessionDurationValve">
@@ -321,6 +322,7 @@
     </sequence>
 	<sequence>
       <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
+      <parameter class-key="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/> 
       <parameter class-key="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
 	  <parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
       <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
@@ -532,4 +534,4 @@
   <component class="org.objectledge.statistics.StatisticsWriter"/>
   <component class="org.objectledge.statistics.MuninNode"/>
   
-</container>
+</container>  
