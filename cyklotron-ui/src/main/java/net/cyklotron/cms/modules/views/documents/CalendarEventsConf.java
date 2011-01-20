@@ -39,7 +39,9 @@ public class CalendarEventsConf
         this.categoryQueryService = categoryQueryService;
     }
     
-    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext,
+        TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
+        CoralSession coralSession)
         throws ProcessingException
     {
         // get config
@@ -52,34 +54,27 @@ public class CalendarEventsConf
             Resource root = categoryQueryService.getCategoryQueryRoot(coralSession, site);
             Resource[] queries = coralSession.getStore().getResource(root);
             Arrays.sort(queries, new NameComparator(i18nContext.getLocale()));
-            List temp = new ArrayList(queries.length); 
+            List temp = new ArrayList(queries.length);
             for(int i = 0; i < queries.length; i++)
             {
                 Resource query = queries[i];
                 List item = new ArrayList();
                 item.add(query.getName());
                 item.add(query.getName());
-                temp.add(item); 
+                temp.add(item);
             }
             templatingContext.put("queries", temp);
+
+            long index = componentConfig.getLong("index_id", -1);
+            if(index != -1)
+            {
+                templatingContext.put("index", coralSession.getStore().getResource(index));
+            }
         }
         catch(Exception e)
         {
-            throw new ProcessingException("failed to retrieve information", e);
+            throw new ProcessingException("Exception occurred", e);
         }
-        
-        long index = componentConfig.getLong("index_id",-1);		
-		try
-		{
-			if(index != -1)
-			{
-				templatingContext.put("index", coralSession.getStore().getResource(index));
-			}
-		}
-		catch(Exception e)
-		{
-			throw new ProcessingException("Exception occurred",e);
-		}
     }
     
     public boolean checkAccessRights(Context context)
