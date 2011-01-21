@@ -6,7 +6,7 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array("query_pool_id", "index_id", );
+var fieldNames = new Array("query_pool_id", "index_id" );
 
 function sendConfig()
 {
