@@ -1,0 +1,32 @@
+#
+# Initial script for the CMS integration subsystem
+#
+# author <a href="mailto:pablo@caltha.pl">Pawel Potempski</a>
+# author <a href="mailto:rafal@caltha.pl">Rafal Krzewski</a>
+# version $Id: integration-init.rml,v 1.5 2007-06-02 23:57:03 rafal Exp $
+#
+
+ECHO ' - integration';
+
+CREATE RESOURCE 'applications'
+RESOURCE CLASS 'node'
+PARENT '/cms'
+ATTRIBUTES (
+  description = 'Parent node of all deployed applications'
+);
+
+# a simple no-resources application, hence declared here 
+CREATE RESOURCE 'statistics'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 99,
+  enabled = true,
+  required = false
+);
+
+# application availablility map
+CREATE RELATION integration.SiteApplications;
