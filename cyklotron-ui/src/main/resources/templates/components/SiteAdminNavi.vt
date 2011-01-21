@@ -1,0 +1,105 @@
+## ConvertTemplates:IMMUTABLE
+#set($block = false)
+ 
+#set ($subject = $cms_tool.getSubject())
+
+#macro(linkCell $class $label $linkObject)
+<td #if($class != '') class="$class" #end onMouseOver="this.style.backgroundColor='#AAAAAA'" onMouseOut="this.style.backgroundColor=''" nowrap><a href="$linkObject">$label</a></td>
+#end
+
+## TODO: Make a CMSUserInfo V
+  #if($cms_tool.hasRole($subject,'cms.administrator'))
+  <table width="100%" class="adminNavi" cellspacing="0">
+    <tr>
+      <td class="inscription" width="95%" align="right">System administration: &nbsp;</td>
+      <td class="separator">|</td>      
+      #linkCell('admin' 'PREFERENCES' $link.view("preferences.SystemPreferences").unset('site_id'))
+      <td class="separator">|</td>
+      #linkCell('admin' 'SITES' $link.view("site.SiteList").unset('site_id'))
+      <td class="separator">|</td>
+      #linkCell('admin' 'AGGREGATION' $link.view("aggregation.ImporterList").unset('site_id'))
+      <td class="separator">|</td>
+      #linkCell('admin' 'GLOBAL CATEGORIES' $link.view("category.CategoryList").unset('site_id'))
+      <td class="separator">|</td>
+      #linkCell('admin' 'GLOBAL STATISTICS' $link.view("statistics.Statistics").unset('site_id'))
+      <td class="separator">|</td>
+      #linkCell('admin' 'GLOBAL ROLES' $link.view('security.RoleList').unset('site_id'))
+      <td class="separator">|</td>      
+    </tr>
+  </table>
+  #end
+  #if($cmsData.site && !$cms_tool.subject.equals($cms_tool.anonymousSubject))
+  #set($siteLink = $link.set("site_id",$cmsData.site.id))
+  
+  #if($cms_tool.isAppEnabled('search') || $cms_tool.isAppEnabled('forum') || $cms_tool.isAppEnabled('banner') || $cms_tool.isAppEnabled('poll') || $cms_tool.isAppEnabled('link') || $cms_tool.isAppEnabled('syndication') || $cms_tool.isAppEnabled('periodicals') || $cms_tool.isAppEnabled('statistics') || $cms_tool.isAppEnabled('aggregation') || $block)      
+  
+  <table width="100%" class="adminNavi" cellspacing="0">
+    <tr>
+      <td class="inscription" width="80%" align="right">Additional modules: &nbsp;</td>
+      <td class="separator">|</td>
+    #if($cms_tool.isAppEnabled('search') || $block)
+      #linkCell('' 'SEARCH' $siteLink.view('search.Search'))
+      <td class="separator">|</td>
+    #end
+    #if($cms_tool.isAppEnabled('forum') || $block)    
+      #linkCell('' 'FORUM' $siteLink.view('forum.DiscussionList').set('fid',$cms_tool.getApplication("forum").getId()))
+      <td class="separator">|</td>
+    #end
+    #if($cms_tool.isAppEnabled('banner') || $block)      
+      #linkCell('' 'BANNERS' $siteLink.view('banner.PoolList').set('bsid',$cms_tool.getApplication("banners").getId()))
+      <td class="separator">|</td>
+    #end
+    #if($cms_tool.isAppEnabled('poll') || $block)      
+      #linkCell('' 'POLLS' $siteLink.view('poll.PoolList').set('psid',$cms_tool.getApplication("polls").getId()))
+      <td class="separator">|</td>
+    #end
+    #if($cms_tool.isAppEnabled('link') || $block)      
+      #linkCell('' 'LINKS' $siteLink.view('link.PoolList').set('lsid',$cms_tool.getApplication("links").getId()))
+      <td class="separator">|</td>
+    #end
+    #if($cms_tool.isAppEnabled('syndication') || $block)      
+      #linkCell('' 'RSS/XML FEEDS' $siteLink.view('syndication.IncomingFeedList'))
+      <td class="separator">|</td>
+    #end
+    #if($cms_tool.isAppEnabled('periodicals') || $block)      
+      #linkCell('' 'PERIODICALS' $siteLink.view('periodicals.Periodicals'))
+      <td class="separator">|</td>
+    #end
+    #if($cms_tool.isAppEnabled('statistics') || $block)      
+      #linkCell('' 'STATISTICS' $siteLink.view('statistics.Statistics')) 
+      <td class="separator">|</td>
+    #end
+    #if($cms_tool.isAppEnabled('aggregation') || $block)      
+      #linkCell('' 'AGGREGATION' $siteLink.view('aggregation.Exported'))
+      <td class="separator">|</td>      
+	#end
+	#if($cms_tool.isAppEnabled('library') || $block)
+      #linkCell('' 'LIBRARY' $siteLink.view('library.Browse'))
+      <td class="separator">|</td>
+    #end
+    </tr>
+  </table>
+  
+  #end 
+  <table width="100%" class="adminNavi" cellspacing="0">
+    <tr>
+      #linkCell('special' 'PREVIEW' $link.unsetView().unset('site_id').set('x', $home_page_node.id))    
+      <td class="inscription" width="80%" align="right">Base modules: &nbsp;</td>
+      <td class="separator">|</td>
+      #linkCell('' 'SITE' $siteLink.view('site.EditSite'))
+      <td class="separator">|</td>
+      #linkCell('' 'DOCUMENTS' $siteLink.view('structure.NaviInfo'))
+      #linkCell('' '(WORKFLOW)' $siteLink.view('structure.EditorialTasks'))
+      #linkCell('' '(FOOTERS)' $siteLink.view('documents.FootersList').set('reset','true'))
+      <td class="separator">|</td>
+      #linkCell('' 'CATEGORIES' $siteLink.view('category.CategoryList'))
+      <td class="separator">|</td>
+      #linkCell('' 'FILES' $siteLink.view('files.ListDirectory').set('dir_id',$files.getFilesRoot($site).getId()))
+      <td class="separator">|</td>
+      #linkCell('' 'APPEARANCE' $siteLink.view('appearance.EditSite'))
+      <td class="separator">|</td>
+      #linkCell('' 'TEAM' $siteLink.view('security.RoleList'))
+      <td class="separator">|</td>
+    </tr>
+  </table>
+  #end

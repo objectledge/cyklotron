@@ -1,0 +1,67 @@
+##
+## Poll application: poll editing screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: poll_results.vt,v 1.1 2005-05-25 15:22:18 pablo Exp $
+##
+##
+
+#if($result_scope == "poll_$cms_data.component.instanceName")
+#result_inline_message('results.poll')
+#end
+
+#if($poll)
+
+#set($x = $parametersTool.get('x',""))
+#if($x.length() == 0)
+ #set($cmsLink = $link)
+#else
+ #set($cmsLink = $link.set('x',$x))
+#end
+
+<table class="defaultTable">
+  <tr>
+    <td align="left"><b>Tytuł ankiety:</b></td>
+    <td><i>$poll.getName()</i></td>
+  </tr>
+  <tr>
+    <td align="left"><b>Opis:</b></td>
+    <td><i>$!poll.getDescription()</i></td>
+  </tr>
+
+  #foreach($questionKey in $questionKeys)
+  <tr>
+    <td colspan="2">
+      <b>Pytanie:</b>  <i>$questions.get($questionKey).getTitle()</i> <br>
+    #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
+      <b>Opcja $velocityCount: </b><br><i> $questions.get($questionKey).getAnswers().get($answerKey).getTitle() </i>
+      $results.get($questions.get($questionKey).getAnswers().get($answerKey).getId())
+      ($stringTool.shortenString($percent.get($questions.get($questionKey).getAnswers().get($answerKey).getId()).toString(), 4, "")%)<br>
+    #end
+    </td>
+  </tr>
+  #end
+  #if($already_voted)
+  <tr>
+    <td>
+      Dziękujemy za oddanie głosu!
+    </td>
+  </tr>
+  #end
+  <tr>
+   <td>
+     <a href="$cmsLink.unset('poll_action')">Powrót</a>
+   </td>
+  </tr>
+</table>
+
+#else
+  <table class="defaultTable">
+    <tr>
+      <th>
+        <b>Brak ankiety</b>
+      </th>
+    </tr>
+  </table>
+#end
