@@ -58,7 +58,7 @@ function submitDocForm(targetView)
     }
     _formtool_dispatch_event('$form_id');
    }else{
-     alert("Dokument typu wydarzenie w kalendarzu, nie może być zapisana, gdyż nie ma prawiodłowo zdefiniowanego zakresu początku i końca wydarzenia.");
+     alert("Dokument typu wydarzenie w kalendarzu nie może być zapisany. Brak prawiodłowo zdefiniowej daty początku i końca wydarzenia.");
    }
 }
 
