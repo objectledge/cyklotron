@@ -48,11 +48,19 @@ autoInstanceSaver = new AutoInstanceSaver(
 // save button
 function submitDocForm(targetView)
 {
+   var titleCalendar = document.getElementsByName("form.page-0.group-0.input-3")[0].value;
+   var eventStart = document.getElementsByName("form.page-0.group-4.date-2_enabled")[1].checked;
+   var eventEnd = document.getElementsByName("form.page-0.group-4.date-3_enabled")[1].checked;
+   if( titleCalendar.length==0 || (eventStart && eventEnd))
+   {
     if(targetView)
     {
-    document.forms['$form_id'].action = document.forms['$form_id'].action + '&target_view=' + targetView;
-  }
+      document.forms['$form_id'].action = document.forms['$form_id'].action + '&target_view=' + targetView;
+    }
     _formtool_dispatch_event('$form_id');
+   }else{
+     alert("Event type document cannot be saved. EventStart or EventEnd date filed is not defined.");
+   }
 }
 
 // configuration for HTMLArea scripts
