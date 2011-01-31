@@ -75,6 +75,7 @@ public class UpdateConfiguration
             ForumResource forumRoot = forumService.getForum(coralSession, site);
             forumRoot.setForumNode(forumNode);
             forumRoot.setReplyTo(replyTo);
+            forumRoot.setCaptchaEnabled(parameters.getBoolean("add_captcha", false));
             forumRoot.setLastlyAddedSize(parameters.getInt("forum_last_added_size",5));
             forumRoot.setRejectMessage(parameters.get("reject_message"));
             forumRoot.update();

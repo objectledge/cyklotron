@@ -144,16 +144,37 @@ public interface ForumResource
      * @return the value of the the <code>site</code> attribute.
      */
     public SiteResource getSite();
- 
+
     /**
      * Sets the value of the <code>site</code> attribute.
-     *
+     * 
      * @param value the value of the <code>site</code> attribute.
-     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
-     *         value.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> value.
      */
     public void setSite(SiteResource value)
         throws ValueRequiredException;
-     
+
+    /**
+     * Returns the value of the <code>captchaEnabled</code> attribute.
+     *
+     * @return the value of the the <code>captchaEnabled</code> attribute.
+     */
+    public boolean getCaptchaEnabled();
+
+    /**
+     * Sets the value of the <code>captchaEnabled</code> attribute.
+     *
+     * @param value the value of the <code>captchaEnabled</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setCaptchaEnabled(boolean value);
+    
+    /**
+     * Checks if the value of the <code>captchaEnabled</code> attribute is defined.
+     *
+     * @return <code>true</code> if the value of the <code>captchaEnabled</code> attribute is defined.
+     */
+    public boolean isCaptchaEnabledDefined();
+
     // @custom methods ///////////////////////////////////////////////////////
 }

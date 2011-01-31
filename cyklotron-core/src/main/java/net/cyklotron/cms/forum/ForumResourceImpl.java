@@ -73,6 +73,9 @@ public class ForumResourceImpl
 
     /** The AttributeDefinition object for the <code>site</code> attribute. */
     private static AttributeDefinition siteDef;
+    
+    /** The AttributeDefinition object for the <code>captchaEnabled</code> attribute. */
+    private static AttributeDefinition captchaEnabledDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -423,6 +426,35 @@ public class ForumResourceImpl
             }
         }
         catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+
+    @Override
+    public boolean getCaptchaEnabled()
+    {
+        return (Boolean) getInternal(captchaEnabledDef, false);
+    }
+
+    @Override
+    public boolean isCaptchaEnabledDefined()
+    {
+        return isDefined(captchaEnabledDef);
+    }
+
+    @Override
+    public void setCaptchaEnabled(boolean value)
+    {
+        try
+        {
+            set(captchaEnabledDef, value);
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
         {
             throw new BackendException("incompatible schema change",e);
         }
