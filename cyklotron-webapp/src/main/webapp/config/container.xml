@@ -149,6 +149,8 @@
   <component class="org.objectledge.encodings.HTMLEntityEncoder"/>
   <component class="org.objectledge.upload.FileDownload"/>
   <component class="org.objectledge.im.InstantMessaging"/>
+  <component class-key="org.objectledge.web.captcha.CaptchaService"
+             class="org.objectledge.web.captcha.ReCaptchaCaptchaServiceImpl"/>
   
   <!-- // mvc components ////////////////////////////////////////////////////////////// -->
   <!-- mvc basics -->
@@ -186,6 +188,7 @@
   <component class="net.cyklotron.cms.security.SecurityToolFactory"/>
   <component class="net.cyklotron.util.WorkflowToolFactory"/>
   <component class="org.objectledge.forms.FormToolFactory"/>
+  <component class="org.objectledge.web.captcha.CaptchaToolFactory"/>
 
   <component class="org.objectledge.templating.tools.ContextTools">
     <sequence>
@@ -206,7 +209,7 @@
       <parameter class-key="net.cyklotron.cms.security.SecurityToolFactory"/>      
       <parameter class-key="net.cyklotron.util.WorkflowToolFactory"/>      
       <parameter class-key="org.objectledge.forms.FormToolFactory"/>      
-      
+      <parameter class-key="org.objectledge.web.captcha.CaptchaToolFactory"/>
     </sequence>
   </component>      
   <component class="org.objectledge.upload.FileUpload"/>    
