@@ -179,7 +179,7 @@ public class ProposeDocument
                 }
             }
             
-            if(valid)
+            if(valid && screenConfig.getBoolean("add_captcha", false))
             {
                 if(!captchaService.checkCaptcha(httpContext, (RequestParameters)parameters))
                 {
