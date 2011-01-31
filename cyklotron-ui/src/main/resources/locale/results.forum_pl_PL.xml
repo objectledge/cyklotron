@@ -86,6 +86,9 @@
     <prefix name="name_invalid">
       <value>Wprowadzona nazwa jest nieprawidłowa.</value>
     </prefix>
+    <prefix name="invalid_captcha_verification">
+      <value>Podano niepoprawny kod Captcha</value>
+    </prefix>
     <prefix name="parameter_not_found">
       <value>Nie wypełniono wymagenego pola w formularzu.</value>
     </prefix>

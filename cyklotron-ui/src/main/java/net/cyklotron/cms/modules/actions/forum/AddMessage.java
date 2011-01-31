@@ -14,6 +14,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
@@ -38,13 +39,13 @@ import net.cyklotron.cms.workflow.WorkflowService;
 public class AddMessage
     extends BaseForumAction
 {
-    
+    protected CaptchaService captchaService;
     
     public AddMessage(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, ForumService forumService, WorkflowService workflowService)
+        CmsDataFactory cmsDataFactory, ForumService forumService, WorkflowService workflowService, CaptchaService captchaService)
     {
         super(logger, structureService, cmsDataFactory, forumService, workflowService);
-        
+        this.captchaService = captchaService;
     }
     /**
      * Performs the action.
@@ -95,6 +96,15 @@ public class AddMessage
             {
 				templatingContext.put("result","hidden_discussion");
 				return;
+            }
+            
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
+            Parameters config = cmsData.getComponent(instanceName).getConfiguration();
+            if(config != null && config.getBoolean("add_captcha", false)
+                && !captchaService.checkCaptcha(httpContext, (RequestParameters)parameters))
+            {
+                templatingContext.put("result", "invalid_captcha_verification");
+                return;
             }
             
             String content = parameters.get("content","");

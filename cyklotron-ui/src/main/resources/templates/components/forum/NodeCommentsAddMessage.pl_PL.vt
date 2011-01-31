@@ -86,6 +86,14 @@ $parent_content #end</textarea></td>
   </select>
       </td>
     </tr>
+    #if($cms_data.component.configuration.getBoolean('add_captcha', false))
+ 	 <tr>
+ 	  <td><b>Weryfikacja Captcha</b></td>
+ 	 	<td>
+ 	 	  $captcha.createCaptchaWidget()
+ 	   </td>
+ 	 </tr>
+ 	#end
   </table>
 
 #if($discussion && $discussion.state.name == 'moderated')

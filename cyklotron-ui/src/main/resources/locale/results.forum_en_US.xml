@@ -87,6 +87,9 @@
     <prefix name="name_invalid">
       <value>The entered name is invalid</value>
     </prefix>
+    <prefix name="invalid_captcha_verification">
+      <value>incorrect Captcha string.</value>
+    </prefix>
     <prefix name="parameter_not_found">
       <value>Parameter not found.</value>
     </prefix>
