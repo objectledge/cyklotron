@@ -26,7 +26,7 @@ var fieldNames = new Array( "use_screen", "add_captcha");
 
 <form name="nodeCommentsConf">
 
-<table width="100%" class="genericItemTree" cellspacing="0">
+<table width="100%" class="genericScreen" cellspacing="0">
 <tr>
   <td>Użyj ekranu Forum do przeglądania i dodawania wiadomości.</td>
   <td><input type="checkbox" name="use_screen" value="true"#if($componentConfig.getBoolean('use_screen', false)) checked="true"#end/></td>

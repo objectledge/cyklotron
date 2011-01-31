@@ -26,13 +26,13 @@ var fieldNames = new Array( "use_screen", "add_captcha");
 
 <form name="nodeCommentsConf">
 
-<table width="100%" class="genericItemTree" cellspacing="0">
+<table width="100%" class="genericScreen" cellspacing="0">
 <tr>
   <td>Use forum screen for message viewing and posting</td>
   <td><input type="checkbox" name="use_screen" value="true"#if($componentConfig.getBoolean('use_screen', false)) checked="true"#end/></td>
 </tr>
 <tr>
-  <td align="right">Add Captcha verification</td>
+  <td>Add Captcha verification</td>
   <td><input type="checkbox" name="add_captcha" value="true"#if($componentConfig.getBoolean('add_captcha', false)) checked#end></td>
 </tr>
 </table>
