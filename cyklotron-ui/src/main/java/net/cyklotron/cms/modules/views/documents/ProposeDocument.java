@@ -294,7 +294,9 @@ public class ProposeDocument
             long parentId = screenConfig.getLong("parent_id", -1L);
             Resource parentNode = parentId != -1L ? NavigationNodeResourceImpl
                 .getNavigationNodeResource(coralSession, parentId) : cmsData.getNode();
-            templatingContext.put("parent_node", parentNode);    
+            templatingContext.put("parent_node", parentNode); 
+            templatingContext.put("add_captcha", screenConfig.getBoolean(
+                "add_captcha", false));
         }
         catch(Exception e)
         {

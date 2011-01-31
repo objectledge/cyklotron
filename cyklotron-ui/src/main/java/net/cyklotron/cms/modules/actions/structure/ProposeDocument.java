@@ -16,12 +16,14 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.html.HTMLService;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
 import org.objectledge.upload.UploadContainer;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
@@ -63,11 +65,14 @@ public class ProposeDocument
     private final RelatedService relatedService;
 
     private final HTMLService htmlService;
+    
+    private final CaptchaService captchaService;
 
     public ProposeDocument(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService, CategoryService categoryService,
         FileUpload uploadService, FilesService filesService,
-        CoralSessionFactory coralSessionFactory, RelatedService relatedService, HTMLService htmlService)
+        CoralSessionFactory coralSessionFactory, RelatedService relatedService,
+        HTMLService htmlService, CaptchaService captchaService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
         this.categoryService = categoryService;
@@ -76,6 +81,7 @@ public class ProposeDocument
         this.coralSessionFactory = coralSessionFactory;
         this.relatedService = relatedService;
         this.htmlService = htmlService;
+        this.captchaService = captchaService;
     }
 
     /**
@@ -94,7 +100,7 @@ public class ProposeDocument
         DocumentNodeResource node = null;
         boolean valid = true;
         CategoryResource[] parentCategories = null;
-
+        
         try
         {
             // get parameters
@@ -170,6 +176,15 @@ public class ProposeDocument
                 {
                     templatingContext.put("result", "navi_name_repeated");
                     valid = false;
+                }
+            }
+            
+            if(valid)
+            {
+                if(!captchaService.checkCaptcha(httpContext, (RequestParameters)parameters))
+                {
+                    templatingContext.put("result", "invalid_captcha_verification");
+                    valid = false;                    
                 }
             }
 

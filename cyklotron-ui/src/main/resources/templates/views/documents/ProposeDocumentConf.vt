@@ -11,7 +11,7 @@ $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <!--
 var fieldNames = new Array( "parent_id", "category_id_1", "category_id_2", "inherit_categories", "calendar_tree", "attachments_enabled", 
                             "attachments_dir_id", "attachments_max_count", "attachments_max_size", "attachments_allowed_formats", 
-                            "editing_enabled", "category_depth", "add_document_visual_editor" );
+                            "editing_enabled", "category_depth", "add_document_visual_editor", "add_captcha" );
 
 function sendConfig()
 {
@@ -95,6 +95,10 @@ function sendConfig()
   <tr>
     <td align="right">$ui_labels.get('add_document_visual_editor')</td>
     <td><input type="checkbox" name="add_document_visual_editor" value="true"#if($add_document_visual_editor) checked#end></td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('add_captcha')</td>
+    <td><input type="checkbox" name="add_captcha" value="true"#if($add_captcha) checked#end></td>
   </tr>
 </table>
 </form>

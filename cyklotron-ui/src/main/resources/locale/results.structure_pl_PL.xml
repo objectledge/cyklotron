@@ -124,6 +124,9 @@
     <prefix name="invalid_html">
       <value>Pole 'Treść wiadomości' zawiera niedozwolone znaki</value>
     </prefix>
+    <prefix name="invalid_captcha_verification">
+      <value>Podano niepoprawny kod Catcha</value>
+    </prefix>
     <prefix name="updated_successfully">
       <value>Zapisano pomyślnie</value>
     </prefix>

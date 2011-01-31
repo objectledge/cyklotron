@@ -203,6 +203,14 @@ function addOrganization(i)
 	#end
     </td>
   </tr>
+#end
+#if($add_captcha)
+  <tr>
+    <td>Wprowadz kod weryfikacji Captcha</td>
+    <td>
+       $captcha.createCaptchaWidget()
+    </td>
+  </tr>
 #end 
 </table>
 

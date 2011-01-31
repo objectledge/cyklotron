@@ -105,6 +105,8 @@ public class ProposeDocumentConf
                 "editing_enabled", false));
             templatingContext.put("add_document_visual_editor", screenConfig.getBoolean(
                 "add_document_visual_editor", false));
+            templatingContext.put("add_captcha", screenConfig.getBoolean(
+                "add_captcha", false));
         }
         catch(Exception e)
         {

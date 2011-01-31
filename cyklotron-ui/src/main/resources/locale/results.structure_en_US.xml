@@ -103,6 +103,9 @@
     <prefix name="navi_title_empty">
       <value>'Title' field may not be empty.</value>
     </prefix>
+    <prefix name="navi_name_repeated">
+      <value>This message was already added.</value>
+    </prefix>
     <prefix name="parent_not_found">
       <value>Parent node not found.</value>
     </prefix>
@@ -117,6 +120,12 @@
     </prefix>
     <prefix name="subject_not_found">
       <value>No user with that name exists.</value>
+    </prefix>
+    <prefix name="invalid_html">
+      <value>'Content' field contains unwanted chars.</value>
+    </prefix>
+    <prefix name="invalid_captcha_verification">
+      <value>incorrect Captcha string.</value>
     </prefix>
     <prefix name="updated_successfully">
       <value>Updated successfully.</value>
