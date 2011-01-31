@@ -206,7 +206,7 @@ function addOrganization(i)
 #end
 #if($add_captcha)
   <tr>
-    <td>Wprowadz kod weryfikacji Captcha</td>
+    <td>Captcha verification</td>
     <td>
        $captcha.createCaptchaWidget()
     </td>
