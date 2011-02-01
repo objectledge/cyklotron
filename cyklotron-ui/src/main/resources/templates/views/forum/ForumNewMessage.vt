@@ -75,7 +75,15 @@ $parent_content #end</textarea></td>
       </td>
     </tr>
     #end
-
+    #if($add_captcha)
+ 	 <tr>
+ 	  <td><b>Captcha verification</b></td>
+ 	 	<td>
+ 	 	  $captcha.createCaptchaWidget()
+ 	   </td>
+ 	 </tr>
+ 	#end
+ 	
   </table>
 
   #if($discussion && $discussion.state.name == 'moderated')

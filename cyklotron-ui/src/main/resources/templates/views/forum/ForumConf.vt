@@ -72,7 +72,7 @@ $object.name
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "did", "statefull" );
+var fieldNames = new Array( "did", "statefull", "add_captcha");
 // -->
 </script>
 
@@ -94,10 +94,11 @@ var fieldNames = new Array( "did", "statefull" );
   <tr>
     <td>
     Shall component keep its state when document is changed:<br>
-    #set($statefull = $componentConfig.getBoolean('statefull', true))
-    <input type="radio" name="statefull" value="true" #if($statefull) checked #end> yes
-    <input type="radio" name="statefull" value="false" #if(!$statefull) checked #end> no
-    </td>
+    <td><input type="checkbox" name="statefull" value="true"#if($componentConfig.getBoolean('statefull', true)) checked#end></td>
+  </tr>
+  <tr>
+   <td>Add Captcha verification</td>
+   <td><input type="checkbox" name="add_captcha" value="true"#if($componentConfig.getBoolean('add_captcha', false)) checked#end></td>
   </tr>
 </table>
 </form>

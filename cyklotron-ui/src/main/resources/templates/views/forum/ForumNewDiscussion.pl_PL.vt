@@ -54,6 +54,14 @@
       </select>
     </td>
       </tr>
+    #if($add_captcha)
+ 	 <tr>
+ 	  <td><b>Weryfikacja Captcha</b></td>
+ 	 	<td>
+ 	 	  $captcha.createCaptchaWidget()
+ 	   </td>
+ 	 </tr>
+ 	#end
     </table>
 
     <div align="right">

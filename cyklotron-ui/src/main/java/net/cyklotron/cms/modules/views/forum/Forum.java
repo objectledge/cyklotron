@@ -274,17 +274,33 @@ public class Forum
             {
                 templatingContext.put("resource", coralSession.getStore().getResource(resid));
             }
+            ForumResource forum = forumService.getForum(coralSession, getSite());
+            templatingContext.put("add_captcha",forum.getCaptchaEnabled());
         }
         catch(EntityDoesNotExistException e)
         {
             screenError(getNode(), context, "Resource not found", e);
+        }
+        catch(ForumException e)
+        {
+            screenError(getNode(), context, "resource not found", e);
         }
     }
     
     public void prepareNewDiscussion(Context context)
         throws ProcessingException
     {
-        // does nothing
+        try
+        {
+            CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+            TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+            ForumResource forum = forumService.getForum(coralSession, getSite());
+            templatingContext.put("add_captcha",forum.getCaptchaEnabled());
+        }
+        catch(ForumException e)
+        {
+            screenError(getNode(), context, "resource not found", e);
+        }    
     }
 
     private String prepareContent(String content)

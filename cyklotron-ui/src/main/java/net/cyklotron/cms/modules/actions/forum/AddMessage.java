@@ -98,9 +98,26 @@ public class AddMessage
 				return;
             }
             
+            boolean captcha_enabled = false;
             CmsData cmsData = cmsDataFactory.getCmsData(context);
-            Parameters config = cmsData.getComponent(instanceName).getConfiguration();
-            if(config != null && config.getBoolean("add_captcha", false)
+            if(parameters.isDefined("ci")) // if request sent from component
+            {
+                Parameters config = cmsData.getComponent(instanceName).getConfiguration();
+                if(config != null)
+                {
+                    captcha_enabled = config.getBoolean("add_captcha", false);
+                }
+            }
+            else // if request sent from application
+            {
+                ForumResource forum = forumService.getForum(coralSession, cmsData.getSite());
+                if(forum != null)
+                {
+                    captcha_enabled = forum.getCaptchaEnabled();
+                }
+            }
+
+            if(captcha_enabled
                 && !captchaService.checkCaptcha(httpContext, (RequestParameters)parameters))
             {
                 templatingContext.put("result", "invalid_captcha_verification");
