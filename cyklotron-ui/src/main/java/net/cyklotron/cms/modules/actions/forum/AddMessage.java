@@ -100,18 +100,21 @@ public class AddMessage
             
             boolean captcha_enabled = false;
             CmsData cmsData = cmsDataFactory.getCmsData(context);
-            if(parameters.isDefined("ci")) // if request sent from component
+            ForumResource forum = forumService.getForum(coralSession, cmsData.getSite());
+
+            // check if subject has forum administrator right.
+            if(!coralSession.getUserSubject().hasRole(forum.getAdministrator()))
             {
-                Parameters config = cmsData.getComponent(instanceName).getConfiguration();
-                if(config != null)
+                if(parameters.isDefined("ci")) // if request sent from component
                 {
-                    captcha_enabled = config.getBoolean("add_captcha", false);
+                    Parameters config = cmsData.getComponent(instanceName).getConfiguration();
+                    if(config != null)
+                    {
+                        captcha_enabled = config.getBoolean("add_captcha", false);
+                    }
                 }
-            }
-            else // if request sent from application
-            {
-                ForumResource forum = forumService.getForum(coralSession, cmsData.getSite());
-                if(forum != null)
+                else
+                // if request sent from application
                 {
                     captcha_enabled = forum.getCaptchaEnabled();
                 }
