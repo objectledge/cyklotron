@@ -3,6 +3,7 @@ package net.cyklotron.cms.modules.components.category;
 import org.jcontainer.dna.Logger;
 import org.objectledge.cache.CacheFactory;
 import org.objectledge.context.Context;
+import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.Templating;
 import org.objectledge.web.mvc.finders.MVCFinder;
@@ -44,10 +45,10 @@ extends BaseResourceList
 	/* (non-Javadoc)
 	 * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getResourceList()
 	 */
-	protected net.cyklotron.cms.category.components.BaseResourceList getResourceList()
+	protected net.cyklotron.cms.category.components.BaseResourceList getResourceList(CmsData cmsData, Parameters parameters)
 	{
 		return new net.cyklotron.cms.category.components.RelatedResourceList(context, 
-            integrationService, cmsDataFactory, categoryQueryService, categoryService);
+            integrationService, cmsDataFactory, categoryQueryService, categoryService, cmsData.getNode());
 	}
     
     /* (non-Javadoc)

@@ -15,6 +15,7 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.category.query.CategoryResolver;
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -33,14 +34,17 @@ extends BaseResourceList
 	protected CategoryQueryService categoryQueryService;
 	
     protected CategoryService categoryService;
+    
+    protected NavigationNodeResource contextNode;
 	
 	public RelatedResourceList(Context context, IntegrationService integrationService,
         CmsDataFactory cmsDataFactory,  CategoryQueryService categoryQueryService,
-        CategoryService categoryService)
+        CategoryService categoryService, NavigationNodeResource contextNode)
     {
         super(context,integrationService, cmsDataFactory);
         this.categoryService = categoryService;
         this.categoryQueryService = categoryQueryService;
+        this.contextNode = contextNode;
     }
     
 	
@@ -65,21 +69,21 @@ extends BaseResourceList
     throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
-        NavigationNodeResource node = cmsData.getNode();
+       
         RelatedResourceListConfiguration config2 = (RelatedResourceListConfiguration)config;
 		SiteFilter siteFilter = new SiteFilter(new SiteResource[] { cmsData.getSite() });
-        if(node != null)
+        if(contextNode != null)
         {
             if(config2.isSiteFilterEnabled())
             {
                 TableFilter[] filters = new TableFilter[2];
-                filters[0] = new RejectResourceFilter(node);
+                filters[0] = new RejectResourceFilter(contextNode);
                 filters[1] = siteFilter;
                 return filters;
             }
             else
             {
-                return new TableFilter[] { new RejectResourceFilter(node) };
+                return new TableFilter[] { new RejectResourceFilter(contextNode) };
             }
         }
         else if(config2.isSiteFilterEnabled())
@@ -123,10 +127,10 @@ extends BaseResourceList
         }
 
         CmsData cmsData = cmsDataFactory.getCmsData(context);
-		NavigationNodeResource node = cmsData.getNode();
-        if(node != null)
+		
+        if(contextNode != null)
         {
-            CategoryResource[] categories = categoryService.getCategories(coralSession, node, false);
+            CategoryResource[] categories = categoryService.getCategories(coralSession, contextNode, false);
         
             StringBuilder buf = new StringBuilder(100);
             for(int i = 0; i < categories.length; i++)

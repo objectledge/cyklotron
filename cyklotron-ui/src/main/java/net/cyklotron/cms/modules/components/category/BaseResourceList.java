@@ -75,7 +75,7 @@ extends BaseCategoryComponent
         {
     		CmsData cmsData = cmsDataFactory.getCmsData(context);
     
-    		net.cyklotron.cms.category.components.BaseResourceList resList = getResourceList();
+    		net.cyklotron.cms.category.components.BaseResourceList resList = getResourceList(cmsData, parameters);
     
     		BaseResourceListConfiguration config = resList.createConfig();
     
@@ -235,5 +235,5 @@ extends BaseCategoryComponent
         }
     }
     
-    protected abstract net.cyklotron.cms.category.components.BaseResourceList getResourceList();
+    protected abstract net.cyklotron.cms.category.components.BaseResourceList getResourceList(CmsData cmsData, Parameters parameters);
 }
