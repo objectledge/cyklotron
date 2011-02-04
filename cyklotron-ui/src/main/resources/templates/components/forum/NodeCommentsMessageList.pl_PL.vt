@@ -100,7 +100,9 @@
      ## ------------ ROW START -  tableView_row
     <tr class="row$zeroIfEven">
       <td width="70%">
+        #if($table.getViewAsTree())
         #tableView_linesAndFolders($table $row $tableLink)
+        #end
         <a href="$viewLink.set('mid', $row.getObject().getId())">$row.getObject().getName()</a>
       </td>
       <td nowrap="nowrap">

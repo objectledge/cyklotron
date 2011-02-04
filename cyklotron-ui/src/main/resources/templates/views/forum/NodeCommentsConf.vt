@@ -19,7 +19,7 @@ $viewEnclosureTool.override('popup.Default')
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "use_screen", "add_captcha");
+var fieldNames = new Array( "use_screen", "viewType", "add_captcha");
 // -->
 </script>
 
@@ -30,6 +30,13 @@ var fieldNames = new Array( "use_screen", "add_captcha");
 <tr>
   <td>Use forum screen for message viewing and posting</td>
   <td><input type="checkbox" name="use_screen" value="true"#if($componentConfig.getBoolean('use_screen', false)) checked="true"#end/></td>
+</tr>
+<tr>
+  <td>Choose comments initial view type:</td>
+  <td><select size="1" name="viewType">
+  #set($opts = [["list", false], ["tree", true]])
+  #options($opts $componentConfig.getBoolean('viewType', true))
+    </select></td>
 </tr>
 <tr>
   <td>Add Captcha verification</td>

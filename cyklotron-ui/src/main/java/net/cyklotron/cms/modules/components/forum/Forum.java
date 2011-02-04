@@ -293,11 +293,12 @@ public class Forum
                 templatingContext.put("discussion",discussion);
                 String thisComponentInstance = cmsDataFactory.getCmsData(context).getComponent().getInstanceName();
                 String tableInstance = getComponentName()+":"+thisComponentInstance+":messages:"+discussion.getIdString();
+                Parameters config = cmsDataFactory.getCmsData(context).getComponent(thisComponentInstance).getConfiguration();
 
                 TableState state = tableStateManager.getState(context, tableInstance);
                 if(state.isNew())
                 {
-                    state.setTreeView(true);
+                    state.setTreeView(config.getBoolean("viewType", true));
                     String rootId = discussion.getIdString();
                     state.setRootId(rootId);
                     state.setCurrentPage(0);
