@@ -3,7 +3,9 @@ package net.cyklotron.cms.modules.components.category;
 import org.jcontainer.dna.Logger;
 import org.objectledge.cache.CacheFactory;
 import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.Templating;
 import org.objectledge.web.mvc.finders.MVCFinder;
@@ -18,6 +20,8 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureUtil;
 
 
 /**
@@ -48,7 +52,7 @@ extends BaseResourceList
 	protected net.cyklotron.cms.category.components.BaseResourceList getResourceList(CmsData cmsData, Parameters parameters)
 	{
 		return new net.cyklotron.cms.category.components.RelatedResourceList(context, 
-            integrationService, cmsDataFactory, categoryQueryService, categoryService, cmsData.getNode());
+            integrationService, cmsDataFactory, categoryQueryService, categoryService, getNode(context, cmsData, parameters));
 	}
     
     /* (non-Javadoc)
@@ -57,5 +61,27 @@ extends BaseResourceList
     protected CmsNodeResource getCacheKeyNode(BaseResourceListConfiguration config, CmsData cmsData)
     {
         return cmsData.getNode();
+    }
+    
+    
+    protected NavigationNodeResource getNode(Context context, CmsData cmsData, Parameters parameters)
+    {
+        if(parameters.isDefined("node_id"))
+        {
+            try
+            {
+                Long nodeId = parameters.getLong("node_id", -1L);
+                CoralSession sesion = context.getAttribute(CoralSession.class);
+                return (NavigationNodeResource)StructureUtil.getNode(sesion, nodeId);
+            }
+            catch(ProcessingException e)
+            {
+                return cmsData.getNode();
+            }
+        }
+        else
+        {
+            return cmsData.getNode();
+        }
     }
 }
