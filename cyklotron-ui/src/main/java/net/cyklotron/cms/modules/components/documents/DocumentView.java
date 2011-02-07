@@ -2,6 +2,7 @@ package net.cyklotron.cms.modules.components.documents;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -38,8 +39,7 @@ public class DocumentView
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
-        CmsData cmsData = getCmsData();
-        NavigationNodeResource node = cmsData.getNode();
+        NavigationNodeResource node = getContextNode(coralSession, getCmsData(), parameters);
         if(node != null)
         {
             if(node instanceof DocumentNodeResource)
@@ -55,5 +55,33 @@ public class DocumentView
         {
             componentError(context, "No navigation node selected");            
         }
+    }
+    
+    private NavigationNodeResource getContextNode(CoralSession coralSession, CmsData cmsData, Parameters parameters)
+    {    
+        NavigationNodeResource node;
+        if(parameters.isDefined("node_id"))
+        {
+            try
+            {
+                long node_id = parameters.getLong("node_id", -1L);
+                node = (DocumentNodeResource)coralSession.getStore().getResource(node_id);
+                // check if subject can view this node.
+                if(!("published".equals(node.getState().getName()) && node.canView(coralSession,
+                    coralSession.getUserSubject())))
+                {
+                    node = cmsData.getNode();
+                }
+                return node;
+            }
+            catch(EntityDoesNotExistException e)
+            {
+                return cmsData.getNode();
+            }
+        }
+        else
+        {
+            return cmsData.getNode();
+        } 
     }
 }

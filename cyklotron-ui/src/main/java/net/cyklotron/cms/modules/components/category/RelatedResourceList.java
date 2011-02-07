@@ -71,8 +71,15 @@ extends BaseResourceList
             try
             {
                 Long nodeId = parameters.getLong("node_id", -1L);
-                CoralSession sesion = context.getAttribute(CoralSession.class);
-                return (NavigationNodeResource)StructureUtil.getNode(sesion, nodeId);
+                CoralSession coralSession = context.getAttribute(CoralSession.class);
+                NavigationNodeResource node = (NavigationNodeResource)StructureUtil.getNode(coralSession, nodeId);
+                // check if subject can view this node.
+                if(!("published".equals(node.getState().getName()) && node.canView(coralSession,
+                    coralSession.getUserSubject())))
+                {
+                    node = cmsData.getNode();
+                }
+                return node;
             }
             catch(ProcessingException e)
             {
