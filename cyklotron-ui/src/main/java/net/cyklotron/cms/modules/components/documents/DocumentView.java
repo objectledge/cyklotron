@@ -67,8 +67,7 @@ public class DocumentView
                 long node_id = parameters.getLong("node_id", -1L);
                 node = (DocumentNodeResource)coralSession.getStore().getResource(node_id);
                 // check if subject can view this node.
-                if(!("published".equals(node.getState().getName()) && node.canView(coralSession,
-                    coralSession.getUserSubject())))
+                if(!node.canView(coralSession, coralSession.getUserSubject(),cmsData.getDate()))
                 {
                     node = cmsData.getNode();
                 }

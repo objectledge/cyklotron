@@ -52,7 +52,7 @@ extends BaseResourceList
 	protected net.cyklotron.cms.category.components.BaseResourceList getResourceList(CmsData cmsData, Parameters parameters)
 	{
 		return new net.cyklotron.cms.category.components.RelatedResourceList(context, 
-            integrationService, cmsDataFactory, categoryQueryService, categoryService, getNode(context, cmsData, parameters));
+            integrationService, cmsDataFactory, categoryQueryService, categoryService, getContextNode(context, cmsData, parameters));
 	}
     
     /* (non-Javadoc)
@@ -64,7 +64,7 @@ extends BaseResourceList
     }
     
     
-    protected NavigationNodeResource getNode(Context context, CmsData cmsData, Parameters parameters)
+    protected NavigationNodeResource getContextNode(Context context, CmsData cmsData, Parameters parameters)
     {
         if(parameters.isDefined("node_id"))
         {
@@ -74,8 +74,7 @@ extends BaseResourceList
                 CoralSession coralSession = context.getAttribute(CoralSession.class);
                 NavigationNodeResource node = (NavigationNodeResource)StructureUtil.getNode(coralSession, nodeId);
                 // check if subject can view this node.
-                if(!("published".equals(node.getState().getName()) && node.canView(coralSession,
-                    coralSession.getUserSubject())))
+                if(!node.canView(coralSession, coralSession.getUserSubject(), cmsData.getDate()))
                 {
                     node = cmsData.getNode();
                 }
