@@ -205,7 +205,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         {
             if("closestEventStart".equals(parameters.get("sort_field", "")))
             {
-                SortField field2 = new SortField("eventStart", new ClosestEventStartFieldComparator(startDate, parameters.getBoolean("eval_event_priority",true)), "desc".equals(parameters.get("sort_order","desc")));
+                SortField field2 = new SortField("eventStart", new ClosestEventFieldComparator(startDate, true), "desc".equals(parameters.get("sort_order","desc")));
                 return new SortField[] { field2 };
             }
             else
@@ -228,11 +228,11 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
     }
     
     
-    public class ClosestEventStartFieldComparator extends FieldComparatorSource
+    public class ClosestEventFieldComparator extends FieldComparatorSource
     {
         private ClosestDateParser parser;
         
-        public ClosestEventStartFieldComparator(Date date, boolean evalEventsHigher)
+        public ClosestEventFieldComparator(Date date, boolean evalEventsHigher)
         {
             this.parser = new ClosestDateParser(date.getTime(), evalEventsHigher);
         }
@@ -332,11 +332,8 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
                 try
                 {
                     Date date = SearchUtil.dateFromString(string);
-                    Long exactTimeDiff;
                     
                     calendar.setTimeInMillis(date.getTime());
-                    exactTimeDiff = Math.abs(selectedTime.getTimeInMillis() - calendar.getTimeInMillis());
-                    
                     calendar.set(java.util.Calendar.HOUR_OF_DAY, 0);
                     calendar.set(java.util.Calendar.MINUTE, 0);
                     calendar.set(java.util.Calendar.SECOND, 0);
@@ -344,17 +341,16 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
                     
                     result = Math.abs(selectedTime.getTimeInMillis() - calendar.getTimeInMillis());
                     // add converted time sufix to sort by event strat time.
-                    result += ((exactTimeDiff - result)/3600*60*24*1000);
+                    result += ((date.getTime() - calendar.getTimeInMillis())/8640); // divided by 1/1000 milisecunds.
                     
-                    /* define sort order when distance from events is the same.
-                     * if event hasn't started yet add extra time to order that event after
-                     * all that has started and have the same distance from selected time.
-                     * or other way if evalEventsHigher is set to false.
+                    /* when absolute distance from events is the same
+                     * as first set all events that started yet 
+                     * then all that will start soon. 
                      */
                     if(evalEventsHigher == selectedTime.before(calendar))
                     { 
-                        result++;
-                    } 
+                        result+=10000;
+                    }
                 }
                 catch(Exception e){}
                 return result;
