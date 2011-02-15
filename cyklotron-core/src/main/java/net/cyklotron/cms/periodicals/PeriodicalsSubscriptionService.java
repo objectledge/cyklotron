@@ -99,16 +99,4 @@ public interface PeriodicalsSubscriptionService
      */
     public UnsubscriptionInfo decodeUnsubscriptionToken(String encoded, boolean urlEncoded)
         throws PeriodicalsException;
-    
-    /**
-     * (Re)creates encryption key. 
-     * 
-     * Performing this operation will cause all previously generated the unsubscription tokens 
-     * become unverifiable, still it will be possible to read subscriber
-     * address from them, so that one time password verification will be possible.
-     * 
-     * @throws PeriodicalsException if the key generation fails.
-     */
-    public void createEncryptionKey()
-        throws PeriodicalsException;
 }

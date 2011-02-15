@@ -31,6 +31,7 @@ package net.cyklotron.cms.periodicals.internal;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.test.LedgeTestCase;
 
+import net.cyklotron.cms.confirmation.CipherCryptographyServiceImpl;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestService;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestServiceImpl;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
@@ -47,6 +48,7 @@ public class PeriodicalsSubscriptionServiceImplTest
 {
     private FileSystem fileSystem;
     private PeriodicalsSubscriptionService service;
+    private CipherCryptographyServiceImpl cipherCryptographyService;
     private EmailConfirmationRequestServiceImpl confirmationRequestService;
     
     public void setUp() throws Exception
@@ -57,8 +59,9 @@ public class PeriodicalsSubscriptionServiceImplTest
     
     private void initService() throws Exception
     {
-        confirmationRequestService = new EmailConfirmationRequestServiceImpl(fileSystem, "AES", 128, "SHA1", "12345");
-        service = new PeriodicalsSubscriptionServiceImpl(confirmationRequestService);        
+        cipherCryptographyService = new CipherCryptographyServiceImpl(fileSystem, "AES", 128, "SHA1", "12345");
+        confirmationRequestService = new EmailConfirmationRequestServiceImpl(cipherCryptographyService);
+        service = new PeriodicalsSubscriptionServiceImpl(cipherCryptographyService, confirmationRequestService);
     }
     
     public void testEncryption() throws Exception
@@ -78,7 +81,6 @@ public class PeriodicalsSubscriptionServiceImplTest
         int periodicalId = 799;
         String address = "rafal@caltha.pl";
         String enc = service.createUnsubscriptionToken(periodicalId, address);
-        service.createEncryptionKey();
         UnsubscriptionInfo info = service.decodeUnsubscriptionToken(enc, true);
         assertEquals(periodicalId, info.getPeriodicalId());
         assertEquals(address, info.getAddress());

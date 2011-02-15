@@ -37,34 +37,17 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
  * @version $Id: PeriodicalsSubscriptionService.java,v 1.4 2006-05-18 13:58:09 rafal Exp $
  */
-public interface EmailConfirmationRequestService
-{
-
+public interface CipherCryptographyService
+{    
     /**
-     * Create a subscription change request.
+     * (Re)creates encryption key. 
      * 
-     * @param email the requestors email address.
-     * @return a magic cookie to be returned to the user.
-     */
-    public String createEmailConfirmationRequest(CoralSession coralSession, String email, String items)
-    throws ConfirmationRequestException;
-
-    /**
-     * Return a subscription change request.
+     * Performing this operation will cause all previously generated the unsubscription tokens 
+     * become unverifiable, still it will be possible to read subscriber
+     * address from them, so that one time password verification will be possible.
      * 
-     * @param cookie the magic cookie recieved form the user.
-     * @return the request object, or null if invalid.
+     * @throws ConfirmationRequestException if the key generation fails.
      */
-    public EmailConfirmationRequestResource getEmailConfirmationRequest(CoralSession coralSession,
-        String cookie)
-    throws ConfirmationRequestException;
-
-    /**
-     * Discard a subscription change request.
-     * 
-     * @param cookie the magic cookie recieved form the user.
-     */
-    public void discardEmailConfirmationRequest(CoralSession coralSession, String cookie)
-    throws ConfirmationRequestException;
-    
+    public void createEncryptionKey()
+        throws ConfirmationRequestException;
 }

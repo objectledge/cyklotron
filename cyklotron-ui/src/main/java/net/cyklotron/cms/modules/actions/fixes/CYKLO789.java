@@ -2,6 +2,7 @@ package net.cyklotron.cms.modules.actions.fixes;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -12,6 +13,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.confirmation.ConfirmationRequestException;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestService;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
@@ -47,7 +49,8 @@ public class CYKLO789
             QueryResults results = coralSession.getQuery().
                 executeQuery("FIND RESOURCE FROM "+SubscriptionRequestResource.CLASS_NAME);
             Resource[] nodes = results.getArray(1);
-            for(int i = 0; i < nodes.length; i++)
+            int i;
+            for(i = 0; i < nodes.length; i++)
             {
                 System.out.print("("+i+") Processing: "+nodes[i].getPath());
                 SubscriptionRequestResource res = (SubscriptionRequestResource)nodes[i];
@@ -59,7 +62,21 @@ public class CYKLO789
                 catch(Exception e)
                 {
                     logger.error("",e);
-                    System.out.println(" failure");
+                    System.out.println("SubscriptionRequest resource convertion failure.");
+                }
+            }
+            if(i == nodes.length)
+            {
+                for(i = 0; i < nodes.length; i++)
+                {
+                    try
+                    {
+                        coralSession.getStore().deleteResource((Resource)nodes[i]);
+                    }
+                    catch(EntityInUseException e)
+                    {
+                        System.out.println("SubscriptionRequest resources delete failure.");
+                    }
                 }
             }
         }

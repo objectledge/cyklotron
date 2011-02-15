@@ -28,6 +28,11 @@
 
 package net.cyklotron.cms.periodicals.internal;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +41,7 @@ import java.util.List;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.session.CoralSession;
 
+import net.cyklotron.cms.confirmation.CipherCryptographyServiceImpl;
 import net.cyklotron.cms.confirmation.ConfirmationRequestException;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestServiceImpl;
@@ -52,27 +58,15 @@ import net.cyklotron.cms.site.SiteResource;
 public class PeriodicalsSubscriptionServiceImpl 
     implements PeriodicalsSubscriptionService
 {
-    private static EmailConfirmationRequestServiceImpl emailConfirmationRequestService;
-    
+    protected static EmailConfirmationRequestServiceImpl emailConfirmationRequestService;
+    protected static CipherCryptographyServiceImpl cipherCryptographyService;    
 
-    public PeriodicalsSubscriptionServiceImpl(EmailConfirmationRequestServiceImpl emailConfirmationRequestService)
+    public PeriodicalsSubscriptionServiceImpl(
+        CipherCryptographyServiceImpl cipherCryptographyService,
+        EmailConfirmationRequestServiceImpl emailConfirmationRequestService)
     {
+        this.cipherCryptographyService = cipherCryptographyService;
         this.emailConfirmationRequestService = emailConfirmationRequestService;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void createEncryptionKey() throws PeriodicalsException
-    {
-        try
-        {
-            emailConfirmationRequestService.createEncryptionKey();
-        }
-        catch(Exception e)
-        {
-            throw new PeriodicalsException("failed to create new encryption key", e);
-        }
     }
 
     // inherit doc
@@ -112,20 +106,12 @@ public class PeriodicalsSubscriptionServiceImpl
     {
         try
         {
-            EmailConfirmationRequestResource r = emailConfirmationRequestService
-                .getEmailConfirmationRequest(coralSession, cookie);
-            if(r != null)
-            {
-                coralSession.getStore().deleteResource(r);
-            }
+            emailConfirmationRequestService.discardEmailConfirmationRequest(coralSession, cookie);
         }
-        catch(EntityInUseException e)
-        {
-            throw new PeriodicalsException("failed to delete subscription change request", e);
-        }
+
         catch(ConfirmationRequestException e)
         {
-            throw new PeriodicalsException("subscription change request dose not exists.", e);
+            throw new PeriodicalsException("failed to delete subscription change request", e);
         }
     }
 
@@ -159,7 +145,13 @@ public class PeriodicalsSubscriptionServiceImpl
     {
         try
         {
-            return emailConfirmationRequestService.createUnsubscriptionToken(periodicalId, address);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            DataOutputStream dos = new DataOutputStream(baos);
+            dos.writeUTF(Long.toString(periodicalId));
+            dos.writeUTF(address);
+            dos.write(cipherCryptographyService.encryptAndDigest(periodicalId, address));
+            dos.close();
+            return cipherCryptographyService.bytesToString(baos.toByteArray());
         }
         catch(Exception e)
         {
@@ -174,7 +166,15 @@ public class PeriodicalsSubscriptionServiceImpl
     {
         try
         {
-            return emailConfirmationRequestService.decodeUnsubscriptionToken(encoded, urlEncoded);
+            ByteArrayInputStream bais = new ByteArrayInputStream(cipherCryptographyService.stringToBytes(encoded, urlEncoded));
+            DataInputStream dis = new DataInputStream(bais);
+            long periodicalId = Long.parseLong(dis.readUTF());
+            String address = dis.readUTF();
+            byte[] digest1 = cipherCryptographyService.encryptAndDigest(periodicalId, address);
+            byte[] digest2 = new byte[digest1.length]; 
+            dis.readFully(digest2);
+            return new UnsubscriptionInfo(periodicalId, address, MessageDigest
+                .isEqual(digest1, digest2));
         }
         catch(Exception e)
         {

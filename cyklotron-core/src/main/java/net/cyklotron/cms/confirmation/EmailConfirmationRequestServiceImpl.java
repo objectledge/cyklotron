@@ -73,145 +73,15 @@ import net.cyklotron.cms.site.SiteResource;
 
 public class EmailConfirmationRequestServiceImpl
     implements EmailConfirmationRequestService
-{
-    private static final String KEYSTORE_PATH = "/data/confirmation_request.ks"; //"/data/periodicals.ks";
-    
-    private static final String TOKEN_CHAR_ENCODING = "UTF-8";
-    
-    private static final String KEY_ALIAS = "unsub_token";
-
-    private static final String DEFAULT_RANDOM_PROVIDER = "SUN";
-    
-    private static final String DEFAULT_RANDOM_ALGORITHM = "NativePRNG";
-    
-    private static final String DEFAULT_CIPHER_PROVIDER = "SunJCE";
-
-    private static final String DEFAULT_DIGEST_PROVIDER = "SUN";
-
-    private static final String DEFAULT_KEYSTORE_PROVIDER = "SunJCE";
-    
-    private static final String DEFAULT_KEYSTORE_TYPE = "JCEKS";
-    
-    private final FileSystem fileSystem;
-    
+{   
     /** the confirmationRequest data root node. */
-    protected Resource confirmationRoot;
+    protected Resource confirmationRoot;    
     
-    /** Java Cryptography API provider for Cipher & KeyGenerator */
-    private final String cipherProvider;
-    
-    /** spec of algorithm for encoding unsubscription link tokens */
-    private final String cipherAlgorithm;
-    
-    /** key size for encoding unsubscription link tokens */
-    private final int cipherKeySize;
+    protected static CipherCryptographyServiceImpl cipherCryptographyService;
 
-    /** Java Cryptography API provider for MessageDigest */
-    private final String digestProvider;
-
-    /** MessageDigest algorithm spec */
-    private final String digest;
-    
-    /** Java Cryptography API provider for KeyStore */
-    private final String keyStoreProvider;
-
-    /** KeyStore type */
-    private final String keyStoreType;
-
-    /** KeyStore password */
-    private final String keystorePass;
-    
-    /** pseudo-random number generator */
-    private final SecureRandom random;
-
-    /** Base64 codec */
-    private final Base64 base64 = new Base64();
-
-    /** encryption key */
-    private SecretKey encryptionKey;
-
-    public EmailConfirmationRequestServiceImpl(FileSystem fileSystem, String cipher, int keySize,
-        String digest, String keystorePass)
+    public EmailConfirmationRequestServiceImpl(CipherCryptographyServiceImpl cipherCryptographyService)
     {
-        this(fileSystem, DEFAULT_RANDOM_PROVIDER, DEFAULT_RANDOM_ALGORITHM,
-                        DEFAULT_CIPHER_PROVIDER, cipher, keySize, DEFAULT_DIGEST_PROVIDER, digest,
-                        DEFAULT_KEYSTORE_PROVIDER, DEFAULT_KEYSTORE_TYPE, keystorePass);
-    }
-    
-    public EmailConfirmationRequestServiceImpl(FileSystem fileSystem, Configuration config)
-        throws ConfigurationException
-    {
-        this(fileSystem, 
-            config.getChild("random-provider").getValue(DEFAULT_RANDOM_PROVIDER),
-            config.getChild("random").getValue(DEFAULT_RANDOM_ALGORITHM),
-            config.getChild("cipher-provider").getValue(DEFAULT_CIPHER_PROVIDER),
-            config.getChild("cipher").getValue(),
-            config.getChild("key-size").getValueAsInteger(),
-            config.getChild("digest-provider").getValue(DEFAULT_DIGEST_PROVIDER),
-            config.getChild("digest").getValue(),
-            config.getChild("keystore-provider").getValue(DEFAULT_KEYSTORE_PROVIDER),
-            config.getChild("keystore").getValue(DEFAULT_KEYSTORE_TYPE),
-            config.getChild("keystore-password").getValue());
-    }
-
-    public EmailConfirmationRequestServiceImpl(FileSystem fileSystem, String randomProvider,
-        String randomAlgorithm, String cipherProvider, String cipherAlgorithm, int cipherKeySize,
-        String digestProvider, String digest, String keyStoreProvider, String keyStoreType,
-        String keystorePass)
-    {
-        this.fileSystem = fileSystem;
-        this.cipherProvider = cipherProvider;
-        this.cipherAlgorithm = cipherAlgorithm;
-        this.cipherKeySize = cipherKeySize;
-        this.digestProvider = digestProvider;
-        this.digest = digest;
-        this.keyStoreProvider = keyStoreProvider;
-        this.keyStoreType = keyStoreType;
-        this.keystorePass = keystorePass;
-            
-        try
-        {
-            this.random = SecureRandom.getInstance(randomAlgorithm, randomProvider);
-
-            if(fileSystem.exists(KEYSTORE_PATH) && fileSystem.canRead(KEYSTORE_PATH))
-            {
-                KeyStore keyStore = KeyStore.getInstance(keyStoreType, keyStoreProvider);
-                char[] passChars = keystorePass.toCharArray();
-                keyStore.load(fileSystem.getInputStream(KEYSTORE_PATH), passChars);
-                encryptionKey = (SecretKey)keyStore.getKey(KEY_ALIAS, passChars);
-            }
-            else
-            {
-                createEncryptionKey();
-            }
-        }
-        catch(Exception e)
-        {
-            throw new ComponentInitializationError("failed to initialize crypto support", e);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void createEncryptionKey() throws ConfirmationRequestException
-    {
-        try
-        {
-            char[] passChars = keystorePass.toCharArray();
-            KeyStore keyStore = KeyStore.getInstance(keyStoreType, keyStoreProvider);
-            KeyGenerator keyGen = KeyGenerator.getInstance(cipherAlgorithm, cipherProvider);
-            keyGen.init(cipherKeySize, random);
-            encryptionKey = keyGen.generateKey();
-            keyStore.load(null, null);
-            keyStore.setKeyEntry(KEY_ALIAS, encryptionKey, passChars, null);
-            fileSystem.mkdirs(FileSystem.directoryPath(KEYSTORE_PATH));
-            keyStore.store(fileSystem.getOutputStream(KEYSTORE_PATH), passChars);
-        }
-        catch(Exception e)
-        {
-            throw new ConfirmationRequestException("failed to create new encryption key", e);
-        }
+        this.cipherCryptographyService = cipherCryptographyService;
     }
 
     // inherit doc
@@ -241,7 +111,7 @@ public class EmailConfirmationRequestServiceImpl
         Resource[] res;
         do
         {
-            cookie = getRandomCookie();
+            cookie = cipherCryptographyService.getRandomCookie();
             res = coralSession.getStore().getResource(root, cookie);
         }
         while(res.length > 0);
@@ -258,7 +128,6 @@ public class EmailConfirmationRequestServiceImpl
         }
         return cookie;
     }
-   
 
     // inherit doc
     public synchronized void discardEmailConfirmationRequest(CoralSession coralSession, String cookie)
@@ -275,50 +144,6 @@ public class EmailConfirmationRequestServiceImpl
             {
                 throw new ConfirmationRequestException("failed to delete subscription change request", e);
             }
-        }
-    }
-    
-    /**
-     * {@inheritDoc}
-     */
-    public String createUnsubscriptionToken(long periodicalId, String address) throws ConfirmationRequestException
-    {
-        try
-        {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            DataOutputStream dos = new DataOutputStream(baos);
-            dos.writeUTF(Long.toString(periodicalId));
-            dos.writeUTF(address);
-            dos.write(encryptAndDigest(toBytes(periodicalId, address)));
-            dos.close();
-            return bytesToString(baos.toByteArray());
-        }
-        catch(Exception e)
-        {
-            throw new ConfirmationRequestException("failed to create unsubscription token", e);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public UnsubscriptionInfo decodeUnsubscriptionToken(String encoded, boolean urlEncoded) throws PeriodicalsException
-    {
-        try
-        {
-            ByteArrayInputStream bais = new ByteArrayInputStream(stringToBytes(encoded, urlEncoded));
-            DataInputStream dis = new DataInputStream(bais);
-            long periodicalId = Long.parseLong(dis.readUTF());
-            String address = dis.readUTF();
-            byte[] digest1 = encryptAndDigest(toBytes(periodicalId, address));
-            byte[] digest2 = new byte[digest1.length]; 
-            dis.readFully(digest2);
-            return new UnsubscriptionInfo(periodicalId, address, MessageDigest
-                .isEqual(digest1, digest2));
-        }
-        catch(Exception e)
-        {
-            throw new PeriodicalsException("failed to decode unsubscription token", e);
         }
     }
     
@@ -344,60 +169,5 @@ public class EmailConfirmationRequestServiceImpl
             }
         }
         return confirmationRoot;
-    }
-    
-    protected String getRandomCookie()
-    {
-        return String.format("%016x", random.nextLong());
-    }
-    
-    private String bytesToString(byte[] bytes)
-        throws UnsupportedEncodingException
-    {
-        byte[] b64 = base64.encode(bytes);
-        return URLEncoder.encode(new String(b64, TOKEN_CHAR_ENCODING), TOKEN_CHAR_ENCODING);
-    }
-
-    private byte[] stringToBytes(String encoded, boolean urlEncoded)
-        throws UnsupportedEncodingException
-    {
-        String b64s = urlEncoded ? URLDecoder.decode(encoded, TOKEN_CHAR_ENCODING) : encoded; 
-        byte[] b64 = b64s.getBytes(TOKEN_CHAR_ENCODING);
-        return base64.decode(b64);
-    }
-    
-    private byte[] toBytes(Object ... data) throws IOException
-    {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(baos);
-        for(Object obj : data)
-        {
-            Class cl = obj.getClass();
-            if(String.class.equals(cl))
-            {
-                dos.writeUTF((String)obj);
-            }
-            if(Long.class.equals(cl))
-            {
-                dos.writeLong(((Long)obj).longValue());
-            }
-            if(Boolean.class.equals(cl))
-            {
-                dos.writeBoolean(((Boolean)obj).booleanValue());
-            }
-            if(Byte.TYPE.equals(cl.getComponentType()))
-            {
-                dos.write((byte[])obj);
-            }
-        }
-        return baos.toByteArray();
-    }
-    
-    private byte[] encryptAndDigest(byte[] in) throws Exception
-    {
-        Cipher cipher = Cipher.getInstance(cipherAlgorithm, cipherProvider);
-        cipher.init(Cipher.ENCRYPT_MODE, encryptionKey);
-        MessageDigest md = MessageDigest.getInstance(digest, digestProvider);
-        return md.digest(cipher.doFinal(in));
     }
 }
