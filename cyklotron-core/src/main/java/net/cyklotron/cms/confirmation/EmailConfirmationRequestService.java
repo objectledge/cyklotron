@@ -26,7 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 //
 
-package net.cyklotron.cms.periodicals;
+package net.cyklotron.cms.confirmation;
 
 import org.objectledge.coral.session.CoralSession;
 
@@ -37,7 +37,7 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
  * @version $Id: PeriodicalsSubscriptionService.java,v 1.4 2006-05-18 13:58:09 rafal Exp $
  */
-public interface PeriodicalsSubscriptionService
+public interface EmailConfirmationRequestService
 {
 
     /**
@@ -46,9 +46,8 @@ public interface PeriodicalsSubscriptionService
      * @param email the requestors email address.
      * @return a magic cookie to be returned to the user.
      */
-    public String createSubscriptionRequest(CoralSession coralSession, SiteResource site,
-        String email, String items)
-        throws PeriodicalsException;
+    public String createEmailConfirmationRequest(CoralSession coralSession, String email, String items)
+    throws ConfirmationRequestException;
 
     /**
      * Return a subscription change request.
@@ -56,29 +55,17 @@ public interface PeriodicalsSubscriptionService
      * @param cookie the magic cookie recieved form the user.
      * @return the request object, or null if invalid.
      */
-    public EmailConfirmationRequestResource getSubscriptionRequest(CoralSession coralSession,
+    public EmailConfirmationRequestResource getEmailConfirmationRequest(CoralSession coralSession,
         String cookie)
-        throws PeriodicalsException;
+    throws ConfirmationRequestException;
 
     /**
      * Discard a subscription change request.
      * 
      * @param cookie the magic cookie recieved form the user.
      */
-    public void discardSubscriptionRequest(CoralSession coralSession, String cookie)
-        throws PeriodicalsException;
-
-    /**
-     * Returns periodicals in the given site, the address is subscribed to.
-     * 
-     * @param site the site
-     * @param email the email address
-     * @return an array of email periodical resources.
-     * @throws PeriodicalsException
-     */
-    public EmailPeriodicalResource[] getSubscribedEmailPeriodicals(CoralSession coralSession,
-        SiteResource site, String email)
-        throws PeriodicalsException;
+    public void discardEmailConfirmationRequest(CoralSession coralSession, String cookie)
+    throws ConfirmationRequestException;
 
     /**
      * Create an encrypted, URL safe token that can be later decoded into UnsubscriptionInfo object.
@@ -88,7 +75,7 @@ public interface PeriodicalsSubscriptionService
      * @return encrypted, URL safe token.
      */
     public String createUnsubscriptionToken(long periodicalId, String address)
-        throws PeriodicalsException;
+        throws ConfirmationRequestException;
     
     /**
      * Decode the encrypted token created with createUnsubscriptionToken method.
@@ -96,9 +83,10 @@ public interface PeriodicalsSubscriptionService
      * @param the encrypted token.
      * 
      * @return UnsubscriptionInfo object.
+     *
+     *public UnsubscriptionInfo decodeUnsubscriptionToken(String encoded, boolean urlEncoded)
+     *   throws ConfirmationRequestException;
      */
-    public UnsubscriptionInfo decodeUnsubscriptionToken(String encoded, boolean urlEncoded)
-        throws PeriodicalsException;
     
     /**
      * (Re)creates encryption key. 
@@ -107,8 +95,8 @@ public interface PeriodicalsSubscriptionService
      * become unverifiable, still it will be possible to read subscriber
      * address from them, so that one time password verification will be possible.
      * 
-     * @throws PeriodicalsException if the key generation fails.
+     * @throws ConfirmationRequestException if the key generation fails.
      */
     public void createEncryptionKey()
-        throws PeriodicalsException;
+        throws ConfirmationRequestException;
 }

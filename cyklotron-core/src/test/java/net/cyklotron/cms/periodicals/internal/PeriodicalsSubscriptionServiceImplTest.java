@@ -31,6 +31,8 @@ package net.cyklotron.cms.periodicals.internal;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.test.LedgeTestCase;
 
+import net.cyklotron.cms.confirmation.EmailConfirmationRequestService;
+import net.cyklotron.cms.confirmation.EmailConfirmationRequestServiceImpl;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
 
@@ -45,6 +47,7 @@ public class PeriodicalsSubscriptionServiceImplTest
 {
     private FileSystem fileSystem;
     private PeriodicalsSubscriptionService service;
+    private EmailConfirmationRequestServiceImpl confirmationRequestService;
     
     public void setUp() throws Exception
     {
@@ -54,7 +57,8 @@ public class PeriodicalsSubscriptionServiceImplTest
     
     private void initService() throws Exception
     {
-        service = new PeriodicalsSubscriptionServiceImpl(fileSystem, "AES", 128, "SHA1", "12345");        
+        confirmationRequestService = new EmailConfirmationRequestServiceImpl(fileSystem, "AES", 128, "SHA1", "12345");
+        service = new PeriodicalsSubscriptionServiceImpl(confirmationRequestService);        
     }
     
     public void testEncryption() throws Exception

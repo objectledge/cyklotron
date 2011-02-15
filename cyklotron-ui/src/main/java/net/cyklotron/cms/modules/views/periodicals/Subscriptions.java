@@ -30,13 +30,13 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
 import net.cyklotron.cms.modules.views.BaseSkinableScreen;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
-import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
 import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
@@ -144,7 +144,7 @@ public class Subscriptions
             String cookie = parameters.get("cookie");
             templatingContext.put("cookie", cookie);
             SiteResource site = getSite();
-            SubscriptionRequestResource req = periodicalsSubscriptionService
+            EmailConfirmationRequestResource req = periodicalsSubscriptionService
                 .getSubscriptionRequest(coralSession, cookie);
             templatingContext.put("email", req.getEmail());
             List periodicals = Arrays.asList(periodicalsService.getEmailPeriodicals(coralSession, site));
@@ -175,10 +175,10 @@ public class Subscriptions
             if(cookie.length() > 0)
             {
                 templatingContext.put("cookie", cookie);
-                SubscriptionRequestResource req = periodicalsSubscriptionService
+                EmailConfirmationRequestResource req = periodicalsSubscriptionService
                 .getSubscriptionRequest(coralSession, cookie);
                 templatingContext.put("email", req.getEmail());
-                StringTokenizer st = new StringTokenizer(req.getItems(), " ");
+                StringTokenizer st = new StringTokenizer(req.getData(), " ");
                 List selected = new ArrayList();
                 while (st.hasMoreTokens())
                 {
@@ -269,13 +269,12 @@ public class Subscriptions
         {
             try
             {
-                SubscriptionRequestResource req = periodicalsSubscriptionService
-                    .getSubscriptionRequest(coralSession, cookie);
+                EmailConfirmationRequestResource req = periodicalsSubscriptionService.getSubscriptionRequest(coralSession, cookie);
                 if (req == null)
                 {
                     return "InvalidTicket";
                 }
-                else if (req.getItems() == null)
+                else if (req.getData() == null)
                 {
                     return "Edit";
                 }

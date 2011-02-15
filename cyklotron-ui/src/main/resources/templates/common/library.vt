@@ -113,3 +113,24 @@ javascript:operationPrompt('$prompt','$link');##
 #macro(selected $condition)
 #if($condition) selected#end
 #end
+
+## Append related images to document content
+## set id attribute with "related:" and image number string as <p> tag attribute in document content.
+## example <p id="related:0">...</p>
+## macro attributes: $node - document node, $imageExtentionsArray - image extentions, $className - css class name. 
+ 
+#macro(appendRelatedImages $node $imageExtentionsArray $className)
+ <script>var appendRelatedImages = new AppendRelatedImages()</script>
+ #set($relResources = $cms_tool.getRelatedResources($node))##
+ #foreach($resource in $relResources)
+   #if($cms_tool.getClassDefinition($resource).name.equals('cms.files.file'))
+       #set($extStart = $resource.name.length() - 4)
+       #set($ext = $resource.name.substring($extStart).toLowerCase())
+       #if($imageExtentionsArray.contains($ext))
+       <script>appendRelatedImages.addImageResource('$resource.path','$resource.description','$className');</script>
+       #end
+   #end
+ #end
+ <script>appendRelatedImages.append();</script>
+#end
+

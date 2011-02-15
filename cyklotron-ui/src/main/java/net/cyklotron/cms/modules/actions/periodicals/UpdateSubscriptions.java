@@ -26,10 +26,10 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
-import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
 import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -71,7 +71,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                     return;
                 }
                 templatingContext.put("cookie", cookie);
-                SubscriptionRequestResource req = periodicalsSubscriptionService
+                EmailConfirmationRequestResource req = periodicalsSubscriptionService
                     .getSubscriptionRequest(coralSession, cookie);
                 String email = req.getEmail();
                 if (req == null)
@@ -79,7 +79,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                     // invalid cookie - screen will complain
                     return;
                 }
-                StringTokenizer st = new StringTokenizer(req.getItems(), " ");
+                StringTokenizer st = new StringTokenizer(req.getData(), " ");
                 Set selected = new HashSet();
                 while (st.hasMoreTokens())
                 {
@@ -122,7 +122,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                 {
                     cookie = parameters.get("cookie");
                     templatingContext.put("cookie", cookie);
-                    SubscriptionRequestResource req = periodicalsSubscriptionService
+                    EmailConfirmationRequestResource req = periodicalsSubscriptionService
                         .getSubscriptionRequest(coralSession, cookie);
                     email = req.getEmail();
                 }
@@ -142,6 +142,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                         // periodical was deleted, ignore
                     }
                 }
+                
                 SiteResource site = getSite(context);
                 EmailPeriodicalResource[] subscribedArray = periodicalsSubscriptionService
                     .getSubscribedEmailPeriodicals(coralSession, site, email);

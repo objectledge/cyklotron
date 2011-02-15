@@ -89,7 +89,7 @@ public class SendTicket
                 templatingContext.put("result", "address_missing");
                 return;
             }
-            String cookie = periodicalsSubscriptionService.createSubsriptionRequest(coralSession,
+            String cookie = periodicalsSubscriptionService.createSubscriptionRequest(coralSession,
                 getSite(context), email, subscribe ? items : null);
             LedgeMessage message = mailService.newMessage();
             message.getContext().put("cookie", cookie);

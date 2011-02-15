@@ -29,6 +29,13 @@ ATTRIBUTES (
   description = 'Parent node of site virtual server aliases.'
 );
 
+CREATE RESOURCE 'confirmationRequests'
+RESOURCE CLASS 'node'
+PARENT '/cms'
+ATTRIBUTES (
+  description = 'Parent node of confirmation requests.'
+);
+
 CREATE RESOURCE 'security'
 RESOURCE CLASS 'node'
 PARENT '/cms'
