@@ -384,8 +384,8 @@
   <component class-key="net.cyklotron.cms.link.LinkService"
              class="net.cyklotron.cms.link.internal.LinkServiceImpl"/>
 
-  <component class-key="net.cyklotron.cms.confirmation.CipherCryptographyService"
-             class="net.cyklotron.cms.confirmation.CipherCryptographyServiceImpl"/>
+  <component class-key="net.cyklotron.cms.confirmation.CryptographyService"
+             class="net.cyklotron.cms.confirmation.CryptographyServiceImpl"/>
              
   <component class-key="net.cyklotron.cms.confirmation.EmailConfirmationRequestService"
              class="net.cyklotron.cms.confirmation.EmailConfirmationRequestServiceImpl"/>
