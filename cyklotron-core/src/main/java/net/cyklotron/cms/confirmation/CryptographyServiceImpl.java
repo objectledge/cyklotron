@@ -28,9 +28,7 @@
 
 package net.cyklotron.cms.confirmation;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -39,10 +37,6 @@ import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -52,27 +46,11 @@ import org.apache.commons.codec.binary.Base64;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.ComponentInitializationError;
-import org.objectledge.coral.BackendException;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.schema.ResourceClass;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
 
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestResourceImpl;
-import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
-import net.cyklotron.cms.periodicals.PeriodicalsException;
-import net.cyklotron.cms.periodicals.PeriodicalsNodeResource;
-import net.cyklotron.cms.periodicals.PeriodicalsNodeResourceImpl;
-import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
-import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
-import net.cyklotron.cms.site.SiteResource;
 
-
-public class CipherCryptographyServiceImpl
-    implements CipherCryptographyService
+public class CryptographyServiceImpl
+    implements CryptographyService
 {
     private static final String KEYSTORE_PATH = "/data/cipher.ks";
     
@@ -127,7 +105,7 @@ public class CipherCryptographyServiceImpl
     /** encryption key */
     private SecretKey encryptionKey;
 
-    public CipherCryptographyServiceImpl(FileSystem fileSystem, String cipher, int keySize,
+    public CryptographyServiceImpl(FileSystem fileSystem, String cipher, int keySize,
         String digest, String keystorePass)
     {
         this(fileSystem, DEFAULT_RANDOM_PROVIDER, DEFAULT_RANDOM_ALGORITHM,
@@ -135,7 +113,7 @@ public class CipherCryptographyServiceImpl
                         DEFAULT_KEYSTORE_PROVIDER, DEFAULT_KEYSTORE_TYPE, keystorePass);
     }
     
-    public CipherCryptographyServiceImpl(FileSystem fileSystem, Configuration config)
+    public CryptographyServiceImpl(FileSystem fileSystem, Configuration config)
         throws ConfigurationException
     {
         this(fileSystem, 
@@ -151,7 +129,7 @@ public class CipherCryptographyServiceImpl
             config.getChild("keystore-password").getValue());
     }
 
-    public CipherCryptographyServiceImpl(FileSystem fileSystem, String randomProvider,
+    public CryptographyServiceImpl(FileSystem fileSystem, String randomProvider,
         String randomAlgorithm, String cipherProvider, String cipherAlgorithm, int cipherKeySize,
         String digestProvider, String digest, String keyStoreProvider, String keyStoreType,
         String keystorePass)
@@ -211,16 +189,19 @@ public class CipherCryptographyServiceImpl
         }
     }
     
+    @Override
     public String getRandomCookie()
     {
         return String.format("%016x", random.nextLong());
     }
     
+    @Override
     public byte[] encryptAndDigest(long resId, String address) throws Exception
     {
         return encryptAndDigest(toBytes(resId, address));
     }
     
+    @Override
     public String bytesToString(byte[] bytes)
         throws UnsupportedEncodingException
     {
@@ -228,6 +209,7 @@ public class CipherCryptographyServiceImpl
         return URLEncoder.encode(new String(b64, TOKEN_CHAR_ENCODING), TOKEN_CHAR_ENCODING);
     }
 
+    @Override
     public byte[] stringToBytes(String encoded, boolean urlEncoded)
         throws UnsupportedEncodingException
     {

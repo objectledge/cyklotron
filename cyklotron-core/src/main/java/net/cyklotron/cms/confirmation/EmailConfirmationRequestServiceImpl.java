@@ -28,47 +28,10 @@
 
 package net.cyklotron.cms.confirmation;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.security.KeyStore;
-import java.security.MessageDigest;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-
-import org.apache.commons.codec.binary.Base64;
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.ComponentInitializationError;
-import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.filesystem.FileSystem;
-
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestResourceImpl;
-import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
-import net.cyklotron.cms.periodicals.PeriodicalsException;
-import net.cyklotron.cms.periodicals.PeriodicalsNodeResource;
-import net.cyklotron.cms.periodicals.PeriodicalsNodeResourceImpl;
-import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
-import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
-import net.cyklotron.cms.site.SiteResource;
 
 
 public class EmailConfirmationRequestServiceImpl
@@ -77,9 +40,9 @@ public class EmailConfirmationRequestServiceImpl
     /** the confirmationRequest data root node. */
     protected Resource confirmationRoot;    
     
-    protected static CipherCryptographyServiceImpl cipherCryptographyService;
+    protected CryptographyService cipherCryptographyService;
 
-    public EmailConfirmationRequestServiceImpl(CipherCryptographyServiceImpl cipherCryptographyService)
+    public EmailConfirmationRequestServiceImpl(CryptographyService cipherCryptographyService)
     {
         this.cipherCryptographyService = cipherCryptographyService;
     }

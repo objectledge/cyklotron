@@ -28,16 +28,14 @@
 
 package net.cyklotron.cms.confirmation;
 
-import org.objectledge.coral.session.CoralSession;
+import java.io.UnsupportedEncodingException;
 
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
-import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
  * @version $Id: PeriodicalsSubscriptionService.java,v 1.4 2006-05-18 13:58:09 rafal Exp $
  */
-public interface CipherCryptographyService
+public interface CryptographyService
 {    
     /**
      * (Re)creates encryption key. 
@@ -50,4 +48,15 @@ public interface CipherCryptographyService
      */
     public void createEncryptionKey()
         throws ConfirmationRequestException;
+
+    public abstract String getRandomCookie();
+
+    public abstract byte[] stringToBytes(String encoded, boolean urlEncoded)
+        throws UnsupportedEncodingException;
+
+    public abstract String bytesToString(byte[] bytes)
+        throws UnsupportedEncodingException;
+
+    public abstract byte[] encryptAndDigest(long resId, String address)
+        throws Exception;
 }

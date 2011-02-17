@@ -36,13 +36,10 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.session.CoralSession;
 
-import net.cyklotron.cms.confirmation.CipherCryptographyServiceImpl;
 import net.cyklotron.cms.confirmation.ConfirmationRequestException;
+import net.cyklotron.cms.confirmation.CryptographyService;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestServiceImpl;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
@@ -58,11 +55,12 @@ import net.cyklotron.cms.site.SiteResource;
 public class PeriodicalsSubscriptionServiceImpl 
     implements PeriodicalsSubscriptionService
 {
-    protected static EmailConfirmationRequestServiceImpl emailConfirmationRequestService;
-    protected static CipherCryptographyServiceImpl cipherCryptographyService;    
+    protected EmailConfirmationRequestServiceImpl emailConfirmationRequestService;
+    
+    protected CryptographyService cipherCryptographyService;    
 
     public PeriodicalsSubscriptionServiceImpl(
-        CipherCryptographyServiceImpl cipherCryptographyService,
+        CryptographyService cipherCryptographyService,
         EmailConfirmationRequestServiceImpl emailConfirmationRequestService)
     {
         this.cipherCryptographyService = cipherCryptographyService;
