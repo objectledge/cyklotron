@@ -56,9 +56,9 @@ public class PollConf
     {
 		try
         {
-            PollsResource pollsRoot = getPollsParent(coralSession, pollService.POLLS_ROOT_NAME);
-            templatingContext.put("pollsRoot",pollsRoot);
-            Resource[] resources = coralSession.getStore().getResource(pollsRoot);
+            PollsResource poolsRoot = getPollsParent(coralSession, pollService.POOLS_ROOT_NAME);
+            templatingContext.put("pollsRoot",poolsRoot);
+            Resource[] resources = coralSession.getStore().getResource(poolsRoot);
             List<Resource> pools = new ArrayList<Resource>();
             for(int i = 0; i < resources.length; i++)
             {
