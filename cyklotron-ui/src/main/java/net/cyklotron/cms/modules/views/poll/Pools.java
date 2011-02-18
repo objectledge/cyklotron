@@ -87,8 +87,8 @@ public class Pools
         try
         {
         	CmsData cmsData = getCmsData();
-            PollsResource pollsRoot = pollService.getPollsRoot(coralSession, cmsData.getSite());
-            Resource[] resources = coralSession.getStore().getResource(pollsRoot);
+            PollsResource poolsRoot = pollService.getPollsParent(coralSession, cmsData.getSite(), pollService.POOLS_ROOT_NAME);
+            Resource[] resources = coralSession.getStore().getResource(poolsRoot);
             List<PoolResource> pools = new ArrayList<PoolResource>();
             HashMap hasPolls = new HashMap();
             for(int i = 0; i < resources.length; i++)

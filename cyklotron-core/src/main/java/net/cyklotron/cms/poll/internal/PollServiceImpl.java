@@ -134,6 +134,63 @@ public class PollServiceImpl
         }
         throw new PollException("Too much polls root resources for site: "+site.getName());
     }
+    
+    public PollsResource getPollsParent(CoralSession coralSession, SiteResource site, String name)
+        throws PollException
+    {
+        PollsResource appsPollsRoot = getPollsRoot(coralSession, site);
+        if(appsPollsRoot == null)
+        {
+            throw new PollException("Polls root for site: " + site.getName() + " not found");
+        }
+        Resource[] roots = coralSession.getStore().getResource(appsPollsRoot, name);
+        if(roots.length == 1 && roots[0] instanceof PollsResource)
+        {
+            return (PollsResource)roots[0];
+        }
+        if(roots.length == 0)
+        {
+            try
+            {
+                return PollsResourceImpl.createPollsResource(coralSession, name, appsPollsRoot);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new PollException("unexpected exception", e);
+            }
+        }
+        throw new PollException("Too much polls." + name + " resources for site: " + site.getName());
+    }
+    
+    
+    public PollsResource getPollsParent(CoralSession coralSession, int psid, String name)
+        throws PollException, EntityDoesNotExistException
+    {
+        Resource pollsRoot = coralSession.getStore().getResource(psid);
+        if(pollsRoot == null
+            || !(pollsRoot instanceof PollsResource && "applications".equals(pollsRoot
+                .getParent().getName())))
+        {
+            throw new PollException("polls." + name + " root not found");
+        }
+        Resource[] roots = coralSession.getStore().getResource(pollsRoot, name);
+        if(roots.length == 1 && roots[0] instanceof PollsResource)
+        {
+            return (PollsResource)roots[0];
+        }
+        if(roots.length == 0)
+        {
+            try
+            {
+                return PollsResourceImpl.createPollsResource(coralSession, name, pollsRoot);
+            }
+            catch(InvalidResourceNameException e)
+            {
+                throw new PollException("unexpected exception", e);
+            }
+        }
+        throw new PollException("Too much polls." + name + " resources");
+    }
 
     /**
      * return the poll for poll pool with logic based on specified configuration.

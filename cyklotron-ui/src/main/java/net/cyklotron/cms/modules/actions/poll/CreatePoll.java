@@ -22,17 +22,18 @@ import org.objectledge.web.mvc.MVCContext;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.poll.AnswerResource;
 import net.cyklotron.cms.poll.AnswerResourceImpl;
+import net.cyklotron.cms.poll.PollException;
 import net.cyklotron.cms.poll.PollResource;
 import net.cyklotron.cms.poll.PollResourceImpl;
 import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.PollsResource;
-import net.cyklotron.cms.poll.PollsResourceImpl;
 import net.cyklotron.cms.poll.PoolResource;
 import net.cyklotron.cms.poll.PoolResourceImpl;
 import net.cyklotron.cms.poll.QuestionResource;
 import net.cyklotron.cms.poll.QuestionResourceImpl;
 import net.cyklotron.cms.poll.util.Answer;
 import net.cyklotron.cms.poll.util.Question;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.workflow.TransitionResource;
 import net.cyklotron.cms.workflow.WorkflowException;
@@ -117,7 +118,8 @@ public class CreatePoll
 
         try
         {
-            PollsResource pollsRoot = PollsResourceImpl.getPollsResource(coralSession, psid);
+            SiteResource site = cmsDataFactory.getCmsData(context).getSite(); 
+            PollsResource pollsRoot = pollService.getPollsParent(coralSession, site, pollService.POLLS_ROOT_NAME);
             PollResource pollResource = PollResourceImpl.createPollResource(coralSession, title,
                 pollsRoot);
             pollResource.setDescription(description);
@@ -131,7 +133,7 @@ public class CreatePoll
             pollResource.setStartDate(start);
             pollResource.setEndDate(end);
 
-            Resource workflowRoot = pollsRoot.getParent().getParent().getParent().getParent();
+            Resource workflowRoot = pollsRoot.getParent().getParent().getParent().getParent().getParent();
             workflowService.assignState(coralSession, workflowRoot, pollResource);
             String transitionName = parameters.get("transition","");
             if(transitionName.length() != 0)
@@ -178,6 +180,13 @@ public class CreatePoll
             }
         }
         catch(EntityDoesNotExistException e)
+        {
+            templatingContext.put("result","exception");
+            templatingContext.put("trace",new StackTrace(e));
+            logger.error("PollException: ",e);
+            return;
+        }
+        catch(PollException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));

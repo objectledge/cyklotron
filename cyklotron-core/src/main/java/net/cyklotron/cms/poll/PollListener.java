@@ -65,15 +65,29 @@ implements SiteCreationListener, SiteDestructionValve, Startable
         CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            SiteResource site = siteService.getSite(coralSession,name);
+            SiteResource site = siteService.getSite(coralSession, name);
             PollsResource pollsRoot = pollService.getPollsRoot(coralSession, site);
             Resource[] nodes = coralSession.getStore().getResource(site, "security");
             if(nodes.length != 1)
             {
                 log.error("Security node for site couldn't be found");
             }
-            cmsSecurityService.createRole(coralSession, site.getAdministrator(), 
-                 "cms.poll.polls.administrator", pollsRoot);
+            cmsSecurityService.createRole(coralSession, site.getAdministrator(),
+                "cms.poll.polls.administrator", pollsRoot);
+
+            PollsResource pools = PollsResourceImpl.createPollsResource(coralSession, "pools",
+                pollsRoot);
+            PollsResource polls = PollsResourceImpl.createPollsResource(coralSession, "polls",
+                pollsRoot);
+            PollsResource votes = PollsResourceImpl.createPollsResource(coralSession, "votes",
+                pollsRoot);
+            
+            cmsSecurityService.createRole(coralSession, site.getAdministrator(),
+                "cms.poll.polls.administrator", polls);
+            cmsSecurityService.createRole(coralSession, site.getAdministrator(),
+                "cms.poll.polls.administrator", pools);
+            cmsSecurityService.createRole(coralSession, site.getAdministrator(),
+                "cms.poll.polls.administrator", votes);
         }
         catch(Exception e)
         {

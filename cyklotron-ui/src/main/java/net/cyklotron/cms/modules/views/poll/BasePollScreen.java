@@ -56,6 +56,29 @@ public abstract class BasePollScreen
             throw new ProcessingException("failed to lookup polls root");
         }
     }
+    
+    public PollsResource getPollsParent(CoralSession coralSession, String name)
+        throws ProcessingException
+    {
+        CmsData cmsData = getCmsData();
+        SiteResource site = cmsData.getSite();
+        if(site == null)
+        {
+            site = cmsData.getGlobalComponentsDataSite();
+        }
+        if(site == null)
+        {
+            throw new ProcessingException("No site selected");
+        }
+        try
+        {
+            return pollService.getPollsParent(coralSession, site, name);
+        }
+        catch(PollException e)
+        {
+            throw new ProcessingException("failed to lookup polls."+ name +" root");
+        }
+    }
 
     public boolean checkAccessRights(Context context)
         throws ProcessingException

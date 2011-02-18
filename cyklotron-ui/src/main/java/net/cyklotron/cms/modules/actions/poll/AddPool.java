@@ -14,9 +14,9 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.poll.PollException;
 import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.PollsResource;
-import net.cyklotron.cms.poll.PollsResourceImpl;
 import net.cyklotron.cms.poll.PoolResource;
 import net.cyklotron.cms.poll.PoolResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
@@ -56,7 +56,8 @@ public class AddPool
 
         try
         {
-            PollsResource pollsRoot = PollsResourceImpl.getPollsResource(coralSession, psid);
+            PollsResource poolsRoot = pollService.getPollsParent(coralSession, psid, pollService.POOLS_ROOT_NAME);
+            
             String title = parameters.get("title","");
             if(title.length() == 0)
             {
@@ -65,11 +66,18 @@ public class AddPool
             }
             String description = parameters.get("description","");
             PoolResource poolResource = PoolResourceImpl.createPoolResource(coralSession, title,
-                pollsRoot);
+                poolsRoot);
             poolResource.setDescription(description);
             poolResource.update();
         }
         catch(EntityDoesNotExistException e)
+        {
+            templatingContext.put("result","exception");
+            templatingContext.put("trace",new StackTrace(e));
+            logger.error("PollException: ",e);
+            return;
+        }
+        catch(PollException e)
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));

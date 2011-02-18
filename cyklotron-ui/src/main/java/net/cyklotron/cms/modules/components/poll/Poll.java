@@ -58,7 +58,7 @@ public class Poll extends SkinableCMSComponent
             String state = getState(context);
             PollResource poll = null;
             Parameters componentConfig = getConfiguration();
-            PollsResource pollsResource = pollService.getPollsRoot(coralSession, getSite(context));
+            PollsResource pollsResource = pollService.getPollsParent(coralSession, getSite(context), pollService.POLLS_ROOT_NAME);
             poll = pollService.getPoll(coralSession, pollsResource, componentConfig);
             if(hasVoted())
             {
@@ -149,7 +149,7 @@ public class Poll extends SkinableCMSComponent
                 return true;
             }
             Parameters componentConfig = getConfiguration();
-            PollsResource pollsResource = pollService.getPollsRoot(coralSession, getSite(context));
+            PollsResource pollsResource = pollService.getPollsParent(coralSession, getSite(context),pollService.POLLS_ROOT_NAME);
             PollResource poll = pollService.getPoll(coralSession, pollsResource, componentConfig);
             if(poll == null)
             {

@@ -56,7 +56,7 @@ public class PollConf
     {
 		try
         {
-            PollsResource pollsRoot = getPollsRoot(coralSession);
+            PollsResource pollsRoot = getPollsParent(coralSession, pollService.POLLS_ROOT_NAME);
             templatingContext.put("pollsRoot",pollsRoot);
             Resource[] resources = coralSession.getStore().getResource(pollsRoot);
             List<Resource> pools = new ArrayList<Resource>();
@@ -99,7 +99,6 @@ public class PollConf
         {
             throw new ProcessingException("failed to initialize column data", e);
         }
-
 	}
 
 }

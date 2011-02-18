@@ -2,6 +2,7 @@ package net.cyklotron.cms.poll;
 
 import java.util.Map;
 
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
@@ -18,6 +19,15 @@ public interface PollService
 {
     /** The name of the service (<code>"poll"</code>). */
     public final static String SERVICE_NAME = "poll";
+    
+    /** The name of polls root (<code>"polls"</code>). */
+    public final static String POLLS_ROOT_NAME = "polls";
+    
+    /** The name of pools root (<code>"pools"</code>). */
+    public final static String POOLS_ROOT_NAME = "pools";
+    
+    /** The name of votes root (<code>"votes"</code>). */
+    public final static String VOTES_ROOT_NAME = "votes";
 
     /**
      * The logging facility where the service issues it's informational
@@ -34,6 +44,29 @@ public interface PollService
      */
     public PollsResource getPollsRoot(CoralSession coralSession, SiteResource site)
         throws PollException;
+
+    /**
+     * return the polls root node.
+     *
+     * @param site the site resource.
+     * @param name the polls resource type name.
+     * @return the pools root resource.
+     * @throws PollException if the operation fails.
+     */
+    public PollsResource getPollsParent(CoralSession coralSession, SiteResource site, String name)
+    throws PollException;
+
+    /**
+     * return the polls root node.
+     *
+     * @param psid polls root resource id.
+     * @param name the polls resource type name.
+     * @return the pools root resource.
+     * @throws PollException if the operation fails.
+     * @throws EntityDoesNotExistException if the operation fails.
+     */
+    public PollsResource getPollsParent(CoralSession coralSession, int psid, String name)
+    throws PollException, EntityDoesNotExistException;
 
     /**
      * return the poll for poll pool with logic based on specified configuration.

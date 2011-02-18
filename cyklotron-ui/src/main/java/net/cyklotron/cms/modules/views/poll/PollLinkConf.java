@@ -68,9 +68,10 @@ public class PollLinkConf
         
         try
         {
-            PollsResource pollsRoot = pollService.getPollsRoot(coralSession, cmsData.getSite());
-            templatingContext.put("pollsRoot",pollsRoot);
-            Resource[] resources = coralSession.getStore().getResource(pollsRoot);
+            PollsResource poolsRoot = pollService.getPollsParent(coralSession, cmsData.getSite(),
+                pollService.POOLS_ROOT_NAME);
+            templatingContext.put("pollsRoot", poolsRoot);
+            Resource[] resources = coralSession.getStore().getResource(poolsRoot);
             List pools = new ArrayList();
             for(int i = 0; i < resources.length; i++)
             {
@@ -79,12 +80,11 @@ public class PollLinkConf
                     pools.add(resources[i]);
                 }
             }
-            templatingContext.put("pools",pools);
-        	//
+            templatingContext.put("pools", pools);
         }
         catch(Exception e)
         {
-        	throw new ProcessingException("Exception occured", e);
+            throw new ProcessingException("Exception occured", e);
         }
     }
 }
