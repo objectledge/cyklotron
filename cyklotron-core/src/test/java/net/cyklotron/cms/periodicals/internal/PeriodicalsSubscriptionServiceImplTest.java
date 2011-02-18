@@ -50,7 +50,7 @@ public class PeriodicalsSubscriptionServiceImplTest
     private FileSystem fileSystem;
     private PeriodicalsSubscriptionService service;
     private CryptographyService cipherCryptographyService;
-    private EmailConfirmationRequestServiceImpl confirmationRequestService;
+    private EmailConfirmationRequestService confirmationRequestService;
     
     public void setUp() throws Exception
     {
