@@ -32,13 +32,10 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.LowerCaseFilter;
-import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.WordlistLoader;
 import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.document.Document;
@@ -92,16 +89,16 @@ public class OrganizationsIndex
     {
         Document document = new Document();
         document
-            .add(new NumericField("id", 4, Field.Store.YES, true).setLongValue(organization.id));
-        document.add(new Field("name", organization.name, Field.Store.YES, Field.Index.ANALYZED,
+            .add(new NumericField("id", 4, Field.Store.YES, true).setLongValue(organization.getId()));
+        document.add(new Field("name", organization.getName(), Field.Store.YES, Field.Index.ANALYZED,
             Field.TermVector.WITH_POSITIONS_OFFSETS));
-        document.add(new Field("province", organization.province, Field.Store.YES,
+        document.add(new Field("province", organization.getProvince(), Field.Store.YES,
             Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-        document.add(new Field("city", organization.city, Field.Store.YES, Field.Index.ANALYZED,
+        document.add(new Field("city", organization.getCity(), Field.Store.YES, Field.Index.ANALYZED,
             Field.TermVector.WITH_POSITIONS_OFFSETS));
-        document.add(new Field("street", organization.street, Field.Store.YES,
+        document.add(new Field("street", organization.getStreet(), Field.Store.YES,
             Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
-        document.add(new Field("postCode", organization.postCode, Field.Store.YES,
+        document.add(new Field("postCode", organization.getPostCode(), Field.Store.YES,
             Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
         return document;
     }

@@ -30,19 +30,17 @@ package net.cyklotron.cms.ngodatabase;
 
 public class Organization
 {
-    // constants /////////////////////////////////////////////////////////////
+    private Long id;
 
-    public Long id;
+    private String name;
 
-    String name;
+    private String province;
 
-    String province;
+    private String city;
 
-    String city;
+    private String street;
 
-    String street;
-
-    String postCode;
+    private String postCode;
 
     private String tel;
 
@@ -166,10 +164,5 @@ public class Organization
     public void setEmail(String email)
     {
         this.email = email;
-    }
-
-    public boolean matches(String name)
-    {
-        return this.name.toLowerCase().contains(name.toLowerCase());
     }
 }

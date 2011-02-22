@@ -262,8 +262,10 @@ public class NgoDatabaseServiceImpl
                 organizations.startUpdate();
                 SAXReader saxReader = new SAXReader();
                 Document doc = saxReader.read(fileSystem.getInputStream(INCOMING_FILE));
-                for(Element ogranization : (List<Element>)doc
-                    .selectNodes("/organizacje/organizacjaInfo"))
+                @SuppressWarnings("unchecked")
+                List<Element> organizationElements = (List<Element>)doc
+                    .selectNodes("/organizacje/organizacjaInfo");
+                for(Element ogranization : organizationElements)
                 {
                     String name = ogranization.selectSingleNode("Nazwa_polska").getStringValue();
                     Long id = Long.parseLong(ogranization.selectSingleNode("ID_Adresowego")
@@ -528,7 +530,9 @@ public class NgoDatabaseServiceImpl
         doc.add(sources);
         Node event = meta.selectSingleNode("/meta/event");
         event.detach();
-        ((Branch)event).content().add(0, elm("place", nvl(enc(document.getEventPlace()))));
+        @SuppressWarnings("unchecked")
+        List<Element> content = ((Branch)event).content();
+        content.add(0, elm("place", nvl(enc(document.getEventPlace()))));
         doc.add(event);
         Node organization = meta.selectSingleNode("/meta/organizations/organization[id='" + orgId
             + "']");
