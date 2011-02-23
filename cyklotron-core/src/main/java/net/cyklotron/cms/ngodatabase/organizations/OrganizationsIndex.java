@@ -26,7 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package net.cyklotron.cms.ngodatabase;
+package net.cyklotron.cms.ngodatabase.organizations;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -53,6 +53,8 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.utils.Timer;
 
+import net.cyklotron.cms.ngodatabase.AbstractIndex;
+import net.cyklotron.cms.ngodatabase.Organization;
 import net.cyklotron.cms.search.analysis.AlphanumericFilter;
 
 /**

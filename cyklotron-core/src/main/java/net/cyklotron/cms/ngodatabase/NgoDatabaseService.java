@@ -55,6 +55,5 @@ public interface NgoDatabaseService
      * @return contents of the feed.
      */
     public String getOrganizationNewsFeed(Parameters parameters)
-        throws IOException, FeedException, ProcessingException, CategoryException, SiteException,
-        ConfigurationException;
+        throws ProcessingException;
 }

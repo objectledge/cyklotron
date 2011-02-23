@@ -1,4 +1,4 @@
-package net.cyklotron.cms.ngodatabase;
+package net.cyklotron.cms.ngodatabase.locations;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +19,8 @@ import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 import org.objectledge.utils.Timer;
 
 import net.cyklotron.cms.files.util.CSVFileReader;
+import net.cyklotron.cms.ngodatabase.Location;
+import net.cyklotron.cms.ngodatabase.LocationsProvider;
 
 /**
  * LocationProvider implementation for Poland using Pocztowe Numery Adresowe (postal area codes)

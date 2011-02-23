@@ -36,6 +36,8 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.picocontainer.Startable;
 
+import net.cyklotron.cms.ngodatabase.locations.LocationsIndex;
+
 public class LocationDatabaseServiceImpl
     implements LocationDatabaseService, Startable
 {
