@@ -1,16 +1,22 @@
 package net.cyklotron.cms.structure.internal;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.query.MalformedQueryException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.query.QueryResults.Row;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.schema.CircularDependencyException;
@@ -799,6 +805,49 @@ public class StructureServiceImpl
             throw new StructureException("failed to move node", e);
         }
     }
+    
+    /**
+     * Returns a set of ids of documents that have validityStart at or after the specified date.
+     * <p>
+     * By contract, documents without specified validity start date are always returned.
+     * </p>
+     * <p>
+     * All times are rounded down to full minute.
+     * </p>
+     * 
+     * @param date a date.
+     * @retunrs all documents have validityStart at or after the specified date.
+     * @throws StructureException
+     */
+    public Set<Long> getDocumentsValidAtOrAfter(Date date, CoralSession coralSession)
+        throws StructureException
+    {
+        SimpleDateFormat df = 
+            new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
+
+        String dateLiteral = df.format(date);
+
+        try
+        {
+            QueryResults res = coralSession.getQuery().executeQuery(
+                "FIND RESOURCE FROM documents.document_node WHERE validityStart >= '"+dateLiteral+"'");
+            Set<Long> set = new HashSet<Long>(1024);
+            for (Iterator<Row> iter = res.iterator(); iter.hasNext();)
+            {
+                long[] ids = iter.next().getIdArray();
+                for (int i = 0; i < ids.length; i++)
+                {
+                    set.add(new Long(ids[i]));
+                }
+            }
+            return set;
+        }
+        catch (Exception e)
+        {
+           throw new StructureException("Coral query failed", e);
+        }
+    }
+
 
     public CategoryResource getNegativeCategory()
     {

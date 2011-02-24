@@ -308,4 +308,21 @@ public interface StructureService
     public void setProposeDocumentNode(CoralSession coralSession, SiteResource site,
         NavigationNodeResource node)
         throws StructureException;
+    
+    /**
+     * Returns a set of ids of documents that have validityStart at or after the specified date.
+     * <p>
+     * By contract, documents without specified validity start date are always returned.
+     * </p>
+     * <p>
+     * All times are rounded down to full minute.
+     * </p>
+     * 
+     * @param date a date.
+     * @param coralSession TODO
+     * @retunrs all documents have validityStart at or after the specified date.
+     * @throws StructureException
+     */
+    public Set<Long> getDocumentsValidAtOrAfter(Date date, CoralSession coralSession)
+        throws StructureException;
 }

@@ -16,6 +16,7 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * This component displays lists of hand-prioritzed resources assigned to queried categories.
@@ -31,11 +32,11 @@ extends BaseResourceList
         CategoryService categoryService, SiteService siteService,
         TableStateManager tableStateManager, CategoryQueryService categoryQueryService,
         CacheFactory cacheFactory, IntegrationService integrationService,
-        PreferencesService preferencesService)
+        PreferencesService preferencesService, StructureService structureService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder, categoryService,
                         siteService, tableStateManager, categoryQueryService, cacheFactory,
-                        integrationService, preferencesService);
+                        integrationService, preferencesService, structureService);
         
     }
     /* (non-Javadoc)
@@ -44,6 +45,6 @@ extends BaseResourceList
     protected net.cyklotron.cms.category.components.BaseResourceList getResourceList(CmsData cmsData, Parameters parameters)
     {
 		return new net.cyklotron.cms.category.components.HoldingResourceList(context, integrationService, cmsDataFactory,
-            categoryQueryService, siteService);
+            categoryQueryService, siteService, structureService);
     }
 }

@@ -40,6 +40,7 @@ import net.cyklotron.cms.modules.components.SkinableCMSComponent;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Category Query Persistent List component.
@@ -60,11 +61,14 @@ public class CategoryQueryPersistentList
 
     private CacheFactory cacheFactory;
 
+    private final StructureService structureService;
+
     public CategoryQueryPersistentList(org.objectledge.context.Context context, Logger logger,
         Templating templating, CmsDataFactory cmsDataFactory, SkinService skinService,
         MVCFinder mvcFinder, CategoryQueryService categoryQueryService,
         TableStateManager tableStateManager, SiteService siteService,
-        IntegrationService integrationService, CacheFactory cacheFactory)
+        IntegrationService integrationService, CacheFactory cacheFactory,
+        StructureService structureService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
         this.categoryQueryService = categoryQueryService;
@@ -72,6 +76,7 @@ public class CategoryQueryPersistentList
         this.siteService = siteService;
         this.integrationService = integrationService;
         this.cacheFactory = cacheFactory;
+        this.structureService = structureService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext,
@@ -134,7 +139,7 @@ public class CategoryQueryPersistentList
             templatingContext.put("queries", queries);
 
             CategoryQueryPersistentResourceList resList = new CategoryQueryPersistentResourceList(
-                context, integrationService, cmsDataFactory, categoryQueryService, siteService,
+                context, integrationService, cmsDataFactory, categoryQueryService, siteService, structureService,
                 selected_query, config);
             Resource[] resources = null;
             try

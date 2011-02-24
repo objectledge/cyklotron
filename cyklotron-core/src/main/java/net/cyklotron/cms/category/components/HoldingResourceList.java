@@ -15,6 +15,7 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.util.CmsResourceListTableModel;
 
 /**
@@ -28,9 +29,9 @@ extends DocumentResourceList
 {
     public HoldingResourceList(Context context, IntegrationService integrationService,
         CmsDataFactory cmsDataFactory,  CategoryQueryService categoryQueryService,
-        SiteService siteService)
+        SiteService siteService, StructureService structureService)
     {
-        super(context,integrationService, cmsDataFactory, categoryQueryService, siteService);
+        super(context,integrationService, cmsDataFactory, categoryQueryService, siteService, structureService);
     }
 
     public BaseResourceListConfiguration createConfig()

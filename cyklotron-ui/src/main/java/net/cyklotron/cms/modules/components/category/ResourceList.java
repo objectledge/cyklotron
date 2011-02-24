@@ -16,6 +16,7 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * This component displays lists of resources assigned to queried categories.
@@ -24,26 +25,27 @@ import net.cyklotron.cms.skins.SkinService;
  * @version $Id: ResourceList.java,v 1.4 2005-03-08 10:54:52 pablo Exp $
  */
 public class ResourceList
-extends BaseResourceList
+    extends BaseResourceList
 {
-	/* (non-Javadoc)
-	 * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getResourceList()
-	 */
-	protected net.cyklotron.cms.category.components.BaseResourceList getResourceList(CmsData cmsData, Parameters parameters)
-	{
-		return new net.cyklotron.cms.category.components.ResourceList(context, integrationService, cmsDataFactory,
-            categoryQueryService, siteService);
-	}
     public ResourceList(Context context, Logger logger, Templating templating,
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
         CategoryService categoryService, SiteService siteService,
         TableStateManager tableStateManager, CategoryQueryService categoryQueryService,
         CacheFactory cacheFactory, IntegrationService integrationService,
-        PreferencesService preferencesService)
+        PreferencesService preferencesService, StructureService structureService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder, categoryService,
                         siteService, tableStateManager, categoryQueryService, cacheFactory,
-                        integrationService, preferencesService);
+                        integrationService, preferencesService, structureService);
         
+    }
+
+    /* (non-Javadoc)
+     * @see net.cyklotron.cms.modules.components.category.BaseResourceList#getResourceList()
+     */
+    protected net.cyklotron.cms.category.components.BaseResourceList getResourceList(CmsData cmsData, Parameters parameters)
+    {
+        return new net.cyklotron.cms.category.components.ResourceList(context, integrationService, cmsDataFactory,
+            categoryQueryService, siteService);
     }
 }

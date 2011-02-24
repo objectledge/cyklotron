@@ -25,6 +25,7 @@ import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Configuration screen for HoldingResourceList component.
@@ -33,16 +34,18 @@ import net.cyklotron.cms.site.SiteService;
  * @version $Id: HoldingResourceListComponentConf.java,v 1.5 2005-05-17 06:22:17 zwierzem Exp $
  */
 public class HoldingResourceListComponentConf extends BaseResourceListComponentConf
-{
-    
+{    
+    private final StructureService structureService;
+
     public HoldingResourceListComponentConf(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, CategoryService categoryService,
         SiteService siteService, IntegrationService integrationService,
-        CategoryQueryService categoryQueryService)
+        CategoryQueryService categoryQueryService, StructureService structureService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         categoryService, siteService, integrationService, categoryQueryService);
+        this.structureService = structureService;
         
     }
 	
@@ -58,7 +61,7 @@ public class HoldingResourceListComponentConf extends BaseResourceListComponentC
 
 		HoldingResourceList resList =
 			new HoldingResourceList(context,integrationService,cmsDataFactory,
-				categoryQueryService, siteService);
+				categoryQueryService, siteService, structureService);
 
 		// get resources based on category query
 		Resource[] resources = null;

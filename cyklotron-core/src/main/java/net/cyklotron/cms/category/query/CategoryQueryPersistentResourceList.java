@@ -15,6 +15,7 @@ import net.cyklotron.cms.category.query.CategoryQueryResultsConfiguration;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * This class contains logic of a screen which displays lists of resources assigned
@@ -32,11 +33,11 @@ extends DocumentResourceList
     public CategoryQueryPersistentResourceList(
         Context context, IntegrationService integrationService,
         CmsDataFactory cmsDataFactory,  CategoryQueryService categoryQueryService,
-        SiteService siteService,
+        SiteService siteService, StructureService structureService,
         CategoryQueryResource query,
         CategoryQueryPersistentListConfiguration config)
     {
-        super(context,integrationService, cmsDataFactory, categoryQueryService, siteService);
+        super(context,integrationService, cmsDataFactory, categoryQueryService, siteService, structureService);
         this.query = query;
         this.config = config;
 	}

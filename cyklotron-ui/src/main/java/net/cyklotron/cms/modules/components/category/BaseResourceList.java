@@ -30,6 +30,7 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * Base component for displaying lists of resources assigned to queried categories.
@@ -51,13 +52,15 @@ extends BaseCategoryComponent
     protected IntegrationService integrationService;
     
     protected PreferencesService preferencesService;
+
+    protected final StructureService structureService;
     
     public BaseResourceList(Context context, Logger logger, Templating templating,
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
         CategoryService categoryService, SiteService siteService, 
         TableStateManager tableStateManager, CategoryQueryService categoryQueryService,
         CacheFactory cacheFactory, IntegrationService integrationService,
-        PreferencesService preferencesService)
+        PreferencesService preferencesService, StructureService structureService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder, categoryService,
                         siteService);
@@ -66,6 +69,7 @@ extends BaseCategoryComponent
         this.cacheFactory = cacheFactory;
         this.integrationService = integrationService;
         this.preferencesService = preferencesService;
+        this.structureService = structureService;
     }
 
 	public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)

@@ -112,7 +112,7 @@ public class CategoryQueryResults
 			new CategoryQueryResultsConfiguration(getScreenConfig(), categoryQuery);
 
         CategoryQueryResultsResourceList resList = new CategoryQueryResultsResourceList(context, integrationService,
-            cmsDataFactory, categoryQueryService, siteService,
+            cmsDataFactory, categoryQueryService, siteService, structureService,
                 categoryQuery, config);
 
         // get resources based on category query

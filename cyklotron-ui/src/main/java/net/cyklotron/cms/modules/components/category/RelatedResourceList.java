@@ -21,6 +21,7 @@ import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.StructureUtil;
 
 
@@ -39,11 +40,11 @@ extends BaseResourceList
         CategoryService categoryService, SiteService siteService,
         TableStateManager tableStateManager, CategoryQueryService categoryQueryService,
         CacheFactory cacheFactory, IntegrationService integrationService,
-        PreferencesService preferencesService)
+        PreferencesService preferencesService, StructureService structureService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder, categoryService,
                         siteService, tableStateManager, categoryQueryService, cacheFactory,
-                        integrationService, preferencesService);
+                        integrationService, preferencesService, structureService);
         
     }
 	/* (non-Javadoc)

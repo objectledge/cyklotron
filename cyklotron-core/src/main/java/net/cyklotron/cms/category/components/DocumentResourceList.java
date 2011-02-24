@@ -22,6 +22,8 @@ import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureException;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * This class contains logic of component which displays lists of documents assigned
@@ -33,11 +35,14 @@ import net.cyklotron.cms.site.SiteService;
 public class DocumentResourceList
 extends ResourceList
 {
+    private final StructureService structureService;
+
     public DocumentResourceList(Context context, IntegrationService integrationService,
         CmsDataFactory cmsDataFactory,  CategoryQueryService categoryQueryService,
-        SiteService siteService)
+        SiteService siteService, StructureService structureService)
 	{
         super(context,integrationService, cmsDataFactory, categoryQueryService, siteService);
+        this.structureService = structureService;
 	}
 
     public BaseResourceListConfiguration createConfig()
@@ -45,9 +50,6 @@ extends ResourceList
     {
         return new DocumentResourceListConfiguration();
     }
-    
-    private CategoryQueryResource categoryQuery;
-    private boolean categoryQuerySought = false;
 
     public String getTableStateName()
     {
@@ -67,44 +69,25 @@ extends ResourceList
         return null;
     }
     
-    public Set getIdSet(CoralSession coralSession, BaseResourceListConfiguration config)
+    public Set<Long> getIdSet(CoralSession coralSession, BaseResourceListConfiguration config)
         throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
 
-        String date = null;
         int offset = ((DocumentResourceListConfiguration) config).getPublicationTimeOffset();
         if(offset != -1)
         {
             Date now = cmsData.getDate();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(now);
-            calendar.add(Calendar.DAY_OF_MONTH, -offset);
-
-            SimpleDateFormat df = 
-                new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
-
-            date = df.format(calendar.getTime());
-
+            calendar.add(Calendar.DAY_OF_MONTH, -offset);            
             try
             {
-                QueryResults res = coralSession.getQuery().executeQuery(
-                    "FIND RESOURCE FROM documents.document_node WHERE validityStart >= '"+date+"'");
-                Set set = new HashSet(1024);
-                for (Iterator iter = res.iterator(); iter.hasNext();)
-                {
-                    long[] ids = ((Row) iter.next()).getIdArray();
-                    for (int i = 0; i < ids.length; i++)
-                    {
-                        set.add(new Long(ids[i]));
-                    }
-                }
-                return set;
+                return structureService.getDocumentsValidAtOrAfter(calendar.getTime(), coralSession);
             }
-            catch (MalformedQueryException e)
+            catch(StructureException e)
             {
-                // should not happen
-                return null;
+               throw new ProcessingException(e);
             }
         }
         return null;
