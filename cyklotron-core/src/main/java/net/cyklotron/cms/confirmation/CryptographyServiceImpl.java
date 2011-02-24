@@ -52,7 +52,7 @@ import org.objectledge.filesystem.FileSystem;
 public class CryptographyServiceImpl
     implements CryptographyService
 {
-    private static final String KEYSTORE_PATH = "/data/cipher.ks";
+    private static final String KEYSTORE_PATH = "/data/cyklotron.ks";
     
     private static final String TOKEN_CHAR_ENCODING = "UTF-8";
     
