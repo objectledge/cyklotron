@@ -82,6 +82,7 @@ public class PeriodicalsSubscriptionServiceImplTest
         int periodicalId = 799;
         String address = "rafal@caltha.pl";
         String enc = service.createUnsubscriptionToken(periodicalId, address);
+        cipherCryptographyService.createEncryptionKey();
         UnsubscriptionInfo info = service.decodeUnsubscriptionToken(enc, true);
         assertEquals(periodicalId, info.getPeriodicalId());
         assertEquals(address, info.getAddress());
