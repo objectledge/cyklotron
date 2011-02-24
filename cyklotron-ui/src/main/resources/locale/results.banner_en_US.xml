@@ -1,0 +1,72 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="invalid_description">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Name may not contain / character.</value>
+    </prefix>
+    <prefix name="invalid_media">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_title">
+      <value>.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>Changed successfully.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Deleted successfully.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Exception occured.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Illegal parameter</value>
+    </prefix>
+    <prefix name="invalid_description">
+      <value>Illegal description - action canceled.</value>
+    </prefix>
+    <prefix name="invalid_media">
+      <value>Invalid media.</value>
+    </prefix>
+    <prefix name="invalid_title">
+      <value>Illegal title - action canceled.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Entered name is not valid</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Parameter not found.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Updated successfully.</value>
+    </prefix>
+  </prefix>
+</strings>
