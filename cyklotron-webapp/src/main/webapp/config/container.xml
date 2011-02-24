@@ -508,7 +508,7 @@
              class="net.cyklotron.cms.ngodatabase.NgoDatabaseServiceImpl"/>
   
   <component class-key="net.cyklotron.cms.ngodatabase.LocationsProvider"
-  			 class="net.cyklotron.cms.ngodatabase.PNALocationsProvider"/> 
+  			 class="net.cyklotron.cms.ngodatabase.locations.PNALocationsProvider"/> 
             
   <component class-key="net.cyklotron.cms.ngodatabase.LocationDatabaseService"
              class="net.cyklotron.cms.ngodatabase.LocationDatabaseServiceImpl"/>
