@@ -1,24 +1,27 @@
 package net.cyklotron.cms.structure.internal;
 
-import java.text.SimpleDateFormat;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
-import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.query.MalformedQueryException;
-import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.query.QueryResults.Row;
+import org.objectledge.coral.query.FilteredQueryResults;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.relation.RelationModification;
+import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
@@ -27,9 +30,12 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.database.Database;
+import org.objectledge.database.DatabaseUtils;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.utils.StringUtils;
+import org.objectledge.utils.Timer;
 
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.documents.DocumentAliasResource;
@@ -48,6 +54,12 @@ import net.cyklotron.cms.workflow.StateResource;
 import net.cyklotron.cms.workflow.TransitionResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
+
+import bak.pcj.adapter.LongSetToSetAdapter;
+import bak.pcj.map.LongKeyLongMap;
+import bak.pcj.map.LongKeyLongOpenHashMap;
+import bak.pcj.set.LongOpenHashSet;
+import bak.pcj.set.LongSet;
 
 /**
  * Implementation of Structure Service
@@ -99,17 +111,20 @@ public class StructureServiceImpl
     
     /** Home page preferences key for id of the node where propose document is deployed in the site */
     private static final String PROPOSE_DOCUMENT_NODE_KEY = "stucture.proposeDocumentNode";
+
+    private final Database database;
      
     /**
      * Initializes the service.
      */
     public StructureServiceImpl(Configuration config, Logger logger, 
         WorkflowService workflowService, SecurityService cmsSecurityService,
-        CoralSessionFactory sessionFactory)
+        CoralSessionFactory sessionFactory, Database database)
     {
         this.log = logger;
         this.workflowService = workflowService;
         this.cmsSecurityService = cmsSecurityService;
+        this.database = database;
         this.showUnclassifiedNodesInSites = new HashSet<String>();
         invalidNodeErrorScreen = config.getChild("invalidNodeErrorScreen").getValue("InvalidNodeError");
         enableWorkflow = config.getChild("enableWorkflow").getValueAsBoolean(false);
@@ -240,6 +255,7 @@ public class StructureServiceImpl
         {
             throw new StructureException("Required attribute value was not set.",e);
         }
+        updateValidityStartCache(node);
         return node;
     }
     
@@ -284,6 +300,7 @@ public class StructureServiceImpl
             node.setThumbnail(originalDocument.getThumbnail());
         }
         updateNode(coralSession, node, name, true, subject);
+        updateValidityStartCache(node);
         if(isWorkflowEnabled())
         {
             Permission permission = coralSession.getSecurity().getUniquePermission(
@@ -469,7 +486,18 @@ public class StructureServiceImpl
             node.setCustomModificationTime(new Date());
         }
         node.update();
+        updateValidityStartCache(node);
         return transition;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public void newNodeCreated(NavigationNodeResource node)
+    {
+        updateValidityStartCache(node);
+        node.setCustomModificationTime(node.getModificationTime());
+        node.update();
     }
 
     /**
@@ -822,32 +850,133 @@ public class StructureServiceImpl
     public Set<Long> getDocumentsValidAtOrAfter(Date date, CoralSession coralSession)
         throws StructureException
     {
-        SimpleDateFormat df = 
-            new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
-
-        String dateLiteral = df.format(date);
-
-        try
+        synchronized(validityStartToDocument)
         {
-            QueryResults res = coralSession.getQuery().executeQuery(
-                "FIND RESOURCE FROM documents.document_node WHERE validityStart >= '"+dateLiteral+"'");
-            Set<Long> set = new HashSet<Long>(1024);
-            for (Iterator<Row> iter = res.iterator(); iter.hasNext();)
+            if(!validityStartCacheLoaded)
             {
-                long[] ids = iter.next().getIdArray();
-                for (int i = 0; i < ids.length; i++)
-                {
-                    set.add(new Long(ids[i]));
-                }
+                preloadValidityStartCache(coralSession);
             }
-            return set;
-        }
-        catch (Exception e)
-        {
-           throw new StructureException("Coral query failed", e);
+            @SuppressWarnings("unchecked")
+            Set<Long> adapter = new LongSetToSetAdapter(getDocumentsValidAtOrAfterFromCache(date));
+            return adapter;
         }
     }
 
+    private boolean validityStartCacheLoaded = false;
+    
+    private final SortedMap<Long, LongSet> validityStartToDocument = new TreeMap<Long, LongSet>();
+
+    private final LongKeyLongMap documentToValidityStart = new LongKeyLongOpenHashMap();
+
+    private void preloadValidityStartCache(CoralSession coralSession)
+        throws StructureException
+    {
+        synchronized(validityStartToDocument)
+        {
+            Connection conn = null;
+            Statement stmt = null;
+            ResultSet rset = null;
+            try
+            {
+                log.info("preloading validity start cache");
+                Timer timer = new Timer();
+                @SuppressWarnings("unchecked")
+                AttributeDefinition<Date> def = coralSession.getSchema().getResourceClass(
+                    NavigationNodeResource.CLASS_NAME).getAttribute("validityStart");
+                
+                conn = database.getConnection();
+                stmt = conn.createStatement();
+                rset = stmt.executeQuery("SELECT g.resource_id, d.data "
+                    + "FROM coral_attribute_date d, coral_generic_resource g "
+                    + "WHERE g.attribute_definition_id = " + def.getId() + " "
+                    + "AND d.data_key = g.data_key");
+
+                GregorianCalendar cal = new GregorianCalendar();
+                int counter = 0;
+                while(rset.next())
+                {
+                    Date date = rset.getDate(2);
+                    if(date != null)
+                    {
+                        cal.setTime(date);
+                        cal.set(Calendar.SECOND, 0);
+                        cal.set(Calendar.MILLISECOND, 0);
+                        long dateKey = cal.getTimeInMillis();
+                        LongSet documentSet = validityStartToDocument.get(dateKey);
+                        if(documentSet == null)
+                        {
+                            documentSet = new LongOpenHashSet();
+                            validityStartToDocument.put(dateKey, documentSet);
+                        }
+                        long docId = rset.getLong(1);
+                        documentSet.add(docId);
+                        documentToValidityStart.put(docId, dateKey);
+                    }
+                    counter++;
+                }
+                log.info("cached validity start info for " + counter + " documents in "
+                    + timer.getElapsedSeconds() + "s");
+            }
+            catch(Exception e)
+            {
+                throw new StructureException("database query failed", e);
+            }
+            finally
+            {
+                DatabaseUtils.close(conn, stmt, rset);
+            }
+            validityStartCacheLoaded = true;
+        }
+    }
+
+    private void updateValidityStartCache(NavigationNodeResource node)
+    {
+        synchronized(validityStartToDocument)
+        {
+            if(validityStartCacheLoaded && node.isValidityStartDefined())
+            {
+                long previousDateKey = documentToValidityStart.get(node.getId());
+                GregorianCalendar cal = new GregorianCalendar();
+                cal.setTime(node.getValidityStart());
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                long currentDateKey = cal.getTimeInMillis();
+                if(currentDateKey != previousDateKey)
+                {
+                    LongSet documentSet = validityStartToDocument.get(previousDateKey);
+                    if(documentSet != null)
+                    {
+                        documentSet.remove(node.getId());
+                    }
+                    documentSet = validityStartToDocument.get(currentDateKey);
+                    if(documentSet == null)
+                    {
+                        documentSet = new LongOpenHashSet();
+                        validityStartToDocument.put(currentDateKey, documentSet);
+                    }
+                }
+            }
+        }
+    }
+
+    private LongSet getDocumentsValidAtOrAfterFromCache(Date date)
+    {
+        synchronized(validityStartToDocument)
+        {
+            GregorianCalendar cal = new GregorianCalendar();
+            cal.setTime(date);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            long dateKey = cal.getTimeInMillis();
+            LongSet result = new LongOpenHashSet();
+            for(Map.Entry<Long, LongSet> entry : validityStartToDocument.tailMap(dateKey)
+                .entrySet())
+            {
+                result.addAll(entry.getValue());
+            }
+            return result;
+        }
+    }
 
     public CategoryResource getNegativeCategory()
     {

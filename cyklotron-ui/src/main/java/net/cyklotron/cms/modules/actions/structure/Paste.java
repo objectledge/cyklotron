@@ -6,6 +6,7 @@ import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -86,6 +87,18 @@ public class Paste extends BaseCopyPasteAction
                 {
                     templatingContext.put("result", "cannot_copy_to_descendant");
                     return;
+                }
+                resources = coralSession.getStore().getResource(parent, node.getName());
+                if(resources.length == 1)
+                {
+                    new SubtreeVisitor() 
+                    {
+                        @SuppressWarnings("unused")
+                        public void visit(NavigationNodeResource node)
+                        {
+                            structureService.newNodeCreated(node);
+                        }
+                    }.traverseBreadthFirst(resources[0]);
                 }
             }
             else

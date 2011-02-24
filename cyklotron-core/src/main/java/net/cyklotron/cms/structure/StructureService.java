@@ -109,6 +109,15 @@ public interface StructureService
     public boolean updateNode(CoralSession coralSession, NavigationNodeResource node,
         String name, boolean updateTimeStamp, Subject subject)
         throws StructureException, InvalidResourceNameException;
+    
+    /**
+     * Called whenever new document nodes are created by other means than
+     * {@link #addDocumentNode(CoralSession, String, String, Resource, Subject)} or
+     * {@link #addDocumentAlias(CoralSession, DocumentNodeResource, String, String, NavigationNodeResource, Subject)}.
+     * 
+     * @param node the new node.
+     */
+    public void newNodeCreated(NavigationNodeResource node);
 
     /**
      * Update navigation node sequence info.
@@ -312,14 +321,11 @@ public interface StructureService
     /**
      * Returns a set of ids of documents that have validityStart at or after the specified date.
      * <p>
-     * By contract, documents without specified validity start date are always returned.
-     * </p>
-     * <p>
      * All times are rounded down to full minute.
      * </p>
      * 
      * @param date a date.
-     * @param coralSession TODO
+     * @param coralSession a coral session.
      * @retunrs all documents have validityStart at or after the specified date.
      * @throws StructureException
      */

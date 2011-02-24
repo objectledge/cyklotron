@@ -18,6 +18,8 @@ public class StructureSiteCreationListener
     
     private final Logger log;
 
+    private final StructureService structureService;
+
     /**
      * Creates a StructureSiteCreationListener insntance.
      * 
@@ -26,9 +28,10 @@ public class StructureSiteCreationListener
      * @param log the log.
      */
     public StructureSiteCreationListener(CoralSessionFactory coralSessionFactory, 
-        EventWhiteboard eventWhiteboard, Logger log)
+        EventWhiteboard eventWhiteboard, StructureService structureService, Logger log)
     {
         this.coralSessionFactory = coralSessionFactory;
+        this.structureService = structureService;
         this.log = log;
         eventWhiteboard.addListener(SiteCreationListener.class, this, null);
     }
@@ -46,13 +49,10 @@ public class StructureSiteCreationListener
                 getUniqueResourceByPath("/cms/sites/"+name+"/structure"); 
             new SubtreeVisitor() 
             {
+                @SuppressWarnings("unused")
                 public void visit(NavigationNodeResource node)
                 {
-                    if(node.getCustomModificationTime() == null)
-                    {
-                        node.setCustomModificationTime(node.getModificationTime());
-                        node.update();
-                    }
+                    structureService.newNodeCreated(node);
                 }
             }.traverseBreadthFirst(homePage);
         }
