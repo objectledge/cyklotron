@@ -23,6 +23,14 @@
           <b>Opcja $velocityCount:</b><br>
           <i>$answers.get($answerKey).getTitle()</i>
           ($stringTool.shortenString($percent.get($answers.get($answerKey).getId()).toString(), 4, "")%) - $results.get($answers.get($answerKey).getId())<BR/>
+          #set($ballotsForAnswer = $ballots.get($answers.get($answerKey).getId()))##
+          #if($ballotsForAnswer.size()>0)
+          #foreach($ballotForAnswer in $ballotsForAnswer)
+            $ballotForAnswer.email<BR/>
+          #end
+          #else
+            Brak oddanych głosów.
+          #end
      </td>
     </tr>
     #end
