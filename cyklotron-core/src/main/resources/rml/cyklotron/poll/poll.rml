@@ -48,6 +48,23 @@ ATTRIBUTES (
 integer sequence,
 integer votesCount
 );
+
+CREATE RESOURCE CLASS 'cms.poll.vote'
+JAVA CLASS 'net.cyklotron.cms.poll.VoteResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node', 'protected')
+ATTRIBUTES (
+role moderator
+);
+
+CREATE RESOURCE CLASS 'cms.poll.ballot'
+JAVA CLASS 'net.cyklotron.cms.poll.BallotResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED string email,
+long answerId
+);
     
 # // security ////////////////////////////////////////////////////////////////
 

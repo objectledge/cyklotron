@@ -13,7 +13,7 @@
 #set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
 ## TITLE BAR
 
-#genericScreenHeader("EDYCJA ANKIETY")
+#genericScreenHeader("EDYCJA SONDAŻU")
 
 #result_inline_message('results.poll')
 

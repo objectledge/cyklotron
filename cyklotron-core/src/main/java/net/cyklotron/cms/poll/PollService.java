@@ -113,6 +113,14 @@ public interface PollService
 	 */
 	public void prepareMaps(CoralSession coralSession, PollResource poll, Map questions, Map resultMap, Map percentMap);
 
+	   /**
+     * @param vote
+     * @param answers
+     * @param resultMap
+     * @param percentMap
+     */
+    public void prepareVoteMaps(CoralSession coralSession, VoteResource vote, Map answers, Map resultMap, Map percentMap, Map ballotsMap);
+	
     /**
      * Return the poll relation.
      * 

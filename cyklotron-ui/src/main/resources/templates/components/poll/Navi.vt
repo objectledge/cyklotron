@@ -4,4 +4,5 @@
 
   #genericNaviHeader('POLLS')
     #linkCell('' 'Poll pool list' $pollLink.view('poll.PoolList'))
+    #linkCell('' 'Poll vote list' $pollLink.view('poll.VoteList'))
   #genericNaviTrailer()

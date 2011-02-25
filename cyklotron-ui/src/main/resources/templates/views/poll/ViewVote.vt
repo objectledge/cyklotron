@@ -1,0 +1,51 @@
+#set($psid = $parametersTool.get('psid','-1'))
+#set ($voteLink = $link.set('psid',$psid))
+
+#genericScreenHeader("VOTE")
+
+  <form name="form1" method="post" action="" class="defaultForm">
+  <input type="hidden" name="psid" value="$psid" size="30">
+  <input type="hidden" name="pid" value="$vote.id" size="30">
+    <table class="defaultTable">
+    <tr>
+     <td align="left"><b>Title:</b></td>
+     <td>$vote.getName()</td>
+    </tr>
+    <tr>
+     <td align="left"><b>Description:</b></td>
+     <td>$!vote.getDescription()</td>
+    </tr>
+    #set($howMany = 0)
+    #foreach($answerKey in $answerKeys)
+	<tr>
+	 <td colspan="2">
+          #set($howMany = ($howMany + $results.get($answers.get($answerKey).getId())))##
+          <b>Option $velocityCount:</b><br>
+          <i>$answers.get($answerKey).getTitle()</i>
+          ($stringTool.shortenString($percent.get($answers.get($answerKey).getId()).toString(), 4, "")%) - $results.get($answers.get($answerKey).getId())<BR/>
+     </td>
+    </tr>
+    #end
+    <tr>
+     <td align="left"><b>How many:</b></td><td>$howMany</td>
+    </tr>
+    </table>
+  </form>
+  
+  <div>
+    <table class="layoutTable" align="right" border="0">
+      <tr>
+        <td>
+          <table height="22" class="buttonTable">
+            <tr>
+              <td>
+                <a href="$voteLink.view("poll.VoteList")">Cancle</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+#genericScreenTrailer()

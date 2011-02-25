@@ -108,6 +108,20 @@ ATTRIBUTES (
   categorizable = true
 );
 
+CREATE RESOURCE 'cms.poll.vote'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/poll/resources'
+ATTRIBUTES (
+  image = 'vote.png', # resource icon
+  view = 'poll.VoteSearchResult',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  pickerSupported = false,
+  categorizable = true
+);
+
 # // roles for polls ////////////////////////
 
 CREATE RESOURCE 'roles'

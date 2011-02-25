@@ -73,6 +73,23 @@ public abstract class BasePollAction
             }
         }
     }
+    
+   protected void saveVote(HttpContext httpContext, Parameters parameters)
+   {
+       Map answers = (Map)httpContext.getSessionAttribute(VOTE_KEY);
+       if(answers == null)
+       {
+           answers = new HashMap();
+           httpContext.setSessionAttribute(VOTE_KEY, answers);
+       }
+       int answerSize = parameters.getInt("answer_size", -1);
+       for(int i = 0; i < answerSize; i++)
+       {
+           Answer answer = (Answer)answers.get(new Integer(i));
+           String answerTitle = parameters.get("answer_"+i, "");
+           answer.setTitle(answerTitle);
+       }
+   }
 
     public PollsResource getPollsRoot(Context context, CoralSession coralSession)
         throws ProcessingException

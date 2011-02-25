@@ -17,3 +17,34 @@ ATTRIBUTES (
 REQUIRED string email,
 string data
 );
+
+CREATE RESOURCE 'cms.poll.vote'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/poll/resources'
+ATTRIBUTES (
+  image = 'vote.png', # resource icon
+  view = 'poll.VoteSearchResult',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  pickerSupported = false,
+  categorizable = true
+);
+
+CREATE RESOURCE CLASS 'cms.poll.vote'
+JAVA CLASS 'net.cyklotron.cms.poll.VoteResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node', 'protected')
+ATTRIBUTES (
+role moderator
+);
+
+CREATE RESOURCE CLASS 'cms.poll.ballot'
+JAVA CLASS 'net.cyklotron.cms.poll.BallotResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED string email,
+long answerId
+);

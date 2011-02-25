@@ -3,7 +3,9 @@ package net.cyklotron.cms.poll.internal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.Cookie;
 
@@ -25,6 +27,7 @@ import org.objectledge.web.HttpContext;
 import org.picocontainer.Startable;
 
 import net.cyklotron.cms.poll.AnswerResource;
+import net.cyklotron.cms.poll.BallotResource;
 import net.cyklotron.cms.poll.PollException;
 import net.cyklotron.cms.poll.PollResource;
 import net.cyklotron.cms.poll.PollService;
@@ -33,6 +36,7 @@ import net.cyklotron.cms.poll.PollsResourceImpl;
 import net.cyklotron.cms.poll.PoolResource;
 import net.cyklotron.cms.poll.PoolResourceImpl;
 import net.cyklotron.cms.poll.QuestionResource;
+import net.cyklotron.cms.poll.VoteResource;
 import net.cyklotron.cms.poll.util.Answer;
 import net.cyklotron.cms.poll.util.Question;
 import net.cyklotron.cms.site.SiteResource;
@@ -337,6 +341,45 @@ public class PollServiceImpl
 		    }
 		}
 	}
+	
+	
+    /**
+     * @param vote
+     * @param answers
+     * @param resultMap
+     * @param percentMap
+     */
+    public void prepareVoteMaps(CoralSession coralSession, VoteResource vote, Map answers,
+        Map resultMap, Map percentMap, Map ballotsMap)
+    {
+        Resource[] answerResources = coralSession.getStore().getResource(vote);
+        int totalCount = 0;
+        for(int i = 0; i < answerResources.length; i++)
+        {
+            AnswerResource answerResource = (AnswerResource)answerResources[i];
+            Answer answer = new Answer(answerResource.getName(), answerResource.getId());
+            answers.put(new Integer(answerResource.getSequence()), answer);
+            resultMap.put(answerResource.getId(), new Integer(answerResource.getVotesCount()));
+            Resource[] ballotResources = coralSession.getStore().getResource(answerResource);
+            List<BallotResource> ballots = new ArrayList<BallotResource>();
+            ballotsMap.put(answerResource.getId(), ballots.toArray(ballotResources));
+            totalCount += answerResource.getVotesCount();
+        }
+
+        for(int i = 0; i < answerResources.length; i++)
+        {
+            AnswerResource answerResource = (AnswerResource)answerResources[i];
+            if(totalCount > 0)
+            {
+                percentMap.put(answerResource.getId(), new Float(answerResource.getVotesCount()
+                    * 100 / totalCount));
+            }
+            else
+            {
+                percentMap.put(answerResource.getId(), new Float(0));
+            }
+        }
+    }
     
     
     

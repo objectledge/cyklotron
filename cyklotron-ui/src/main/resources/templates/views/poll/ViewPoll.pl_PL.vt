@@ -9,7 +9,7 @@
 #set($psid = $parametersTool.get('psid','-1'))
 #set ($pollLink = $link.set('psid',$psid))
 #set($poolId = $parametersTool.get('pool_id','-1'))
-#genericScreenHeader("ANKIETA")
+#genericScreenHeader("SONDAŻ")
 ## TITLE BAR
 
   <form name="form1" method="post" action="$pollLink.view("poll.RespondPollResult").action("poll.RespondPoll")" class="defaultForm">
@@ -18,7 +18,7 @@
     <table class="defaultTable">
       <tr>
     <td align="left">
-      <b>Tytuł ankiety:</b>
+      <b>Tytuł sondażu:</b>
     </th>
     <td>
       $poll.getName()
@@ -54,7 +54,7 @@
 
       <tr>
     <td align="left">
-      <b>Wszystkich glosow:</b>
+      <b>Wszystkich głosów:</b>
     </td>
     <td>
        $howMany

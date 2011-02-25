@@ -38,32 +38,53 @@ public class ChangeSequence
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        savePoll(httpContext, parameters);
-        int qid = parameters.getInt("qid", -1);
-        if(qid == -1)
+        String type = parameters.get("type", "poll");
+
+        if("poll".equals(type))
         {
-            throw new ProcessingException("Question id not found");
+            savePoll(httpContext, parameters);
+            int qid = parameters.getInt("qid", -1);
+            if(qid == -1)
+            {
+                throw new ProcessingException("Question id not found");
+            }
+            int aid = parameters.getInt("aid", -1);
+            int offset = parameters.getInt("offset", 0);
+            if(offset == 0)
+            {
+                throw new ProcessingException("Offset not found");
+            }
+
+            Map questions = (Map)httpContext.getSessionAttribute(POLL_KEY);
+            if(questions == null || questions.size() <= qid)
+            {
+                throw new ProcessingException("Question id exceed questions length");
+            }
+
+            if(aid == -1)
+            {
+                move(questions, qid, offset);
+            }
+            else
+            {
+                Map answers = ((Question)questions.get(new Integer(qid))).getAnswers();
+                move(answers, aid, offset);
+            }
         }
-        int aid = parameters.getInt("aid", -1);
-        int offset = parameters.getInt("offset", 0);
-        if(offset == 0)
+        else if("vote".equals(type))
         {
-            throw new ProcessingException("Offset not found");
-        }
-        
-        Map questions = (Map)httpContext.getSessionAttribute(POLL_KEY);
-        if(questions == null || questions.size() <= qid)
-        {
-            throw new ProcessingException("Question id exceed questions length");
-        }
-        
-        if(aid == -1)
-        {
-            move(questions, qid, offset);
-        }
-        else
-        {
-            Map answers = ((Question)questions.get(new Integer(qid))).getAnswers();
+            saveVote(httpContext, parameters);
+            int aid = parameters.getInt("aid", -1);
+            int offset = parameters.getInt("offset", 0);
+            if(offset == 0)
+            {
+                throw new ProcessingException("Offset not found");
+            }
+            Map answers = (Map)httpContext.getSessionAttribute(VOTE_KEY);
+            if(answers == null || answers.size() <= aid)
+            {
+                throw new ProcessingException("Question id exceed questions length");
+            }
             move(answers, aid, offset);
         }
     }
