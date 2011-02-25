@@ -1,11 +1,10 @@
 package net.cyklotron.cms.poll.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.Cookie;
 
@@ -361,8 +360,7 @@ public class PollServiceImpl
             answers.put(new Integer(answerResource.getSequence()), answer);
             resultMap.put(answerResource.getId(), new Integer(answerResource.getVotesCount()));
             Resource[] ballotResources = coralSession.getStore().getResource(answerResource);
-            List<BallotResource> ballots = new ArrayList<BallotResource>();
-            ballotsMap.put(answerResource.getId(), ballots.toArray(ballotResources));
+            ballotsMap.put(answerResource.getId(), Arrays.asList(ballotResources));
             totalCount += answerResource.getVotesCount();
         }
 
