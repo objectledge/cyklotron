@@ -36,6 +36,7 @@ import java.util.Locale;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.database.Database;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.DateFormatter;
 import org.objectledge.parameters.Parameters;
@@ -72,9 +73,9 @@ public class NgoDatabaseServiceImpl
     private final Locale locale;
 
     public NgoDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem,
-        SiteService siteService, CoralSessionFactory coralSessionFactory, Templating templating,
-        OfflineLinkRenderingService offlineLinkRenderingService, DateFormatter dateFormatter,
-        CategoryService categoryService)
+        SiteService siteService, CoralSessionFactory coralSessionFactory, Database database,
+        Templating templating, OfflineLinkRenderingService offlineLinkRenderingService,
+        DateFormatter dateFormatter, CategoryService categoryService)
         throws Exception
     {
         // date format
