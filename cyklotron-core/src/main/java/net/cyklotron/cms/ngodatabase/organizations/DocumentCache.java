@@ -119,10 +119,17 @@ public class DocumentCache
         synchronized(organizationToDocument)
         {
             LongSet docs = null;
+            
             LongSet oldOrgs = (LongSet)documentToOrganization.get(doc);
-            // remove old organizationToDocument mappings
-            if(oldOrgs != null)
+            LongSet orgs = new LongOpenHashSet();
+            for(String id : organizationIds.split(","))
             {
+                orgs.add(Long.parseLong(id));
+            }
+            boolean orgsEqual = oldOrgs != null ? orgs.equals(oldOrgs) : orgs.isEmpty();
+            if(oldOrgs != null && !orgsEqual)
+            {
+                // remove old organizationToDocument mappings
                 LongIterator i = oldOrgs.iterator();
                 while(i.hasNext())
                 {
@@ -131,81 +138,97 @@ public class DocumentCache
                     if(docs != null)
                     {
                         docs.remove(doc);
+                        if(docs.isEmpty())
+                        {
+                            organizationToDocument.remove(orgId);
+                        }
                     }
-                }
+                }                
             }
-            // add new organizationToDocument mappings
-            LongSet orgs = new LongOpenHashSet();
-            for(String id : organizationIds.split(","))
+            if(oldOrgs == null || !orgsEqual)
             {
-                orgs.add(Long.parseLong(id));
-            }
-            LongIterator i = orgs.iterator();
-            while(i.hasNext())
-            {
-                long orgId = i.next();
-                docs = (LongSet)organizationToDocument.get(orgId);
-                if(docs == null)
+                // add new organizationToDocument mappings
+                LongIterator i = orgs.iterator();
+                while(i.hasNext())
                 {
-                    docs = new LongOpenHashSet();
-                    organizationToDocument.put(orgId, docs);
+                    long orgId = i.next();
+                    docs = (LongSet)organizationToDocument.get(orgId);
+                    if(docs == null)
+                    {
+                        docs = new LongOpenHashSet();
+                        organizationToDocument.put(orgId, docs);
+                    }
+                    docs.add(doc);
                 }
-                docs.add(doc);
+                // add or replace documentToOrganization mapping
+                documentToOrganization.put(doc, orgs);                
             }
-            // add or replace documentToOrganization mapping
-            documentToOrganization.put(doc, orgs);
-
+            
+            long updateTimeKey = 0L;
             if(updateTime != null)
             {
                 calendar.setTime(updateTime);
                 calendar.set(Calendar.SECOND, 0);
                 calendar.set(Calendar.MILLISECOND, 0);
-                long dateKey = calendar.getTimeInMillis();
-                long oldUpdateTime = documentToUpdateTime.get(doc);
-                if(oldUpdateTime != dateKey)
+                updateTimeKey = calendar.getTimeInMillis();
+            }
+            long oldUpdateTimeKey = documentToUpdateTime.get(doc);            
+            if(oldUpdateTimeKey != 0L && oldUpdateTimeKey != updateTimeKey)
+            {
+                // remove old updateTimeToDocument mapping
+                docs = updateTimeToDocument.get(oldUpdateTimeKey);
+                if(docs != null)
                 {
-                    // remove old updateTimeToDocument mapping
-                    docs = updateTimeToDocument.get(oldUpdateTime);
-                    if(docs != null)
+                    docs.remove(doc);
+                    if(docs.isEmpty())
                     {
-                        docs.remove(doc);
-                    }                    
-                }
+                        updateTimeToDocument.remove(oldUpdateTimeKey);
+                    }
+                }                    
+            }
+            if((oldUpdateTimeKey == 0L || oldUpdateTimeKey != updateTimeKey) && updateTimeKey != 0L)
+            {
                 // add new updateTimeToDocument mapping
-                docs = updateTimeToDocument.get(dateKey);
+                docs = updateTimeToDocument.get(updateTimeKey);
                 if(docs == null)
                 {
                     docs = new LongOpenHashSet();
-                    updateTimeToDocument.put(dateKey, docs);
+                    updateTimeToDocument.put(updateTimeKey, docs);
                 }                
                 docs.add(doc);
                 
                 // add or replace documentToUpdateTime mapping
-                documentToUpdateTime.put(doc, dateKey);
+                documentToUpdateTime.put(doc, updateTimeKey);
             }
             
             long oldSite = documentToSite.get(doc);
-            if(oldSite != site)
+            if(oldSite != 0 && oldSite != site)
             {
                 // remove old siteToDocument mapping
                 docs = (LongSet)siteToDocument.get(oldSite);
                 if(docs != null)
                 {
                     docs.remove(doc);
+                    if(docs.isEmpty())
+                    {
+                        siteToDocument.remove(oldSite);
+                    }
                 }
             }
-            
-            // add new siteToDocument mapping
-            docs = (LongSet)siteToDocument.get(site);
-            if(docs == null)
+            if(oldSite == 0L || oldSite != site)
             {
-                docs = new LongOpenHashSet();
-                siteToDocument.put(site, docs);
+                // add new siteToDocument mapping
+                docs = (LongSet)siteToDocument.get(site);
+                if(docs == null)
+                {
+                    docs = new LongOpenHashSet();
+                    siteToDocument.put(site, docs);
+                }
+                docs.add(doc);
+                
+                // add or replace documentToSite mapping
+                documentToSite.put(doc, site);            
             }
-            docs.add(doc);
-            
-            // add or replace documentToSite mapping
-            documentToSite.put(doc, site);
         }
     }
 
