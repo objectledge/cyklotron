@@ -3,12 +3,15 @@ package net.cyklotron.cms.ngodatabase.organizations;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.event.ResourceChangeListener;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
@@ -19,8 +22,6 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
 
-import net.cyklotron.cms.documents.DocumentNodeResource;
-
 import bak.pcj.LongIterator;
 import bak.pcj.map.LongKeyLongMap;
 import bak.pcj.map.LongKeyLongOpenHashMap;
@@ -29,7 +30,13 @@ import bak.pcj.map.LongKeyOpenHashMap;
 import bak.pcj.set.LongOpenHashSet;
 import bak.pcj.set.LongSet;
 
-public class DocumentCache
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+
+public class CachingUpdatedDocumentsProvider
+    extends UpdatedDocumentsProvider
 {
     private final Database database;
 
@@ -53,13 +60,37 @@ public class DocumentCache
 
     private boolean cacheLoaded;
 
-    public DocumentCache(Database database, CoralSessionFactory coralSessionFactory)
+    public CachingUpdatedDocumentsProvider(Database database,
+        CoralSessionFactory coralSessionFactory, SiteService siteService)
     {
+        super(siteService);
         this.database = database;
         this.coralSessionFactory = coralSessionFactory;
     }
     
-    public LongSet queryDocuments(long[] sites, long org, Date date)
+    @Override
+    public List<DocumentNodeResource> queryDocuments(SiteResource[] sites, Date endDate,
+        long organizationId, CoralSession coralSession)
+    {
+        LongSet documents = queryDocuments(sites, endDate, organizationId);
+        List<DocumentNodeResource> result = new ArrayList<DocumentNodeResource>(documents.size());
+        try
+        {
+            LongIterator i = documents.iterator();
+            while(i.hasNext())
+            {
+                result
+                    .add(DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, i.next()));
+            }
+            return result;
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new RuntimeException("internal error");
+        }
+    }
+
+    private LongSet queryDocuments(SiteResource[] sites, Date date, long org)
     {
         synchronized(organizationToDocument)
         {
@@ -93,9 +124,9 @@ public class DocumentCache
             result.retainAll(temp);
 
             temp.clear();
-            for(long site : sites)
+            for(SiteResource site : sites)
             {
-                temp.addAll((LongSet)siteToDocument.get(site));
+                temp.addAll((LongSet)siteToDocument.get(site.getId()));
             }
             result.retainAll(temp);
             
@@ -287,10 +318,9 @@ public class DocumentCache
         }
     }
 
-    public class DocumentUpdateListener
+    private class DocumentUpdateListener
         implements ResourceChangeListener
     {
-
         @Override
         public void resourceChanged(Resource resource, Subject subject)
         {
