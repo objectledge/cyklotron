@@ -36,7 +36,6 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.filesystem.FileSystem;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.site.SiteService;
 
 public class OutgoingOrganizationsService
 {
@@ -54,16 +53,16 @@ public class OutgoingOrganizationsService
 
     private final Logger logger;
 
-    private final SiteService siteService;
-
     private final DateFormat dateFormat;
 
-    public OutgoingOrganizationsService(Configuration outgoingConfig, SiteService siteService,
-        CoralSessionFactory coralSessionFactory, FileSystem fileSystem, Logger logger,
-        DateFormat dateFormat)
+    private final UpdatedDocumentsProvider updatedDocumentsProvider;
+
+    public OutgoingOrganizationsService(Configuration outgoingConfig,
+        UpdatedDocumentsProvider updatedDocumentsProvider, CoralSessionFactory coralSessionFactory,
+        FileSystem fileSystem, Logger logger, DateFormat dateFormat)
         throws ConfigurationException
     {
-        this.siteService = siteService;
+        this.updatedDocumentsProvider = updatedDocumentsProvider;
         this.coralSessionFactory = coralSessionFactory;
         this.fileSystem = fileSystem;
         this.logger = logger;
@@ -76,12 +75,12 @@ public class OutgoingOrganizationsService
     {
         // query documents
         List<DocumentNodeResource> documents = null;
-        Date endDate = OrganizationUtils.offsetDate(new Date(), outgoingQueryDays);
+        Date endDate = updatedDocumentsProvider.offsetDate(new Date(), outgoingQueryDays);
         CoralSession coralSession = coralSessionFactory.getAnonymousSession();
         try
         {
-            documents = OrganizationUtils.queryDocuments(OrganizationUtils.getSites(outgoingSites,
-                siteService, coralSession), endDate, -1L, coralSession);
+            documents = updatedDocumentsProvider.queryDocuments(updatedDocumentsProvider.getSites(
+                outgoingSites, coralSession), endDate, -1L, coralSession);
         }
         catch(Exception e)
         {
@@ -190,7 +189,8 @@ public class OutgoingOrganizationsService
         return s != null ? s : "";
     }
 
-    private static Element documentElm(DocumentNodeResource document, Long orgId, DateFormat dateFormat)
+    private static Element documentElm(DocumentNodeResource document, Long orgId,
+        DateFormat dateFormat)
         throws DocumentException
     {
         Document meta = DocumentHelper.parseText(document.getMeta());

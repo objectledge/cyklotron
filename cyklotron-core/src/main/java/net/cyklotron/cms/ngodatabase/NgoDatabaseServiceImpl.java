@@ -46,10 +46,12 @@ import org.objectledge.utils.StringUtils;
 import org.picocontainer.Startable;
 
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.ngodatabase.organizations.CoralQueryUpdatedDocumentsProvider;
 import net.cyklotron.cms.ngodatabase.organizations.IncomingOrganizationsService;
 import net.cyklotron.cms.ngodatabase.organizations.OrganizationNewsFeedService;
 import net.cyklotron.cms.ngodatabase.organizations.OrganizationsIndex;
 import net.cyklotron.cms.ngodatabase.organizations.OutgoingOrganizationsService;
+import net.cyklotron.cms.ngodatabase.organizations.UpdatedDocumentsProvider;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.util.OfflineLinkRenderingService;
 
@@ -67,6 +69,8 @@ public class NgoDatabaseServiceImpl
     private final OutgoingOrganizationsService outgoing;
 
     private final OrganizationNewsFeedService newsFeed;
+    
+    private final UpdatedDocumentsProvider updatedDocumetns;
 
     private final DateFormat dateFormat;
 
@@ -88,13 +92,16 @@ public class NgoDatabaseServiceImpl
         // lucene index
         this.organizationsIndex = new OrganizationsIndex(fileSystem, logger);
 
+        // updated documents provider
+        this.updatedDocumetns = new CoralQueryUpdatedDocumentsProvider(siteService);
+
         // service components
         this.incoming = new IncomingOrganizationsService(config.getChild("incoming"), fileSystem,
             organizationsIndex, logger);
-        this.outgoing = new OutgoingOrganizationsService(config.getChild("outgoing"), siteService,
+        this.outgoing = new OutgoingOrganizationsService(config.getChild("outgoing"), updatedDocumetns,
             coralSessionFactory, fileSystem, logger, dateFormat);
         this.newsFeed = new OrganizationNewsFeedService(config.getChild("newsFeed"), dateFormat,
-            locale, organizationsIndex, siteService, categoryService, coralSessionFactory,
+            locale, organizationsIndex, updatedDocumetns, categoryService, coralSessionFactory,
             fileSystem, dateFormatter, offlineLinkRenderingService, templating, logger);
     }
 

@@ -41,7 +41,6 @@ import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.ngodatabase.Organization;
-import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.util.OfflineLinkRenderingService;
 
 public class OrganizationNewsFeedService
@@ -68,7 +67,7 @@ public class OrganizationNewsFeedService
 
     private final OrganizationsIndex organizationsIndex;
 
-    private final SiteService siteService;
+    private final UpdatedDocumentsProvider updatedDocumentsProvider;
 
     private final FileSystem fileSystem;
 
@@ -87,18 +86,18 @@ public class OrganizationNewsFeedService
     private final Logger logger;
 
     public OrganizationNewsFeedService(Configuration newsFeedConfig, DateFormat dateFormat,
-        Locale locale, OrganizationsIndex organizationsIndex, SiteService siteService,
-        CategoryService categoryService, CoralSessionFactory coralSessionFactory,
-        FileSystem fileSystem, DateFormatter dateFormatter,
-        OfflineLinkRenderingService offlineLinkRenderingService, Templating templating,
-        Logger logger)
+        Locale locale, OrganizationsIndex organizationsIndex,
+        UpdatedDocumentsProvider updatedDocumentsProvider, CategoryService categoryService,
+        CoralSessionFactory coralSessionFactory, FileSystem fileSystem,
+        DateFormatter dateFormatter, OfflineLinkRenderingService offlineLinkRenderingService,
+        Templating templating, Logger logger)
         throws ConfigurationException
     {
         this.dateFormat = dateFormat;
         this.locale = locale;
+        this.updatedDocumentsProvider = updatedDocumentsProvider;
         this.coralSessionFactory = coralSessionFactory;
         this.organizationsIndex = organizationsIndex;
-        this.siteService = siteService;
         this.fileSystem = fileSystem;
         this.dateFormatter = dateFormatter;
         this.offlineLinkRenderingService = offlineLinkRenderingService;
@@ -140,9 +139,9 @@ public class OrganizationNewsFeedService
                     throw new ProcessingException("organization " + organizationId + " not found");
                 }
                 Date startDate = new Date();
-                Date endDate = OrganizationUtils.offsetDate(startDate, newsFeedQueryDays);
-                List<DocumentNodeResource> documents = OrganizationUtils.queryDocuments(
-                    OrganizationUtils.getSites(newsFeedSites, siteService, coralSession), endDate,
+                Date endDate = updatedDocumentsProvider.offsetDate(startDate, newsFeedQueryDays);
+                List<DocumentNodeResource> documents = updatedDocumentsProvider.queryDocuments(
+                    updatedDocumentsProvider.getSites(newsFeedSites, coralSession), endDate,
                     organizationId, coralSession);
                 SyndFeed feed = buildFeed(organization, documents, startDate, endDate, coralSession);
                 feedContents = saveCachedFeed(organizationId, feed);

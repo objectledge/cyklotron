@@ -1,13 +1,9 @@
 package net.cyklotron.cms.ngodatabase.organizations;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.jcontainer.dna.Configuration;
-import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.query.MalformedQueryException;
 import org.objectledge.coral.query.QueryResults;
@@ -16,40 +12,19 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.util.ProtectedValidityFilter;
 
-public class OrganizationUtils
+public class CoralQueryUpdatedDocumentsProvider
+    extends UpdatedDocumentsProvider
 {
-    protected OrganizationUtils()
+    public CoralQueryUpdatedDocumentsProvider(SiteService siteService)
     {
-        // no instantiation
+        super(siteService);
     }
 
-    public static Date offsetDate(Date date, int offsetDays)
-    {
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        cal.add(Calendar.DAY_OF_MONTH, -offsetDays);
-        return cal.getTime();
-    }
-
-    public static SiteResource[] getSites(Configuration config, SiteService siteService,
-        CoralSession coralSession)
-        throws SiteException, ConfigurationException
-    {
-        Configuration[] siteConfigElm = config.getChildren("site");
-        SiteResource[] sites = new SiteResource[siteConfigElm.length];
-        for(int i = 0; i < siteConfigElm.length; i++)
-        {
-            sites[i] = siteService.getSite(coralSession, siteConfigElm[i].getValue());
-        }
-        return sites;
-    }
-
-    public static List<DocumentNodeResource> queryDocuments(SiteResource[] sites, Date endDate,
+    public List<DocumentNodeResource> queryDocuments(SiteResource[] sites, Date endDate,
         long organizationId, CoralSession coralSession)
     {
         try
@@ -103,7 +78,7 @@ public class OrganizationUtils
     }
 
     @SuppressWarnings("unchecked")
-    private static String getDateLiteral(Date date, CoralSession coralSession)
+    private String getDateLiteral(Date date, CoralSession coralSession)
     {
         try
         {
@@ -116,6 +91,5 @@ public class OrganizationUtils
             throw new RuntimeException("internal error", e);
         }
     }
-    
-    
+   
 }
