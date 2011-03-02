@@ -13,6 +13,7 @@ import java.util.TreeMap;
 
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.event.ResourceChangeListener;
+import org.objectledge.coral.event.ResourceDeletionListener;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
@@ -182,6 +183,7 @@ public class CachingUpdatedDocumentsProvider
 
                     listener = new DocumentUpdateListener();
                     coralSession.getEvent().addResourceChangeListener(listener, documentNodeClass);
+                    coralSession.getEvent().addResourceDeletionListener(listener, documentNodeClass);
                     cacheLoaded = true;
                 }
                 catch(Exception e)
@@ -317,9 +319,59 @@ public class CachingUpdatedDocumentsProvider
             }
         }
     }
+    
+    private void deleteFromCache(long doc)
+    {
+        synchronized(organizationToDocument)
+        {
+            LongSet orgs = (LongSet)documentToOrganization.remove(doc);
+            if(orgs != null)
+            {
+                LongIterator i = orgs.iterator();
+                while(i.hasNext())
+                {
+                    long org = i.next();
+                    LongSet docs = (LongSet)organizationToDocument.get(org);
+                    if(docs != null)
+                    {
+                        docs.remove(doc);
+                        if(docs.isEmpty())
+                        {
+                            organizationToDocument.remove(org);
+                        }
+                    }
+                }
+            }
+            
+            long updateTimeKey = documentToUpdateTime.remove(doc);
+            if(updateTimeKey != 0L)
+            {
+                LongSet docs = updateTimeToDocument.get(updateTimeKey);
+                if(docs != null)
+                {
+                    docs.remove(doc);
+                    if(docs.isEmpty())
+                    {
+                        updateTimeToDocument.remove(updateTimeKey);
+                    }
+                }
+            }
+            
+            long site = documentToSite.remove(doc);
+            if(site != 0L)
+            {
+                LongSet docs = (LongSet)siteToDocument.get(site);
+                docs.remove(doc);
+                if(docs.isEmpty())
+                {
+                    siteToDocument.remove(updateTimeKey);
+                }
+            }
+        }
+    }
 
     private class DocumentUpdateListener
-        implements ResourceChangeListener
+        implements ResourceChangeListener, ResourceDeletionListener
     {
         @Override
         public void resourceChanged(Resource resource, Subject subject)
@@ -327,8 +379,19 @@ public class CachingUpdatedDocumentsProvider
             if(resource instanceof DocumentNodeResource)
             {
                 DocumentNodeResource doc = (DocumentNodeResource)resource;
-                updateCache(resource.getId(), doc.getOrganizationIds(),
+                updateCache(doc.getId(), doc.getOrganizationIds(),
                     doc.getCustomModificationTime(), doc.getSite().getId());
+            }
+        }
+
+        @Override
+        public void resourceDeleted(Resource resource)
+            throws Exception
+        {
+            if(resource instanceof DocumentNodeResource)
+            {
+                DocumentNodeResource doc = (DocumentNodeResource)resource;
+                deleteFromCache(doc.getId());
             }
         }
     }
