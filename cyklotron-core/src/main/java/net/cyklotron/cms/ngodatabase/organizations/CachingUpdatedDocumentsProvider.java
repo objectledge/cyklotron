@@ -10,6 +10,8 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.event.ResourceChangeListener;
@@ -60,6 +62,10 @@ public class CachingUpdatedDocumentsProvider
     private DocumentUpdateListener listener = null;
 
     private boolean cacheLoaded;
+    
+    private final Lock r;
+    
+    private final Lock w;
 
     public CachingUpdatedDocumentsProvider(Database database,
         CoralSessionFactory coralSessionFactory, SiteService siteService)
@@ -67,6 +73,9 @@ public class CachingUpdatedDocumentsProvider
         super(siteService);
         this.database = database;
         this.coralSessionFactory = coralSessionFactory;
+        ReentrantReadWriteLock rw = new ReentrantReadWriteLock();
+        r = rw.readLock();
+        w = rw.writeLock();
     }
     
     @Override
@@ -93,7 +102,8 @@ public class CachingUpdatedDocumentsProvider
 
     private LongSet queryDocuments(SiteResource[] sites, Date date, long org)
     {
-        synchronized(organizationToDocument)
+        r.lock();
+        try
         {
             if(!cacheLoaded)
             {
@@ -115,30 +125,38 @@ public class CachingUpdatedDocumentsProvider
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
             long dateKey = calendar.getTimeInMillis();
-
+            
             LongSet temp = new LongOpenHashSet();
             for(SortedMap.Entry<Long, LongSet> entry : updateTimeToDocument.tailMap(dateKey)
-                .entrySet())
+                            .entrySet())
             {
                 temp.addAll(entry.getValue());
             }
             result.retainAll(temp);
-
+            
             temp.clear();
             for(SiteResource site : sites)
             {
                 temp.addAll((LongSet)siteToDocument.get(site.getId()));
             }
-            result.retainAll(temp);
-            
+            result.retainAll(temp);            
             return result;
+        }
+        finally
+        {
+            r.unlock();
         }
     }
 
     private void preloadCache()
     {
-        synchronized(organizationToDocument)
+        // Thread owns read lock acquired by queryDocuments methods. It needs to be released before 
+        // write lock can be acquired, because ReentrantReadWriteLock does not support lock upgrading.
+        r.unlock();
+        w.lock();
+        try
         {
+            // Check if cache has not been preloaded by another thread while we were waiting for write lock.
             if(!cacheLoaded)
             {
                 Connection conn = null;
@@ -148,7 +166,7 @@ public class CachingUpdatedDocumentsProvider
                 try
                 {
                     coralSession = coralSessionFactory.getAnonymousSession();
-
+    
                     @SuppressWarnings("unchecked")
                     ResourceClass<DocumentNodeResource> documentNodeClass = coralSession
                         .getSchema().getResourceClass(DocumentNodeResource.CLASS_NAME);
@@ -161,7 +179,7 @@ public class CachingUpdatedDocumentsProvider
                     @SuppressWarnings("unchecked")
                     AttributeDefinition<Date> customModificationTimeAttr = (AttributeDefinition<Date>)documentNodeClass
                         .getAttribute("customModificationTime");
-
+    
                     conn = database.getConnection();
                     stmt = conn.createStatement();
                     rset = stmt
@@ -174,13 +192,13 @@ public class CachingUpdatedDocumentsProvider
                             + "AND gr.attribute_definition_id " + siteAttr.getId() + " "
                             + "AND s.data_key = gs.data_key AND d.data_Key = gd.data_key AND r.data_key = gr.data_key "
                             + "AND gd.resource_id = gs.resource_id AND gr.resource_id = gd.resource_id");
-
+    
                     while(rset.next())
                     {
                         updateCache(rset.getLong(1), rset.getString(2), rset.getDate(3),
                             rset.getLong(4));
                     }
-
+    
                     listener = new DocumentUpdateListener();
                     coralSession.getEvent().addResourceChangeListener(listener, documentNodeClass);
                     coralSession.getEvent().addResourceDeletionListener(listener, documentNodeClass);
@@ -200,11 +218,18 @@ public class CachingUpdatedDocumentsProvider
                 }
             }
         }
+        finally
+        {
+            // Reacquire read lock (Lock downgrading is supported by ReentrantReadWriteLock) 
+            r.lock();
+            w.unlock();
+        }
     }
 
     private void updateCache(long doc, String organizationIds, Date updateTime, long site)
     {
-        synchronized(organizationToDocument)
+        w.lock();
+        try
         {
             LongSet docs = null;
             
@@ -318,11 +343,16 @@ public class CachingUpdatedDocumentsProvider
                 documentToSite.put(doc, site);            
             }
         }
+        finally
+        {
+            w.unlock();
+        }
     }
     
     private void deleteFromCache(long doc)
     {
-        synchronized(organizationToDocument)
+        w.lock();
+        try
         {
             LongSet orgs = (LongSet)documentToOrganization.remove(doc);
             if(orgs != null)
@@ -367,6 +397,10 @@ public class CachingUpdatedDocumentsProvider
                     siteToDocument.remove(updateTimeKey);
                 }
             }
+        }
+        finally
+        {
+            w.unlock();
         }
     }
 
