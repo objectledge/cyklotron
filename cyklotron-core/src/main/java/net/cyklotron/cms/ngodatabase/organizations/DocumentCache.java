@@ -67,33 +67,38 @@ public class DocumentCache
             {
                 preloadCache();
             }
+            LongSet result = new LongOpenHashSet();
+            
+            if(org > 0L)
+            {
+                result.addAll((LongSet)organizationToDocument.get(org));
+            }
+            else
+            {
+                result.addAll(documentToOrganization.keySet());
+            }
             
             Calendar calendar = new GregorianCalendar();
             calendar.setTime(date);
             calendar.set(Calendar.SECOND, 0);
             calendar.set(Calendar.MILLISECOND, 0);
-            SortedMap<Long, LongSet> updatedDocuments = updateTimeToDocument.tailMap(calendar.getTimeInMillis());
-            
-            LongSet result = new LongOpenHashSet();
-            if(org > 0L)
+            long dateKey = calendar.getTimeInMillis();
+
+            LongSet temp = new LongOpenHashSet();
+            for(SortedMap.Entry<Long, LongSet> entry : updateTimeToDocument.tailMap(dateKey)
+                .entrySet())
             {
-                result.addAll((LongSet)organizationToDocument.get(org));
-                for(SortedMap.Entry<Long, LongSet> entry : updatedDocuments.entrySet())
-                {
-                    result.retainAll(entry.getValue());
-                }
+                temp.addAll(entry.getValue());
             }
-            else
-            {
-                for(SortedMap.Entry<Long, LongSet> entry : updatedDocuments.entrySet())
-                {
-                    result.addAll(entry.getValue());
-                }
-            }
+            result.retainAll(temp);
+
+            temp.clear();
             for(long site : sites)
             {
-                result.retainAll((LongSet)siteToDocument.get(site));
+                temp.addAll((LongSet)siteToDocument.get(site));
             }
+            result.retainAll(temp);
+            
             return result;
         }
     }
