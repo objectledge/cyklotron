@@ -989,6 +989,10 @@ public class StructureServiceImpl
                     if(documentSet != null)
                     {
                         documentSet.remove(node.getId());
+                        if(documentSet.isEmpty())
+                        {
+                            validityStartToDocument.remove(previousDateKey);
+                        }
                     }
                     documentSet = validityStartToDocument.get(currentDateKey);
                     if(documentSet == null)
@@ -996,6 +1000,7 @@ public class StructureServiceImpl
                         documentSet = new LongOpenHashSet();
                         validityStartToDocument.put(currentDateKey, documentSet);
                     }
+                    documentToValidityStart.put(node.getId(), currentDateKey);
                 }
             }
         }
