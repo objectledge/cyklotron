@@ -14,6 +14,7 @@ import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
@@ -32,6 +33,8 @@ public class DocumentCache
 {
     private final Database database;
 
+    private final CoralSessionFactory coralSessionFactory;
+    
     private final LongKeyMap documentToOrganization = new LongKeyOpenHashMap();
 
     private final LongKeyMap organizationToDocument = new LongKeyOpenHashMap();
@@ -50,12 +53,52 @@ public class DocumentCache
 
     private boolean cacheLoaded;
 
-    public DocumentCache(Database database)
+    public DocumentCache(Database database, CoralSessionFactory coralSessionFactory)
     {
         this.database = database;
+        this.coralSessionFactory = coralSessionFactory;
+    }
+    
+    public LongSet queryDocuments(long[] sites, long org, Date date)
+    {
+        synchronized(organizationToDocument)
+        {
+            if(!cacheLoaded)
+            {
+                preloadCache();
+            }
+            
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            SortedMap<Long, LongSet> updatedDocuments = updateTimeToDocument.tailMap(calendar.getTimeInMillis());
+            
+            LongSet result = new LongOpenHashSet();
+            if(org > 0L)
+            {
+                result.addAll((LongSet)organizationToDocument.get(org));
+                for(SortedMap.Entry<Long, LongSet> entry : updatedDocuments.entrySet())
+                {
+                    result.retainAll(entry.getValue());
+                }
+            }
+            else
+            {
+                for(SortedMap.Entry<Long, LongSet> entry : updatedDocuments.entrySet())
+                {
+                    result.addAll(entry.getValue());
+                }
+            }
+            for(long site : sites)
+            {
+                result.retainAll((LongSet)siteToDocument.get(site));
+            }
+            return result;
+        }
     }
 
-    private void preloadCache(CoralSession coralSession)
+    private void preloadCache()
     {
         synchronized(organizationToDocument)
         {
@@ -64,8 +107,11 @@ public class DocumentCache
                 Connection conn = null;
                 Statement stmt = null;
                 ResultSet rset = null;
+                CoralSession coralSession = null;
                 try
                 {
+                    coralSession = coralSessionFactory.getAnonymousSession();
+
                     @SuppressWarnings("unchecked")
                     ResourceClass<DocumentNodeResource> documentNodeClass = coralSession
                         .getSchema().getResourceClass(DocumentNodeResource.CLASS_NAME);
@@ -109,6 +155,10 @@ public class DocumentCache
                 finally
                 {
                     DatabaseUtils.close(conn, stmt, rset);
+                    if(coralSession != null)
+                    {
+                        coralSession.close();
+                    }
                 }
             }
         }
