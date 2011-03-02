@@ -46,7 +46,6 @@ import org.objectledge.utils.StringUtils;
 import org.picocontainer.Startable;
 
 import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.ngodatabase.organizations.CoralQueryUpdatedDocumentsProvider;
 import net.cyklotron.cms.ngodatabase.organizations.IncomingOrganizationsService;
 import net.cyklotron.cms.ngodatabase.organizations.OrganizationNewsFeedService;
 import net.cyklotron.cms.ngodatabase.organizations.OrganizationsIndex;
@@ -76,10 +75,11 @@ public class NgoDatabaseServiceImpl
 
     private final Locale locale;
 
-    public NgoDatabaseServiceImpl(Configuration config, Logger logger, FileSystem fileSystem,
-        SiteService siteService, CoralSessionFactory coralSessionFactory, Database database,
-        Templating templating, OfflineLinkRenderingService offlineLinkRenderingService,
-        DateFormatter dateFormatter, CategoryService categoryService)
+    public NgoDatabaseServiceImpl(Configuration config, Logger logger,
+        UpdatedDocumentsProvider updatedDocuments, FileSystem fileSystem, SiteService siteService,
+        CoralSessionFactory coralSessionFactory, Database database, Templating templating,
+        OfflineLinkRenderingService offlineLinkRenderingService, DateFormatter dateFormatter,
+        CategoryService categoryService)
         throws Exception
     {
         // date format
@@ -93,7 +93,7 @@ public class NgoDatabaseServiceImpl
         this.organizationsIndex = new OrganizationsIndex(fileSystem, logger);
 
         // updated documents provider
-        this.updatedDocumetns = new CoralQueryUpdatedDocumentsProvider(siteService);
+        this.updatedDocumetns = updatedDocuments;
 
         // service components
         this.incoming = new IncomingOrganizationsService(config.getChild("incoming"), fileSystem,

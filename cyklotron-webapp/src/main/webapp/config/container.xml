@@ -503,6 +503,9 @@
 
   <component class-key="org.objectledge.html.HTMLService"
              class="org.objectledge.html.HTMLServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.ngodatabase.organizations.UpdatedDocumentsProvider" 
+             class="net.cyklotron.cms.ngodatabase.organizations.CachingUpdatedDocumentsProvider" />
              
   <component class-key="net.cyklotron.cms.ngodatabase.NgoDatabaseService"
              class="net.cyklotron.cms.ngodatabase.NgoDatabaseServiceImpl"/>
