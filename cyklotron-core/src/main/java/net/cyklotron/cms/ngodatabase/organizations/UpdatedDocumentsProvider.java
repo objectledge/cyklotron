@@ -39,6 +39,11 @@ public abstract class UpdatedDocumentsProvider
         for(int i = 0; i < siteConfigElm.length; i++)
         {
             sites[i] = siteService.getSite(coralSession, siteConfigElm[i].getValue());
+            if(sites[i] == null)
+            {
+                throw new ConfigurationException("site " + siteConfigElm[i].getValue()
+                    + " not found", siteConfigElm[i].getPath(), siteConfigElm[i].getLocation());
+            }
         }
         return sites;
     }
