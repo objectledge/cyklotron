@@ -1,0 +1,69 @@
+#
+# CMS init script
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# author <a href="mailto:rkrzewsk@ngo.pl">Rafal Krzewski</a>
+# version $Id: base-init.rml,v 1.4 2007-01-20 23:56:42 pablo Exp $
+#
+
+ECHO 'Deploying Cyklotron CMS...';
+
+CREATE RESOURCE 'cms'
+RESOURCE CLASS 'cms.root'
+PARENT 1
+ATTRIBUTES (
+  description = 'Root node of the Cyklotron CMS data'
+);
+
+CREATE RESOURCE 'sites'
+RESOURCE CLASS 'node'
+PARENT '/cms'
+ATTRIBUTES (
+  description = 'Parent node of all deployed sites.'
+);
+
+CREATE RESOURCE 'aliases'
+RESOURCE CLASS 'node'
+PARENT '/cms'
+ATTRIBUTES (
+  description = 'Parent node of site virtual server aliases.'
+);
+
+CREATE RESOURCE 'security'
+RESOURCE CLASS 'node'
+PARENT '/cms'
+ATTRIBUTES (
+  description = 'Parent node of global roles.'
+);
+
+# // security ////////////////////////////////////////////////////////////////
+
+CREATE ROLE 'cms.administrator';
+GRANT PERMISSION 'cms.administer' ON '/cms' RECURSIVE TO 'cms.administrator';
+
+ALTER ROLE 'root'
+ADD SUBROLES (
+  'cms.administrator'
+);
+
+CREATE RESOURCE 'cms.administrator'
+RESOURCE CLASS 'cms.security.role'
+PARENT '/cms/security'
+ATTRIBUTES (
+  descriptionKey = 'cms.administrator',
+  deletable = false,
+  sharingWorkgroup = false,
+  role = 'cms.administrator',
+  description = ''
+);
+
+
+CREATE ROLE 'cms.registered';
+CREATE ROLE 'cms.anonymous';
+CREATE ROLE 'cms.everyone';
+ALTER ROLE cms.anonymous ADD SUBROLES ( cms.everyone );
+ALTER ROLE cms.registered ADD SUBROLES ( cms.everyone );
+
+# eNGO groups integration -- user 2 is anonymous
+GRANT ROLE 'cms.anonymous' TO 2;
+CREATE ROLE 'cms.workgroup';
