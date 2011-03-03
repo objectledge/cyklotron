@@ -183,15 +183,16 @@ public class CachingUpdatedDocumentsProvider
                     conn = database.getConnection();
                     stmt = conn.createStatement();
                     rset = stmt
-                        .executeQuery("SELECT gr.resource_id, s.data, d.data, r.data "
+                        .executeQuery("SELECT gr.resource_id, s.data, d.data, r.ref "
                             + "FROM coral_generic_resource gs, coral_attribute_string s, "
-                            + "coral_generic_resource gd, coral_attribute_date d "
-                            + "coral_generic_resource gr, coral_attribute_resource r, "
+                            + "coral_generic_resource gd, coral_attribute_date d, "
+                            + "coral_generic_resource gr, coral_attribute_resource r "
                             + "WHERE gs.attribute_definition_id = " + organizationIdsAttr.getId() + " "
                             + "AND gd.attribute_definition_id = " + customModificationTimeAttr.getId() + " "
-                            + "AND gr.attribute_definition_id " + siteAttr.getId() + " "
+                            + "AND gr.attribute_definition_id = " + siteAttr.getId() + " "
                             + "AND s.data_key = gs.data_key AND d.data_Key = gd.data_key AND r.data_key = gr.data_key "
-                            + "AND gd.resource_id = gs.resource_id AND gr.resource_id = gd.resource_id");
+                            + "AND gd.resource_id = gs.resource_id AND gr.resource_id = gd.resource_id "
+                            + "AND s.data NOT IN (',', ',0,')");
     
                     while(rset.next())
                     {
@@ -237,7 +238,10 @@ public class CachingUpdatedDocumentsProvider
             LongSet orgs = new LongOpenHashSet();
             for(String id : organizationIds.split(","))
             {
-                orgs.add(Long.parseLong(id));
+                if(id.length() > 0 && !id.equals("0"))
+                {
+                    orgs.add(Long.parseLong(id));
+                }
             }
             boolean orgsEqual = oldOrgs != null ? orgs.equals(oldOrgs) : orgs.isEmpty();
             if(oldOrgs != null && !orgsEqual)
@@ -257,8 +261,12 @@ public class CachingUpdatedDocumentsProvider
                         }
                     }
                 }                
+                if(orgs.isEmpty())
+                {
+                    documentToOrganization.remove(doc);
+                }
             }
-            if(oldOrgs == null || !orgsEqual)
+            if((oldOrgs == null || !orgsEqual) && !orgs.isEmpty())
             {
                 // add new organizationToDocument mappings
                 LongIterator i = orgs.iterator();
@@ -297,9 +305,13 @@ public class CachingUpdatedDocumentsProvider
                     {
                         updateTimeToDocument.remove(oldUpdateTimeKey);
                     }
-                }                    
+                }     
+                if(updateTimeKey == 0L || orgs.isEmpty())
+                {
+                    documentToUpdateTime.remove(doc);
+                }
             }
-            if((oldUpdateTimeKey == 0L || oldUpdateTimeKey != updateTimeKey) && updateTimeKey != 0L)
+            if((oldUpdateTimeKey == 0L || oldUpdateTimeKey != updateTimeKey) && updateTimeKey != 0L && !orgs.isEmpty())
             {
                 // add new updateTimeToDocument mapping
                 docs = updateTimeToDocument.get(updateTimeKey);
@@ -327,8 +339,12 @@ public class CachingUpdatedDocumentsProvider
                         siteToDocument.remove(oldSite);
                     }
                 }
+                if(orgs.isEmpty())
+                {
+                    documentToSite.remove(doc);
+                }
             }
-            if(oldSite == 0L || oldSite != site)
+            if((oldSite == 0L || oldSite != site) && !orgs.isEmpty())
             {
                 // add new siteToDocument mapping
                 docs = (LongSet)siteToDocument.get(site);
