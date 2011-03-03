@@ -1,0 +1,75 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="copied_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Contact administrator to solve this problem.</value>
+    </prefix>
+    <prefix name="granted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Contact administrator to solve this problem.</value>
+    </prefix>
+    <prefix name="no_site_chosen">
+      <value>.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Contact administrator to solve this problem.</value>
+    </prefix>
+    <prefix name="recommended_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="revoked_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>Changed successfully.</value>
+    </prefix>
+    <prefix name="copied_successfully">
+      <value>Copied successfully.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Removed successfully.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Error occured.</value>
+    </prefix>
+    <prefix name="granted_successfully">
+      <value>Role granting performed successfully.</value>
+    </prefix>
+    <prefix name="no_site_chosen">
+      <value>No site chosen.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Required field empty.</value>
+    </prefix>
+    <prefix name="recommended_successfully">
+      <value>Recommended successfully.</value>
+    </prefix>
+    <prefix name="revoked_successfully">
+      <value>Role revocing performed successfully.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Updated successfully.</value>
+    </prefix>
+  </prefix>
+</strings>

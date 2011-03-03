@@ -1,0 +1,72 @@
+/* - - - - - site wide elements definitions - - - - -*/
+
+body, td, li {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 10pt;
+}
+
+body {
+    background-color: #ffffff;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    navigation links and areas */
+a {
+    color: #888;
+}
+
+a:hover {
+    color: #aaa;
+}
+
+.navigation {
+    padding: 5px;
+}
+
+.navigation a {
+    padding: 0px 3px;
+    display: block;
+    text-decoration: none;
+}
+
+.navigation a:hover {
+    background-color: #fa0;
+    color: black;
+}
+
+.navigation a.navi-current-path {
+    background-color: #eee;
+}
+
+.navigation a.navi-current-page {
+    background-color: #fa0;
+    color: black;
+}
+
+.subnavi {
+    font-size: 95%;
+    margin-left: 10px;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    searchbox */
+.search-box {
+}
+
+.search-box form {
+}
+
+.search-box input {
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    loginbox */
+.login-box {
+}
+
+.login-box form {
+}
+
+.login-box input {
+}
+

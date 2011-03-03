@@ -1,0 +1,132 @@
+
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+$pageTool.addScriptLink('script/Forms.js')
+
+#genericScreenHeader('Zdarzenia w kalendarzu - konfiguracja ')
+#set($from_component = true)
+#set($save_action = $link.unsetView().action('structure.UpdatePreferences'))
+
+#if($cms_data.isNodeDefined())
+#set($save_action = $save_action.set('x',$cms_data.node.id))
+#end
+
+<script type="text/javascript">
+<!--
+var fieldNames = new Array("categoryQueryName", "index_id", "range", "offset", "res_num", "sort_field", "sort_order", "cacheInterval");
+
+function sendConfig()
+{
+    document.form1.action = "$save_action";
+#if($cms_data.node)
+    document.form1.target = "cyklotron_calendar_event_config_${cms_data.node.id}";
+#else
+    document.form1.target = "cyklotron_calendar_event_config";
+#end
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+
+function clearCategory(item)
+{
+    setValue('form1','category_id_'+item,'');
+    setValue('form1','category_name_'+item,'');
+}
+//-->
+</script>
+
+<form name="form1" method="post" action="">
+#if($cms_data.node)
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+
+<table border="0" class="genericScreen" width="100%">
+  <tr>
+   <td>
+   Wybierz zapytanie:
+   </td>
+   <td>
+     <select name="categoryQueryName">
+       #options($queries $config.get('categoryQueryName',""))
+     </select>
+   </td>
+  </tr>
+  <tr>
+    <td align="left">Zestaw indexów:</td>
+    <td>
+     <a href="#select_index_pool('name id' 'form1' 'index_name index_id')">wybierz</a>
+     <input type="text" name="index_name" style="width:100%;" value="$!index.name" maxlength="150" readonly="readonly" />
+     <input type="hidden" name="index_id" value="$!index.id"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="left">Liczba dni naprzód:</td>
+    <td>
+      <select size="1" name="offset">
+      #set($opts = [["0", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7],["14", 14],["21", 21], ["30", 30], ["365", 365]])
+      #options($opts $config.getInt('offset', 0))
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="left">Zakres:</td>
+    <td>
+    <select size="1" name="range">
+      <option value="ongoing" #if($config.get('range',"") == "ongoing") selected #end>wszystkie trwające</option>
+      <option value="in" #if($config.get('range',"") == "in") selected #end>zawarte</option>
+      <option value="starting" #if($config.get('range',"") == "starting") selected #end>rozpoczynające się</option>
+      <option value="ending" #if($config.get('range',"") == "ending") selected #end>kończące się</option>
+    </select>
+    </td>
+  </tr>
+<tr>
+<td>
+Wybierz liczbę pokazywanych wyników:
+</td>
+<td><select size="1" name="res_num">
+#set($opts = [["nieograniczona", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7], ["8", 8], ["9", 9], ["10", 10], ["11", 11], ["12", 12], ["13", 13], ["14", 14], ["15", 15]])
+#options($opts $config.getInt('res_num', 10))
+  </select></td>
+</tr>
+<tr>
+<td>
+Wybierz sposób sortowania wyników:
+</td>
+<td>
+<select name="sort_field">
+#set($opts = [["według trafności","score"],["według czasu modyfikacji","modification_time"],["według czasu publikacji","validity_start"],["według początku wydarzenia","event_start"],["według końca wydarzenia","event_end"],["według najbliższego wydarzenia","closestEventStart"]])
+#options($opts $config.get('sort_field',"score"))
+</select>
+<select name="sort_order">
+#set($opts = [["malejąco","desc"],["rosnąco","asc"]])
+#options($opts $config.get('sort_order',"desc"))
+</select>
+</td>
+</tr>
+<tr>
+<td>
+Wybierz czas utrzymywania wyników zapytania w pamięci &quot;cache&quot;:
+</td>
+<td>
+<select size="1" name="cacheInterval">
+#set($opts = [["nie utrzymuj", 0], ["2 min", 120], ["5 min", 300], ["10 min", 600], ["30 min", 1800]])
+#options($opts $config.getInt('cacheInterval', 0))
+  </select></td>
+</tr>
+
+</table>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+  <a href="javascript:sendConfig()">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+</form>
+#genericScreenTrailer()

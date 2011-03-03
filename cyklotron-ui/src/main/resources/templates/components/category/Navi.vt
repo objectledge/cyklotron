@@ -1,0 +1,8 @@
+#genericNaviHeader('CATEGORIES')
+  #linkCell('' 'Site categories' $link.view('category.CategoryList'))
+#if($site)
+  #linkCell('' 'Queries' $link.view('category.query.CategoryQueryList'))
+  #linkCell('' 'Query pools' $link.view('category.query.CategoryQueryPoolList'))
+  #linkCell('' 'Query results' $link.view('category.query.CategoryQueryConf'))
+#end
+#genericNaviTrailer()
