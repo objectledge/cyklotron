@@ -1,0 +1,45 @@
+
+CREATE RESOURCE 'library'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0',
+  priority = 5,
+  enabled = true,
+  required = false
+);
+
+CREATE RESOURCE CLASS 'cms.library.config'
+JAVA CLASS 'net.cyklotron.cms.library.LibraryConfigResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  resource(category.category) category,
+  resource(search.pool) searchPool
+);
+
+CREATE RESOURCE 'screens'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/library';
+
+CREATE RESOURCE 'index'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/library/screens'
+ATTRIBUTES (
+  screenName = 'library.Index',
+  configurationView = 'library.IndexConf'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/library/screens/index';
+
+CREATE RESOURCE 'calendar_events'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/documents/screens'
+ATTRIBUTES (
+  screenName = 'documents.CalendarEvents',
+  configurationView = 'documents.CalendarEventsScreenConf'
+);

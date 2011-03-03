@@ -1,0 +1,15 @@
+ALTER RESOURCE CLASS documents.document_node ADD ATTRIBUTE text proposedContent;
+
+CREATE RESOURCE 'publicUpload'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/files/components'
+ATTRIBUTES (
+  componentName = 'files.PublicUpload',
+  configurationView = 'files.PublicUploadConf'
+);
+
+ALTER RESOURCE /cms/applications/common/resources/cms.root 
+SET ATTRIBUTE relatedSupported = false;
+
+ALTER RESOURCE /cms/applications/site/resources/site.site 
+SET ATTRIBUTE relatedSupported = false; 

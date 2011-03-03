@@ -1,0 +1,537 @@
+<?xml version="1.0"?>
+<container xmlns="http://objectledge.org/container/1.0">
+
+  <!-- content extractor -->
+  <component class="org.objectledge.filesystem.ContentExtractor"/>
+
+  <!-- base components -->
+
+  <component class="org.objectledge.context.Context"/>
+  
+  <!-- database -->
+
+  <component class-key="org.objectledge.database.Transaction"
+             class="org.objectledge.database.JotmTransaction"/>
+
+  <component class="org.objectledge.database.XaPoolDataSource"/>
+  
+  <component class="org.objectledge.database.ThreadDataSource$Statistics"/>
+  
+  <component class="org.objectledge.database.ThreadDataSource">
+    <parameter class-key="org.objectledge.database.XaPoolDataSource"/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+  </component>
+  
+  <component class="org.objectledge.database.IdGenerator">
+    <parameter class-key="org.objectledge.database.XaPoolDataSource"/>
+  </component>
+  
+  <component class-key="org.objectledge.database.Database"
+             class="org.objectledge.database.DefaultDatabase">
+    <parameter class-key="org.objectledge.database.ThreadDataSource"/>
+    <parameter/>
+    <parameter/>
+  </component>
+  
+  <component class-key="org.objectledge.database.persistence.Persistence"
+            class="org.objectledge.database.persistence.DefaultPersistence"/>
+  
+  <component class="org.objectledge.database.Transaction$GuardValve"/>
+  
+  <component class="org.objectledge.database.ThreadDataSource$GuardValve"/>  
+ 
+  <!-- utility components -->
+  
+  <component class="org.objectledge.coral.session.CoralSessionCleanupValve"/>
+    
+  <component key="thread-context-cleanup" class="org.objectledge.pipeline.SimplePipeline">
+    <sequence>
+      <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
+      <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
+      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>
+    </sequence>
+  </component>
+  
+  <component class="org.objectledge.threads.ThreadPool">
+    <parameter key="thread-context-cleanup"/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+  </component>
+  <component class="org.objectledge.event.EventWhiteboardFactory"/>
+  <component class-key="org.objectledge.event.EventWhiteboard"
+             class="org.objectledge.event.DefaultEventWhiteboard"/>
+  <component class="org.objectledge.web.WebConfigurator"/>
+  <component class-key="org.objectledge.authentication.UserManager"
+             class="org.objectledge.authentication.DirectoryUserManager">
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <sequence>
+      <component class="org.objectledge.coral.security.CoralUserManagementParticipant"/>
+    </sequence>
+  </component>             
+             
+  <component class-key="org.objectledge.templating.Templating"
+             class="org.objectledge.templating.velocity.VelocityTemplating"/>
+
+  <component class-key="org.objectledge.i18n.I18n" class="org.objectledge.i18n.xml.XMLI18n"/>
+  <component class="org.objectledge.i18n.DateFormatter"/>  
+  <component class="org.objectledge.authentication.NamingPolicy"/>
+  <component class="org.objectledge.authentication.LoginVerifier"/>
+  <component class="org.objectledge.authentication.PasswordGenerator"/>
+  <component class="org.objectledge.authentication.PasswordDigester">
+    <parameter value="MD5"/>
+  </component>
+  <container key="contextFactoryHelperContainer"/>
+  <component class="org.objectledge.naming.ContextFactory">
+    <parameter key="contextFactoryHelperContainer"/>
+    <parameter/>
+    <parameter/>
+  </component>
+  
+  <component class-key="org.objectledge.scheduler.AbstractScheduler"
+             class="org.objectledge.scheduler.db.DBScheduler">
+    <parameter key="contextFactoryHelperContainer"/>
+    <parameter/>
+    <parameter/>
+    <parameter/>             
+    <sequence>
+      <component class="org.objectledge.scheduler.CronScheduleFactory"/>
+    </sequence>
+    <parameter/>
+  </component>             
+  
+  <!-- needed by cache factory, but unimplemented ATM -->
+  <component class="org.objectledge.notification.Notification"/>
+  
+  <component class-key="org.objectledge.cache.CacheFactory" 
+             class="org.objectledge.cache.DefaultCacheFactory"/>
+  
+  <component class-key="org.objectledge.parameters.db.DBParametersManager"
+             class="org.objectledge.parameters.db.DefaultDBParametersManager"/>
+  
+  <component class="org.objectledge.mail.MailSystem"/>
+
+  <component class="org.objectledge.configuration.ConfigurationInspector"/>
+  
+  <!-- coral -->
+
+  <container key="coralContainer"/>
+
+  <component class-key="org.objectledge.coral.Instantiator"
+             class="org.objectledge.coral.PicoInstantiator">
+    <parameter key="coralContainer"/>
+  </component>
+  
+  <component class-key="org.objectledge.coral.CoralCore" 
+             class="org.objectledge.coral.CoralCoreImpl">
+    <parameter key="coralContainer"/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+  </component>           
+  <component class-key="org.objectledge.coral.session.CoralSessionFactory" 
+             class="org.objectledge.coral.session.CoralSessionFactoryImpl"/>
+  
+  <!-- utils -->
+  
+  <component class="org.objectledge.encodings.HTMLEntityEncoder"/>
+  <component class="org.objectledge.upload.FileDownload"/>
+  <component class="org.objectledge.im.InstantMessaging"/>
+  
+  <!-- // mvc components ////////////////////////////////////////////////////////////// -->
+  <!-- mvc basics -->
+  
+  <component class="org.objectledge.coral.security.CoralRoleChecking"/>
+  <component class="org.objectledge.web.mvc.security.PolicySystem"/>
+  <component class="org.objectledge.web.mvc.security.SecurityHelper"/>
+  <component class="org.objectledge.web.mvc.finders.NameSequenceFactory"/>
+
+  <container key="mvcContainer"/>
+  <component class="org.objectledge.web.mvc.finders.I18nMVCFinder">
+    <parameter key="mvcContainer"/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+  </component>
+  <component class="org.objectledge.i18n.WebI18nToolFactory"/>
+  <component class="org.objectledge.i18n.WebDateFormatToolFactory"/>
+  <component class-key="org.objectledge.web.mvc.tools.LinkToolFactory"
+             class="net.cyklotron.cms.CmsLinkToolFactory"/>
+  <component class="org.objectledge.web.mvc.builders.ViewEnclosureManager"/>
+  <component class="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
+  <component class="org.objectledge.web.mvc.components.ComponentToolFactory"/>
+  <component class="net.cyklotron.cms.CmsPageToolFactory"/>
+  <component class="org.objectledge.web.mvc.tools.StringToolFactory"/>
+  <component class="org.objectledge.web.mvc.tools.EmailToolFactory"/>
+  
+  <component class="org.objectledge.web.mvc.tools.ParametersToolFactory"/>
+  <component class="org.objectledge.web.mvc.tools.UserAgentToolFactory"/>
+  <component class="net.cyklotron.cms.CmsToolFactory"/>
+  <component class="net.cyklotron.cms.category.CategoryToolFactory"/>
+  <component class="net.cyklotron.cms.files.FilesToolFactory"/>
+  <component class="net.cyklotron.cms.security.SecurityToolFactory"/>
+  <component class="net.cyklotron.util.WorkflowToolFactory"/>
+  <component class="org.objectledge.forms.FormToolFactory"/>
+
+  <component class="org.objectledge.templating.tools.ContextTools">
+    <sequence>
+      <parameter class-key="org.objectledge.i18n.WebI18nToolFactory"/>
+      <parameter class-key="org.objectledge.i18n.WebDateFormatToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.tools.LinkToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.builders.ViewEnclosureManager"/>
+      <parameter class-key="org.objectledge.web.mvc.tools.HTMLEntityEncoderToolFactory"/>
+      <parameter class-key="net.cyklotron.cms.CmsPageToolFactory"/>            
+      <parameter class-key="org.objectledge.web.mvc.tools.StringToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.tools.EmailToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.components.ComponentToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.tools.UserAgentToolFactory"/>
+      <parameter class-key="org.objectledge.web.mvc.tools.ParametersToolFactory"/>
+      <parameter class-key="net.cyklotron.cms.CmsToolFactory"/>
+      <parameter class-key="net.cyklotron.cms.category.CategoryToolFactory"/>      
+      <parameter class-key="net.cyklotron.cms.files.FilesToolFactory"/>      
+      <parameter class-key="net.cyklotron.cms.security.SecurityToolFactory"/>      
+      <parameter class-key="net.cyklotron.util.WorkflowToolFactory"/>      
+      <parameter class-key="org.objectledge.forms.FormToolFactory"/>      
+      
+    </sequence>
+  </component>      
+  <component class="org.objectledge.upload.FileUpload"/>    
+  <component class-key="org.objectledge.table.TableStateManager"
+             class="org.objectledge.table.TableStateManagerImpl"/>
+
+  <!-- // valves ////////////////////////////////////////////////////////////////////// -->
+  <component class="org.objectledge.web.ContentTypeInitializerValve"/>
+  <component class="org.objectledge.encodings.RequestParametersHTMLEntityDecoderValve"/>
+  <component class="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
+  <component class="org.objectledge.web.mvc.MVCResultsValve"/>
+  <component class="org.objectledge.web.mvc.MVCInitializerValve"/>
+  <component class="org.objectledge.authentication.AuthenticationValve"/>
+  <component class="org.objectledge.authentication.UserTrackingValve"/>
+  <component class="org.objectledge.parameters.RequestParametersLoaderValve"/>
+  <component class="org.objectledge.i18n.LocaleLoaderValve"/>
+  <component class="org.objectledge.i18n.EncodingLoaderValve"/>
+  <component class="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
+  <component class="org.objectledge.web.mvc.builders.BuilderExecutorValve">
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter value="4"/>
+    <parameter value="4"/>
+  </component>
+  <component class="net.cyklotron.cms.CmsBuilderExecutorValve"/>
+  <component class="net.cyklotron.cms.modules.hooks.CmsDomainHook"/>
+  <component class="org.objectledge.templating.TemplatingContextLoaderValve"/>
+  <component class="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
+  <component class="org.objectledge.web.PrintExceptionValve"/>
+  <component class="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
+  <component class="org.objectledge.upload.FileUploadValve"/>
+  <component class="org.objectledge.coral.session.CoralSessionInitValve"/>
+  <component class="org.objectledge.coral.session.CoralSessionVerificationValve"/>
+  <component class="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/>
+  <component class="net.cyklotron.cms.CmsDataInitializerValve"/>
+  <component class="org.objectledge.web.mvc.security.PolicyCheckingValve"/>
+  <component class="org.objectledge.web.SessionDurationValve">
+     <parameter value="1800"/>
+     <parameter value="300"/>
+  </component>
+  <!-- end of valves -->      
+
+
+  <!-- // pipeline //////////////////////////////////////////////////////////////////////// -->
+
+  <component key="postAuthPipeline"
+    class="org.objectledge.authentication.PostAuthenticationValve">
+    <component anon="true" class="org.objectledge.pipeline.SimplePipeline">
+      <sequence>			 
+        <parameter class-key="org.objectledge.authentication.UserTrackingValve"/>
+        <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
+        <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
+        <parameter class-key="org.objectledge.coral.session.CoralSessionVerificationValve"/>
+        <parameter class-key="org.objectledge.web.mvc.security.PolicyCheckingValve"/>
+        <parameter class-key="org.objectledge.web.SessionDurationValve"/>
+      </sequence>      
+    </component>
+  </component>
+
+  <component key="oneTimeProcessingPipeline"
+			 class="org.objectledge.pipeline.SimplePipeline">
+    <sequence>			 
+      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
+      <parameter class-key="org.objectledge.authentication.AuthenticationValve"/>
+      <parameter class-key="org.objectledge.authentication.UserTrackingValve"/>
+      <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
+      <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
+      <parameter class-key="org.objectledge.parameters.RequestParametersLoaderValve"/>
+      <parameter class-key="org.objectledge.upload.FileUploadValve"/>
+      <parameter class-key="org.objectledge.encodings.RequestParametersHTMLEntityDecoderValve"/>
+      <parameter class-key="org.objectledge.web.mvc.MVCInitializerValve"/>
+      <parameter class-key="org.objectledge.coral.session.CoralSessionInitValve"/>
+      <parameter class-key="org.objectledge.web.mvc.security.PolicyCheckingValve"/>
+      <parameter class-key="org.objectledge.web.SessionDurationValve"/>
+      <parameter class-key="org.objectledge.web.mvc.actions.ActionExecutorValve"/>
+      <parameter key="postAuthPipeline"/>
+    </sequence>      
+  </component>
+
+  <component key="cmsRenderingPipeline"
+  	class="org.objectledge.pipeline.SimplePipeline">
+    <sequence>
+      <parameter class-key="net.cyklotron.cms.modules.hooks.CmsDomainHook"/>
+      <parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
+      <parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
+      <parameter class-key="net.cyklotron.cms.CmsBuilderExecutorValve"/>
+    </sequence>      
+  </component>
+  
+  <component key="renderingPipeline"
+  	class="org.objectledge.pipeline.SimplePipeline">
+    <sequence>
+      <parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
+      <parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
+      <parameter class-key="org.objectledge.web.mvc.builders.BuilderExecutorValve"/>
+    </sequence>      
+  </component>
+  
+  <component class="org.objectledge.pipeline.ErrorHandlingPipeline">
+    <parameter class-key="org.jcontainer.dna.Logger"/>
+    <sequence>
+      <parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
+      <parameter key="oneTimeProcessingPipeline"/>
+      <parameter key="cmsRenderingPipeline"/>
+    </sequence>
+	<sequence>
+      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
+      <parameter class-key="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
+      <parameter key="renderingPipeline"/>
+    </sequence>
+	<sequence>
+      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
+      <parameter class-key="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/> 
+      <parameter class-key="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
+	  <parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
+      <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
+      <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
+    </sequence>
+  </component>
+
+  <!-- // dispatchers ///////////////////////////////////////////////////////////////////// -->
+    
+  <component class-key="org.objectledge.web.HttpDispatcher" 
+             class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
+    <component class="org.objectledge.pipeline.ConcurrencyControlValve">
+      <component class="org.objectledge.web.RequestTrackingValve">
+        <parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
+        <parameter/>
+        <parameter/>
+        <parameter/>
+      </component>
+      <parameter/>
+      <parameter/>
+    </component>
+    <parameter/>
+  </component>
+    
+  <!-- // cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
+
+  <component class-key="net.cyklotron.cms.aggregation.AggregationService"
+             class="net.cyklotron.cms.aggregation.internal.AggregationServiceImpl"/>
+  
+  <component class-key="net.cyklotron.cms.banner.BannerService"
+             class="net.cyklotron.cms.banner.internal.BannerServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.category.CategoryService"
+             class="net.cyklotron.cms.category.internal.CategoryServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.category.query.CategoryQueryService"
+             class="net.cyklotron.cms.category.query.internal.CategoryQueryServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.documents.DocumentService"
+             class="net.cyklotron.cms.documents.internal.DocumentServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.files.FilesService"
+             class="net.cyklotron.cms.files.internal.FilesServiceImpl">
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+  </component>             
+             
+  <component class-key="net.cyklotron.cms.forum.ForumService"
+             class="net.cyklotron.cms.forum.internal.ForumServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.integration.IntegrationService"
+             class="net.cyklotron.cms.integration.internal.IntegrationServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.link.LinkService"
+             class="net.cyklotron.cms.link.internal.LinkServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.periodicals.PeriodicalsTemplatingService"
+             class="net.cyklotron.cms.periodicals.internal.PeriodicalsTemplatingServiceImpl"/>
+             
+  <component class-key="net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService"
+             class="net.cyklotron.cms.periodicals.internal.PeriodicalsSubscriptionServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.periodicals.PeriodicalsService"
+             class="net.cyklotron.cms.periodicals.internal.PeriodicalsServiceImpl">
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <sequence>
+      <parameter class-key="net.cyklotron.cms.periodicals.internal.HTMLRendererFactory"/>
+      <parameter class-key="net.cyklotron.cms.periodicals.internal.PlainTextRendererFactory"/>
+      <parameter class-key="net.cyklotron.cms.periodicals.internal.HTMLNotificationRendererFactory"/>
+      <parameter class-key="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
+    </sequence>
+  </component>             
+  
+  <component class-key="net.cyklotron.cms.preferences.PreferencesService"
+             class="net.cyklotron.cms.preferences.internal.PreferencesServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.related.RelatedService"
+             class="net.cyklotron.cms.related.internal.RelatedServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.search.SearchService"
+             class="net.cyklotron.cms.search.internal.SearchServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.security.SecurityService"
+             class="net.cyklotron.cms.security.internal.SecurityServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.site.SiteService"
+             class="net.cyklotron.cms.site.internal.SiteServiceImpl"/>
+
+  <component class="net.cyklotron.cms.util.OfflineLinkRenderingService"/>
+
+  <component class-key="net.cyklotron.cms.syndication.SyndicationService"
+             class="net.cyklotron.cms.syndication.internal.SyndicationServiceImpl"/>
+             
+  <component class="net.cyklotron.cms.library.LibraryService"/>             
+
+  <component class="net.cyklotron.cms.site.SiteDestructionManager">
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <sequence>
+      <parameter class-key="net.cyklotron.cms.security.SecurityDestructionListener"/> 
+      <parameter class-key="net.cyklotron.cms.aggregation.AggregationListener"/>
+      <parameter class-key="net.cyklotron.cms.search.SearchListener"/>
+      <parameter class-key="net.cyklotron.cms.files.FilesListener"/>
+      <parameter class-key="net.cyklotron.cms.forum.ForumListener"/>
+      <parameter class-key="net.cyklotron.cms.poll.PollListener"/>
+      <parameter class-key="net.cyklotron.cms.link.LinkListener"/>            
+      <parameter class-key="net.cyklotron.cms.banner.BannerListener"/>
+      <parameter class-key="net.cyklotron.cms.structure.StructureSiteDestructionListener"/>            
+      <parameter class-key="net.cyklotron.cms.skins.SkinsSiteDestructionListener"/>
+      <parameter class-key="net.cyklotron.cms.style.StyleSiteDestructionListener"/>            
+      <parameter class-key="net.cyklotron.cms.category.CategoryListener"/>
+      <parameter class-key="net.cyklotron.cms.periodicals.PeriodicalsListener"/>
+	  <parameter class-key="net.cyklotron.cms.syndication.SyndicationListener"/>
+    </sequence>
+  </component>             
+
+  <component class="net.cyklotron.cms.security.SecurityDestructionListener"/> 
+  <component class="net.cyklotron.cms.aggregation.AggregationListener"/>
+  <component class="net.cyklotron.cms.search.SearchListener"/>
+  <component class="net.cyklotron.cms.files.FilesListener"/>
+  <component class="net.cyklotron.cms.forum.ForumListener"/>
+  <component class="net.cyklotron.cms.poll.PollListener"/>
+  <component class="net.cyklotron.cms.link.LinkListener"/>
+  <component class="net.cyklotron.cms.banner.BannerListener"/>
+  <component class="net.cyklotron.cms.skins.SkinsSiteCreationListener"/>
+  <component class="net.cyklotron.cms.skins.SkinsSiteDestructionListener"/>
+  <component class="net.cyklotron.cms.style.StyleSiteDestructionListener"/>
+  <component class="net.cyklotron.cms.category.CategoryListener"/>
+  <component class="net.cyklotron.cms.periodicals.PeriodicalsListener"/>
+  <component class="net.cyklotron.cms.structure.StructureSiteCreationListener"/>
+  <component class="net.cyklotron.cms.structure.StructureSiteDestructionListener"/>
+  <component class="net.cyklotron.cms.syndication.SyndicationListener"/>
+
+  <component class-key="net.cyklotron.cms.skins.SkinService"
+             class="net.cyklotron.cms.skins.internal.SkinServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.structure.StructureService"
+             class="net.cyklotron.cms.structure.internal.StructureServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.style.StyleService"
+             class="net.cyklotron.cms.style.internal.StyleServiceImpl"/>
+
+  <component class-key="net.cyklotron.cms.workflow.WorkflowService"
+             class="net.cyklotron.cms.workflow.internal.WorkflowServiceImpl">
+    <parameter/>
+    <parameter/>
+    <parameter/>
+    <sequence>
+    </sequence>
+  </component>             
+
+  <component class-key="org.objectledge.forms.FormsService"
+             class="org.objectledge.forms.internal.FormsServiceImpl"/>
+
+  <component class-key="org.objectledge.forms.internal.xml.XMLService"
+             class="org.objectledge.forms.internal.xml.impl.XMLServiceImpl"/>
+
+  <component class-key="org.objectledge.html.HTMLService"
+             class="org.objectledge.html.HTMLServiceImpl"/>
+             
+  <component class-key="net.cyklotron.cms.ngodatabase.NgoDatabaseService"
+             class="net.cyklotron.cms.ngodatabase.NgoDatabaseServiceImpl"/>
+  
+  <component class-key="net.cyklotron.cms.ngodatabase.LocationsProvider"
+  			 class="net.cyklotron.cms.ngodatabase.PNALocationsProvider"/> 
+            
+  <component class-key="net.cyklotron.cms.ngodatabase.LocationDatabaseService"
+             class="net.cyklotron.cms.ngodatabase.LocationDatabaseServiceImpl"/>
+             
+  <component class="net.cyklotron.cms.CmsDataFactory"/>
+  
+  <component class-key="net.cyklotron.cms.poll.PollService"
+             class="net.cyklotron.cms.poll.internal.PollServiceImpl"/>  
+             
+  <!-- remote management -->           
+             
+  <component class="net.cyklotron.cms.management.ErrorReportingService"/>             
+
+  <!-- // plugins, listeners, factories ... -->           
+  
+  <component class="net.cyklotron.cms.periodicals.internal.HTMLRendererFactory"/>
+  <component class="net.cyklotron.cms.periodicals.internal.PlainTextRendererFactory"/>
+  <component class="net.cyklotron.cms.periodicals.internal.HTMLNotificationRendererFactory"/>
+  <component class="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
+
+  <!-- stats come at the end so that all the providers are referencable -->  
+  
+  <component class="org.objectledge.statistics.Statistics">
+    <sequence>
+      <component class="org.objectledge.statistics.VMStatisticsProvider"/>
+      <parameter class-key="org.objectledge.pipeline.ConcurrencyControlValve"/>
+      <parameter class-key="org.objectledge.database.ThreadDataSource$Statistics"/>
+      <parameter class-key="org.objectledge.web.RequestTrackingValve"/>
+      <parameter class-key="org.objectledge.cache.CacheFactory"/>
+    </sequence>
+  </component>
+  <component class="org.objectledge.statistics.StatisticsWriter"/>
+  <component class="org.objectledge.statistics.MuninNode"/>
+  
+</container>  
