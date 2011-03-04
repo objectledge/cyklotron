@@ -200,8 +200,8 @@ public class CachingUpdatedDocumentsProvider
     
                     while(rset.next())
                     {
-                        updateCache(rset.getLong(1), rset.getString(2), rset.getDate(3),
-                            rset.getLong(4));
+                        updateCache(rset.getLong(1), rset.getString(2),
+                            new Date(rset.getTimestamp(3).getTime()), rset.getLong(4));
                     }
     
                     listener = new DocumentUpdateListener();
