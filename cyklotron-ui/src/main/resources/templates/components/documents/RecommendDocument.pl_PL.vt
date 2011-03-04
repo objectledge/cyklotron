@@ -1,0 +1,7 @@
+
+$pageTool.addScriptLink('script/WinPopup.js')##
+#set($recommend_link = $link.set('x', $recommend_document_node.id).set('parent_node_id',$node.id))
+<a href="javascript:getWinPopup('recommend_document').open('$recommend_link',  550, 500); void(0);">
+Poleć znajomemu
+</a>
+

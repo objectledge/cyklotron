@@ -1,0 +1,42 @@
+
+
+#genericScreenHeader('OSOBY')
+
+  #result_inline_message('results.security')
+
+  $table.getColumn('login').set('label','Login')
+  $table.getColumn('name').set('label','Imię i nazwisko')
+  $table.getColumn('name').set('width','95%')
+  $table.getColumn('team_member').set('label','Dostęd do UI')
+  $table.getColumn('team_member').set('align','center')
+  $table.getColumn('administrator').set('label','Administrator')
+  $table.getColumn('administrator').set('align','center')
+  $table.getColumn('member_since').set('label','W zespole od')
+  $table.getColumn('member_since').set('align','center')
+  #set($tableLink = $link.set('tableId',$table.getId()))
+  #set($columnOrder = ['login','name','team_member','administrator','member_since'])
+
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $columnOrder)
+    </tr>
+  #foreach($row in $table.rows)
+    #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td><a href="$link.view('security.MemberAssignments').set('subject_id',$row.object.id)">$row.object.login</a></td>
+      <td>#if($row.object.name && $row.object.name.length() > 0)$row.object.name#else&nbsp;#end</td>
+      <td align="center">#if($row.object.team_member) tak #else nie #end</td>
+      <td align="center">#if($row.object.administrator) tak #else nie #end</td>
+      <td nobreak align="center">$format_date.style('date').format($row.object.member_since)</td>
+    </tr>
+  #end
+    <tr>
+      <td colspan="5" align="center" class="bottomLine">
+         #tableView_pager($table $tableLink)
+         #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td></tr>
+  </table>
+
+#command_bar([["$link.view('security.AddMember')",'Dodaj osobę']])
+
+#genericScreenTrailer()
