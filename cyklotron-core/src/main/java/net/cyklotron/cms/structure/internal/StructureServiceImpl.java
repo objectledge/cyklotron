@@ -3,6 +3,7 @@ package net.cyklotron.cms.structure.internal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -38,12 +39,6 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.utils.Timer;
 
-import bak.pcj.adapter.LongSetToSetAdapter;
-import bak.pcj.map.LongKeyLongMap;
-import bak.pcj.map.LongKeyLongOpenHashMap;
-import bak.pcj.set.LongOpenHashSet;
-import bak.pcj.set.LongSet;
-
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.documents.DocumentAliasResource;
 import net.cyklotron.cms.documents.DocumentAliasResourceImpl;
@@ -61,6 +56,12 @@ import net.cyklotron.cms.workflow.StateResource;
 import net.cyklotron.cms.workflow.TransitionResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
+
+import bak.pcj.adapter.LongSetToSetAdapter;
+import bak.pcj.map.LongKeyLongMap;
+import bak.pcj.map.LongKeyLongOpenHashMap;
+import bak.pcj.set.LongOpenHashSet;
+import bak.pcj.set.LongSet;
 
 /**
  * Implementation of Structure Service
@@ -930,10 +931,10 @@ public class StructureServiceImpl
                     int counter = 0;
                     while(rset.next())
                     {
-                        Date date = rset.getDate(2);
+                        Timestamp date = rset.getTimestamp(2);
                         if(date != null)
                         {
-                            cal.setTime(date);
+                            cal.setTimeInMillis(date.getTime());
                             cal.set(Calendar.SECOND, 0);
                             cal.set(Calendar.MILLISECOND, 0);
                             long dateKey = cal.getTimeInMillis();
