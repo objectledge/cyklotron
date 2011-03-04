@@ -137,7 +137,11 @@ public class CachingUpdatedDocumentsProvider
             temp.clear();
             for(SiteResource site : sites)
             {
-                temp.addAll((LongSet)siteToDocument.get(site.getId()));
+                LongSet docs = (LongSet)siteToDocument.get(site.getId());
+                if(docs != null)
+                {
+                    temp.addAll(docs);
+                }
             }
             result.retainAll(temp);            
             return result;
