@@ -1,0 +1,204 @@
+/*
+    $Id: style.css,v 1.1 2005-01-28 02:44:59 pablo Exp $
+*/
+/* basics */
+body {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size:9pt;
+    voice-family: "\"}\""; voice-family:inherit;
+    font-size:11pt;
+} html>body {font-size:11pt;}
+
+a:link {
+    color: rgb(129,129,129);
+}
+
+/* content */
+.content {
+    padding: 1px 1em;
+    line-height: 1.35em;
+}
+
+#additions-area .content {
+    line-height: 1.25em;
+}
+
+h1 {
+    font-size:160%;
+    margin:0.5em 0 0.2em 0;
+    color: rgb(150,150,191);
+}
+h2 {
+    font-size:120%;
+    margin:0.5em 0 0.2em 0;
+    color: rgb(150,150,191);
+    text-align: right;
+}
+h3 {
+    font-size:140%;
+    margin:0.2em 0;
+    text-align: right;
+    padding: 4px;
+    border-bottom: 1px solid gray;
+}
+
+dt {
+    font-weight: bold;
+    display: list-item;
+    list-style: square;
+    margin-left: 2em;
+    margin-top: 1em;
+}
+dd {
+    margin-left: 2em;
+}
+
+p {
+    margin: 1em 0;
+    text-align: justify;
+}
+
+span.logo-inline {
+    font-weight: bold;
+    padding:2px;
+    padding-left: 19px;
+    line-height: 16px;
+    background: url('images/logo-mini.png');
+    background-position: 0% 50%;
+    background-repeat: no-repeat;
+    font-size:9pt;
+    voice-family: "\"}\""; voice-family:inherit;
+    font-size:11pt;
+} html>body span.logo-inline {font-size:11pt;}
+
+.head,
+.foot {
+    padding: 5px;
+}
+.head a {
+    text-decoration: none;
+}
+
+.foot {
+    font-size: 85%;
+}
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * layout classes and ids
+ */
+
+/* breadcrumb container */
+.breadcrumb {
+    text-transform: lowercase;
+}
+
+.searchbox input {
+    border: solid 1px rgb(100,100,191);
+    font-size:90%;
+}
+
+.searchbox a {
+    font-weight: bold;
+}
+
+/* top container */
+#top-container {
+    padding: 10px;
+}
+
+#address {
+    font-size:75%;
+}
+
+/* pic container */
+
+/* navi container */
+
+/* mid container */
+#mid-container,
+#content-area {
+    background-color: white;
+}
+
+#additions-area {
+    border: 1px solid rgb(150,150,191);
+    background-color: rgb(229,229,229);
+    font-size:90%;
+}
+
+#additions-area h1 {
+    font-size: 120%;
+    color: black;
+}
+
+#additions-area ul {
+    list-style: square;
+    margin: 1em 0;
+    padding: 0 1em;
+}
+
+#additions-area ul ul {
+    list-style: disc;
+    margin: 0.1em 0;
+}
+
+#additions-area li a.navi-current-path {
+
+}
+
+#additions-area li a.navi-current-page {
+    color: black;
+    text-decoration: none;
+}
+
+/* bottom */
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * components
+ */
+.more-link {
+    text-align: right;
+}
+
+.more-link a {
+    font-weight: bold;
+    text-decoration: none;
+    color: rgb(181,0,0);
+    padding-right: 7px;
+    background: url('images/red-arrow-r.gif');
+    background-position: 100% 60%;
+    background-repeat: no-repeat;
+}
+
+
+.squished {
+    margin:0;
+    line-height:0;
+}
+
+div.doc-metadata {
+    font-size: 90%;
+}
+
+div.doc-metadata span {
+    display: block;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * basics
+ */
+a:hover {
+    color: rgb(190,190,190);
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * cms
+ */
+a.ext-lnk {
+    padding-right: 12px;
+    background: url('images/external-link.gif');
+    background-position: 100% 50%;
+    background-repeat: no-repeat;
+}
+
