@@ -196,7 +196,7 @@ public class CachingUpdatedDocumentsProvider
                             + "AND gr.attribute_definition_id = " + siteAttr.getId() + " "
                             + "AND s.data_key = gs.data_key AND d.data_Key = gd.data_key AND r.data_key = gr.data_key "
                             + "AND gd.resource_id = gs.resource_id AND gr.resource_id = gd.resource_id "
-                            + "AND s.data NOT IN (',', ',0,')");
+                            + "AND s.data != ','");
     
                     while(rset.next())
                     {
@@ -242,7 +242,7 @@ public class CachingUpdatedDocumentsProvider
             LongSet orgs = new LongOpenHashSet();
             for(String id : organizationIds.split(","))
             {
-                if(id.length() > 0 && !id.equals("0"))
+                if(id.length() > 0)
                 {
                     orgs.add(Long.parseLong(id));
                 }
