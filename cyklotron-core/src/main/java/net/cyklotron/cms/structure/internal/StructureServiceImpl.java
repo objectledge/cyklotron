@@ -1000,6 +1000,7 @@ public class StructureServiceImpl
                         documentSet = new LongOpenHashSet();
                         validityStartToDocument.put(currentDateKey, documentSet);
                     }
+                    documentSet.add(node.getId());
                     documentToValidityStart.put(node.getId(), currentDateKey);
                 }
             }
