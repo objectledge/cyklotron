@@ -1,0 +1,539 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="index_pliki/styles.css" rel="stylesheet" type="text/css">
+<link rel="shortcut icon" type="image/png" href="http://www.mcmediaplayer.com/favicon.ico">
+<link rel="alternate" type="application/rss+xml" title="MC Media Player RSS Feed" href="http://feeds.mcmediaplayer.com/mcmp">
+<title>MC Media Player Variables</title>
+</head><body>
+<script type="text/javascript">
+window.google_analytics_uacct = "UA-388844-27";
+</script>
+
+<div id="boundary">
+<div id="content">
+<div style="margin: 4px 0px 0px; padding: 0px; float: right;"><a href="http://www.mediacollege.com/">www.mediacollege.com</a> | <a href="http://www.mediacollege.com/forum/forumdisplay.php?f=20">Support Forum</a></div>
+
+<div id="bc">
+<a href="http://www.mcmediaplayer.com/" class="homebtn"><img src="index/logo-header.png" alt="MC Media Player" align="absmiddle" border="0" width="110" height="30"></a>
+<ul>
+<li><a href="http://www.mcmediaplayer.com/player/altair/index.html">MC Altair</a></li>
+<li><a href="http://www.mcmediaplayer.com/setup/index.html">Setup</a></li>
+<li>Variables</li>
+</ul>
+</div>
+
+<h1 align="left">MC Altair Variables</h1>
+<p align="left">This is a list of variables that are currently available for the <a href="http://www.mcmediaplayer.com/player/altair/index.html">MC Altair</a> player (v0.8).</p>
+<table cellpadding="7" cellspacing="0">
+<tbody><tr valign="top">
+<td valign="top"><font color="#000099" size="+1"><b>Variable Name</b></font></td>
+<td valign="top"><font size="+1">&nbsp;</font></td>
+<td valign="top"><font color="#000099" size="+1"><b>Possible Values</b></font></td>
+<td valign="top"><font size="+1">&nbsp;</font></td>
+<td valign="top"><font color="#000099" size="+1"><b>Default</b></font></td>
+<td><font size="+1">&nbsp;</font></td>
+<td valign="top"><font color="#000099" size="+1"><b>Description</b></font></td>
+</tr>
+<tr>
+<td colspan="7" valign="top"><b><font color="#000099">Player</font></b></td>
+</tr>
+<tr>
+<td valign="top"><b>playerFile<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">[URL]</td>
+<td>&nbsp;</td>
+<td valign="top">mcmp.swf</td>
+<td>&nbsp;</td>
+<td valign="top">URL of the player SWF file.</td>
+</tr>
+<tr>
+<td valign="top"><b>playerJsFile<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">[URL]</td>
+<td>&nbsp;</td>
+<td valign="top">mcmp.js</td>
+<td>&nbsp;</td>
+<td valign="top">URL of the player JavaScript file.</td>
+</tr>
+<tr>
+<td valign="top"><b>playerSize</b></td>
+<td>&nbsp;</td>
+<td valign="top">[number] x [number]</td>
+<td>&nbsp;</td>
+<td valign="top">480x270</td>
+<td>&nbsp;</td>
+<td valign="top">Width/height of the player in pixels. This variable only applies if you are using the JavaScript file.</td>
+</tr>
+<tr>
+<td valign="top"><b>playerBackgroundColor</b></td>
+<td>&nbsp;</td>
+<td valign="top">[hex value]</td>
+<td>&nbsp;</td>
+<td valign="top">525252 (grey)</td>
+<td>&nbsp;</td>
+<td valign="top">Color of the player background. If you have a preview image defined, this color will not always be visible.</td>
+</tr>
+<tr>
+  <td valign="top"><b>colorScheme</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">[hex value]</td>
+  <td>&nbsp;</td>
+  <td valign="top">2175fb</td>
+  <td>&nbsp;</td>
+  <td valign="top">Global color scheme. Specifying colors for individual elements will override the colorScheme value.</td>
+</tr>
+<!--<tr>
+  <td valign="top"><b>playerAutoResize</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">on, off</td>
+  <td>&nbsp;</td>
+  <td valign="top">on</td>
+  <td>&nbsp;</td>
+  <td valign="top">When enabled, the player will automatically resize and/or reposition elements when resizing occurs. This only applies to element attributes that have not been defined; so for example, you could specify a fixed position for the play button but all other elements will be auto-resized.<br>
+    This variable should normally be left on.</td>
+</tr>-->
+<tr>
+  <td colspan="7" valign="top"><b><font color="#000099">Default Video Actions</font></b></td>
+</tr>
+<tr>
+  <td valign="top"><b>defaultBufferLength</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">0.1 - [any value]</td>
+  <td>&nbsp;</td>
+  <td valign="top">1</td>
+  <td>&nbsp;</td>
+  <td valign="top">Length of video to buffer before playback begins. Accepts any positive value. One decimal place is allowed. </td>
+</tr>
+<tr>
+  <td valign="top"><b>defaultEndAction*</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">previewImage, pauseAtStart, pauseAtEnd, stop, repeat<br>
+    <i>Additional option: </i>fpButton=[on,off]</td>
+  <td>&nbsp;</td>
+  <td valign="top">previewImage/pauseAtStart,fpButton=on<br></td>
+  <td>&nbsp;</td>
+  <td valign="top">What
+happens when the clip reaches the end. By default the preview image is
+shown, but if no preview image is defined, defaults to using the first
+frame of the video (pauseAtStart).<br> Other options: pauseAtEnd (pause
+on the last frame), stop (clear the video stream completely), repeat
+(turns on the autoRepeat function).<br>
+    You can also turn the First Play button on or off.<br>
+    <a href="http://www.mcmediaplayer.com/setup/variables/defaultEndAction.html">More details &amp; options</a></td>
+</tr>
+<tr>
+  <td valign="top"><b>defaultStopAction*</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">previewImage, none<br>
+    <i>Additional option:</i> fpButton=[on,off]</td>
+  <td>&nbsp;</td>
+  <td valign="top">previewImage</td>
+  <td>&nbsp;</td>
+  <td valign="top">What happens when the stop button is clicked. Similar to <i>defaultEndAction</i>, but with fewer options (because the stop button must always remove the video stream completely).</td>
+</tr>
+<tr>
+<td colspan="7" valign="top"><b><font color="#000099">Control Panel (CP)</font></b></td>
+</tr>
+<tr>
+<td valign="top"><b>cpSize<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 480x480</td>
+<td>&nbsp;</td>
+<td valign="top">480x24</td>
+<td>&nbsp;</td>
+<td valign="top">Size of the control panel.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpPosition<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 460x260</td>
+<td>&nbsp;</td>
+<td valign="top">0x246</td>
+<td>&nbsp;</td>
+<td valign="top">Position of the control panel.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpBackgroundColor<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">[hex value]</td>
+<td>&nbsp;</td>
+<td valign="top">000000 (black)</td>
+<td>&nbsp;</td>
+<td valign="top">Background color of the control panel.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpBackgroundOpacity<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0 - 100</td>
+<td>&nbsp;</td>
+<td valign="top">60</td>
+<td>&nbsp;</td>
+<td valign="top">Opacity (transparency) of the cp background color.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpButtonsOpacity<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0 - 100</td>
+<td>&nbsp;</td>
+<td valign="top">100</td>
+<td>&nbsp;</td>
+<td valign="top">Opacity (transparency) of all the cp buttons (you won't normally want to change this).</td>
+</tr>
+<tr>
+<td valign="top"><b>cpCounterPosition<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 460x270</td>
+<td>&nbsp;</td>
+<td valign="top">330x4</td>
+<td>&nbsp;</td>
+<td valign="top">Time counter position.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpFullscreenBtnPosition<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 460x270</td>
+<td>&nbsp;</td>
+<td valign="top">454x12</td>
+<td>&nbsp;</td>
+<td valign="top">Fullscreen button position.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpHidePanel<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">button, mouseout, never</td>
+<td>&nbsp;</td>
+<td valign="top">button</td>
+<td>&nbsp;</td>
+<td valign="top">When to hide the control panel.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpHideDelay<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">[number]</td>
+<td>&nbsp;</td>
+<td valign="top">0</td>
+<td>&nbsp;</td>
+<td valign="top">If cpHidePanel is set to "mouseout", this is the delay in seconds before the cp fades out.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpInfoBtnPosition<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 460x270</td>
+<td>&nbsp;</td>
+<td valign="top">470x12</td>
+<td>&nbsp;</td>
+<td valign="top">Position of the info button.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpPlayBtnPosition<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 460x270</td>
+<td>&nbsp;</td>
+<td valign="top">60x12</td>
+<td>&nbsp;</td>
+<td valign="top">Position of the play button.</td>
+</tr>
+<tr>
+  <td valign="top"><b>cpPlayBtnColor</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">[hex value]</td>
+  <td>&nbsp;</td>
+  <td valign="top">&nbsp;</td>
+  <td>&nbsp;</td>
+  <td valign="top">Play button color.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpRepeatBtnPosition<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 460x270</td>
+<td>&nbsp;</td>
+<td valign="top">438x12</td>
+<td>&nbsp;</td>
+<td valign="top">Position of the auto-repeat button.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpScrubberPosition<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 460x270</td>
+<td>&nbsp;</td>
+<td valign="top">194x8</td>
+<td>&nbsp;</td>
+<td valign="top">Position of the scrubber (progress bar etc).</td>
+</tr>
+<tr>
+  <td valign="top"><b>cpScrubberColor</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">[hex value]</td>
+  <td>&nbsp;</td>
+  <td valign="top">&nbsp;</td>
+  <td>&nbsp;</td>
+  <td valign="top">Color of the scrubber background.</td>
+</tr>
+<tr>
+  <td valign="top"><b>cpScrubberLoadedColor</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">[hex value]</td>
+  <td>&nbsp;</td>
+  <td valign="top">&nbsp;</td>
+  <td>&nbsp;</td>
+  <td valign="top">Color of the "loaded" bar in the scrubber.</td>
+</tr>
+<tr>
+  <td valign="top"><b>cpScrubberElapsedColor</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">[hex value]</td>
+  <td>&nbsp;</td>
+  <td valign="top">&nbsp;</td>
+  <td>&nbsp;</td>
+  <td valign="top">Color of the "elapsed" bar in the scrubber.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpStopBtnPosition<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 460x270</td>
+<td>&nbsp;</td>
+<td valign="top">85x12</td>
+<td>&nbsp;</td>
+<td valign="top">Position of the stop button.</td>
+</tr>
+<tr>
+  <td valign="top"><b>cpStopBtnColor</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">[hex value]</td>
+  <td>&nbsp;</td>
+  <td valign="top">&nbsp;</td>
+  <td>&nbsp;</td>
+  <td valign="top">Stop button color.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpVolumeBtnPosition<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 460x270</td>
+<td>&nbsp;</td>
+<td valign="top">118x2</td>
+<td>&nbsp;</td>
+<td valign="top">Position of the volume control.</td>
+</tr>
+<tr>
+  <td valign="top"><b>cpVolumeCtrlColor</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">[hex value]</td>
+  <td>&nbsp;</td>
+  <td valign="top">&nbsp;</td>
+  <td>&nbsp;</td>
+  <td valign="top">Volume control color.</td>
+</tr>
+<tr>
+<td valign="top"><b>cpVolumeStart<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0 - 100</td>
+<td>&nbsp;</td>
+<td valign="top">100</td>
+<td>&nbsp;</td>
+<td valign="top">Initial volume level used at startup.</td>
+</tr>
+<tr>
+  <td valign="top"><b>tooltipTextColor</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">[Hex color]</td>
+  <td>&nbsp;</td>
+  <td valign="top">000000</td>
+  <td>&nbsp;</td>
+  <td valign="top">Tooltip text color</td>
+</tr>
+<tr>
+  <td valign="top"><b>tooltipBackgroundColor</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">[Hex color]</td>
+  <td>&nbsp;</td>
+  <td valign="top">CCCCCC</td>
+  <td>&nbsp;</td>
+  <td valign="top">Tooltip background color</td>
+</tr>
+<tr>
+<td colspan="7" valign="top"><b><font color="#000099">Preview / First Play</font></b></td>
+</tr>
+<tr>
+  <td valign="top"><b>streamingServerURL</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">[URL]</td>
+  <td>&nbsp;</td>
+  <td valign="top">&nbsp;</td>
+  <td>&nbsp;</td>
+  <td valign="top">If you are using RTMP streaming video, this is the URL of the Flash streaming server (e.g. rtmp://example.com/streamApp).</td>
+</tr>
+<tr>
+<td valign="top"><b>fpFileURL</b></td>
+<td>&nbsp;</td>
+<td valign="top">[URL]</td>
+<td>&nbsp;</td>
+<td valign="top">&nbsp;</td>
+<td>&nbsp;</td>
+<td valign="top">URL of the video file to play.</td>
+</tr>
+<tr>
+<td valign="top"><b>fpPreviewImageURL</b></td>
+<td>&nbsp;</td>
+<td valign="top">[URL]</td>
+<td>&nbsp;</td>
+<td valign="top">&nbsp;</td>
+<td>&nbsp;</td>
+<td valign="top">URL of the optional preview image.</td>
+</tr>
+<tr>
+<td valign="top"><b>fpPreviewImageSize</b></td>
+<td>&nbsp;</td>
+<td valign="top">original, fit</td>
+<td>&nbsp;</td>
+<td valign="top">fit</td>
+<td>&nbsp;</td>
+<td valign="top">Size of the preview image (relative to the player).</td>
+</tr>
+<tr>
+<td valign="top"><b>fpButtonOpacity<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0 - 100</td>
+<td>&nbsp;</td>
+<td valign="top">60</td>
+<td>&nbsp;</td>
+<td valign="top">Opacity (transparency) of the big play button.</td>
+</tr>
+<tr>
+<td valign="top"><b>fpButtonPosition<br>
+</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 460x270</td>
+<td>&nbsp;</td>
+<td valign="top">240x118</td>
+<td>&nbsp;</td>
+<td valign="top">Position of the big play button.</td>
+</tr>
+<tr>
+<td valign="top"><b>fpButtonSize</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - [any value]</td>
+<td>&nbsp;</td>
+<td valign="top">126x126</td>
+<td>&nbsp;</td>
+<td valign="top">Size of the big play button.</td>
+</tr>
+<tr>
+  <td valign="top"><b>fpButtonColor</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">[hex value]</td>
+  <td>&nbsp;</td>
+  <td valign="top">&nbsp;</td>
+  <td>&nbsp;</td>
+  <td valign="top">Color of the big play button.</td>
+</tr>
+<tr>
+  <td valign="top"><b>fpAction</b></td>
+  <td>&nbsp;</td>
+  <td valign="top">none, play</td>
+  <td>&nbsp;</td>
+  <td valign="top">none</td>
+  <td>&nbsp;</td>
+  <td valign="top">What to do when the player loads (nothing, or play the video file automatically)</td>
+</tr>
+<tr>
+<td colspan="7" valign="top"><b><font color="#000099">Message Box</font></b></td>
+</tr>
+<tr>
+<td valign="top"><b>msgBackgroundColor </b></td>
+<td>&nbsp;</td>
+<td valign="top">[hex value]</td>
+<td>&nbsp;</td>
+<td valign="top">000000 (black)</td>
+<td>&nbsp;</td>
+<td valign="top">Message box background color.</td>
+</tr>
+<tr>
+<td valign="top"><b>msgBackgroundOpacity</b></td>
+<td>&nbsp;</td>
+<td valign="top">0 - 100</td>
+<td>&nbsp;</td>
+<td valign="top">90</td>
+<td>&nbsp;</td>
+<td valign="top">Opacity (transparency) of the message box background.</td>
+</tr>
+<tr>
+<td colspan="7" valign="top"><b><font color="#000099">Video Screen</font></b></td>
+</tr>
+<tr>
+<td valign="top"><b>videoScreenPosition</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 460x270</td>
+<td>&nbsp;</td>
+<td valign="top">0x0</td>
+<td>&nbsp;</td>
+<td valign="top">Video screen X/Y position.</td>
+</tr>
+<tr>
+<td valign="top"><b>videoScreenSize</b></td>
+<td>&nbsp;</td>
+<td valign="top">0x0 - 480x270</td>
+<td>&nbsp;</td>
+<td valign="top">480x270</td>
+<td>&nbsp;</td>
+<td valign="top">Video screen width/height. The default size is the same as the player.</td>
+</tr>
+</tbody></table>
+<p align="left">* = Not yet supported with streaming rtmp files.</p>
+<h4>Under Construction</h4>
+<ul>
+<li>Separate variables for fullscreen mode</li>
+<li>Button size &amp; color  variables</li>
+<li><b>fsMode</b> -- allow fullscreen</li>
+</ul>
+</div>
+
+<div id="adsenseFooter">
+<script type="text/javascript"><!--
+google_ad_client = "pub-9498124618136592";
+//MC Media Player
+google_ad_slot = "5371003360";
+google_ad_width = 728;
+google_ad_height = 90;
+//--></script>
+<script type="text/javascript" src="index_pliki/show_ads.js">
+</script><script src="index/expansion_embed.js"></script><script src="index/test_domain.js"></script><script>google_protectAndRun("ads_core.google_render_ad", google_handleError, google_render_ad);</script><ins style="border: medium none ; margin: 0pt; padding: 0pt; display: inline-table; height: 90px; position: relative; visibility: visible; width: 728px;"><ins style="border: medium none ; margin: 0pt; padding: 0pt; display: block; height: 90px; position: relative; visibility: visible; width: 728px;"><iframe allowtransparency="true" hspace="0" id="google_ads_frame1" marginheight="0" marginwidth="0" name="google_ads_frame" src="index/ads.html" style="left: 0pt; position: absolute; top: 0pt;" vspace="0" scrolling="no" width="728" frameborder="0" height="90"></iframe></ins></ins>
+</div>
+
+<div id="footer">
+<a href="http://www.mcmediaplayer.com/">Home</a> | <a href="http://www.mcmediaplayer.com/about/index.html">About</a> | <a href="http://www.mcmediaplayer.com/about/faq/index.html">FAQ</a> | <a href="http://www.mcmediaplayer.com/about/terms.html">Terms</a> | <a href="http://www.mcmediaplayer.com/help/index.html">Help</a>
+</div>
+
+</div>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write("\<script src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'>\<\/script>" );
+</script><script src="index/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-388844-27");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script>
+</body></html>

@@ -1,0 +1,33 @@
+
+
+#set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${parametersTool.view}.buttons"))
+#set($skin_link = $link.set("site_id",$cmsData.site.id).set("skin",$skin))
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.appearance")
+
+<script type="text/javascript">
+  function go(link)
+  {
+    document.form1.action = link;
+	document.form1.submit();
+  }
+</script>
+<form name="form1" method="post" action='$skin_link.view('appearance.skin.EditSkin').action('appearance.skin.UpdateStylesheet')'>
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td colspan="2"><textarea name="contents" style="width:100%;" rows="30">$!contents</textarea></td>
+    </tr>
+    <tr>
+      <td colspan="2">$ui_strings.get('warning')</td>
+    </tr>
+  </table>
+</form>
+
+#set($action_link = $skin_link.action('appearance.skin.UpdateStylesheet'))
+#command_bar([["javascript:go('$action_link')",$ui_buttons.get('saveAndContinue')],["javascript:go('$action_link.view('appearance.skin.EditSkin')')",$ui_buttons.get('save')],[$skin_link.view('appearance.skin.EditSkin'),$ui_buttons.get('cancel')]])
+
+#genericScreenTrailer()

@@ -1,0 +1,178 @@
+
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="role">
+    <prefix name="cms">
+      <prefix name="administrator">
+        <value>System administrator</value>
+      </prefix>    
+      <prefix name="aggregation">
+        <prefix name="export">
+          <prefix name="administrator">
+            <value>Aggregation sharing administrator</value>
+          </prefix>
+        </prefix>
+        <prefix name="import">
+          <prefix name="administrator">
+            <value>Aggregation imports administrator</value>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="banner">
+        <prefix name="banners">
+          <prefix name="administrator">
+            <value>Banner administrator</value>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="category">
+        <prefix name="administrator">
+          <value>Category administrator</value>
+        </prefix>
+        <prefix name="classifier">
+          <value>Category classifier</value>
+        </prefix>
+        <prefix name="query">
+          <prefix name="administrator">
+            <value>Category query administrator</value>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="files">
+        <prefix name="administrator">
+          <value>Files administrator</value>
+        </prefix>
+        <prefix name="visitor">
+          <value>Files visitor</value>
+        </prefix>
+      </prefix>
+      <prefix name="forum">
+        <prefix name="administrator">
+          <value>Forum administrator</value>
+        </prefix>
+        <prefix name="discussion">
+          <prefix name="administrator">
+            <value>Discussion administrator</value>
+          </prefix>
+          <prefix name="moderator">
+            <value>Discussion moderator</value>
+          </prefix>
+          <prefix name="participant">
+            <value>Discussion participant</value>
+          </prefix>
+          <prefix name="visitor">
+            <value>Discussion reader</value>
+          </prefix>
+        </prefix>
+        <prefix name="moderator">
+          <value>Forum moderator</value>
+        </prefix>
+        <prefix name="participant">
+          <value>Forum participant</value>
+        </prefix>
+        <prefix name="visitor">
+          <value>Forum reader</value>
+        </prefix>
+      </prefix>
+      <prefix name="httpfeed">
+        <prefix name="administrator">
+          <value>HTTP feeds administrator</value>
+        </prefix>
+      </prefix>
+      <prefix name="layout">
+        <prefix name="administrator">
+          <value>Layout administrator</value>
+        </prefix>
+      </prefix>
+      <prefix name="links">
+        <prefix name="administrator">
+          <value>Links administrator</value>
+        </prefix>
+      </prefix>
+      <prefix name="periodicals">
+        <prefix name="administrator">
+          <value>Periodicals administrator</value>
+        </prefix>
+      </prefix>
+      <prefix name="poll">
+        <prefix name="polls">
+          <prefix name="administrator">
+            <value>Polls administrator</value>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="rich_content">
+        <prefix name="administrator">
+          <value>Rich content editor</value>
+        </prefix>
+      </prefix>
+      <prefix name="search">
+        <prefix name="administrator">
+          <value>Search administrator</value>
+        </prefix>
+      </prefix>
+      <prefix name="site">
+        <prefix name="administrator">
+          <value>Administrator</value>
+        </prefix>
+        <prefix name="team_member">
+          <value>Team member</value>
+        </prefix>
+        <prefix name="senior_editor">
+          <value>Senior editor</value>
+        </prefix>
+        <prefix name="editor">
+          <value>Editor</value>
+        </prefix>
+      </prefix>
+      <prefix name="structure">
+        <prefix name="administrator">
+          <value>Document administrator</value>
+        </prefix>
+        <prefix name="editor">
+          <value>Document editor</value>
+        </prefix>
+        <prefix name="local_visitor">
+          <value>Local document reader</value>
+        </prefix>
+        <prefix name="redactor">
+          <value>Document redaktor</value>
+        </prefix>
+        <prefix name="acceptor">
+          <value>Document acceptor</value>
+        </prefix>
+        <prefix name="reporter">
+          <value>Document reporter</value>
+        </prefix>
+        <prefix name="visitor">
+          <value>Document reader</value>
+        </prefix>
+        <prefix name="inbound_alias_creator">
+          <value>Inbound alias creator</value>
+        </prefix>
+      </prefix>
+      <prefix name="syndication">
+        <prefix name="administrator">
+          <value>Syndication administrator</value>
+        </prefix>
+        <prefix name="infeed">
+          <prefix name="administrator">
+            <value>Syndication incoming feeds administrator</value>
+          </prefix>
+        </prefix>
+        <prefix name="outfeed">
+          <prefix name="administrator">
+            <value>Syndication outgoing feeds administrator</value>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="strings">
+    <prefix name="for_folder">
+      <value>for folder</value>
+    </prefix>
+    <prefix name="for_node">
+      <value>for document</value>
+    </prefix>
+  </prefix>
+</strings>

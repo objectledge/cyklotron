@@ -1,0 +1,46 @@
+## REQUIRES 
+## $cmsData.site SiteResource
+## $subject Subject
+## $roles RoleResource[]
+
+#genericScreenHeader('PRZYPISANIE RÓL GRUPIE')
+
+#set($tableLink = $link.set('tableId',$roles.getId()).set('group_id',$group.id))
+#set($roleName = $i18n.usePrefix('cms.security.role'))
+
+<table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
+<tr>
+  <th>
+    Role w serwisie $cmsData.site.name przypisane do #if($groupName != '@team_member') grupy $groupName #else zespołu serwisu $cmsData.site.name #end
+  </th>
+</tr>
+#if($roles.getNumPages() > 1)
+#tableView_pager($roles $tableLink)
+#end
+<form name="form0" method="post" action="$link.view("security.GroupList").action("security.UpdateGroupAssignments").set("group_id",$group.id)">
+<script language="javascript">
+     function send()
+     {
+         document.form0.submit();
+     }
+</script>
+#foreach ($row in $roles.rows)
+  <tr>
+   <td> 
+    <input type="hidden" name="role_id" value="$row.object.role.id">
+      #if($assigned.contains($row.object.role))
+        #set($checked = " checked")
+      #else
+        #set($checked = "")
+      #end
+      <input type="checkbox" name="selected_role_id" value="$row.object.role.id" id="role_$row.id"$!checked>
+      #tableView_linesAndFolders($roles $row $tableLink)
+      <label for="role_$row.id"> #role_name($row.object) </label>
+    </td>
+  </tr>
+#end
+</form>
+</table>
+
+#command_bar([['javascript:send();','Zapisz']])
+</table>
