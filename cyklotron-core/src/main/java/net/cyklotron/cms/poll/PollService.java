@@ -1,6 +1,7 @@
 package net.cyklotron.cms.poll;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.Relation;
@@ -79,6 +80,15 @@ public interface PollService
     public PollResource getPoll(CoralSession coralSession, PollsResource pollsResource, Parameters config)
         throws PollException;
 
+    /**
+     * return the vote resource for configuration.
+     *
+     * @param config the configuration.
+     * @return the vote resource.
+     * @throws PollException if the operation fails.
+     */
+    public VoteResource getVote(CoralSession coralSession, Parameters config)
+        throws PollException;
 
     /**
      * return the poll content for indexing purposes.
@@ -104,6 +114,18 @@ public interface PollService
     public boolean hasVoted(HttpContext httpContext, 
         TemplatingContext templatingContext, PollResource poll)
         throws PollException;
+    
+    /**
+     * checks whether the vote has been voted by user 
+     * 
+     * @param httpContext the http context of the request.
+     * @param vote the vote
+     * @return <code>true</code> if already voted.
+     * @throws PollException if anything goes wrong.
+     */
+    public boolean hasVoted(HttpContext httpContext, 
+        TemplatingContext templatingContext, VoteResource vote)
+        throws PollException;
 
 	/**
 	 * @param poll
@@ -120,6 +142,11 @@ public interface PollService
      * @param percentMap
      */
     public void prepareVoteMaps(CoralSession coralSession, VoteResource vote, Map answers, Map resultMap, Map percentMap, Map ballotsMap);
+
+    /**
+     * @param vote
+     */    
+    public Set<String> getBallotsEmails(CoralSession coralSession, VoteResource vote);
 	
     /**
      * Return the poll relation.

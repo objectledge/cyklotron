@@ -898,6 +898,56 @@
           </prefix>
         </prefix>
       </prefix>
+      <prefix name="voting">
+        <prefix name="description">
+          <value>Voting screen</value>
+        </prefix>
+        <prefix name="name">
+          <value>Voting</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Default voting screen.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Default</value>
+            </prefix>
+          </prefix>
+          <prefix name="Confirm">
+            <prefix name="description">
+              <value>Confirm ballot.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Confirm</value>
+            </prefix>
+          </prefix>
+          <prefix name="InvalidBallot">
+            <prefix name="description">
+              <value>Invalid ballot screen.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Invalid ballot</value>
+            </prefix>
+          </prefix>
+          <prefix name="BallotSent">
+            <prefix name="description">
+              <value>Ballot sent screen.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Ballot sent</value>
+            </prefix>
+          </prefix>
+          <prefix name="Result">
+            <prefix name="description">
+              <value>Display results.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Results</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
     </prefix>
   </prefix>
   <prefix name="related">

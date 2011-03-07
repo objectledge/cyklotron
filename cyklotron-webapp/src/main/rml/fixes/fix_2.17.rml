@@ -48,3 +48,32 @@ ATTRIBUTES (
 REQUIRED string email,
 long answerId
 );
+
+
+CREATE RESOURCE 'voting'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/poll/screens'
+ATTRIBUTES (
+  screenName = 'poll.Voting',
+  configurationView = 'poll.VotingConf'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/poll/screens/voting';
+
+CREATE RESOURCE 'Confirm'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/poll/screens/voting';
+
+CREATE RESOURCE 'InvalidBallot'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/poll/screens/voting';
+
+CREATE RESOURCE 'BallotSent'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/poll/screens/voting';
+
+CREATE RESOURCE 'Result'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/poll/screens/voting';

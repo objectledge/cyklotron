@@ -876,6 +876,56 @@
           </prefix>
         </prefix>
       </prefix>
+            <prefix name="voting">
+        <prefix name="description">
+          <value>Aplikacja do głosowania na ankietę.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Ankieta</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Ekran do głosowania.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Zagłosuj</value>
+            </prefix>
+          </prefix>
+          <prefix name="Confirm">
+            <prefix name="description">
+              <value>Ekran do potwierdzenia wybranego głosu.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Potwierdzenie</value>
+            </prefix>
+          </prefix>
+          <prefix name="InvalidBallot">
+            <prefix name="description">
+              <value>Informacja o niepoprawnym albo nieaktualny głosie.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Nieprawidłowy glos</value>
+            </prefix>
+          </prefix>
+          <prefix name="BallotSent">
+            <prefix name="description">
+              <value>Informacja o poprawnym wyslaniu głosu.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Głos wysłany</value>
+            </prefix>
+          </prefix>
+          <prefix name="Result">
+            <prefix name="description">
+              <value>Wyświetla wyniki ankiety.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Wyniki głosowania</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
     </prefix>
   </prefix>
   <prefix name="related">

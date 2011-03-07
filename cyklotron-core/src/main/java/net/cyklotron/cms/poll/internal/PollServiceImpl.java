@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.Cookie;
 
@@ -36,6 +38,7 @@ import net.cyklotron.cms.poll.PoolResource;
 import net.cyklotron.cms.poll.PoolResourceImpl;
 import net.cyklotron.cms.poll.QuestionResource;
 import net.cyklotron.cms.poll.VoteResource;
+import net.cyklotron.cms.poll.VoteResourceImpl;
 import net.cyklotron.cms.poll.util.Answer;
 import net.cyklotron.cms.poll.util.Question;
 import net.cyklotron.cms.site.SiteResource;
@@ -222,6 +225,33 @@ public class PollServiceImpl
         }
         return null;
     }
+    
+    /**
+     * return the vote resource for configuration.
+     *
+     * @param config the configuration.
+     * @return the vote resource.
+     * @throws PollException if the operation fails.
+     */
+    public VoteResource getVote(CoralSession coralSession, Parameters config)
+        throws PollException
+    {
+        long voteId = config.getLong("vote_id",-1);
+        if(voteId != -1)
+        {
+            VoteResource voteResource = null;
+            try
+            {
+                voteResource = VoteResourceImpl.getVoteResource(coralSession, voteId);
+                return voteResource;
+            }
+            catch(EntityDoesNotExistException e)
+            {
+                throw new PollException("Vote not found",e);
+            }
+        }
+        return null;
+    }
 
     /**
      * return the poll content for indexing purposes.
@@ -289,6 +319,44 @@ public class PollServiceImpl
                 return false;
             }
             String cookieKey = "poll_"+poll.getId();
+            Cookie[] cookies = httpContext.getRequest().getCookies();
+            if(cookies != null)
+            {
+                for(int i=0; i<cookies.length; i++)
+                {
+                    if(cookies[i].getName().equals(cookieKey))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        catch(Exception e)
+        {
+            throw new PollException("exception occured", e);
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public boolean hasVoted(HttpContext httpContext, 
+        TemplatingContext templatingContext, VoteResource vote)
+        throws PollException
+    {
+        try
+        {
+            if(templatingContext.get("already_voted") != null && 
+              ((Boolean)templatingContext.get("already_voted")).booleanValue())
+            {
+                return true;
+            }
+            if(vote == null)
+            {
+                return false;
+            }
+            String cookieKey = "vote_"+vote.getId();
             Cookie[] cookies = httpContext.getRequest().getCookies();
             if(cookies != null)
             {
@@ -379,7 +447,21 @@ public class PollServiceImpl
         }
     }
     
-    
+    public Set<String> getBallotsEmails(CoralSession coralSession, VoteResource vote)
+    {
+        Resource[] answerResources = coralSession.getStore().getResource(vote);
+        Set<String> emailList = new HashSet<String>();
+        for(int i = 0; i < answerResources.length; i++)
+        {
+            AnswerResource answerResource = (AnswerResource)answerResources[i];;
+            Resource[] ballotResources = coralSession.getStore().getResource(answerResource);
+            for(int j = 0; j < ballotResources.length; j++)
+            {
+                emailList.add(((BallotResource)ballotResources[i]).getEmail());
+            }
+        }
+        return emailList;
+    }
     
     /**
      * return the poll for poll pool with logic based on specified configuration.
