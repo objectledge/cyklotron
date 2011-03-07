@@ -6,28 +6,27 @@
   <form name="form1" method="post" action="" class="defaultForm">
   <input type="hidden" name="psid" value="$psid" size="30">
   <input type="hidden" name="pid" value="$vote.id" size="30">
-    <table class="defaultTable">
+    <table class="genericItemList" width="100%" cellspacing="0">
     <tr>
-     <td align="left"><b>Tytuł ankiety:</b></td>
-     <td>$vote.getName()</td>
+     <th colspan="2">Szczególy ankiety</th>
     </tr>
     <tr>
-     <td align="left"><b>Opis:</b></td>
-     <td>$!vote.getDescription()</td>
+      <td width="15%">Tytuł ankiety: </td><td><i>$vote.getName()</i></td>         
     </tr>
-    #set($howMany = 0)
+    <tr>
+      <td>Opis: </td><td><i>$!vote.getDescription()</i></td>
+    </tr>    
+    #set($totalVotes = 0)
     #foreach($answerKey in $answerKeys)
-	<tr>
-	 <td colspan="2">
-          #set($howMany = ($howMany + $results.get($answers.get($answerKey).getId())))##
-          <b>Opcja $velocityCount:</b><br>
-          <i>$answers.get($answerKey).getTitle()</i>
-          ($stringTool.shortenString($percent.get($answers.get($answerKey).getId()).toString(), 4, "")%) - $results.get($answers.get($answerKey).getId())<BR/>
-     </td>
-    </tr>
+      #set($totalVotes = ($totalVotes + $results.get($answers.get($answerKey).getId())))##
+    <tr>
+      #set($option = $answerKey+1)
+      <td>Opcja $option:</td>
+      <td>($stringTool.shortenString($percent.get($answers.get($answerKey).getId()).toString(), 4, "")%) - $results.get($answers.get($answerKey).getId()): <i>$answers.get($answerKey).getTitle()</i></td>
+    </tr> 
     #end
     <tr>
-     <td align="left"><b>Wszystkich głosów:</b></td><td>$howMany</td>
+      <td>Ilość wszystkich oddanych głosów: </td><td>$totalVotes</td>
     </tr>
     </table>
   </form>

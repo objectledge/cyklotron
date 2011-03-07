@@ -6,37 +6,35 @@
   <form name="form1" method="post" action="" class="defaultForm">
   <input type="hidden" name="psid" value="$psid" size="30">
   <input type="hidden" name="pid" value="$vote.id" size="30">
-    <table class="defaultTable">
+    <table class="genericItemList" width="100%" cellspacing="0">
     <tr>
-     <td align="left"><b>Tytuł ankiety:</b></td>
-     <td>$vote.getName()</td>
+     <th colspan="2">Szczególy ankiety</th>
     </tr>
     <tr>
-     <td align="left"><b>Opis:</b></td>
-     <td>$!vote.getDescription()</td>
+      <td width="15%">Tytuł ankiety: </td><td><i>$vote.getName()</i></td>         
     </tr>
-    #set($howMany = 0)
+    <tr>
+      <td>Opis: </td><td><i>$!vote.getDescription()</i></td>
+    </tr>    
+    </table>
+    <br/><br/>
+    <table class="genericItemList" width="100%" cellspacing="0">
+    <tr>
+      <th width=30%>Email głosującego:</th>
+      <th width=50%>Opcja:</th>
+      <th width=20%>Data:</th>
+    </tr>
     #foreach($answerKey in $answerKeys)
-	<tr>
-	 <td colspan="2">
-          #set($howMany = ($howMany + $results.get($answers.get($answerKey).getId())))##
-          <b>Opcja $velocityCount:</b><br>
-          <i>$answers.get($answerKey).getTitle()</i>
-          ($stringTool.shortenString($percent.get($answers.get($answerKey).getId()).toString(), 4, "")%) - $results.get($answers.get($answerKey).getId())<BR/>
-          #set($ballotsForAnswer = $ballots.get($answers.get($answerKey).getId()))##
-          #if($ballotsForAnswer.size()>0)
-          #foreach($ballotForAnswer in $ballotsForAnswer)
-            $ballotForAnswer.email<BR/>
-          #end
-          #else
-            Brak oddanych głosów.
-          #end
-     </td>
-    </tr>
-    #end
-    <tr>
-     <td align="left"><b>Wszystkich głosów:</b></td><td>$howMany</td>
-    </tr>
+        #set($answerTitle = $answers.get($answerKey).getTitle())
+        #set($ballotsForAnswer = $ballots.get($answers.get($answerKey).getId()))##
+        #foreach($ballotForAnswer in $ballotsForAnswer)
+         <tr>
+          <td >$ballotForAnswer.email</td>
+          <td ><i>$answerTitle</i></td>
+          <td >$format_date.format($ballotForAnswer.creationTime())</td>
+         </tr>
+        #end
+     #end
     </table>
   </form>
   
