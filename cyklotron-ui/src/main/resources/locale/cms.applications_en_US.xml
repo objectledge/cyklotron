@@ -938,7 +938,7 @@
               <value>Ballot sent</value>
             </prefix>
           </prefix>
-          <prefix name="Result">
+          <prefix name="Results">
             <prefix name="description">
               <value>Display results.</value>
             </prefix>

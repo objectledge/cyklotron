@@ -97,7 +97,7 @@ CREATE RESOURCE 'BallotSent'
 RESOURCE CLASS 'integration.screen_state'
 PARENT '/cms/applications/poll/screens/voting';
 
-CREATE RESOURCE 'Result'
+CREATE RESOURCE 'Results'
 RESOURCE CLASS 'integration.screen_state'
 PARENT '/cms/applications/poll/screens/voting';
 

@@ -101,7 +101,7 @@ public class Voting
                 if(hasVoted())
                 {
                     templatingContext.put("already_voted", Boolean.TRUE);
-                    state = "Result"; 
+                    state = "Results"; 
                 }
                 else
                 {
@@ -187,7 +187,7 @@ public class Voting
 
     }
 
-    public void prepareResult(Context context)
+    public void prepareResults(Context context)
     throws ProcessingException
     {
         try

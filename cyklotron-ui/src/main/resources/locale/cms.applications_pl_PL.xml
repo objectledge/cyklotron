@@ -916,7 +916,7 @@
               <value>Głos wysłany</value>
             </prefix>
           </prefix>
-          <prefix name="Result">
+          <prefix name="Results">
             <prefix name="description">
               <value>Wyświetla wyniki ankiety.</value>
             </prefix>
