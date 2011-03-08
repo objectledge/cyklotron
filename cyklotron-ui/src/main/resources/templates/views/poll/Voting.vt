@@ -1,0 +1,45 @@
+#result_inline_message('results.poll')
+
+#if($vote)
+
+  #set($x = $parametersTool.get('x',""))
+  #if($x.length() == 0)
+   #set($cmsLink = $link)
+  #else
+   #set($cmsLink = $link.set('x',$x))
+  #end
+
+  <form name="form_voting" method="post" action="$cmsLink.action("poll.RespondVote")" class="defaultForm">
+  <input type="hidden" name="vid" value="$vote.id">
+  <table class="defaultTable">
+    <tr>
+      <td align="left">
+        <b>Title:</b><i>$vote.getName()</i>
+      </td>
+    </tr>
+        
+    <tr>
+      <td>Description: $vote.getDescription()<br>
+        #foreach($answerKey in $answerKeys)
+          <tr><td>
+            <input type="radio" id="answer_${answerKey}" name="answer_${answerKey}" value="$answers.get($answerKey).getId()">
+            <label for="answer_${answerKey}">$answers.get($answerKey).getTitle()</label>
+          </td></tr>
+        #end
+      </td>
+    </tr>
+    #if($already_voted)
+     <tr><td>Thank you for voting!</td></tr>
+    #else
+     <tr>
+      <script language="javascript">function submit(){ document.form_voting.submit(); }</script>
+      <td NOWRAP class="usualbutton"><a href="javascript:submit()">Vote</a></td>
+     </tr>
+    #end
+   </table>
+  </form>
+#else
+  <table class="defaultTable">
+    <tr><th><b>No vote defined.</b></th></tr>
+  </table>
+#end

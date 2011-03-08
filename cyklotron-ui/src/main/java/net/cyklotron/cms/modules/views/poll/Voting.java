@@ -68,19 +68,8 @@ public class Voting
 
             String state = (String)context.getAttribute(getClass().getName() + ".state");
             state = parameters.get("state", null);
-            if(state == null)
-            {
-                if(hasVoted())
-                {
-                    templatingContext.put("already_voted", Boolean.TRUE);
-                    state = "Result";   
-                }
-                else
-                {
-                    state = "Default";
-                }
-            }
-            else if("Default".equals(state))
+            
+            if("Default".equals(state))
             {
                 state = "SentBallot";
             }
@@ -107,7 +96,18 @@ public class Voting
                     state = "InvalidBallot";
                 }
             }
-
+            else
+            {
+                if(hasVoted())
+                {
+                    templatingContext.put("already_voted", Boolean.TRUE);
+                    state = "Result"; 
+                }
+                else
+                {
+                    state = "Default";
+                }
+            }
             return state;
         }
         catch(PollException e)
@@ -164,6 +164,16 @@ public class Voting
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
             VoteResource vote = pollService.getVote(coralSession, screenConfig);
             templatingContext.put("vote", vote);
+            
+            Map answers = new HashMap();
+            pollService.prepareVoteMaps(coralSession, vote, answers, new HashMap(), new HashMap(), new HashMap());
+            List answerKeys = new ArrayList();
+            for(int i = 0; i< answers.size(); i++)
+            {
+                answerKeys.add(new Integer(i));
+            }
+            templatingContext.put("answers", answers);
+            templatingContext.put("answerKeys", answerKeys);
         }
         catch(PollException e)
         {
