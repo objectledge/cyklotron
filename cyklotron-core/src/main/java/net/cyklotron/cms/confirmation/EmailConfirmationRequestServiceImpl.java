@@ -28,10 +28,15 @@
 
 package net.cyklotron.cms.confirmation;
 
+import java.util.Date;
+
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+
+import net.cyklotron.cms.files.FileResource;
+import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 
 
 public class EmailConfirmationRequestServiceImpl
@@ -132,5 +137,17 @@ public class EmailConfirmationRequestServiceImpl
             }
         }
         return confirmationRoot;
+    }
+    
+    
+    /**
+     * Sent EmailConfirmationRequest
+     * 
+     * @param coralSession CoralSession.
+     * @param r EmailPeriodicalResource.
+     */
+    public void send(CoralSession coralSession, EmailPeriodicalResource r, FileResource file, Date time, String recipient)
+    {
+     
     }
 }

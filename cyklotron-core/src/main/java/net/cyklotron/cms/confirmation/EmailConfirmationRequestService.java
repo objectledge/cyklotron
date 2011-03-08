@@ -28,10 +28,13 @@
 
 package net.cyklotron.cms.confirmation;
 
+import java.util.Date;
+
 import org.objectledge.coral.session.CoralSession;
 
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
-import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.files.FileResource;
+import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
@@ -66,5 +69,13 @@ public interface EmailConfirmationRequestService
      */
     public void discardEmailConfirmationRequest(CoralSession coralSession, String cookie)
     throws ConfirmationRequestException;
+    
+    /**
+     * Sent EmailConfirmationRequest
+     * 
+     * @param coralSession CoralSession.
+     * @param r EmailPeriodicalResource.
+     */
+    public void send(CoralSession coralSession, EmailPeriodicalResource r, FileResource file, Date time, String recipient);
     
 }
