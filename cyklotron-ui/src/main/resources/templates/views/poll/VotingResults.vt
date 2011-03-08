@@ -20,7 +20,7 @@
   </tr>
   <tr>
     <td colspan="2">
-    #foreach($answerKey in $answerKeys())
+    #foreach($answerKey in $answerKeys)
       <b>Opcja $velocityCount: </b><br/>
       <i> $answers.get($answerKey).getTitle() </i>
       $results.get($answers.get($answerKey).getId()) ($stringTool.shortenString($percent.get($answers.get($answerKey).getId()).toString(), 4, "")%)<br/>
