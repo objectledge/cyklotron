@@ -12,7 +12,7 @@
     <relativePath>../cyklotron-common</relativePath>
   </parent>
   <dependencies>
-      <dependency>
+    <dependency>
       <groupId>org.cyklotron</groupId>
       <artifactId>cyklotron-common</artifactId>
       <type>pom</type>
@@ -36,18 +36,18 @@
       <type>war</type>
     </dependency>
     <dependency>
-        <groupId>org.cyklotron</groupId>
-        <artifactId>cyklotron-ui-fckeditor</artifactId>
-        <type>war</type>
-      </dependency>  
+      <groupId>org.cyklotron</groupId>
+      <artifactId>cyklotron-ui-fckeditor</artifactId>
+      <type>war</type>
+    </dependency>
     <dependency>
       <groupId>org.objectledge</groupId>
       <artifactId>ledge-lgpl</artifactId>
       <exclusions>
-      	<exclusion>
-      		<artifactId>connector</artifactId>
-      		<groupId>javax.resource</groupId>
-      	</exclusion>
+        <exclusion>
+          <artifactId>connector</artifactId>
+          <groupId>javax.resource</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -90,19 +90,19 @@
       <artifactId>java-diff</artifactId>
     </dependency>
     <dependency>
-    	<groupId>javax.resource</groupId>
-    	<artifactId>connector-api</artifactId>
-    	<version>1.5</version>
-    	<scope>compile</scope>
+      <groupId>javax.resource</groupId>
+      <artifactId>connector-api</artifactId>
+      <version>1.5</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
-       <groupId>org.bouncycastle</groupId>
-       <artifactId>bcprov-jdk15</artifactId>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk15</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.bouncycastle</groupId>
-       <artifactId>bcmail-jdk15</artifactId>
-    </dependency>    
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcmail-jdk15</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -111,15 +111,34 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>2.1-beta-1</version>
         <configuration>
-          <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+          <dependentWarExcludes>WEB-INF/web.xml</dependentWarExcludes>
+          <packagingExcludes>WEB-INF/eclipse-web.xml</packagingExcludes>        
           <webappDirectory>${project.build.directory}/cyklotron</webappDirectory>
-          <webResources>
-            <resource>
-              <directory>src/main/webapp-overlay</directory>
-            </resource>
-          </webResources>
         </configuration>
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>eclipse</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>2.1-beta-1</version>
+            <configuration>
+              <webXml>src/main/webapp/WEB-INF/eclipse-web.xml</webXml>
+              <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+              <webResources>
+                <resource>
+                  <directory>src/main/webapp-overlay</directory>
+                </resource>
+              </webResources>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
