@@ -40,13 +40,13 @@ public class RemoveAnswer
         TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        savePoll(httpContext, parameters);
         int qid = parameters.getInt("qid", -1);
         int aid = parameters.getInt("aid", -1);
         String type = parameters.get("type", "poll");
 
         if("poll".equals(type))
         {
+            savePoll(httpContext, parameters);
             if(qid == -1 || aid == -1)
             {
                 throw new ProcessingException("Question id nor Answer id not found");
@@ -77,6 +77,7 @@ public class RemoveAnswer
         }
         else if("vote".equals(type))
         {
+            saveVote(httpContext, parameters);
             if(aid == -1)
             {
                 throw new ProcessingException("Question id nor Answer id not found");
@@ -86,7 +87,17 @@ public class RemoveAnswer
             {
                 throw new ProcessingException("Answer id exceed answers length");
             }
-            answers.remove(new Integer(aid));
+            Map newAnswers = new HashMap();
+            for(int i = 0; i < aid; i++)
+            {
+                Integer key = new Integer(i);
+                newAnswers.put(key, answers.get(key));
+            }
+            for(int i = aid + 1; i < answers.size(); i++)
+            {
+                newAnswers.put(new Integer(i - 1), answers.get(new Integer(i)));
+            }
+            httpContext.setSessionAttribute(VOTE_KEY, newAnswers);
         }
     }
 }

@@ -40,12 +40,12 @@ public class AddAnswer
         TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        savePoll(httpContext, parameters);
-        int qid = parameters.getInt("qid", -1);
         String type = parameters.get("type", "poll");
 
         if("poll".equals(type))
         {
+            savePoll(httpContext, parameters);
+            int qid = parameters.getInt("qid", -1);
             if(qid == -1)
             {
                 throw new ProcessingException("Question position not found");
@@ -57,6 +57,7 @@ public class AddAnswer
         }
         else if("vote".equals(type))
         {
+            saveVote(httpContext, parameters);
             Map answers = (Map)httpContext.getSessionAttribute(VOTE_KEY);
             answers.put(answers.size(), new Answer("", -1));
         }
