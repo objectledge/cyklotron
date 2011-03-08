@@ -65,6 +65,7 @@ public class Voting
             CmsData cmsData = cmsDataFactory.getCmsData(context);
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
             VoteResource vote = pollService.getVote(coralSession, screenConfig);
+            boolean enableResults = screenConfig.getBoolean("enable_results", Boolean.FALSE);
 
             String state = (String)context.getAttribute(getClass().getName() + ".state");
             state = parameters.get("state", null);
@@ -101,7 +102,14 @@ public class Voting
                 if(hasVoted())
                 {
                     templatingContext.put("already_voted", Boolean.TRUE);
-                    state = "Results"; 
+                    if(enableResults)
+                    {
+                        state = "Results";
+                    }
+                    else
+                    {
+                        state = "Default";
+                    }
                 }
                 else
                 {

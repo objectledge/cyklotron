@@ -5,7 +5,7 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "vote_id" );
+var fieldNames = new Array( "vote_id", "enable_results" );
 
 function sendConfig()
 {
@@ -19,6 +19,14 @@ function sendConfig()
 <form name="form1" method="post" action="">
   <input type="hidden" name="node_id" value="$node.id">
   <input type="hidden" name="config" value="" />
+  
+<table class="genericScreen" width="100%" cellspacing="0">
+  <tr>
+    <td>Czy pokazywać bierzące wyniki ankiety:<br>
+    <td><input type="checkbox" name="enable_results" value="true"#if($enable_results) checked#end></td>
+  </tr>
+</table>  
+<br/> 
 <table border="0" class="genericScreen" width="100%">
 <tr>
 <th colspan="2">Wybierz ankiete pokazywany przez aplikację</th>

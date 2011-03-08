@@ -73,6 +73,9 @@ public class VotingConf
             templatingContext.put("table", new TableTool(state, null, model));
             
             Parameters screenConfig = getScreenConfig();
+            boolean enableResults = screenConfig.getBoolean("enable_results", Boolean.FALSE);
+            templatingContext.put("enable_results", enableResults);
+            
             long voteId = screenConfig.getLong("vote_id", -1);
             if(voteId != -1)
             {
