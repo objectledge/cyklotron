@@ -72,9 +72,9 @@ public class Voting
             
             if("Default".equals(state))
             {
-                state = "SentBallot";
+                state = "BallotSent";
             }
-            else if("SentBallot".equals(state))
+            else if("BallotSent".equals(state))
             {
                 try
                 {
@@ -108,7 +108,7 @@ public class Voting
                     }
                     else
                     {
-                        state = "Default";
+                        state = "BallotSent";
                     }
                 }
                 else
@@ -229,12 +229,12 @@ public class Voting
         }
     }
     
-    public void prepareTicketSent(Context context)
+    public void prepareBallotSent(Context context)
     {
         // does nothing
     }
     
-    public void prepareInvalidTicket(Context context)
+    public void prepareInvalidBallot(Context context)
     {
         // does nothing
     }
