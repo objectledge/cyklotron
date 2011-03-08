@@ -9,7 +9,7 @@
    #set($cmsLink = $link.set('x',$x))
   #end
 
-  <form name="form_voting" method="post" action="$cmsLink.action("poll.SendVote")" class="defaultForm">
+  <form name="form_voting" method="post" action="$cmsLink.action("poll.SendVote").set('state','Default')" class="defaultForm">
   <input type="hidden" name="vid" value="$vote.id">
   <table class="defaultTable">
     <tr>
