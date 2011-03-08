@@ -28,6 +28,7 @@ import org.objectledge.web.mvc.MVCContext;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
+import net.cyklotron.cms.periodicals.PeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsService;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.UnsubscriptionInfo;
@@ -107,6 +108,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
             else
             {
                 String email;
+                SiteResource site;
                 if(parameters.isDefined("token"))
                 {
                     String unsubToken = parameters.get("token");
@@ -117,6 +119,9 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                         throw new ProcessingException("authorization failed");
                     }
                     email = unsubInfo.getAddress();
+                    PeriodicalResource periodical = (PeriodicalResource)coralSession.getStore()
+                        .getResource(unsubInfo.getPeriodicalId());
+                    site = periodical.getSite();
                 }
                 else
                 {
@@ -143,7 +148,16 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                     }
                 }
                 
-                SiteResource site = getSite(context);
+                if(cookie != null && selected.size() == 1)
+                {
+                    PeriodicalResource periodical = (PeriodicalResource)selected.toArray()[0];
+                    site = periodical.getSite();
+                }
+                else
+                {
+                    site = getSite(context);
+                }
+                
                 EmailPeriodicalResource[] subscribedArray = periodicalsSubscriptionService
                     .getSubscribedEmailPeriodicals(coralSession, site, email);
                 Set subscribed = new HashSet(Arrays.asList(subscribedArray));
