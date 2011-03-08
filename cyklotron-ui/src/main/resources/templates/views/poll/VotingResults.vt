@@ -1,0 +1,42 @@
+#result_inline_message('results.poll')
+
+#if($vote)
+
+ #set($x = $parametersTool.get('x',""))
+ #if($x.length() == 0)
+  #set($cmsLink = $link)
+ #else
+  #set($cmsLink = $link.set('x',$x))
+ #end
+
+ <table class="defaultTable">
+  <tr>
+    <td align="left"><b>Title:</b></td>
+    <td><i>$vote.getName()</i></td>
+  </tr>
+  <tr>
+    <td align="left"><b>Description:</b></td>
+    <td><i>$!vote.getDescription()</i></td>
+  </tr>
+  <tr>
+    <td colspan="2">
+    #foreach($answerKey in $answerKeys())
+      <b>Opcja $velocityCount: </b><br/>
+      <i> $answers.get($answerKey).getTitle() </i>
+      $results.get($answers.get($answerKey).getId()) ($stringTool.shortenString($percent.get($answers.get($answerKey).getId()).toString(), 4, "")%)<br/>
+    #end
+    </td>
+  </tr>
+  #if($already_voted)
+     <tr><td>Thank you for voting!</td></tr>
+  #end
+ </table>
+#else
+  <table class="defaultTable">
+    <tr>
+      <th>
+        <b>No vote defined.</b>
+      </th>
+    </tr>
+  </table>
+#end
