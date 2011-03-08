@@ -36,6 +36,9 @@
     <prefix name="invalid_name">
       <value>Nazwa nie może być pusta.</value>
     </prefix>
+    <prefix name="invalid_email">
+      <value>Email nie może być pusty.</value>
+    </prefix>
     <prefix name="new_session">
       <value>.</value>
     </prefix>
@@ -88,6 +91,9 @@
     </prefix>
     <prefix name="invalid_title">
       <value>Operacja nieudana - nieprawidłowy tytuł.</value>
+    </prefix>
+    <prefix name="invalid_email">
+      <value>Operacja nieudana - Nieprawidłowy adres email.</value>
     </prefix>
     <prefix name="new_session">
       <value>Brak lub nowa sesja - spróbuj ponownie.</value>

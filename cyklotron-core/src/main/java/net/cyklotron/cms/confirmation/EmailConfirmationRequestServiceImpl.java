@@ -36,8 +36,6 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.files.FileResource;
-import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
-
 
 public class EmailConfirmationRequestServiceImpl
     implements EmailConfirmationRequestService
@@ -144,9 +142,9 @@ public class EmailConfirmationRequestServiceImpl
      * Sent EmailConfirmationRequest
      * 
      * @param coralSession CoralSession.
-     * @param r EmailPeriodicalResource.
+     * @param String cookie.
      */
-    public void send(CoralSession coralSession, EmailPeriodicalResource r, FileResource file, Date time, String recipient)
+    public void send(CoralSession coralSession, String cookie, FileResource file, Date time, String recipient)
     {
      
     }

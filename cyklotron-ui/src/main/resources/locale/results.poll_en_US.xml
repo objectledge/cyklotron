@@ -36,6 +36,9 @@
     <prefix name="invalid_name">
       <value>Name not be empty.</value>
     </prefix>
+    <prefix name="invalid_email">
+      <value>Email not be empty.</value>
+    </prefix>
     <prefix name="new_session">
       <value>.</value>
     </prefix>
@@ -91,6 +94,9 @@
     </prefix>
     <prefix name="invalid_name">
       <value>The entered name is invalid</value>
+    </prefix>
+    <prefix name="invalid_email">
+      <value>The entered email is invalid</value>
     </prefix>
     <prefix name="new_session">
       <value>No session or new session - try again.</value>

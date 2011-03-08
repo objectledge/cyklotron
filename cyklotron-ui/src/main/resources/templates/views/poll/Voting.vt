@@ -9,7 +9,7 @@
    #set($cmsLink = $link.set('x',$x))
   #end
 
-  <form name="form_voting" method="post" action="$cmsLink.action("poll.RespondVote")" class="defaultForm">
+  <form name="form_voting" method="post" action="$cmsLink.action("poll.SendVote")" class="defaultForm">
   <input type="hidden" name="vid" value="$vote.id">
   <table class="defaultTable">
     <tr>
@@ -26,6 +26,11 @@
             <label for="answer_${answerKey}">$answers.get($answerKey).getTitle()</label>
           </td></tr>
         #end
+      </td>
+    </tr>
+    <tr>
+      <td align="left">
+        Input your email: <input type="text" name="email" value="$!email">
       </td>
     </tr>
     #if($already_voted)

@@ -76,6 +76,6 @@ public interface EmailConfirmationRequestService
      * @param coralSession CoralSession.
      * @param r EmailPeriodicalResource.
      */
-    public void send(CoralSession coralSession, EmailPeriodicalResource r, FileResource file, Date time, String recipient);
+    public void send(CoralSession coralSession, String cookie, FileResource file, Date time, String recipient);
     
 }
