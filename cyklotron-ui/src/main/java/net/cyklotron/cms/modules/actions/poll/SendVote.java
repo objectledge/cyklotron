@@ -55,7 +55,6 @@ public class SendVote
         throws ProcessingException
     {
         HttpSession session = httpContext.getRequest().getSession();
-        CmsData cmsData = cmsDataFactory.getCmsData(context);
         
         if(session == null || session.isNew())
         {
@@ -93,7 +92,7 @@ public class SendVote
                 {
                     String confirmationRequest = emailConfirmationRequestService.createEmailConfirmationRequest(coralSession, email, answerResource.getName());
                     emailConfirmationRequestService.send(coralSession, confirmationRequest, null, null, null);
-                    setCookie(httpContext,vid, answerId, cmsData);
+                    setCookie(httpContext,vid, answerId);
                     break;
                 }
             }
@@ -111,15 +110,15 @@ public class SendVote
         templatingContext.put("already_voted", Boolean.TRUE);
     }
         
-    private void setCookie(HttpContext httpContext, Integer vid,Long answerId, CmsData cmsData)
+    private void setCookie(HttpContext httpContext, Integer vid,Long answerId)
     {
         
         String cookieKey = "vote_"+vid;
         Cookie cookie = new Cookie(cookieKey, answerId.toString());
         cookie.setMaxAge(30 * 24 * 3600);
-        cookie.setDomain(cmsData.getSite().getName());
         cookie.setPath("/");
         httpContext.getResponse().addCookie(cookie);
+        
     }
 	
     public boolean checkAccessRights(Context context)
