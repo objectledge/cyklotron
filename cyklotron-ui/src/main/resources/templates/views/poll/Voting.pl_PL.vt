@@ -37,6 +37,14 @@
     #if($already_voted)
      <tr><td>Dziękujemy za oddanie głosu!</td></tr>
     #else
+     #if($add_captcha)
+ 	 <tr>
+ 	  <td><b>Weryfikacja Captcha</b></td>
+ 	 	<td>
+ 	 	  $captcha.createCaptchaWidget()
+ 	   </td>
+ 	 </tr>
+ 	 #end
      <tr>
       <script language="javascript">function submit(){ document.form_voting.submit(); }</script>
       <td NOWRAP class="usualbutton"><a href="javascript:submit()">Zagłosuj</a></td>

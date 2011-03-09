@@ -95,6 +95,9 @@
     <prefix name="invalid_email">
       <value>Operacja nieudana - Nieprawidłowy adres email.</value>
     </prefix>
+    <prefix name="invalid_captcha_verification">
+      <value>Podano niepoprawny kod Captcha.</value>
+    </prefix>
     <prefix name="new_session">
       <value>Brak lub nowa sesja - spróbuj ponownie.</value>
     </prefix>

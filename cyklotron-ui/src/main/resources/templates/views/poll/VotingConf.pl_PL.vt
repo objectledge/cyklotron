@@ -5,7 +5,7 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "vote_id", "enable_results" );
+var fieldNames = new Array( "vote_id", "enable_results", "add_captcha");
 
 function sendConfig()
 {
@@ -24,6 +24,10 @@ function sendConfig()
   <tr>
     <td>Czy pokazywać bierzące wyniki ankiety:<br>
     <td><input type="checkbox" name="enable_results" value="true"#if($enable_results) checked#end></td>
+  </tr>
+  <tr>
+   <td>Dodaj weryfikację Captcha</td>
+   <td><input type="checkbox" name="add_captcha" value="true"#if($add_captcha) checked#end></td>
   </tr>
 </table>  
 <br/> 

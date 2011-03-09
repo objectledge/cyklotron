@@ -11,19 +11,17 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestResourceImpl;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestService;
-import net.cyklotron.cms.files.FileResource;
-import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.poll.AnswerResource;
 import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.VoteResource;
@@ -42,11 +40,14 @@ public class SendVote
 
     private EmailConfirmationRequestService emailConfirmationRequestService;
     
+    private CaptchaService captchaService;
+    
     public SendVote(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, PollService pollService, WorkflowService workflowService, EmailConfirmationRequestService emailConfirmationRequestService)
+        CmsDataFactory cmsDataFactory, PollService pollService, WorkflowService workflowService, EmailConfirmationRequestService emailConfirmationRequestService,CaptchaService captchaService)
     {
         super(logger, structureService, cmsDataFactory, pollService, workflowService);
         this.emailConfirmationRequestService = emailConfirmationRequestService;    
+        this.captchaService = captchaService;
     }
     /**
      * Performs the action.
@@ -55,13 +56,15 @@ public class SendVote
         throws ProcessingException
     {
         HttpSession session = httpContext.getRequest().getSession();
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
         
         if(session == null || session.isNew())
         {
             templatingContext.put("result", "new_session");
             return;
         }
-
+        
         Subject subject = coralSession.getUserSubject();
         int vid = parameters.getInt("vid", -1);
         if(vid == -1)
@@ -72,6 +75,12 @@ public class SendVote
         if(email.trim().isEmpty())
         {
             templatingContext.put("result", "invalid_email");
+            return;
+        }
+        if(screenConfig.getBoolean("add_captcha", false)
+            && !captchaService.checkCaptcha(httpContext, (RequestParameters)parameters))
+        {
+            templatingContext.put("result", "invalid_captcha_verification");
             return;
         }
 

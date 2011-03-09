@@ -75,6 +75,8 @@ public class VotingConf
             Parameters screenConfig = getScreenConfig();
             boolean enableResults = screenConfig.getBoolean("enable_results", Boolean.FALSE);
             templatingContext.put("enable_results", enableResults);
+            boolean addCaptcha = screenConfig.getBoolean("add_captcha", Boolean.FALSE);
+            templatingContext.put("add_captcha", addCaptcha);
             
             long voteId = screenConfig.getLong("vote_id", -1);
             if(voteId != -1)
