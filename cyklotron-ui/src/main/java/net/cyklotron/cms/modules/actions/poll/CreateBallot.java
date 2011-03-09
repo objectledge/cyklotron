@@ -76,6 +76,9 @@ public class CreateBallot
                         coralSession, cookie, answerResource, req.getEmail());
                     ballotResource.setAnswerId(answerResource.getId());
                     ballotResource.update();
+                    
+                    answerResource.setVotesCount(answerResource.getVotesCount()+1);
+                    answerResource.update();
                 }
                 emailConfirmationRequestService.discardEmailConfirmationRequest(coralSession, cookie);
             }
