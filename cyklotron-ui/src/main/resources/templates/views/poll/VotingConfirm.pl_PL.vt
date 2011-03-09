@@ -12,17 +12,19 @@
 </script>
 
 <div class="periodicals-subscriptions-screen">
-<p class="title">Potwierdzenie udziału głosowania w ankiecie</p>
+<p class="title">Potwierdzenie udziału w ankiecie</p>
 <p>Adres email: $email</p>
 <form name="form1" method="POST" action="$xlink.action('poll.CreateBallot')">
 <P>Zagłosowałeś w ankiecie:</P>
-<p>Tytuł ankiety:$vote.getName()</p>
-<p>Opis ankiety: $vote.getDescription()</p>
+<P>
+Tytuł ankiety:$vote.getName()<br/>
+Opis ankiety: $vote.getDescription()<br/>
 #foreach($answerKey in $answerKeys)
  #if($answers.get($answerKey).getId() == $selected)
-   <P>Twój głos: $answers.get($answerKey).getTitle()</P>
+   Twój głos: $answers.get($answerKey).getTitle()
  #end
 #end
+</P>
 <br/>
 <br/>
 <p>Aby Twój głos został uwzględniony, prosimy o potwierdzenie oddania głosu.</p>

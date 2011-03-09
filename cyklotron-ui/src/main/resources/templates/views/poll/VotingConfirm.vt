@@ -16,13 +16,15 @@
 <p>Email: $email</p>
 <form name="form1" method="POST" action="$xlink.action('poll.CreateBallot')">
 <P>You has voted in:</P>
-<p>Title:$vote.getName()</p>
-<p>Description: $vote.getDescription()</p>
+<p>
+Title:$vote.getName()<br/>
+Description: $vote.getDescription()<br/>
 #foreach($answerKey in $answerKeys)
  #if($answers.get($answerKey).getId() == $selected)
-   <P>Your option: $answers.get($answerKey).getTitle()</P>
+   Your option: $answers.get($answerKey).getTitle()
  #end
 #end
+</P>
 <br/>
 <br/>
 <p>To end voting process, please confirm your vote.</p>

@@ -1,6 +1,7 @@
 package net.cyklotron.cms.modules.actions.poll;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
@@ -87,8 +88,11 @@ public class SendVote
         try
         {
             VoteResource voteResource = VoteResourceImpl.getVoteResource(coralSession, vid);
-            if(pollService.hasVoted(httpContext, templatingContext, voteResource))
+            Set<String> voteEmails = pollService.getBallotsEmails(coralSession, voteResource);
+            
+            if(pollService.hasVoted(httpContext, templatingContext, voteResource) || voteEmails.contains(email))
             {
+                templatingContext.put("already_voted", Boolean.TRUE);
                 templatingContext.put("result", "already_responded");
                 return;
             }
@@ -99,7 +103,7 @@ public class SendVote
                 Long answerId = parameters.getLong("answer_"+answerResource.getSequence(), -1);
                 if(answerId != -1)
                 {
-                    String confirmationRequest = emailConfirmationRequestService.createEmailConfirmationRequest(coralSession, email, answerResource.getName());
+                    String confirmationRequest = emailConfirmationRequestService.createEmailConfirmationRequest(coralSession, email, answerId.toString());
                     emailConfirmationRequestService.send(coralSession, confirmationRequest, null, null, null);
                     setCookie(httpContext,vid, answerId);
                     break;

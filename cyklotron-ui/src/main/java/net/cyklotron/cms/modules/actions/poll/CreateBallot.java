@@ -60,15 +60,16 @@ public class CreateBallot
         {
             EmailConfirmationRequestResource req = emailConfirmationRequestService
                 .getEmailConfirmationRequest(coralSession, cookie);
+
             if(req == null)
             {
-                throw new ProcessingException("Vote not found");
+                throw new ProcessingException("Cookie not found");
             }
             else
             {
                 VoteResource voteResource = pollService.getVote(coralSession, screenConfig);
                 AnswerResource answerResource = AnswerResourceImpl.getAnswerResource(coralSession,
-                    Long.parseLong(req.getData(), -1));
+                    Long.parseLong(req.getData()));
                 if(voteResource != null && voteResource.equals(answerResource.getParent()))
                 {
                     BallotResource ballotResource = BallotResourceImpl.createBallotResource(
@@ -76,6 +77,7 @@ public class CreateBallot
                     ballotResource.setAnswerId(answerResource.getId());
                     ballotResource.update();
                 }
+                emailConfirmationRequestService.discardEmailConfirmationRequest(coralSession, cookie);
             }
         }
         catch(Exception e)

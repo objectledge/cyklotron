@@ -88,7 +88,7 @@ public class Voting
                         state = "InvalidBallot";
                     }
                 }
-                catch(ConfirmationRequestException e)
+                catch(Exception e)
                 {
                     state = "InvalidBallot";
                 }
