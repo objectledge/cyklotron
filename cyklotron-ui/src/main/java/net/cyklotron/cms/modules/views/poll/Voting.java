@@ -21,7 +21,7 @@ import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.confirmation.ConfirmationRequestException;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestService;
+import net.cyklotron.cms.confirmation.EmailConfirmationService;
 import net.cyklotron.cms.modules.views.BaseSkinableScreen;
 import net.cyklotron.cms.poll.PollException;
 import net.cyklotron.cms.poll.PollService;
@@ -35,7 +35,7 @@ import net.cyklotron.cms.style.StyleService;
 public class Voting
     extends BaseSkinableScreen
 {
-    private EmailConfirmationRequestService emailConfirmationRequestService;
+    private EmailConfirmationService emailConfirmationRequestService;
 
     private PollService pollService;
 
@@ -43,7 +43,7 @@ public class Voting
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         StructureService structureService, StyleService styleService, SkinService skinService,
         MVCFinder mvcFinder, TableStateManager tableStateManager,
-        EmailConfirmationRequestService emailConfirmationRequestService, PollService pollService)
+        EmailConfirmationService emailConfirmationRequestService, PollService pollService)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);

@@ -14,7 +14,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.confirmation.ConfirmationRequestException;
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestService;
+import net.cyklotron.cms.confirmation.EmailConfirmationService;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
 import net.cyklotron.cms.periodicals.SubscriptionRequestResource;
@@ -28,10 +28,10 @@ import net.cyklotron.cms.structure.StructureService;
 public class CYKLO789
     extends BaseCMSAction
 {
-    private EmailConfirmationRequestService emailConfirmationRequestService;
+    private EmailConfirmationService emailConfirmationRequestService;
     
     public CYKLO789(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, PeriodicalsSubscriptionService periodicalsSubscriptionService,EmailConfirmationRequestService emailConfirmationRequestService)
+        CmsDataFactory cmsDataFactory, PeriodicalsSubscriptionService periodicalsSubscriptionService,EmailConfirmationService emailConfirmationRequestService)
     {
         super(logger, structureService, cmsDataFactory);
         this.emailConfirmationRequestService = emailConfirmationRequestService;

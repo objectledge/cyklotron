@@ -13,7 +13,7 @@ import org.objectledge.web.mvc.MVCContext;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestService;
+import net.cyklotron.cms.confirmation.EmailConfirmationService;
 import net.cyklotron.cms.poll.AnswerResource;
 import net.cyklotron.cms.poll.AnswerResourceImpl;
 import net.cyklotron.cms.poll.BallotResource;
@@ -28,14 +28,14 @@ public class CreateBallot
     extends BasePollAction
 {
 
-    private EmailConfirmationRequestService emailConfirmationRequestService;
+    private EmailConfirmationService emailConfirmationService;
 
     public CreateBallot(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, PollService pollService, WorkflowService workflowService,
-        EmailConfirmationRequestService emailConfirmationRequestService)
+        EmailConfirmationService emailConfirmationRequestService)
     {
         super(logger, structureService, cmsDataFactory, pollService, workflowService);
-        this.emailConfirmationRequestService = emailConfirmationRequestService;
+        this.emailConfirmationService = emailConfirmationRequestService;
     }
 
     /**
@@ -58,7 +58,7 @@ public class CreateBallot
 
         try
         {
-            EmailConfirmationRequestResource req = emailConfirmationRequestService
+            EmailConfirmationRequestResource req = emailConfirmationService
                 .getEmailConfirmationRequest(coralSession, cookie);
 
             if(req == null)
@@ -80,7 +80,7 @@ public class CreateBallot
                     answerResource.setVotesCount(answerResource.getVotesCount()+1);
                     answerResource.update();
                 }
-                emailConfirmationRequestService.discardEmailConfirmationRequest(coralSession, cookie);
+                emailConfirmationService.discardEmailConfirmationRequest(coralSession, cookie);
             }
         }
         catch(Exception e)

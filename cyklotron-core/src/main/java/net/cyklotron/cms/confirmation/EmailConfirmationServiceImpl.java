@@ -37,15 +37,15 @@ import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.files.FileResource;
 
-public class EmailConfirmationRequestServiceImpl
-    implements EmailConfirmationRequestService
+public class EmailConfirmationServiceImpl
+    implements EmailConfirmationService
 {   
     /** the confirmationRequest data root node. */
     protected Resource confirmationRoot;    
     
     protected CryptographyService cipherCryptographyService;
 
-    public EmailConfirmationRequestServiceImpl(CryptographyService cipherCryptographyService)
+    public EmailConfirmationServiceImpl(CryptographyService cipherCryptographyService)
     {
         this.cipherCryptographyService = cipherCryptographyService;
     }

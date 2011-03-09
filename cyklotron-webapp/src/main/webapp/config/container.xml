@@ -387,8 +387,8 @@
   <component class-key="net.cyklotron.cms.confirmation.CryptographyService"
              class="net.cyklotron.cms.confirmation.CryptographyServiceImpl"/>
              
-  <component class-key="net.cyklotron.cms.confirmation.EmailConfirmationRequestService"
-             class="net.cyklotron.cms.confirmation.EmailConfirmationRequestServiceImpl"/>
+  <component class-key="net.cyklotron.cms.confirmation.EmailConfirmationService"
+             class="net.cyklotron.cms.confirmation.EmailConfirmationServiceImpl"/>
 
   <component class-key="net.cyklotron.cms.periodicals.PeriodicalsTemplatingService"
              class="net.cyklotron.cms.periodicals.internal.PeriodicalsTemplatingServiceImpl"/>

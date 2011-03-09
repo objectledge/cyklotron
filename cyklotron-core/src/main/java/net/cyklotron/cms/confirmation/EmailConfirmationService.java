@@ -40,7 +40,7 @@ import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
  * @version $Id: PeriodicalsSubscriptionService.java,v 1.4 2006-05-18 13:58:09 rafal Exp $
  */
-public interface EmailConfirmationRequestService
+public interface EmailConfirmationService
 {
 
     /**

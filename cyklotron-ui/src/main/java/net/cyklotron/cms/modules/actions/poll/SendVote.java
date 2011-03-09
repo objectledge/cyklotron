@@ -22,7 +22,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestService;
+import net.cyklotron.cms.confirmation.EmailConfirmationService;
 import net.cyklotron.cms.poll.AnswerResource;
 import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.VoteResource;
@@ -39,12 +39,12 @@ public class SendVote
     extends BasePollAction
 {
 
-    private EmailConfirmationRequestService emailConfirmationRequestService;
+    private EmailConfirmationService emailConfirmationRequestService;
     
     private CaptchaService captchaService;
     
     public SendVote(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, PollService pollService, WorkflowService workflowService, EmailConfirmationRequestService emailConfirmationRequestService,CaptchaService captchaService)
+        CmsDataFactory cmsDataFactory, PollService pollService, WorkflowService workflowService, EmailConfirmationService emailConfirmationRequestService,CaptchaService captchaService)
     {
         super(logger, structureService, cmsDataFactory, pollService, workflowService);
         this.emailConfirmationRequestService = emailConfirmationRequestService;    

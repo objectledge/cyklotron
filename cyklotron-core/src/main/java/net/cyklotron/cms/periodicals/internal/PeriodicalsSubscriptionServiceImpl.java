@@ -41,7 +41,7 @@ import org.objectledge.coral.session.CoralSession;
 import net.cyklotron.cms.confirmation.ConfirmationRequestException;
 import net.cyklotron.cms.confirmation.CryptographyService;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestService;
+import net.cyklotron.cms.confirmation.EmailConfirmationService;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalsException;
 import net.cyklotron.cms.periodicals.PeriodicalsSubscriptionService;
@@ -55,13 +55,13 @@ import net.cyklotron.cms.site.SiteResource;
 public class PeriodicalsSubscriptionServiceImpl 
     implements PeriodicalsSubscriptionService
 {
-    protected EmailConfirmationRequestService emailConfirmationRequestService;
+    protected EmailConfirmationService emailConfirmationRequestService;
     
     protected CryptographyService cipherCryptographyService;    
 
     public PeriodicalsSubscriptionServiceImpl(
         CryptographyService cipherCryptographyService,
-        EmailConfirmationRequestService emailConfirmationRequestService)
+        EmailConfirmationService emailConfirmationRequestService)
     {
         this.cipherCryptographyService = cipherCryptographyService;
         this.emailConfirmationRequestService = emailConfirmationRequestService;
