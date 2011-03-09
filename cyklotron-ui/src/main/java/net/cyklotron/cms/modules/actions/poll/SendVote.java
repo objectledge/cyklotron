@@ -110,7 +110,7 @@ public class SendVote
         {
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));
-            logger.error("Exception in poll,RespondVote action", e);
+            logger.error("Exception in poll,SendVote action", e);
             return;
         }
 

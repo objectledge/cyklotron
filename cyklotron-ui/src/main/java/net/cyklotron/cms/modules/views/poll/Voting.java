@@ -192,7 +192,48 @@ public class Voting
     public void prepareConfirm(Context context)
     throws ProcessingException
     {
-
+        try
+        {
+            Parameters parameters = RequestParameters.getRequestParameters(context);
+            CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+            TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
+            Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
+            VoteResource vote = pollService.getVote(coralSession, screenConfig);
+            templatingContext.put("vote", vote);
+            
+            Map answers = new HashMap();
+            pollService.prepareVoteMaps(coralSession, vote, answers, new HashMap(), new HashMap(), new HashMap());
+            List answerKeys = new ArrayList();
+            for(int i = 0; i< answers.size(); i++)
+            {
+                answerKeys.add(new Integer(i));
+            }
+            templatingContext.put("answers", answers);
+            templatingContext.put("answerKeys", answerKeys);
+            
+            String cookie = parameters.get("cookie", "");
+            if(cookie.length() > 0)
+            {
+                templatingContext.put("cookie", cookie);
+                EmailConfirmationRequestResource request = emailConfirmationRequestService.getEmailConfirmationRequest(coralSession, cookie);
+                templatingContext.put("email", request.getEmail());
+                templatingContext.put("selected", Long.parseLong(request.getData()));
+            }
+            else
+            {
+                throw new ProcessingException("Cookie not found.");
+            }
+            
+        }
+        catch(PollException e)
+        {
+            throw new ProcessingException("Vote not found." + e);
+        }
+        catch(ConfirmationRequestException e)
+        {
+            throw new ProcessingException("Cookie not found." + e);
+        }        
     }
 
     public void prepareResults(Context context)

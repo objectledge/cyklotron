@@ -1,0 +1,34 @@
+##
+#set($xlink = $link.set('x',$parametersTool.get('x')))
+#if($cookie)
+  #set($xlink = $xlink.set('cookie', $cookie))
+#end
+
+<script type="text/javascript">
+  function send()
+  {
+  	document.form1.submit();
+  }
+</script>
+
+<div class="periodicals-subscriptions-screen">
+<p class="title">Voting confirmation</p>
+<p>Email: $email</p>
+<form name="form1" method="POST" action="$xlink.action('poll.CreateBallot')">
+<P>You has voted in:</P>
+<p>Title:$vote.getName()</p>
+<p>Description: $vote.getDescription()</p>
+#foreach($answerKey in $answerKeys)
+ #if($answers.get($answerKey).getId() == $selected)
+   <P>Your option: $answers.get($answerKey).getTitle()</P>
+ #end
+#end
+<br/>
+<br/>
+<p>To end voting process, please confirm your vote.</p>
+<p align="right">
+  <a href="javascript:send()">confirm</a>
+</p>
+</form>
+</p>
+</div>
