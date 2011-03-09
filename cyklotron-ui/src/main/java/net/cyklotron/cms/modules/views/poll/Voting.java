@@ -70,11 +70,7 @@ public class Voting
             String state = (String)context.getAttribute(getClass().getName() + ".state");
             state = parameters.get("state", null);
             
-            if("Default".equals(state))
-            {
-                state = "BallotSent";
-            }
-            else if("BallotSent".equals(state))
+            if("BallotSent".equals(state))
             {
                 try
                 {
@@ -182,6 +178,10 @@ public class Voting
             }
             templatingContext.put("answers", answers);
             templatingContext.put("answerKeys", answerKeys);
+            
+            boolean addCaptcha = screenConfig.getBoolean("add_captcha", Boolean.FALSE);
+            templatingContext.put("add_captcha", addCaptcha);
+            
         }
         catch(PollException e)
         {

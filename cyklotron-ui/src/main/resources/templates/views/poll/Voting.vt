@@ -9,7 +9,7 @@
    #set($cmsLink = $link.set('x',$x))
   #end
 
-  <form name="form_voting" method="post" action="$cmsLink.action("poll.SendVote").set('state','Default')" class="defaultForm">
+  <form name="form_voting" method="post" action="$cmsLink.action("poll.SendVote")" class="defaultForm">
   <input type="hidden" name="vid" value="$vote.id">
   <table class="defaultTable">
     <tr>
@@ -47,7 +47,7 @@
      <tr>
       <script language="javascript">function submit(){ document.form_voting.submit(); }</script>
       <td NOWRAP class="usualbutton"><a href="javascript:submit()">Vote</a></td>
-     </tr>sie
+     </tr>
     #end
    </table>
   </form>
