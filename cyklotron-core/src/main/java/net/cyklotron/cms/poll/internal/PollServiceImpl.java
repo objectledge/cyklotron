@@ -453,11 +453,11 @@ public class PollServiceImpl
         Set<String> emailList = new HashSet<String>();
         for(int i = 0; i < answerResources.length; i++)
         {
-            AnswerResource answerResource = (AnswerResource)answerResources[i];;
+            AnswerResource answerResource = (AnswerResource)answerResources[i];
             Resource[] ballotResources = coralSession.getStore().getResource(answerResource);
             for(int j = 0; j < ballotResources.length; j++)
             {
-                emailList.add(((BallotResource)ballotResources[i]).getEmail());
+                emailList.add(((BallotResource)ballotResources[j]).getEmail());
             }
         }
         return emailList;
