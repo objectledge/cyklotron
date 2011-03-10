@@ -37,7 +37,7 @@
       <value>Nazwa nie może być pusta.</value>
     </prefix>
     <prefix name="invalid_email">
-      <value>Email nie może być pusty.</value>
+      <value>Nieprawidłowy adres email.</value>
     </prefix>
     <prefix name="new_session">
       <value>.</value>

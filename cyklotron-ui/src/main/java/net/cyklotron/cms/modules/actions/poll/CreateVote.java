@@ -59,6 +59,7 @@ public class CreateVote
 
         String title = parameters.get("title","");
         String description = parameters.get("description","");
+        String senderAddress = parameters.get("sender_address","");
         if(title.length() < 1 || title.length() > 64)
         {
             route(mvcContext, templatingContext, "poll.AddVote", "invalid_title");
@@ -67,6 +68,11 @@ public class CreateVote
         if(description.length() < 0 || description.length() > 255)
         {
             route(mvcContext, templatingContext, "poll.AddVote", "invalid_description");
+            return;
+        }
+        if(!senderAddress.matches("([a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+.[a-zA-Z]{1,4})?"))
+        {
+            route(mvcContext, templatingContext, "poll.AddVote", "invalid_email");
             return;
         }
         if(answers.size() == 0)
@@ -96,6 +102,7 @@ public class CreateVote
             PollsResource votesRoot = pollService.getPollsParent(coralSession, site, pollService.VOTES_ROOT_NAME);
             VoteResource voteResource = VoteResourceImpl.createVoteResource(coralSession, title, votesRoot);
             voteResource.setDescription(description);
+            voteResource.setSenderAddress(senderAddress);
             voteResource.update();
             
             for(int i = 0; i < answers.size(); i++)

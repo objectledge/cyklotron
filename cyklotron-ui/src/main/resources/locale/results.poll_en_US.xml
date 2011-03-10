@@ -37,7 +37,7 @@
       <value>Name not be empty.</value>
     </prefix>
     <prefix name="invalid_email">
-      <value>Email not be empty.</value>
+      <value>Invalid email adress.</value>
     </prefix>
     <prefix name="invalid_captcha_verification">
       <value>incorrect Captcha string.</value>

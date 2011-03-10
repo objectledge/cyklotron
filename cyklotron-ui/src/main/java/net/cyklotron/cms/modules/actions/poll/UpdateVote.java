@@ -75,6 +75,7 @@ public class UpdateVote
 
         String title = parameters.get("title", "");
         String description = parameters.get("description", "");
+        String senderAddress = parameters.get("sender_address","");
         if(title.length() < 1 || title.length() > 64)
         {
             route(mvcContext, templatingContext, "poll.EditVote", "invalid_title");
@@ -83,6 +84,11 @@ public class UpdateVote
         if(description.length() < 0 || description.length() > 255)
         {
             route(mvcContext, templatingContext, "poll.EditVote", "invalid_description");
+            return;
+        }
+        if(!senderAddress.matches("([a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+.[a-zA-Z]{1,4})?"))
+        {
+            route(mvcContext, templatingContext, "poll.EditVote", "invalid_email");
             return;
         }
 
@@ -117,6 +123,10 @@ public class UpdateVote
             if(!voteResource.getDescription().equals(description))
             {
                 voteResource.setDescription(description);
+            }
+            if(!voteResource.getSenderAddress().equals(senderAddress))
+            {
+                voteResource.setSenderAddress(senderAddress);
             }
             voteResource.update();
 

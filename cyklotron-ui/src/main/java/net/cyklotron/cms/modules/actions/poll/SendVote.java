@@ -83,7 +83,7 @@ public class SendVote
             throw new ProcessingException("Vote id not found");
         }
         String email = parameters.get("email", "");
-        if(email.trim().isEmpty())
+        if(!email.matches("([a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+.[a-zA-Z]{1,4})?"))
         {
             templatingContext.put("result", "invalid_email");
             return;

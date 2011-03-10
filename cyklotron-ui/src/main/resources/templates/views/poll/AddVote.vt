@@ -17,6 +17,10 @@
       <td align="left"><b>Short description:</b></td>
       <td colspan="2"><input type="text" style="width:100%" name="description" value="$!htmlEncoder.encodeAttribute($parametersTool.get("description",""))" size="50"></td>
     </tr>
+    <tr>
+      <td align="left"><b>Sender email:</b></td>
+      <td colspan="2"><input type="text" style="width:100%" name="sender_address" value="$!htmlEncoder.encodeAttribute($parametersTool.get("sender_address",""))" size="70"></td>
+    </tr>
   </table>
   <br>
   #set($answerKeys = $answers.keySet())
