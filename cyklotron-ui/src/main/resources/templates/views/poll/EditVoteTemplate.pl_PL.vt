@@ -1,0 +1,65 @@
+#set($psid = $parametersTool.get('psid','-1'))
+#set($link = $link.set('type','vote').set('psid', $psid))
+
+$pageTool.addScriptLink("script/RemoteRequest.js")
+
+#set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${parametersTool.view}.buttons"))
+#set($template_link = $link.set("site_id",$cmsData.site.id).set("name",$name))
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.polls")
+
+#if($parse_trace)
+<table class="messageInlineTable">
+  <tr><td><pre>$parse_trace</pre></td></tr>
+</table>
+#end
+
+<script type="text/javascript">
+  browserUtil.addEventListener(window, 'load', 
+    function (event)
+    {
+      var req = new XMLRemoteRequest();
+      var doc = req.getRemoteDocument('$template_link.view('poll.DownloadTemplate').set('type','xml')');
+      var nodes = doc.getElementsByTagName('contents').item(0).childNodes;
+      var contents = '';
+	  for(i=0; i<nodes.length; i++)
+	  {
+	    if(nodes.item(i).nodeType == 4)
+	    {
+	      contents = nodes.item(i).nodeValue;
+	    }
+	  }
+      document.form1.contents.value = contents;
+    }
+  );
+</script>
+
+<form name="form1" method="post" action='$template_link.view('poll.VoteList').action('polls.UpdateTemplate')'>
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="3">$ui_strings.get("subtitle_info")</th>
+    </tr>
+    <tr>
+       <td align="right" valign="top">$ui_labels.get('name'):</td>
+       <td colspan="2" width="90%">$!name</td>
+    </tr>
+  </table>
+
+  <br/>
+
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td align="right"><b>$ui_labels.get("contents"):</b></td>
+      <td width="90%"><a href="$template_link.view('poll.DownloadTemplate')">$ui_strings.get("click_to_download")</a></td>
+    </tr>
+    <tr>
+      <td colspan="2"><textarea name="contents" style="width:100%;" rows="30"></textarea></td>
+    </tr>
+  </table>
+</form>
+
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('save')],[$link.view('poll.VoteList'),$ui_buttons.get('cancel')]])

@@ -35,6 +35,7 @@ $table.getColumn('delete').set('label', 'Usuń')
            <a href="$voteLink.view("poll.EditVote").set('vid',$vote.getId()).set('reset','true')">edycja</a>
            <a href="$voteLink.view("poll.ViewVote").set('vid',$vote.getId())">podgląd</a>
            <a href="$voteLink.view("poll.ViewVoteBallots").set('vid',$vote.getId())">szegóły głosowania</a>
+           <a href="$voteLink.view("poll.EditVoteTemplate").set('vid',$vote.getId())">edycja szablonu powiadomienia</a>
         </div>
         </span><br>
         - <i>$vote.getDescription()</i>

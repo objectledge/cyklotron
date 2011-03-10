@@ -35,6 +35,7 @@ $table.getColumn('delete').set('label', 'Delete')
            <a href="$voteLink.view("poll.EditVote").set('vid',$vote.getId()).set('reset','true')">edit</a>
            <a href="$voteLink.view("poll.ViewVote").set('vid',$vote.getId())">view</a>
            <a href="$voteLink.view("poll.ViewVoteBallots").set('vid',$vote.getId())">voting details</a>
+           <a href="$voteLink.view("poll.EditVoteTemplate").set('vid',$vote.getId())">edit confirmation template</a>
         </div>
         </span><br>
         - <i>$vote.getDescription()</i>

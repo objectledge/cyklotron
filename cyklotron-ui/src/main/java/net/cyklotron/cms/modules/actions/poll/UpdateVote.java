@@ -116,15 +116,15 @@ public class UpdateVote
         try
         {
             VoteResource voteResource = VoteResourceImpl.getVoteResource(coralSession, vid);
-            if(!voteResource.getName().equals(title))
+            if(!title.equals(voteResource.getName()))
             {
                 coralSession.getStore().setName(voteResource, title);
             }
-            if(!voteResource.getDescription().equals(description))
+            if(!description.equals(voteResource.getDescription()))
             {
                 voteResource.setDescription(description);
             }
-            if(!voteResource.getSenderAddress().equals(senderAddress))
+            if(!senderAddress.equals(voteResource.getSenderAddress()))
             {
                 voteResource.setSenderAddress(senderAddress);
             }
