@@ -23,8 +23,12 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.filesystem.FileSystem;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
+import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.picocontainer.Startable;
@@ -50,7 +54,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * Implementation of Poll Service
- *
+ * 
  * @author <a href="mailto:publo@ngo.pl">Pawel Potempski</a>
  * @version $Id: PollServiceImpl.java,v 1.12 2005-08-02 17:11:23 pablo Exp $
  */
@@ -58,9 +62,9 @@ public class PollServiceImpl
     implements PollService, ResourceDeletionListener, Startable
 {
     public static final String RELATION_NAME = "poll.PoolBindings";
-    
+
     // instance variables ////////////////////////////////////////////////////
-    
+
     /** logging facility */
     private Logger log;
 
@@ -69,25 +73,31 @@ public class PollServiceImpl
 
     /** workflow service */
     private WorkflowService workflowService;
-    
+
     /** pds */
-    //private PersonalDataService pds;
+    // private PersonalDataService pds;
 
     private CoralSessionFactory sessionFactory;
-    
+
     private Relation pollRelation;
+
+    private final Templating templating;
+
+    private final FileSystem fileSystem;
 
     // initialization ////////////////////////////////////////////////////////
 
     /**
      * Initializes the service.
      */
-    public PollServiceImpl(CoralSessionFactory sessionFactory, Logger logger, 
-        WorkflowService workflowService)
+    public PollServiceImpl(CoralSessionFactory sessionFactory, Logger logger,
+        WorkflowService workflowService, FileSystem fileSystem, Templating templating)
     {
         this.log = logger;
         this.workflowService = workflowService;
         this.sessionFactory = sessionFactory;
+        this.fileSystem = fileSystem;
+        this.templating = templating;
         CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
@@ -105,12 +115,12 @@ public class PollServiceImpl
 
     public void stop()
     {
-        
+
     }
 
     /**
      * return the polls root resource.
-     *
+     * 
      * @param site the site resource.
      * @return the polls root resource.
      * @throws PollException if the operation fails.
@@ -121,7 +131,7 @@ public class PollServiceImpl
         Resource[] applications = coralSession.getStore().getResource(site, "applications");
         if(applications == null || applications.length != 1)
         {
-            throw new PollException("Applications root for site: "+site.getName()+" not found");
+            throw new PollException("Applications root for site: " + site.getName() + " not found");
         }
         Resource[] roots = coralSession.getStore().getResource(applications[0], "polls");
         if(roots.length == 1)
@@ -140,9 +150,9 @@ public class PollServiceImpl
                 throw new PollException("unexpected exception", e);
             }
         }
-        throw new PollException("Too much polls root resources for site: "+site.getName());
+        throw new PollException("Too much polls root resources for site: " + site.getName());
     }
-    
+
     public PollsResource getPollsParent(CoralSession coralSession, SiteResource site, String name)
         throws PollException
     {
@@ -169,15 +179,14 @@ public class PollServiceImpl
         }
         throw new PollException("Too much polls." + name + " resources for site: " + site.getName());
     }
-    
-    
+
     public PollsResource getPollsParent(CoralSession coralSession, int psid, String name)
         throws PollException, EntityDoesNotExistException
     {
         Resource pollsRoot = coralSession.getStore().getResource(psid);
         if(pollsRoot == null
-            || !(pollsRoot instanceof PollsResource && "applications".equals(pollsRoot
-                .getParent().getName())))
+            || !(pollsRoot instanceof PollsResource && "applications".equals(pollsRoot.getParent()
+                .getName())))
         {
             throw new PollException("polls." + name + " root not found");
         }
@@ -202,16 +211,17 @@ public class PollServiceImpl
 
     /**
      * return the poll for poll pool with logic based on specified configuration.
-     *
+     * 
      * @param pollsResource the polls pool.
      * @param config the configuration.
      * @return the poll resource.
      * @throws PollException if the operation fails.
      */
-    public PollResource getPoll(CoralSession coralSession, PollsResource pollsResource, Parameters config)
+    public PollResource getPoll(CoralSession coralSession, PollsResource pollsResource,
+        Parameters config)
         throws PollException
     {
-        long poolId = config.getLong("pool_id",-1);
+        long poolId = config.getLong("pool_id", -1);
         if(poolId != -1)
         {
             PoolResource poolResource = null;
@@ -222,15 +232,15 @@ public class PollServiceImpl
             }
             catch(EntityDoesNotExistException e)
             {
-                throw new PollException("Pool not found",e);
+                throw new PollException("Pool not found", e);
             }
         }
         return null;
     }
-    
+
     /**
      * return the vote resource for configuration.
-     *
+     * 
      * @param config the configuration.
      * @return the vote resource.
      * @throws PollException if the operation fails.
@@ -238,7 +248,7 @@ public class PollServiceImpl
     public VoteResource getVote(CoralSession coralSession, Parameters config)
         throws PollException
     {
-        long voteId = config.getLong("vote_id",-1);
+        long voteId = config.getLong("vote_id", -1);
         if(voteId != -1)
         {
             VoteResource voteResource = null;
@@ -249,7 +259,7 @@ public class PollServiceImpl
             }
             catch(EntityDoesNotExistException e)
             {
-                throw new PollException("Vote not found",e);
+                throw new PollException("Vote not found", e);
             }
         }
         return null;
@@ -257,7 +267,7 @@ public class PollServiceImpl
 
     /**
      * return the poll content for indexing purposes.
-     *
+     * 
      * @param pollResource the poll.
      * @return the poll content.
      */
@@ -266,53 +276,51 @@ public class PollServiceImpl
         return "";
     }
 
-
-
     /**
      * execute logic of the job to check expiration date.
      */
     public void checkPollState(CoralSession coralSession)
     {
-		try
-		{
-			Resource readyState = coralSession.getStore()
-				.getUniqueResourceByPath("/cms/workflow/automata/poll.poll/states/ready");
-			Resource activeState = coralSession.getStore()
-				.getUniqueResourceByPath("/cms/workflow/automata/poll.poll/states/active");				
-			QueryResults results = coralSession.getQuery().
-				executeQuery("FIND RESOURCE FROM cms.poll.poll WHERE state = "+readyState.getIdString());
-			Resource[] nodes = results.getArray(1);
-			log.debug("CheckPollState "+nodes.length+" ready polls found");
-			for(int i = 0; i < nodes.length; i++)
-			{
-				checkPollState(coralSession, (PollResource)nodes[i]);
-			}
-			results = coralSession.getQuery()
-				.executeQuery("FIND RESOURCE FROM cms.poll.poll WHERE state = "+activeState.getIdString());
-			nodes = results.getArray(1);
-			log.debug("CheckPollState "+nodes.length+" active polls found");
-			for(int i = 0; i < nodes.length; i++)
-			{
-				checkPollState(coralSession, (PollResource)nodes[i]);
-			}
-		}
-		catch(Exception e)
-		{
-			log.error("CheckBannerState exception ",e);
-		}
+        try
+        {
+            Resource readyState = coralSession.getStore().getUniqueResourceByPath(
+                "/cms/workflow/automata/poll.poll/states/ready");
+            Resource activeState = coralSession.getStore().getUniqueResourceByPath(
+                "/cms/workflow/automata/poll.poll/states/active");
+            QueryResults results = coralSession.getQuery().executeQuery(
+                "FIND RESOURCE FROM cms.poll.poll WHERE state = " + readyState.getIdString());
+            Resource[] nodes = results.getArray(1);
+            log.debug("CheckPollState " + nodes.length + " ready polls found");
+            for(int i = 0; i < nodes.length; i++)
+            {
+                checkPollState(coralSession, (PollResource)nodes[i]);
+            }
+            results = coralSession.getQuery().executeQuery(
+                "FIND RESOURCE FROM cms.poll.poll WHERE state = " + activeState.getIdString());
+            nodes = results.getArray(1);
+            log.debug("CheckPollState " + nodes.length + " active polls found");
+            for(int i = 0; i < nodes.length; i++)
+            {
+                checkPollState(coralSession, (PollResource)nodes[i]);
+            }
+        }
+        catch(Exception e)
+        {
+            log.error("CheckBannerState exception ", e);
+        }
     }
 
     /**
      * {@inheritDoc}
      */
-    public boolean hasVoted(HttpContext httpContext, 
-        TemplatingContext templatingContext, PollResource poll)
+    public boolean hasVoted(HttpContext httpContext, TemplatingContext templatingContext,
+        PollResource poll)
         throws PollException
     {
         try
         {
-            if(templatingContext.get("already_voted") != null && 
-              ((Boolean)templatingContext.get("already_voted")).booleanValue())
+            if(templatingContext.get("already_voted") != null
+                && ((Boolean)templatingContext.get("already_voted")).booleanValue())
             {
                 return true;
             }
@@ -320,11 +328,11 @@ public class PollServiceImpl
             {
                 return false;
             }
-            String cookieKey = "poll_"+poll.getId();
+            String cookieKey = "poll_" + poll.getId();
             Cookie[] cookies = httpContext.getRequest().getCookies();
             if(cookies != null)
             {
-                for(int i=0; i<cookies.length; i++)
+                for(int i = 0; i < cookies.length; i++)
                 {
                     if(cookies[i].getName().equals(cookieKey))
                     {
@@ -339,18 +347,18 @@ public class PollServiceImpl
             throw new PollException("exception occured", e);
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
-    public boolean hasVoted(HttpContext httpContext, 
-        TemplatingContext templatingContext, VoteResource vote)
+    public boolean hasVoted(HttpContext httpContext, TemplatingContext templatingContext,
+        VoteResource vote)
         throws PollException
     {
         try
         {
-            if(templatingContext.get("already_voted") != null && 
-              ((Boolean)templatingContext.get("already_voted")).booleanValue())
+            if(templatingContext.get("already_voted") != null
+                && ((Boolean)templatingContext.get("already_voted")).booleanValue())
             {
                 return true;
             }
@@ -358,11 +366,11 @@ public class PollServiceImpl
             {
                 return false;
             }
-            String cookieKey = "vote_"+vote.getId();
+            String cookieKey = "vote_" + vote.getId();
             Cookie[] cookies = httpContext.getRequest().getCookies();
             if(cookies != null)
             {
-                for(int i=0; i<cookies.length; i++)
+                for(int i = 0; i < cookies.length; i++)
                 {
                     if(cookies[i].getName().equals(cookieKey))
                     {
@@ -377,41 +385,43 @@ public class PollServiceImpl
             throw new PollException("exception occured", e);
         }
     }
-    
-	/**
-	 * @param poll
-	 * @param questions
-	 * @param resultMap
-	 * @param percentMap
-	 */
-	public void prepareMaps(CoralSession coralSession, PollResource poll, Map questions, Map resultMap, Map percentMap) {
-		Resource[] questionResources = coralSession.getStore().getResource(poll);
-		for(int i = 0; i < questionResources.length; i++)
-		{
-		    QuestionResource questionResource = (QuestionResource)questionResources[i];
-		    Question question = new Question(questionResource.getName(),questionResource.getId());
-		    questions.put(new Integer(questionResource.getSequence()),question);
-		    Resource[] answerResources = coralSession.getStore().getResource(questionResources[i]);
-		    for(int j = 0; j < answerResources.length; j++)
-		    {
-		        AnswerResource answerResource = (AnswerResource)answerResources[j];
-		        Answer answer = new Answer(answerResource.getName(),answerResource.getId());
-		        question.getAnswers().put(new Integer(answerResource.getSequence()),answer);
-		        Long id = answerResource.getIdObject();
-		        resultMap.put(id, new Integer(answerResource.getVotesCount()));
-		        if(questionResource.getVotesCount() > 0)
-		        {
-		        	percentMap.put(id,new Float(answerResource.getVotesCount()*100/questionResource.getVotesCount()));
-		        }
-		        else
-		        {
-		        	percentMap.put(id,new Float(0));
-		        }
-		    }
-		}
-	}
-	
-	
+
+    /**
+     * @param poll
+     * @param questions
+     * @param resultMap
+     * @param percentMap
+     */
+    public void prepareMaps(CoralSession coralSession, PollResource poll, Map questions,
+        Map resultMap, Map percentMap)
+    {
+        Resource[] questionResources = coralSession.getStore().getResource(poll);
+        for(int i = 0; i < questionResources.length; i++)
+        {
+            QuestionResource questionResource = (QuestionResource)questionResources[i];
+            Question question = new Question(questionResource.getName(), questionResource.getId());
+            questions.put(new Integer(questionResource.getSequence()), question);
+            Resource[] answerResources = coralSession.getStore().getResource(questionResources[i]);
+            for(int j = 0; j < answerResources.length; j++)
+            {
+                AnswerResource answerResource = (AnswerResource)answerResources[j];
+                Answer answer = new Answer(answerResource.getName(), answerResource.getId());
+                question.getAnswers().put(new Integer(answerResource.getSequence()), answer);
+                Long id = answerResource.getIdObject();
+                resultMap.put(id, new Integer(answerResource.getVotesCount()));
+                if(questionResource.getVotesCount() > 0)
+                {
+                    percentMap.put(id, new Float(answerResource.getVotesCount() * 100
+                        / questionResource.getVotesCount()));
+                }
+                else
+                {
+                    percentMap.put(id, new Float(0));
+                }
+            }
+        }
+    }
+
     /**
      * @param vote
      * @param answers
@@ -448,7 +458,7 @@ public class PollServiceImpl
             }
         }
     }
-    
+
     public Set<String> getBallotsEmails(CoralSession coralSession, VoteResource vote)
     {
         Resource[] answerResources = coralSession.getStore().getResource(vote);
@@ -464,35 +474,78 @@ public class PollServiceImpl
         }
         return emailList;
     }
-    
+
     private static final String DEAULT_TICKET_TEMPLATE = "/messages/votes/Confirm_%s";
     
-    private static final String DEFAULT_TICKET_TEMPLATE_PATH = "/templates" + DEAULT_TICKET_TEMPLATE + ".vt";
-
     private static final String TICKET_TEMPLATE = "/sites/%s/messages/votes/%s";
-    
+
     private static final String TICKET_TEMPLATE_PATH = "/templates" + TICKET_TEMPLATE + ".vt";
-    
+
+    private static final String TEMPLATE_ENCODING = "UTF-8";
+
     public Template getVoteConfiramationTicketTemplate(VoteResource vote, Locale locale)
+        throws ProcessingException
     {
-        // TODO
-        return null;
+        String templateName = null;
+        try
+        {
+            templateName = String.format(TICKET_TEMPLATE, vote.getIdString());
+            if(!templating.templateExists(templateName))
+            {
+                templateName = String.format(DEAULT_TICKET_TEMPLATE, locale.toString());
+            }
+            return templating.getTemplate(templateName);
+        }
+        catch(TemplateNotFoundException e)
+        {
+            throw new ProcessingException("template " + templateName + " not found");
+        }
     }
-    
+
     public String getVoteConfiramationTicketContents(VoteResource vote)
+        throws ProcessingException
     {
-        // TODO
-        return null;
+        String path = null;
+        try
+        {
+            path = String.format(TICKET_TEMPLATE_PATH, vote.getIdString());
+            if(!fileSystem.exists(path))
+            {
+                return "";
+            }
+            else
+            {
+                return fileSystem.read(path, TEMPLATE_ENCODING);
+            }
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("failed to load contents of template " + path, e);
+        }
     }
-    
+
     public void setVoteConfiramationTicketContents(VoteResource vote, String contents)
+        throws ProcessingException
     {
-        // TODO
+        String path = null;
+        try
+        {
+            path = String.format(TICKET_TEMPLATE_PATH, vote.getIdString());
+            if(!fileSystem.exists(path))
+            {
+                fileSystem.mkdirs(FileSystem.directoryPath(path));
+            }            
+            fileSystem.write(path, contents, TEMPLATE_ENCODING);            
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("failed to write contents of template " + path, e);
+        }
     }
-    
+
     /**
      * return the poll for poll pool with logic based on specified configuration.
-     *
+     * 
      * @param poolResource the polls pool.
      * @return the poll resource.
      * @throws PollException if the operation fails.
@@ -504,7 +557,7 @@ public class PollServiceImpl
         ArrayList active = new ArrayList();
         PollResource pollResource = null;
         PollResource temp = null;
-        for(int i =0; i < polls.length; i++)
+        for(int i = 0; i < polls.length; i++)
         {
             temp = (PollResource)polls[i];
             if(temp.getState().getName().equals("active"))
@@ -512,12 +565,12 @@ public class PollServiceImpl
                 active.add(temp);
             }
         }
-        if(active.size()==0)
+        if(active.size() == 0)
         {
             return null;
         }
         pollResource = (PollResource)active.get(0);
-        for(int i=1; i < active.size(); i++)
+        for(int i = 1; i < active.size(); i++)
         {
             temp = (PollResource)active.get(i);
             if(temp.getEndDate().before(pollResource.getEndDate()))
@@ -528,11 +581,8 @@ public class PollServiceImpl
         return pollResource;
     }
 
-    
     // private methods
 
-
-    
     /**
      * check state of the poll and expire it if the end date was reached.
      */
@@ -541,7 +591,8 @@ public class PollServiceImpl
         try
         {
             Date today = Calendar.getInstance().getTime();
-            ProtectedTransitionResource[] transitions = workflowService.getAllowedTransitions(coralSession, pollResource, coralSession.getUserSubject());
+            ProtectedTransitionResource[] transitions = workflowService.getAllowedTransitions(
+                coralSession, pollResource, coralSession.getUserSubject());
             String state = pollResource.getState().getName();
             ProtectedTransitionResource transition = null;
 
@@ -593,25 +644,23 @@ public class PollServiceImpl
         }
         catch(WorkflowException e)
         {
-            log.error("Poll Job Exception",e);
+            log.error("Poll Job Exception", e);
         }
 
     }
 
-    
     /**
      * {@inheritDoc}
      */
     public Relation getRelation(CoralSession coralSession)
-    {     
+    {
         if(pollRelation != null)
         {
             return pollRelation;
         }
         try
         {
-            pollRelation = coralSession.getRelationManager().
-                                   getRelation(RELATION_NAME);
+            pollRelation = coralSession.getRelationManager().getRelation(RELATION_NAME);
         }
         catch(AmbigousEntityNameException e)
         {
@@ -619,7 +668,7 @@ public class PollServiceImpl
         }
         catch(EntityDoesNotExistException e)
         {
-            //ignore it.
+            // ignore it.
         }
         if(pollRelation != null)
         {
@@ -634,23 +683,22 @@ public class PollServiceImpl
             throw new IllegalStateException("the related relation already exists");
         }
         return pollRelation;
-    }    
-    
+    }
+
     /**
-     * Create the  relation.
+     * Create the relation.
      * 
-     * @param coralSession the coralSession. 
+     * @param coralSession the coralSession.
      */
     private synchronized void createRelation(CoralSession coralSession, String name)
         throws EntityExistsException
     {
         if(pollRelation == null)
         {
-            pollRelation = coralSession.getRelationManager().
-                createRelation(RELATION_NAME);
+            pollRelation = coralSession.getRelationManager().createRelation(RELATION_NAME);
         }
     }
-    
+
     public void resourceDeleted(Resource resource)
     {
         CoralSession coralSession = sessionFactory.getRootSession();
@@ -670,7 +718,7 @@ public class PollServiceImpl
                 coralSession.getRelationManager().updateRelation(refs, diff);
             }
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             throw new RuntimeException(e);
         }
@@ -681,4 +729,3 @@ public class PollServiceImpl
     }
 
 }
-

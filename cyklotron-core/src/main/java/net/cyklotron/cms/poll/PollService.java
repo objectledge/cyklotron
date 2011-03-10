@@ -8,6 +8,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
@@ -166,7 +167,8 @@ public interface PollService
      * @param vote a VoteResource
      * @param locale locale for looking up fallback template when vote has none defined.
      */
-    public Template getVoteConfiramationTicketTemplate(VoteResource vote, Locale locale);
+    public Template getVoteConfiramationTicketTemplate(VoteResource vote, Locale locale)
+        throws ProcessingException;
     
     /***
      * Returns confirmation ticket template contents
@@ -174,7 +176,8 @@ public interface PollService
      * @param vote a VoteResource
      * @return template contents, empty string when none defined previously.
      */
-    public String getVoteConfiramationTicketContents(VoteResource vote);
+    public String getVoteConfiramationTicketContents(VoteResource vote)
+        throws ProcessingException;
     
     /***
      * Sets confirmation ticket template contents
@@ -182,5 +185,6 @@ public interface PollService
      * @param vote a VoteResource
      * @return template contents.
      */
-    public void setVoteConfiramationTicketContents(VoteResource vote, String contents);
+    public void setVoteConfiramationTicketContents(VoteResource vote, String contents)
+        throws ProcessingException;
 }
