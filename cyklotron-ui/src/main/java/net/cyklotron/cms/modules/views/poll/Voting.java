@@ -31,7 +31,6 @@ import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
-
 public class Voting
     extends BaseSkinableScreen
 {
@@ -61,7 +60,7 @@ public class Voting
             Parameters parameters = RequestParameters.getRequestParameters(context);
             CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
             TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-            
+
             CmsData cmsData = cmsDataFactory.getCmsData(context);
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
             VoteResource vote = pollService.getVote(coralSession, screenConfig);
@@ -69,8 +68,8 @@ public class Voting
 
             String state = (String)context.getAttribute(getClass().getName() + ".state");
             state = parameters.get("state", null);
-            
-            if("BallotSent".equals(state))
+
+            if("Confirm".equals(state))
             {
                 try
                 {
@@ -98,7 +97,8 @@ public class Voting
                 if(hasVoted())
                 {
                     templatingContext.put("already_voted", Boolean.TRUE);
-                    if(enableResults)
+                    if(!"responded_successfully".equals(templatingContext.get("result"))
+                        && enableResults)
                     {
                         state = "Results";
                     }
@@ -119,7 +119,7 @@ public class Voting
             throw new ProcessingException("Vote not found." + e);
         }
     }
-    
+
     public boolean hasVoted()
         throws ProcessingException
     {
@@ -127,7 +127,7 @@ public class Voting
         HttpContext httpContext = HttpContext.getHttpContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         CmsData cmsData = cmsDataFactory.getCmsData(context);
-        
+
         try
         {
             if(templatingContext.get("already_voted") != null
@@ -158,7 +158,7 @@ public class Voting
     }
 
     public void prepareDefault(Context context)
-    throws ProcessingException
+        throws ProcessingException
     {
         try
         {
@@ -168,29 +168,30 @@ public class Voting
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
             VoteResource vote = pollService.getVote(coralSession, screenConfig);
             templatingContext.put("vote", vote);
-            
+
             Map answers = new HashMap();
-            pollService.prepareVoteMaps(coralSession, vote, answers, new HashMap(), new HashMap(), new HashMap());
+            pollService.prepareVoteMaps(coralSession, vote, answers, new HashMap(), new HashMap(),
+                new HashMap());
             List answerKeys = new ArrayList();
-            for(int i = 0; i< answers.size(); i++)
+            for(int i = 0; i < answers.size(); i++)
             {
                 answerKeys.add(new Integer(i));
             }
             templatingContext.put("answers", answers);
             templatingContext.put("answerKeys", answerKeys);
-            
+
             boolean addCaptcha = screenConfig.getBoolean("add_captcha", Boolean.FALSE);
             templatingContext.put("add_captcha", addCaptcha);
-            
+
         }
         catch(PollException e)
         {
             throw new ProcessingException("Vote not found." + e);
         }
     }
-    
+
     public void prepareConfirm(Context context)
-    throws ProcessingException
+        throws ProcessingException
     {
         try
         {
@@ -201,22 +202,24 @@ public class Voting
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
             VoteResource vote = pollService.getVote(coralSession, screenConfig);
             templatingContext.put("vote", vote);
-            
+
             Map answers = new HashMap();
-            pollService.prepareVoteMaps(coralSession, vote, answers, new HashMap(), new HashMap(), new HashMap());
+            pollService.prepareVoteMaps(coralSession, vote, answers, new HashMap(), new HashMap(),
+                new HashMap());
             List answerKeys = new ArrayList();
-            for(int i = 0; i< answers.size(); i++)
+            for(int i = 0; i < answers.size(); i++)
             {
                 answerKeys.add(new Integer(i));
             }
             templatingContext.put("answers", answers);
             templatingContext.put("answerKeys", answerKeys);
-            
+
             String cookie = parameters.get("cookie", "");
             if(cookie.length() > 0)
             {
                 templatingContext.put("cookie", cookie);
-                EmailConfirmationRequestResource request = emailConfirmationRequestService.getEmailConfirmationRequest(coralSession, cookie);
+                EmailConfirmationRequestResource request = emailConfirmationRequestService
+                    .getEmailConfirmationRequest(coralSession, cookie);
                 templatingContext.put("email", request.getEmail());
                 templatingContext.put("selected", Long.parseLong(request.getData()));
             }
@@ -224,7 +227,7 @@ public class Voting
             {
                 throw new ProcessingException("Cookie not found.");
             }
-            
+
         }
         catch(PollException e)
         {
@@ -233,11 +236,11 @@ public class Voting
         catch(ConfirmationRequestException e)
         {
             throw new ProcessingException("Cookie not found." + e);
-        }        
+        }
     }
 
     public void prepareResults(Context context)
-    throws ProcessingException
+        throws ProcessingException
     {
         try
         {
@@ -249,13 +252,14 @@ public class Voting
             templatingContext.put("vote", vote);
 
             Map answers = new HashMap();
-            Map resultMap= new HashMap();
-            Map percentMap= new HashMap();
-            Map ballotsMap= new HashMap();
-            
-            pollService.prepareVoteMaps(coralSession, vote, answers, resultMap, percentMap, ballotsMap);
+            Map resultMap = new HashMap();
+            Map percentMap = new HashMap();
+            Map ballotsMap = new HashMap();
+
+            pollService.prepareVoteMaps(coralSession, vote, answers, resultMap, percentMap,
+                ballotsMap);
             List answerKeys = new ArrayList();
-            for(int i = 0; i< answers.size(); i++)
+            for(int i = 0; i < answers.size(); i++)
             {
                 answerKeys.add(new Integer(i));
             }
@@ -269,12 +273,12 @@ public class Voting
             throw new ProcessingException("Vote not found." + e);
         }
     }
-    
+
     public void prepareBallotSent(Context context)
     {
         // does nothing
     }
-    
+
     public void prepareInvalidBallot(Context context)
     {
         // does nothing
