@@ -1,5 +1,6 @@
 package net.cyklotron.cms.poll;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -7,6 +8,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 
@@ -155,4 +157,30 @@ public interface PollService
      * @return the poll relation.
      */
     public Relation getRelation(CoralSession coralSession);
+    
+    // Votes
+    
+    /**
+     * Returns confirmation ticket template
+     * 
+     * @param vote a VoteResource
+     * @param locale locale for looking up fallback template when vote has none defined.
+     */
+    public Template getVoteConfiramationTicketTemplate(VoteResource vote, Locale locale);
+    
+    /***
+     * Returns confirmation ticket template contents
+     * 
+     * @param vote a VoteResource
+     * @return template contents, empty string when none defined previously.
+     */
+    public String getVoteConfiramationTicketContents(VoteResource vote);
+    
+    /***
+     * Sets confirmation ticket template contents
+     * 
+     * @param vote a VoteResource
+     * @return template contents.
+     */
+    public void setVoteConfiramationTicketContents(VoteResource vote, String contents);
 }

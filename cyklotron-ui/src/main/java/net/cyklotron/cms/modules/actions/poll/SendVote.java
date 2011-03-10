@@ -11,9 +11,11 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
@@ -103,9 +105,15 @@ public class SendVote
                 Long answerId = parameters.getLong("answer_"+answerResource.getSequence(), -1);
                 if(answerId != -1)
                 {
-                    String confirmationRequest = emailConfirmationRequestService.createEmailConfirmationRequest(coralSession, email, answerId.toString());
-                    emailConfirmationRequestService.sendConfirmationRequest(confirmationRequest, null, null, null, null, null, null, coralSession);
-                    setCookie(httpContext,vid, answerId);
+                    String confirmationRequest = emailConfirmationRequestService
+                        .createEmailConfirmationRequest(coralSession, email, answerId.toString());
+                    I18nContext i18nContext = I18nContext.getI18nContext(context);
+                    Template template = pollService.getVoteConfiramationTicketTemplate(
+                        voteResource, i18nContext.getLocale());
+                    // TODO adres nadawcy trzeba zapisać w resource, LinkRenderer z OfflineLinkRendererService
+                    emailConfirmationRequestService.sendConfirmationRequest(confirmationRequest,
+                        null, email, cmsData.getNode(), template, "PLAIN", null, coralSession);
+                    setCookie(httpContext, vid, answerId);
                     break;
                 }
             }

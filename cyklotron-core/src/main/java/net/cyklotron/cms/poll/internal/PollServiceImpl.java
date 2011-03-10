@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.picocontainer.Startable;
@@ -461,6 +463,31 @@ public class PollServiceImpl
             }
         }
         return emailList;
+    }
+    
+    private static final String DEAULT_TICKET_TEMPLATE = "/messages/votes/Confirm_%s";
+    
+    private static final String DEFAULT_TICKET_TEMPLATE_PATH = "/templates" + DEAULT_TICKET_TEMPLATE + ".vt";
+
+    private static final String TICKET_TEMPLATE = "/sites/%s/messages/votes/%s";
+    
+    private static final String TICKET_TEMPLATE_PATH = "/templates" + TICKET_TEMPLATE + ".vt";
+    
+    public Template getVoteConfiramationTicketTemplate(VoteResource vote, Locale locale)
+    {
+        // TODO
+        return null;
+    }
+    
+    public String getVoteConfiramationTicketContents(VoteResource vote)
+    {
+        // TODO
+        return null;
+    }
+    
+    public void setVoteConfiramationTicketContents(VoteResource vote, String contents)
+    {
+        // TODO
     }
     
     /**
