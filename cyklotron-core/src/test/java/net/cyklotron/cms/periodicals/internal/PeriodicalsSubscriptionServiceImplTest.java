@@ -28,7 +28,9 @@
 
 package net.cyklotron.cms.periodicals.internal;
 
+import org.jmock.Mock;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.mail.MailSystem;
 import org.objectledge.test.LedgeTestCase;
 
 import net.cyklotron.cms.confirmation.CryptographyService;
@@ -51,17 +53,21 @@ public class PeriodicalsSubscriptionServiceImplTest
     private PeriodicalsSubscriptionService service;
     private CryptographyService cipherCryptographyService;
     private EmailConfirmationService confirmationRequestService;
+    private Mock mockMailSystem;
+    private MailSystem mailSystem;
     
     public void setUp() throws Exception
     {
         fileSystem = getFileSystem();
+        mockMailSystem = mock(MailSystem.class);
+        mailSystem = (MailSystem)mockMailSystem.proxy();
         initService();
     }
     
     private void initService() throws Exception
     {
         cipherCryptographyService = new CryptographyServiceImpl(fileSystem, "AES", 128, "SHA1", "12345");
-        confirmationRequestService = new EmailConfirmationServiceImpl(cipherCryptographyService);
+        confirmationRequestService = new EmailConfirmationServiceImpl(cipherCryptographyService, mailSystem);
         service = new PeriodicalsSubscriptionServiceImpl(cipherCryptographyService, confirmationRequestService);
     }
     
