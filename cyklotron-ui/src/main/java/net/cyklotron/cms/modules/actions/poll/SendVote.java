@@ -104,7 +104,7 @@ public class SendVote
                 if(answerId != -1)
                 {
                     String confirmationRequest = emailConfirmationRequestService.createEmailConfirmationRequest(coralSession, email, answerId.toString());
-                    emailConfirmationRequestService.send(coralSession, confirmationRequest, null, null, null);
+                    emailConfirmationRequestService.sendConfirmationRequest(confirmationRequest, null, null, null, null, null, null, coralSession);
                     setCookie(httpContext,vid, answerId);
                     break;
                 }

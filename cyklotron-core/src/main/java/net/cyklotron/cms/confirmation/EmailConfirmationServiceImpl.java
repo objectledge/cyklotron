@@ -30,24 +30,37 @@ package net.cyklotron.cms.confirmation;
 
 import java.util.Date;
 
+import javax.mail.Message;
+import javax.mail.internet.InternetAddress;
+
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.mail.LedgeMessage;
+import org.objectledge.mail.MailSystem;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplatingContext;
 
-import net.cyklotron.cms.files.FileResource;
+import net.cyklotron.cms.documents.LinkRenderer;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
 public class EmailConfirmationServiceImpl
     implements EmailConfirmationService
-{   
+{
     /** the confirmationRequest data root node. */
-    protected Resource confirmationRoot;    
-    
+    protected Resource confirmationRoot;
+
     protected CryptographyService cipherCryptographyService;
 
-    public EmailConfirmationServiceImpl(CryptographyService cipherCryptographyService)
+    private final MailSystem mailSystem;
+
+    public EmailConfirmationServiceImpl(CryptographyService cipherCryptographyService,
+        MailSystem mailSystem)
     {
         this.cipherCryptographyService = cipherCryptographyService;
+        this.mailSystem = mailSystem;
     }
 
     // inherit doc
@@ -68,8 +81,9 @@ public class EmailConfirmationServiceImpl
     }
 
     // interit doc
-    
-    public synchronized String createEmailConfirmationRequest(CoralSession coralSession, String email, String data)
+
+    public synchronized String createEmailConfirmationRequest(CoralSession coralSession,
+        String email, String data)
         throws ConfirmationRequestException
     {
         Resource root = getConfirmationRequestsRoot(coralSession);
@@ -90,13 +104,15 @@ public class EmailConfirmationServiceImpl
         }
         catch(Exception e)
         {
-            throw new ConfirmationRequestException("failed to create subscription request record", e);
+            throw new ConfirmationRequestException("failed to create subscription request record",
+                e);
         }
         return cookie;
     }
 
     // inherit doc
-    public synchronized void discardEmailConfirmationRequest(CoralSession coralSession, String cookie)
+    public synchronized void discardEmailConfirmationRequest(CoralSession coralSession,
+        String cookie)
         throws ConfirmationRequestException
     {
         EmailConfirmationRequestResource r = getEmailConfirmationRequest(coralSession, cookie);
@@ -108,11 +124,12 @@ public class EmailConfirmationServiceImpl
             }
             catch(EntityInUseException e)
             {
-                throw new ConfirmationRequestException("failed to delete subscription change request", e);
+                throw new ConfirmationRequestException(
+                    "failed to delete subscription change request", e);
             }
         }
     }
-    
+
     /**
      * Get root node of confirmationRoot's data.
      * 
@@ -136,16 +153,37 @@ public class EmailConfirmationServiceImpl
         }
         return confirmationRoot;
     }
-    
-    
+
     /**
-     * Sent EmailConfirmationRequest
-     * 
-     * @param coralSession CoralSession.
-     * @param String cookie.
+     * {@inheritDoc}
      */
-    public void send(CoralSession coralSession, String cookie, FileResource file, Date time, String recipient)
+    public void sendConfirmationRequest(String cookie, String sender, String recipient,
+        NavigationNodeResource node, Template template, String medium, LinkRenderer linkRenderer,
+        CoralSession coralSession)
+        throws ProcessingException
     {
-     
+        LedgeMessage message = mailSystem.newMessage();
+        TemplatingContext templatingContext = message.getContext();
+        templatingContext.put("cookie", cookie);
+        templatingContext.put("link", linkRenderer);
+        try
+        {
+            if(node != null)
+            {
+                templatingContext.put("node", node);
+                templatingContext.put("site", node.getSite());
+                templatingContext.put("baseLink", linkRenderer.getNodeURL(coralSession, node));
+            }
+            message.setTemplate(template, medium);
+            message.getMessage().setSentDate(new Date());
+            message.getMessage().setFrom(new InternetAddress(sender));
+            message.getMessage().setRecipient(Message.RecipientType.TO,
+                new InternetAddress(recipient));
+            message.send(true);
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("message rendering failed", e);
+        }
     }
 }

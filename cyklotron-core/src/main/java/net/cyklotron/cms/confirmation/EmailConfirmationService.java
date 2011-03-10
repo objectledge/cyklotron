@@ -28,13 +28,12 @@
 
 package net.cyklotron.cms.confirmation;
 
-import java.util.Date;
-
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Template;
 
-import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
-import net.cyklotron.cms.files.FileResource;
-import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
+import net.cyklotron.cms.documents.LinkRenderer;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
@@ -49,33 +48,43 @@ public interface EmailConfirmationService
      * @param email the requestors email address.
      * @return a magic cookie to be returned to the user.
      */
-    public String createEmailConfirmationRequest(CoralSession coralSession, String email, String items)
-    throws ConfirmationRequestException;
+    public String createEmailConfirmationRequest(CoralSession coralSession, String email,
+        String items)
+        throws ConfirmationRequestException;
 
     /**
      * Return a subscription change request.
      * 
-     * @param cookie the magic cookie recieved form the user.
+     * @param cookie the magic cookie received form the user.
      * @return the request object, or null if invalid.
      */
     public EmailConfirmationRequestResource getEmailConfirmationRequest(CoralSession coralSession,
         String cookie)
-    throws ConfirmationRequestException;
+        throws ConfirmationRequestException;
 
     /**
      * Discard a subscription change request.
      * 
-     * @param cookie the magic cookie recieved form the user.
+     * @param cookie the magic cookie received form the user.
      */
     public void discardEmailConfirmationRequest(CoralSession coralSession, String cookie)
-    throws ConfirmationRequestException;
-    
+        throws ConfirmationRequestException;
+
     /**
      * Sent EmailConfirmationRequest
      * 
-     * @param coralSession CoralSession.
-     * @param r EmailPeriodicalResource.
+     * @param cookie the magic cookie to include in the message
+     * @param sender sender's e-mail address
+     * @param recipient recipient's e-mail address
+     * @param node a navigation node for generating links in the message
+     * @param template message template
+     * @param medium message medium. Content-Type header of the message will be text/$medium
+     * @param linkRenderer LinkRenderer instance
+     * @param coralSession Coral session
+     * @throws ProcessingException when rendering or sending message fails.
      */
-    public void send(CoralSession coralSession, String cookie, FileResource file, Date time, String recipient);
-    
+    public void sendConfirmationRequest(String cookie, String sender, String recipient,
+        NavigationNodeResource node, Template template, String medium,
+        LinkRenderer linkRenderer, CoralSession coralSession) throws ProcessingException;
+
 }
