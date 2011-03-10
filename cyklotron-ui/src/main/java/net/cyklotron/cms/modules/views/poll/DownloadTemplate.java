@@ -74,17 +74,15 @@ extends BasePollScreen
         try
         {
             String contentType;
-            String content = "";
-            VoteResource vote = VoteResourceImpl.getVoteResource(coralSession, vid);
+            VoteResource vote = VoteResourceImpl.getVoteResource(coralSession, vid);        
+            String content =  pollService.getVoteConfiramationTicketContents(vote, i18nContext.getLocale());
             if (asText)
             {
                 contentType = "text/plain";
-                content = pollService.getVoteConfiramationTicketContents(vote);
             }
             else if(asXML)
             {
                 contentType = "text/xml";
-                content = pollService.getVoteConfiramationTicketContents(vote);
                 content = 
                     "<?xml version=\"1.0\" encoding=\""+httpContext.getEncoding()+"\"?>\n"+
                     "<contents>\n"+
@@ -94,7 +92,6 @@ extends BasePollScreen
             else
             {
                 contentType = "application/octet-stream";
-                content = pollService.getVoteConfiramationTicketContents(vote);
             }
             httpContext.disableCache();
             httpContext.setResponseLength(StringUtils.getByteCount(content, httpContext

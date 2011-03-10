@@ -174,9 +174,11 @@ public interface PollService
      * Returns confirmation ticket template contents
      * 
      * @param vote a VoteResource
-     * @return template contents, empty string when none defined previously.
+     * @param locale TODO
+     * @param locale locale for looking up fallback template when vote has none defined.  
+     * @return template contents, or default template contents when none defined previously.
      */
-    public String getVoteConfiramationTicketContents(VoteResource vote)
+    public String getVoteConfiramationTicketContents(VoteResource vote, Locale locale)
         throws ProcessingException;
     
     /***

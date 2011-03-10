@@ -477,6 +477,8 @@ public class PollServiceImpl
 
     private static final String DEAULT_TICKET_TEMPLATE = "/messages/votes/Confirm_%s";
     
+    private static final String DEAULT_TICKET_TEMPLATE_PATH = "/templates" + DEAULT_TICKET_TEMPLATE + ".vt";
+    
     private static final String TICKET_TEMPLATE = "/sites/%s/messages/votes/%s";
 
     private static final String TICKET_TEMPLATE_PATH = "/templates" + TICKET_TEMPLATE + ".vt";
@@ -503,7 +505,7 @@ public class PollServiceImpl
         }
     }
 
-    public String getVoteConfiramationTicketContents(VoteResource vote)
+    public String getVoteConfiramationTicketContents(VoteResource vote, Locale locale)
         throws ProcessingException
     {
         String path = null;
@@ -513,12 +515,13 @@ public class PollServiceImpl
                 .format(TICKET_TEMPLATE_PATH, vote.getSite().getName(), vote.getIdString());
             if(!fileSystem.exists(path))
             {
-                return "";
+                path = String.format(DEAULT_TICKET_TEMPLATE_PATH, locale.toString());
+                if(!fileSystem.exists(path))
+                {
+                    return "";
+                }
             }
-            else
-            {
-                return fileSystem.read(path, TEMPLATE_ENCODING);
-            }
+            return fileSystem.read(path, TEMPLATE_ENCODING);
         }
         catch(Exception e)
         {

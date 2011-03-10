@@ -38,18 +38,16 @@ import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
- * @author fil
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ * @author fil To change the template for this generated type comment go to
+ *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
 public class EditVoteTemplate
     extends BasePollScreen
 {
     private Templating templating;
-    
+
     private PollService pollService;
-    
+
     public EditVoteTemplate(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, Templating templating, PollService pollService)
@@ -58,22 +56,25 @@ public class EditVoteTemplate
         this.templating = templating;
         this.pollService = pollService;
     }
-    
-    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
+
+    public void process(Parameters parameters, MVCContext mvcContext,
+        TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
+        CoralSession coralSession)
         throws ProcessingException
-        { 
-        
+    {
+
         int vid = parameters.getInt("vid", -1);
         if(vid == -1)
         {
             throw new ProcessingException("Vote id not found");
-        }        
+        }
         try
         {
             VoteResource vote = VoteResourceImpl.getVoteResource(coralSession, vid);
-            String contents = pollService.getVoteConfiramationTicketContents(vote);
+            String contents = pollService.getVoteConfiramationTicketContents(vote, i18nContext
+                .getLocale());
             templatingContext.put("name", vote.getName());
-            
+
             if(contents == null)
             {
                 contents = "";
@@ -84,26 +85,21 @@ public class EditVoteTemplate
                 StringReader in = new StringReader(contents);
                 StringWriter out = new StringWriter();
 
-                templating.merge(
-                        blankContext,
-                        in,
-                        out,
-                        "<component template>");
+                templating.merge(blankContext, in, out, "<component template>");
 
             }
         }
         catch(EntityDoesNotExistException e)
         {
-            templatingContext.put("result","exception");
-            templatingContext.put("trace",new StackTrace(e));
-            logger.error("VoteException: ",e);
+            templatingContext.put("result", "exception");
+            templatingContext.put("trace", new StackTrace(e));
+            logger.error("VoteException: ", e);
             return;
         }
-        catch (MergingException e)
+        catch(MergingException e)
         {
             templatingContext.put("result", "template_parse_error");
-            templatingContext.put(
-                "parse_trace", new StackTrace(e));
+            templatingContext.put("parse_trace", new StackTrace(e));
         }
     }
 }
