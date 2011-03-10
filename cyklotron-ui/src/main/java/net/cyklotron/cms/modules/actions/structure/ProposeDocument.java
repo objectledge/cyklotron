@@ -120,6 +120,15 @@ public class ProposeDocument
                 valid = false;
                 templatingContext.put("result", data.getValidationFailure());
             }
+            
+            if(valid && screenConfig.getBoolean("add_captcha", false))
+            {
+                if(!captchaService.checkCaptcha(httpContext, (RequestParameters)parameters))
+                {
+                    templatingContext.put("result", "invalid_captcha_verification");
+                    valid = false;                    
+                }
+            }
 
             // find parent node
             NavigationNodeResource parent = null;
@@ -176,15 +185,6 @@ public class ProposeDocument
                 {
                     templatingContext.put("result", "navi_name_repeated");
                     valid = false;
-                }
-            }
-            
-            if(valid && screenConfig.getBoolean("add_captcha", false))
-            {
-                if(!captchaService.checkCaptcha(httpContext, (RequestParameters)parameters))
-                {
-                    templatingContext.put("result", "invalid_captcha_verification");
-                    valid = false;                    
                 }
             }
 
