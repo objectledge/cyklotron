@@ -1,0 +1,9 @@
+#set($subject = "${site.name} - vote confirmation")
+#set($contentType = "text/html")
+<html>
+<body>
+<p>To confirm your vote in ${vote.name} poll, click
+<a href="$link.setNode($node).set('cookie',$cookie)">here</a>.</p>
+<p>This message has been generated automatically, please do not reply.</p>
+</body>
+</html>

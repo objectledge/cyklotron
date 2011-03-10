@@ -1,0 +1,9 @@
+#set($subject = "${site.name} - potwierdzenie oddania głosu a ankiecie")
+#set($contentType = "text/html")
+<html>
+<body>
+<p>Aby potwierdzić swój głos oddany w ankiecie ${vote.name} kliknij ten
+<a href="$link.setNode($node).set('cookie',$cookie)">link</a>.</p>&nbsp;
+<p>Wiadomość została wygenerowana automatycznie, proszę na nią nie odpowiadać.</p>
+</body>
+</html>
