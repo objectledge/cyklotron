@@ -28,8 +28,10 @@
 
 package net.cyklotron.cms.periodicals.internal;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,37 +47,37 @@ import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
- *
- *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
  * @version $Id: PeriodicalsTemplatingServiceImpl.java,v 1.3 2007-11-18 21:23:25 rafal Exp $
  */
-public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingService
+public class PeriodicalsTemplatingServiceImpl
+    implements PeriodicalsTemplatingService
 {
     private final FileSystem fileSystem;
-    private final Templating templating;
-    private final I18n i18n;
-    private final String templateEncoding;    
 
-    public PeriodicalsTemplatingServiceImpl(FileSystem fileSystem, Templating templating, 
-        I18n i18n)
+    private final Templating templating;
+
+    private final I18n i18n;
+
+    private final String templateEncoding;
+
+    public PeriodicalsTemplatingServiceImpl(FileSystem fileSystem, Templating templating, I18n i18n)
     {
         this.fileSystem = fileSystem;
         this.templating = templating;
-        this.i18n = i18n;        
+        this.i18n = i18n;
         this.templateEncoding = templating.getTemplateEncoding();
     }
-    
+
     // template variants ////////////////////////////////////////////////////
-    
+
     // inherit doc
     public String[] getTemplateVariants(SiteResource site, String renderer)
         throws PeriodicalsException
     {
         try
         {
-            String dir = "/templates/sites/"+site.getName()+
-                "/messages/periodicals/"+renderer;
+            String dir = "/templates/sites/" + site.getName() + "/messages/periodicals/" + renderer;
             if(!fileSystem.exists(dir))
             {
                 return new String[0];
@@ -86,12 +88,12 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
                 return new String[0];
             }
             ArrayList temp = new ArrayList();
-            for (int i = 0; i < items.length; i++)
+            for(int i = 0; i < items.length; i++)
             {
-                String path = dir+"/"+items[i];
+                String path = dir + "/" + items[i];
                 if(fileSystem.isFile(path) && path.endsWith(".vt"))
                 {
-                    temp.add(items[i].substring(0, items[i].length()-3));
+                    temp.add(items[i].substring(0, items[i].length() - 3));
                 }
             }
             String[] result = new String[temp.size()];
@@ -115,21 +117,22 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
     public Template getTemplateVariant(SiteResource site, String renderer, String name)
         throws TemplateNotFoundException
     {
-        String path = "/sites/"+site.getName()+"/messages/periodicals/"+renderer+"/"+name;
+        String path = "/sites/" + site.getName() + "/messages/periodicals/" + renderer + "/" + name;
         return templating.getTemplate(path);
     }
 
     // inherit doc
-    public void createTemplateVariant(SiteResource site, String renderer, String name, String contents)
+    public void createTemplateVariant(SiteResource site, String renderer, String name,
+        String contents)
         throws ProcessingException
     {
         String path = getTemplateVariantPath(site, renderer, name);
         if(fileSystem.exists(path))
         {
-            throw new ProcessingException("variant "+name+" of "+renderer+
-                " render already exists in site "+site.getName());
+            throw new ProcessingException("variant " + name + " of " + renderer
+                + " render already exists in site " + site.getName());
         }
-        
+
         writeTemplate(path, contents, "failed to write template contents");
         invalidateTemplate(site, renderer, name);
     }
@@ -141,8 +144,8 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
         String path = getTemplateVariantPath(site, renderer, name);
         if(!fileSystem.exists(path))
         {
-            throw new ProcessingException("variant "+name+" of "+renderer+
-                " render does not exist in site "+site.getName());
+            throw new ProcessingException("variant " + name + " of " + renderer
+                + " render does not exist in site " + site.getName());
         }
         try
         {
@@ -156,14 +159,14 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
     }
 
     private static final String DEFAULT_TEMPLATE_FILE = "/templates/messages/periodicals/%s_%s.vt";
-    
+
     private static final String DEFAULT_TEMPLATE = "/messages/periodicals/%s_%s";
-    
-    public List getDefaultTemplateLocales(String renderer)
+
+    public List<Locale> getDefaultTemplateLocales(String renderer)
         throws ProcessingException
     {
-        List list = new ArrayList();
-        for (Locale locale : i18n.getSupportedLocales())
+        List<Locale> list = new ArrayList<Locale>();
+        for(Locale locale : i18n.getSupportedLocales())
         {
             if(fileSystem.exists(String.format(DEFAULT_TEMPLATE_FILE, renderer, locale.toString())))
             {
@@ -178,12 +181,13 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
     {
         try
         {
-            return fileSystem.read(String.format(DEFAULT_TEMPLATE_FILE, renderer, locale.toString()), templateEncoding);            
+            return fileSystem.read(String
+                .format(DEFAULT_TEMPLATE_FILE, renderer, locale.toString()), templateEncoding);
         }
         catch(Exception e)
         {
-            throw new ProcessingException("failed to read template contents for renderer "+
-                renderer+"_"+locale.toString(), e);
+            throw new ProcessingException("failed to read template contents for renderer "
+                + renderer + "_" + locale.toString(), e);
         }
     }
 
@@ -192,7 +196,8 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
     {
         try
         {
-            return templating.getTemplate(String.format(DEFAULT_TEMPLATE, renderer, locale.toString()));
+            return templating.getTemplate(String.format(DEFAULT_TEMPLATE, renderer, locale
+                .toString()));
         }
         catch(TemplateNotFoundException e)
         {
@@ -207,8 +212,8 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
         String path = getTemplateVariantPath(site, renderer, name);
         if(!fileSystem.exists(path))
         {
-            throw new ProcessingException("variant "+name+" of "+renderer+
-                " render does not exist in site "+site.getName());
+            throw new ProcessingException("variant " + name + " of " + renderer
+                + " render does not exist in site " + site.getName());
         }
         try
         {
@@ -221,18 +226,19 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
     }
 
     // inherit doc
-    public void getTemplateVariantContents(SiteResource site, String renderer, String name, OutputStream out)
+    public void getTemplateVariantContents(SiteResource site, String renderer, String name,
+        OutputStream out)
         throws ProcessingException
     {
         String path = getTemplateVariantPath(site, renderer, name);
         if(!fileSystem.exists(path))
         {
-            throw new ProcessingException("variant "+name+" of "+renderer+
-                " render does not exist in site "+site.getName());
+            throw new ProcessingException("variant " + name + " of " + renderer
+                + " render does not exist in site " + site.getName());
         }
         try
         {
-            fileSystem.read(path,out);
+            fileSystem.read(path, out);
         }
         catch(Exception e)
         {
@@ -247,21 +253,22 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
         String path = getTemplateVariantPath(site, renderer, name);
         if(!fileSystem.exists(path))
         {
-            throw new ProcessingException("variant "+name+" of "+renderer+
-                " render does not exist in site "+site.getName());
+            throw new ProcessingException("variant " + name + " of " + renderer
+                + " render does not exist in site " + site.getName());
         }
         return fileSystem.length(path);
     }
 
     // inherit doc
-    public void setTemplateVariantContents(SiteResource site, String renderer, String name, String contents)
+    public void setTemplateVariantContents(SiteResource site, String renderer, String name,
+        String contents)
         throws ProcessingException
     {
         String path = getTemplateVariantPath(site, renderer, name);
         if(!fileSystem.exists(path))
         {
-            throw new ProcessingException("variant "+name+" of "+renderer+
-                " render does not exist in site "+site.getName());
+            throw new ProcessingException("variant " + name + " of " + renderer
+                + " render does not exist in site " + site.getName());
         }
         writeTemplate(path, contents, "failed to write template contents");
         invalidateTemplate(site, renderer, name);
@@ -270,14 +277,14 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
     // inherit doc
     protected String getTemplateVariantPath(SiteResource site, String renderer, String variant)
     {
-        return "/templates/sites/"+site.getName()+"/messages/periodicals/"+renderer+
-            "/"+variant+".vt";    
+        return "/templates/sites/" + site.getName() + "/messages/periodicals/" + renderer + "/"
+            + variant + ".vt";
     }
 
     protected void invalidateTemplate(SiteResource site, String renderer, String variant)
     {
-        String name = "/sites/"+site.getName()+"/messages/periodicals/"+renderer+
-            "/"+variant;
+        String name = "/sites/" + site.getName() + "/messages/periodicals/" + renderer + "/"
+            + variant;
         templating.invalidateTemplate(name);
     }
 
@@ -291,12 +298,161 @@ public class PeriodicalsTemplatingServiceImpl implements PeriodicalsTemplatingSe
             {
                 fileSystem.mkdirs(FileSystem.directoryPath(path));
             }
-            fileSystem.write(path,
-                encoder.encodeHTML(contents, templateEncoding), templateEncoding);
+            fileSystem
+                .write(path, encoder.encodeHTML(contents, templateEncoding), templateEncoding);
         }
         catch(Exception e)
         {
             throw new ProcessingException(message, e);
         }
+    }
+
+    // confirmation tickets
+
+    private static final String DEFAULT_TICKET_TEMPLATE = "/messages/periodicals/Ticket_%s_PLAIN";
+
+    private static final String DEFAULT_TICKET_TEMPLATE_PATH = "/templates"
+        + DEFAULT_TICKET_TEMPLATE + ".vt";
+
+    private static final String TICKET_TEMPLATE = "/templates/sites/%s/messages/periodicals/tickets/%s";
+
+    private static final String TICKET_TEMPLATE_PATH = "/templates" + TICKET_TEMPLATE + ".vt";
+
+    @Override
+    public List<Locale> getDefaultConfirmationTicketTemplateLocales()
+    {
+        List<Locale> list = new ArrayList<Locale>();
+        for(Locale locale : i18n.getSupportedLocales())
+        {
+            if(templating.templateExists(String.format(DEFAULT_TICKET_TEMPLATE, locale.toString())))
+            {
+                list.add(locale);
+            }
+        }
+        return list;
+    }
+
+    @Override
+    public Template getDefaultConfirmationTicketTemplate(Locale locale)
+        throws ProcessingException
+    {
+        try
+        {
+            String name = String.format(DEFAULT_TICKET_TEMPLATE, locale.toString());
+            return templating.templateExists(name) ? templating.getTemplate(name) : null;
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException(
+                "failed to read default confirmation ticket template contents", e);
+        }
+    }
+
+    @Override
+    public String getDefaultConfirmationTicketTemplateContents(Locale locale)
+        throws ProcessingException
+    {
+        try
+        {
+            String path = String.format(DEFAULT_TICKET_TEMPLATE_PATH, locale.toString());
+            return fileSystem.exists(path) ? fileSystem.read(path, templateEncoding) : null;
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException(
+                "failed to read default confirmation ticket template contents", e);
+        }
+    }
+
+    @Override
+    public List<String> getConfirmationTicketTemplateVariants(SiteResource site)
+        throws PeriodicalsException
+    {
+        try
+        {
+            String dir = "/templates/sites/" + site.getName() + "/messages/periodicals/tickets";
+            if(!fileSystem.exists(dir))
+            {
+                return Collections.emptyList();
+            }
+            String[] items = fileSystem.list(dir);
+            if(items == null || items.length == 0)
+            {
+                return Collections.emptyList();
+            }
+            List<String> temp = new ArrayList<String>();
+            for(int i = 0; i < items.length; i++)
+            {
+                String path = dir + "/" + items[i];
+                if(fileSystem.isFile(path) && path.endsWith(".vt"))
+                {
+                    temp.add(items[i].substring(0, items[i].length() - 3));
+                }
+            }
+            return temp;
+        }
+        catch(Exception e)
+        {
+            throw new PeriodicalsException(
+                "failed to look up confirmation ticket template variants", e);
+        }
+    }
+
+    @Override
+    public void deleteConfirmationTicketTemplateVariant(SiteResource site, String variant)
+        throws ProcessingException
+    {
+        try
+        {
+            String path = String.format(TICKET_TEMPLATE_PATH, site.getName(), variant);
+            if(fileSystem.exists(path))
+            {
+                fileSystem.delete(path);
+            }
+        }
+        catch(IOException e)
+        {
+            throw new ProcessingException("failed to delete confirmation ticket template variant", e);
+        }
+    }
+
+    @Override
+    public Template getConfirmationTicketTemplate(SiteResource site, String variant)
+        throws ProcessingException
+    {
+        try
+        {
+            String name = String.format(TICKET_TEMPLATE, site.getName(), variant);
+            return templating.templateExists(name) ? templating.getTemplate(name) : null;
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("failed to read confirmation ticket template", e);
+        }
+    }
+
+    @Override
+    public String getConfirmationTicketTemplateContents(SiteResource site, String variant)
+        throws ProcessingException
+    {
+        try
+        {
+            String path = String.format(TICKET_TEMPLATE_PATH, site.getName(), variant);
+            return fileSystem.exists(path) ? fileSystem.read(path, templateEncoding) : null;
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("failed to read confirmation ticket template contents", e);
+        }
+    }
+
+    @Override
+    public void setConfirmationTicketTemplateContents(SiteResource site, String variant,
+        String contents)
+        throws ProcessingException
+    {
+        writeTemplate(String.format(TICKET_TEMPLATE_PATH, site.getName(), variant), contents,
+            "failed to write confirmation ticket template contents");
+        templating.invalidateTemplate(String.format(TICKET_TEMPLATE, site.getName(), variant));
     }
 }

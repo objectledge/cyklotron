@@ -39,22 +39,20 @@ import org.objectledge.templating.TemplateNotFoundException;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
- *
- *
  * @author <a href="rafal@caltha.pl">Rafał Krzewski</a>
  * @version $Id: PeriodicalsTemplatingService.java,v 1.2 2006-05-05 08:22:04 rafal Exp $
  */
 public interface PeriodicalsTemplatingService
 {
     // template variants ////////////////////////////////////////////////////
-    
+
     /**
      * Returns the names of the template variants defined for a specific renderer.
      * 
      * @param site the site.
      * @param renderer the renderer.
      * @return the names of the template variants defined for a specific renderer.
-     */    
+     */
     public String[] getTemplateVariants(SiteResource site, String renderer)
         throws PeriodicalsException;
 
@@ -64,8 +62,8 @@ public interface PeriodicalsTemplatingService
      * @param site the site.
      * @param renderer the renderer.
      * @param name the varaint's name.
-     * @return <code>true</code> if the specified variant of the renderer's template 
-     *         exists in the site.
+     * @return <code>true</code> if the specified variant of the renderer's template exists in the
+     *         site.
      */
     public boolean hasTemplateVariant(SiteResource site, String renderer, String name);
 
@@ -75,9 +73,8 @@ public interface PeriodicalsTemplatingService
      * @param site the site.
      * @param renderer the renderer.
      * @param name the variant's name.
-     * 
      * @return the variant's template.
-     */    
+     */
     public Template getTemplateVariant(SiteResource site, String renderer, String name)
         throws TemplateNotFoundException, PeriodicalsException;
 
@@ -89,12 +86,13 @@ public interface PeriodicalsTemplatingService
      * @param name the variant's name.
      * @param contents the template contents.
      */
-    public void createTemplateVariant(SiteResource site, String renderer, String name, String contents)
+    public void createTemplateVariant(SiteResource site, String renderer, String name,
+        String contents)
         throws ProcessingException;
 
     /**
      * Deletes a renderer's template variant.
-     *
+     * 
      * @param site the site.
      * @param renderer the renderer.
      * @param name the variant's name.
@@ -103,13 +101,13 @@ public interface PeriodicalsTemplatingService
         throws ProcessingException;
 
     /**
-     * Returns a list of Loacales in which the application provides a template
-     * for the specified renderer.
-     *  
+     * Returns a list of Loacales in which the application provides a template for the specified
+     * renderer.
+     * 
      * @param renderer the renderer
      * @return a list of Locale objects.
-     */        
-    public List getDefaultTemplateLocales(String renderer)
+     */
+    public List<Locale> getDefaultTemplateLocales(String renderer)
         throws ProcessingException;
 
     /**
@@ -118,7 +116,7 @@ public interface PeriodicalsTemplatingService
      * @param renderer the renderer.
      * @param locale the locale.
      * @return the contents of the template.
-     */        
+     */
     public String getDefaultTemplateContents(String renderer, Locale locale)
         throws ProcessingException;
 
@@ -128,7 +126,7 @@ public interface PeriodicalsTemplatingService
      * @param renderer the renderer.
      * @param locale the locale.
      * @return the template, or <code>null</code> if not avaialable.
-     */        
+     */
     public Template getDefaultTemplate(String renderer, Locale locale)
         throws ProcessingException;
 
@@ -151,7 +149,8 @@ public interface PeriodicalsTemplatingService
      * @param name the variant's name.
      * @param out the stream to write contents to.
      */
-    public void getTemplateVariantContents(SiteResource site, String renderer, String name, OutputStream out)
+    public void getTemplateVariantContents(SiteResource site, String renderer, String name,
+        OutputStream out)
         throws ProcessingException;
 
     /**
@@ -173,7 +172,94 @@ public interface PeriodicalsTemplatingService
      * @param name the variant's name.
      * @param contents the contents of the template.
      */
-    public void setTemplateVariantContents(SiteResource site, String renderer, String name, String contents)
+    public void setTemplateVariantContents(SiteResource site, String renderer, String name,
+        String contents)
         throws ProcessingException;
 
+    // confirmation ticket templates
+
+    /**
+     * Returns a list of Loacales in which the application provides a confirmation ticket template.
+     * 
+     * @return list of Locale objects.
+     */
+    public List<Locale> getDefaultConfirmationTicketTemplateLocales();
+
+    /**
+     * Returns a default confirmation ticket template for a given locale.
+     * 
+     * @param locale the locale.
+     * @return the template, or null when no default template is not defined for specified locale.
+     * @throws ProcessingException
+     */
+    public Template getDefaultConfirmationTicketTemplate(Locale locale)
+        throws ProcessingException;
+
+    /**
+     * Returns the contents of default confirmation ticket template for a given locale.
+     * 
+     * @param locale the locale.
+     * @return template contents, or null when no default template is not defined for specified
+     *         locale.
+     * @throws ProcessingException
+     */
+    public String getDefaultConfirmationTicketTemplateContents(Locale locale)
+        throws ProcessingException;
+
+    /**
+     * Returns the variants of confirmation ticket template defined in the site.
+     * 
+     * @param site the site
+     * @return List of variant names.
+     * @throws PeriodicalsException
+     */
+    public List<String> getConfirmationTicketTemplateVariants(SiteResource site)
+        throws PeriodicalsException;
+
+    /**
+     * Deletes a confirmation ticket template variant.
+     * 
+     * @param site
+     * @param variant
+     * @throws ProcessingException
+     */
+    public void deleteConfirmationTicketTemplateVariant(SiteResource site, String variant)
+        throws ProcessingException;
+
+    /**
+     * Returns a confirmation ticket template.
+     * 
+     * @param site the site.
+     * @param variant template variant.
+     * @return the template, or null when no such variant exists.
+     * @throws ProcessingException
+     */
+    public Template getConfirmationTicketTemplate(SiteResource site, String variant)
+        throws ProcessingException;
+
+    /**
+     * Returns the contents of a confirmation ticket template.
+     * 
+     * @param site the site.
+     * @param variant template variant.
+     * @return template contents, or null when no such variant exists.
+     * @throws ProcessingException
+     */
+    public String getConfirmationTicketTemplateContents(SiteResource site, String variant)
+        throws ProcessingException;
+
+    /**
+     * Sets the contents of a confirmation ticket template.
+     * <p>
+     * If no variant by that name exists, new variant is created. Otherwise old contents are
+     * replaced.
+     * </p>
+     * 
+     * @param site the site.
+     * @param variant template variant.
+     * @param contents template contents.
+     * @throws ProcessingException
+     */
+    public void setConfirmationTicketTemplateContents(SiteResource site, String variant,
+        String contents) throws ProcessingException;
 }
