@@ -29,6 +29,7 @@
 package net.cyklotron.cms.confirmation;
 
 import java.util.Date;
+import java.util.Map;
 
 import javax.mail.Message;
 import javax.mail.internet.InternetAddress;
@@ -158,8 +159,8 @@ public class EmailConfirmationServiceImpl
      * {@inheritDoc}
      */
     public void sendConfirmationRequest(String cookie, String sender, String recipient,
-        NavigationNodeResource node, Template template, String medium, LinkRenderer linkRenderer,
-        CoralSession coralSession)
+        Map<String, Object> templatingContextEntries, NavigationNodeResource node,
+        Template template, String medium, LinkRenderer linkRenderer, CoralSession coralSession)
         throws ProcessingException
     {
         LedgeMessage message = mailSystem.newMessage();
@@ -173,6 +174,13 @@ public class EmailConfirmationServiceImpl
                 templatingContext.put("node", node);
                 templatingContext.put("site", node.getSite());
                 templatingContext.put("baseLink", linkRenderer.getNodeURL(coralSession, node));
+            }
+            if(templatingContextEntries != null)
+            {
+                for(Map.Entry<String,Object> entry : templatingContextEntries.entrySet())
+                {
+                    templatingContext.put(entry.getKey(), entry.getValue());
+                }
             }
             message.setTemplate(template, medium);
             message.getMessage().setSentDate(new Date());

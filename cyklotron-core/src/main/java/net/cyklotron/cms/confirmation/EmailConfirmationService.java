@@ -28,6 +28,8 @@
 
 package net.cyklotron.cms.confirmation;
 
+import java.util.Map;
+
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
@@ -68,13 +70,15 @@ public interface EmailConfirmationService
      */
     public void discardEmailConfirmationRequest(CoralSession coralSession, String cookie)
     throws ConfirmationRequestException;
-    
+
     /**
      * Sent EmailConfirmationRequest
      * 
      * @param cookie the magic cookie to include in the message
      * @param sender sender's e-mail address
      * @param recipient recipient's e-mail address
+     * @param templatingContextEntries additional entries to pass to templating context, may be null
+     *        when not needed.
      * @param node a navigation node for generating links in the message
      * @param template message template
      * @param medium message medium. Content-Type header of the message will be text/$medium
@@ -83,7 +87,8 @@ public interface EmailConfirmationService
      * @throws ProcessingException when rendering or sending message fails.
      */
     public void sendConfirmationRequest(String cookie, String sender, String recipient,
-        NavigationNodeResource node, Template template, String medium,
-        LinkRenderer linkRenderer, CoralSession coralSession) throws ProcessingException;
+        Map<String, Object> templatingContextEntries, NavigationNodeResource node,
+        Template template, String medium, LinkRenderer linkRenderer, CoralSession coralSession)
+        throws ProcessingException;
     
 }
