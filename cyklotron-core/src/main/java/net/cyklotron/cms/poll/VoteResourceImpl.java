@@ -368,7 +368,7 @@ public class VoteResourceImpl
         return false;
     }
     
-    // @custom methods ///////////////////////////////////////////////////////
+    // @import net.cyklotron.cms.site.SiteResource
     
     public SiteResource getSite()
     {

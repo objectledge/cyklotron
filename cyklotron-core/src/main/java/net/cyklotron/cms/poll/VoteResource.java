@@ -33,6 +33,7 @@ import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.ProtectedResource;
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  * Defines the accessor methods of <code>cms.poll.vote</code> Coral resource class.
@@ -94,6 +95,7 @@ public interface VoteResource
     public boolean isSenderAddressDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
+    // @import net.cyklotron.cms.site.SiteResource
     
     /**
      * Returns the site where this VoteResource belongs.
