@@ -46,6 +46,7 @@ import org.objectledge.coral.store.ValueRequiredException;
 import net.cyklotron.cms.CmsConstants;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  * An implementation of <code>cms.poll.vote</code> Coral resource class.
@@ -365,5 +366,17 @@ public class VoteResourceImpl
     public boolean isIndexed(String fieldName)
     {
         return false;
+    }
+    
+    // @custom methods ///////////////////////////////////////////////////////
+    
+    public SiteResource getSite()
+    {
+        Resource r = getParent();
+        while(r != null && !(r instanceof SiteResource))
+        {
+            r = r.getParent();
+        }
+        return (SiteResource)r;
     }
 }

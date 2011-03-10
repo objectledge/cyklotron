@@ -489,7 +489,8 @@ public class PollServiceImpl
         String templateName = null;
         try
         {
-            templateName = String.format(TICKET_TEMPLATE, vote.getIdString());
+            templateName = String.format(TICKET_TEMPLATE, vote.getSite().getName(),
+                vote.getIdString());
             if(!templating.templateExists(templateName))
             {
                 templateName = String.format(DEAULT_TICKET_TEMPLATE, locale.toString());
@@ -508,7 +509,8 @@ public class PollServiceImpl
         String path = null;
         try
         {
-            path = String.format(TICKET_TEMPLATE_PATH, vote.getIdString());
+            path = String
+                .format(TICKET_TEMPLATE_PATH, vote.getSite().getName(), vote.getIdString());
             if(!fileSystem.exists(path))
             {
                 return "";
@@ -530,7 +532,8 @@ public class PollServiceImpl
         String path = null;
         try
         {
-            path = String.format(TICKET_TEMPLATE_PATH, vote.getIdString());
+            path = String
+                .format(TICKET_TEMPLATE_PATH, vote.getSite().getName(), vote.getIdString());
             if(!fileSystem.exists(path))
             {
                 fileSystem.mkdirs(FileSystem.directoryPath(path));

@@ -94,4 +94,9 @@ public interface VoteResource
     public boolean isSenderAddressDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
+    
+    /**
+     * Returns the site where this VoteResource belongs.
+     */
+    public SiteResource getSite();    
 }
