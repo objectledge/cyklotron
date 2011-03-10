@@ -64,6 +64,9 @@ public class VoteResourceImpl
     /** The AttributeDefinition object for the <code>moderator</code> attribute. */
     private static AttributeDefinition moderatorDef;
 
+    /** The AttributeDefinition object for the <code>senderAddress</code> attribute. */
+    private static AttributeDefinition senderAddressDef;
+
 	// custom injected fields /////////////////////////////////////////////////
 	
     /** The PollService. */
@@ -206,6 +209,66 @@ public class VoteResourceImpl
     public boolean isModeratorDefined()
 	{
 	    return isDefined(moderatorDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>senderAddress</code> attribute.
+     *
+     * @return the value of the <code>senderAddress</code> attribute.
+     */
+    public String getSenderAddress()
+    {
+        return (String)getInternal(senderAddressDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>senderAddress</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>senderAddress</code> attribute.
+     */
+    public String getSenderAddress(String defaultValue)
+    {
+        return (String)getInternal(senderAddressDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>senderAddress</code> attribute.
+     *
+     * @param value the value of the <code>senderAddress</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setSenderAddress(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(senderAddressDef, value);
+            }
+            else
+            {
+                unset(senderAddressDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>senderAddress</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>senderAddress</code> attribute is defined.
+	 */
+    public boolean isSenderAddressDefined()
+	{
+	    return isDefined(senderAddressDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

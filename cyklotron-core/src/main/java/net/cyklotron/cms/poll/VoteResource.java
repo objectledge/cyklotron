@@ -70,6 +70,28 @@ public interface VoteResource
 	 * @return <code>true</code> if the value of the <code>moderator</code> attribute is defined.
 	 */
     public boolean isModeratorDefined();
+ 
+    /**
+     * Returns the value of the <code>senderAddress</code> attribute.
+     *
+     * @return the value of the the <code>senderAddress</code> attribute.
+     */
+    public String getSenderAddress();
+
+    /**
+     * Sets the value of the <code>senderAddress</code> attribute.
+     *
+     * @param value the value of the <code>senderAddress</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setSenderAddress(String value);   
+   
+	/**
+	 * Checks if the value of the <code>senderAddress</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>senderAddress</code> attribute is defined.
+	 */
+    public boolean isSenderAddressDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 }

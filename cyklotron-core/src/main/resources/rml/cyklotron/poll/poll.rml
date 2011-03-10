@@ -54,7 +54,8 @@ JAVA CLASS 'net.cyklotron.cms.poll.VoteResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node', 'protected')
 ATTRIBUTES (
-role moderator
+role moderator,
+string senderAddress
 );
 
 CREATE RESOURCE CLASS 'cms.poll.ballot'
