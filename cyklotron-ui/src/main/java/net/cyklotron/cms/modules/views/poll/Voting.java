@@ -69,7 +69,7 @@ public class Voting
             String state = (String)context.getAttribute(getClass().getName() + ".state");
             state = parameters.get("state", null);
 
-            if("Confirm".equals(state))
+            if(parameters.isDefined("cookie"))
             {
                 try
                 {
