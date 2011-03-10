@@ -3,7 +3,7 @@
 <html>
 <body>
 <p>Aby potwierdzić swój głos oddany w ankiecie ${vote.name} kliknij ten
-<a href="$link.setNode($node).set('cookie',$cookie)">link</a>.</p>&nbsp;
+<a href="${baseLink}?cookie=${cookie}">link</a>.</p>
 <p>Wiadomość została wygenerowana automatycznie, proszę na nią nie odpowiadać.</p>
 </body>
 </html>

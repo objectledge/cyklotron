@@ -3,7 +3,7 @@
 <html>
 <body>
 <p>To confirm your vote in ${vote.name} poll, click
-<a href="$link.setNode($node).set('cookie',$cookie)">here</a>.</p>
+<a href="${baseLink}?cookie=${cookie}">link</a>.</p>
 <p>This message has been generated automatically, please do not reply.</p>
 </body>
 </html>
