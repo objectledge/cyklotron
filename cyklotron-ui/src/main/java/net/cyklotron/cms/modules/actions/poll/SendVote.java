@@ -25,15 +25,16 @@ import org.objectledge.web.mvc.MVCContext;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.confirmation.EmailConfirmationService;
+import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.poll.AnswerResource;
 import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.VoteResource;
 import net.cyklotron.cms.poll.VoteResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.util.OfflineLinkRenderingService;
 import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
- *
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
  * @version $Id: RespondPoll.java,v 1.7 2007-02-25 14:14:49 pablo Exp $
  */
@@ -42,32 +43,39 @@ public class SendVote
 {
 
     private EmailConfirmationService emailConfirmationRequestService;
-    
+
     private CaptchaService captchaService;
-    
+
+    private final OfflineLinkRenderingService linkRenderingService;
+
     public SendVote(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, PollService pollService, WorkflowService workflowService, EmailConfirmationService emailConfirmationRequestService,CaptchaService captchaService)
+        CmsDataFactory cmsDataFactory, PollService pollService, WorkflowService workflowService,
+        EmailConfirmationService emailConfirmationRequestService, CaptchaService captchaService,
+        OfflineLinkRenderingService linkRenderingService)
     {
         super(logger, structureService, cmsDataFactory, pollService, workflowService);
-        this.emailConfirmationRequestService = emailConfirmationRequestService;    
+        this.emailConfirmationRequestService = emailConfirmationRequestService;
         this.captchaService = captchaService;
+        this.linkRenderingService = linkRenderingService;
     }
+
     /**
      * Performs the action.
      */
-    public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
+    public void execute(Context context, Parameters parameters, MVCContext mvcContext,
+        TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
         HttpSession session = httpContext.getRequest().getSession();
         CmsData cmsData = cmsDataFactory.getCmsData(context);
         Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
-        
+
         if(session == null || session.isNew())
         {
             templatingContext.put("result", "new_session");
             return;
         }
-        
+
         Subject subject = coralSession.getUserSubject();
         int vid = parameters.getInt("vid", -1);
         if(vid == -1)
@@ -91,8 +99,9 @@ public class SendVote
         {
             VoteResource voteResource = VoteResourceImpl.getVoteResource(coralSession, vid);
             Set<String> voteEmails = pollService.getBallotsEmails(coralSession, voteResource);
-            
-            if(pollService.hasVoted(httpContext, templatingContext, voteResource) || voteEmails.contains(email))
+
+            if(pollService.hasVoted(httpContext, templatingContext, voteResource)
+                || voteEmails.contains(email))
             {
                 templatingContext.put("already_voted", Boolean.TRUE);
                 templatingContext.put("result", "already_responded");
@@ -102,7 +111,7 @@ public class SendVote
             for(int i = 0; i < answersResources.length; i++)
             {
                 AnswerResource answerResource = (AnswerResource)answersResources[i];
-                Long answerId = parameters.getLong("answer_"+answerResource.getSequence(), -1);
+                Long answerId = parameters.getLong("answer_" + answerResource.getSequence(), -1);
                 if(answerId != -1)
                 {
                     String confirmationRequest = emailConfirmationRequestService
@@ -110,9 +119,10 @@ public class SendVote
                     I18nContext i18nContext = I18nContext.getI18nContext(context);
                     Template template = pollService.getVoteConfiramationTicketTemplate(
                         voteResource, i18nContext.getLocale());
-                    // TODO adres nadawcy trzeba zapisać w resource, LinkRenderer z OfflineLinkRendererService
+                    LinkRenderer linkRenderer = linkRenderingService.getLinkRenderer();
                     emailConfirmationRequestService.sendConfirmationRequest(confirmationRequest,
-                        null, email, cmsData.getNode(), template, "PLAIN", null, coralSession);
+                        voteResource.getSenderAddress(), email, cmsData.getNode(), template,
+                        "PLAIN", linkRenderer, coralSession);
                     setCookie(httpContext, vid, answerId);
                     break;
                 }
@@ -126,24 +136,23 @@ public class SendVote
             return;
         }
 
-
         templatingContext.put("result", "responded_successfully");
         templatingContext.put("already_voted", Boolean.TRUE);
     }
-        
-    private void setCookie(HttpContext httpContext, Integer vid,Long answerId)
+
+    private void setCookie(HttpContext httpContext, Integer vid, Long answerId)
     {
-        
-        String cookieKey = "vote_"+vid;
+
+        String cookieKey = "vote_" + vid;
         Cookie cookie = new Cookie(cookieKey, answerId.toString());
         cookie.setMaxAge(30 * 24 * 3600);
         cookie.setPath("/");
         httpContext.getResponse().addCookie(cookie);
-        
+
     }
-	
+
     public boolean checkAccessRights(Context context)
-    	throws ProcessingException
+        throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
         if(!cmsData.isApplicationEnabled("poll"))
@@ -151,8 +160,6 @@ public class SendVote
             logger.debug("Application 'poll' not enabled in site");
             return false;
         }
-	    return true;
-	}
+        return true;
+    }
 }
-
-
