@@ -1,6 +1,7 @@
 package net.cyklotron.cms.modules.actions.poll;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.Cookie;
@@ -120,9 +121,11 @@ public class SendVote
                     Template template = pollService.getVoteConfiramationTicketTemplate(
                         voteResource, i18nContext.getLocale());
                     LinkRenderer linkRenderer = linkRenderingService.getLinkRenderer();
+                    Map<String, Object> entries = new HashMap<String, Object>();
+                    entries.put("vote", voteResource);
                     emailConfirmationRequestService.sendConfirmationRequest(confirmationRequest,
-                        voteResource.getSenderAddress(), email, cmsData.getNode(), template,
-                        "PLAIN", linkRenderer, coralSession);
+                        voteResource.getSenderAddress(), email, entries, cmsData.getNode(),
+                        template, "PLAIN", linkRenderer, coralSession);
                     setCookie(httpContext, vid, answerId);
                     break;
                 }

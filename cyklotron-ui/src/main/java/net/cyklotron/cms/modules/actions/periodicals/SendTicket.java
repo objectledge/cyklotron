@@ -117,7 +117,7 @@ public class SendTicket
             }
 
             emailConfirmationService.sendConfirmationRequest(cookie, periodicalsService
-                .getFromAddress(), email, node, template, "PLAIN", linkRenderer, coralSession);
+                .getFromAddress(), email, null, node, template, "PLAIN", linkRenderer, coralSession);
 
             templatingContext.put("result", "ticket_sent");
         }
