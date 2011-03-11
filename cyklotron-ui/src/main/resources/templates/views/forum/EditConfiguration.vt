@@ -123,7 +123,7 @@ Message to display in place of rejected message's body
 </tr>
 <tr>
 <td align="right" width="30%">Add Captcha verification</td>
-<td><input type="checkbox" name="add_captcha" value="true"#if($!forum.captchaEnabled) checked#end></td>
+<td><input type="checkbox" name="add_captcha" value="true"#if($!forum.getCaptchaEnabled(false)) checked#end></td>
 </tr>
 </table>
 

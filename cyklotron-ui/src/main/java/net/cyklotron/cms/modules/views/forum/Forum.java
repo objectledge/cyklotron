@@ -275,7 +275,7 @@ public class Forum
                 templatingContext.put("resource", coralSession.getStore().getResource(resid));
             }
             ForumResource forum = forumService.getForum(coralSession, getSite());
-            templatingContext.put("add_captcha",forum.getCaptchaEnabled());
+            templatingContext.put("add_captcha",forum.getCaptchaEnabled(false));
         }
         catch(EntityDoesNotExistException e)
         {
@@ -295,7 +295,7 @@ public class Forum
             CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
             TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
             ForumResource forum = forumService.getForum(coralSession, getSite());
-            templatingContext.put("add_captcha",forum.getCaptchaEnabled());
+            templatingContext.put("add_captcha",forum.getCaptchaEnabled(false));
         }
         catch(ForumException e)
         {

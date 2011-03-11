@@ -123,7 +123,7 @@ Komunikat wyświetlany zamiast treści zablokowanych wiadomości:
 </tr>
 <tr>
 <td align="right" width="30%">Dodaj weryfikację Captcha</td>
-<td><input type="checkbox" name="add_captcha" value="true"#if($!forum.captchaEnabled) checked#end></td>
+<td><input type="checkbox" name="add_captcha" value="true"#if($!forum.getCaptchaEnabled(false)) checked#end></td>
 </tr>
 
 </table>
