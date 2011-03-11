@@ -74,11 +74,8 @@ public class EditVoteTemplate
             String contents = pollService.getVoteConfiramationTicketContents(vote, i18nContext
                 .getLocale());
             templatingContext.put("name", vote.getName());
+            templatingContext.put("vid", vid);
 
-            if(contents == null)
-            {
-                contents = "";
-            }
             if(!templatingContext.containsKey("result"))
             {
                 TemplatingContext blankContext = templating.createContext();

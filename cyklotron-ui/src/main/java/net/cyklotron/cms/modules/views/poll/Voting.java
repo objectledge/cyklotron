@@ -69,7 +69,9 @@ public class Voting
             String state = (String)context.getAttribute(getClass().getName() + ".state");
             state = parameters.get("state", null);
 
-            if(parameters.isDefined("cookie"))
+            if(parameters.isDefined("cookie")
+                && !"responded_successfully".equals(templatingContext.get("result"))
+                && !templatingContext.containsKey("already_voted"))
             {
                 try
                 {

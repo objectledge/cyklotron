@@ -23,13 +23,10 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.periodicals.PeriodicalsService;
-import net.cyklotron.cms.periodicals.PeriodicalsTemplatingService;
 import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.VoteResource;
 import net.cyklotron.cms.poll.VoteResourceImpl;
 import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author fil
