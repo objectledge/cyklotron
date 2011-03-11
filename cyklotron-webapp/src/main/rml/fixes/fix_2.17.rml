@@ -78,3 +78,31 @@ PARENT '/cms/applications/poll/screens/voting';
 CREATE RESOURCE 'Results'
 RESOURCE CLASS 'integration.screen_state'
 PARENT '/cms/applications/poll/screens/voting';
+
+CREATE RESOURCE 'locked'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/forum.message/states'
+ATTRIBUTES (
+  description = 'A locked message',
+  initial = false
+);
+
+CREATE RESOURCE 'lock'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.message/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.message/states/visible',
+  to = '/cms/workflow/automata/forum.message/states/locked',
+  performPermission = 'cms.forum.moderate',
+  description = 'lock a visible message.'
+);
+
+CREATE RESOURCE 'unlock'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.message/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.message/states/locked',
+  to = '/cms/workflow/automata/forum.message/states/visible',
+  performPermission = 'cms.forum.moderate',
+  description = 'Unlock a message.'
+);

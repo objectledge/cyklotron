@@ -99,6 +99,9 @@
           <prefix name="new">
             <value>Nowy</value>
           </prefix>
+          <prefix name="locked">
+            <value>Zablokowany</value>
+          </prefix>
           <prefix name="rejected">
             <value>Odrzucony</value>
           </prefix>
@@ -118,12 +121,18 @@
               <value>Skasuj</value>
             </prefix>
           </prefix>
+          <prefix name="lock">
+              <value>Zablokuj</value>
+          </prefix>
           <prefix name="reject">
             <value>Odrzuć</value>
           </prefix>
           <prefix name="undelete">
             <value>Wznów</value>
           </prefix>
+          <prefix name="unlock">
+            <value>Odblokuj</value>
+          </prefix>          
         </prefix>
       </prefix>
     </prefix>

@@ -85,9 +85,9 @@
       </td>
       <td align="right" nowrap="nowrap">
       	#if($row.childCount > 0)
-          &nbsp;
+          #fireTransition($row.object $tableLink.set('mid', $row.object.id)) &nbsp;
       	#else
-          <a href="$tableLink.set('mid', $row.object.id).action('forum.DeleteMessage')">delete</a>
+          #fireTransition($row.object $tableLink.set('mid', $row.object.id)) | <a href="$tableLink.set('mid', $row.object.id).action('forum.DeleteMessage')">Delete</a> &nbsp;
       	#end
       </td>
     </tr>

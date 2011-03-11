@@ -487,6 +487,14 @@ ATTRIBUTES (
   initial = false
 );
 
+CREATE RESOURCE 'locked'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/forum.message/states'
+ATTRIBUTES (
+  description = 'A locked message',
+  initial = false
+);
+
 CREATE RESOURCE 'transitions'
 RESOURCE CLASS 'node'
 PARENT '/cms/workflow/automata/forum.message'
@@ -542,4 +550,24 @@ ATTRIBUTES (
   to = '/cms/workflow/automata/forum.message/states/new',
   performPermission = 'cms.forum.moderate',
   description = 'Undelete a message.'
+);
+
+CREATE RESOURCE 'lock'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.message/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.message/states/visible',
+  to = '/cms/workflow/automata/forum.message/states/locked',
+  performPermission = 'cms.forum.moderate',
+  description = 'lock a visible message.'
+);
+
+CREATE RESOURCE 'unlock'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.message/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.message/states/locked',
+  to = '/cms/workflow/automata/forum.message/states/visible',
+  performPermission = 'cms.forum.moderate',
+  description = 'Unlock a message.'
 );
