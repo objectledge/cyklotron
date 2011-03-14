@@ -8,9 +8,11 @@
     <tr align="right">
       <td width="90%"></td>
       #if($cms_tool.getUserData().hasPermission($message.getDiscussion(), 'cms.forum.add'))
+      #if($message.state.name!='locked')
       <td NOWRAP class="usualbutton">
 	<a href="$cms_link.set('state','NewMessage').set('mid', $message.getId())">Reply</a>
       </td>
+      #end
       <td NOWRAP class="usualbutton">
         <a href="$cms_link.set('state','NewMessage').set('did',$message.getDiscussion().getId())">New message</a>
       </td>
