@@ -76,9 +76,8 @@
 
 <ol>
 <li><a href="$link.action('fixes.CYKLO789')">Refactor active SubscriptionRequests to EmailConfirmationRequests</a></li>
-</ol>
-<ol>
 <li><a href="$link.action('fixes.ReorganizePollsResource')">Reorganize Polls Resources</a></li>
+<li><a href="$link.action('fixes.CYKLO798')">Set sticked attribute to MessageResources</a></li>
 </ol>
 
 <h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>

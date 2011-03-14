@@ -106,3 +106,5 @@ ATTRIBUTES (
   performPermission = 'cms.forum.moderate',
   description = 'Unlock a message.'
 );
+
+ALTER RESOURCE CLASS 'cms.forum.message' ADD ATTRIBUTE boolean sticked VALUE false;

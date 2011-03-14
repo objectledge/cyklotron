@@ -69,7 +69,8 @@ string moderationCookie,
 string messageId,
 string author,
 string email,
-REQUIRED resource(cms.forum.discussion) discussion
+REQUIRED resource(cms.forum.discussion) discussion,
+boolean sticked
 );
 
 # // security ////////////////////////////////////////////////////////////////

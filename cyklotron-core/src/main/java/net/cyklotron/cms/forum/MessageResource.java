@@ -203,7 +203,44 @@ public interface MessageResource
      * @param value the value of the <code>priority</code> attribute.
      */
     public void setPriority(int value);
-    
+   	
+    /**
+     * Returns the value of the <code>sticked</code> attribute.
+     *
+     * @return the value of the the <code>sticked</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public boolean getSticked()
+		throws IllegalStateException;
+
+	/**
+     * Returns the value of the <code>sticked</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>sticked</code> attribute.
+     */
+    public boolean getSticked(boolean defaultValue);
+
+    /**
+     * Sets the value of the <code>sticked</code> attribute.
+     *
+     * @param value the value of the <code>sticked</code> attribute.
+     */
+    public void setSticked(boolean value);
+
+	/**
+     * Removes the value of the <code>sticked</code> attribute.
+     */
+    public void unsetSticked();
+   
+	/**
+	 * Checks if the value of the <code>sticked</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>sticked</code> attribute is defined.
+	 */
+    public boolean isStickedDefined();
+ 
     /**
      * Returns the value of the <code>title</code> attribute.
      *

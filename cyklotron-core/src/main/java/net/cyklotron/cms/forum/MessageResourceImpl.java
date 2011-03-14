@@ -87,6 +87,9 @@ public class MessageResourceImpl
     /** The AttributeDefinition object for the <code>state</code> attribute. */
     private static AttributeDefinition stateDef;
 
+    /** The AttributeDefinition object for the <code>sticked</code> attribute. */
+    private static AttributeDefinition stickedDef;
+
     /** The AttributeDefinition object for the <code>title</code> attribute. */
     private static AttributeDefinition titleDef;
 
@@ -618,6 +621,85 @@ public class MessageResourceImpl
     public boolean isStateDefined()
 	{
 	    return isDefined(stateDef);
+	}
+
+    /**
+     * Returns the value of the <code>sticked</code> attribute.
+     *
+     * @return the value of the <code>sticked</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public boolean getSticked()
+        throws IllegalStateException
+    {
+	    Boolean value = (Boolean)getInternal(stickedDef, null);
+        if(value != null)
+        {
+            return value.booleanValue();
+        }
+        else
+        {
+            throw new IllegalStateException("value of attribute sticked is undefined"+
+			    " for resource #"+getId());
+        }
+    }
+
+    /**
+     * Returns the value of the <code>sticked</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>sticked</code> attribute.
+     */
+    public boolean getSticked(boolean defaultValue)
+    {
+		return ((Boolean)getInternal(stickedDef, new Boolean(defaultValue))).booleanValue();
+	}
+
+    /**
+     * Sets the value of the <code>sticked</code> attribute.
+     *
+     * @param value the value of the <code>sticked</code> attribute.
+     */
+    public void setSticked(boolean value)
+    {
+        try
+        {
+            set(stickedDef, new Boolean(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+	
+	/**
+     * Removes the value of the <code>sticked</code> attribute.
+     */
+    public void unsetSticked()
+    {
+        try
+        {
+            unset(stickedDef);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }     
+    } 
+   
+	/**
+	 * Checks if the value of the <code>sticked</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>sticked</code> attribute is defined.
+	 */
+    public boolean isStickedDefined()
+	{
+	    return isDefined(stickedDef);
 	}
  
     /**

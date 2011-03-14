@@ -1,3 +1,6 @@
+$pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addStyleLink("style/cms-popupmenu.css")
+
 #####
 ## TYPE: S
 ## NAME: Post list screen
@@ -53,11 +56,11 @@
   $table.getColumn('name').set('label', 'Subject').set('width', '70%')
   $table.getColumn('creator.name').set('label', 'Author')
   $table.getColumn('creation.time').set('label', 'Date')
+  $table.getColumn('state').set('label', 'Stan')
   $table.getColumn('actions').set('label', 'Actions')
-  #set($tableColumnOrder = ['name', 'creator.name', 'creation.time','actions'] )
+  #set($tableColumnOrder = ['name', 'creator.name', 'creation.time', 'state', 'actions'] )
 
   ## ------------ TABLE START
-  <div align="right"><b>Show #tableView_pageSizeChooser($table $tableLink [10,20,50,100])</b></div>
   <table width="100%" class="genericItemList" cellspacing="0">
     <tr>
       #tableView_header($table $tableLink $tableColumnOrder)
@@ -75,13 +78,21 @@
     <tr class="row$zeroIfEven">
       <td width="70%">
         #tableView_linesAndFolders($table $row $tableLink)
-        <a href="$rowLink.set('mid', $row.getObject().getId())">$row.getObject().getName()</a>
+        <span class="cms-popupmenubutton"><span>$row.getObject().getName()</span>
+        <div class="cms-popupmenu">
+           <a href="$rowLink.set('mid', $row.getObject().getId())">edit</a>
+           <a href="$rowLink.view('forum.MessageList').action('forum.ToggleMessageStick').set('mid', $row.getObject().getId())">#if($row.object.sticked)unstick#{else}stick#end</a>
+        </div>
+        </span>
       </td>
       <td nowrap="nowrap">
       #cms_personal_credentials($row.object.createdBy)<br>
       </td>
       <td align="right" nowrap="nowrap">
       $format_date.format($row.getObject().getCreationTime())
+      </td>
+      <td nowrap="nowrap">
+        #if($row.object.sticked)sticked, #end $row.object.state.name
       </td>
       <td align="right" nowrap="nowrap">
       	#if($row.childCount > 0)
@@ -95,11 +106,16 @@
   #end
 #end
 ## ------------ ROWS END
+    <tr>	  
+      <td nowrap colspan="5" align="center" class="bottomLine">
+        #tableView_pager($table $tableLink)
+        #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td>
+    </tr>
 </table>
 
 
 
 ## ------------ TABLE END
-<div align="right"><b>#tableView_pager($table $tableLink)</b></div>
 #commandbar()
 
