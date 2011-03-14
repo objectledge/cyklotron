@@ -92,6 +92,12 @@ public class AddMessage
                 parameters.set("did", discussion.getIdString());
             }
             
+            if(parent instanceof MessageResource && "locked".equals(((MessageResource)parent).getState().getName()))
+            {
+                templatingContext.put("result","parent_message_locked");
+                return;
+            }
+            
             if(discussion.getState().getName().equals("hidden"))
             {
 				templatingContext.put("result","hidden_discussion");

@@ -40,6 +40,9 @@
     <prefix name="parameter_not_found">
       <value>Contact system administrator to submit the problem.</value>
     </prefix>
+    <prefix name="parent_message_locked">
+      <value>Parent message has been locked.</value>
+    </prefix>
     <prefix name="responded_successfully">
       <value>.</value>
     </prefix>
@@ -92,6 +95,9 @@
     </prefix>
     <prefix name="parameter_not_found">
       <value>Parameter not found.</value>
+    </prefix>
+    <prefix name="parent_message_locked">
+      <value>Parent message has been locked.</value>
     </prefix>
     <prefix name="responded_successfully">
       <value>Responded successfully.</value>

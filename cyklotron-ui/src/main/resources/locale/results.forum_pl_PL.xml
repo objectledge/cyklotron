@@ -39,6 +39,9 @@
     <prefix name="parameter_not_found">
       <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
     </prefix>
+    <prefix name="parent_message_locked">
+      <value>Wiadomość nadrzędna została zablokowana.</value>
+    </prefix>
     <prefix name="responded_successfully">
       <value>.</value>
     </prefix>
@@ -91,6 +94,9 @@
     </prefix>
     <prefix name="parameter_not_found">
       <value>Nie wypełniono wymagenego pola w formularzu.</value>
+    </prefix>
+    <prefix name="parent_message_locked">
+      <value>Wiadomość nadrzędna została zablokowana.</value>
     </prefix>
     <prefix name="responded_successfully">
       <value>Udzielenie odpowiedzi przebiegło pomyślnie.</value>

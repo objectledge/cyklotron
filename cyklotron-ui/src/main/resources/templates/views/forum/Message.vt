@@ -16,9 +16,11 @@
   <table class="commandBarTable" border="0" width="100%" height="22">
     <tr align="right">
       <td width="90%"></td>
+      #if($message.state.name!='locked')
       <td NOWRAP class="usualbutton">
 	<a href="$link.view("forum.AddMessage").set('mid', $message.getId()).set('mode', $parametersTool.get('mode','list'))">Reply</a>
       </td>
+      #end
       <td NOWRAP class="usualbutton">
     <a href="$link.view("forum.AddMessage").set('mode', $parametersTool.get('mode','list')).set('did',$message.getDiscussion().getId())">New message</a>
       </td>
