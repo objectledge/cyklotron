@@ -34,6 +34,12 @@ public class MessageComparator
     /** sorting by owner mode */
     public static final int OWNER_DESC = 6;
     
+    /** sorting by owner mode */
+    public static final int CREATOR_ASC = 7;
+    
+    /** sorting by owner mode */
+    public static final int CREATOR_DESC = 8;
+    
     /** soring mode */
     private int mode;
 
@@ -59,6 +65,17 @@ public class MessageComparator
         {
             return 0;
         }
+        
+        if(((MessageResource)o1).getSticked() && !((MessageResource)o2).getSticked())
+        {
+            return -1;
+        }
+        else if(!((MessageResource)o1).getSticked()
+            && ((MessageResource)o2).getSticked())
+        {
+            return 1;
+        }
+        
         switch(mode) 
         {
         case 0:
@@ -90,6 +107,20 @@ public class MessageComparator
             return cmp;
         case 6:
             cmp =  collator.compare( ((MessageResource)o2).getOwner().getName(), ((MessageResource)o1).getOwner().getName() );
+            if(cmp == 0)
+            {
+                cmp = collator.compare(((MessageResource)o1).getName(), ((MessageResource)o2).getName());
+            }
+            return cmp;
+        case 7:
+            cmp = collator.compare( ((MessageResource)o1).getCreatedBy().getName(), ((MessageResource)o2).getCreatedBy().getName() );
+            if(cmp == 0)
+            {
+                cmp = collator.compare(((MessageResource)o1).getName(), ((MessageResource)o2).getName());
+            }
+            return cmp;
+        case 8:
+            cmp =  collator.compare( ((MessageResource)o2).getCreatedBy().getName(), ((MessageResource)o1).getCreatedBy().getName() );
             if(cmp == 0)
             {
                 cmp = collator.compare(((MessageResource)o1).getName(), ((MessageResource)o2).getName());

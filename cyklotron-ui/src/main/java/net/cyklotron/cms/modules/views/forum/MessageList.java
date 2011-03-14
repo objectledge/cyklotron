@@ -20,6 +20,7 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.DiscussionResourceImpl;
 import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.forum.MessageTableModel;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.workflow.WorkflowService;
 
@@ -72,7 +73,7 @@ public class MessageList
 			state.setRootId(rootId);
 			state.setExpanded(rootId);
 
-            TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
+            TableModel model = new MessageTableModel(coralSession, i18nContext.getLocale());
             TableTool helper = null;
             try
             {
