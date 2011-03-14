@@ -80,7 +80,8 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
         #tableView_linesAndFolders($table $row $tableLink)
         <span class="cms-popupmenubutton"><span>$row.getObject().getName()</span>
         <div class="cms-popupmenu">
-           <a href="$rowLink.set('mid', $row.getObject().getId())">edit</a>
+           <a href="$rowLink.set('mid', $row.getObject().getId())">view</a>
+           <a href="$rowLink.view('forum.EditMessage').set('mid', $row.getObject().getId())">edit</a>
            <a href="$rowLink.view('forum.MessageList').action('forum.ToggleMessageStick').set('mid', $row.getObject().getId())">#if($row.object.sticked)unstick#{else}stick#end</a>
         </div>
         </span>

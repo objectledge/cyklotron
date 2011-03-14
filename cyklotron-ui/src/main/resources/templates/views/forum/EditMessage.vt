@@ -28,7 +28,7 @@
 #genericScreenHeader('EDIT MESSAGE')
 
   <table border="0" class="defaultTable">
-    <form name="form1" method="post" action="$link.view('forum.UpdateMessageResult').action('forum.UpdateMessage').set('mid',$message.getId()).set('did',$message.getDiscussion().getId())" class="defaultForm">
+    <form name="form1" method="post" action="$link.view('forum.MessageList').action('forum.UpdateMessage').set('mid',$message.getId()).set('did',$message.getDiscussion().getId())" class="defaultForm">
 
     #if ($message.getDiscussion().getId() != $message.getParent().getId())
       <tr>
