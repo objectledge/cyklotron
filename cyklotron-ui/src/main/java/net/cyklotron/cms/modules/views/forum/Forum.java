@@ -36,6 +36,7 @@ import net.cyklotron.cms.forum.ForumResource;
 import net.cyklotron.cms.forum.ForumService;
 import net.cyklotron.cms.forum.MessageResource;
 import net.cyklotron.cms.forum.MessageResourceImpl;
+import net.cyklotron.cms.forum.MessageTableModel;
 import net.cyklotron.cms.modules.views.BaseSkinableScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.skins.SkinService;
@@ -186,7 +187,7 @@ public class Forum
                 state.setSortColumnName("creation.time");
                 state.setAscSort(false);
             }
-            TableModel model = new CoralTableModel(coralSession, i18nContext.getLocale());
+            TableModel model = new MessageTableModel(coralSession, i18nContext.getLocale());
             ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
             filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper = new TableTool(state, filters, model);

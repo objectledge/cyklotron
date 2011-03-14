@@ -42,6 +42,7 @@ import net.cyklotron.cms.forum.ForumResourceImpl;
 import net.cyklotron.cms.forum.ForumService;
 import net.cyklotron.cms.forum.MessageResource;
 import net.cyklotron.cms.forum.MessageResourceImpl;
+import net.cyklotron.cms.forum.MessageTableModel;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.util.CollectionFilter;
@@ -309,7 +310,7 @@ public class Forum
                     state.setAscSort(false);
                 }
                 TableModel model;
-                model = new CoralTableModel(coralSession, i18nContext.getLocale());
+                model = new MessageTableModel(coralSession, i18nContext.getLocale());
 
                 ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
                 filters.add(new ProtectedViewFilter(coralSession, subject));
