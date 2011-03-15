@@ -90,7 +90,7 @@ public class SendVote
             return;
         }
         String email = parameters.get("email", "");
-        if(!email.matches("([a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+.[a-zA-Z]{1,4})?"))
+        if(!email.matches("[a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+.[a-zA-Z]{1,4}"))
         {
             templatingContext.put("result", "invalid_email");
             return;
