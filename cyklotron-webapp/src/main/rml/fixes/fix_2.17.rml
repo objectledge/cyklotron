@@ -107,4 +107,4 @@ ATTRIBUTES (
   description = 'Unlock a message.'
 );
 
-ALTER RESOURCE CLASS 'cms.forum.message' ADD ATTRIBUTE boolean sticked VALUE false;
+ALTER RESOURCE CLASS 'cms.forum.message' ADD ATTRIBUTE boolean sticky VALUE false;

@@ -145,7 +145,7 @@ public class AddMessage
             String email = parameters.get("email","");
             message.setAuthor(author);
             message.setEmail(email);
-            message.setSticked(false);
+            message.setSticky(false);
             message.update();
             // workflow
             if(discussion.getForum().getSite() != null)

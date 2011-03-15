@@ -87,8 +87,8 @@ public class MessageResourceImpl
     /** The AttributeDefinition object for the <code>state</code> attribute. */
     private static AttributeDefinition stateDef;
 
-    /** The AttributeDefinition object for the <code>sticked</code> attribute. */
-    private static AttributeDefinition stickedDef;
+    /** The AttributeDefinition object for the <code>sticky</code> attribute. */
+    private static AttributeDefinition stickyDef;
 
     /** The AttributeDefinition object for the <code>title</code> attribute. */
     private static AttributeDefinition titleDef;
@@ -624,48 +624,48 @@ public class MessageResourceImpl
 	}
 
     /**
-     * Returns the value of the <code>sticked</code> attribute.
+     * Returns the value of the <code>sticky</code> attribute.
      *
-     * @return the value of the <code>sticked</code> attribute.
+     * @return the value of the <code>sticky</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public boolean getSticked()
+    public boolean getSticky()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(stickedDef, null);
+	    Boolean value = (Boolean)getInternal(stickyDef, null);
         if(value != null)
         {
             return value.booleanValue();
         }
         else
         {
-            throw new IllegalStateException("value of attribute sticked is undefined"+
+            throw new IllegalStateException("value of attribute sticky is undefined"+
 			    " for resource #"+getId());
         }
     }
 
     /**
-     * Returns the value of the <code>sticked</code> attribute.
+     * Returns the value of the <code>sticky</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>sticked</code> attribute.
+     * @return the value of the <code>sticky</code> attribute.
      */
-    public boolean getSticked(boolean defaultValue)
+    public boolean getSticky(boolean defaultValue)
     {
-		return ((Boolean)getInternal(stickedDef, new Boolean(defaultValue))).booleanValue();
+		return ((Boolean)getInternal(stickyDef, new Boolean(defaultValue))).booleanValue();
 	}
 
     /**
-     * Sets the value of the <code>sticked</code> attribute.
+     * Sets the value of the <code>sticky</code> attribute.
      *
-     * @param value the value of the <code>sticked</code> attribute.
+     * @param value the value of the <code>sticky</code> attribute.
      */
-    public void setSticked(boolean value)
+    public void setSticky(boolean value)
     {
         try
         {
-            set(stickedDef, new Boolean(value));
+            set(stickyDef, new Boolean(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -678,13 +678,13 @@ public class MessageResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>sticked</code> attribute.
+     * Removes the value of the <code>sticky</code> attribute.
      */
-    public void unsetSticked()
+    public void unsetSticky()
     {
         try
         {
-            unset(stickedDef);
+            unset(stickyDef);
         }
         catch(ValueRequiredException e)
         {
@@ -693,13 +693,13 @@ public class MessageResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>sticked</code> attribute is defined.
+	 * Checks if the value of the <code>sticky</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>sticked</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>sticky</code> attribute is defined.
 	 */
-    public boolean isStickedDefined()
+    public boolean isStickyDefined()
 	{
-	    return isDefined(stickedDef);
+	    return isDefined(stickyDef);
 	}
  
     /**

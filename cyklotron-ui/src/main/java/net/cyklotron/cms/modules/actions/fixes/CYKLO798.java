@@ -50,9 +50,9 @@ public class CYKLO798
                 MessageResource res = (MessageResource)nodes[i];
                 try
                 {
-                    if(!res.isStickedDefined())
+                    if(!res.isStickyDefined())
                     {
-                       res.setSticked(false);
+                       res.setSticky(false);
                     }
                     System.out.println(" success");
                 }

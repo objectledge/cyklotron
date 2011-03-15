@@ -205,41 +205,41 @@ public interface MessageResource
     public void setPriority(int value);
    	
     /**
-     * Returns the value of the <code>sticked</code> attribute.
+     * Returns the value of the <code>sticky</code> attribute.
      *
-     * @return the value of the the <code>sticked</code> attribute.
+     * @return the value of the the <code>sticky</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public boolean getSticked()
+    public boolean getSticky()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>sticked</code> attribute.
+     * Returns the value of the <code>sticky</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>sticked</code> attribute.
+     * @return the value of the <code>sticky</code> attribute.
      */
-    public boolean getSticked(boolean defaultValue);
+    public boolean getSticky(boolean defaultValue);
 
     /**
-     * Sets the value of the <code>sticked</code> attribute.
+     * Sets the value of the <code>sticky</code> attribute.
      *
-     * @param value the value of the <code>sticked</code> attribute.
+     * @param value the value of the <code>sticky</code> attribute.
      */
-    public void setSticked(boolean value);
+    public void setSticky(boolean value);
 
 	/**
-     * Removes the value of the <code>sticked</code> attribute.
+     * Removes the value of the <code>sticky</code> attribute.
      */
-    public void unsetSticked();
+    public void unsetSticky();
    
 	/**
-	 * Checks if the value of the <code>sticked</code> attribute is defined.
+	 * Checks if the value of the <code>sticky</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>sticked</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>sticky</code> attribute is defined.
 	 */
-    public boolean isStickedDefined();
+    public boolean isStickyDefined();
  
     /**
      * Returns the value of the <code>title</code> attribute.
