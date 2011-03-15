@@ -139,7 +139,6 @@ public class SendVote
         catch(Exception e)
         {
             templatingContext.put("result", "exception");
-            templatingContext.put("trace", new StackTrace(e));
             logger.error("Exception in poll,SendVote action", e);
             return;
         }
