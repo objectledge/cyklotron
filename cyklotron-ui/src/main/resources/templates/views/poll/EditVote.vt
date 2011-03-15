@@ -72,7 +72,7 @@
     <table class="layoutTable" align="right" border="0">
       <tr>
         <td NOWRAP class="usualbutton">
-          <a href="javascript:document.form1.submit();">Save poll</a>
+          <a href="javascript:document.form1.submit();">Save vote</a>
         </td>
         <td>
           <table height="22" class="buttonTable">

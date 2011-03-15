@@ -86,7 +86,7 @@ public class UpdateVote
             route(mvcContext, templatingContext, "poll.EditVote", "invalid_description");
             return;
         }
-        if(!senderAddress.matches("([a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+.[a-zA-Z]{1,4})?"))
+        if(!senderAddress.matches("[a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+.[a-zA-Z]{1,4}"))
         {
             route(mvcContext, templatingContext, "poll.EditVote", "invalid_email");
             return;
