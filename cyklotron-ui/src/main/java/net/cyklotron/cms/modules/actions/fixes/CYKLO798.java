@@ -62,6 +62,7 @@ public class CYKLO798
                     System.out.println("Faild to set sticked attribute to MessageResource.");
                 }
             }
+            templatingContext.put("result", "success");
         }
         catch(Exception e)
         {

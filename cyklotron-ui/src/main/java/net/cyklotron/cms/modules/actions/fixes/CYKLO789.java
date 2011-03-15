@@ -79,6 +79,7 @@ public class CYKLO789
                     }
                 }
             }
+            templatingContext.put("result", "success");
         }
         catch(Exception e)
         {

@@ -92,6 +92,7 @@ public class ReorganizePollsResource
                     coralSession.getStore().setParent(pool, poolsParent);
                 }
             }
+            templatingContext.put("result", "success");
         }
         catch(Exception e)
         {
