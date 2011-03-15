@@ -83,6 +83,12 @@ public class SendVote
         {
             throw new ProcessingException("Vote id not found");
         }
+        Long answerId = parameters.getLong("answer", -1);
+        if(answerId == -1)
+        {
+            templatingContext.put("result", "answer_not_found");
+            return;
+        }
         String email = parameters.get("email", "");
         if(!email.matches("([a-zA-Z0-9.-_]+@[a-zA-Z0-9.-_]+.[a-zA-Z]{1,4})?"))
         {
@@ -112,8 +118,7 @@ public class SendVote
             for(int i = 0; i < answersResources.length; i++)
             {
                 AnswerResource answerResource = (AnswerResource)answersResources[i];
-                Long answerId = parameters.getLong("answer_" + answerResource.getSequence(), -1);
-                if(answerId != -1)
+                if(answerId.equals(answerResource.getId()))
                 {
                     String confirmationRequest = emailConfirmationRequestService
                         .createEmailConfirmationRequest(coralSession, email, answerId.toString());

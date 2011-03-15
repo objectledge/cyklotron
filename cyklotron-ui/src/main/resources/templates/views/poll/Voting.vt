@@ -22,7 +22,7 @@
       <td>Description: $vote.getDescription()<br>
         #foreach($answerKey in $answerKeys)
           <tr><td>
-            <input type="radio" id="answer" name="answer_${answerKey}" value="$answers.get($answerKey).getId()">
+            <input type="radio" id="answer_${answerKey}" name="answer" value="$answers.get($answerKey).getId()">
             <label for="answer_${answerKey}">$answers.get($answerKey).getTitle()</label>
           </td></tr>
         #end
