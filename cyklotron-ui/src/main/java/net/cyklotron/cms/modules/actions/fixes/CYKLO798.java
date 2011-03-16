@@ -46,7 +46,6 @@ public class CYKLO798
             int i;
             for(i = 0; i < nodes.length; i++)
             {
-                System.out.print("("+i+") Processing: "+nodes[i].getPath());
                 MessageResource res = (MessageResource)nodes[i];
                 try
                 {
@@ -54,12 +53,11 @@ public class CYKLO798
                     {
                        res.setSticky(false);
                     }
-                    System.out.println(" success");
                 }
                 catch(Exception e)
                 {
                     logger.error("",e);
-                    System.out.println("Faild to set sticked attribute to MessageResource.");
+                    System.out.println("Faild to set sticked attribute to MessageResource:" +nodes[i].getPath());
                 }
             }
             templatingContext.put("result", "success");

@@ -52,17 +52,15 @@ public class CYKLO789
             int i;
             for(i = 0; i < nodes.length; i++)
             {
-                System.out.print("("+i+") Processing: "+nodes[i].getPath());
                 SubscriptionRequestResource res = (SubscriptionRequestResource)nodes[i];
                 try
                 {
                     emailConfirmationRequestService.createEmailConfirmationRequest(coralSession, res.getEmail(), res.getItems());
-                    System.out.println(" success");
                 }
                 catch(Exception e)
                 {
                     logger.error("",e);
-                    System.out.println("SubscriptionRequest resource convertion failure.");
+                    System.out.println("SubscriptionRequest resource: " + nodes[i].getPath() + " convertion failure.");
                 }
             }
             if(i == nodes.length)
@@ -75,7 +73,7 @@ public class CYKLO789
                     }
                     catch(EntityInUseException e)
                     {
-                        System.out.println("SubscriptionRequest resources delete failure.");
+                        System.out.println("SubscriptionRequest resources: " + nodes[i].getPath() + " delete failure.");
                     }
                 }
             }
