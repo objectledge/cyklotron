@@ -561,6 +561,14 @@
               <value>Nowa wypowiedź</value>
             </prefix>
           </prefix>
+          <prefix name="ModeratorTasks">
+            <prefix name="description">
+              <value>Pozwala administratorowi moderować forum.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Ekran moderacji forum</value>
+            </prefix>
+          </prefix>
         </prefix>
       </prefix>
     </prefix>

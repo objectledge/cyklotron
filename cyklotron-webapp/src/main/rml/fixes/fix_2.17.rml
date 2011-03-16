@@ -107,4 +107,8 @@ ATTRIBUTES (
   description = 'Unlock a message.'
 );
 
-ALTER RESOURCE CLASS 'cms.forum.message' ADD ATTRIBUTE boolean sticky VALUE false;
+ALTER RESOURCE CLASS 'cms.forum.message' ADD ATTRIBUTE boolean sticky;
+
+CREATE RESOURCE 'ModeratorTasks'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/forum/screens/forum';

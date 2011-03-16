@@ -80,7 +80,10 @@
   #genericScreenHeader('DISCUSSION LIST')
 
   #result_inline_message('results.forum')
-
+  
+  #if($cms_tool.getUserData().hasPermission($forum, "cms.forum.moderate"))
+    <div><i><a href="$cms_link.set('state','ModeratorTasks')">#if($new_messages_count > 0)Messages to moderate ($new_messages_count)#{else}No messages to moderate.#end</a></i></div>
+  #end
   #discussions_table($discussions_table "Dyscussions" "No discussions")
   <br/> 
   #discussions_table($comments_table "Comments" "No comments")

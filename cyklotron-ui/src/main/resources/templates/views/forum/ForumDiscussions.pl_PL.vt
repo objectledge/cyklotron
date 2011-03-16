@@ -24,8 +24,8 @@
 
   #set($columnOrder = ['name','creator.name','creation.time'])
   #set($tableLink = $forumLink.set('tableId',$table.getId()))
-
-  <table>
+   
+   <table>
     <tr>
       <th colspan="6">$label</th>
     </tr>
@@ -80,7 +80,10 @@
   #genericScreenHeader('LISTA DYSKUSJI')
 
   #result_inline_message('results.forum')
-
+      	                                             
+  #if($cms_tool.getUserData().hasPermission($forum, "cms.forum.moderate"))
+    <div><i><a href="$cms_link.set('state','ModeratorTasks')">#if($new_messages_count > 0)Wiadomości do moderacji ($new_messages_count)#{else}Brak wiadomości do moderacji#end</a></i></div>
+  #end
   #discussions_table($discussions_table "Dyskusje" "Nie ma żadnych dyskusji")
   <br/> 
   #discussions_table($comments_table "Komentarze" "Nie ma żadnych komentarzy")

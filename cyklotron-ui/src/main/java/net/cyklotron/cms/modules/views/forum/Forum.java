@@ -10,9 +10,12 @@ import java.util.StringTokenizer;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.query.MalformedQueryException;
+import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.schema.ResourceClass;
+import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.CoralTableModel;
 import org.objectledge.coral.table.ResourceListTableModel;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -28,6 +31,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.DiscussionResourceImpl;
@@ -44,6 +48,10 @@ import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.util.CollectionFilter;
 import net.cyklotron.cms.util.ProtectedViewFilter;
+import net.cyklotron.cms.workflow.AutomatonResource;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * Stateful screen for forum application.
@@ -56,22 +64,26 @@ public class Forum
 {
     /** forum serivce. */
     protected ForumService forumService;
+    
+    protected WorkflowService workflowService;
 
     private Set<String> allowedStates = new HashSet<String>();
 
     public Forum(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         StructureService structureService, StyleService styleService, SkinService skinService,
-        MVCFinder mvcFinder, TableStateManager tableStateManager, ForumService forumService)
+        MVCFinder mvcFinder, TableStateManager tableStateManager, ForumService forumService, WorkflowService workflowService)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
         this.forumService = forumService;
+        this.workflowService = workflowService;
         allowedStates.add("Discussions");
         allowedStates.add("Messages");
         allowedStates.add("Message");
         allowedStates.add("NewMessage");
         allowedStates.add("NewDiscussion");
+        allowedStates.add("ModeratorTasks");
     }
     
     public String getState()
@@ -141,6 +153,9 @@ public class Forum
             filters2.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper2 = new TableTool(state2, filters2, model2);
             templatingContext.put("comments_table", helper2);
+            
+            List newMessages = getModeratorTasks(coralSession, forum);
+            templatingContext.put("new_messages_count", newMessages.size());
         }
         catch(ForumException e)
         {
@@ -202,6 +217,49 @@ public class Forum
         catch(TableException e)
         {
             screenError(getNode(), context, "failed to initialize table toolkit: ", e);
+        }
+        catch(Exception e)
+        {
+            screenError(getNode(), context, "Component exception: ", e);
+        }
+    }
+    
+    public void prepareModeratorTasks(Context context)
+        throws ProcessingException
+    {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        I18nContext i18nContext = I18nContext.getI18nContext(context);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+
+        long mid = parameters.getLong("mid", -1);
+        try
+        {
+            ForumResource forum = forumService.getForum(coralSession, getSite());
+            templatingContext.put("forum", forum);
+            
+            List messages = getModeratorTasks(coralSession, forum);
+            if(messages.size() > 0 && mid == -1)
+            {
+                templatingContext.put("mid", ((Resource)messages.get(messages.size()-1)).getId());
+            }
+            else
+            {
+                templatingContext.put("mid", mid);
+            }
+            
+            String tableInstance = "cms:screen:forum:ModeratorTasks:"+getSite().getIdString();
+            TableState state = tableStateManager.getState(context, tableInstance);
+            if(state.isNew())
+            {
+                state.setTreeView(false);
+                state.setPageSize(10);
+                state.setSortColumnName("creation.time");
+                state.setAscSort(false);
+            }
+            TableModel model = new ResourceListTableModel(messages,i18nContext.getLocale());
+            TableTool helper = new TableTool(state, null, model);
+            templatingContext.put("table", helper);
         }
         catch(Exception e)
         {
@@ -314,5 +372,92 @@ public class Forum
             sb.append("\n");
         }
         return sb.toString();
+    }
+    
+    private List getModeratorTasks(CoralSession coralSession, ForumResource forum)
+        throws ProcessingException
+    {
+        List messages = new ArrayList();
+        try
+        {
+            Resource[] nodes = null;
+            ResourceClass messageClass = coralSession.getSchema().getResourceClass(
+                "cms.forum.message");
+            AutomatonResource automaton = workflowService.getPrimaryAutomaton(coralSession,
+                getSite().getParent().getParent(), messageClass);
+            StateResource state = workflowService.getState(coralSession, automaton, "new");   
+            QueryResults results = coralSession.getQuery().executeQuery(
+                "FIND RESOURCE FROM cms.forum.message WHERE state = " + state.getIdString());
+            nodes = results.getArray(1);
+            for(int i = 0; i < nodes.length; i++)
+            {
+                MessageResource message = (MessageResource)nodes[i];
+                if(message.getDiscussion().getForum().equals(forum))
+                {
+                    messages.add(message);
+                }
+            }
+        }
+        catch(MalformedQueryException e)
+        {
+            throw new ProcessingException("Malformed query", e);
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new ProcessingException("cms.forum.message resource does not exist", e);
+        }
+        catch(WorkflowException e)
+        {
+            throw new ProcessingException("Workflow state does not exist", e);
+        }
+        catch(ProcessingException e)
+        {
+            throw new ProcessingException("Processing Exception", e);
+        }
+        return messages;
+    }
+    
+    
+    @Override
+    public boolean requiresAuthenticatedUser(Context context)
+        throws Exception
+    {        
+        return "ModeratorTasks".equals(getState());
+    }
+    
+    @Override
+    public boolean checkAccessRights(Context context)
+        throws ProcessingException
+    {
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+
+        String state = getState();
+        if("ModeratorTasks".equals(state))
+        {
+            try
+            {
+                Permission moderatePermission = coralSession.getSecurity().getUniquePermission(
+                    "cms.forum.moderate");
+                ForumResource forum = forumService.getForum(coralSession, getSite());
+                return getNode().canView(coralSession, cmsData, cmsData.getUserData().getSubject())
+                    && coralSession.getUserSubject().hasPermission(forum, moderatePermission);
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if(isNodeDefined())
+            {
+                return getNode().canView(coralSession, cmsData, cmsData.getUserData().getSubject());
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }

@@ -109,6 +109,10 @@ CREATE RESOURCE 'NewDiscussion'
 RESOURCE CLASS 'integration.screen_state'
 PARENT '/cms/applications/forum/screens/forum';
 
+CREATE RESOURCE 'ModeratorTasks'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/forum/screens/forum';
+
 # // resources ////////////////////
 
 CREATE RESOURCE 'resources'
