@@ -59,7 +59,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
   $table.getColumn('state').set('label', 'Stan')
   $table.getColumn('actions').set('label', 'Akcje')
   #set($tableColumnOrder = ['name', 'creator.name', 'creation.time', 'state', 'actions'] )
-  #set($MessageState = {'new' : 'nowy', 'visible' : 'widoczny', 'rejected' : 'wycofany', 'deleted': 'usunięty', 'locked': 'zablokowany', 'sticked' : 'przyklejony'} )
+  #set($MessageState = {'new' : 'nowy', 'visible' : 'widoczny', 'rejected' : 'wycofany', 'deleted': 'usunięty', 'locked': 'zablokowany', 'sticky' : 'przyklejony'} )
 
   ## ------------ TABLE START
   <table width="100%" class="genericItemList" cellspacing="0">
@@ -83,7 +83,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
         <div class="cms-popupmenu">
            <a href="$rowLink.set('mid', $row.getObject().getId())">podgląd</a>
            <a href="$rowLink.view('forum.EditMessage').set('mid', $row.getObject().getId())">edycja</a>
-           <a href="$rowLink.view('forum.MessageList').action('forum.ToggleMessageStick').set('mid', $row.getObject().getId())">#if($row.object.sticked)odklej#{else}przyklej#end</a>
+           <a href="$rowLink.view('forum.MessageList').action('forum.ToggleMessageStick').set('mid', $row.getObject().getId())">#if($row.object.sticky)odklej#{else}przyklej#end</a>
         </div>
         </span>
       </td>
@@ -94,7 +94,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
        $format_date.format($row.getObject().getCreationTime())
       </td>
       <td nowrap="nowrap">
-        #if($row.object.sticked)przyklejony, #end $MessageState.get($row.object.state.name)
+        #if($row.object.sticky)przyklejony, #end $MessageState.get($row.object.state.name)
       </td>
       <td align="right" nowrap="nowrap">
       	#if($row.childCount > 0)

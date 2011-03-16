@@ -131,6 +131,7 @@ public class Forum
             TableTool helper = new TableTool(state, filters, model);
             
             templatingContext.put("discussions_table", helper);
+            templatingContext.put("forum_tool", new ForumTool(coralSession));
 
             res = coralSession.getStore().getResource(forum, "comments");
             if(res.length != 1)
@@ -458,6 +459,21 @@ public class Forum
             {
                 return true;
             }
+        }
+    }
+    
+    public class ForumTool
+    {
+        final protected CoralSession coralSession;
+        
+        ForumTool(CoralSession coralSession)
+        {
+            this.coralSession = coralSession;
+        }
+        
+        public int getVisibleMessages(DiscussionResource discussion)
+        {
+            return forumService.getVisibleMessages(coralSession, discussion, coralSession.getUserSubject());
         }
     }
 }

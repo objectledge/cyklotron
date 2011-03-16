@@ -53,9 +53,9 @@
     <tr class="row$odd">
       <td width="35%">
         #if($row.object.id == $selected)
-        <b>	<a href="$cms_link.set('state','Messages').set('did',$row.object.getId())">$discussion_name</a></b>
+        <b>	<a href="$cms_link.set('state','Messages').set('did',$row.object.getId())">$discussion_name ($forum_tool.getVisibleMessages($row.object))</a></b>
         #else
-	<a href="$cms_link.set('state','Messages').set('did',$row.object.getId())">$discussion_name</a>
+	<a href="$cms_link.set('state','Messages').set('did',$row.object.getId())">$discussion_name ($forum_tool.getVisibleMessages($row.object))</a>
         #end
         <br>
 	<i>$!row.object.getDescription()</i>
