@@ -20,11 +20,17 @@ $pageTool.addScriptLink("script/WinPopup.js")
       #end
       #if($cms_tool.getUserData().hasPermission($message.getDiscussion(), 'cms.forum.moderate'))
       <td NOWRAP class="usualbutton">
+        <span><b>actions:</b></span>#fireTransition($message $cms_link.set('mid',$message.id))
+      </td>
+      <td NOWRAP class="usualbutton">
+        <a href="$cms_link.action('forum.ToggleMessageStick').set('mid', $message.id)">#if($message.getSticky(false))unstick#{else}stick#end</a>
+      </td>
+      <td NOWRAP class="usualbutton">
         <a href="javascript:getWinPopup('move message').open('$link.view('forum.MoveMessage').set('did', $message.getDiscussion().getId()).set('mid',$message.getId())',  500, 550); void(0);">Move</a>
       </td>
       #end
       <td NOWRAP class="usualbutton">
-    <a href="$cms_link.set('state','Messages').set('did', $message.getDiscussion().getId())">Back to message list</a>
+       <a href="$cms_link.set('state','Messages').set('did', $message.getDiscussion().getId())">Back to message list</a>
       </td>
     </tr>
   </table>
