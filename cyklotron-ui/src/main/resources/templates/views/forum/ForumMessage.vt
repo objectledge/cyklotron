@@ -1,3 +1,4 @@
+$pageTool.addScriptLink("script/WinPopup.js")
 ## SET LOCAL VARS
 #set($cms_link = $link.set('x',$parametersTool.getLong('x')))
 #set($cms_link = $cms_link.set('state',$parametersTool.get('state','Messages')))
@@ -15,6 +16,11 @@
       #end
       <td NOWRAP class="usualbutton">
         <a href="$cms_link.set('state','NewMessage').set('did',$message.getDiscussion().getId())">New message</a>
+      </td>
+      #end
+      #if($cms_tool.getUserData().hasPermission($message.getDiscussion(), 'cms.forum.moderate'))
+      <td NOWRAP class="usualbutton">
+        <a href="javascript:getWinPopup('move message').open('$link.view('forum.MoveMessage').set('did', $message.getDiscussion().getId()).set('mid',$message.getId())',  500, 550); void(0);">Move</a>
       </td>
       #end
       <td NOWRAP class="usualbutton">
