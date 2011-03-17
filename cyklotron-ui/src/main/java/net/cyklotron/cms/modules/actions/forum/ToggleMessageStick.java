@@ -72,7 +72,7 @@ public class ToggleMessageStick
                 throw new ProcessingException("Message id not found");
             }
             MessageResource message = MessageResourceImpl.getMessageResource(coralSession, mid);
-            message.setSticky(!message.getSticky());
+            message.setSticky(!message.getSticky(false));
             message.update();
         }
         catch(EntityDoesNotExistException e)

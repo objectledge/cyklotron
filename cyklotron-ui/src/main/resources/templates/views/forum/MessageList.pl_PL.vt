@@ -83,7 +83,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
         <div class="cms-popupmenu">
            <a href="$rowLink.set('mid', $row.getObject().getId())">podgląd</a>
            <a href="$rowLink.view('forum.EditMessage').set('mid', $row.getObject().getId())">edycja</a>
-           <a href="$rowLink.view('forum.MessageList').action('forum.ToggleMessageStick').set('mid', $row.getObject().getId())">#if($row.object.sticky)odklej#{else}przyklej#end</a>
+           <a href="$rowLink.view('forum.MessageList').action('forum.ToggleMessageStick').set('mid', $row.getObject().getId())">#if($row.object.sticky(false))odklej#{else}przyklej#end</a>
         </div>
         </span>
       </td>
@@ -94,7 +94,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
        $format_date.format($row.getObject().getCreationTime())
       </td>
       <td nowrap="nowrap">
-        #if($row.object.sticky)przyklejony, #end $MessageState.get($row.object.state.name)
+        #if($row.object.sticky(false))przyklejony, #end $MessageState.get($row.object.state.name)
       </td>
       <td align="right" nowrap="nowrap">
       	#if($row.childCount > 0)

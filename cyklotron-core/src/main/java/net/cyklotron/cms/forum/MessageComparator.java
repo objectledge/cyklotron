@@ -66,12 +66,12 @@ public class MessageComparator
             return 0;
         }
         
-        if(((MessageResource)o1).getSticky() && !((MessageResource)o2).getSticky())
+        if(((MessageResource)o1).getSticky(false) && !((MessageResource)o2).getSticky(false))
         {
             return -1;
         }
-        else if(!((MessageResource)o1).getSticky()
-            && ((MessageResource)o2).getSticky())
+        else if(!((MessageResource)o1).getSticky(false)
+            && ((MessageResource)o2).getSticky(false))
         {
             return 1;
         }
