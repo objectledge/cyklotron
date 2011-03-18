@@ -43,6 +43,11 @@
   #set($tableColumnOrder = ['name', 'creator.name', 'creation.time'] )
 
   ## ------------ TABLE START
+  
+  #if($cms_tool.getUserData().hasPermission($discussion.forum, "cms.forum.moderate"))
+    <div><i><a href="$cms_link.set('state','ModeratorTasks')">#if($forum_tool.getModeratorTasks($discussion.getId()) > 0)Wiadomości do moderacji ($forum_tool.getModeratorTasks($discussion.getId()))#{else}Brak wiadomości do moderacji#end</a></i></div>
+  #end
+  
   <div align="right"><b>Pokaż #tableView_pageSizeChooser($table $tableLink [10,20,50,100])</b></div>
   <table width="100%" class="genericItemList" cellspacing="0">
     <tr>

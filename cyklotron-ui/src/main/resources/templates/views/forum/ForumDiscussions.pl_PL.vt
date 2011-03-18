@@ -82,7 +82,7 @@
   #result_inline_message('results.forum')
       	                                             
   #if($cms_tool.getUserData().hasPermission($forum, "cms.forum.moderate"))
-    <div><i><a href="$cms_link.set('state','ModeratorTasks')">#if($new_messages_count > 0)Wiadomości do moderacji ($new_messages_count)#{else}Brak wiadomości do moderacji#end</a></i></div>
+    <div><i><a href="$cms_link.set('state','ModeratorTasks')">#if($forum_tool.getModeratorTasks() > 0)Wiadomości do moderacji ($forum_tool.getModeratorTasks())#{else}Brak wiadomości do moderacji#end</a></i></div>
   #end
   #discussions_table($discussions_table "Dyskusje" "Nie ma żadnych dyskusji")
   <br/> 

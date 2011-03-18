@@ -169,9 +169,6 @@ public class Forum
             filters2.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             TableTool helper2 = new TableTool(state2, filters2, model2);
             templatingContext.put("comments_table", helper2);
-            
-            List newMessages = getModeratorTasks(coralSession, forum);
-            templatingContext.put("new_messages_count", newMessages.size());
         }
         catch(ForumException e)
         {
@@ -191,7 +188,10 @@ public class Forum
         HttpContext httpContext = HttpContext.getHttpContext(context);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-        long did = parameters.getLong("did", -1);
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
+        
+        long did = screenConfig.getLong("did", parameters.getLong("did", -1));
         if(did == -1)
         {
             screenError(getNode(), context, "discussion id not found");
@@ -224,7 +224,7 @@ public class Forum
             TableTool helper = new TableTool(state, filters, model);
             
             templatingContext.put("table",helper);
-            templatingContext.put("messageCount", forumService.getVisibleMessages(coralSession, discussion, coralSession.getUserSubject()));
+            templatingContext.put("forum_tool", new ForumTool(coralSession));
         }
         catch(EntityDoesNotExistException e)
         {
@@ -254,7 +254,11 @@ public class Forum
             ForumResource forum = forumService.getForum(coralSession, getSite());
             templatingContext.put("forum", forum);
             
-            List messages = getModeratorTasks(coralSession, forum);
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
+            Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
+            
+            Long did = screenConfig.getLong("did", parameters.getLong("did", -1));
+            List messages = getModeratorTasks(coralSession, forum, did);
             if(messages.size() > 0 && mid == -1)
             {
                 templatingContext.put("mid", ((Resource)messages.get(messages.size()-1)).getId());
@@ -276,6 +280,7 @@ public class Forum
             TableModel model = new ResourceListTableModel(messages,i18nContext.getLocale());
             TableTool helper = new TableTool(state, null, model);
             templatingContext.put("table", helper);
+            templatingContext.put("forum_tool", new ForumTool(coralSession));
         }
         catch(Exception e)
         {
@@ -414,7 +419,7 @@ public class Forum
         return sb.toString();
     }
     
-    private List getModeratorTasks(CoralSession coralSession, ForumResource forum)
+    private List getModeratorTasks(CoralSession coralSession, ForumResource forum, Long discussionId)
         throws ProcessingException
     {
         List messages = new ArrayList();
@@ -432,9 +437,19 @@ public class Forum
             for(int i = 0; i < nodes.length; i++)
             {
                 MessageResource message = (MessageResource)nodes[i];
-                if(message.getDiscussion().getForum().equals(forum))
+                if(discussionId == null || discussionId <= 0)
                 {
-                    messages.add(message);
+                    if(message.getDiscussion().getForum().equals(forum))
+                    {
+                        messages.add(message);
+                    }
+                }
+                else
+                {
+                    if(discussionId.equals(message.getDiscussion().getId()))
+                    {
+                        messages.add(message);
+                    }
                 }
             }
         }
@@ -524,10 +539,42 @@ public class Forum
         {
             this.coralSession = coralSession;
         }
+
         
+        /*
+         *  return VisibleMessages count
+         */
         public int getVisibleMessages(DiscussionResource discussion)
         {
             return forumService.getVisibleMessages(coralSession, discussion, coralSession.getUserSubject());
+        }
+        
+        /*
+         *  return ModeratorTasks  count form defined discussion
+         */
+        public int getModeratorTasks(Long discussionId)
+        {
+            try
+            {
+               ForumResource forum = forumService.getForum(coralSession, getSite());
+               return Forum.this.getModeratorTasks(coralSession, forum, discussionId).size();
+            }
+            catch(ProcessingException e)
+            {
+                return 0;
+            }
+            catch(ForumException e)
+            {
+                return 0;
+            }
+        }
+        
+        /*
+         *  return ModeratorTasks count for all discussions 
+         */
+        public int getModeratorTasks()
+        {
+            return getModeratorTasks(null);
         }
     }
 }
