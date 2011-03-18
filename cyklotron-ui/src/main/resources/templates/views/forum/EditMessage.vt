@@ -65,7 +65,7 @@
 	<td align="right"><b>Priority:</b></td>
 	<td>
 	  <select name="priority">
-	    #options($priorities_list '$message.getPriority()')
+	    #options($priorities_list "$message.getPriority()")
 	  </select>
 	</td>
       </tr>
