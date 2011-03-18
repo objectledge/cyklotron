@@ -112,3 +112,7 @@ ALTER RESOURCE CLASS 'cms.forum.message' ADD ATTRIBUTE boolean sticky;
 CREATE RESOURCE 'ModeratorTasks'
 RESOURCE CLASS 'integration.screen_state'
 PARENT '/cms/applications/forum/screens/forum';
+
+CREATE RESOURCE 'EditMessage'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/forum/screens/forum';

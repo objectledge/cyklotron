@@ -68,6 +68,9 @@ public class Forum
     protected WorkflowService workflowService;
 
     private Set<String> allowedStates = new HashSet<String>();
+    
+    private final List<String> REQUIRES_AUTHENTICATED_USER = Arrays.asList("ModeratorTasks",
+        "EditMessage");
 
     public Forum(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
@@ -79,6 +82,7 @@ public class Forum
         this.forumService = forumService;
         this.workflowService = workflowService;
         allowedStates.add("Discussions");
+        allowedStates.add("EditMessage");
         allowedStates.add("Messages");
         allowedStates.add("Message");
         allowedStates.add("NewMessage");
@@ -298,6 +302,30 @@ public class Forum
         }
     }
     
+    public void prepareEditMessage(Context context)
+        throws ProcessingException
+    {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+
+        long mid = parameters.getLong("mid", -1);
+        if(mid == -1)
+        {
+            screenError(getNode(), context, "Message id not found");
+            return;
+        }
+        try
+        {
+            MessageResource message = MessageResourceImpl.getMessageResource(coralSession, mid);
+            templatingContext.put("message", message);
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            screenError(getNode(), context, "Resource not found", e);
+        }
+    }
+    
     public void prepareNewMessage(Context context)
         throws ProcessingException
     {
@@ -423,7 +451,7 @@ public class Forum
     public boolean requiresAuthenticatedUser(Context context)
         throws Exception
     {        
-        return "ModeratorTasks".equals(getState());
+        return REQUIRES_AUTHENTICATED_USER.contains(getState());
     }
     
     @Override
@@ -448,6 +476,21 @@ public class Forum
             {
                 return false;
             }
+        }
+        else if("EditMessage".equals(state))
+        {
+            try
+            {
+                Permission modifyPermission = coralSession.getSecurity().getUniquePermission(
+                    "cms.forum.modify");
+                ForumResource forum = forumService.getForum(coralSession, getSite());
+                return getNode().canView(coralSession, cmsData, cmsData.getUserData().getSubject())
+                    && coralSession.getUserSubject().hasPermission(forum, modifyPermission);
+            }
+            catch(Exception e)
+            {
+                return false;
+            }            
         }
         else
         {

@@ -551,6 +551,14 @@
               <value>Discussion list</value>
             </prefix>
           </prefix>
+          <prefix name="EditMessage">
+            <prefix name="description">
+              <value>Allows administrator edit message.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Edit message</value>
+            </prefix>
+          </prefix>
           <prefix name="Message">
             <prefix name="description">
               <value>Displays single message in the discussion.</value>

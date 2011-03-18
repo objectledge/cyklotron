@@ -529,6 +529,14 @@
               <value>Lista dyskusji</value>
             </prefix>
           </prefix>
+          <prefix name="EditMessage">
+            <prefix name="description">
+              <value>Pozwala administratorowi edytować wiadomość.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Edycja wiadomości</value>
+            </prefix>
+          </prefix>
           <prefix name="Message">
             <prefix name="description">
               <value>Wyświetla pojedynczą wypowiedź.</value>

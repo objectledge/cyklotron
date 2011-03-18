@@ -18,6 +18,11 @@ $pageTool.addScriptLink("script/WinPopup.js")
         <a href="$cms_link.set('state','NewMessage').set('did',$message.getDiscussion().getId())">Nowa wiadomość</a>
       </td>
       #end
+      #if($cms_tool.getUserData().hasPermission($message.getDiscussion(), 'cms.forum.modify'))
+      <td NOWRAP class="usualbutton">
+	    <a href="$cms_link.set('state','EditMessage').set('mid', $message.getId())">Edycja</a>
+      </td>
+      #end
       #if($cms_tool.getUserData().hasPermission($message.getDiscussion(), 'cms.forum.moderate'))
       <td NOWRAP class="usualbutton">
         <span><b>akcje:</b></span>#fireTransition($message $cms_link.set('mid',$message.id))
