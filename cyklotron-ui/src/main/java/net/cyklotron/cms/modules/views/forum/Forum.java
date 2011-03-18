@@ -91,12 +91,23 @@ public class Forum
     }
     
     public String getState()
+    throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
+        long did = screenConfig.getLong("did", -1);
+        String defaultState = (did == -1) ? "Discussions" : "Messages"; 
+        
         Parameters parameters = RequestParameters.getRequestParameters(context);
-        String state = parameters.get("state","Discussions");
+        String state = parameters.get("state", defaultState);
+        
         if(!allowedStates.contains(state))
         {
             return null;
+        }
+        else if(did != -1 && "Discussions".equals(state))
+        {
+            return defaultState;
         }
         return state;
     }
