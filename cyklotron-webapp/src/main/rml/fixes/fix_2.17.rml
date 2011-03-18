@@ -116,3 +116,6 @@ PARENT '/cms/applications/forum/screens/forum';
 CREATE RESOURCE 'EditMessage'
 RESOURCE CLASS 'integration.screen_state'
 PARENT '/cms/applications/forum/screens/forum';
+
+ALTER RESOURCE '/cms/applications/forum/screens/forum'
+SET ATTRIBUTE configurationView = 'forum.ForumScreenConf';
