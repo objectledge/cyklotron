@@ -559,6 +559,11 @@ public class ForumServiceImpl
 		return new VisibleMessageCounter(coralSession, subject).count(discussion);
 	}
 	
+	public int getVisibleSubMessages(CoralSession coralSession, MessageResource message, Subject subject)
+	{
+	    return new VisibleMessageCounter(coralSession, subject).count(message) - 1;
+	}
+	
 	private class VisibleMessageCounter extends SubtreeVisitor
 	{
 		private int count;
@@ -583,6 +588,13 @@ public class ForumServiceImpl
 			traverseBreadthFirst(discussion);
 			return count;
 		}
+		
+        public int count(MessageResource message)
+        {
+            count = 0;
+            traverseBreadthFirst(message);
+            return count;
+        }
 	}
 }
 

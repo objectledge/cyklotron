@@ -587,6 +587,14 @@ public class Forum
         }
         
         /*
+         *  return Visible sub messages count of message 
+         */
+        public int getVisibleSubMessages(MessageResource message)
+        {
+            return forumService.getVisibleSubMessages(coralSession, message, coralSession.getUserSubject());
+        }
+        
+        /*
          *  return ModeratorTasks  count form defined discussion
          */
         public int getModeratorTasks(Long discussionId)

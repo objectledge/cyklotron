@@ -116,4 +116,13 @@ public interface ForumService
 	 * @return the number of messages in a discussion visible to a particular subject.
 	 */
 	public int getVisibleMessages(CoralSession coralSession, DiscussionResource discussion, Subject subject);
+
+	   /**
+     * Returns the number of sub messages of message visible to a particular subject.
+     * 
+     * @param discussion a discussion.
+     * @param subject a Subject.
+     * @return the number of messages of message visible to a particular subject.
+     */
+	public int getVisibleSubMessages(CoralSession coralSession, MessageResource message, Subject subject);
 }
