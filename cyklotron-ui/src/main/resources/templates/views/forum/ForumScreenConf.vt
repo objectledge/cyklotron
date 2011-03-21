@@ -73,7 +73,7 @@ $object.name
 <td><label>Wybierz poziom rozwinięcia listy wiadomości:</label></td>
 <td><select size="1" name="level_expanded" >
 #set($opts = [["0", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5]])
-#options($opts $config.level_expanded)
+#options($opts $config.getInt('level_expanded',0))
 </select></td>
 </tr>
 </table>
