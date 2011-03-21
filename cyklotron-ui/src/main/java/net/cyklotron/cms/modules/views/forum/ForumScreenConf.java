@@ -103,6 +103,7 @@ public class ForumScreenConf
 					//non existing discusson may be configured
 				}
 	        }
+	        templatingContext.put("config", screenConfig);
         }
         catch(TableException e)
         {

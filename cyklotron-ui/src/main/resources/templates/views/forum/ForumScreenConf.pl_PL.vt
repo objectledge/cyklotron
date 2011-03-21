@@ -6,7 +6,7 @@ $viewEnclosureTool.override('popup.Default')
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
     <!--
-    var fieldNames = new Array("did");
+    var fieldNames = new Array("did", "level_expanded");
     function sendConfig()
     {
     document.form1.action = "$save_action";
@@ -67,6 +67,16 @@ $object.name
 #set($columnOrder = ['select','name'])
 #set($tableLink = $link.set('tableId',$discussions_table.getId()))
 #listTable($discussions_table "Wybierz dyskusje pokazywaną w aplikacji" "Brak dyskusji")
+<br/>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tr>
+<td><label>Wybierz poziom rozwinięcia listy wiadomości:</label></td>
+<td><select size="1" name="level_expanded" >
+#set($opts = [["0", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5]])
+#options($opts $config.level_expanded)
+</select></td>
+</tr>
+</table>
 </form>
 
 ##

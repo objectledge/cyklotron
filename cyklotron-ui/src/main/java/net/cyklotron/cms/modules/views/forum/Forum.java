@@ -24,6 +24,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
+import org.objectledge.table.TableRow;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
@@ -190,7 +191,9 @@ public class Forum
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         CmsData cmsData = cmsDataFactory.getCmsData(context);
         Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
-        
+
+        long level_expanded = screenConfig.getLong("level_expanded", 0);
+        Long mid = parameters.getLong("mid", -1);
         long did = screenConfig.getLong("did", parameters.getLong("did", -1));
         if(did == -1)
         {
@@ -203,26 +206,42 @@ public class Forum
             templatingContext.put("discussion",discussion);
             
             String tableInstance = "cms:screen:forum:ForumMessages:"+getNode().getIdString()+":"+discussion.getIdString();
+            String rootId = discussion.getIdString();
+            boolean showRoot = false; 
+            if(mid != -1)
+            {
+                tableInstance += ":" + mid.toString(); 
+                rootId = mid.toString();
+                showRoot = true;
+                templatingContext.put("mid", mid);
+            }            
 
             TableState state = tableStateManager.getState(context, tableInstance);
             if(state.isNew())
             {
                 state.setTreeView(true);
-                String rootId = discussion.getIdString();
                 state.setRootId(rootId);
                 state.setCurrentPage(0);
-                state.setShowRoot(false);
+                state.setShowRoot(showRoot);
                 state.setExpanded(rootId);
-                state.setAllExpanded(parameters.getBoolean("expand_all", false));
+                state.setAllExpanded(false);
                 state.setPageSize(10);
                 state.setSortColumnName("creation.time");
                 state.setAscSort(false);
             }
+            
             TableModel model = new MessageTableModel(coralSession, i18nContext.getLocale());
             ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
             filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
-            TableTool helper = new TableTool(state, filters, model);
             
+            if(mid == -1 && level_expanded > 0 && state.isNew())
+            {
+                TableFilter[] filtersArray = new TableFilter[filters.size()];
+                filters.toArray(filtersArray);
+                setLevelExpanded(model, filtersArray, state, level_expanded);
+            }
+            TableTool helper = new TableTool(state, filters, model);
+               
             templatingContext.put("table",helper);
             templatingContext.put("forum_tool", new ForumTool(coralSession));
         }
@@ -470,6 +489,24 @@ public class Forum
             throw new ProcessingException("Processing Exception", e);
         }
         return messages;
+    }
+    
+    
+    void setLevelExpanded(TableModel model, TableFilter[] filtersArray, TableState state,
+        Long level_expanded)
+    {
+        TableRow[] rows = model.getRowSet(state, filtersArray).getRows();
+        for(int i = 0; i < rows.length; i++)
+        {
+            if(!state.isExpanded(rows[i].getId()) && rows[i].getDepth() < level_expanded)
+            {
+                state.setExpanded(rows[i].getId());
+                if(rows[i].getChildCount() > 0)
+                {
+                    setLevelExpanded(model, filtersArray, state, level_expanded);
+                }
+            }
+        }
     }
     
     

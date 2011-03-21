@@ -55,7 +55,11 @@
     </tr>
 
     ## ------------ HEADERS
-    #set($rowLink = $tableLink.set('state','Message'))
+    #if($parametersTool.isDefined('mid'))
+      #set($rowLink = $tableLink.set('state','Message'))
+    #else
+      #set($rowLink = $tableLink.set('state','Messages'))
+    #end
 
     #if ($table.getPageRowCount() == 0)
     <tr class="row1"><td colspan="$tableColumnOrder.size()">Nie ma żadnych wiadomości.</td></tr>
