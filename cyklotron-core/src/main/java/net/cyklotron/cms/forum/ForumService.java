@@ -1,5 +1,6 @@
 package net.cyklotron.cms.forum;
 
+import java.util.Date;
 import java.util.List;
 
 import org.objectledge.coral.security.Subject;
@@ -117,12 +118,21 @@ public interface ForumService
 	 */
 	public int getVisibleMessages(CoralSession coralSession, DiscussionResource discussion, Subject subject);
 
-	   /**
+	 /**
      * Returns the number of sub messages of message visible to a particular subject.
      * 
-     * @param discussion a discussion.
+     * @param message a message.
      * @param subject a Subject.
      * @return the number of messages of message visible to a particular subject.
      */
 	public int getVisibleSubMessages(CoralSession coralSession, MessageResource message, Subject subject);
+	
+	/**
+     * Returns the date of last modified resource child visible to a particular subject.
+     * 
+     * @param resource a MessageResource or DiscussionResource.
+     * @param subject a Subject.
+     * @return the date of last modified resource child visible to a particular subject.
+     */
+     public Date getLastModifiedMessage(CoralSession coralSession, Resource message, Subject subject);
 }

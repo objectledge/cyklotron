@@ -2,6 +2,7 @@ package net.cyklotron.cms.modules.views.forum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -592,6 +593,14 @@ public class Forum
         public int getVisibleSubMessages(MessageResource message)
         {
             return forumService.getVisibleSubMessages(coralSession, message, coralSession.getUserSubject());
+        }
+        
+        /*
+        *  return the date of last modified message or discussion child visible to a particular subject.
+        */
+        public Date getLastModifiedMessage(Resource message)
+        {
+            return forumService.getLastModifiedMessage(coralSession, message, coralSession.getUserSubject());
         }
         
         /*

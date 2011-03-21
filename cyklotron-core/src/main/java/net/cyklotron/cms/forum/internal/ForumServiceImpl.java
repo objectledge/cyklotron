@@ -1,6 +1,7 @@
 package net.cyklotron.cms.forum.internal;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -564,9 +565,15 @@ public class ForumServiceImpl
 	    return new VisibleMessageCounter(coralSession, subject).count(message) - 1;
 	}
 	
+    public Date getLastModifiedMessage(CoralSession coralSession, Resource message, Subject subject)
+    {
+        return new VisibleMessageCounter(coralSession, subject).lastModified(message);
+    }
+	
 	private class VisibleMessageCounter extends SubtreeVisitor
 	{
 		private int count;
+		private Date lastModified;
 		private final ProtectedViewFilter filter;
 		
 		public VisibleMessageCounter(CoralSession coralSession, Subject subject)
@@ -579,6 +586,10 @@ public class ForumServiceImpl
 			if(filter.accept(message))
 			{
 				count++;
+                if(lastModified != null && lastModified.before(message.getModificationTime()))
+                {
+                    lastModified = message.getModificationTime();
+                }
 			}
 		}
 		
@@ -594,6 +605,21 @@ public class ForumServiceImpl
             count = 0;
             traverseBreadthFirst(message);
             return count;
+        }
+        
+        public Date lastModified(Resource resource)
+        {
+            if(resource != null
+                && (resource instanceof MessageResource || resource instanceof DiscussionResource))
+            {
+                lastModified = resource.getModificationTime();
+                traverseBreadthFirst(resource);
+                return lastModified;
+            }
+            else
+            {
+                return null;
+            }
         }
 	}
 }
