@@ -52,12 +52,14 @@ public class UpdateMessage
         if(name.equals(""))
         {
             templatingContext.put("result","illegal_message_name");
+            parameters.set("state", "EditMessage");
             return;
         }
         long messageId = parameters.getLong("mid", -1);
         if (messageId == -1)
         {
             templatingContext.put("result","parameter_not_found");
+            parameters.set("state", "EditMessage");
             return;
         }
         String content = parameters.get("content","");
@@ -83,6 +85,7 @@ public class UpdateMessage
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
+            parameters.set("state", "EditMessage");
             logger.error("ForumException: ",e);
             return;
         }
@@ -90,6 +93,7 @@ public class UpdateMessage
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
+            parameters.set("state", "EditMessage");
             logger.error("ForumException: ",e);
             return;
         }
@@ -97,12 +101,14 @@ public class UpdateMessage
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
+            parameters.set("state", "EditMessage");
             logger.error("WorkflowException: ",e);
             return;
         }
         catch(InvalidResourceNameException e)
         {
             templatingContext.put("result","name_invalid");
+            parameters.set("state", "EditMessage");
             return;
         }
         templatingContext.put("result","updated_successfully");

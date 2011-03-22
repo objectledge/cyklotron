@@ -62,6 +62,7 @@ public class AddMessage
             if(name.equals(""))
             {
                 templatingContext.put("result","illegal_message_name");
+                parameters.set("state", "NewMessage");
                 return;
             }
             HTMLEntityEncoder encoder = new HTMLEntityEncoder();
@@ -72,6 +73,7 @@ public class AddMessage
             if((parentId == -1 || discussionId == -1) && resourceId == -1)
             {
                 templatingContext.put("result","parameter_not_found");
+                parameters.set("state", "NewMessage");
                 return;
             }
 
@@ -95,12 +97,14 @@ public class AddMessage
             if(parent instanceof MessageResource && "locked".equals(((MessageResource)parent).getState().getName()))
             {
                 templatingContext.put("result","parent_message_locked");
+                parameters.set("state", "NewMessage");
                 return;
             }
             
             if(discussion.getState().getName().equals("hidden"))
             {
 				templatingContext.put("result","hidden_discussion");
+				parameters.set("state", "NewMessage");
 				return;
             }
             
@@ -130,6 +134,7 @@ public class AddMessage
                 && !captchaService.checkCaptcha(httpContext, (RequestParameters)parameters))
             {
                 templatingContext.put("result", "invalid_captcha_verification");
+                parameters.set("state", "NewMessage");
                 return;
             }
             
@@ -147,6 +152,7 @@ public class AddMessage
             message.setEmail(email);
             message.setSticky(false);
             message.update();
+            
             // workflow
             if(discussion.getForum().getSite() != null)
             {
@@ -170,6 +176,7 @@ public class AddMessage
         {
             templatingContext.put("result","exception");
             templatingContext.put("trace",new StackTrace(e));
+            parameters.set("state", "NewMessage");
             logger.error("ForumException: ",e);
             return;
         }

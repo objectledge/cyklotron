@@ -208,7 +208,7 @@ public class Forum
             
             String tableInstance = "cms:screen:forum:ForumMessages:"+getNode().getIdString()+":"+discussion.getIdString();
             String rootId = discussion.getIdString();
-            boolean showRoot = false; 
+            boolean showRoot = false;
             if(mid != -1)
             {
                 tableInstance += ":" + mid.toString(); 
@@ -228,7 +228,7 @@ public class Forum
                 state.setAllExpanded(false);
                 state.setPageSize(10);
                 state.setSortColumnName("creation.time");
-                state.setAscSort(false);
+                state.setAscSort(parameters.getBoolean("ascSort", false));
             }
             
             TableModel model = new MessageTableModel(coralSession, i18nContext.getLocale());
