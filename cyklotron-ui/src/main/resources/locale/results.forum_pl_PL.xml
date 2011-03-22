@@ -15,9 +15,6 @@
     <prefix name="answer_not_found">
       <value>.</value>
     </prefix>
-    <prefix name="answer_not_found">
-      <value>.</value>
-    </prefix>
     <prefix name="commentary_already_exists">
       <value>.</value>
     </prefix>
