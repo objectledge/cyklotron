@@ -235,7 +235,7 @@ public class Forum
             ArrayList<TableFilter> filters = new ArrayList<TableFilter>();
             filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             
-            if(mid == -1 && level_expanded > 0 && state.isNew())
+            if(mid == -1 && level_expanded > 0)
             {
                 TableFilter[] filtersArray = new TableFilter[filters.size()];
                 filters.toArray(filtersArray);
