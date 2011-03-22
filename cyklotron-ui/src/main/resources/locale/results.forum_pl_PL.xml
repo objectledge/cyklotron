@@ -15,6 +15,9 @@
     <prefix name="answer_not_found">
       <value>.</value>
     </prefix>
+    <prefix name="answer_not_found">
+      <value>.</value>
+    </prefix>
     <prefix name="commentary_already_exists">
       <value>.</value>
     </prefix>
@@ -26,6 +29,9 @@
     </prefix>
     <prefix name="illegal_transition_name">
       <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="illegal_message_name">
+      <value>Brak tytułu wiadomości.</value>
     </prefix>
     <prefix name="invalid_description">
       <value>.</value>
@@ -79,6 +85,9 @@
     </prefix>
     <prefix name="illegal_transition_name">
       <value>Nieprawidłowy parameter</value>
+    </prefix>
+    <prefix name="illegal_message_name">
+      <value>Brak tytułu wiadomości.</value>
     </prefix>
     <prefix name="invalid_description">
       <value>Operacja nieudana - nieprawidłowy opis.</value>
