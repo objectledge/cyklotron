@@ -70,6 +70,7 @@ public class UpdateMessage
             if(!message.getName().equals(name))
             {
                 coralSession.getStore().setName(message,name);
+                message.setTitle(name);
             }
             message.setContent(content);
             message.setPriority(priority);
