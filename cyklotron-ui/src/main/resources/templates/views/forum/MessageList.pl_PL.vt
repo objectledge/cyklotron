@@ -97,11 +97,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
         #if($row.object.getSticky(false))przyklejony, #end $MessageState.get($row.object.state.name)
       </td>
       <td align="right" nowrap="nowrap">
-      	#if($row.childCount > 0)
-          #fireTransition($row.object $tableLink.set('mid', $row.object.id)) &nbsp;
-      	#else
-          #fireTransition($row.object $tableLink.set('mid', $row.object.id)) | <a href="$tableLink.set('mid', $row.object.id).action('forum.DeleteMessage')">Usuń</a> &nbsp;
-      	#end
+         #fireTransition($row.object $tableLink.set('mid', $row.object.id)) | <a href="$tableLink.set('mid', $row.object.id).action('forum.DeleteMessage')">Usuń</a> &nbsp;
       </td>
     </tr>
 ## ------------ ROW END -  tableView_row

@@ -31,13 +31,17 @@ package net.cyklotron.cms.modules.actions.forum;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.ForumService;
 import net.cyklotron.cms.forum.MessageResource;
@@ -79,5 +83,33 @@ public class ToggleMessageStick
         {
             throw new ProcessingException("Resource not found", e);
         }
+    }
+    
+    public boolean checkAccessRights(Context context) 
+    throws ProcessingException
+    {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("forum"))
+        {
+            logger.debug("Application 'forum' not enabled in site");
+            return false;
+        }
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        Permission moderate = coralSession.getSecurity().getUniquePermission("cms.forum.moderate");
+        long mid = parameters.getLong("mid", -1);
+        if(mid != -1)
+        {
+            try
+            {
+                Resource message = coralSession.getStore().getResource(mid);
+                return coralSession.getUserSubject().hasPermission(message, moderate);
+            }   
+            catch(Exception e)
+            {
+                throw new ProcessingException("failed to check access rights", e);
+            }    
+        }
+        return false;
     }
 }

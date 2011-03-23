@@ -3,11 +3,14 @@ package net.cyklotron.cms.modules.views.forum;
 import java.util.ArrayList;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
@@ -19,6 +22,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.DiscussionResourceImpl;
@@ -114,5 +118,33 @@ public class MoveMessage
         {
             throw new ProcessingException("Component exception: ", e);
         }
+    }
+    
+    public boolean checkAccessRights(Context context) 
+    throws ProcessingException
+    {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        if(!cmsData.isApplicationEnabled("forum"))
+        {
+            logger.debug("Application 'forum' not enabled in site");
+            return false;
+        }
+        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        Permission modify = coralSession.getSecurity().getUniquePermission("cms.forum.modify");
+        long did = parameters.getLong("did", -1);
+        if(did != -1)
+        {
+            try
+            {
+                Resource discussion = coralSession.getStore().getResource(did);
+                return coralSession.getUserSubject().hasPermission(discussion, modify);
+            }   
+            catch(Exception e)
+            {
+                throw new ProcessingException("failed to check access rights", e);
+            }    
+        }
+        return false;
     }
 }

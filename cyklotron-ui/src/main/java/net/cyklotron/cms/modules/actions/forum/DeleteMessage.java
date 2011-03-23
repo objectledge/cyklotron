@@ -53,7 +53,7 @@ public class DeleteMessage
         {
             MessageResource message = MessageResourceImpl.getMessageResource(coralSession, messageId);
             long parentId = message.getParentId();
-            coralSession.getStore().deleteResource(message);
+            coralSession.getStore().deleteTree(message);
             parameters.set("mid", parentId);
         }
         catch(EntityDoesNotExistException e)
