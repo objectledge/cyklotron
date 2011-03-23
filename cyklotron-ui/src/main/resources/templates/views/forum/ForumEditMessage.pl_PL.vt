@@ -25,6 +25,8 @@ $pageTool.addScriptLink("script/WinPopup.js")
 
 #genericScreenHeader('EDYCJA WIADOMOŚCI')
 
+#result_inline_message('results.forum')
+
 <form name="form1" method="post" action="$cms_link.action('forum.UpdateMessage').set('state','Messages').set('did', $message.getDiscussion().getId()).set('mid', $message.getId())">
 <table border="0" class="postHeaderTable">
      #if ($message.getDiscussion().getId() != $message.getParent().getId())
@@ -42,17 +44,17 @@ $pageTool.addScriptLink("script/WinPopup.js")
 <table border="0" class="defaultTable">
     <tr>
 	 <td align="right"><b>Tytuł:</b></td>
-	 <td><input type="text" name="name" size="63" value="$!htmlEncoder.encodeAttribute($message.name)" maxlength="150"></td>
+	 <td><input type="text" name="name" size="63" value="$!htmlEncoder.encodeAttribute($!name)" maxlength="150"></td>
     </tr>
     <tr>
 	 <td align="right"><b>Treść:</b></td>
-	 <td><textarea rows="10" cols="58" name="content">$message.getContent()</textarea></td>
+	 <td><textarea rows="10" cols="58" name="content">$!content</textarea></td>
     </tr>
     <tr>
 	 <td align="right"><b>Priorytet:</b></td>
 	 <td>
 	  <select name="priority">
-	    #options($priorities_list "$message.getPriority()")  
+	    #options($priorities_list "$priority")  
 	  </select>
 	 </td>
     </tr>

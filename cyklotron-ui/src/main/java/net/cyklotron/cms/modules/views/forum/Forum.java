@@ -355,6 +355,9 @@ public class Forum
         {
             MessageResource message = MessageResourceImpl.getMessageResource(coralSession, mid);
             templatingContext.put("message", message);
+            templatingContext.put("name", parameters.get("name", message.getName()));
+            templatingContext.put("content", parameters.get("content", message.getContent()));
+            templatingContext.put("priority", parameters.getInt("priority", message.getPriority()));
         }
         catch(EntityDoesNotExistException e)
         {
@@ -398,6 +401,10 @@ public class Forum
             {
                 templatingContext.put("resource", coralSession.getStore().getResource(resid));
             }
+            templatingContext.put("name", parameters.get("name",""));
+            templatingContext.put("content", parameters.get("content",""));
+            templatingContext.put("priority", parameters.getInt("priority", 2));
+            
             ForumResource forum = forumService.getForum(coralSession, getSite());
             templatingContext.put("add_captcha",forum.getCaptchaEnabled(false));
         }
