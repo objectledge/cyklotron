@@ -28,7 +28,7 @@
       <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
     </prefix>
     <prefix name="illegal_message_name">
-      <value>Brak tytułu wiadomości.</value>
+      <value>.</value>
     </prefix>
     <prefix name="invalid_description">
       <value>.</value>

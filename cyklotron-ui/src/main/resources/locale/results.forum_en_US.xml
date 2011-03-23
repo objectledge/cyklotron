@@ -29,7 +29,7 @@
       <value>Contact system administrator to submit the problem.</value>
     </prefix>
     <prefix name="illegal_message_name">
-      <value>No message title.</value>
+      <value>.</value>
     </prefix>
     <prefix name="invalid_description">
       <value>.</value>
