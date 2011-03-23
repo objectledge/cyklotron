@@ -1,6 +1,7 @@
 package net.cyklotron.cms.documents.internal;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -309,6 +310,8 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         public class ClosestDateParser
             implements LongParser
         {
+            private static final long serialVersionUID = -9081043127213853682L;
+            
             private Calendar selectedTime;
             private Calendar calendar;
             private boolean evalEventsHigher;
@@ -340,7 +343,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
                     calendar.set(java.util.Calendar.MILLISECOND, 0);
                     
                     result = Math.abs(selectedTime.getTimeInMillis() - calendar.getTimeInMillis());
-                    // add converted time sufix to sort by event strat time.
+                    // add converted time suffix to sort by event start time.
                     result += ((date.getTime() - calendar.getTimeInMillis())/8640); // divided by 1/1000 milisecunds.
                     
                     /* when absolute distance from events is the same
@@ -356,14 +359,30 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
                 return result;
             }
 
-            protected Object readResolve()
+            @Override
+            public boolean equals(Object o)
             {
-                return new ClosestDateParser(selectedTime.getTimeInMillis(), evalEventsHigher);
+                if(o == null || !(o instanceof ClosestDateParser))
+                {
+                    return false;
+                }
+                ClosestDateParser p = (ClosestDateParser)o;
+                return (p.selectedTime.getTimeInMillis() == selectedTime.getTimeInMillis())
+                    && (p.evalEventsHigher == evalEventsHigher);
             }
-
+            
+            @Override
+            public int hashCode()
+            {
+                long t = selectedTime.getTimeInMillis();
+                return (int)(t ^ (t >>> 32) ^ (evalEventsHigher ? 0xFFFF : 0));
+            }
+            
+            @Override
             public String toString()
             {
-                return FieldCache.class.getName() + ".CLOSEST_DATE_PARSER";
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                return "ClosestDateParser(" + format.format(selectedTime.getTime()) + ", " + evalEventsHigher + ")";
             }
         }
     }
