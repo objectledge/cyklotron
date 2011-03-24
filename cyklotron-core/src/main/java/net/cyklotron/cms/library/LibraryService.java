@@ -312,10 +312,11 @@ public class LibraryService
         QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, SEARCH_FIELDS, analyzer);
         parser.setDefaultOperator(Operator.AND);
         Set<Long> uniqueIds = new HashSet<Long>();
+        Searcher searcher = null;
         try
         {
             Query query = parser.parse(queryString);
-            Searcher searcher = searchService.getSearchingFacility().getSearcher(
+            searcher = searchService.getSearchingFacility().getSearcher(
                 new PoolResource[] { searchPool }, coralSession.getUserSubject());
             int numHits = searcher.maxDoc() > 0 ? searcher.maxDoc() : 1;
             TopDocs hits = searcher.search(query, null, numHits);
@@ -328,6 +329,13 @@ public class LibraryService
         catch(Exception e)
         {
             throw new SearchException("full text search failed", e);
+        }
+        finally
+        {
+            if(searcher != null)
+            {
+                searchService.getSearchingFacility().returnSearcher(searcher);
+            }
         }
         Set<IndexCard> indexCards = new HashSet<IndexCard>();
         for(long resId : uniqueIds)
