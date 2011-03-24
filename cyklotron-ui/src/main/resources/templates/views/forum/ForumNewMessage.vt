@@ -6,6 +6,9 @@
   #set ($current_user = $authenticationContext.getUserPrincipal().getName())
 ## END SET LOCAL VARS
 
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink("script/captcha/verify.js")##
+
   #genericScreenHeader('NEW MESSAGE')
   
   #result_inline_message('results.forum')
@@ -104,10 +107,19 @@ $parent_content #else $!content #end</textarea></td>
         <script language="javascript">
         function sendaddpost()
         {
-          document.form1.submit();
+         function sendaddpost()
+         {
+          if(document.form1.name.value=="")
+          {
+            alert("Field'name' is empty.");
+          }
+          else{
+            captchaVerify('$link.view('captcha.Verify')', document.form1, 'Invalid captcha.');
+          }
+         }
         }
         </script>
-        <a href="javascript:sendaddpost()">Send</a>
+        <a id="addMessage" href="javascript:sendaddpost()">Send</a>
       </td>
       <td NOWRAP class="usualbutton">
       #if ($parent.getId() != $discussion.getId())
