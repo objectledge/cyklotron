@@ -22,6 +22,7 @@ implements SearchHit
     private float score;
     private String url;
     private String editUrl;
+    private long id = -1L;
     
     private SH sh;
 
@@ -188,7 +189,11 @@ implements SearchHit
      */
     public long getId()
     {
-        return Long.parseLong(doc.get(SearchConstants.FIELD_ID));
+        if(id == -1L)
+        {
+            id = Long.parseLong(doc.get(SearchConstants.FIELD_ID));
+        }
+        return id;
     }
 
     /**
