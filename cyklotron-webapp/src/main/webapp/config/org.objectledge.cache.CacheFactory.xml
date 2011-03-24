@@ -45,15 +45,6 @@
     <config>StatisticsMap()</config>    
   </instance>
   
-  <instance name="resourcelist">
-    <config>HashMap()</config>    
-    <config>StatisticsMap()</config>    
-  </instance>
-  <instance name="resourcelistkey">
-    <config>HashMap()</config>    
-    <config>StatisticsMap()</config>    
-  </instance>
-  
   <instance name="categoryQueryResults">
     <config>HashMap()</config>    
     <config>StatisticsMap()</config>    
@@ -65,7 +56,7 @@
   </instance>
   
   <instance name="docRenderingHelpers">
-    <config>SoftMap(1000)</config>    
+    <config>LRUMap(1000)</config>    
     <config>StatisticsMap()</config>    
   </instance>
 </config>
