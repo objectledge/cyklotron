@@ -112,7 +112,7 @@
         <version>2.1-beta-1</version>
         <configuration>
           <dependentWarExcludes>WEB-INF/web.xml</dependentWarExcludes>
-          <packagingExcludes>WEB-INF/eclipse-web.xml</packagingExcludes>        
+          <packagingExcludes>WEB-INF/eclipse-web.xml</packagingExcludes>
           <webappDirectory>${project.build.directory}/cyklotron</webappDirectory>
         </configuration>
       </plugin>
@@ -138,6 +138,12 @@
             </configuration>
           </plugin>
         </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>bamboo</id>
+      <build>
+        <finalName>cyklotron-b${buildId}</finalName>
       </build>
     </profile>
   </profiles>
