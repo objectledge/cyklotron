@@ -54,11 +54,7 @@
     <config>StatisticsMap()</config>    
   </instance>
   
-  <instance name="categoryquery">
-    <config>HashMap()</config>    
-    <config>StatisticsMap()</config>    
-  </instance>
-  <instance name="categoryquerykey">
+  <instance name="categoryQueryResults">
     <config>HashMap()</config>    
     <config>StatisticsMap()</config>    
   </instance>
