@@ -13,8 +13,28 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
 ## TODO: permissions checking
 #####
 ## COMMAND BAR PREPROCESSING
-#macro(commandbar)
 
+<script>
+function deleteAction(val, url)
+{
+  if(val > 0)
+  {
+    if(confirm("Czy napewno chesz usunąć tą wiadomość wraz z "+val+" odpowiedziami?"))
+    {
+        document.location.href = url;
+    }
+  }
+  else
+  {
+    if(confirm("Czy napewno chesz usunąć tą wiadomość?"))
+    {
+        document.location.href = url;
+    }
+  }
+}
+</script>
+
+#macro(commandbar)
 <a href="$forumLink.view("forum.EditDiscussion").set("did",$discussion.getId())">edytuj</a> - 
 
 #if($cms_tool.getUserData().hasPermission($discussion, "cms.category.categorize"))                                                                   
@@ -97,7 +117,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
         #if($row.object.getSticky(false))przyklejony, #end $MessageState.get($row.object.state.name)
       </td>
       <td align="right" nowrap="nowrap">
-         #fireTransition($row.object $tableLink.set('mid', $row.object.id)) | <a href="$tableLink.set('mid', $row.object.id).action('forum.DeleteMessage')">Usuń</a> &nbsp;
+         #fireTransition($row.object $tableLink.set('mid', $row.object.id)) | <a href="javascript:deleteAction($row.childCount,'$tableLink.set('mid', $row.object.id).action('forum.DeleteMessage')')">Usuń</a> &nbsp;
       </td>
     </tr>
 ## ------------ ROW END -  tableView_row
