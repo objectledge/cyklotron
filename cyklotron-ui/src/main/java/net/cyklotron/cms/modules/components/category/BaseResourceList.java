@@ -114,64 +114,30 @@ extends BaseCategoryComponent
         }
 	}
 
-    /**
-     * TODO: Make this kind of cacheing available as a static/tool/service code 
-     */
     protected Resource[] getResources(CoralSession coralSession,
         net.cyklotron.cms.category.components.BaseResourceList resList,
         BaseResourceListConfiguration config) throws ProcessingException
     {
-        long cacheInterval = (long) config.getCacheInterval();
+        int cacheInterval = config.getCacheInterval();
         if(cacheInterval > 0L)
         {
-            // get cache instance
-            Map cache = null;
-            Map keyCache = null;
-            try
-            {
-                cache = cacheFactory.getInstance("resourcelist", "resourcelist");
-                keyCache = cacheFactory.getInstance("resourcelistkey", "resourcelistkey");
-            }
-            catch(Exception e)
-            {
-                throw new ProcessingException(e);
-            }
-            // create cached resource list key
-            
+            // create cached resource list key            
             CmsData cmsData = cmsDataFactory.getCmsData(context); 
-            //String key = cmsData.getNode().getIdString() + "." + cmsData.getComponent().getInstanceName();
             CmsNodeResource node = getCacheKeyNode(config, cmsData);
             String key = node.getIdString() + "." + cmsData.getComponent().getInstanceName();
-            String synchronizedKey = null;
-            synchronized(keyCache)
+
+            // retrieve shared key
+            String sharedKey = categoryQueryService.getSharedResultsKey(key);
+            
+            synchronized(sharedKey)
             {
-                synchronizedKey = (String)keyCache.get(key);
-                if(synchronizedKey == null)
+                Resource[] results = categoryQueryService.getCachedResults(sharedKey);
+                if(results == null)
                 {
-                    synchronizedKey = key;
-                    keyCache.put(key, key);
+                    results = getResources2(coralSession, resList, config);
+                    categoryQueryService.setCachedResult(key, results, cacheInterval);
                 }
-            }
-            synchronized(synchronizedKey)
-            {
-                // get cached resource list together with creation time
-                CacheEntry entry;
-                synchronized(cache)
-                {
-                    entry = (CacheEntry) cache.get(key);
-                }
-                // check entry validity
-                if(entry == null ||
-                System.currentTimeMillis() - entry.timeStamp > cacheInterval*1000L)
-                {
-                    Resource[] ress = getResources2(coralSession, resList, config);
-                    entry = new CacheEntry(ress, System.currentTimeMillis());
-                    synchronized (cache)
-                    {
-                        cache.put(key, entry);
-                    }
-                }
-                return entry.list;
+                return results;
             }
         }
         else
@@ -198,18 +164,6 @@ extends BaseCategoryComponent
             node = cmsData.getNode(); 
         }
         return node;
-    }
-    
-    private class CacheEntry
-    {
-        final private Resource[] list;
-        final private long timeStamp;
-
-        public CacheEntry(Resource[] list, long timeStamp)
-        {
-            this.list = list;
-            this.timeStamp = timeStamp;
-        }
     }
 
     protected Resource[] getResources2(CoralSession coralSession,

@@ -135,5 +135,34 @@ public interface CategoryQueryService
 
     //public Resource[] reverseQuery(CoralSession coralSession, String query, Set idSet)
      //   throws Exception;
+    
+    // results caching
+    
+    /**
+     * Retrieve shared key usable for synchronization.
+     * 
+     * This method will return identical string instance, equal to the argument by value, to each calling thread.
+     * 
+     * @param key thread local key
+     * @return shared key
+     */
+    public String getSharedResultsKey(String key);
+    
+    /**
+     * Returns cached query results.
+     * 
+     * @param key application defined identifier.
+     * @return cached results, or null when not available.
+     */
+    public Resource[] getCachedResults(String key);
+    
+    /**
+     * Stores cached query results.
+     * 
+     * @param key application defined identifier.
+     * @param results the results.
+     * @param cacheInterval cache interval in seconds.
+     */
+    public void setCachedResult(String identifier, Resource[] results, long cacheInterval);
 }
 
