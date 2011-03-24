@@ -226,7 +226,7 @@ public class Forum
                 state.setShowRoot(showRoot);
                 state.setExpanded(rootId);
                 state.setAllExpanded(false);
-                state.setPageSize(10);
+                state.setPageSize(parameters.getInt("pageSize", 10));
                 state.setSortColumnName("creation.time");
                 state.setAscSort(parameters.getBoolean("ascSort", false));
             }
