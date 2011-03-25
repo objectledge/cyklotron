@@ -134,11 +134,13 @@ public class Forum
             }
             Resource[] discussions = coralSession.getStore().getResource(res[0]);
             TableState state = tableStateManager.getState(context, "cms:screens:forum,Forum:discussions");
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
+            Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
             if(state.isNew())
             {
             
                 state.setTreeView(false);
-                state.setPageSize(10);
+                state.setPageSize(screenConfig.getInt("page_size", 10));
                 state.setSortColumnName("creation.time");
                 state.setAscSort(false);
             }
@@ -208,12 +210,18 @@ public class Forum
             
             String tableInstance = "cms:screen:forum:ForumMessages:"+getNode().getIdString()+":"+discussion.getIdString();
             String rootId = discussion.getIdString();
+            int pageSize = screenConfig.getInt("page_size", 10);
+            if(screenConfig.getLong("did", -1) > 0)
+            {
+                pageSize = 0;
+            }
             boolean showRoot = false;
             if(mid != -1)
             {
                 tableInstance += ":" + mid.toString(); 
                 rootId = mid.toString();
                 showRoot = true;
+                pageSize = screenConfig.getInt("page_size", 10);
                 templatingContext.put("mid", mid);
             }            
 
@@ -226,7 +234,7 @@ public class Forum
                 state.setShowRoot(showRoot);
                 state.setExpanded(rootId);
                 state.setAllExpanded(false);
-                state.setPageSize(parameters.getInt("pageSize", 10));
+                state.setPageSize(pageSize);
                 state.setSortColumnName("creation.time");
                 state.setAscSort(parameters.getBoolean("ascSort", false));
             }
@@ -600,6 +608,23 @@ public class Forum
         public int getVisibleSubMessages(MessageResource message)
         {
             return forumService.getVisibleSubMessages(coralSession, message, coralSession.getUserSubject());
+        }
+        
+        /*
+         * return new sub messages count of message
+         */
+        public int getNewSubMessages(MessageResource message)
+        {
+            int newMessagesCount = 0;
+            Resource[] res = coralSession.getStore().getResource(message);
+            for(int i = 0; i < res.length; i++)
+            {
+                if("New".equals(((MessageResource)res[i]).getState().getName()))
+                {
+                    newMessagesCount++;
+                }
+            }
+            return newMessagesCount;
         }
         
         /*

@@ -6,7 +6,7 @@ $viewEnclosureTool.override('popup.Default')
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
     <!--
-    var fieldNames = new Array("did", "level_expanded");
+    var fieldNames = new Array("did", "level_expanded", "page_size");
     function sendConfig()
     {
     document.form1.action = "$save_action";
@@ -74,6 +74,13 @@ $object.name
 #set($opts = [["0", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5]])
 <td><select size="1" name="level_expanded" >
 #options($opts $config.getInt('level_expanded',0))
+</select></td>
+</tr>
+<tr>
+<td><label>Wybierz liczbę pokazywanych wyników:</label></td>
+#set($opts = [["10", 10], ["20", 20], ["50", 50], ["100", 100], ["Wszystkie", 0]])
+<td><select size="1" name="page_size" >
+#options($opts $config.getInt('page_size', 10))
 </select></td>
 </tr>
 </table>
