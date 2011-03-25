@@ -104,18 +104,23 @@ $parent_content #else $!content #end</textarea></td>
       <td width="90%"></td>
       <td NOWRAP class="usualbutton">
         <script language="javascript">
-        function sendaddpost()
+        function sendaddpost(captcha)
         {
           if(document.form1.name.value=="")
           {
             alert("Pole 'nazwa' nie zostało wypełnione.");
           }
           else{
-            captchaVerify('$link.view('captcha.Verify')', document.form1, 'Nieprawidłowy kod captcha.');
+           if(captcha)
+           {
+             captchaVerify('$link.view('captcha.Verify')', document.form1, 'Nieprawidłowy kod captcha.');
+           }else{
+             document.form1.submit();
+           }
           }
         }
         </script>
-        <a id="addMessage" href="javascript:sendaddpost()" >Wyślij</a>
+        <a id="addMessage" href="javascript:sendaddpost($add_captcha)" >Wyślij</a>
       </td>
       <td NOWRAP class="usualbutton">
       #if ($parent.getId() != $discussion.getId())
