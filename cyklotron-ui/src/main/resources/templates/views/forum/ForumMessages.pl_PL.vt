@@ -30,7 +30,12 @@
 
   #set($forumLink = $cms_link.set('fid',$discussion.forum.id))
 
-  #set($tableLink = $forumLink.set('did', $discussion.getId()).set('tableId',$table.getId()))
+  #if($parametersTool.isDefined('mid'))
+      #set($tableLink = $forumLink.set('did', $discussion.getId()).set('tableId',$table.getId()).set('mid', $parametersTool.get('mid')))
+  #else
+      #set($tableLink = $forumLink.set('did', $discussion.getId()).set('tableId',$table.getId()))
+  #end
+
 
   #if($table.getPageCount() > 0)
   #tableView_pager($table $tableLink)
