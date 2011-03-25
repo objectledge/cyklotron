@@ -38,12 +38,26 @@ Uprawnienia:
       <img src="$link.content('images/tree/T.gif')" />
       <img src="$link.content('images/tree/file.gif')" />
       #if($cms_tool.checkAdministrator())
-        <a href="#roles($discussions $discussions)">Dyskusje</a>
+        <a href="#roles($discussionsRoot $discussionsRoot)">Dyskusje</a>
       #else
  	    Dyskusje
       #end
     </td>
   </tr>
+  #foreach($discussion in $discussions)
+  <tr>
+    <td>
+      <img src="$link.content('images/tree/T.gif')" />
+      <img src="$link.content('images/tree/T.gif')" />
+      <img src="$link.content('images/tree/file.gif')" />
+      #if($cms_tool.checkAdministrator())
+        <a href="#roles($discussion $discussion)">$discussion.name</a>
+      #else
+ 	    $discussion.name
+      #end
+    </td>
+  </tr>
+  #end
   <tr>
     <td>
       <img src="$link.content('images/tree/L.gif')" />
@@ -77,7 +91,7 @@ Liczba ostatnio dodanych:
     Dyskusje
     </td>
     <td>
-      <input type="text" name="discussions_last_added_size" value="$discussions.getLastlyAddedSize(10)" size="3" />
+      <input type="text" name="discussions_last_added_size" value="$discussionsRoot.getLastlyAddedSize(10)" size="3" />
     </td>
   </tr>
   <tr>

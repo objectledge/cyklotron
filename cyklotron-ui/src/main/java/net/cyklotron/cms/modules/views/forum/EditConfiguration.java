@@ -1,5 +1,8 @@
 package net.cyklotron.cms.modules.views.forum;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
@@ -55,9 +58,17 @@ public class EditConfiguration
                 templatingContext.put("forum_node", forumNode);
             }
             Resource[] comments = coralSession.getStore().getResource(forum, "comments");
-            Resource[] discussions = coralSession.getStore().getResource(forum, "discussions");
+            Resource[] discussionsRoot = coralSession.getStore().getResource(forum, "discussions");
+            Resource[] resources = coralSession.getStore().getResource(discussionsRoot[0]);
+            List discussions = new ArrayList();
+            for(int i = 0; i < resources.length; i++)
+            {
+                discussions.add(resources[i]);
+            }
+            
             templatingContext.put("comments",comments[0]);
-            templatingContext.put("discussions",discussions[0]);
+            templatingContext.put("discussionsRoot", discussionsRoot[0]);
+            templatingContext.put("discussions", discussions);
             
             ResourceClass resourceClass = coralSession.getSchema().getResourceClass("cms.forum.discussion");
             AutomatonResource automaton = workflowService.getPrimaryAutomaton(coralSession, site.getParent().getParent(), resourceClass);
