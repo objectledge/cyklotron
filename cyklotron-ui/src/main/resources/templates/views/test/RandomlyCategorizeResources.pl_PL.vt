@@ -1,0 +1,186 @@
+
+
+#macro(category_tree $table $root_row_title)
+#set($tableLink = $link.set('tableId',$table.id))
+##
+#foreach($row in $table.rows)
+#if($table.rootRow != $row)## WARN: rootRow is not a category
+<input type="hidden" name="category-visible" value="$row.id" />
+#end
+#end
+##
+<table width="100%" class="genericItemTree" cellspacing="0">
+#foreach($row in $table.rows)
+    <tr>
+      <td width="20">
+#if($table.rootRow == $row)
+&nbsp;
+#elseif($category_selection_state.getValue($row.object).equals('selected'))
+<input type="checkbox" name="category-$row.id" id="category-$row.id" value="selected" checked="checked" />
+#else
+<input type="checkbox" name="category-$row.id" id="category-$row.id" value="selected" />
+#end
+      </td>
+      <td>
+##tableView_linesAndFolders($table $row $tableLink)
+#set($toggleExpandLink = $tableLink.set('rowId',$row.getId()).action('table.ToggleExpanded'))
+#set($toggleExpandLink = "javascript:fSub('$toggleExpandLink')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink)
+
+#if($table.rootRow == $row)
+$root_row_title
+#else
+<label for="category-$row.id">$row.object.name</label>
+#end
+    </td>
+  </tr>
+#end
+</table>
+#end
+
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#set($from_component = true)
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<script type="text/javascript">
+<!--
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+//-->
+</script>
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+#genericScreenHeader('WYBIERZ KATEGORIE')
+
+#result_inline_message('results.category')
+
+<form name="form1" method="post" action="">
+
+##
+## params
+##
+
+<table border="0" class="genericScreen" width="100%" cellspacing="0">
+
+<tr>
+<td align="right">Minimalna liczba kategorii przypisanych jednemu zasobowi:</td>
+<td width="60%">
+<select name="mincats">
+#set($opts = [["0", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5]])
+#options($opts 0)
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right">Maksymalna libczba kategorii przypisanych jednemu zasobowi:</td>
+<td>
+<select name="maxcats">
+#set($opts = [["0", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["7", 7], ["10", 10]])
+#options($opts 7)
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right"></td>
+<td>
+<select name="addcategories">
+#set($opts = [["dodaj kategorie do juź przypisanych", "add"], ["usuń przypisane i dodaj nowe", "replace"]])
+#options($opts 'replace')
+</select>
+</td>
+</tr>
+
+</table>
+
+##
+## resources
+##
+<h2>Zasoby</h2>
+
+#set($tableLink = $link.set('tableId',$res_table.id))
+##
+#foreach($row in $res_table.rows)
+<input type="hidden" name="resource-visible" value="$row.id" />
+#end
+##
+<table width="100%" class="genericItemTree" cellspacing="0">
+#foreach($row in $res_table.rows)
+    <tr>
+      <td width="20">
+#if($resource_selection_state.getValue($row.object).equals('selected'))
+<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" checked="checked" />
+#else
+<input type="checkbox" name="resource-$row.id" id="resource-$row.id" value="selected" />
+#end
+      </td>
+      <td>
+#set($toggleExpandLink = $tableLink.set('rowId',$row.getId()).action('table.ToggleExpanded'))
+#set($toggleExpandLink = "javascript:fSub('$toggleExpandLink')")
+#tableView_linesAndFoldersBase($res_table $row $toggleExpandLink)
+
+<label for="resource-$row.id">$row.object.name</label>
+    </td>
+  </tr>
+#end
+</table>
+
+$pageTool.addScriptLink('script/Forms.js')
+<script type="text/javascript">
+<!--
+function checkAll(name, value)
+{
+  //alert(name +'\n'+ value);
+  var ids = getValue ('form1', name+'-visible');
+  //alert(ids);
+  for(var i=0; i<ids.length; i++)
+  {
+    setValue('form1', name+'-'+ids[i], value);
+  }
+}
+//-->
+</script>
+
+<p><a href="javascript:checkAll('resource', 'selected');">Zaznacz wszystkie widoczne zasoby</a></p>
+<p><a href="javascript:checkAll('resource', '---');">Wyczyść zaznaczenie wszystkich widocznych zasobów</a></p>
+
+##
+## categories
+##
+<h2>Kategorie</h2>
+
+#if($removed_categories)
+<p>Kategorie usunięte w wyniku optymalizacji:</p>
+<ol>
+#foreach($category in $removed_categories)
+<li>$category.name</li>
+#end
+</ol>
+#end
+
+#category_tree($globaltable 'kategorie globalne')
+<br />
+#category_tree($sitetable 'kategorie serwisu')
+
+<p><a href="javascript:checkAll('category', 'selected');">Zaznacz wszystkie widoczne kategorie</a></p>
+<p><a href="javascript:checkAll('category', '---');">Wyczyść zaznaczenie wszystkich widocznych kategorii</a></p>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  <a href="javascript:fSub('$link.action('category.OptimiseCategorization')');">Optymalizuj</a>
+  </div>
+
+  <div class="modification">
+  <a href="javascript:fSub('$link.view('structure.NaviInfo').action('test.RandomlyCategorizeResources')');">Kategoryzuj</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

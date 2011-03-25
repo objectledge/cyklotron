@@ -1,0 +1,150 @@
+#genericScreenHeader('Konfiguracja komponentu dokumenty z zapamiętanej lista zapytań według kategorii')
+#set($from_component = true)
+
+#if($cms_data.node)
+#set($form_target = "cyklotron_$cms_data.node.id")
+#set($form_action = "$link.unsetView().action('structure.UpdatePreferences').set('x',$cms_data.node.id)")
+#else
+#set($form_target = 'cyklotron')
+#set($form_action = "$link.unsetView().action('structure.UpdatePreferences')")
+#end
+
+<form name="configSend" method="post" target="$form_target" action="$form_action">
+#if($cms_data.node)
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+</form>
+
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "header", "maxResNumber", "publicationTimeOffset", "queryPoolName", "listSortColumn", "listSortDir", "cacheInterval", "domain", "pathIncluded");
+// -->
+</script>
+
+<form name="categoryQueryPersistentListConf">
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tbody>
+
+<tr>
+<td>
+Podaj tytuł nawigacji:
+</td>
+<td><input type="text" name="header" style="width: 100%;" value="$!list_conf.header" /></td>
+</tr>
+
+<tr>
+<td>
+Wybierz liczbę dokumentów pokazywanych przez nawigację:
+</td>
+<td><select size="1" name="maxResNumber">
+#set($opts = [["nieograniczona", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7], ["8", 8], ["9", 9], ["10", 10], ["11", 11], ["12", 12], ["13", 13], ["14", 14], ["15", 15]])
+#options($opts $list_conf.maxResNumber)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Wybierz liczbę dni w okresie których pojawiły się nowe dokumenty - tylko z nastawioną datą publikacji:
+</td>
+<td><select size="1" name="publicationTimeOffset">
+#set($opts = [["nieograniczona", -1], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7],["14", 14],["21", 21], ["30", 30], ["60", 60], ["90", 90], ["180", 180], ["365", 365]])
+#options($opts $list_conf.publicationTimeOffset)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Wybierz sposób sortowania dokumentów:
+</td>
+<td><select size="1" name="listSortColumn">
+#set($opts = [["tytuł/nazwa", "index.title"], ["czas utworzenia", "creation.time"], ["czas modyfikacji", "modification.time"], ["priorytet", "priority"], ["data publikacji","validity.start"], ["priorytet i data publikacji","priority.validity.start"], ["początek wydarzenia","event.start"], ["koniec wydarzenia","event.end"]])
+#options($opts $list_conf.sortColumn)
+  </select>
+  <select size="1" name="listSortDir">
+#set($opts = [["rosnąco", true], ["malejąco", false]])
+#options($opts $list_conf.sortDir)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Wybierz czas utrzymywania wyników zapytania w pamięci &quot;cache&quot;:
+</td>
+<td>
+<select size="1" name="cacheInterval">
+#set($opts = [["30 min", 1800], ["5 min", 300], ["10 min", 600], ["2 min", 120], ["1 minuta", 60]])
+#options($opts $list_conf.cacheInterval)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Podaj nazwę domeny dodawanej do cookie:
+</td>
+<td><input type="text" name="domain" style="width: 100%;" value="$!list_conf.domain" /></td>
+</tr>
+
+<tr>
+<td>
+Uwzględnij ścieżkę do strony przy tworzeniu cookie
+</td>
+<td>
+<input type="checkbox" name="pathIncluded" value="true"#if($list_conf.isPathIncluded()) checked#end>
+</td>
+</tr>
+
+</tbody>
+</table>
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+<tr>
+<th colspan="2">Wybierz zestaw zapytań dla komponentu</th>
+</tr>
+#if($table.pageRowCount == 0)
+<tr class="row1">
+<td colspan="$tableColumnOrder.size()">
+Nie ma żadnych zestawów.
+</td>
+</tr>
+#else
+
+#foreach($row in $table.rows)
+<tr>
+<td style="width: 10px;">
+#if($row.object == $selected_pool)
+<input type="radio" name="queryPoolName" value="$row.object.name" id="pool$row.object.id" checked="checked" />
+#else
+<input type="radio" name="queryPoolName" value="$row.object.name" id="pool$row.object.id" />
+#end
+</td>
+<td>
+<label for="pool$row.object.id">
+#tableView_linesAndFoldersBase($table $row $link)
+$row.object.name
+<small>$!row.object.description</small>
+</label>
+
+</td>
+</tr>
+#end
+#end
+</table>
+</form>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:submitConfig('$form_target', 'categoryQueryPersistentListConf', 'configSend', fieldNames)">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

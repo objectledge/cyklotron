@@ -1,0 +1,46 @@
+
+$pageTool.addScriptLink('script/CMSPopups.js')
+
+#set($subject = $cms_tool.subject)
+
+#genericScreenHeader('Application configuration - Search')
+
+#result_inline_message('results.search')
+
+<form name="form1" method="post" action="$link.action('search.UpdateConfiguration')">
+
+<table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+<tr>
+<td align="right" width="30%">
+Search screen path:
+</td>
+<td>
+#if($cms_tool.hasPermission($subject,$site,'cms.search.configure'))
+<input type="text" name="searchNodePath" value="$!search_node.sitePath" size="60" />
+<a href="#select_node('relative_path' $search_node.id 'form1' 'searchNodePath')">choose</a>
+#else
+&nbsp;$!search_node.sitePath
+#end
+</td>
+</tr>
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  #if($cms_tool.hasPermission($subject,$site,'cms.search.configure'))
+  <a href="javascript:document.form1.submit();">Save</a>
+  <a href="javascript:document.form1.reset();">Cancel</a>
+  #end
+  </div>
+</div>
+
+#genericScreenTrailer()
+

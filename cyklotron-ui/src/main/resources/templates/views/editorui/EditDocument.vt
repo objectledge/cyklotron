@@ -1,0 +1,149 @@
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.core.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.widget.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.position.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.autocomplete.js')##
+$pageTool.addScriptLink('script/jquery/ui/plugin/jquery.autocomplete.js')##
+$pageTool.addScriptLink("script/ngodatabase/autocomplete.js")##
+$pageTool.addScriptLink("script/xmlhttp.js")##
+$pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.base.css')##
+$pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.theme.css')##
+$pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
+
+#set($organizationsLink = $link.view('ngodatabase.JsonOrganizations').unset('site_id'))
+#set($locationsLink = $link.view('ngodatabase.JsonLocations').unset('site_id'))
+#set($link = $link.set('node_id',$cms_data.node.id))
+##
+$pageTool.addStyleLink('style/cms-admin-forms.css')##
+##
+##
+#set($form_id = $doc-edit-instance.form.id)##
+#set($linkFieldName = "link-input-${form_id}")##
+#set($isSeniorEditor = $cms_tool.subject.hasRole($cms_data.site.seniorEditor))
+##
+
+<script type="text/javascript">
+<!--
+/* auto instance refresh */
+function AutoInstanceSaver(sessionInterval, confirmQuestion,  formId, formAction)
+{
+  this._save = function()
+  {
+    if(confirm(confirmQuestion))
+    {
+        document.forms[formId].action = formAction;
+        _formtool_dispatch_event(formId);
+    }
+  }
+
+  window.setTimeout(this._save, 0.9 * 1000 * sessionInterval);
+}
+
+autoInstanceSaver = new AutoInstanceSaver(
+    ${maxInactiveSessionInterval},
+    '$i18n.get('cms.document.edit.autoupdate.popup')',
+    '$form_id',
+    '$link.action('documents.UpdateDocumentFormInstance').view('editorui.EditDocument')');
+
+// save button
+function submitDocForm(targetView)
+{
+    if(targetView)
+    {
+    document.forms['$form_id'].action = document.forms['$form_id'].action + '&target_view=' + targetView;
+  }
+    _formtool_dispatch_event('$form_id');
+}
+
+// configuration for HTMLArea scripts
+var htmlAreaConfiguration = new Array();
+htmlAreaConfiguration["image.select.popup.url"] = "$link.view('popup.DirectoryWithUpload').set('node_id',$cms_data.node.id)";
+htmlAreaConfiguration["document.select.popup.url"] = "#select_node('cms_path' $cms_data.node.id 'htmlarea-edit-popups' $linkFieldName)";
+
+function gotoDocument(url, docid) {                                                                                                                          
+ xmlhttp.open("HEAD", "/view/editorui.EditDocument?from_list=true&node_id=" + docid,true);                                                                  
+ xmlhttp.onreadystatechange=function() {                                                                                                                    
+ if (xmlhttp.readyState==4) {                                                                                                                              
+   if (xmlhttp.status==200) {                                                                                                                            
+   //         location.href="/view/editorui.EditDocument?from_list=true&node_id=" + docid;                                                                     
+          window.open(url + docid);                                                                                                                         
+    }                                                                                                                                                     
+    else if (xmlhttp.status==404) alert("Document with this  id does not exists. ")                                                                             
+  else alert("Status is "+xmlhttp.status + " " + docid)                                                                                                   
+  }                                                                                                                                                         
+  }                                                                                                                                                           
+   xmlhttp.send(null)                                                                                                                                          
+ }    
+                                                                                                                                                         
+// organizations / events autocomplete
+jQuery(document).ready(function()
+{
+   initEditDocumentAutocomplete(5, '$link.view('ngodatabase.JsonOrganizations')', '$link.view('ngodatabase.JsonLocations')');
+});
+                                                                                                                                                         
+// -->
+</script>
+<table width="100%" class="genericScreen" cellspacing="0">
+<tr>
+<th>Edit document</th>
+<th class="right">
+<form id="gotoDoc" onsubmit="return false;" style="display:inline" >
+     Id: <input name="docid" size="5" maxlength="7" type="text" value="$node.id">
+    <a href="javascript:gotoDocument('/view/editorui.EditNode?node_id=', document.forms.gotoDoc.docid.value)">Edit properties</a> 
+    #if($isSeniorEditor) <a href="javascript:gotoDocument('/view/editorui.EditDocument?from_list=true&node_id=', document.forms.gotoDoc.docid.value)">Edit document</a> #end
+ </form>
+
+</tr>
+</table>
+<div class="action-buttons">
+  <div class="additional">
+<a href="#categorize($node)">Categories</a><br/>
+<a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Preview</a><br/>
+<a href="#related($node)">Relations</a>
+  </div>
+
+  <div class="modification">
+<div>
+<a href="javascript:submitDocForm('editorui.EditDocument');">Save and stay on screen</a> |
+<a href="javascript:submitDocForm('editorui.Documents');">Save and go to workflow</a> |
+<a href="javascript:submitDocForm('editorui.EditNode');">Save and go to properties</a>
+</div>
+<br/>
+<div>
+  <a href="$link.action('documents.CancelEditDocument').set('target_view','editorui.EditNode')">Anuluj i przejdz do właściwości</a> |
+  <a href="$link.action('documents.CancelEditDocument').set('target_view','editorui.Documents')">Anuluj i przejdz do obiegu</a>
+</div>
+  </div>
+</div>
+
+<br />
+
+#set($formLink = $link.action('editorui.UpdateDocument').view('editorui.EditDocument'))
+$formtool.generateUI($doc-edit-instance, $formLink)
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+<a href="#categorize($node)">Categories</a><br/>
+<a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Preview</a>
+<a href="#related($node)">Relations</a>
+  </div>
+
+  <div class="modification">
+<div>
+<a href="javascript:submitDocForm('editorui.EditDocument');">Save and stay on screen</a>
+<a href="javascript:submitDocForm('editorui.Documents');">Save and go to workflow</a>
+<a href="javascript:submitDocForm('editorui.EditNode');">Save and go to properties</a>
+</div>
+<br/>
+<div>
+<a href="$link.action('documents.CancelEditDocument').set('target_view','editorui.EditNode')">Cancel and go to properties</a>
+<a href="$link.action('documents.CancelEditDocument').set('target_view','editorui.Documents')">Cancel and go to workflow</a>
+</div>
+  </div>
+</div>
+
+#genericScreenTrailer()
+

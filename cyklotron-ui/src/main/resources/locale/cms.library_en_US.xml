@@ -1,0 +1,86 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="Browse">
+    <prefix name="strings">
+      <item name="title">Browsing library index</item>
+      <item name="notConfigured">Aplication is not configured properly.</item>
+      <item name="noItemsFound">No index items were found.</item>
+      <item name="searchHeading">Full text search.</item>
+      <item name="searchButton">search</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="title">Title</item>
+      <item name="authors">Authors</item>
+      <item name="pubYear">Publication year</item>
+      <item name="keywords">Keywords</item>
+      <item name="downloads">Downloads</item>
+    </prefix>
+  </prefix>
+  <prefix name="Problems">
+    <prefix name="strings">
+      <item name="title">Problem report</item>
+      <item name="notConfigured">Aplication is not configured properly.</item>
+      <item name="noProblemsFound">No problems were detected.</item>
+      <item name="filtersHeading">Fitlers</item>
+      <item name="filtersButton">apply</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="resource">Resource</item>
+      <item name="documents">Documents</item>
+      <item name="files">Files</item>
+      <item name="problems">Problems</item>
+    </prefix>
+    <prefix name="problems">
+      <item name="INVALID_CLASS">Invalid resource class</item>
+      <item name="INVALID_METADATA">Invalid metadata (document is damaged)</item>
+      <item name="MISSING_AUTHOR">Author field is blank</item>
+      <item name="VALIDITY_START_UNSET">Publication date is not set</item>
+      <item name="MISSING_DESCRIPTION_DOC">Missing index item document</item>
+      <item name="MULTIPLE_DESCRIPTION_DOCS">File attached to multiple index item documents</item>
+      <item name="LIBRARY_CATEGORY_MISSING">Required category is missing</item>
+      <item name="DOCUMENT_NOT_ACCESSIBLE">Document not visible to anonymous site visitors</item>
+      <item name="FILE_NOT_ACCESSIBLE">File not visible to anonymous site visitors</item>
+    </prefix>
+  </prefix>
+  <prefix name="IndexConf">
+    <prefix name="strings">
+      <item name="title">Embedded screen configuration</item>
+      <item name="sortColumn">Sort column</item>
+      <item name="sortDirection">Sort direction</item>
+      <item name="asc">ascending</item>
+      <item name="desc">descending</item>
+      <item name="pageSize">Items per page</item>
+      <item name="save">Save</item>
+      <item name="cancel">Cancel</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="title">Title</item>
+      <item name="authors">Authors</item>
+      <item name="pubYear">Publication year</item>
+      <item name="keywords">Keywords</item>
+    </prefix>
+  </prefix>
+  <prefix name="Config">
+    <prefix name="strings">
+      <item name="title">Application configuration</item>
+      <item name="category">Category</item>
+      <item name="indexPool">Index pool</item>
+      <item name="select">select</item>
+      <item name="save">save</item>
+    </prefix>
+    <prefix name="help">
+      <item name="general"><![CDATA[<p>Each library item consists of a document (dubbed an index 
+        card) and optionally one or more attached files. Both files and and documents nedd to belong 
+        to the category selected below. A file must be attached to exactly one index card.</p> 
+        <p>Author and keywords for a library item are configured on the index card document contents 
+        editing screen. Publication year is determined from index card document's publication date.
+        </p>
+        <p>Search index pool should encompass both files and documents, but should be restricted to 
+        smallest suitable set, both by path selection and required categories to speed up searching.
+        </p>]]>
+      </item>
+      <item name="category">All library resources need to belong to this category
+      </item>
+      <item name="indexPool">Search index pool to use for full-text searching library contents</item>
+    </prefix>
+  </prefix>
+</strings>
