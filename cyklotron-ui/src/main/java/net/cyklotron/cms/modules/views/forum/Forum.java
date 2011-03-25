@@ -623,6 +623,10 @@ public class Forum
                 {
                     newMessagesCount++;
                 }
+                if(((MessageResource)res[i]).getChildren().length > 0)
+                {
+                    newMessagesCount += getNewSubMessages((MessageResource)res[i]);
+                }
             }
             return newMessagesCount;
         }
