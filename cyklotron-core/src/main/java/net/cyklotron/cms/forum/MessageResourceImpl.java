@@ -784,7 +784,7 @@ public class MessageResourceImpl
         	return true;
         }
         
-        if(state.getName().equals("visible") || state.getName().equals("rejected"))
+        if(state.getName().equals("locked") || state.getName().equals("visible"))
         {
             return true;
         }
