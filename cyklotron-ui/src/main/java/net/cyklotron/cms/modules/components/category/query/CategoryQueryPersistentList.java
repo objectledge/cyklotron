@@ -291,17 +291,4 @@ public class CategoryQueryPersistentList
             return categoryQueryService.forwardQuery(coralSession, query);
         }
     }
-
-    private class CacheEntry
-    {
-        final private Resource[] list;
-
-        final private long timeStamp;
-
-        public CacheEntry(Resource[] list, long timeStamp)
-        {
-            this.list = list;
-            this.timeStamp = timeStamp;
-        }
-    }
 }
