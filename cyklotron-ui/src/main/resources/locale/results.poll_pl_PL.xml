@@ -37,7 +37,10 @@
       <value>Nazwa nie może być pusta.</value>
     </prefix>
     <prefix name="invalid_email">
-      <value>Nieprawidłowy adres email.</value>
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_captcha_verification">
+      <value>.</value>
     </prefix>
     <prefix name="new_session">
       <value>.</value>
