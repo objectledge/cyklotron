@@ -137,51 +137,28 @@ public class CategoryQueryResults
         CategoryQueryResultsConfiguration config)
         throws Exception
     {
-        long cacheInterval = (long) config.getCacheInterval();
+
+        int cacheInterval = config.getCacheInterval();
         if(cacheInterval > 0L)
         {
-            // get cache instance
-            Map cache = null;
-            Map keyCache = null;
-            try
-            {
-                cache = cacheFactory.getInstance("categoryquery", "categoryquery");
-                keyCache = cacheFactory.getInstance("categoryquerykey", "categoryquerykey");
-            }
-            catch(Exception e)
-            {
-                throw new ProcessingException(e);
-            }
-            CmsData cmsData = cmsDataFactory.getCmsData(context); 
+            // create cached resource list key
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
             String key = cmsData.getNode().getIdString() + "."
                 + config.getCategoryQuery().getIdString();
-            String synchronizedKey = null;
-            synchronized(keyCache)
+
+            // retrieve shared key
+            String sharedKey = categoryQueryService.getSharedResultsKey(key);
+
+            synchronized(sharedKey)
             {
-                synchronizedKey = (String)keyCache.get(key);
-                if(synchronizedKey == null)
+                Resource[] results = categoryQueryService.getCachedResults(sharedKey);
+                if(results == null)
                 {
-                    synchronizedKey = key;
-                    keyCache.put(key, key);
+                    results = getResources2(coralSession, resList, config);
+                    categoryQueryService.setCachedResult(key, results, cacheInterval);
                 }
+                return results;
             }
-            synchronized(synchronizedKey)
-            {
-                // get cached resource list together with creation time
-                CacheEntry entry = (CacheEntry) cache.get(key);
-                // check entry validity
-                if(entry == null ||
-                System.currentTimeMillis() - entry.timeStamp > cacheInterval*1000L)
-                {
-                    Resource[] ress = getResources2(coralSession, resList, config);
-                    entry = new CacheEntry(ress, System.currentTimeMillis());
-                    synchronized (cache)
-                    {
-                        cache.put(key, entry);
-                    }
-                }
-                return entry.list;
-            }            
         }
         else
         {
