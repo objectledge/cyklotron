@@ -36,6 +36,8 @@ public class SearchingFacilityImpl implements SearchingFacility
 
     // local //////////////////////////////////////////////////////////////////////////////////////
 
+    private Map indexSearchersCache = new WeakHashMap(); 
+    
     /**
      * Creates the facility.
      * @param log
@@ -63,27 +65,12 @@ public class SearchingFacilityImpl implements SearchingFacility
         return getSearcher(indexes, subject);
     }
 
-    @Override
     public void returnSearcher(Searcher searcher)
     {
-        try
-        {
-            searcher.close();
-        }
-        catch(IOException e)
-        {
-            log.error("failed to close searcher", e);
-        }
+        // WARN: we do not close the searcher - we leave it open for future use.
     }
-    
-    @Override
-    public void clearSearcher(IndexResource index)
-    {
-        // searcher pooling was removed     
-    }
-    
-    // implementation /////////////////////////////////////////////////////////////////////////////
 
+    // implementation /////////////////////////////////////////////////////////////////////////////
 
     private Searcher getSearcher(List indexes, Subject subject) throws SearchException
     {
@@ -127,8 +114,56 @@ public class SearchingFacilityImpl implements SearchingFacility
 
     private Searcher getSearcher(IndexResource index) throws IOException, SearchException
     {
+        IndexSearcherDescriptor searcherDescriptor = 
+            (IndexSearcherDescriptor) indexSearchersCache.get(index);
+
         Directory indexDirectory = indexingFacility.getIndexDirectory(index);
-        return new IndexSearcher(indexDirectory, true);        
+        long currentVersion = IndexReader.getCurrentVersion(indexDirectory);
+
+        if(searcherDescriptor == null)
+        {
+            searcherDescriptor = new IndexSearcherDescriptor(index, IndexReader
+                .getCurrentVersion(indexDirectory), new IndexSearcher(indexDirectory, true));
+            indexSearchersCache.put(index, searcherDescriptor);
+        }
+        // /if the index has changed since this Searcher was created
+        else if(currentVersion != searcherDescriptor.lastKnownVersion)
+        {
+            searcherDescriptor.update(currentVersion, new IndexSearcher(indexDirectory, true));
+        }
+
+        return searcherDescriptor.getSearcher();
+    }
+    
+    public void clearSearcher(IndexResource index)
+    {
+        indexSearchersCache.remove(index);
+    }    
+
+    final class IndexSearcherDescriptor
+    {
+        private IndexResource index;
+        private long lastKnownVersion;
+        private Searcher searcher;
+
+        public IndexSearcherDescriptor(
+            IndexResource index, long lastKnownVersion, IndexSearcher searcher)
+        {
+            this.index = index;
+            this.lastKnownVersion = lastKnownVersion;
+            this.searcher = searcher;
+        }
+
+        public void update(long lastKnownVersion, IndexSearcher searcher)
+        {
+            this.lastKnownVersion = lastKnownVersion;
+            this.searcher = searcher;
+        }
+
+        public Searcher getSearcher()
+        {
+            return searcher;
+        }
     }
 }
 
