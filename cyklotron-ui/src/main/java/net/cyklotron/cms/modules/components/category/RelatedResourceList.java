@@ -67,13 +67,13 @@ extends BaseResourceList
     
     protected NavigationNodeResource getContextNode(Context context, CmsData cmsData, Parameters parameters)
     {
-        if(parameters.isDefined("node_id"))
+        if(parameters.isDefined("doc_id"))
         {
             try
             {
-                Long nodeId = parameters.getLong("node_id", -1L);
+                Long docId = parameters.getLong("doc_id", -1L);
                 CoralSession coralSession = context.getAttribute(CoralSession.class);
-                NavigationNodeResource node = (NavigationNodeResource)StructureUtil.getNode(coralSession, nodeId);
+                NavigationNodeResource node = (NavigationNodeResource)StructureUtil.getNode(coralSession, docId);
                 // check if subject can view this node.
                 if(!node.canView(coralSession, coralSession.getUserSubject(), cmsData.getDate()))
                 {

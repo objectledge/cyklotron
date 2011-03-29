@@ -60,12 +60,12 @@ public class DocumentView
     private NavigationNodeResource getContextNode(CoralSession coralSession, CmsData cmsData, Parameters parameters)
     {    
         NavigationNodeResource node;
-        if(parameters.isDefined("node_id"))
+        if(parameters.isDefined("doc_id"))
         {
             try
             {
-                long node_id = parameters.getLong("node_id", -1L);
-                node = (DocumentNodeResource)coralSession.getStore().getResource(node_id);
+                long doc_id = parameters.getLong("doc_id", -1L);
+                node = (DocumentNodeResource)coralSession.getStore().getResource(doc_id);
                 // check if subject can view this node.
                 if(!node.canView(coralSession, coralSession.getUserSubject(),cmsData.getDate()))
                 {
