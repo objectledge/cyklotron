@@ -251,7 +251,7 @@ public class CategoryQueryPersistentList
             // create cached resource list key            
             CmsData cmsData = cmsDataFactory.getCmsData(context);
             String key = cmsData.getNode().getIdString() + "."
-                + resList.getQueryResource().getIdString();
+                + cmsData.getComponent().getInstanceName();
 
             // retrieve shared key
             String sharedKey = categoryQueryService.getSharedResultsKey(key);
