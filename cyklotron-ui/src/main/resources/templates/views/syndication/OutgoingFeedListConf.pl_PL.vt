@@ -1,0 +1,64 @@
+
+#genericScreenHeader('Zmiana parametrów wyświetlania listy kanałów wychodzących')
+##
+#result_inline_message('results.syndication')
+##
+##
+#set($from_component = true)
+#set($subject = $cms_tool.subject)
+##
+#set($formAction = $link.unsetView().action('structure.UpdatePreferences'))
+#if($cms_data.node)
+#set($formAction = $formAction.set('x',$cms_data.node.id))
+#end
+<form name="configSend" method="post" target="cyklotron_$!cms_data.node.id" action="$formAction">
+#if($cms_data.node)
+  <input type="hidden" name="node_id" value="$cms_data.node.id" />
+#end
+  <input type="hidden" name="scope" value="$instance" />
+  <input type="hidden" name="config" value="" />
+</form>
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "feedSortColumn", "feedSortDir" );
+// -->
+</script>
+##
+
+<form name="feedConf">
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tbody>
+
+  <tr>
+  <td>Wybierz sposób sortowania:</td>
+  <td><select size="1" name="feedSortColumn">
+  #set($opts = [["nazwa", "name"], ["czas utworzenia", "creation.time"], ["czas modyfikacji", "modification.time"]])
+  #options($opts $feedConf.sortColumn)
+    </select>
+    <select size="1" name="feedSortDir">
+  #set($opts = [["ascending", true], ["descending", false]])
+  #options($opts $feedConf.sortDir)
+    </select></td>
+  </tr>
+
+</tbody>
+</table>
+  
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:submitConfig('cyklotron_$!cms_data.node.id', 'feedConf', 'configSend', fieldNames)">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

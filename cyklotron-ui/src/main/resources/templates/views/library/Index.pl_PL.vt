@@ -1,0 +1,59 @@
+<h2>Library</h2>
+
+#if(!$applicationConfigured)
+<p>Application is not configured properly</p>
+#else
+<form name="libraryIndex" method="POST" action="">
+<script type="text/javascript">
+  function send(action)
+  {
+    document.libraryIndex.action = action;
+    document.libraryIndex.submit();
+  }
+</script>
+
+<h4>Full text search</h4>
+<p>
+	<input type="text" name="query" value="$!query" />
+	<a href="javascript:send('$link.setNode($cmsData.node)')">search</a>
+</p>
+
+<h4>Results</h4>
+#if($table.rows.empty)
+<p>No items were found</p>
+#else
+#set($columnOrder = ['title','authors','pubYear','keywords','downloads'])
+$table.getColumn('title').set('label', 'Title')
+$table.getColumn('authors').set('label', 'Authors')
+$table.getColumn('pubYear').set('label', 'Publication yera')
+$table.getColumn('keywords').set('label', 'Keywords')
+$table.getColumn('downloads').set('label', 'Downloads')
+#set($tableLink = $link.setNode($cmsData.node).set('tableId',$table.id))
+<table width="100%" cellspacing="0">
+	<tr>
+		#tableView_header_Submit($table $tableLink $columnOrder 'send')
+	</tr>
+	#foreach($row in $table.rows)
+	#set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+		<td><a href="$link.setNode($row.object.descriptionDoc)">$row.object.title</a></td>
+		<td>$row.object.authors</td>
+		<td>$row.object.pubYear</td>
+		<td>#if($row.object.keywords.length() > 0) $row.object.keywords #else &nbsp; #end</td>
+		<td>
+			#foreach($download in $row.object.downloads)
+			<a href="$files.getLink($download)">$download.name</a> <br/>
+			#end			
+		</td>
+	</tr>
+	#end
+ <tr>
+    <td colspan="5" align="center">
+       #tableView_pager_Submit($table $tableLink 'send')
+       #tableView_pageSizeChooser_Submit($table $tableLink [20, 50, 100] 'send')
+    </td>
+  </tr>
+</table>
+</form>
+#end
+#end

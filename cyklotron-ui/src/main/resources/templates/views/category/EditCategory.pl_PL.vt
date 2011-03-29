@@ -1,0 +1,122 @@
+
+#genericScreenHeader('EDYCJA KATEGORII')
+
+#result_inline_message('results.category')
+
+#set($catLink = $link.set('cat_id',$category.id))
+
+<form name="form1" method="post" action="$catLink.action('category.UpdateCategory')">
+
+<table border="0" class="genericScreen" width="100%">
+<tr>
+<td align="right"><b>Nazwa:</b></td>
+<td width="90%" colspan="2">
+<input type="text" name="name" style="width:100%;" value="$category.name" maxlength="150" />
+</td>
+</tr>
+
+<tr>
+<td align="right" valign="top"><b>Opis:</b></td>
+<td colspan="2">
+<textarea rows="3" cols="" style="width:100%;" name="description">$category.description</textarea>
+</td>
+</tr>
+
+<tr>
+#set($linkResource = $category.link)
+<td align="right" valign="top"><b>Odsyłacz:</b></td>
+<td width="80%">
+   <input name="link_id" value="$!linkResource.getId()" type="hidden"/>
+   #if($linkResource)
+     #if($linkResource.resourceClass.name.equals("cms.link.external_link"))
+      <input name="link_target" value="$!linkResource.getTarget()" type="text" readonly style="border:none;background-color:transparent;width:100%;"/><br/>
+     #else
+      <input name="link_target" value="Wewnętrzny: $!linkResource.getNode().getPath().substring($cms_tool.getSite($linkResource).getPath().length()).substring(10)" type="text" readonly style="border:none;background-color:transparent;width:100%;"/><br/>
+     #end
+      <input name="link_name" value="$!linkResource.name" type="text" readonly style="border:none;background-color:transparent;font-weight:bold;width:100%;"/>
+   #else
+     <input name="link_target" value="" type="text" readonly style="border:none;background-color:transparent;width:100%;"/><br/>
+     <input name="link_name" value="" type="text" readonly style="border:none;background-color:transparent;font-weight:bold;width:100%;"/>
+   #end
+</td>
+<td class="actionlink">
+    <a href="#select_category_link('id target name' 'form1' 'link_id link_target link_name')">wybierz</a>
+</td>
+</tr>
+
+<tr>
+<td align="right" valign="top"><b>Styl:</b></td>
+<td colspan="2">
+<input type="text" name="uiStyle" value="$!category.uiStyle" maxlength="100" />
+</td>
+</tr>
+</table>
+
+<div><input type="checkbox" id="warunek" name="warunek" onclick="javascript:check1();">
+	<label for="warunek">Pokaż opcje zaawansowane</label>
+</div>
+<div id="advance_query">
+
+<h3>Klasy zasobów dla tej kategorii</h3>
+<ul>
+#foreach($appinfo in $category_tool.getResourceClassesInfo($category))
+
+<li>Aplikacja $appinfo.application.name
+<ul style="list-style: none;">
+#foreach($resclassinfo in $appinfo.resourceClassesInfos)
+<li>
+#if($resclassinfo.supported)
+#if($resclassinfo.owned)
+<input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" checked="checked" />
+#else
+<input type="checkbox" name="DUMMY" id="res-class-$resclassinfo.resourceClass.id" checked="checked" disabled="disabled"/>
+#end
+#else
+<input type="checkbox" name="res_class_id" id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.id" />
+#end
+<label for="res-class-$resclassinfo.resourceClass.id" >#resource_type($resclassinfo)</label>
+</li>
+#end
+</ul>
+</li>
+
+#end
+</ul>
+</div><br>
+<script language="JavaScript1.1" type="text/javascript">
+<!--
+check1();
+function check1() {
+	warunek = (document.form1.warunek.checked);
+	
+	obj = document.getElementsByTagName("div");
+	
+	if(warunek) {
+		obj["advance_query"].style.display = '';
+	} else {
+		obj["advance_query"].style.display = 'none';
+	}
+
+}
+-->
+</script>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+    <a href="$catLink.view('category.FixCategoryAssignments')" ##
+      title="Usuwa kategoryzację zasobów, które nie mają typu zgodnego z tą kategorią" ##
+    >Popraw kategoryzację</a>
+  </div>
+
+  <div class="modification">
+    <a href="javascript:document.form1.submit();">Zapisz</a>
+    <a href="$catLink.view('category.CategoryList')">Anuluj</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()
