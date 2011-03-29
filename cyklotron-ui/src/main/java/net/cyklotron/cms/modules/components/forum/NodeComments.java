@@ -7,15 +7,20 @@ import java.util.Map;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.Templating;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentAliasResource;
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.ForumException;
 import net.cyklotron.cms.forum.ForumResource;
@@ -62,12 +67,15 @@ public class NodeComments
     protected DiscussionResource getDiscussion(HttpContext httpContext, CoralSession coralSession, Context context, boolean errorOnNull)
         throws ProcessingException
     {
-        if(getNode() == null)
+
+        Parameters parameters = RequestParameters.getRequestParameters(context);
+        CmsData cmsData = cmsDataFactory.getCmsData(context);    
+        NavigationNodeResource node = getContextNode(coralSession, cmsData, parameters);
+        if(node == null)
         {
             componentError(context, "No node selected");
             return null;
         }
-        NavigationNodeResource node = getNode();
         try
         {
             if(node instanceof DocumentAliasResource)
@@ -81,5 +89,32 @@ public class NodeComments
         {
             throw new ProcessingException("failed to retrieve forum information", e);
         }
+    }
+    
+    private NavigationNodeResource getContextNode(CoralSession coralSession, CmsData cmsData, Parameters parameters)
+    {    
+        NavigationNodeResource node;
+        if(parameters.isDefined("doc_id"))
+        {
+            try
+            {
+                long doc_id = parameters.getLong("doc_id", -1L);
+                node = (DocumentNodeResource)coralSession.getStore().getResource(doc_id);
+                // check if subject can view this node.
+                if(!node.canView(coralSession, coralSession.getUserSubject(),cmsData.getDate()))
+                {
+                    node = cmsData.getNode();
+                }
+                return node;
+            }
+            catch(EntityDoesNotExistException e)
+            {
+                return cmsData.getNode();
+            }
+        }
+        else
+        {
+            return cmsData.getNode();
+        } 
     }
 }
