@@ -124,56 +124,34 @@ public class CalendarEvents
         I18nContext i18nContext, Parameters parameters)
         throws ProcessingException
     {
-        long cacheInterval = (long)config.getLong("cacheInterval", 0L);
+        long cacheInterval = (long)config.getInt("cacheInterval", 0);
         if(cacheInterval > 0L)
         {
-            // get cache instance
-            Map cache = null;
-            try
-            {
-                cache = cacheService.getInstance("calendarevents", "calendarevents");
-            }
-            catch(Exception e)
-            {
-                throw new ProcessingException(e);
-            }
-            // create cached data key
+            // create cached resource list key            
             CmsData cmsData = cmsDataFactory.getCmsData(context);
-
             String key = cmsData.getNode().getIdString() + "."
                 + cmsData.getComponent().getInstanceName();
-            // get cached data together with creation time
-            CacheEntry entry = (CacheEntry)cache.get(key);
-            // check entry validity
-            if(entry == null
-                || System.currentTimeMillis() - entry.timeStamp > cacheInterval * 1000L)
+
+            // retrieve shared key
+            String sharedKey = categoryQueryService.getSharedResultsKey(key);
+            
+            synchronized(sharedKey)
             {
-                SearchHit[] list = getHits2(config, coralSession, i18nContext, parameters);
-                if(list == null)
+                SearchHit[] results = (SearchHit[])categoryQueryService.getCachedResults(sharedKey);
+                if(results == null)
                 {
-                    return null;
+                    results = getHits2(config, coralSession, i18nContext, parameters);
+                    categoryQueryService.setCachedResult(key, (Resource[])results, cacheInterval);
                 }
-                entry = new CacheEntry(list, System.currentTimeMillis());
-                synchronized(cache)
-                {
-                    cache.put(key, entry);
-                }
+                return results;
             }
-            return entry.list;
         }
-        return getHits2(config, coralSession, i18nContext, parameters);
-    }
-
-    private class CacheEntry
-    {
-        private final SearchHit[] list;
-
-        private final long timeStamp;
-
-        public CacheEntry(SearchHit[] list, long timeStamp)
+        else
         {
-            this.list = list;
-            this.timeStamp = timeStamp;
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
+            logger.warn("non-cachable calendarEvents component nodeId="
+                + cmsData.getNode().getIdString());
+            return getHits2(config, coralSession, i18nContext, parameters);
         }
     }
 
