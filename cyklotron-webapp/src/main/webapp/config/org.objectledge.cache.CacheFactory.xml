@@ -45,7 +45,7 @@
     <config>StatisticsMap()</config>    
   </instance>
   
-  <instance name="categoryQueryResults">
+  <instance name="componentData">
     <config>HashMap()</config>    
     <config>StatisticsMap()</config>    
   </instance>

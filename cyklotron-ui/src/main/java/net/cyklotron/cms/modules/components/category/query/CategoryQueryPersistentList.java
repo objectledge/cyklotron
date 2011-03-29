@@ -38,6 +38,7 @@ import net.cyklotron.cms.modules.components.SkinableCMSComponent;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.ComponentDataCacheService;
 import net.cyklotron.cms.structure.StructureService;
 
 /**
@@ -61,12 +62,14 @@ public class CategoryQueryPersistentList
 
     private final StructureService structureService;
 
+    private final ComponentDataCacheService componentDataCacheService;
+
     public CategoryQueryPersistentList(org.objectledge.context.Context context, Logger logger,
         Templating templating, CmsDataFactory cmsDataFactory, SkinService skinService,
         MVCFinder mvcFinder, CategoryQueryService categoryQueryService,
         TableStateManager tableStateManager, SiteService siteService,
         IntegrationService integrationService, CacheFactory cacheFactory,
-        StructureService structureService)
+        StructureService structureService, ComponentDataCacheService componentDataCacheService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
         this.categoryQueryService = categoryQueryService;
@@ -75,6 +78,7 @@ public class CategoryQueryPersistentList
         this.integrationService = integrationService;
         this.cacheFactory = cacheFactory;
         this.structureService = structureService;
+        this.componentDataCacheService = componentDataCacheService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext,
@@ -245,31 +249,24 @@ public class CategoryQueryPersistentList
         CategoryQueryPersistentResourceList resList, CategoryQueryPersistentListConfiguration config)
         throws Exception
     {        
+        CmsData cmsData = cmsDataFactory.getCmsData(context); 
         int cacheInterval = config.getCacheInterval();
         if(cacheInterval > 0L)
         {
-            // create cached resource list key            
-            CmsData cmsData = cmsDataFactory.getCmsData(context);
-            String key = cmsData.getNode().getIdString() + "."
-                + cmsData.getComponent().getInstanceName();
-
-            // retrieve shared key
-            String sharedKey = categoryQueryService.getSharedResultsKey(key);
-            
-            synchronized(sharedKey)
+            Object guard = componentDataCacheService.getGuard(cmsData);            
+            synchronized(guard)
             {
-                Resource[] results = categoryQueryService.getCachedResults(sharedKey);
+                Resource[] results = componentDataCacheService.getCachedData(cmsData);
                 if(results == null)
                 {
                     results = getResources2(coralSession, resList, config);
-                    categoryQueryService.setCachedResult(key, results, cacheInterval);
+                    componentDataCacheService.setCachedData(cmsData, results, cacheInterval);
                 }
                 return results;
             }
         }
         else
         {
-            CmsData cmsData = cmsDataFactory.getCmsData(context);
             logger.warn("non-cachable category query results screen nodeId="
                 + cmsData.getNode().getIdString());
             return getResources2(coralSession, resList, config);

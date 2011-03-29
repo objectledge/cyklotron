@@ -32,6 +32,7 @@ import net.cyklotron.cms.modules.views.BaseSkinableScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.ComponentDataCacheService;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
@@ -39,81 +40,85 @@ import net.cyklotron.cms.style.StyleService;
  * Category Query Resutls screen.
  * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryQueryResults.java,v 1.7 2008-10-30 17:54:28 rafal Exp $ 
+ * @version $Id: CategoryQueryResults.java,v 1.7 2008-10-30 17:54:28 rafal Exp $
  */
-public class CategoryQueryResults 
+public class CategoryQueryResults
     extends BaseSkinableScreen
 {
-	/** category query service */
-	protected CategoryQueryService categoryQueryService;
+    /** category query service */
+    protected CategoryQueryService categoryQueryService;
 
     protected SiteService siteService;
-    
+
     protected IntegrationService integrationService;
-    
+
     protected CacheFactory cacheFactory;
-    
+
+    private final ComponentDataCacheService componentDataCacheService;
+
     public CategoryQueryResults(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         StructureService structureService, StyleService styleService, SkinService skinService,
         MVCFinder mvcFinder, TableStateManager tableStateManager,
         CategoryQueryService categoryQueryService, SiteService siteService,
-        IntegrationService integrationService, CacheFactory cacheFactory)
+        IntegrationService integrationService, ComponentDataCacheService componentDataCacheService)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
         this.categoryQueryService = categoryQueryService;
         this.siteService = siteService;
         this.integrationService = integrationService;
+        this.componentDataCacheService = componentDataCacheService;
         this.cacheFactory = cacheFactory;
-	}
-	
-	public void prepareDefault(Context context)
-		throws ProcessingException
-	{
-		CmsData cmsData = cmsDataFactory.getCmsData(context);
+    }
+
+    public void prepareDefault(Context context)
+        throws ProcessingException
+    {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-		// get query object
-		CategoryQueryResource categoryQuery;        
-		try
-		{
-			if(parameters.isDefined(CategoryQueryUtil.QUERY_PARAM))
-			{
+        // get query object
+        CategoryQueryResource categoryQuery;
+        try
+        {
+            if(parameters.isDefined(CategoryQueryUtil.QUERY_PARAM))
+            {
                 categoryQuery = CategoryQueryUtil.getQuery(coralSession, parameters);
-			}
+            }
             else if(getScreenConfig().isDefined("categoryQueryName")
                 && !getScreenConfig().get("categoryQueryName", "").isEmpty())
             {
                 categoryQuery = getScreenConfigCategoryResource(context, coralSession);
             }
-			else
-			{
-                categoryQuery = categoryQueryService.getDefaultQuery(coralSession, cmsData.getSite());
-			}
-            
+            else
+            {
+                categoryQuery = categoryQueryService.getDefaultQuery(coralSession,
+                    cmsData.getSite());
+            }
+
             if(categoryQuery == null)
             {
                 screenError(cmsData.getNode(), context, "default category query not configured");
                 return;
             }
-		}
-		catch (CategoryQueryException e1)
-		{
-			screenError(cmsData.getNode(), context, "cannot get catgory query root for site "+
-                cmsData.getSite().getName());
-			return;
-		}    
-		templatingContext.put("category_query", categoryQuery);    
+        }
+        catch(CategoryQueryException e1)
+        {
+            screenError(cmsData.getNode(), context, "cannot get catgory query root for site "
+                + cmsData.getSite().getName());
+            return;
+        }
+        templatingContext.put("category_query", categoryQuery);
 
-		// get config
-		CategoryQueryResultsConfiguration config = 
-			new CategoryQueryResultsConfiguration(getScreenConfig(), categoryQuery);
+        // get config
+        CategoryQueryResultsConfiguration config = new CategoryQueryResultsConfiguration(
+            getScreenConfig(), categoryQuery);
 
-        CategoryQueryResultsResourceList resList = new CategoryQueryResultsResourceList(context, integrationService,
-            cmsDataFactory, categoryQueryService, siteService, structureService,
-                categoryQuery, config);
+        CategoryQueryResultsResourceList resList = new CategoryQueryResultsResourceList(context,
+            integrationService, cmsDataFactory, categoryQueryService, siteService,
+            structureService, categoryQuery, config);
 
         // get resources based on category query
         Resource[] resources = null;
@@ -132,43 +137,35 @@ public class CategoryQueryResults
         TableTool tool = resList.getTableTool(coralSession, context, config, state, resources);
         templatingContext.put("table", tool);
     }
-    
+
     private Resource[] getResources(CoralSession coralSession, BaseResourceList resList,
         CategoryQueryResultsConfiguration config)
         throws Exception
     {
-
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
         int cacheInterval = config.getCacheInterval();
         if(cacheInterval > 0L)
         {
-            // create cached resource list key
-            CmsData cmsData = cmsDataFactory.getCmsData(context);
-            String key = cmsData.getNode().getIdString() + "."
-                + cmsData.getComponent().getInstanceName();
-
-            // retrieve shared key
-            String sharedKey = categoryQueryService.getSharedResultsKey(key);
-
-            synchronized(sharedKey)
+            Object guard = componentDataCacheService.getGuard(cmsData);
+            synchronized(guard)
             {
-                Resource[] results = categoryQueryService.getCachedResults(sharedKey);
+                Resource[] results = componentDataCacheService.getCachedData(cmsData);
                 if(results == null)
                 {
                     results = getResources2(coralSession, resList, config);
-                    categoryQueryService.setCachedResult(key, results, cacheInterval);
+                    componentDataCacheService.setCachedData(cmsData, results, cacheInterval);
                 }
                 return results;
             }
         }
         else
         {
-            CmsData cmsData = cmsDataFactory.getCmsData(context);
             logger.warn("non-cachable category query results screen nodeId="
                 + cmsData.getNode().getIdString());
             return getResources2(coralSession, resList, config);
         }
     }
-    
+
     private Resource[] getResources2(CoralSession coralSession, BaseResourceList resList,
         BaseResourceListConfiguration config)
         throws Exception
@@ -182,9 +179,9 @@ public class CategoryQueryResults
         else
         {
             return categoryQueryService.forwardQuery(coralSession, query);
-        }        
+        }
     }
-    
+
     private CategoryQueryResource getScreenConfigCategoryResource(Context context,
         CoralSession coralSession)
         throws ProcessingException, CategoryQueryException
@@ -215,10 +212,11 @@ public class CategoryQueryResults
         }
         return categoryQuery;
     }
-    
+
     private class CacheEntry
     {
         final private Resource[] list;
+
         final private long timeStamp;
 
         public CacheEntry(Resource[] list, long timeStamp)
@@ -226,5 +224,5 @@ public class CategoryQueryResults
             this.list = list;
             this.timeStamp = timeStamp;
         }
-    }    
+    }
 }

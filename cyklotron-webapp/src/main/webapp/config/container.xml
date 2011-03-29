@@ -482,6 +482,7 @@
 
   <component class-key="net.cyklotron.cms.structure.StructureService"
              class="net.cyklotron.cms.structure.internal.StructureServiceImpl"/>
+  <component class="net.cyklotron.cms.structure.ComponentDataCacheService"/>             
 
   <component class-key="net.cyklotron.cms.style.StyleService"
              class="net.cyklotron.cms.style.internal.StyleServiceImpl"/>

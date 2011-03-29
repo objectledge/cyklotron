@@ -47,6 +47,7 @@ import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.ComponentDataCacheService;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.util.SiteFilter;
 
@@ -73,12 +74,14 @@ public class CalendarEvents
 
     protected SiteService siteService;
 
+    private final ComponentDataCacheService componentDataCacheService;
+
     public CalendarEvents(org.objectledge.context.Context context, Logger logger,
         Templating templating, CmsDataFactory cmsDataFactory, SkinService skinService,
         MVCFinder mvcFinder, StructureService structureService, SearchService searchService,
         CacheFactory cacheFactory, IntegrationService integrationService,
         CategoryQueryService categoryQueryService, SiteService siteService,
-        TableStateManager tableStateManager)
+        TableStateManager tableStateManager, ComponentDataCacheService componentDataCacheService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
         this.structureService = structureService;
@@ -88,6 +91,7 @@ public class CalendarEvents
         this.tableStateManager = tableStateManager;
         this.categoryQueryService = categoryQueryService;
         this.siteService = siteService;
+        this.componentDataCacheService = componentDataCacheService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext,
@@ -124,32 +128,25 @@ public class CalendarEvents
         I18nContext i18nContext, Parameters parameters)
         throws ProcessingException
     {
-        long cacheInterval = (long)config.getInt("cacheInterval", 0);
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        int cacheInterval = config.getInt("cacheInterval", 0);
         if(cacheInterval > 0L)
         {
-            // create cached resource list key            
-            CmsData cmsData = cmsDataFactory.getCmsData(context);
-            String key = cmsData.getNode().getIdString() + "."
-                + cmsData.getComponent().getInstanceName();
-
-            // retrieve shared key
-            String sharedKey = categoryQueryService.getSharedResultsKey(key);
-            
-            synchronized(sharedKey)
+            Object guard = componentDataCacheService.getGuard(cmsData);
+            synchronized(guard)
             {
-                SearchHit[] results = (SearchHit[])categoryQueryService.getCachedResults(sharedKey);
+                SearchHit[] results = componentDataCacheService.getCachedData(cmsData);
                 if(results == null)
                 {
                     results = getHits2(config, coralSession, i18nContext, parameters);
-                    categoryQueryService.setCachedResult(key, (Resource[])results, cacheInterval);
+                    componentDataCacheService.setCachedData(cmsData, results, cacheInterval);
                 }
                 return results;
             }
         }
         else
         {
-            CmsData cmsData = cmsDataFactory.getCmsData(context);
-            logger.warn("non-cachable calendarEvents component nodeId="
+            logger.warn("non-cachable category query results screen nodeId="
                 + cmsData.getNode().getIdString());
             return getHits2(config, coralSession, i18nContext, parameters);
         }
