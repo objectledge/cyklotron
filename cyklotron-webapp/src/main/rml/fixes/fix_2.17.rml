@@ -119,3 +119,6 @@ PARENT '/cms/applications/forum/screens/forum';
 
 ALTER RESOURCE '/cms/applications/forum/screens/forum'
 SET ATTRIBUTE configurationView = 'forum.ForumScreenConf';
+
+ALTER RESOURCE '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.modify' 
+SET PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator';
