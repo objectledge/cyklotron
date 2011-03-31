@@ -15,6 +15,7 @@ import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.ComponentResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.structure.ComponentDataCacheService;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
@@ -25,13 +26,17 @@ public class SetComponentClass
 
     protected IntegrationService integrationService;
 
+    private final ComponentDataCacheService componentDataCacheService;
+
     public SetComponentClass(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService,
-        PreferencesService preferencesService, IntegrationService integrationService)
+        PreferencesService preferencesService, IntegrationService integrationService,
+        ComponentDataCacheService componentDataCacheService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
         this.preferencesService = preferencesService;
         this.integrationService = integrationService;
+        this.componentDataCacheService = componentDataCacheService;
     }
 
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
@@ -56,6 +61,7 @@ public class SetComponentClass
             }
             preferences.set("component."+instance+".app", application.getApplicationName());
             preferences.set("component."+instance+".class", component.getComponentName().replace(".",","));
+            componentDataCacheService.clearCachedData(cmsData.getNode(), instance);
         }
         catch(Exception e)
         {

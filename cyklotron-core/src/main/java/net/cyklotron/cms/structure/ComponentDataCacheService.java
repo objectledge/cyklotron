@@ -45,7 +45,15 @@ public class ComponentDataCacheService
     private String getKey(NavigationNodeResource node, String componentInstance, String id)
     {
         StringBuilder buff = new StringBuilder();
-        buff.append(node.getIdString()).append('.').append(componentInstance);
+        if(node != null)
+        {
+            buff.append(node.getIdString());
+        }
+        else
+        {
+            buff.append("global");
+        }
+        buff.append('.').append(componentInstance);
         if(id != null && id.length() > 0)
         {
             buff.append('.').append(id);

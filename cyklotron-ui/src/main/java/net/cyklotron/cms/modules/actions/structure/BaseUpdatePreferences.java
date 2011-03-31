@@ -14,6 +14,7 @@ import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.ComponentDataCacheService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
@@ -26,15 +27,17 @@ public abstract class BaseUpdatePreferences
 	/** site service */
 	protected SiteService siteService;
 
-    
+    private final ComponentDataCacheService componentDataCacheService;
     
     public BaseUpdatePreferences(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService,
-        PreferencesService preferencesService, SiteService siteService)
+        PreferencesService preferencesService, SiteService siteService,
+        ComponentDataCacheService componentDataCacheService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
         this.preferencesService = preferencesService;
 		this.siteService = siteService;
+        this.componentDataCacheService = componentDataCacheService;
     }
 
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
@@ -62,6 +65,8 @@ public abstract class BaseUpdatePreferences
         {
             throw e;
         }
+        
+        componentDataCacheService.clearCachedData(node, scope);
 
         if(node != null)
         {

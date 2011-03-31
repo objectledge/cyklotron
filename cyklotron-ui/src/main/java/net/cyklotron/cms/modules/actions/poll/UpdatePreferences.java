@@ -10,6 +10,7 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.structure.BaseUpdatePreferences;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.ComponentDataCacheService;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
@@ -19,10 +20,11 @@ public class UpdatePreferences
     
     public UpdatePreferences(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService,
-        PreferencesService preferencesService, SiteService siteService)
+        PreferencesService preferencesService, SiteService siteService,
+        ComponentDataCacheService componentDataCacheService)
     {
         super(logger, structureService, cmsDataFactory, styleService, preferencesService,
-                        siteService);
+                        siteService, componentDataCacheService);
         
     }
     

@@ -17,6 +17,7 @@ import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.modules.actions.structure.UpdatePreferences;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.ComponentDataCacheService;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
@@ -37,10 +38,11 @@ public class UpdateRelatedResourceListConfiguration
     public UpdateRelatedResourceListConfiguration(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService,
         PreferencesService preferencesService, SiteService siteService,
-        CategoryQueryService categoryQueryService)
+        CategoryQueryService categoryQueryService,
+        ComponentDataCacheService componentDataCacheService)
     {
         super(logger, structureService, cmsDataFactory, styleService, preferencesService,
-                        siteService);
+                        siteService, componentDataCacheService);
 		this.categoryQueryService = categoryQueryService;
 	}
 	
