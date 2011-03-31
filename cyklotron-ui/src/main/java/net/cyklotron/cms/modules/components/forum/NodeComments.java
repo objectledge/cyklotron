@@ -25,6 +25,7 @@ import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.ForumException;
 import net.cyklotron.cms.forum.ForumResource;
 import net.cyklotron.cms.forum.ForumService;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
@@ -82,7 +83,7 @@ public class NodeComments
             {
                 node = ((DocumentAliasResource)node).getOriginalDocument();
             }
-            ForumResource forum = forumService.getForum(coralSession, getSite(context));
+            ForumResource forum = getForum(coralSession, node, getSite(context));
             return forumService.getDiscussion(coralSession, forum, "comments/"+node.getIdString());
         }
         catch(ForumException e)
@@ -90,6 +91,7 @@ public class NodeComments
             throw new ProcessingException("failed to retrieve forum information", e);
         }
     }
+   
     
     private NavigationNodeResource getContextNode(CoralSession coralSession, CmsData cmsData, Parameters parameters)
     {    
@@ -116,5 +118,22 @@ public class NodeComments
         {
             return cmsData.getNode();
         } 
+    }
+    
+    
+    private ForumResource getForum(CoralSession coralSession,
+        NavigationNodeResource node, SiteResource site)
+        throws ForumException
+    {
+        ForumResource forum;
+        try
+        {
+            forum = forumService.getForum(coralSession, node.getSite());
+        }
+        catch(ForumException e)
+        {
+            forum = forumService.getForum(coralSession, site);
+        }
+        return forum;
     }
 }
