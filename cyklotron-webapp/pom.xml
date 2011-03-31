@@ -113,7 +113,13 @@
         <configuration>
           <dependentWarExcludes>WEB-INF/web.xml</dependentWarExcludes>
           <packagingExcludes>WEB-INF/eclipse-web.xml</packagingExcludes>
+          <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
           <webappDirectory>${project.build.directory}/cyklotron</webappDirectory>
+          <archive>
+            <manifest>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+          </archive>
         </configuration>
       </plugin>
     </plugins>
@@ -129,7 +135,6 @@
             <version>2.1-beta-1</version>
             <configuration>
               <webXml>src/main/webapp/WEB-INF/eclipse-web.xml</webXml>
-              <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
               <webResources>
                 <resource>
                   <directory>src/main/webapp-overlay</directory>
