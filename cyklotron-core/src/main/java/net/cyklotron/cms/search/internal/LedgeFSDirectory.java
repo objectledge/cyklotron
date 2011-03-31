@@ -197,7 +197,8 @@ public class LedgeFSDirectory extends Directory
                 int i = randomAccess.read(b, offset+total, len-total);
                 if (i == -1)
                 {
-                    throw new IOException("read past EOF");
+                    throw new IOException("read past EOF of " + path + " at postition " + offset
+                        + ", length " + len + ", read " + total + " bytes");
                 }
                 total += i;
             } while (total < len);
