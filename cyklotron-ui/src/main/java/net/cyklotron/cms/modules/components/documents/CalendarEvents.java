@@ -132,14 +132,14 @@ public class CalendarEvents
         int cacheInterval = config.getInt("cacheInterval", 0);
         if(cacheInterval > 0L)
         {
-            Object guard = componentDataCacheService.getGuard(cmsData);
+            Object guard = componentDataCacheService.getGuard(cmsData, null);
             synchronized(guard)
             {
-                SearchHit[] results = componentDataCacheService.getCachedData(cmsData);
+                SearchHit[] results = componentDataCacheService.getCachedData(cmsData, null);
                 if(results == null)
                 {
                     results = getHits2(config, coralSession, i18nContext, parameters);
-                    componentDataCacheService.setCachedData(cmsData, results, cacheInterval);
+                    componentDataCacheService.setCachedData(cmsData, null, results, cacheInterval);
                 }
                 return results;
             }

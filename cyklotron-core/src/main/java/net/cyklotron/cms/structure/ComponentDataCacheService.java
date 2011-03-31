@@ -42,26 +42,33 @@ public class ComponentDataCacheService
 
     // component data caching
 
-    private String getKey(NavigationNodeResource node, String componentInstance)
+    private String getKey(NavigationNodeResource node, String componentInstance, String id)
     {
-        return node.getIdString() + "." + componentInstance;
+        StringBuilder buff = new StringBuilder();
+        buff.append(node.getIdString()).append('.').append(componentInstance);
+        if(id != null && id.length() > 0)
+        {
+            buff.append('.').append(id);
+        }            
+        return buff.toString();
     }
 
-    private String getKey(CmsData cmsData)
+    private String getKey(CmsData cmsData, String id)
     {
-        return getKey(cmsData.getNode(), cmsData.getComponent().getInstanceName());
+        return getKey(cmsData.getNode(), cmsData.getComponent().getInstanceName(), id);
     }
 
     /**
      * Returns synchronization guard object. This object should be used for synchronizing thread
      * operations involving component data cache.
-     * 
+     * @param id TODO
      * @param key thread local key
+     * 
      * @return synchronization guard object.
      */
-    public Object getGuard(CmsData cmsData)
+    public Object getGuard(CmsData cmsData, String id)
     {
-        String key = getKey(cmsData);
+        String key = getKey(cmsData, id);
         String sharedKey = null;
         synchronized(sharedKeys)
         {
@@ -80,11 +87,12 @@ public class ComponentDataCacheService
      * 
      * @param <T> type of data, application dependent.
      * @param cmsData CmsData, identifying a component.
+     * @param id identifier of the specific data item, null when not used.
      * @return cached data, or null when not available.
      */
-    public <T> T getCachedData(CmsData cmsData)
+    public <T> T getCachedData(CmsData cmsData, String id)
     {
-        String key = getKey(cmsData);
+        String key = getKey(cmsData, id);
         if(dataCache == null)
         {
             // caching disabled
@@ -114,12 +122,13 @@ public class ComponentDataCacheService
      * 
      * @param <T> type of data, application dependent.
      * @param cmsData CmsData, identifying a component.
-     * @param data cached data.
+     * @param id identifier of the specific data item, null when not used.
      * @param cacheInterval cache interval in seconds.
+     * @param data cached data.
      */
-    public <T> void setCachedData(CmsData cmsData, T results, int cacheInterval)
+    public <T> void setCachedData(CmsData cmsData, String id, T results, int cacheInterval)
     {
-        String key = getKey(cmsData);
+        String key = getKey(cmsData, id);
         if(dataCache != null)
         {
             synchronized(dataCache)
@@ -139,12 +148,19 @@ public class ComponentDataCacheService
      */
     public void clearCachedData(NavigationNodeResource node, String componentInstance)
     {
-        String key = getKey(node, componentInstance);
+        String key = getKey(node, componentInstance, null);
         if(dataCache != null)
         {
             synchronized(dataCache)
             {
-                dataCache.remove(key);
+                Iterator<Map.Entry<String,CacheEntry<?>>> i = dataCache.entrySet().iterator();
+                while(i.hasNext())
+                {
+                    if(i.next().getKey().startsWith(key))
+                    {
+                        i.remove();
+                    }
+                }
             }
         }
     }

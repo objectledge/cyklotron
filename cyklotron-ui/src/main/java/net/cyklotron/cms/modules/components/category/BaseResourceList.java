@@ -131,14 +131,14 @@ public abstract class BaseResourceList
         int cacheInterval = config.getCacheInterval();
         if(cacheInterval > 0L)
         {
-            Object guard = componentDataCacheService.getGuard(cmsData);
+            Object guard = componentDataCacheService.getGuard(cmsData, null);
             synchronized(guard)
             {
-                Resource[] results = componentDataCacheService.getCachedData(cmsData);
+                Resource[] results = componentDataCacheService.getCachedData(cmsData, null);
                 if(results == null)
                 {
                     results = getResources2(coralSession, resList, config);
-                    componentDataCacheService.setCachedData(cmsData, results, cacheInterval);
+                    componentDataCacheService.setCachedData(cmsData, null, results, cacheInterval);
                 }
                 return results;
             }

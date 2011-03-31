@@ -144,16 +144,17 @@ public class CategoryQueryResults
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
         int cacheInterval = config.getCacheInterval();
+        String dataId = config.getCategoryQuery().getIdString();
         if(cacheInterval > 0L)
         {
-            Object guard = componentDataCacheService.getGuard(cmsData);
+            Object guard = componentDataCacheService.getGuard(cmsData, dataId);
             synchronized(guard)
             {
-                Resource[] results = componentDataCacheService.getCachedData(cmsData);
+                Resource[] results = componentDataCacheService.getCachedData(cmsData, dataId);
                 if(results == null)
                 {
                     results = getResources2(coralSession, resList, config);
-                    componentDataCacheService.setCachedData(cmsData, results, cacheInterval);
+                    componentDataCacheService.setCachedData(cmsData, dataId, results, cacheInterval);
                 }
                 return results;
             }
