@@ -101,6 +101,8 @@ public class ProposeDocumentConf
                     // ignore
                 }
             }
+            
+            templatingContext.put("owner_login", screenConfig.get("owner_login", ""));
             templatingContext.put("editing_enabled", screenConfig.getBoolean(
                 "editing_enabled", false));
             templatingContext.put("add_document_visual_editor", screenConfig.getBoolean(

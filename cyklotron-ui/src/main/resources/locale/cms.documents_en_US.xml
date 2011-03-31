@@ -61,6 +61,7 @@
 			<item name="attachments_max_size">maximum size of files (kB)</item>
 			<item name="attachments_allowed_formats">allowed formats</item>
             <item name="parent">target location of the new documents</item>
+            <item name="owner_login">choose owner</item>
             <item name="editing_enabled">allow editing of own document by authors</item>
             <item name="add_document_visual_editor">visual editor in AddDocument screen</item>
             <item name="add_captcha">add Captcha verification</item>

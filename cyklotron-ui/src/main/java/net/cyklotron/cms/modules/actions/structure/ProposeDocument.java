@@ -3,6 +3,8 @@ package net.cyklotron.cms.modules.actions.structure;
 import static net.cyklotron.cms.structure.internal.ProposedDocumentData.getAttachmentName;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -67,12 +69,14 @@ public class ProposeDocument
     private final HTMLService htmlService;
     
     private final CaptchaService captchaService;
+    
+    private final UserManager userManager;
 
     public ProposeDocument(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService, CategoryService categoryService,
         FileUpload uploadService, FilesService filesService,
         CoralSessionFactory coralSessionFactory, RelatedService relatedService,
-        HTMLService htmlService, CaptchaService captchaService)
+        HTMLService htmlService, CaptchaService captchaService, UserManager userManager)
     {
         super(logger, structureService, cmsDataFactory, styleService);
         this.categoryService = categoryService;
@@ -82,6 +86,7 @@ public class ProposeDocument
         this.relatedService = relatedService;
         this.htmlService = htmlService;
         this.captchaService = captchaService;
+        this.userManager = userManager;
     }
 
     /**
@@ -194,6 +199,7 @@ public class ProposeDocument
                 node.setSequence(getMaxSequence(coralSession, parent));
                 assignCategories(data, coralSession, node, parentCategories);
                 uploadAndAttachFiles(node, data, coralSession);        
+                setOwner(coralSession, node, screenConfig);
                 setState(coralSession, subject, node);
                 structureService.updateNode(coralSession, node, data.getName(), true, subject);
                 
@@ -298,6 +304,37 @@ public class ProposeDocument
         }
     }
 
+    private void setOwner(CoralSession coralSession, NavigationNodeResource node,
+        Parameters parameters)
+    throws ProcessingException
+    {
+        String ownerLogin = parameters.get("owner_login", "");
+        try
+        {
+            if(ownerLogin != "")
+            {
+                String dn = userManager.getUserByLogin(ownerLogin).getName();
+                Subject owner = coralSession.getSecurity().getSubject(dn);
+                Permission permission = coralSession.getSecurity().getUniquePermission(
+                    "cms.structure.modify_own");
+                if(owner != null && owner.hasPermission(node, permission))
+                {
+                    coralSession.getStore().setOwner(node, owner);
+                }
+            }
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new ProcessingException("Subject " + ownerLogin
+                + "  not found. Repair application configuration", e);
+        }
+        catch(AuthenticationException e)
+        {
+            throw new ProcessingException("Subject " + ownerLogin
+                + "  not found. Repair application configuration", e);
+        }
+    }
+    
     private Role findRedactor(CoralSession coralSession, NavigationNodeResource node)
     {
         while(node != null)

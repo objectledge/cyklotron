@@ -48,7 +48,7 @@
   <prefix name="ProposeDocumentConf">
     <prefix name="strings">
       <item name="title">Konfiguracja komponentu Zaproponuj dokument</item>
-      <item name="no_parent">Jeśli nie wybrano żadnego dokumentu, proponowany dokument pojawie się pod węzłem gdzie znajduje się formularz.</item>
+      <item name="no_parent">Jeśli nie wybrano żadnego dokumentu, proponowany dokument pojawi się pod węzłem gdzie znajduje się formularz.</item>
     </prefix>
     <prefix name="labels">
       <item name="category1">źródło pierwszej listy kategorii</item>
@@ -63,6 +63,7 @@
       <item name="attachments_max_size">maksymalny rozmiar pliku (kB)</item>
       <item name="attachments_allowed_formats">dozwolone formaty</item>
       <item name="parent">lokalizacja docelowa</item>
+      <item name="owner_login">wybierz redaktora</item>
       <item name="editing_enabled">zezwalaj na edycję dokumentów przez autorów</item>
       <item name="add_document_visual_editor">edytor wizualny na ekranie AddDocument</item>
       <item name="add_captcha">dodaj weryfikację Captcha</item>

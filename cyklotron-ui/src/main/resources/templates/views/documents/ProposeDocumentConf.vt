@@ -7,10 +7,11 @@
 #set($from_component = true)
 #set($save_action = "$link.unsetView().action('structure.UpdateScreenPreferences').set('x',$node.id)")
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
+$pageTool.addScriptLink('script/CMSPopups.js')##
 <script type="text/javascript">
 <!--
 var fieldNames = new Array( "parent_id", "category_id_1", "category_id_2", "inherit_categories", "calendar_tree", "attachments_enabled", 
-                            "attachments_dir_id", "attachments_max_count", "attachments_max_size", "attachments_allowed_formats", 
+                            "attachments_dir_id", "attachments_max_count", "attachments_max_size", "attachments_allowed_formats", "owner_login",
                             "editing_enabled", "category_depth", "add_document_visual_editor", "add_captcha" );
 
 function sendConfig()
@@ -71,7 +72,7 @@ function sendConfig()
   <tr>
 	<td align="right">$ui_labels.get('attachments_dir')</td>
 	<td>
-	  <a href="#select_directory('local_path id' 'form1' 'attachments_dir attachments_dir_id')">wybierz</a>
+	  <a href="#select_directory('local_path id' 'form1' 'attachments_dir attachments_dir_id')">$ui_labels.get('choose')</a>
       <input type="text" name="attachments_dir" style="width:100%;" value="$!attachments_dir" maxlength="150" readonly= "readonly" />
 	  <input type="hidden" name="attachments_dir_id" value="$!attachments_dir_id"/>
 	</td>
@@ -87,7 +88,13 @@ function sendConfig()
   <tr>
     <td align="right">$ui_labels.get('attachments_allowed_formats')</td>
     <td><input type="text" name="attachments_allowed_formats" value="$!attachments_allowed_formats"/></td>
-  </tr>  
+  </tr>    
+  <tr>
+    <td align="right">$ui_labels.get('owner_login')</td>
+    <td>
+    <a href="javascript:selectUser('login', 'form1', 'owner_login', '$link.view('popup.UserList').set('perm','cms.structure.modify_own').set('res_id',$node.id).set('permission_filter','true')')">$ui_labels.get('choose')</a>
+    <input type="text" name="owner_login" style="width:100%;" value="$!owner_login" readonly="readonly"></td>
+  </tr>
   <tr>
     <td align="right">$ui_labels.get('editing_enabled')</td>
     <td><input type="checkbox" name="editing_enabled" value="true"#if($editing_enabled) checked#end></td>
