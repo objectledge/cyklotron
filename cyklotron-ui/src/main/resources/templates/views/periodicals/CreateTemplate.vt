@@ -1,0 +1,86 @@
+
+
+#set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${parametersTool.view}.buttons"))
+#set($site_link = $link.set("site_id",$cmsData.site.id))
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.periodicals")
+
+<form name="form1" method="post" enctype="multipart/form-data" action='$site_link.view('periodicals.Templates').action('periodicals.CreateTemplate')'>
+  <input type="hidden" name="renderer" value="$renderer"/>
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="3">$ui_strings.get("subtitle_info")</th>
+    </tr>
+    <tr>
+       <td align="right" valign="top">$ui_labels.get('site'):</td>
+       <td width="90%">$cmsData.site.name</td>
+    </tr>
+    <tr>
+       <td align="right" valign="top">$ui_labels.get('renderer'):</td>
+       <td width="90%">$renderer</td>
+    </tr>
+    <tr>
+       <td align="right" valign="top">$ui_labels.get('name'):</td>
+       <td width="90%">
+         <input type="text" name="name" style="width:100%;"/>
+       </td>       
+    </tr>
+  </table>
+  <br/>
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="3">$ui_strings.get("subtitle_source")</th>
+    </tr>
+    <tr>      
+      <td>
+        <input type="radio" name="source" id="source_empty" value="empty"#if($locales.size() == 0 && $variants.size() == 0) checked="checked"#end/>
+      </td>
+      <td colspan="2" width="95%">
+        <label for="source_empty"><b>$ui_labels.get("empty")</b></label>
+      </td>
+    </tr>
+    <tr>      
+      <td>
+        <input type="radio" name="source" id="source_file" value="file">
+      </td>
+      <td>
+        <label for="source_file"><b>$ui_labels.get("file")</b></label>
+      </td>
+      <td width="90%"><input type="file" name="file" style="width:100%;"></td>
+    </tr>
+#if($locales.size() > 0)
+    <tr>      
+      <td>
+        <input type="radio" name="source" id="source_app" value="app"#if($locales.size() > 0 && $variants.size() == 0) checked="checked"#end/>
+      </td>
+      <td colspan="2" width="95%">
+        <label for="source_app"><b>$ui_labels.get("as_provided")</b></label>
+        <select name="locale">
+#foreach($locale in $locales.keySet())
+          <option value="$locale">$locales.get($locale)</option>
+#end          
+        </select>
+      </td>
+    </tr>
+#end
+#if($variants.size() > 0)
+    <tr>
+      <td>
+        <input type="radio" name="source" id="source_variant" value="variant" checked="checked"/>
+      </td>
+      <td colspan="2" width="95%">
+        <label for="source_variant"><b>$ui_labels.get("as_variant")</b></label>
+        <select name="variant">
+#foreach($variant in $variants)
+          <option value="$variant">$variant</option>
+#end          
+        </select>
+      </td>
+    </tr>
+#end  
+
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('create')],[$link.view('periodicals.Templates'),$ui_buttons.get('cancel')]])

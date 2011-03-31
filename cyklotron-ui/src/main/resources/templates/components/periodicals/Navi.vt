@@ -1,0 +1,20 @@
+#genericNaviHeader('Periodicals')
+#if($site)
+  #linkCell('' 'Perodical list' $link.view('periodicals.Periodicals'))
+  #linkCell('' 'Add periodical' $link.view('periodicals.EditPeriodical').set('from_list','true'))
+#end
+#genericNaviTrailer()
+<br/>
+#genericNaviHeader('Bulletins')
+#if($site)
+  #linkCell('' 'Application configuration' $link.view('periodicals.ConfigureEmailPeriodicals'))
+  #linkCell('' 'Bulletin list' $link.view('periodicals.EmailPeriodicals'))
+  #linkCell('' 'Add bulletin' $link.view('periodicals.EditPeriodical').set('email_periodical','true').set('from_list','true'))
+#end
+#genericNaviTrailer()
+<br/>
+#genericNaviHeader('Templates')
+#if($site)
+  #linkCell('' 'Template list' $link.view('periodicals.Templates'))
+#end
+#genericNaviTrailer()

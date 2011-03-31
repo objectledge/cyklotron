@@ -1,0 +1,22 @@
+$pageTool.addScriptLink('script/CMSPopups.js')
+
+#genericScreenHeader('Konfiguracja aplikacji - Dokumenty')
+
+#result_inline_message('results.structure')
+
+<form name="form1" method="post" action="$link.view('structure.NaviInfo').action('structure.UpdateConfiguration')">
+  <table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+      <td nowrap="true">Lokalizacja strony zawierającej ekran 'Zaproponuj dokument':</td>
+      <td width="90%">
+        <input type="text" name="proposeDocumentNodePath" value="$!proposeDocumentNode.sitePath" size="60"/>
+        <input type="hidden" name="proposeDocumentNodeId" value="$!proposeDocumentNode.id"/>
+        <a href="#select_node('relative_path id' "$!proposeDocumentNode.id" 'form1' 'proposeDocumentNodePath proposeDocumentNodeId')">Wybierz</a>
+      </td>
+    </tr>
+  </table>
+</form>
+
+#command_bar([['javascript:document.form1.submit()','Zapisz']])
+
+#genericScreenTrailer()
