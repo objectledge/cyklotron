@@ -148,7 +148,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                     }
                 }
                 
-                if(cookie != null && selected.size() == 1)
+                if(cookie != null && selected.size() > 0)
                 {
                     PeriodicalResource periodical = (PeriodicalResource)selected.toArray()[0];
                     site = periodical.getSite();
@@ -156,7 +156,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                 else
                 {
                     site = getSite(context);
-                }
+                }                
                 
                 EmailPeriodicalResource[] subscribedArray = periodicalsSubscriptionService
                     .getSubscribedEmailPeriodicals(coralSession, site, email);
