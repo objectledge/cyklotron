@@ -26,6 +26,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.confirmation.EmailConfirmationRequestResource;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
@@ -150,8 +151,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                 
                 if(cookie != null && selected.size() > 0)
                 {
-                    PeriodicalResource periodical = (PeriodicalResource)selected.toArray()[0];
-                    site = periodical.getSite();
+                    site = CmsTool.getSite((Resource)selected.toArray()[0]);
                 }
                 else
                 {
