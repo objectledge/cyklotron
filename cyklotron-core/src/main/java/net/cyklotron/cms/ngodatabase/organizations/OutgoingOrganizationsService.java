@@ -33,6 +33,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.table.comparator.IdComparator;
 import org.objectledge.filesystem.FileSystem;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -109,9 +110,16 @@ public class OutgoingOrganizationsService
             }
         }
 
-        // build DOM tree
+        // sort data
         List<Long> organizationIdList = new ArrayList<Long>(orgMap.keySet());
         Collections.sort(organizationIdList);
+        IdComparator<DocumentNodeResource> byId = new IdComparator<DocumentNodeResource>();
+        for(List<DocumentNodeResource> docList : orgMap.values())
+        {
+            Collections.sort(docList, byId);
+        }
+
+        // build DOM tree
         DateFormat dateFormat = (DateFormat)this.dateFormat.clone();
         Element update = attr(elm("update"), "time", dateFormat.format(new Date()));
         for(Long organizationId : organizationIdList)
