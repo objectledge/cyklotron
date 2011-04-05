@@ -17,6 +17,7 @@ import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.Builder;
 import org.objectledge.web.mvc.finders.MVCFinder;
+import org.objectledge.web.mvc.security.SecurityHelper;
 
 import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
@@ -26,22 +27,26 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ScreenResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
 
 public class EmbeddedScreen extends SkinableCMSComponent
 {
     private IntegrationService integrationService;
     
+    private final SecurityHelper securityHelper;
+    
     public EmbeddedScreen(Context context, Logger logger, Templating templating,
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
-        IntegrationService integrationService)
+        IntegrationService integrationService, SecurityHelper securityHelper)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
         this.integrationService = integrationService;
+        this.securityHelper = securityHelper;
     }
     public static String SCREEN_ERRORS_KEY = "screen_errors";
     
-    public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
+    public void process(Parameters parameters, MVCContext mvcContext,
+        TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
+        CoralSession coralSession)
         throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
@@ -72,10 +77,12 @@ public class EmbeddedScreen extends SkinableCMSComponent
             ScreenResource screenRes = integrationService.getScreen(coralSession, app, screen);
             if(screenRes != null)
             {
-                if(integrationService.isApplicationEnabled(coralSession, site,(ApplicationResource)screenRes.getParent().getParent()))
+                if(integrationService.isApplicationEnabled(coralSession, site,
+                    (ApplicationResource)screenRes.getParent().getParent()))
                 {
                     templatingContext.put("application_enabled", true);
                     Builder builder = finderService.findBuilder(screen).getBuilder();
+                    securityHelper.checkSecurity(builder, context);
                     Template template = finderService.findBuilderTemplate(screen).getTemplate();
                     try
                     {
