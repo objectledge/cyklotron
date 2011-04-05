@@ -1,3 +1,5 @@
+html, body {height: 100%;}
+
 body {
   background: white;
   color: black;
@@ -31,6 +33,21 @@ UNIVERSAL CLASSES
   text-align: right;
 }
 
+/*
+CONTAINER
+contains all components on the page
+*/
+.view-box{min-height:100%;
+   position:relative;
+}
+
+/*
+CONTENT WRAPPER
+contains contant page
+*/
+#main-block {
+	 padding-bottom:30px;
+}
 
 /*
 TOP INFO BAR
@@ -121,6 +138,27 @@ administrators navigation's looks
   color: #443344;
   text-decoration: underline;
 }
+
+/*
+ADMINISTRATOR's FOOTER
+administrators footer's looks
+*/
+#adminFooter {
+   position:absolute;
+   bottom:0;
+   width:100%;
+   height:30px;
+}
+
+#adminFooter span {
+   display: block;
+   text-align: left; 
+   width: 95%;
+   border-top:1px solid #000000;
+   font-family:Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-size: 12px;
+}
+
 
 
 
