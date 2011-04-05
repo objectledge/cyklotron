@@ -72,6 +72,9 @@ $pageTool.addHttpEquivMeta("Expires","Mon, 12 May 1998 00:00:00 GMT")
    </table>
  #end
 </div>
+<div id="adminFooter" align="center">
+   $component.embed('system.WebappManifest')
+</div>
 
 #stop
 
