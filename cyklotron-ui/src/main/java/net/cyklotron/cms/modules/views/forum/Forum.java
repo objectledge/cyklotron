@@ -537,19 +537,36 @@ public class Forum
     public boolean checkAccessRights(Context context)
         throws ProcessingException
     {
+        Parameters parameters = RequestParameters.getRequestParameters(context);
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         CmsData cmsData = cmsDataFactory.getCmsData(context);
+
 
         String state = getState();
         if("ModeratorTasks".equals(state))
         {
             try
-            {
+            {       
                 Permission moderatePermission = coralSession.getSecurity().getUniquePermission(
-                    "cms.forum.moderate");
-                ForumResource forum = forumService.getForum(coralSession, getSite());
-                return getNode().canView(coralSession, cmsData, cmsData.getUserData().getSubject())
-                    && coralSession.getUserSubject().hasPermission(forum, moderatePermission);
+                "cms.forum.moderate");
+                Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
+                Long did = screenConfig.getLong("did", parameters.getLong("did", -1));
+                if(did != -1)
+                {
+                    DiscussionResource discussion = DiscussionResourceImpl.getDiscussionResource(
+                        coralSession, did);
+                    return getNode().canView(coralSession, cmsData,
+                        cmsData.getUserData().getSubject())
+                        && coralSession.getUserSubject().hasPermission(discussion,
+                            moderatePermission);
+                }
+                else
+                {
+                    ForumResource forum = forumService.getForum(coralSession, getSite());
+                    return getNode().canView(coralSession, cmsData,
+                        cmsData.getUserData().getSubject())
+                        && coralSession.getUserSubject().hasPermission(forum, moderatePermission);
+                }
             }
             catch(Exception e)
             {
@@ -560,11 +577,18 @@ public class Forum
         {
             try
             {
+                Long mid = parameters.getLong("mid", -1);
                 Permission modifyPermission = coralSession.getSecurity().getUniquePermission(
                     "cms.forum.modify");
-                ForumResource forum = forumService.getForum(coralSession, getSite());
-                return getNode().canView(coralSession, cmsData, cmsData.getUserData().getSubject())
-                    && coralSession.getUserSubject().hasPermission(forum, modifyPermission);
+                if(mid != -1)
+                {
+                    MessageResource message = MessageResourceImpl.getMessageResource(coralSession, mid);
+                    return getNode().canView(coralSession, cmsData, cmsData.getUserData().getSubject())
+                    && coralSession.getUserSubject().hasPermission(message, modifyPermission);
+                }
+                else{
+                    return false;
+                }
             }
             catch(Exception e)
             {
