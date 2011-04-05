@@ -25,6 +25,12 @@
       <td class="separator">|</td>
       #linkCell('admin' 'GLOBAL ROLES' $link.view('security.RoleList').unset('site_id'))
       <td class="separator">|</td>      
+      #linkCell('admin' 'SYSTEM' $link.view("system").unset('site_id'))
+      <td class="separator">|</td>
+      #linkCell('admin' 'UPGRADE' $link.view("fixes").unset('site_id'))
+      <td class="separator">|</td>      
+      #linkCell('admin' 'CORAL' $link.view("browser").unset('site_id'))
+      <td class="separator">|</td>	  
     </tr>
   </table>
   #end
