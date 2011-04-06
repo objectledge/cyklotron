@@ -79,6 +79,8 @@ public class CreateBallot
                     
                     answerResource.setVotesCount(answerResource.getVotesCount()+1);
                     answerResource.update();
+                    
+                    pollService.addBallotEmail(coralSession, voteResource, req.getEmail());
                 }
                 emailConfirmationService.discardEmailConfirmationRequest(coralSession, cookie);
             }

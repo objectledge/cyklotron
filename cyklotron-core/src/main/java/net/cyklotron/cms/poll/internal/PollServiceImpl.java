@@ -52,6 +52,9 @@ import net.cyklotron.cms.workflow.ProtectedTransitionResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
 
+import bak.pcj.map.LongKeyMap;
+import bak.pcj.map.LongKeyOpenHashMap;
+
 /**
  * Implementation of Poll Service
  * 
@@ -84,6 +87,8 @@ public class PollServiceImpl
     private final Templating templating;
 
     private final FileSystem fileSystem;
+    
+    private final LongKeyMap ballotsEmailsMap = new LongKeyOpenHashMap();
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -461,18 +466,33 @@ public class PollServiceImpl
 
     public Set<String> getBallotsEmails(CoralSession coralSession, VoteResource vote)
     {
-        Resource[] answerResources = coralSession.getStore().getResource(vote);
         Set<String> emailList = new HashSet<String>();
-        for(int i = 0; i < answerResources.length; i++)
+        if(ballotsEmailsMap.containsKey(vote.getId()))
         {
-            AnswerResource answerResource = (AnswerResource)answerResources[i];
-            Resource[] ballotResources = coralSession.getStore().getResource(answerResource);
-            for(int j = 0; j < ballotResources.length; j++)
-            {
-                emailList.add(((BallotResource)ballotResources[j]).getEmail());
-            }
+            emailList = (Set<String>)ballotsEmailsMap.get(vote.getId());
         }
+        else
+        {
+            Resource[] answerResources = coralSession.getStore().getResource(vote);
+            for(int i = 0; i < answerResources.length; i++)
+            {
+                AnswerResource answerResource = (AnswerResource)answerResources[i];
+                Resource[] ballotResources = coralSession.getStore().getResource(answerResource);
+                for(int j = 0; j < ballotResources.length; j++)
+                {
+                    emailList.add(((BallotResource)ballotResources[j]).getEmail());
+                }
+            }
+            ballotsEmailsMap.put(vote.getId(), emailList);
+        }
+
         return emailList;
+    }
+    
+    public void addBallotEmail(CoralSession coralSession, VoteResource vote, String email)
+    {
+        Set<String> emailList = getBallotsEmails(coralSession, vote);
+        ballotsEmailsMap.put(vote.getId(), emailList.add(email));
     }
 
     private static final String DEAULT_TICKET_TEMPLATE = "/messages/votes/Confirm_%s";
@@ -722,6 +742,18 @@ public class PollServiceImpl
                 RelationModification diff = new RelationModification();
                 diff.removeInv((PollResource)resource);
                 coralSession.getRelationManager().updateRelation(refs, diff);
+            }
+            if(resource instanceof BallotResource)
+            {
+                BallotResource ballot = (BallotResource)resource;
+                AnswerResource answer = (AnswerResource)ballot.getParent();
+                VoteResource vote = (VoteResource)answer.getParent();
+                Set<String> emailList = getBallotsEmails(coralSession, vote);
+                ballotsEmailsMap.put(vote.getId(), emailList.remove(ballot.getEmail()));
+                if(answer.getVotesCount(0) > 0)
+                {
+                    answer.setVotesCount(answer.getVotesCount(0) - 1);
+                }
             }
         }
         catch(Exception e)

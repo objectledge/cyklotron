@@ -147,9 +147,21 @@ public interface PollService
     public void prepareVoteMaps(CoralSession coralSession, VoteResource vote, Map answers, Map resultMap, Map percentMap, Map ballotsMap);
 
     /**
-     * @param vote
+     * Return email set for given VoteResource.
+     * 
+     * @param coralSession the coral session.
+     * @param vote the VoteResource.
      */    
     public Set<String> getBallotsEmails(CoralSession coralSession, VoteResource vote);
+
+    /**
+     * Add email address to ballotsEmailsMap.
+     * 
+     * @param coralSession the coral session.
+     * @param vote the VoteResource.
+     * @param email the email string.
+     */
+    public void addBallotEmail(CoralSession coralSession, VoteResource vote, String email);
 	
     /**
      * Return the poll relation.
