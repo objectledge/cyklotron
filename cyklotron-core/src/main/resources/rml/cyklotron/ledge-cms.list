@@ -20,10 +20,6 @@ rml/cyklotron/httpfeed/httpfeed-init.rml
 rml/cyklotron/syndication/syndication-init.rml
 rml/cyklotron/common/components-init.rml
 rml/cyklotron/common/simple-portal-en.rml
-#rml/cyklotron/common/mini-portal-pl.rml
-#rml/cyklotron/common/caltha-template.rml
-#rml/cyklotron/common/caltha-skin-red.rml
-#rml/cyklotron/common/caltha-skin-css.rml
 rml/cyklotron/aggregation/aggregation-init.rml
 rml/cyklotron/periodicals/periodicals-init.rml
 rml/cyklotron/catalogue/catalogue-init.rml
