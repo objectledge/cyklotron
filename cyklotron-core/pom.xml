@@ -146,9 +146,6 @@
       </resource>
       <resource>
         <directory>src/main/resources</directory>
-        <excludes>
-          <exclude>content/**</exclude>
-        </excludes>
       </resource>
     </resources>
     <plugins>
@@ -165,31 +162,6 @@
             <goals>
               <goal>generator</goal>
             </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2-beta-5</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.objectledge</groupId>
-            <artifactId>ledge-maven-assemblies</artifactId>
-            <version>${versions.ledge}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <descriptors>
-                <descriptor>content-war.xml</descriptor>
-              </descriptors>
-            </configuration>
           </execution>
         </executions>
       </plugin>

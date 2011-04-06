@@ -23,11 +23,6 @@
     </dependency>
     <dependency>
       <groupId>org.cyklotron</groupId>
-      <artifactId>cyklotron-core</artifactId>
-      <type>war</type>
-    </dependency>
-    <dependency>
-      <groupId>org.cyklotron</groupId>
       <artifactId>cyklotron-ui</artifactId>
     </dependency>
     <dependency>
@@ -120,6 +115,31 @@
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
             </manifest>
           </archive>
+          <overlays>
+            <overlay>
+              <groupId>org.objectledge</groupId>
+              <artifactId>ledge-web</artifactId>
+            </overlay>
+            <overlay>
+              <groupId>org.objectledge</groupId>
+              <artifactId>ledge-forms</artifactId>
+            </overlay>
+            <overlay>
+              <groupId>org.objectledge.coral</groupId>
+              <artifactId>coral-browser</artifactId>
+            </overlay>
+            <overlay>
+              <groupId>org.cyklotron</groupId>
+              <artifactId>cyklotron-ui</artifactId>
+            </overlay>
+            <overlay>
+              <groupId>org.cyklotron</groupId>
+              <artifactId>cyklotron-ui-fckeditor</artifactId>
+            </overlay>
+            <overlay>
+              <!-- cyklotron-webapp -->
+            </overlay>
+          </overlays>          
         </configuration>
       </plugin>
     </plugins>
