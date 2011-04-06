@@ -199,7 +199,7 @@ public class ProposeDocument
                 node.setSequence(getMaxSequence(coralSession, parent));
                 assignCategories(data, coralSession, node, parentCategories);
                 uploadAndAttachFiles(node, data, coralSession);        
-                setOwner(coralSession, node, screenConfig);
+                setOwner(coralSession, node, context);
                 setState(coralSession, subject, node);
                 structureService.updateNode(coralSession, node, data.getName(), true, subject);
                 
@@ -305,33 +305,45 @@ public class ProposeDocument
     }
 
     private void setOwner(CoralSession coralSession, NavigationNodeResource node,
-        Parameters parameters)
+        Context context)
     throws ProcessingException
     {
-        String ownerLogin = parameters.get("owner_login", "");
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
+        
+        String ownerLogin = screenConfig.get("owner_login", "");
+        CoralSession rootSession = coralSessionFactory.getRootSession();        
         try
         {
             if(ownerLogin != "")
             {
                 String dn = userManager.getUserByLogin(ownerLogin).getName();
                 Subject owner = coralSession.getSecurity().getSubject(dn);
-                Permission permission = coralSession.getSecurity().getUniquePermission(
-                    "cms.structure.modify_own");
-                if(owner != null && owner.hasPermission(node, permission))
+                Role role = findRedactor(coralSession, node);
+                if(owner != null && role != null &&  owner.hasRole(role))
                 {
-                    coralSession.getStore().setOwner(node, owner);
+                    structureService.enterState(coralSession, node, "taken", owner);
+                    rootSession.getStore().setOwner(node, owner);
                 }
             }
         }
         catch(EntityDoesNotExistException e)
         {
             throw new ProcessingException("Subject " + ownerLogin
-                + "  not found. Repair application configuration", e);
+                + "  not found. Repair application configuration.", e);
         }
         catch(AuthenticationException e)
         {
             throw new ProcessingException("Subject " + ownerLogin
-                + "  not found. Repair application configuration", e);
+                + "  not found. Repair application configuration.", e);
+        }
+        catch(StructureException e)
+        {
+            throw new ProcessingException("Error while entering state.", e);
+        }
+        finally
+        {
+            rootSession.close();
         }
     }
     
