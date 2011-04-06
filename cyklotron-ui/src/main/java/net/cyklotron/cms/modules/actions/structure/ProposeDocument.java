@@ -199,8 +199,8 @@ public class ProposeDocument
                 node.setSequence(getMaxSequence(coralSession, parent));
                 assignCategories(data, coralSession, node, parentCategories);
                 uploadAndAttachFiles(node, data, coralSession);        
-                setOwner(coralSession, node, context);
                 setState(coralSession, subject, node);
+                setOwner(node, context);
                 structureService.updateNode(coralSession, node, data.getName(), true, subject);
                 
                 data.logProposal(logger, node);
@@ -304,7 +304,7 @@ public class ProposeDocument
         }
     }
 
-    private void setOwner(CoralSession coralSession, NavigationNodeResource node,
+    private void setOwner(NavigationNodeResource node,
         Context context)
     throws ProcessingException
     {
@@ -318,11 +318,12 @@ public class ProposeDocument
             if(ownerLogin != "")
             {
                 String dn = userManager.getUserByLogin(ownerLogin).getName();
-                Subject owner = coralSession.getSecurity().getSubject(dn);
-                Role role = findRedactor(coralSession, node);
-                if(owner != null && role != null &&  owner.hasRole(role))
+                Subject owner = rootSession.getSecurity().getSubject(dn);
+                Permission modifyOwnPermission = rootSession.getSecurity().getUniquePermission(
+                    "cms.structure.modify_own");
+                if(owner != null && owner.hasPermission(node, modifyOwnPermission))
                 {
-                    structureService.enterState(coralSession, node, "taken", owner);
+                    structureService.enterState(rootSession, node, "taken", owner);
                     rootSession.getStore().setOwner(node, owner);
                 }
             }
