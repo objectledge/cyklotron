@@ -485,14 +485,14 @@ public class PollServiceImpl
             }
             ballotsEmailsMap.put(vote.getId(), emailList);
         }
-
         return emailList;
     }
     
     public void addBallotEmail(CoralSession coralSession, VoteResource vote, String email)
     {
         Set<String> emailList = getBallotsEmails(coralSession, vote);
-        ballotsEmailsMap.put(vote.getId(), emailList.add(email));
+        emailList.add(email);
+        ballotsEmailsMap.put(vote.getId(), emailList);
     }
 
     private static final String DEAULT_TICKET_TEMPLATE = "/messages/votes/Confirm_%s";
@@ -749,7 +749,8 @@ public class PollServiceImpl
                 AnswerResource answer = (AnswerResource)ballot.getParent();
                 VoteResource vote = (VoteResource)answer.getParent();
                 Set<String> emailList = getBallotsEmails(coralSession, vote);
-                ballotsEmailsMap.put(vote.getId(), emailList.remove(ballot.getEmail()));
+                emailList.remove(ballot.getEmail());
+                ballotsEmailsMap.put(vote.getId(), emailList);
                 if(answer.getVotesCount(0) > 0)
                 {
                     answer.setVotesCount(answer.getVotesCount(0) - 1);
