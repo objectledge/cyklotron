@@ -1,8 +1,0 @@
-CREATE RESOURCE CLASS 'cms.library.config'
-JAVA CLASS 'net.cyklotron.cms.library.LibraryConfigResourceImpl'
-HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
-ATTRIBUTES (
-  resource(category.category) category,
-  resource(search.pool) searchPool
-);

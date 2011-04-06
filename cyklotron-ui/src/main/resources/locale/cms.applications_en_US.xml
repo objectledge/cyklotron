@@ -1187,15 +1187,15 @@
     </prefix>
   </prefix>
 
-  <prefix name="library">
-    <item name="name">Library</item>
+  <prefix name="catalogue">
+    <item name="name">Catalogue</item>
     <prefix name="screens">
       <prefix name="index">
-        <item name="name">Library index</item>
-        <item name="description">Displays library index in tabular form.</item>
+        <item name="name">Catalogue index</item>
+        <item name="description">Displays catalogue index in tabular form.</item>
         <prefix name="states">
           <prefix name="Default">
-            <item name="description">Displays library index in tabular form.</item>
+            <item name="description">Displays catalogue index in tabular form.</item>
           </prefix>
         </prefix>
       </prefix>

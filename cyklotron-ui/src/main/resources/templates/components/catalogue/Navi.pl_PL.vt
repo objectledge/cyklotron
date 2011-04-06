@@ -1,0 +1,5 @@
+#genericNaviHeader('BIBLIOTEKA')
+  #linkCell('' 'Przeglądanie' $link.view('catalogue.Browse'))
+  #linkCell('' 'Rarpot błędów' $link.view('catalogue.Problems'))
+  #linkCell('' 'Konfiguracja' $link.view('catalogue.Config'))
+#genericNaviTrailer()

@@ -122,3 +122,15 @@ SET ATTRIBUTE configurationView = 'forum.ForumScreenConf';
 
 ALTER RESOURCE '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.modify' 
 SET PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator';
+
+# library -> catalogue
+
+ALTER RESOURCE CLASS 'cms.library.config' SET NAME 'cms.catalogue.config';
+
+ALTER RESOURCE CLASS 'cms.catalogue.config' SET JAVA CLASS 'net.cyklotron.cms.catalogue.CatalogueConfigResourceImpl';
+
+ALTER RESOURCE '/cms/applications/library' SET NAME 'catalogue';
+
+ALTER RESOURCE '/cms/applications/catalogue/screens/index' SET ATTRIBUTE screenName = 'catalogue.Index';
+
+ALTER RESOURCE '/cms/applications/catalogue/screens/index' SET ATTRIBUTE configurationView = 'catalogue.IndexConf';

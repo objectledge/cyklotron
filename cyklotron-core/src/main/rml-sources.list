@@ -24,7 +24,7 @@ src/main/resources/rml/cyklotron/httpfeed/httpfeed.rml
 src/main/resources/rml/cyklotron/syndication/syndication.rml
 src/main/resources/rml/cyklotron/aggregation/aggregation.rml
 src/main/resources/rml/cyklotron/periodicals/periodicals.rml
-src/main/resources/rml/cyklotron/library/library.rml
+src/main/resources/rml/cyklotron/catalogue/catalogue.rml
 #init data
 src/main/resources/rml/cyklotron/common/base-init.rml
 src/main/resources/rml/cyklotron/integration/integration-init.rml

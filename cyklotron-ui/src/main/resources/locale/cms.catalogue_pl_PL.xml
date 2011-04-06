@@ -1,0 +1,93 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="Browse">
+    <prefix name="strings">
+      <item name="title">Przeglądanie indeksu katalogu</item>
+      <item name="notConfigured">Aplikacja nie jest prawidłowo skonfigurowana
+      </item>
+      <item name="noItemsFound">Nie znaleziono żadnych publikacji</item>
+      <item name="searchHeading">Wyszukiwanie pełnotekstowe</item>
+      <item name="searchButton">Szukaj</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="title">Tytył</item>
+      <item name="authors">Autorzy</item>
+      <item name="pubYear">Rok publikacji</item>
+      <item name="keywords">Słowa kluczowe</item>
+      <item name="downloads">Pliki do pobrania</item>
+    </prefix>
+  </prefix>
+  <prefix name="Problems">
+    <prefix name="strings">
+      <item name="title">Raport błędów</item>
+      <item name="notConfigured">Aplikacja nie jest prawidłowo skonfigurowana
+      </item>
+      <item name="noProblemsFound">Nie znaleziono problemów</item>
+      <item name="filtersHeading">Filtry</item>
+      <item name="filtersButton">zastosuj</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="resource">Zasób</item>
+      <item name="documents">Dokumenty</item>
+      <item name="files">Pliki</item>
+      <item name="problems">Problemy</item>
+    </prefix>
+    <prefix name="problems">
+      <item name="INVALID_CLASS">Niewłaściwa klasa zasobu</item>
+      <item name="INVALID_METADATA">Nieprawidłowe metadane (dokument uszkodzony)
+      </item>
+      <item name="MISSING_AUTHOR">Nie wypełnione pole autor</item>
+      <item name="VALIDITY_START_UNSET">Nie ustawiona data publikacji</item>
+      <item name="MISSING_DESCRIPTION_DOC">Brak dokumentu - karty indeksowej dla pliku</item>
+      <item name="MULTIPLE_DESCRIPTION_DOCS">Wiele dokumentów - kart indeksowych dla jednego
+        pliku</item>
+      <item name="REQUIRED_CATEGORY_MISSING">Nie nadano wymaganej kategorii</item>
+      <item name="DOCUMENT_NOT_ACCESSIBLE">Dokument niewidoczny dla niezalogowanych
+        użytkowników</item>
+      <item name="FILE_NOT_ACCESSIBLE">Plik niewidoczny dla niezalogowanych użytkowników
+      </item>
+    </prefix>
+  </prefix>
+  <prefix name="IndexConf">
+    <prefix name="strings">
+      <item name="title">Konfiguracja ekranu osadzonego</item>
+      <item name="sortColumn">Kryterium sortowania</item>
+      <item name="sortDirection">Kierunek sortowania</item>
+      <item name="asc">rosnąco</item>
+      <item name="desc">malejąco</item>
+      <item name="pageSize">Ilość dokumentów na stronie</item>
+      <item name="save">Zapisz</item>
+      <item name="cancel">Anuluj</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="title">Tytył</item>
+      <item name="authors">Autorzy</item>
+      <item name="pubYear">Rok publikacji</item>
+      <item name="keywords">Słowa kluczowe</item>
+    </prefix>
+  </prefix>
+  <prefix name="Config">
+    <prefix name="strings">
+      <item name="title">Konfiguracja aplikacji</item>
+      <item name="category">Kategoria</item>
+      <item name="indexPool">Zestaw indeksów</item>
+      <item name="select">wybierz</item>
+      <item name="save">zapisz</item>
+    </prefix>
+    <prefix name="help">
+      <item name="general"><![CDATA[<p>Każda pozycja katalogu składa się z dokumentu (tzw. karty 
+      indeksowej) oraz, opcjonalnie, powiązanych z nim plików. Zarówno dokumenty jak i pliki muszą 
+      być oznaczone kateorią wybraną poniżej. Plik musi być dowiązany do dokładnie jednego 
+      dokumentu.</p>
+      <p>Autora i słowa kluczowe dla publikacji wpisujemy na ekranie edycji treści dokumentu - karty 
+      indeksowej, natomiast rok publikacji wybieramy ustawiając odpowiednio datę publikacji karty 
+      indeksowej.</p>
+      <p>Zestaw indeksów wyszukiwania powinien obejmować zarówno pliki jak i dokumenty, należy
+      ograniczyć zasoby indeksowane do najmniejszego komplentego zbioru, poprzez wybór odpowiednich
+      ścieżek i kategorii wymaganej, co pozwoli przyspieszyć wyszukiwanie.</p>]]>
+      </item>
+      <item name="category">kategoria którą oznaczone są zasoby katalogu</item>
+      <item name="indexPool">zestaw indeksów przeznaczony do wyszukiwania
+        pełnotekstowego biblioteki</item>
+    </prefix>
+  </prefix>
+</strings>
