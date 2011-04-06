@@ -152,13 +152,6 @@ public class Voting
         }
     }
 
-    @Override
-    public boolean checkAccessRights(Context context)
-        throws ProcessingException
-    {
-        return true;
-    }
-
     public void prepareDefault(Context context)
         throws ProcessingException
     {
