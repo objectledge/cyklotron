@@ -14,7 +14,7 @@ public class IndexCard
 {
     public enum Property
     {
-        TITLE, AUTHORS, PUB_YEAR, KEYWORDS
+        TITLE, AUTHORS, PUB_DATE, PUB_YEAR, KEYWORDS
     }
 
     // internal state (immutable)
@@ -22,6 +22,8 @@ public class IndexCard
     private final String title;
 
     private final String authors;
+    
+    private final String pubDate;
 
     private final String pubYear;
 
@@ -66,8 +68,9 @@ public class IndexCard
             }
         }
         this.authors = buff.toString();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy");
-        this.pubYear = df.format(descriptionDoc.getValidityStart());
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        this.pubDate = df.format(descriptionDoc.getValidityStart());
+        this.pubYear = this.pubDate.substring(0, 4);
         if(descriptionDoc.isKeywordsDefined())
         {
             this.keywords = descriptionDoc.getKeywords();
@@ -120,6 +123,8 @@ public class IndexCard
             return title;
         case AUTHORS:
             return authors;
+        case PUB_DATE:
+            return pubDate;
         case PUB_YEAR:
             return pubYear;
         case KEYWORDS:
