@@ -1,5 +1,3 @@
-#genericNaviHeader('CATALOGUE')
-  #linkCell('' 'Browse index' $link.view('catalogue.Browse'))
-  #linkCell('' 'Problem report' $link.view('catalogue.Problems'))
-  #linkCell('' 'Configuration' $link.view('catalogue.Config'))
+#genericNaviHeader('CATALOGUES')
+  #linkCell('' 'Catalogue list' $link.view('catalogue.List'))
 #genericNaviTrailer()

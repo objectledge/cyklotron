@@ -24,6 +24,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.catalogue.CatalogueConfigResourceImpl;
 import net.cyklotron.cms.catalogue.CatalogueService;
 import net.cyklotron.cms.catalogue.Problem;
 import net.cyklotron.cms.catalogue.ProblemReportItem;
@@ -39,7 +40,8 @@ public class Problems
     private final CatalogueService catalogueService;
 
     public Problems(Context context, Logger logger, PreferencesService preferencesService,
-        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager, CatalogueService catalogueService)
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        CatalogueService catalogueService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
         this.catalogueService = catalogueService;
@@ -51,15 +53,18 @@ public class Problems
         CoralSession coralSession)
         throws ProcessingException
     {
-        SiteResource site = getCmsData().getSite();
-        CatalogueConfigResource config = catalogueService.getConfig(site, coralSession);
-        if(config.isCategoryDefined() && config.isSearchPoolDefined())
+        try
         {
-            templatingContext.put("applicationConfigured", "true");
-            Locale locale = i18nContext.getLocale();
-            try
+            SiteResource site = getCmsData().getSite();
+            long cid = parameters.getLong("cid");
+            CatalogueConfigResource config = CatalogueConfigResourceImpl
+                .getCatalogueConfigResource(coralSession, cid);
+            
+            if(config.isCategoryDefined() && config.isSearchPoolDefined())
             {
-                Set<Problem> filter; 
+                templatingContext.put("applicationConfigured", "true");
+                Locale locale = i18nContext.getLocale();
+                Set<Problem> filter;
                 if(parameters.isDefined("filterDefined"))
                 {
                     filter = new HashSet<Problem>();
@@ -74,9 +79,10 @@ public class Problems
                 {
                     filter = EnumSet.allOf(Problem.class);
                 }
-                
-                List<ProblemReportItem> report = catalogueService.getProblemReport(site, coralSession, locale);
-                
+
+                List<ProblemReportItem> report = catalogueService.getProblemReport(config,
+                    coralSession, locale);
+
                 Set<Problem> problemTypes = new HashSet<Problem>();
                 for(ProblemReportItem item : report)
                 {
@@ -85,9 +91,11 @@ public class Problems
                 List<Problem> problemTypeList = new ArrayList<Problem>(problemTypes);
                 Collections.sort(problemTypeList);
                 templatingContext.put("problemTypes", problemTypeList);
-                
-                List<ProblemReportItem> filteredReport = catalogueService.filterProblemReport(report, filter);
-                ProblemReportTableModel tableModel = new ProblemReportTableModel(filteredReport, locale);
+
+                List<ProblemReportItem> filteredReport = catalogueService.filterProblemReport(
+                    report, filter);
+                ProblemReportTableModel tableModel = new ProblemReportTableModel(filteredReport,
+                    locale);
                 TableState tableState = tableStateManager.getState(context, "view:library.Browse");
                 if(tableState.isNew())
                 {
@@ -95,14 +103,14 @@ public class Problems
                     tableState.setSortColumnName("resource");
                     tableState.setPageSize(20);
                 }
-                TableTool<ProblemReportItem> tableTool = new TableTool<ProblemReportItem>(tableState, null,
-                    tableModel);
+                TableTool<ProblemReportItem> tableTool = new TableTool<ProblemReportItem>(
+                    tableState, null, tableModel);
                 templatingContext.put("table", tableTool);
             }
-            catch(Exception e)
-            {
-                throw new ProcessingException("internal error", e);
-            }
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("internal error", e);
         }
     }
 

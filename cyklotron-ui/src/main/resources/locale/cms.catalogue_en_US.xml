@@ -44,6 +44,8 @@
   <prefix name="IndexConf">
     <prefix name="strings">
       <item name="title">Embedded screen configuration</item>
+      <item name="catalogue">Catalogue</item>
+      <item name="notSelected">not selected</item>
       <item name="sortColumn">Sort column</item>
       <item name="sortDirection">Sort direction</item>
       <item name="asc">ascending</item>
@@ -62,6 +64,7 @@
   <prefix name="Config">
     <prefix name="strings">
       <item name="title">Application configuration</item>
+      <item name="name">Catalogue name</item>
       <item name="category">Category</item>
       <item name="indexPool">Index pool</item>
       <item name="select">select</item>
@@ -83,4 +86,19 @@
       <item name="indexPool">Search index pool to use for full-text searching catalogue contents</item>
     </prefix>
   </prefix>
+  <prefix name="List">
+    <prefix name="columns">
+      <item name="name">Name</item>
+      <item name="creator.name">Creator</item>
+      <item name="creation.time">Creation date</item>
+    </prefix>
+    <prefix name="strings">
+      <item name="title">Catalogues</item>
+      <item name="noneDefined">No catalogues are defined</item>
+      <item name="config">Configuration</item>
+      <item name="browse">Browsing</item>
+      <item name="problems">Problem report</item>
+      <item name="new">New catalogue</item>
+    </prefix>
+  </prefix>  
 </strings>

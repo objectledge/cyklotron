@@ -1,6 +1,7 @@
 #set($strings = $i18n.usePrefix('cms.catalogue.Config.strings'))
 #set($help = $i18n.usePrefix('cms.catalogue.Config.help'))
 #genericScreenHeader($strings.title)
+#result_inline_message("results.catalogue.UpdateConfig") 
 <script type="text/javascript">
     <!--   
     function sendConfig()
@@ -9,12 +10,16 @@
     }
     //-->
 </script>
-<form name="form1" method="POST" action="$link.action('catalogue.UpdateConfig')">
-    <input type="hidden" name="node_id" value="$node.id" />
+<form name="form1" method="POST" action="$link.view('catalogue.List').action('catalogue.UpdateConfig')">
+    <input type="hidden" name="cid" value="$parametersTool.get('cid')" />
     <input type="hidden" name="config" value="" />
     <table border="0" class="genericScreen" width="100%">
 		<tr>
 			<td colspan="2">$help.general</td>
+		</tr>
+		<tr>
+			<td>$strings.name</td>
+			<td><input type="text" name="name" value="$!name"  style="width:100%;"/></td>
 		</tr>
         <tr>
             <td>$strings.category</td>

@@ -50,6 +50,8 @@
   <prefix name="IndexConf">
     <prefix name="strings">
       <item name="title">Konfiguracja ekranu osadzonego</item>
+      <item name="catalogue">Katalog</item>
+      <item name="notSelected">nie wybrany</item>
       <item name="sortColumn">Kryterium sortowania</item>
       <item name="sortDirection">Kierunek sortowania</item>
       <item name="asc">rosnąco</item>
@@ -68,6 +70,7 @@
   <prefix name="Config">
     <prefix name="strings">
       <item name="title">Konfiguracja aplikacji</item>
+      <item name="name">Nazwa katalogu</item>
       <item name="category">Kategoria</item>
       <item name="indexPool">Zestaw indeksów</item>
       <item name="select">wybierz</item>
@@ -88,6 +91,21 @@
       <item name="category">kategoria którą oznaczone są zasoby katalogu</item>
       <item name="indexPool">zestaw indeksów przeznaczony do wyszukiwania
         pełnotekstowego biblioteki</item>
+    </prefix>
+  </prefix>
+  <prefix name="List">
+    <prefix name="columns">
+      <item name="name">Nazwa</item>
+      <item name="creator.name">Twórca</item>
+      <item name="creation.time">Data utworzenia</item>
+    </prefix>
+    <prefix name="strings">
+      <item name="title">Katalogi</item>
+      <item name="noneDefined">Nie utworzono żadnych katalogów</item>
+      <item name="config">Konfiguracja</item>
+      <item name="browse">Przeglądanie</item>
+      <item name="problems">Raport błędów</item>
+      <item name="new">Nowy katalog</item>
     </prefix>
   </prefix>
 </strings>

@@ -18,6 +18,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.catalogue.CatalogueConfigResourceImpl;
 import net.cyklotron.cms.catalogue.IndexCard;
 import net.cyklotron.cms.catalogue.IndexCardTableModel;
 import net.cyklotron.cms.catalogue.CatalogueService;
@@ -47,49 +48,55 @@ public class Index
     public void prepareDefault(Context context)
         throws ProcessingException
     {
-        TemplatingContext templatingContext = context.getAttribute(TemplatingContext.class);
-        CoralSession coralSession = context.getAttribute(CoralSession.class);
-        I18nContext i18nContext = context.getAttribute(I18nContext.class);
-        CmsData cmsData = getCmsData();
-        SiteResource site = cmsData.getSite();
-        CatalogueConfigResource config = catalogueService.getConfig(site, coralSession);
-        Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
-        Parameters parameters = context.getAttribute(RequestParameters.class);
-        if(config.isCategoryDefined() && config.isSearchPoolDefined())
+        try
         {
-            templatingContext.put("applicationConfigured", "true");
-            Locale locale = i18nContext.getLocale();
-            try
+            TemplatingContext templatingContext = context.getAttribute(TemplatingContext.class);
+            CoralSession coralSession = context.getAttribute(CoralSession.class);
+            I18nContext i18nContext = context.getAttribute(I18nContext.class);
+            CmsData cmsData = getCmsData();
+            SiteResource site = cmsData.getSite();
+            Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
+            if(screenConfig.get("cid","").length() > 0)
             {
-                List<IndexCard> index;
-                String query;
-                if(parameters.isDefined("query") && (query = parameters.get("query")).length() > 0)
+                long cid = screenConfig.getLong("cid");
+                CatalogueConfigResource config = CatalogueConfigResourceImpl
+                    .getCatalogueConfigResource(coralSession, cid);
+
+                Parameters parameters = context.getAttribute(RequestParameters.class);
+                if(config.isCategoryDefined() && config.isSearchPoolDefined())
                 {
-                    templatingContext.put("query", query);
-                    index = catalogueService.search(query, site, coralSession, locale);
+                    templatingContext.put("applicationConfigured", "true");
+                    Locale locale = i18nContext.getLocale();
+                    List<IndexCard> index;
+                    String query;
+                    if(parameters.isDefined("query") && (query = parameters.get("query")).length() > 0)
+                    {
+                        templatingContext.put("query", query);
+                        index = catalogueService.search(query, config, coralSession, locale);
+                    }
+                    else
+                    {
+                        index = catalogueService.getAllItems(config, coralSession, locale);
+                    }
+                    IndexCardTableModel tableModel = new IndexCardTableModel(index, locale);
+                    TableState tableState = tableStateManager.getState(context,
+                        "screen:catalogue.Index:" + cmsData.getNode().getIdString());
+                    if(tableState.isNew())
+                    {
+                        tableState.setTreeView(false);
+                        tableState.setSortColumnName(screenConfig.get("sortColumn", "title"));
+                        tableState.setAscSort(screenConfig.getBoolean("sortAsc", true));
+                        tableState.setPageSize(screenConfig.getInt("pageSize", 20));
+                    }
+                    TableTool<IndexCard> tableTool = new TableTool<IndexCard>(tableState, null,
+                                    tableModel);
+                    templatingContext.put("table", tableTool);
                 }
-                else
-                {
-                    index = catalogueService.getAllItems(site, coralSession, locale);
-                }
-                IndexCardTableModel tableModel = new IndexCardTableModel(index, locale);
-                TableState tableState = tableStateManager.getState(context, "screen:catalogue.Index:"
-                    + cmsData.getNode().getIdString());
-                if(tableState.isNew())
-                {
-                    tableState.setTreeView(false);
-                    tableState.setSortColumnName(screenConfig.get("sortColumn", "title"));
-                    tableState.setAscSort(screenConfig.getBoolean("sortAsc", true));
-                    tableState.setPageSize(screenConfig.getInt("pageSize", 20));
-                }
-                TableTool<IndexCard> tableTool = new TableTool<IndexCard>(tableState, null,
-                    tableModel);
-                templatingContext.put("table", tableTool);
             }
-            catch(Exception e)
-            {
-                throw new ProcessingException("internal error", e);
-            }
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("internal error", e);
         }
     }
 }

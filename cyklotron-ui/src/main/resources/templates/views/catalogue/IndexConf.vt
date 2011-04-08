@@ -6,7 +6,7 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
     <!--
-    var fieldNames = new Array( "sortColumn", "sortAsc", "pageSize" );
+    var fieldNames = new Array( "cid", "sortColumn", "sortAsc", "pageSize" );
     function sendConfig()
     {
     document.form1.action = "$save_action";
@@ -20,6 +20,17 @@ $pageTool.addScriptLink('script/ComponentConfiguration.js')##
     <input type="hidden" name="config" value="" />
     <table border="0" class="genericScreen" width="100%">
         <tr>
+			<td>$strings.catalogue</td>
+			<td>
+				<select name="cid">
+				#option('' $strings.notSelected $!selectedCatalogue.id)
+				#foreach($catalogue in $availableCatalogues)
+					#option($catalogue.id $catalogue.name $selectedCatalogue.id)
+				#end
+				</select>
+			</td>
+		</tr>
+		<tr>
             <td>$strings.sortColumn</td>
             <td>
 				#set($columnOrder = ['title','authors','pubYear','keywords'])

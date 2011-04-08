@@ -18,6 +18,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.catalogue.CatalogueConfigResourceImpl;
 import net.cyklotron.cms.catalogue.IndexCard;
 import net.cyklotron.cms.catalogue.IndexCardTableModel;
 import net.cyklotron.cms.catalogue.CatalogueService;
@@ -45,27 +46,31 @@ public class Browse
         CoralSession coralSession)
         throws ProcessingException
     {
-        SiteResource site = getCmsData().getSite();
-        CatalogueConfigResource config = catalogueService.getConfig(site, coralSession);
-        if(config.isCategoryDefined() && config.isSearchPoolDefined())
+        try
         {
-            templatingContext.put("applicationConfigured", "true");
-            Locale locale = i18nContext.getLocale();
-            try
+            SiteResource site = getCmsData().getSite();
+            long cid = parameters.getLong("cid");
+            CatalogueConfigResource config = CatalogueConfigResourceImpl
+                .getCatalogueConfigResource(coralSession, cid);
+
+            if(config.isCategoryDefined() && config.isSearchPoolDefined())
             {
+                templatingContext.put("applicationConfigured", "true");
+                Locale locale = i18nContext.getLocale();
                 List<IndexCard> index;
                 String query;
                 if(parameters.isDefined("query") && (query = parameters.get("query")).length() > 0)
                 {
                     templatingContext.put("query", query);
-                    index = catalogueService.search(query, site, coralSession, locale);
+                    index = catalogueService.search(query, config, coralSession, locale);
                 }
                 else
                 {
-                    index = catalogueService.getAllItems(site, coralSession, locale);
+                    index = catalogueService.getAllItems(config, coralSession, locale);
                 }
                 IndexCardTableModel tableModel = new IndexCardTableModel(index, locale);
-                TableState tableState = tableStateManager.getState(context, "view:catalogue.Browse");
+                TableState tableState = tableStateManager
+                    .getState(context, "view:catalogue.Browse");
                 if(tableState.isNew())
                 {
                     tableState.setTreeView(false);
@@ -76,10 +81,10 @@ public class Browse
                     tableModel);
                 templatingContext.put("table", tableTool);
             }
-            catch(Exception e)
-            {
-                throw new ProcessingException("internal error", e);
-            }
+        }
+        catch(Exception e)
+        {
+            throw new ProcessingException("internal error", e);
         }
     }
 

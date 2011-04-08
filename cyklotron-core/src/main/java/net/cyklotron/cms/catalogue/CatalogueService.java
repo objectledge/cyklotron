@@ -29,6 +29,7 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.NameComparator;
 
+import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.category.CategoryException;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
@@ -78,24 +79,24 @@ public class CatalogueService
     }
 
     /**
-     * Return configuration node for catalogue application in a given site.
+     * Returns root node of catalogue configuration in a given site,
      * 
-     * @param site the site.
-     * @param coralSession coral session.
-     * @return configuration node.
+     * @param site a site.
+     * @param coralSession Coral session.
+     * @return root node of of catalogue configuration.
      */
-    public CatalogueConfigResource getConfig(SiteResource site, CoralSession coralSession)
+    public Resource getConfigRoot(SiteResource site, CoralSession coralSession)
     {
         Resource[] res;
         res = coralSession.getStore().getResourceByPath(site, "applications/catalogue");
         if(res.length > 1)
         {
-            throw new IllegalStateException("multiple catalogue nodes exist under site "
+            throw new IllegalStateException("multiple catalogue parent nodes exist under site "
                 + site.getName());
         }
         else if(res.length == 1)
         {
-            return (CatalogueConfigResource)res[0];
+            return res[0];
         }
         else
         {
@@ -105,41 +106,85 @@ public class CatalogueService
                 throw new IllegalStateException("applications node under site " + site.getName()
                     + " missing or duplicated");
             }
-            CatalogueConfigResource config;
             try
             {
-                config = CatalogueConfigResourceImpl.createCatalogueConfigResource(coralSession,
-                    "catalogue", res[0]);
+                return CmsNodeResourceImpl.createCmsNodeResource(coralSession, "catalogue", res[0]);
             }
             catch(InvalidResourceNameException e)
             {
                 throw new RuntimeException("internal error", e);
             }
-            return config;
         }
+    }
+
+    /**
+     * Create a new catalogue.
+     * 
+     * @param site the site where catalogue belongs.
+     * @param name name of the catalogue.
+     * @param category marker category.
+     * @param searchPool search index pool.
+     * @param coralSession Coral session
+     * @return catalogue configuration resource.
+     * @throws InvalidResourceNameException when name contains disallowed characters.
+     */
+    public CatalogueConfigResource createCatalogue(SiteResource site, String name,
+        CategoryResource category, PoolResource searchPool, CoralSession coralSession)
+        throws InvalidResourceNameException
+    {
+        Resource configRoot = getConfigRoot(site, coralSession);
+        CatalogueConfigResource config = CatalogueConfigResourceImpl.createCatalogueConfigResource(
+            coralSession, name, configRoot);
+        config.setCategory(category);
+        config.setSearchPool(searchPool);
+        config.update();
+        return config;
+    }
+
+    /**
+     * Update catalogue config.
+     * 
+     * @param config catalogue configuration resource.
+     * @param name name of the catalogue.
+     * @param category marker category.
+     * @param searchPool search index pool.
+     * @param coralSession Coral session
+     * @throws InvalidResourceNameException when name contains disallowed characters.
+     */
+    public void updateCatalogue(CatalogueConfigResource config, String name,
+        CategoryResource category, PoolResource searchPool, CoralSession coralSession)
+        throws InvalidResourceNameException
+    {
+        if(!config.getName().equals(name))
+        {
+            coralSession.getStore().setName(config, name);
+        }
+        config.setCategory(category);
+        config.setSearchPool(searchPool);
+        config.update();
     }
 
     /**
      * Validate a resource as candidate for an index item.
      * 
      * @param res the resource, either {@link DocumentNodeResource} or {@link FileResource}.
-     * @param site catalogue location
+     * @param config catalogue configuration resource.
      * @param coralSession coral session
      * @return set of problems, hopefully empty.
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      */
-    public Set<Problem> validateIndexCardCandidate(Resource res, SiteResource site,
+    public Set<Problem> validateIndexCardCandidate(Resource res, CatalogueConfigResource config,
         CoralSession coralSession)
         throws NotConfiguredException
     {
         Set<Problem> problems = new HashSet<Problem>();
         if(res instanceof DocumentNodeResource)
         {
-            return validateDocumentIndexCardCandidate((DocumentNodeResource)res, site, coralSession);
+            return validateDocumentIndexCardCandidate((DocumentNodeResource)res, config, coralSession);
         }
         if(res instanceof FileResource)
         {
-            return validateFileIndexCardCandidate((FileResource)res, site, coralSession);
+            return validateFileIndexCardCandidate((FileResource)res, config, coralSession);
         }
         problems.add(Problem.INVALID_CLASS);
         return problems;
@@ -151,18 +196,18 @@ public class CatalogueService
      * @param res the resource, either {@link DocumentNodeResource} or {@link FileResource}. It is
      *        expected to be problem-free accoding to
      *        {@link #validateIndexCardCandidate(Resource, SiteResource, CoralSession)}.
-     * @param site catalogue location
+     * @param config catalogue configuration resource.
      * @param coralSession coral session
      * @param locale locale used for sorting downloads by name, when manual ordering is not used.
      * @return an IndexCard
      * @throws IllegalArgumentException when resource has problems.
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      */
-    public IndexCard getIndexCard(Resource res, SiteResource site, CoralSession coralSession,
+    public IndexCard getIndexCard(Resource res, CatalogueConfigResource config, CoralSession coralSession,
         Locale locale)
         throws IllegalArgumentException, NotConfiguredException
     {
-        Set<Problem> problems = validateIndexCardCandidate(res, site, coralSession);
+        Set<Problem> problems = validateIndexCardCandidate(res, config, coralSession);
         if(!problems.isEmpty())
         {
             throw new IllegalArgumentException("resource " + res.getIdString() + " has problems "
@@ -174,13 +219,13 @@ public class CatalogueService
         if(res instanceof DocumentNodeResource)
         {
             doc = (DocumentNodeResource)res;
-            downloads = findDownloads(doc, site, coralSession, locale);
+            downloads = findDownloads(doc, config, coralSession, locale);
             return new IndexCard(doc, downloads);
         }
         if(res instanceof FileResource)
         {
             file = (FileResource)res;
-            List<DocumentNodeResource> docCandidates = findDescriptionDocs(file, site, coralSession);
+            List<DocumentNodeResource> docCandidates = findDescriptionDocs(file, config, coralSession);
             if(docCandidates.size() == 1)
             {
                 doc = docCandidates.get(0);
@@ -190,7 +235,7 @@ public class CatalogueService
                 throw new IllegalArgumentException("multiple description documents for file "
                     + file.toString());
             }
-            downloads = findDownloads(doc, site, coralSession, locale);
+            downloads = findDownloads(doc, config, coralSession, locale);
             return new IndexCard(doc, downloads);
         }
         throw new IllegalArgumentException("resource " + res.getIdString() + " has invalid class");
@@ -199,19 +244,19 @@ public class CatalogueService
     /**
      * Create a problem report for catalogue in a given site.
      * 
-     * @param site the site.
+     * @param config catalogue configuration.
      * @param coralSession coral session.
      * @param locale locale used for sorting downloads by name, when manual ordering is not used.
      * @return report contents.
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      * @throws CategoryException when category service error occurs.
      */
-    public List<ProblemReportItem> getProblemReport(SiteResource site, CoralSession coralSession,
-        Locale locale)
+    public List<ProblemReportItem> getProblemReport(CatalogueConfigResource config,
+        CoralSession coralSession, Locale locale)
         throws NotConfiguredException, CategoryException
     {
         List<ProblemReportItem> report = new ArrayList<ProblemReportItem>();
-        CategoryResource markerCategory = getConfig(site, coralSession).getCategory();
+        CategoryResource markerCategory = config.getCategory();
         if(markerCategory == null)
         {
             throw new NotConfiguredException("marker category is not set");
@@ -219,18 +264,18 @@ public class CatalogueService
         Resource[] all = categoryService.getResources(coralSession, markerCategory, false);
         for(Resource res : all)
         {
-            Set<Problem> problems = validateIndexCardCandidate(res, site, coralSession);
+            Set<Problem> problems = validateIndexCardCandidate(res, config, coralSession);
             if(!problems.isEmpty())
             {
                 List<DocumentNodeResource> descriptionDocCandidates = null;
                 List<FileResource> downloads = null;
                 if(res instanceof DocumentNodeResource)
                 {
-                    downloads = findDownloads((DocumentNodeResource)res, site, coralSession, locale);
+                    downloads = findDownloads((DocumentNodeResource)res, config, coralSession, locale);
                 }
                 if(res instanceof FileResource)
                 {
-                    descriptionDocCandidates = findDescriptionDocs((FileResource)res, site,
+                    descriptionDocCandidates = findDescriptionDocs((FileResource)res, config,
                         coralSession);
                 }
                 report
@@ -267,20 +312,19 @@ public class CatalogueService
     }
 
     /**
-     * Retrieve all catalogue index items for a given site.
+     * Retrieve all catalogue index items.
      * 
-     * @param site the site.
+     * @param config catalogue configuration resource.
      * @param coralSession coral session.
      * @param locale locale used for sorting downloads by name, when manual ordering is not used.
      * @return unordered list of index items, intended to be used with {@link IndexCardTableModel}.
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      * @throws CategoryException when category service error occurs.
      */
-    public List<IndexCard> getAllItems(SiteResource site, CoralSession coralSession,
-        Locale locale)
+    public List<IndexCard> getAllItems(CatalogueConfigResource config, CoralSession coralSession, Locale locale)
         throws NotConfiguredException, CategoryException
     {
-        CategoryResource markerCategory = getConfig(site, coralSession).getCategory();
+        CategoryResource markerCategory = config.getCategory();
         if(markerCategory == null)
         {
             throw new NotConfiguredException("marker category is not set");
@@ -290,20 +334,31 @@ public class CatalogueService
         Set<IndexCard> indexCards = new HashSet<IndexCard>();
         for(Resource res : all)
         {
-            Set<Problem> problems = validateIndexCardCandidate(res, site, coralSession);
+            Set<Problem> problems = validateIndexCardCandidate(res, config, coralSession);
             if(problems.isEmpty())
             {
-                indexCards.add(getIndexCard(res, site, coralSession, locale));
+                indexCards.add(getIndexCard(res, config, coralSession, locale));
             }
         }
         return new ArrayList<IndexCard>(indexCards);
     }
 
-    public List<IndexCard> search(String queryString, SiteResource site,
+    /**
+     * Retrieve index items through full text search.
+     * 
+     * @param queryString text query.
+     * @param config catalogue configuration resource.
+     * @param coralSession coral session.
+     * @param locale locale used for sorting downloads by name, when manual ordering is not used.
+     * @return unordered list of index items, intended to be used with {@link IndexCardTableModel}.
+     * @throws NotConfiguredException
+     * @throws SearchException
+     */
+    public List<IndexCard> search(String queryString, CatalogueConfigResource config,
         CoralSession coralSession, Locale locale)
         throws NotConfiguredException, SearchException
     {
-        PoolResource searchPool = getConfig(site, coralSession).getSearchPool();
+        PoolResource searchPool = config.getSearchPool();
         if(searchPool == null)
         {
             throw new NotConfiguredException("searchPool is not set");
@@ -343,10 +398,10 @@ public class CatalogueService
             try
             {
                 Resource res = coralSession.getStore().getResource(resId);
-                Set<Problem> problems = validateIndexCardCandidate(res, site, coralSession);
+                Set<Problem> problems = validateIndexCardCandidate(res, config, coralSession);
                 if(problems.isEmpty())
                 {
-                    indexCards.add(getIndexCard(res, site, coralSession, locale));
+                    indexCards.add(getIndexCard(res, config, coralSession, locale));
                 }
             }
             catch(EntityDoesNotExistException e)
@@ -361,17 +416,17 @@ public class CatalogueService
      * Validate a document as candidate for an index item.
      * 
      * @param doc the document.
-     * @param site catalogue location
+     * @param config catalogue configuration resource.
      * @param coralSession coral session
      * @return set of problems, hopefully empty.
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      */
     private Set<Problem> validateDocumentIndexCardCandidate(DocumentNodeResource doc,
-        SiteResource site, CoralSession coralSession)
+        CatalogueConfigResource config, CoralSession coralSession)
         throws NotConfiguredException
     {
         Set<Problem> problems = new HashSet<Problem>();
-        CategoryResource markerCategory = getConfig(site, coralSession).getCategory();
+        CategoryResource markerCategory = config.getCategory();
         if(markerCategory == null)
         {
             throw new NotConfiguredException("marker category is not set");
@@ -394,7 +449,7 @@ public class CatalogueService
         {
             throw new RuntimeException("internal error", e);
         }
-        
+
         Document metaDOM = null;
         if(doc.getMeta() == null || doc.getMeta().trim().length() == 0)
         {
@@ -446,17 +501,17 @@ public class CatalogueService
      * Validate a file as candidate for an index item.
      * 
      * @param file the file.
-     * @param site catalogue location
+     * @param config catalogue configuration resource.
      * @param coralSession coral session
      * @return set of problems, hopefully empty.
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      */
-    private Set<Problem> validateFileIndexCardCandidate(FileResource file, SiteResource site,
-        CoralSession coralSession)
+    private Set<Problem> validateFileIndexCardCandidate(FileResource file,
+        CatalogueConfigResource config, CoralSession coralSession)
         throws NotConfiguredException
     {
         Set<Problem> problems = new HashSet<Problem>();
-        CategoryResource markerCategory = getConfig(site, coralSession).getCategory();
+        CategoryResource markerCategory = config.getCategory();
         if(markerCategory == null)
         {
             throw new NotConfiguredException("marker category is not set");
@@ -467,7 +522,7 @@ public class CatalogueService
         {
             problems.add(Problem.REQUIRED_CATEGORY_MISSING);
         }
-        
+
         try
         {
             Subject anonymous = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
@@ -479,9 +534,9 @@ public class CatalogueService
         catch(EntityDoesNotExistException e)
         {
             throw new RuntimeException("internal error", e);
-        }        
+        }
 
-        List<DocumentNodeResource> descriptionDocCandidates = findDescriptionDocs(file, site,
+        List<DocumentNodeResource> descriptionDocCandidates = findDescriptionDocs(file, config,
             coralSession);
         if(descriptionDocCandidates.size() < 1)
         {
@@ -494,7 +549,7 @@ public class CatalogueService
         else
         {
             problems.addAll(validateDocumentIndexCardCandidate(descriptionDocCandidates.get(0),
-                site, coralSession));
+                config, coralSession));
         }
         return problems;
     }
@@ -503,16 +558,16 @@ public class CatalogueService
      * Find description document for a file.
      * 
      * @param file the file
-     * @param site catalogue location
+     * @param config catalogue configuration resource.
      * @param coralSession coral session
      * @return a set of resources, may be empty.
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      */
-    private List<DocumentNodeResource> findDescriptionDocs(FileResource file, SiteResource site,
-        CoralSession coralSession)
+    private List<DocumentNodeResource> findDescriptionDocs(FileResource file,
+        CatalogueConfigResource config, CoralSession coralSession)
         throws NotConfiguredException
     {
-        CategoryResource markerCategory = getConfig(site, coralSession).getCategory();
+        CategoryResource markerCategory = config.getCategory();
         if(markerCategory == null)
         {
             throw new NotConfiguredException("marker category is not set");
@@ -540,16 +595,16 @@ public class CatalogueService
      * Find downloadable files for a description document.
      * 
      * @param doc description document
-     * @param site catalogue location
+     * @param config catalogue configuration resource.
      * @param coralSession coral session
      * @return a set of files, may be empty
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      */
-    private List<FileResource> findDownloads(DocumentNodeResource doc, SiteResource site,
-        CoralSession coralSession, Locale locale)
+    private List<FileResource> findDownloads(DocumentNodeResource doc,
+        CatalogueConfigResource config, CoralSession coralSession, Locale locale)
         throws NotConfiguredException
     {
-        CategoryResource markerCategory = getConfig(site, coralSession).getCategory();
+        CategoryResource markerCategory = config.getCategory();
         if(markerCategory == null)
         {
             throw new NotConfiguredException("marker category is not set");

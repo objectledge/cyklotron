@@ -15,8 +15,8 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.catalogue.CatalogueService;
 import net.cyklotron.cms.catalogue.CatalogueConfigResource;
+import net.cyklotron.cms.catalogue.CatalogueConfigResourceImpl;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.SearchException;
@@ -25,16 +25,13 @@ import net.cyklotron.cms.search.SearchService;
 public class Config
     extends BaseCMSScreen
 {
-    private final CatalogueService catalogueService;
-
     private final SearchService searchService;
 
     public Config(Context context, Logger logger, PreferencesService preferencesService,
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
-        CatalogueService catalogueService, SearchService searchService)
+        SearchService searchService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
-        this.catalogueService = catalogueService;
         this.searchService = searchService;
     }
 
@@ -46,15 +43,30 @@ public class Config
     {
         // current settings
         CmsData cmsData = getCmsData();
-        CatalogueConfigResource config = catalogueService.getConfig(cmsData.getSite(), coralSession);
-        if(config.isCategoryDefined())
+        String cid = parameters.get("cid", "new");
+        if(!cid.equals("new") && !templatingContext.containsKey("result"))
         {
-            templatingContext.put("category", config.getCategory());
+            try
+            {
+                CatalogueConfigResource config = CatalogueConfigResourceImpl
+                    .getCatalogueConfigResource(coralSession, Long.parseLong(cid));
+                templatingContext.put("name", config.getName());
+
+                if(config.isCategoryDefined())
+                {
+                    templatingContext.put("category", config.getCategory());
+                }
+                if(config.isSearchPoolDefined())
+                {
+                    templatingContext.put("search_pool", config.getSearchPool());
+                }
+            }
+            catch(Exception e)
+            {
+                throw new ProcessingException("invalid parameter cid=" + parameters.get("cid"));
+            }
         }
-        if(config.isSearchPoolDefined())
-        {
-            templatingContext.put("search_pool", config.getSearchPool());
-        }
+
         // available search pools
         try
         {
@@ -73,17 +85,10 @@ public class Config
         CmsData cmsData = cmsDataFactory.getCmsData(context);
         if(!cmsData.isApplicationEnabled("catalogue"))
         {
-            logger.debug("Application 'search' not enabled in site");
+            logger.debug("Application 'catalogue' not enabled in site");
             return false;
         }
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        if(cmsData.getNode() != null)
-        {
-            return cmsData.getNode().canModify(coralSession, coralSession.getUserSubject());
-        }
-        else
-        {
-            return checkAdministrator(coralSession);
-        }
+        return checkAdministrator(coralSession);
     }
 }
