@@ -80,7 +80,7 @@
       <td class="separator">|</td>
 	#end
 	#if($cms_tool.isAppEnabled('catalogue') || $block)
-      #linkCell('' 'KATALOG' $siteLink.view('catalogue.Browse'))
+      #linkCell('' 'KATALOGI' $siteLink.view('catalogue.List'))
       <td class="separator">|</td>
     #end
     </tr>
