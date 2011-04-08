@@ -467,32 +467,38 @@ public class PollServiceImpl
     public Set<String> getBallotsEmails(CoralSession coralSession, VoteResource vote)
     {
         Set<String> emailList = new HashSet<String>();
-        if(ballotsEmailsMap.containsKey(vote.getId()))
-        {
-            emailList = (Set<String>)ballotsEmailsMap.get(vote.getId());
-        }
-        else
-        {
-            Resource[] answerResources = coralSession.getStore().getResource(vote);
-            for(int i = 0; i < answerResources.length; i++)
+        synchronized(ballotsEmailsMap)
+        {            
+            if(ballotsEmailsMap.containsKey(vote.getId()))
             {
-                AnswerResource answerResource = (AnswerResource)answerResources[i];
-                Resource[] ballotResources = coralSession.getStore().getResource(answerResource);
-                for(int j = 0; j < ballotResources.length; j++)
-                {
-                    emailList.add(((BallotResource)ballotResources[j]).getEmail());
-                }
+                emailList = (Set<String>)ballotsEmailsMap.get(vote.getId());
             }
-            ballotsEmailsMap.put(vote.getId(), emailList);
+            else
+            {
+                Resource[] answerResources = coralSession.getStore().getResource(vote);
+                for(int i = 0; i < answerResources.length; i++)
+                {
+                    AnswerResource answerResource = (AnswerResource)answerResources[i];
+                    Resource[] ballotResources = coralSession.getStore().getResource(answerResource);
+                    for(int j = 0; j < ballotResources.length; j++)
+                    {
+                        emailList.add(((BallotResource)ballotResources[j]).getEmail());
+                    }
+                }
+                ballotsEmailsMap.put(vote.getId(), emailList);
+            }
+            return emailList;
         }
-        return emailList;
     }
     
     public void addBallotEmail(CoralSession coralSession, VoteResource vote, String email)
     {
-        Set<String> emailList = getBallotsEmails(coralSession, vote);
-        emailList.add(email);
-        ballotsEmailsMap.put(vote.getId(), emailList);
+        synchronized(ballotsEmailsMap)
+        {
+            Set<String> emailList = getBallotsEmails(coralSession, vote);
+            emailList.add(email);
+            ballotsEmailsMap.put(vote.getId(), emailList);
+        }
     }
 
     private static final String DEAULT_TICKET_TEMPLATE = "/messages/votes/Confirm_%s";
@@ -748,9 +754,12 @@ public class PollServiceImpl
                 BallotResource ballot = (BallotResource)resource;
                 AnswerResource answer = (AnswerResource)ballot.getParent();
                 VoteResource vote = (VoteResource)answer.getParent();
-                Set<String> emailList = getBallotsEmails(coralSession, vote);
-                emailList.remove(ballot.getEmail());
-                ballotsEmailsMap.put(vote.getId(), emailList);
+                synchronized(ballotsEmailsMap)
+                {
+                    Set<String> emailList = getBallotsEmails(coralSession, vote);
+                    emailList.remove(ballot.getEmail());
+                    ballotsEmailsMap.put(vote.getId(), emailList);
+                }
                 if(answer.getVotesCount(0) > 0)
                 {
                     answer.setVotesCount(answer.getVotesCount(0) - 1);
