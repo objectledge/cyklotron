@@ -28,8 +28,10 @@
  
 package net.cyklotron.cms.catalogue;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -61,6 +63,9 @@ public class CatalogueConfigResourceImpl
 	
     /** The AttributeDefinition object for the <code>category</code> attribute. */
     private static AttributeDefinition categoryDef;
+
+    /** The AttributeDefinition object for the <code>requiredPropertyNames</code> attribute. */
+    private static AttributeDefinition requiredPropertyNamesDef;
 
     /** The AttributeDefinition object for the <code>searchPool</code> attribute. */
     private static AttributeDefinition searchPoolDef;
@@ -203,6 +208,66 @@ public class CatalogueConfigResourceImpl
 	}
  
     /**
+     * Returns the value of the <code>requiredPropertyNames</code> attribute.
+     *
+     * @return the value of the <code>requiredPropertyNames</code> attribute.
+     */
+    public String getRequiredPropertyNames()
+    {
+        return (String)getInternal(requiredPropertyNamesDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>requiredPropertyNames</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>requiredPropertyNames</code> attribute.
+     */
+    public String getRequiredPropertyNames(String defaultValue)
+    {
+        return (String)getInternal(requiredPropertyNamesDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>requiredPropertyNames</code> attribute.
+     *
+     * @param value the value of the <code>requiredPropertyNames</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRequiredPropertyNames(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(requiredPropertyNamesDef, value);
+            }
+            else
+            {
+                unset(requiredPropertyNamesDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>requiredPropertyNames</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>requiredPropertyNames</code> attribute is defined.
+	 */
+    public boolean isRequiredPropertyNamesDefined()
+	{
+	    return isDefined(requiredPropertyNamesDef);
+	}
+ 
+    /**
      * Returns the value of the <code>searchPool</code> attribute.
      *
      * @return the value of the <code>searchPool</code> attribute.
@@ -263,4 +328,36 @@ public class CatalogueConfigResourceImpl
 	}
   
     // @custom methods ///////////////////////////////////////////////////////
+    // @import java.util.Set
+    // @import java.util.EnumSet
+    
+    public Set<IndexCard.Property> getRequiredProperties()
+    {
+        Set<IndexCard.Property> properties = EnumSet.noneOf(IndexCard.Property.class);
+        if(isRequiredPropertyNamesDefined())
+        {
+            String[] propertyNames = getRequiredPropertyNames().split(",");
+            for(String propertyName : propertyNames)
+            {
+                properties.add(Enum.valueOf(IndexCard.Property.class, propertyName));
+            }
+        }
+        return properties;
+    }
+    
+    public void setRequiredProperties(Set<IndexCard.Property> properties)
+    {
+        Iterator<IndexCard.Property> i = properties.iterator();
+        StringBuilder s = new StringBuilder();
+        while(i.hasNext())
+        {
+            IndexCard.Property p = i.next();
+            s.append(p.name());
+            if(i.hasNext())
+            {
+                s.append(',');
+            }
+        }
+        setRequiredPropertyNames(s.toString());
+    }
 }

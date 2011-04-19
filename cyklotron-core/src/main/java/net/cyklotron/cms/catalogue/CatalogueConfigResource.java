@@ -72,6 +72,28 @@ public interface CatalogueConfigResource
     public boolean isCategoryDefined();
  
     /**
+     * Returns the value of the <code>requiredPropertyNames</code> attribute.
+     *
+     * @return the value of the the <code>requiredPropertyNames</code> attribute.
+     */
+    public String getRequiredPropertyNames();
+
+    /**
+     * Sets the value of the <code>requiredPropertyNames</code> attribute.
+     *
+     * @param value the value of the <code>requiredPropertyNames</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRequiredPropertyNames(String value);   
+   
+	/**
+	 * Checks if the value of the <code>requiredPropertyNames</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>requiredPropertyNames</code> attribute is defined.
+	 */
+    public boolean isRequiredPropertyNamesDefined();
+ 
+    /**
      * Returns the value of the <code>searchPool</code> attribute.
      *
      * @return the value of the the <code>searchPool</code> attribute.
@@ -94,4 +116,8 @@ public interface CatalogueConfigResource
     public boolean isSearchPoolDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
+    
+    public Set<IndexCard.Property> getRequiredProperties();
+    
+    public void setRequiredProperties(Set<IndexCard.Property> properties);
 }

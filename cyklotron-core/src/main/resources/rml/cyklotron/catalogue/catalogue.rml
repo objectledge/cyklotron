@@ -4,5 +4,6 @@ HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node' )
 ATTRIBUTES (
   resource(category.category) category,
-  resource(search.pool) searchPool
+  resource(search.pool) searchPool,
+  string requiredPropertyNames
 );

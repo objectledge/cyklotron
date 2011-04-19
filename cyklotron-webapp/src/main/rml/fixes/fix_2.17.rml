@@ -134,3 +134,5 @@ ALTER RESOURCE '/cms/applications/library' SET NAME 'catalogue';
 ALTER RESOURCE '/cms/applications/catalogue/screens/index' SET ATTRIBUTE screenName = 'catalogue.Index';
 
 ALTER RESOURCE '/cms/applications/catalogue/screens/index' SET ATTRIBUTE configurationView = 'catalogue.IndexConf';
+
+ALTER RESOURCE CLASS 'cms.catalogue.config' ADD ATTRIBUTE string requiredPropertyNames;
