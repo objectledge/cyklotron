@@ -100,5 +100,23 @@
       <item name="problems">Problem report</item>
       <item name="new">New catalogue</item>
     </prefix>
-  </prefix>  
+  </prefix>
+  <prefix name="Common">
+    <prefix name="properties">
+      <item name="TITLE">Title</item>
+      <item name="SUBTITLE">Subtile</item>
+      <item name="KEYWORDS">Keywords</item>
+      <item name="ABSTRACT">Abstract</item>
+      <item name="EVENT_TITLE">Event name</item>
+      <item name="EVENT_PLACE">Event place</item>
+      <item name="EVENT_START">Event start</item>
+      <item name="EVENT_END">Event end</item>
+      <item name="VALIDITY_START">Validity start</item>
+      <item name="VALIDITY_END">Validity end</item>
+      <item name="PUB_YEAR">Publication year</item>
+      <item name="AUTHORS">Authors</item>
+      <item name="SOURCES">Sources</item>
+      <item name="ORGANIZATIONS">Organizations</item>
+    </prefix>
+  </prefix>
 </strings>

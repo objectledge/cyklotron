@@ -108,4 +108,22 @@
       <item name="new">Nowy katalog</item>
     </prefix>
   </prefix>
+  <prefix name="Common">
+    <prefix name="properties">
+      <item name="TITLE">Tytuł</item>
+      <item name="SUBTITLE">Podtytuł</item>
+      <item name="KEYWORDS">Słowa kluczowe</item>
+      <item name="ABSTRACT">Skrót</item>
+      <item name="EVENT_TITLE">Nazwa wydarzenia</item>
+      <item name="EVENT_PLACE">Miejsce wydarzenia</item>
+      <item name="EVENT_START">Początek wydarzenia</item>
+      <item name="EVENT_END">Koniec wydarzenia</item>
+      <item name="VALIDITY_START">Początek ważności dokumentu</item>
+      <item name="VALIDITY_END">Koniec ważności dokumentu</item>
+      <item name="PUB_YEAR">Rok publikacji</item>
+      <item name="AUTHORS">Autorzy</item>
+      <item name="SOURCES">Źródła</item>
+      <item name="ORGANIZATIONS">Organizacje</item>
+    </prefix>
+  </prefix>
 </strings>
