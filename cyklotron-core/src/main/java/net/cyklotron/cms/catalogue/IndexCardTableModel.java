@@ -1,5 +1,6 @@
 package net.cyklotron.cms.catalogue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,16 +20,30 @@ public class IndexCardTableModel
     private static TableColumn<IndexCard>[] initColumns(Locale locale)
         throws TableException
     {
+        List<TableColumn<IndexCard>> columns = new ArrayList<TableColumn<IndexCard>>();
+        columns.add(initColumn("title", IndexCard.Property.TITLE, locale));
+        columns.add(initColumn("subtitle", IndexCard.Property.SUBTITLE, locale));
+        columns.add(initColumn("keywords", IndexCard.Property.KEYWORDS, locale));
+        columns.add(initColumn("abstract", IndexCard.Property.ABSTRACT, locale));
+        columns.add(initColumn("eventTitle", IndexCard.Property.EVENT_TITLE, locale));
+        columns.add(initColumn("eventPlace", IndexCard.Property.EVENT_PLACE, locale));
+        columns.add(initColumn("eventStart", IndexCard.Property.EVENT_START, locale));
+        columns.add(initColumn("eventEnd", IndexCard.Property.EVENT_END, locale));
+        columns.add(initColumn("validityStart", IndexCard.Property.VALIDITY_START, locale));
+        columns.add(initColumn("validityEnd", IndexCard.Property.VALIDITY_END, locale));
+        columns.add(initColumn("pubYear", IndexCard.Property.PUB_YEAR, locale));
+        columns.add(initColumn("authors", IndexCard.Property.AUTHORS, locale));
+        columns.add(initColumn("sources", IndexCard.Property.SOURCES, locale));
+        columns.add(initColumn("organizations", IndexCard.Property.ORGANIZATIONS, locale));
         @SuppressWarnings("unchecked")
-        TableColumn<IndexCard>[] columns = new TableColumn[4];
-        columns[0] = new TableColumn<IndexCard>("title", new IndexCardComparator(
-            IndexCard.Property.TITLE, locale));
-        columns[1] = new TableColumn<IndexCard>("authors", new IndexCardComparator(
-            IndexCard.Property.AUTHORS, locale));
-        columns[2] = new TableColumn<IndexCard>("pubYear", new IndexCardComparator(
-            IndexCard.Property.PUB_YEAR, locale));
-        columns[3] = new TableColumn<IndexCard>("keywords", new IndexCardComparator(
-            IndexCard.Property.KEYWORDS, locale));
-        return columns;
+        TableColumn<IndexCard>[] columnArray = new TableColumn[columns.size()];
+        return columns.toArray(columnArray);
+    }
+
+    private static TableColumn<IndexCard> initColumn(String name, IndexCard.Property property,
+        Locale locale)
+        throws TableException
+    {
+        return new TableColumn<IndexCard>(name, new IndexCardComparator(property, locale));
     }
 }
