@@ -50,6 +50,8 @@ import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.Builder;
 import org.objectledge.web.mvc.builders.BuilderExecutorValve;
 import org.objectledge.web.mvc.builders.DefaultBuilder;
+import org.objectledge.web.mvc.builders.EnclosingView;
+import org.objectledge.web.mvc.builders.ViewEnclosureManager;
 import org.objectledge.web.mvc.finders.MVCClassFinder;
 import org.objectledge.web.mvc.finders.MVCTemplateFinder;
 import org.objectledge.web.mvc.security.AccessDeniedException;
@@ -80,6 +82,7 @@ public class CmsBuilderExecutorValve
     protected StyleService styleService;
     
     protected SkinService skinService;
+    private final ViewEnclosureManager viewEnclosureManager;
 	/**
 	 * Component constructor.
 	 * 
@@ -88,14 +91,15 @@ public class CmsBuilderExecutorValve
      * @param securityHelper security helper for access checking
      * @param standardBuilder the standard builder.
 	 */
-	public CmsBuilderExecutorValve(MVCClassFinder classFinder,
-        MVCTemplateFinder templateFinder, SecurityHelper securityHelper,
+    public CmsBuilderExecutorValve(MVCClassFinder classFinder, MVCTemplateFinder templateFinder,
+        SecurityHelper securityHelper, ViewEnclosureManager viewEnclosureManager,
         BuilderExecutorValve standardBuilder, CmsDataFactory cmsDataFactory,
         StyleService styleService, SkinService skinService)
 	{
 		this.classFinder = classFinder;
 		this.templateFinder = templateFinder;
         this.securityHelper = securityHelper;
+        this.viewEnclosureManager = viewEnclosureManager;
         this.standardBuilder = standardBuilder;
         this.cmsDataFactory = cmsDataFactory;
         this.styleService = styleService;
@@ -211,9 +215,12 @@ public class CmsBuilderExecutorValve
         try
         {
             result = builder.build(template, null);
-            templatingContext.put("cmsLayoutPlaceholder", result);
-            template = templateFinder.findBuilderTemplate("CmsPage").getTemplate();
-            result = builder.build(template, null);
+            if(!viewEnclosureManager.getEnclosingView(EnclosingView.DEFAULT).top())
+            {
+                templatingContext.put("cmsLayoutPlaceholder", result);
+                template = templateFinder.findBuilderTemplate("CmsPage").getTemplate();
+                result = builder.build(template, null);                
+            }
 	    }
 	    catch (BuildException e)
 	    {
