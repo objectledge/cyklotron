@@ -14,6 +14,7 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
 #else
 #set($edit_link = $edit_link.set('openerView', $parametersTool.view))
 #end
+##
 #if($cms_tool.isAppEnabled($application_system_name))
 #if($cms_data.component.app && $cms_data.component.clazz)
 ## configure button
@@ -116,46 +117,43 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 #set($component_gen_result = $component.embed($cms_data.component.clazz.replaceAll(',','.')))
 #end
 #else
-
- #if($cms_tool.getSubject() == $cms_tool.getAnonymousSubject())
+##
+#if($cms_tool.getSubject() == $cms_tool.getAnonymousSubject())
   #set($component_gen_result = '')
- #else
+#else
   #set($component_gen_result = 'Aplikacja wyłączona!')
- #end
-
-
+#end
 #end
 ##
 ##
 ## START has role - team member menus
 ##
 #if($cms_data.site && $cms_tool.subject.hasRole($cms_data.site.teamMember) || !$cms_data.site)
-  $pageTool.addStyleLink('style/cms-component-wrapper.css')##
-  ## show menu
-  #if($cms_data.browseMode == "edit")
+$pageTool.addStyleLink('style/cms-component-wrapper.css')##
+## show menu
+#if($cms_data.browseMode == "edit")
     #cms_component_edit_menu()
-  #elseif($cms_data.browseMode == "emergency")
+#elseif($cms_data.browseMode == "emergency")
     ## do not render menus
-  #elseif($cms_data.browseMode == "export")
+#elseif($cms_data.browseMode == "export")
     #cms_component_export_menu()
-  #elseif($cms_data.browseMode == "import")
+#elseif($cms_data.browseMode == "import")
     #cms_component_import_menu()
-  #end
-  ## display component
-  ##
-  ## guard from component's errors
-  #if($cms_data.component.errorMessages)
+#end
+## display component
+##
+## guard from component's errors
+#if($cms_data.component.errorMessages)
     <div class="cms-component-wrapper-errors">
     #foreach($message in $cms_data.component.errorMessages)##
-    <div>$message.message</div><!--
-$message.trace -->
+    <div>$message.message</div><!-- $message.trace -->
     #end##
     </div>
-  #elseif($cms_data.browseMode == "edit")
+#elseif($cms_data.browseMode == "edit")
     ## component packaging
     <div class="cms-component-wrapped-component"
     id="${cms_data.component.instanceName}-component">$component_gen_result</div>
-  #else$component_gen_result#end
+#else$component_gen_result#end
 ##
 ##
 ##
@@ -163,22 +161,22 @@ $message.trace -->
 ##
 ## ELSE has role == not a team member
 ##
-  ## show menu
-  #if($cms_data.browseMode == "import")
+## show menu
+#if($cms_data.browseMode == "import")
     $pageTool.addStyleLink('style/cms-component-wrapper.css')##
     #cms_component_import_menu()
-  #end
+#end
   ## display component
   ##
   ## guard from component's errors
-  #if($cms_data.component.errorMessages)
+#if($cms_data.component.errorMessages)
 	$pageTool.addStyleLink('style/cms-component-wrapper.css')##
     <div class="cms-component-wrapper-errors">Błąd</div><!--
 #foreach($message in $cms_data.component.errorMessages)##
 $message.trace 
 
-#end-->    
-  #else$component_gen_result#end
+#end-->  
+#else$component_gen_result#end
 ##
 ## END has role
 ##
