@@ -28,6 +28,8 @@
  
 package net.cyklotron.cms.catalogue;
 
+import java.util.Set;
+
 import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.CmsNodeResource;
@@ -116,6 +118,7 @@ public interface CatalogueConfigResource
     public boolean isSearchPoolDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
+    // @import java.util.Set
     
     public Set<IndexCard.Property> getRequiredProperties();
     

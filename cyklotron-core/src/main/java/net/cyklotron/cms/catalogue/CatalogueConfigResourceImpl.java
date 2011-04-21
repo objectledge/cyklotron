@@ -30,6 +30,7 @@ package net.cyklotron.cms.catalogue;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -330,6 +331,7 @@ public class CatalogueConfigResourceImpl
     // @custom methods ///////////////////////////////////////////////////////
     // @import java.util.Set
     // @import java.util.EnumSet
+    // @import java.util.Iterator
     
     public Set<IndexCard.Property> getRequiredProperties()
     {
