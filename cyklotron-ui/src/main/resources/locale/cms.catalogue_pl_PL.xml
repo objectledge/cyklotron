@@ -73,6 +73,7 @@
       <item name="name">Nazwa katalogu</item>
       <item name="category">Kategoria</item>
       <item name="indexPool">Zestaw indeksów</item>
+      <item name="requiredProperties">Wymagane pola</item>
       <item name="select">wybierz</item>
       <item name="save">zapisz</item>
     </prefix>
@@ -81,16 +82,12 @@
       indeksowej) oraz, opcjonalnie, powiązanych z nim plików. Zarówno dokumenty jak i pliki muszą 
       być oznaczone kateorią wybraną poniżej. Plik musi być dowiązany do dokładnie jednego 
       dokumentu.</p>
-      <p>Autora i słowa kluczowe dla publikacji wpisujemy na ekranie edycji treści dokumentu - karty 
-      indeksowej, natomiast rok publikacji wybieramy ustawiając odpowiednio datę publikacji karty 
-      indeksowej.</p>
       <p>Zestaw indeksów wyszukiwania powinien obejmować zarówno pliki jak i dokumenty, należy
       ograniczyć zasoby indeksowane do najmniejszego komplentego zbioru, poprzez wybór odpowiednich
-      ścieżek i kategorii wymaganej, co pozwoli przyspieszyć wyszukiwanie.</p>]]>
+      ścieżek i kategorii wymaganej, co pozwoli przyspieszyć wyszukiwanie.</p>
+      <p>Można wybrać pola dokumentu których wypełnienie będzie konieczne aby karta indeksowa
+      została uznana za poprawną.</p>]]>
       </item>
-      <item name="category">kategoria którą oznaczone są zasoby katalogu</item>
-      <item name="indexPool">zestaw indeksów przeznaczony do wyszukiwania
-        pełnotekstowego biblioteki</item>
     </prefix>
   </prefix>
   <prefix name="List">

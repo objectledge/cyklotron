@@ -1,5 +1,8 @@
 package net.cyklotron.cms.modules.actions.catalogue;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -17,6 +20,8 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.catalogue.CatalogueConfigResource;
 import net.cyklotron.cms.catalogue.CatalogueConfigResourceImpl;
 import net.cyklotron.cms.catalogue.CatalogueService;
+import net.cyklotron.cms.catalogue.IndexCard;
+import net.cyklotron.cms.catalogue.IndexCard.Property;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
@@ -48,7 +53,8 @@ public class UpdateConfig
         String name = "";
         CategoryResource category = null;
         PoolResource searchPool = null;
-        
+        Set<IndexCard.Property> requiredProperties = EnumSet.noneOf(Property.class);
+
         name = parameters.get("name", "");
         templatingContext.put("name", name);
 
@@ -60,13 +66,19 @@ public class UpdateConfig
                     parameters.getLong("category"));
                 templatingContext.put("category", category);
             }
-            
+
             if(parameters.get("search_pool", "").length() > 0)
             {
                 searchPool = PoolResourceImpl.getPoolResource(coralSession,
                     parameters.getLong("search_pool"));
                 templatingContext.put("search_pool", searchPool);
             }
+            for(String propertyName : parameters.getStrings("required_properties"))
+            {
+                requiredProperties.add(Enum.valueOf(IndexCard.Property.class, propertyName));
+
+            }
+            templatingContext.put("required_properties", requiredProperties);
         }
         catch(EntityDoesNotExistException e)
         {
@@ -106,13 +118,14 @@ public class UpdateConfig
                 if(cid.equals("new"))
                 {
                     catalogueService.createCatalogue(cmsData.getSite(), name, category, searchPool,
-                        coralSession);
+                        requiredProperties, coralSession);
                 }
                 else
                 {
                     CatalogueConfigResource config = CatalogueConfigResourceImpl
-                    .getCatalogueConfigResource(coralSession, Long.parseLong(cid));
-                    catalogueService.updateCatalogue(config, name, category, searchPool, coralSession);
+                        .getCatalogueConfigResource(coralSession, Long.parseLong(cid));
+                    catalogueService.updateCatalogue(config, name, category, searchPool,
+                        requiredProperties, coralSession);
                 }
             }
             catch(Exception e)
@@ -122,7 +135,7 @@ public class UpdateConfig
             }
         }
 
-        // ///////////////////////////////////////////////////////////////////////////////////// //        
+        // ///////////////////////////////////////////////////////////////////////////////////// //
         if(problem == null)
         {
             templatingContext.put("result", "success");
@@ -132,7 +145,7 @@ public class UpdateConfig
             templatingContext.put("result", problem);
             mvcContext.setView("catalogue.Config");
         }
-        
+
     }
 
     public boolean checkAccessRights(Context context)

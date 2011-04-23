@@ -1,6 +1,8 @@
 package net.cyklotron.cms.modules.views.catalogue;
 
 import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -17,6 +19,7 @@ import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.catalogue.CatalogueConfigResource;
 import net.cyklotron.cms.catalogue.CatalogueConfigResourceImpl;
+import net.cyklotron.cms.catalogue.IndexCard;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.SearchException;
@@ -60,6 +63,10 @@ public class Config
                 {
                     templatingContext.put("search_pool", config.getSearchPool());
                 }
+                if(config.isRequiredPropertyNamesDefined())
+                {
+                    templatingContext.put("required_properties", config.getRequiredProperties());
+                }
             }
             catch(Exception e)
             {
@@ -77,6 +84,8 @@ public class Config
         {
             throw new ProcessingException("internal error", e);
         }
+        Set<IndexCard.Property> allProperties = EnumSet.allOf(IndexCard.Property.class);
+        templatingContext.put("all_properties", allProperties);
     }
 
     public boolean checkAccessRights(Context context)

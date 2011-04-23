@@ -30,6 +30,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.NameComparator;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.catalogue.IndexCard.Property;
 import net.cyklotron.cms.category.CategoryException;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
@@ -124,12 +125,14 @@ public class CatalogueService
      * @param name name of the catalogue.
      * @param category marker category.
      * @param searchPool search index pool.
+     * @param requiredProperties TODO
      * @param coralSession Coral session
      * @return catalogue configuration resource.
      * @throws InvalidResourceNameException when name contains disallowed characters.
      */
     public CatalogueConfigResource createCatalogue(SiteResource site, String name,
-        CategoryResource category, PoolResource searchPool, CoralSession coralSession)
+        CategoryResource category, PoolResource searchPool, Set<Property> requiredProperties,
+        CoralSession coralSession)
         throws InvalidResourceNameException
     {
         Resource configRoot = getConfigRoot(site, coralSession);
@@ -137,6 +140,7 @@ public class CatalogueService
             coralSession, name, configRoot);
         config.setCategory(category);
         config.setSearchPool(searchPool);
+        config.setRequiredProperties(requiredProperties);
         config.update();
         return config;
     }
@@ -148,11 +152,13 @@ public class CatalogueService
      * @param name name of the catalogue.
      * @param category marker category.
      * @param searchPool search index pool.
+     * @param requiredProperties TODO
      * @param coralSession Coral session
      * @throws InvalidResourceNameException when name contains disallowed characters.
      */
     public void updateCatalogue(CatalogueConfigResource config, String name,
-        CategoryResource category, PoolResource searchPool, CoralSession coralSession)
+        CategoryResource category, PoolResource searchPool, Set<Property> requiredProperties,
+        CoralSession coralSession)
         throws InvalidResourceNameException
     {
         if(!config.getName().equals(name))
@@ -161,6 +167,7 @@ public class CatalogueService
         }
         config.setCategory(category);
         config.setSearchPool(searchPool);
+        config.setRequiredProperties(requiredProperties);
         config.update();
     }
 
@@ -180,7 +187,8 @@ public class CatalogueService
         Set<Problem> problems = new HashSet<Problem>();
         if(res instanceof DocumentNodeResource)
         {
-            return validateDocumentIndexCardCandidate((DocumentNodeResource)res, config, coralSession);
+            return validateDocumentIndexCardCandidate((DocumentNodeResource)res, config,
+                coralSession);
         }
         if(res instanceof FileResource)
         {
@@ -203,8 +211,8 @@ public class CatalogueService
      * @throws IllegalArgumentException when resource has problems.
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      */
-    public IndexCard getIndexCard(Resource res, CatalogueConfigResource config, CoralSession coralSession,
-        Locale locale)
+    public IndexCard getIndexCard(Resource res, CatalogueConfigResource config,
+        CoralSession coralSession, Locale locale)
         throws IllegalArgumentException, NotConfiguredException
     {
         Set<Problem> problems = validateIndexCardCandidate(res, config, coralSession);
@@ -225,7 +233,8 @@ public class CatalogueService
         if(res instanceof FileResource)
         {
             file = (FileResource)res;
-            List<DocumentNodeResource> docCandidates = findDescriptionDocs(file, config, coralSession);
+            List<DocumentNodeResource> docCandidates = findDescriptionDocs(file, config,
+                coralSession);
             if(docCandidates.size() == 1)
             {
                 doc = docCandidates.get(0);
@@ -271,7 +280,8 @@ public class CatalogueService
                 List<FileResource> downloads = null;
                 if(res instanceof DocumentNodeResource)
                 {
-                    downloads = findDownloads((DocumentNodeResource)res, config, coralSession, locale);
+                    downloads = findDownloads((DocumentNodeResource)res, config, coralSession,
+                        locale);
                 }
                 if(res instanceof FileResource)
                 {
@@ -321,7 +331,8 @@ public class CatalogueService
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      * @throws CategoryException when category service error occurs.
      */
-    public List<IndexCard> getAllItems(CatalogueConfigResource config, CoralSession coralSession, Locale locale)
+    public List<IndexCard> getAllItems(CatalogueConfigResource config, CoralSession coralSession,
+        Locale locale)
         throws NotConfiguredException, CategoryException
     {
         CategoryResource markerCategory = config.getCategory();

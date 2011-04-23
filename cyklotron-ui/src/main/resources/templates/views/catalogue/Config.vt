@@ -1,5 +1,6 @@
 #set($strings = $i18n.usePrefix('cms.catalogue.Config.strings'))
 #set($help = $i18n.usePrefix('cms.catalogue.Config.help'))
+#set($propertyNames = $i18n.usePrefix('cms.catalogue.Common.properties'))
 #genericScreenHeader($strings.title)
 #result_inline_message("results.catalogue.UpdateConfig") 
 <script type="text/javascript">
@@ -30,9 +31,6 @@
             </td>
 		</tr>
 		<tr>
-			<td colspan="2">$help.category</td>
-		</tr>
-		<tr>
             <td>$strings.indexPool</td>
             <td>
                 <a href="#select_index_pool('name id' 'form1' 'search_pool_name search_pool')">$strings.select</a>
@@ -41,7 +39,17 @@
             </td>
         </tr>
 		<tr>
-			<td colspan="2">$help.indexPool</td>
+			<td>$strings.requiredProperties</td>
+			<td>
+				#foreach($property in $all_properties)
+					<input type="checkbox" name="required_properties" id="$property" value="$property" 
+						#if($required_properties.contains($property)) checked #end />
+					<label for="$property">$propertyNames.get("$property")</label>
+					#if($velocityCount % 4 == 0)
+					<br/>
+				    #end
+				#end
+			</td>
 		</tr>
     </table>
 </form>
