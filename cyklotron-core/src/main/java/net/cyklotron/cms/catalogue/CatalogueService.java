@@ -2,6 +2,7 @@ package net.cyklotron.cms.catalogue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
@@ -274,6 +275,7 @@ public class CatalogueService
         for(Resource res : all)
         {
             Set<Problem> problems = validateIndexCardCandidate(res, config, coralSession);
+            Set<Property> missingProperties = Collections.emptySet();
             if(!problems.isEmpty())
             {
                 List<DocumentNodeResource> descriptionDocCandidates = null;
@@ -282,6 +284,12 @@ public class CatalogueService
                 {
                     downloads = findDownloads((DocumentNodeResource)res, config, coralSession,
                         locale);
+                    if(problems.contains(Problem.MISSING_PROPERTIES))
+                    {
+                        IndexCard tempIndexCard = new IndexCard((DocumentNodeResource)res, null);
+                        missingProperties = config.getRequiredProperties();
+                        missingProperties.removeAll(tempIndexCard.getDefinedProperties());
+                    }
                 }
                 if(res instanceof FileResource)
                 {
@@ -289,7 +297,7 @@ public class CatalogueService
                         coralSession);
                 }
                 report
-                    .add(new ProblemReportItem(res, descriptionDocCandidates, downloads, problems));
+                    .add(new ProblemReportItem(res, descriptionDocCandidates, downloads, problems, missingProperties));
             }
         }
         return report;
@@ -461,50 +469,23 @@ public class CatalogueService
             throw new RuntimeException("internal error", e);
         }
 
-        Document metaDOM = null;
-        if(doc.getMeta() == null || doc.getMeta().trim().length() == 0)
+        try
         {
-            // new documents start with empty metadata, we report it as author has not been set
-            problems.add(Problem.MISSING_AUTHOR);
-        }
-        else
-        {
-            try
+            DocumentHelper.parseText(doc.getMeta());
+            // metadata is well formed - we may check for missing fields
+            IndexCard tempIndexCard = new IndexCard(doc, null);
+            Set<Property> missingProperties = config.getRequiredProperties();
+            missingProperties.removeAll(tempIndexCard.getDefinedProperties());
+            if(!missingProperties.isEmpty())
             {
-                metaDOM = DocumentHelper.parseText(doc.getMeta());
-            }
-            catch(org.dom4j.DocumentException e)
-            {
-                problems.add(Problem.INVALID_METADATA);
+                problems.add(Problem.MISSING_PROPERTIES);
             }
         }
-
-        if(metaDOM != null)
+        catch(org.dom4j.DocumentException e)
         {
-            @SuppressWarnings("unchecked")
-            List<Element> authorNames = metaDOM.selectNodes("/meta/authors/author/name");
-            if(authorNames.size() == 0)
-            {
-                problems.add(Problem.MISSING_AUTHOR);
-            }
-            else
-            {
-                StringBuilder buff = new StringBuilder();
-                for(Element authorName : authorNames)
-                {
-                    buff.append(authorName.getTextTrim());
-                }
-                if(buff.toString().trim().length() == 0)
-                {
-                    problems.add(Problem.MISSING_AUTHOR);
-                }
-            }
+            problems.add(Problem.INVALID_METADATA);
         }
 
-        if(!doc.isValidityStartDefined())
-        {
-            problems.add(Problem.VALIDITY_START_UNSET);
-        }
         return problems;
     }
 

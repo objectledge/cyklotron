@@ -3,7 +3,9 @@ package net.cyklotron.cms.catalogue;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -259,6 +261,20 @@ public class IndexCard
         default:
             throw new IllegalArgumentException(property.name());
         }
+    }
+    
+    public Set<Property> getDefinedProperties()
+    {
+        Set<Property> allProperties = EnumSet.allOf(Property.class);
+        Set<Property> definedProperties = EnumSet.noneOf(Property.class);
+        for(Property property : allProperties)
+        {
+            if(!getProperty(property).equals(""))
+            {
+                definedProperties.add(property);
+            }
+        }
+        return definedProperties;
     }
 
     // java.lang.Object method overrides

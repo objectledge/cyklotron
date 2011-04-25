@@ -17,15 +17,18 @@ public class ProblemReportItem
     private final List<FileResource> downloads;
 
     private final Set<Problem> problems;
+    
+    private final Set<IndexCard.Property> missingProperties;
 
     public ProblemReportItem(Resource resource,
         List<DocumentNodeResource> descriptionDocCandidates, List<FileResource> downloads,
-        Set<Problem> problems)
+        Set<Problem> problems, Set<IndexCard.Property> missingProperties)
     {
         this.resource = resource;
         this.descriptionDocCandidates = descriptionDocCandidates;
         this.downloads = downloads;
         this.problems = problems;
+        this.missingProperties = missingProperties;
     }
 
     public Resource getResource()
@@ -46,5 +49,10 @@ public class ProblemReportItem
     public Set<Problem> getProblems()
     {
         return problems;
+    }
+    
+    public Set<IndexCard.Property> getMissingProperties()
+    {
+        return missingProperties;
     }
 }
