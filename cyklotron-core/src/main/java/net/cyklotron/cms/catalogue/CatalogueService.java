@@ -538,11 +538,6 @@ public class CatalogueService
         {
             problems.add(Problem.MULTIPLE_DESCRIPTION_DOCS);
         }
-        else
-        {
-            problems.addAll(validateDocumentIndexCardCandidate(descriptionDocCandidates.get(0),
-                config, coralSession));
-        }
         return problems;
     }
 
