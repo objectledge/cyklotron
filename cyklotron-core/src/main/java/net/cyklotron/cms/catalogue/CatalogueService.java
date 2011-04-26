@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -181,22 +182,23 @@ public class CatalogueService
      * @return set of problems, hopefully empty.
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      */
-    public Set<Problem> validateIndexCardCandidate(Resource res, CatalogueConfigResource config,
-        CoralSession coralSession)
+    public void validateIndexCardCandidate(Resource res, CatalogueConfigResource config,
+        Set<Problem> problems, Set<IndexCard.Property> missingProperties, CoralSession coralSession)
         throws NotConfiguredException
     {
-        Set<Problem> problems = new HashSet<Problem>();
         if(res instanceof DocumentNodeResource)
         {
-            return validateDocumentIndexCardCandidate((DocumentNodeResource)res, config,
+            validateDocumentIndexCardCandidate((DocumentNodeResource)res, config, problems, missingProperties,
                 coralSession);
         }
-        if(res instanceof FileResource)
+        else if(res instanceof FileResource)
         {
-            return validateFileIndexCardCandidate((FileResource)res, config, coralSession);
+            validateFileIndexCardCandidate((FileResource)res, config, problems, missingProperties, coralSession);
         }
-        problems.add(Problem.INVALID_CLASS);
-        return problems;
+        else
+        {
+            problems.add(Problem.INVALID_CLASS);
+        }
     }
 
     /**
@@ -216,7 +218,9 @@ public class CatalogueService
         CoralSession coralSession, Locale locale)
         throws IllegalArgumentException, NotConfiguredException
     {
-        Set<Problem> problems = validateIndexCardCandidate(res, config, coralSession);
+        Set<Problem> problems = EnumSet.noneOf(Problem.class);
+        Set<Property> missingProperties = EnumSet.noneOf(Property.class);
+        validateIndexCardCandidate(res, config, problems, missingProperties, coralSession);
         if(!problems.isEmpty())
         {
             throw new IllegalArgumentException("resource " + res.getIdString() + " has problems "
@@ -274,8 +278,9 @@ public class CatalogueService
         Resource[] all = categoryService.getResources(coralSession, markerCategory, false);
         for(Resource res : all)
         {
-            Set<Problem> problems = validateIndexCardCandidate(res, config, coralSession);
-            Set<Property> missingProperties = Collections.emptySet();
+            Set<Problem> problems = EnumSet.noneOf(Problem.class);
+            Set<Property> missingProperties = EnumSet.noneOf(Property.class);
+            validateIndexCardCandidate(res, config, problems, missingProperties, coralSession);
             if(!problems.isEmpty())
             {
                 List<DocumentNodeResource> descriptionDocCandidates = null;
@@ -284,12 +289,6 @@ public class CatalogueService
                 {
                     downloads = findDownloads((DocumentNodeResource)res, config, coralSession,
                         locale);
-                    if(problems.contains(Problem.MISSING_PROPERTIES))
-                    {
-                        IndexCard tempIndexCard = new IndexCard((DocumentNodeResource)res, null);
-                        missingProperties = config.getRequiredProperties();
-                        missingProperties.removeAll(tempIndexCard.getDefinedProperties());
-                    }
                 }
                 if(res instanceof FileResource)
                 {
@@ -353,7 +352,9 @@ public class CatalogueService
         Set<IndexCard> indexCards = new HashSet<IndexCard>();
         for(Resource res : all)
         {
-            Set<Problem> problems = validateIndexCardCandidate(res, config, coralSession);
+            Set<Problem> problems = EnumSet.noneOf(Problem.class);
+            Set<Property> missingProperties = EnumSet.noneOf(Property.class);
+            validateIndexCardCandidate(res, config, problems, missingProperties, coralSession);
             if(problems.isEmpty())
             {
                 indexCards.add(getIndexCard(res, config, coralSession, locale));
@@ -417,7 +418,9 @@ public class CatalogueService
             try
             {
                 Resource res = coralSession.getStore().getResource(resId);
-                Set<Problem> problems = validateIndexCardCandidate(res, config, coralSession);
+                Set<Problem> problems = EnumSet.noneOf(Problem.class);
+                Set<Property> missingProperties = EnumSet.noneOf(Property.class);
+                validateIndexCardCandidate(res, config, problems, missingProperties, coralSession);
                 if(problems.isEmpty())
                 {
                     indexCards.add(getIndexCard(res, config, coralSession, locale));
@@ -440,11 +443,11 @@ public class CatalogueService
      * @return set of problems, hopefully empty.
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      */
-    private Set<Problem> validateDocumentIndexCardCandidate(DocumentNodeResource doc,
-        CatalogueConfigResource config, CoralSession coralSession)
+    private void validateDocumentIndexCardCandidate(DocumentNodeResource doc,
+        CatalogueConfigResource config, Set<Problem> problems,
+        Set<IndexCard.Property> missingProperties, CoralSession coralSession)
         throws NotConfiguredException
     {
-        Set<Problem> problems = new HashSet<Problem>();
         CategoryResource markerCategory = config.getCategory();
         if(markerCategory == null)
         {
@@ -474,7 +477,7 @@ public class CatalogueService
             DocumentHelper.parseText(doc.getMeta());
             // metadata is well formed - we may check for missing fields
             IndexCard tempIndexCard = new IndexCard(doc, null);
-            Set<Property> missingProperties = config.getRequiredProperties();
+            missingProperties.addAll(config.getRequiredProperties());
             missingProperties.removeAll(tempIndexCard.getDefinedProperties());
             if(!missingProperties.isEmpty())
             {
@@ -485,8 +488,6 @@ public class CatalogueService
         {
             problems.add(Problem.INVALID_METADATA);
         }
-
-        return problems;
     }
 
     /**
@@ -498,11 +499,10 @@ public class CatalogueService
      * @return set of problems, hopefully empty.
      * @throws NotConfiguredException when configuration for catalogue in given site is missing.
      */
-    private Set<Problem> validateFileIndexCardCandidate(FileResource file,
-        CatalogueConfigResource config, CoralSession coralSession)
+    private void validateFileIndexCardCandidate(FileResource file, CatalogueConfigResource config,
+        Set<Problem> problems, Set<IndexCard.Property> missingProperties, CoralSession coralSession)
         throws NotConfiguredException
     {
-        Set<Problem> problems = new HashSet<Problem>();
         CategoryResource markerCategory = config.getCategory();
         if(markerCategory == null)
         {
@@ -538,7 +538,11 @@ public class CatalogueService
         {
             problems.add(Problem.MULTIPLE_DESCRIPTION_DOCS);
         }
-        return problems;
+        else
+        {
+            validateDocumentIndexCardCandidate(descriptionDocCandidates.get(0),
+                config, problems, missingProperties, coralSession);
+        }
     }
 
     /**
