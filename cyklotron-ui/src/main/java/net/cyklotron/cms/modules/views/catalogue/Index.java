@@ -84,7 +84,7 @@ public class Index
                     if(tableState.isNew())
                     {
                         tableState.setTreeView(false);
-                        tableState.setSortColumnName(screenConfig.get("sortColumn", "title"));
+                        tableState.setSortColumnName(screenConfig.get("sortColumn", "TITLE"));
                         tableState.setAscSort(screenConfig.getBoolean("sortAsc", true));
                         tableState.setPageSize(screenConfig.getInt("pageSize", 20));
                     }

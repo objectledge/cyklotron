@@ -21,29 +21,29 @@ public class IndexCardTableModel
         throws TableException
     {
         List<TableColumn<IndexCard>> columns = new ArrayList<TableColumn<IndexCard>>();
-        columns.add(initColumn("title", IndexCard.Property.TITLE, locale));
-        columns.add(initColumn("subtitle", IndexCard.Property.SUBTITLE, locale));
-        columns.add(initColumn("keywords", IndexCard.Property.KEYWORDS, locale));
-        columns.add(initColumn("abstract", IndexCard.Property.ABSTRACT, locale));
-        columns.add(initColumn("eventTitle", IndexCard.Property.EVENT_TITLE, locale));
-        columns.add(initColumn("eventPlace", IndexCard.Property.EVENT_PLACE, locale));
-        columns.add(initColumn("eventStart", IndexCard.Property.EVENT_START, locale));
-        columns.add(initColumn("eventEnd", IndexCard.Property.EVENT_END, locale));
-        columns.add(initColumn("validityStart", IndexCard.Property.VALIDITY_START, locale));
-        columns.add(initColumn("validityEnd", IndexCard.Property.VALIDITY_END, locale));
-        columns.add(initColumn("pubYear", IndexCard.Property.PUB_YEAR, locale));
-        columns.add(initColumn("authors", IndexCard.Property.AUTHORS, locale));
-        columns.add(initColumn("sources", IndexCard.Property.SOURCES, locale));
-        columns.add(initColumn("organizations", IndexCard.Property.ORGANIZATIONS, locale));
+        columns.add(initColumn(IndexCard.Property.TITLE, locale));
+        columns.add(initColumn(IndexCard.Property.SUBTITLE, locale));
+        columns.add(initColumn(IndexCard.Property.KEYWORDS, locale));
+        columns.add(initColumn(IndexCard.Property.ABSTRACT, locale));
+        columns.add(initColumn(IndexCard.Property.EVENT_TITLE, locale));
+        columns.add(initColumn(IndexCard.Property.EVENT_PLACE, locale));
+        columns.add(initColumn(IndexCard.Property.EVENT_START, locale));
+        columns.add(initColumn(IndexCard.Property.EVENT_END, locale));
+        columns.add(initColumn(IndexCard.Property.VALIDITY_START, locale));
+        columns.add(initColumn(IndexCard.Property.VALIDITY_END, locale));
+        columns.add(initColumn(IndexCard.Property.PUB_YEAR, locale));
+        columns.add(initColumn(IndexCard.Property.AUTHORS, locale));
+        columns.add(initColumn(IndexCard.Property.SOURCES, locale));
+        columns.add(initColumn(IndexCard.Property.ORGANIZATIONS, locale));
         @SuppressWarnings("unchecked")
         TableColumn<IndexCard>[] columnArray = new TableColumn[columns.size()];
         return columns.toArray(columnArray);
     }
 
-    private static TableColumn<IndexCard> initColumn(String name, IndexCard.Property property,
+    private static TableColumn<IndexCard> initColumn(IndexCard.Property property,
         Locale locale)
         throws TableException
     {
-        return new TableColumn<IndexCard>(name, new IndexCardComparator(property, locale));
+        return new TableColumn<IndexCard>(property.toString(), new IndexCardComparator(property, locale));
     }
 }

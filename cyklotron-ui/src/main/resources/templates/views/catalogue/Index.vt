@@ -22,12 +22,12 @@
 #if($table.rows.empty)
 <p>No items were found</p>
 #else
-#set($columnOrder = ['title','authors','pubYear','keywords','downloads'])
-$table.getColumn('title').set('label', 'Title')
-$table.getColumn('authors').set('label', 'Authors')
-$table.getColumn('pubYear').set('label', 'Publication yera')
-$table.getColumn('keywords').set('label', 'Keywords')
-$table.getColumn('downloads').set('label', 'Downloads')
+#set($columnOrder = ['TITLE','AUTHORS','PUB_YEAR','KEYWORDS','DOWNLOADS'])
+$table.getColumn('TITLE').set('label', 'Title')
+$table.getColumn('AUTHORS').set('label', 'Authors')
+$table.getColumn('PUB_YEAR').set('label', 'Publication yera')
+$table.getColumn('KEYWORDS').set('label', 'Keywords')
+$table.getColumn('DOWNLOADS').set('label', 'Downloads')
 #set($tableLink = $link.setNode($cmsData.node).set('tableId',$table.id))
 <table width="100%" cellspacing="0">
 	<tr>

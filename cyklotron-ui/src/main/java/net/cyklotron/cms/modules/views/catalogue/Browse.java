@@ -77,7 +77,7 @@ public class Browse
                 if(tableState.isNew())
                 {
                     tableState.setTreeView(false);
-                    tableState.setSortColumnName("title");
+                    tableState.setSortColumnName("TITLE");
                     tableState.setPageSize(20);
                 }
                 TableTool<IndexCard> tableTool = new TableTool<IndexCard>(tableState, null,
