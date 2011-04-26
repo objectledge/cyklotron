@@ -1,5 +1,6 @@
 #set($vi18n = $i18n.usePrefix('cms.catalogue.Browse'))
 #set($strings = $vi18n.usePrefix('strings'))
+#set($propertyNames = $i18n.usePrefix('cms.catalogue.Common.properties'))
 #genericScreenHeader("${strings.title} ${config.name}")
 
 #if(!$applicationConfigured)
@@ -13,6 +14,7 @@
 </table>	
 #end
 <form name="form1" method="POST">
+<input type="hidden" name="cid" value="$config.id"/>
 <script type="text/javascript">
   function send(action)
   {
@@ -23,18 +25,39 @@
 
 <table  width="100%" class="genericItemList" cellspacing="0">
 <tr><th>$strings.searchHeading</th></tr>
-<tr><td align="right">
+<tr><td>
 <input type="text" name="query" value="$!query" />
 <a href="javascript:send('$link')">$strings.searchButton</a>
 </td></tr>
 </table>
 <br/>
 
-#if(!$table.rows.empty)
-#set($columnOrder = ['title','authors','pubYear','keywords','downloads'])
-#foreach($column in $columnOrder)
-$table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
+<table  width="100%" class="genericItemList" cellspacing="0">
+<tr><th>$strings.vivibleColumnsHeading</th></tr>
+<tr><td>
+<input type="hidden" name="visibleColumnsDefined" value="true" />
+#foreach($property in $propertyOrder)
+<input type="checkbox" name="visibleColumns" id="visibleColumns-${property}" value="$property" #if(!$visibleColumns || $visibleColumns.contains($property))checked #end/>  
+<label for="visibleColumns-${property}">$propertyNames.get("${property}")</label> 
+#if($velocityCount % 4 == 0)
+<br/>
 #end
+#end
+<br/>
+<a href="javascript:send('$link')">$strings.changeButton</a>
+</td></tr>
+</table>
+
+<br/>
+
+#if(!$table.rows.empty)
+#set($columnOrder = [])	
+#foreach($column in $visibleColumns)
+#set($dummy = $columnOrder.add("${column}"))
+$table.getColumn("${column}").set('label', $propertyNames.get("${column}"))
+#end
+#set($dummy = $columnOrder.add('DOWNLOADS'))
+$table.getColumn('DOWNLOADS').set('label', $strings.downloads)
 #set($tableLink = $link.set('tableId',$table.id))
 <table width="100%" class="genericItemList" cellspacing="0">
 	<tr>
@@ -43,10 +66,16 @@ $table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
 #foreach($row in $table.rows)
 #set($odd = $velocityCount % 2)
     <tr class="row$odd">
-		<td><a href="$link.setNode($row.object.descriptionDoc)">$row.object.title</a></td>
-		<td>$row.object.authors</td>
-		<td>$row.object.pubYear</td>
-		<td>#if($row.object.keywords.length() > 0) $row.object.keywords #else &nbsp; #end</td>
+		#foreach($column in $visibleColumns)
+		<td>
+		#if("$column" == "TITLE")
+			<a href="$link.setNode($row.object.descriptionDoc)">$row.object.title</a>
+		#else
+			#set($value = $row.object.getProperty($column))
+			#if($value.length() > 0)$value #else &nbsp; #end
+		#end
+		</td>
+		#end				
 		<td>
 			#if($row.object.downloads && !$row.object.downloads.empty)
 			#foreach($download in $row.object.downloads)
@@ -59,7 +88,8 @@ $table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
 	</tr>
 #end
  <tr>
-    <td colspan="5" align="center" class="bottomLine">
+	#set($colspan = $visibleColumns.size() + 1)
+    <td colspan="$colspan" align="center" class="bottomLine">
        #tableView_pager_Submit($table $tableLink 'send')
        #tableView_pageSizeChooser_Submit($table $tableLink [50,100] 'send')
     </td>

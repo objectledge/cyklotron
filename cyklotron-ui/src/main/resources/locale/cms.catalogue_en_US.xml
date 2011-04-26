@@ -5,13 +5,9 @@
       <item name="notConfigured">Application is not configured properly.</item>
       <item name="noItemsFound">No index items were found.</item>
       <item name="searchHeading">Full text search.</item>
+      <item name="vivibleColumnsHeading">Visible columns</item>
       <item name="searchButton">search</item>
-    </prefix>
-    <prefix name="columns">
-      <item name="title">Title</item>
-      <item name="authors">Authors</item>
-      <item name="pubYear">Publication year</item>
-      <item name="keywords">Keywords</item>
+      <item name="changeButton">change</item>
       <item name="downloads">Downloads</item>
     </prefix>
   </prefix>

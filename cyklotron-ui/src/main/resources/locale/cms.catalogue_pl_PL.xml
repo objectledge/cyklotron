@@ -6,13 +6,9 @@
       </item>
       <item name="noItemsFound">Nie znaleziono żadnych publikacji</item>
       <item name="searchHeading">Wyszukiwanie pełnotekstowe</item>
-      <item name="searchButton">Szukaj</item>
-    </prefix>
-    <prefix name="columns">
-      <item name="title">Tytył</item>
-      <item name="authors">Autorzy</item>
-      <item name="pubYear">Rok publikacji</item>
-      <item name="keywords">Słowa kluczowe</item>
+      <item name="vivibleColumnsHeading">Widoczne kolumny</item>
+      <item name="searchButton">szukaj</item>
+      <item name="changeButton">zmień</item>      
       <item name="downloads">Pliki do pobrania</item>
     </prefix>
   </prefix>

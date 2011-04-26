@@ -1,7 +1,10 @@
 package net.cyklotron.cms.modules.views.catalogue;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -18,11 +21,11 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.catalogue.CatalogueConfigResource;
 import net.cyklotron.cms.catalogue.CatalogueConfigResourceImpl;
+import net.cyklotron.cms.catalogue.CatalogueService;
 import net.cyklotron.cms.catalogue.IndexCard;
 import net.cyklotron.cms.catalogue.IndexCardTableModel;
-import net.cyklotron.cms.catalogue.CatalogueService;
-import net.cyklotron.cms.catalogue.CatalogueConfigResource;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
@@ -48,7 +51,6 @@ public class Browse
     {
         try
         {
-            SiteResource site = getCmsData().getSite();
             long cid = parameters.getLong("cid");
             CatalogueConfigResource config = CatalogueConfigResourceImpl
                 .getCatalogueConfigResource(coralSession, cid);
@@ -81,6 +83,24 @@ public class Browse
                 TableTool<IndexCard> tableTool = new TableTool<IndexCard>(tableState, null,
                     tableModel);
                 templatingContext.put("table", tableTool);
+                templatingContext.put("propertyOrder", IndexCard.Property.ORDER);
+                Set<IndexCard.Property> propertySet = EnumSet.noneOf(IndexCard.Property.class);
+                if(parameters.getBoolean("visibleColumnsDefined", false))
+                {
+                    for(String propertyName : parameters.getStrings("visibleColumns"))
+                    {
+                        propertySet.add(IndexCard.Property.valueOf(propertyName));
+                    }
+                }
+                else
+                {
+                    propertySet.addAll(config.getRequiredProperties());
+                    propertySet.add(IndexCard.Property.TITLE);                  
+                }
+                List<IndexCard.Property> visibleColumns = new ArrayList<IndexCard.Property>();
+                visibleColumns.addAll(IndexCard.Property.ORDER);
+                visibleColumns.retainAll(propertySet);
+                templatingContext.put("visibleColumns",visibleColumns);
             }
         }
         catch(Exception e)
