@@ -1,5 +1,6 @@
 #set($strings = $i18n.usePrefix('cms.catalogue.IndexConf.strings'))
 #set($columnStrings = $i18n.usePrefix('cms.catalogue.IndexConf.columns'))
+#set($propertyNames = $i18n.usePrefix('cms.catalogue.Common.properties'))
 #genericScreenHeader($strings.title)
 #set($from_component = true)
 #set($save_action = "$link.unsetView().action('structure.UpdateScreenPreferences').set('x',$node.id)")
@@ -33,10 +34,9 @@ $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 		<tr>
             <td>$strings.sortColumn</td>
             <td>
-				#set($columnOrder = ['title','authors','pubYear','keywords'])
 				<select name="sortColumn">
-					#foreach($column in $columnOrder)
-					#option($column $columnStrings.get($column) $sortColumn)	
+					#foreach($property in $propertyOrder)
+					#option("$property" $propertyNames.get("$property") $sortColumn)	
 					#end
 			    </select>
             </td>

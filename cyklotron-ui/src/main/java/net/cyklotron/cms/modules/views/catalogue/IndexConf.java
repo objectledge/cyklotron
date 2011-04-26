@@ -17,6 +17,7 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.catalogue.CatalogueConfigResource;
 import net.cyklotron.cms.catalogue.CatalogueConfigResourceImpl;
 import net.cyklotron.cms.catalogue.CatalogueService;
+import net.cyklotron.cms.catalogue.IndexCard;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 
@@ -60,9 +61,10 @@ public class IndexConf
         }
         Resource configRoot = catalogueService.getConfigRoot(getCmsData().getSite(), coralSession);
         templatingContext.put("availableCatalogues", configRoot.getChildren());
-        templatingContext.put("sortColumn", screenConfig.get("sortColumn", "title"));
+        templatingContext.put("sortColumn", screenConfig.get("sortColumn", "TITLE"));
         templatingContext.put("sortAsc", screenConfig.get("sortAsc", "true"));
         templatingContext.put("pageSize", screenConfig.get("pageSize", "20"));
+        templatingContext.put("propertyOrder", IndexCard.Property.ORDER);
     }
 
     public boolean checkAccessRights(Context context)
