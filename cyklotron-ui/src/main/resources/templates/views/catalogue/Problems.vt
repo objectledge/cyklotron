@@ -13,6 +13,7 @@
 </table>	
 #else
 <form name="form1" method="POST">
+<input type="hidden" name="cid" value="$config.id"/>
 <script type="text/javascript">
   function send(action)
   {
