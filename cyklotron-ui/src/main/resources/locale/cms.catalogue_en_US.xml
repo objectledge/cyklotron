@@ -28,12 +28,12 @@
       <item name="documents">Documents</item>
       <item name="files">Files</item>
       <item name="problems">Problems</item>
+      <item name="missingProperties">Missing fields</item>
     </prefix>
     <prefix name="problems">
       <item name="INVALID_CLASS">Invalid resource class</item>
       <item name="INVALID_METADATA">Invalid metadata (document is damaged)</item>
-      <item name="MISSING_AUTHOR">Author field is blank</item>
-      <item name="VALIDITY_START_UNSET">Publication date is not set</item>
+      <item name="MISSING_PROPERTIES">Missing fields</item>
       <item name="MISSING_DESCRIPTION_DOC">Missing index item document</item>
       <item name="MULTIPLE_DESCRIPTION_DOCS">File attached to multiple index item documents</item>
       <item name="REQUIRED_CATEGORY_MISSING">Required category is missing</item>

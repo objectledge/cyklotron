@@ -2,6 +2,8 @@ package net.cyklotron.cms.catalogue;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
@@ -31,7 +33,12 @@ public class IndexCard
         PUB_YEAR,
         AUTHORS,
         SOURCES,
-        ORGANIZATIONS,
+        ORGANIZATIONS;
+        
+        public static List<Property> ORDER = Collections.unmodifiableList(Arrays
+            .asList(new Property[] { TITLE, SUBTITLE, KEYWORDS, ABSTRACT, EVENT_TITLE, EVENT_PLACE,
+                            EVENT_START, EVENT_END, VALIDITY_START, VALIDITY_END, PUB_YEAR,
+                            AUTHORS, SOURCES, ORGANIZATIONS }));
     }
 
     // internal state (immutable)

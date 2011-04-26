@@ -26,6 +26,7 @@ import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.catalogue.CatalogueConfigResourceImpl;
 import net.cyklotron.cms.catalogue.CatalogueService;
+import net.cyklotron.cms.catalogue.IndexCard;
 import net.cyklotron.cms.catalogue.Problem;
 import net.cyklotron.cms.catalogue.ProblemReportItem;
 import net.cyklotron.cms.catalogue.ProblemReportTableModel;
@@ -106,6 +107,7 @@ public class Problems
                 TableTool<ProblemReportItem> tableTool = new TableTool<ProblemReportItem>(
                     tableState, null, tableModel);
                 templatingContext.put("table", tableTool);
+                templatingContext.put("propertyOrder", IndexCard.Property.ORDER);
             }
         }
         catch(Exception e)
