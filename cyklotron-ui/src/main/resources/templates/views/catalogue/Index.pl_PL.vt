@@ -1,7 +1,7 @@
-<h2>Biblioteka</h2>
+<h2>Katalog</h2>
 
 #if(!$applicationConfigured)
-<p>Application is not configured properly</p>
+<p>Aplikacja nie jest poprawnie skonfigurowana</p>
 #else
 <form name="catalogueIndex" method="POST" action="">
 <script type="text/javascript">
@@ -12,22 +12,22 @@
   }
 </script>
 
-<h4>Full text search</h4>
+<h4>Wyszukiwanie</h4>
 <p>
 	<input type="text" name="query" value="$!query" />
-	<a href="javascript:send('$link.setNode($cmsData.node)')">search</a>
+	<a href="javascript:send('$link.setNode($cmsData.node)')">szukaj</a>
 </p>
 
-<h4>Results</h4>
+<h4>Wyniki</h4>
 #if($table.rows.empty)
-<p>No items were found</p>
+<p>Nie znaleziono żadnych publikacji</p>
 #else
 #set($columnOrder = ['title','authors','pubYear','keywords','downloads'])
-$table.getColumn('title').set('label', 'Title')
-$table.getColumn('authors').set('label', 'Authors')
-$table.getColumn('pubYear').set('label', 'Publication yera')
-$table.getColumn('keywords').set('label', 'Keywords')
-$table.getColumn('downloads').set('label', 'Downloads')
+$table.getColumn('title').set('label', 'Tytuł')
+$table.getColumn('authors').set('label', 'Autorzy')
+$table.getColumn('pubYear').set('label', 'Rok wydania')
+$table.getColumn('keywords').set('label', 'Słowa kluczowe')
+$table.getColumn('downloads').set('label', 'Pliki do pobrania')
 #set($tableLink = $link.setNode($cmsData.node).set('tableId',$table.id))
 <table width="100%" cellspacing="0">
 	<tr>
