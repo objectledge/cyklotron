@@ -1,7 +1,7 @@
 <strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="Browse">
     <prefix name="strings">
-      <item name="title">Przeglądanie indeksu katalogu</item>
+      <item name="title">Przeglądanie indeksu - katalog</item>
       <item name="notConfigured">Aplikacja nie jest prawidłowo skonfigurowana
       </item>
       <item name="noItemsFound">Nie znaleziono żadnych publikacji</item>
@@ -18,7 +18,7 @@
   </prefix>
   <prefix name="Problems">
     <prefix name="strings">
-      <item name="title">Raport błędów</item>
+      <item name="title">Raport błędów - katalog</item>
       <item name="notConfigured">Aplikacja nie jest prawidłowo skonfigurowana
       </item>
       <item name="noProblemsFound">Nie znaleziono problemów</item>
@@ -69,7 +69,7 @@
   </prefix>
   <prefix name="Config">
     <prefix name="strings">
-      <item name="title">Konfiguracja aplikacji</item>
+      <item name="title">Konfiguracja katalogu</item>
       <item name="name">Nazwa katalogu</item>
       <item name="category">Kategoria</item>
       <item name="indexPool">Zestaw indeksów</item>

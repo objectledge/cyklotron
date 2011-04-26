@@ -52,6 +52,7 @@ public class Browse
             long cid = parameters.getLong("cid");
             CatalogueConfigResource config = CatalogueConfigResourceImpl
                 .getCatalogueConfigResource(coralSession, cid);
+            templatingContext.put("config", config);
 
             if(config.isCategoryDefined() && config.isSearchPoolDefined())
             {

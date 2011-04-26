@@ -1,7 +1,7 @@
 <strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="Browse">
     <prefix name="strings">
-      <item name="title">Browsing catalogue index</item>
+      <item name="title">Index - catalogue</item>
       <item name="notConfigured">Application is not configured properly.</item>
       <item name="noItemsFound">No index items were found.</item>
       <item name="searchHeading">Full text search.</item>
@@ -17,7 +17,7 @@
   </prefix>
   <prefix name="Problems">
     <prefix name="strings">
-      <item name="title">Problem report</item>
+      <item name="title">Problem report - catalogue</item>
       <item name="notConfigured">Application is not configured properly.</item>
       <item name="noProblemsFound">No problems were detected.</item>
       <item name="filtersHeading">Fitlers</item>
@@ -63,7 +63,7 @@
   </prefix>
   <prefix name="Config">
     <prefix name="strings">
-      <item name="title">Application configuration</item>
+      <item name="title">Catalogue configuration</item>
       <item name="name">Catalogue name</item>
       <item name="category">Category</item>
       <item name="indexPool">Index pool</item>

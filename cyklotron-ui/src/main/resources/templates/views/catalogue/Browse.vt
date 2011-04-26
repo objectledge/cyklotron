@@ -1,6 +1,6 @@
 #set($vi18n = $i18n.usePrefix('cms.catalogue.Browse'))
 #set($strings = $vi18n.usePrefix('strings'))
-#genericScreenHeader($strings.title)
+#genericScreenHeader("${strings.title} ${config.name}")
 
 #if(!$applicationConfigured)
 <table class="messageInlineTable">
