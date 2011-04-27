@@ -1,7 +1,9 @@
 package net.cyklotron.cms.structure;
 
+import java.lang.reflect.Array;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -173,7 +175,7 @@ public class ComponentDataCacheService
         }
     }
 
-    private static class CacheEntry<T>
+    public static class CacheEntry<T>
     {
         final private T data;
 
@@ -188,6 +190,19 @@ public class ComponentDataCacheService
         public boolean isValid(long now)
         {
             return expiryTime > now;
+        }
+        
+        public int size()
+        {
+            if(data.getClass().isArray())
+            {
+                return Array.getLength(data);
+            }
+            if(data instanceof Collection)
+            {
+                return ((Collection<?>)data).size();
+            }
+            return 0;
         }
     }
 
