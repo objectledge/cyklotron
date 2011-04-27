@@ -474,8 +474,11 @@ public class CatalogueService
 
         try
         {
-            DocumentHelper.parseText(doc.getMeta());
-            // metadata is well formed - we may check for missing fields
+            // ensure that metadata is well formed, or missing all together
+            if(doc.isMetaDefined())
+            {
+                DocumentHelper.parseText(doc.getMeta());
+            }
             IndexCard tempIndexCard = new IndexCard(doc, null);
             missingProperties.addAll(config.getRequiredProperties());
             missingProperties.removeAll(tempIndexCard.getDefinedProperties());

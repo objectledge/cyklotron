@@ -102,21 +102,29 @@ public class IndexCard
         this.validityEnd = dateValue(descriptionDoc.getValidityEnd(), df);
         this.pubYear = this.validityStart.length() == 10 ? this.validityStart.substring(0, 4) : "";        
         
-        Document metaDOM;
-        try
+        if(descriptionDoc.isMetaDefined())
         {
-            metaDOM = DocumentHelper.parseText(descriptionDoc.getMeta());
+            Document metaDOM;
+            try
+            {
+                metaDOM = DocumentHelper.parseText(descriptionDoc.getMeta());
+            }
+            catch(org.dom4j.DocumentException e)
+            {
+                throw new RuntimeException("metadata for document #" + descriptionDoc.getIdString()
+                    + "contains invalid XML", e);
+            }
+    
+            this.authors = listValue(metaDOM, "/meta/authors/author/name");
+            this.sources = listValue(metaDOM, "/meta/sources/source/name");
+            this.organizations = listValue(metaDOM, "/meta/organizations/organization/name");
         }
-        catch(org.dom4j.DocumentException e)
+        else
         {
-            throw new RuntimeException("metadata for document #" + descriptionDoc.getIdString()
-                + "contains invalid XML", e);
+            this.authors = "";
+            this.sources = "";
+            this.organizations = "";
         }
-
-        this.authors = listValue(metaDOM, "/meta/authors/author/name");
-        this.sources = listValue(metaDOM, "/meta/sources/source/name");
-        this.organizations = listValue(metaDOM, "/meta/organizations/organization/name");
-        
         this.descriptionDoc = descriptionDoc;
         this.downloads = downloads;
     }
