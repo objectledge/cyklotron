@@ -143,7 +143,7 @@ public class ProposeDocument
             return true;
         }
         String state = getState();
-        if(!REQUIRES_AUTHENTICATED_USER.contains(state))
+        if("Anonymous".equals(state))
         {
             return true;
         }
@@ -152,7 +152,7 @@ public class ProposeDocument
             Parameters requestParameters = context.getAttribute(RequestParameters.class);
             CoralSession coralSession = context.getAttribute(CoralSession.class);
             Subject userSubject = coralSession.getUserSubject();
-            if("AddDocument".equals(state))
+            if("AddDocument".equals(state) || "MyDocuments".equals(state) || "DocumentCategory".equals(state))
             {
                 Permission submitPermission = coralSession.getSecurity().getUniquePermission(
                 "cms.structure.submit");
@@ -182,14 +182,13 @@ public class ProposeDocument
                 {
                     return true;
                 }
-                return false;
             }
+            return false;
         }
         catch(Exception e)
         {
             throw new ProcessingException(e);
         }
-        throw new ProcessingException("invalid state " + state);
     }
 
     /**
