@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config>
+  <publicKey>PUBLIC KEY</publicKey>
+  <privateKey>PRIVATE KEY</privateKey>
+  <options>
+    <option name="theme">white</option>
+  </options>
+</config>
