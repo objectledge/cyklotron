@@ -1,0 +1,101 @@
+##
+## Forum application: commentary adding screen
+##
+## author: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: AddCommentary.vt,v 1.5 2005-05-19 08:03:45 pablo Exp $
+##
+## TODO:
+##     - move option macros to lib
+##     -
+##
+## STATUS: almost final
+$pageTool.addScriptLink('script/CMSPopups.js')
+
+#genericScreenHeader('COMMENT DOCUMENT')
+
+<table width="100%" class="genericScreen" cellspacing="0">
+
+## the two macros below shold be loaded from VM lib
+
+#macro(option $value $label $selected)
+<option value="$value"#if($value.equals($selected)) selected='selected'#end>$label</option>
+#end
+
+#macro(options $list $selected)
+#foreach($elem in $list)
+#option($elem.get(1) $elem.get(0) $selected)
+#end
+#end
+
+#set($priorities_list = [["high", "1"], ["normal", "2"], ["low", "3"]])
+#set($priorities_list_selected = "2")
+#set($state_list = [["hidden", "hidden"], ["moderated", "moderated"], ["open", "open"]])
+#set($state_selected = "hidden")
+
+#set ($user = $subject.getName())
+#set ($fid = $parametersTool.get('fid','-1'))
+
+<form name="form1" method="post" action="$link.view("forum.DiscussionList").action("forum.AddCommentary")" class="defaultForm">
+  <input type="hidden" name="fid" value="$fid" size="30">
+
+  <tr>
+    <td align="right">
+      <b>Commented document:</b>
+    </th>
+    <td>
+      <input type="text" name="path" value="" size="30">
+      #if($cms_tool.getUserData().hasPermission($cms_tool.getHomePage(), "cms.structure.view"))
+      <a href="#select_node('relative_path' '-1' 'form1' 'path')">choose</a>
+      #end
+    </td>
+      </tr>
+
+      <tr>
+    <td align="right">
+      <b>Short description:</b>
+    </td>
+    <td>
+      <input type="text" name="description" value="" size="50">
+    </td>
+      </tr>
+
+    <tr>
+    <td align="right">
+      <b>Comment state:</b>
+    </td>
+    <td>
+      <select name="state">
+        #options($state_list $state_selected)
+      </select>
+    </td>
+      </tr>
+    </table>
+
+    <div align="right">
+      <table class="layoutTable" align="right" border="0">
+    <tr>
+      <td NOWRAP class="usualbutton">
+	    <script language="javascript">
+	      function addcommentary()
+	      {
+            document.form1.submit();
+	      }
+	    </script>
+	    <a href="javascript:addcommentary()">Add</a>
+	  </td>
+      <td>
+        <table height="22" class="buttonTable">
+          <tr>
+        <td>
+          <a href="$link.view("forum.DiscussionList").set("fid",$fid)">Cancel</a>
+        </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+      </table>
+    </div>
+  </form>
+  #genericScreenTrailer()

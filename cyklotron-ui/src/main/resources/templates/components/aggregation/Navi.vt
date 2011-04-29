@@ -1,0 +1,13 @@
+#genericNaviHeader('Aggregation')
+#if($site)
+  #linkCell('' 'Application configuration' $link.view('aggregation.EditConfiguration'))
+  #linkCell('' 'Exported resources' $link.view('aggregation.Exported'))
+  #linkCell('' 'Recommended resources' $link.view('aggregation.Recommendations'))
+  #if($cms_tool.userData.hasRole('cms.aggregation.importer'))
+    #linkCell('' 'Imported resources' $link.view('aggregation.Imported'))
+    #linkCell('' 'Exporting services' $link.view('aggregation.ExporterList'))
+  #end
+#elseif($cms_tool.hasRole($cms_tool.subject, 'cms.administrator'))
+  #linkCell('' 'Aggregating services' $link.view('aggregation.ImporterList').unset('site_id'))
+#end
+#genericNaviTrailer()
