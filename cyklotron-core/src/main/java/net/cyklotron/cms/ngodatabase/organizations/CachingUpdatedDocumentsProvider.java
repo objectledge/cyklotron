@@ -37,6 +37,7 @@ import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.util.ProtectedValidityFilter;
 
 public class CachingUpdatedDocumentsProvider
     extends UpdatedDocumentsProvider
@@ -86,11 +87,16 @@ public class CachingUpdatedDocumentsProvider
         List<DocumentNodeResource> result = new ArrayList<DocumentNodeResource>(documents.size());
         try
         {
+            Subject anonymousSubject = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
+            ProtectedValidityFilter validityFilter = new ProtectedValidityFilter(coralSession, anonymousSubject, new Date());
             LongIterator i = documents.iterator();
             while(i.hasNext())
             {
-                result
-                    .add(DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, i.next()));
+                DocumentNodeResource doc = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, i.next());
+                if(validityFilter.accept(doc))
+                {
+                    result.add(doc);
+                }
             }
             return result;
         }
