@@ -37,7 +37,9 @@ UNIVERSAL CLASSES
 CONTAINER
 contains all components on the page
 */
-.view-box{min-height:100%;
+.view-box{
+   min-height:100%;
+   * height: 100%;
    position:relative;
 }
 
