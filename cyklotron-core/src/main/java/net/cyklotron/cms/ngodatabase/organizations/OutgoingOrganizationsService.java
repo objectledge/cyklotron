@@ -34,9 +34,12 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.table.comparator.IdComparator;
+import org.objectledge.coral.table.comparator.TimeComparator;
 import org.objectledge.filesystem.FileSystem;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.table.CustomModificationTimeComparator;
 
 public class OutgoingOrganizationsService
 {
@@ -113,11 +116,8 @@ public class OutgoingOrganizationsService
         // sort data
         List<Long> organizationIdList = new ArrayList<Long>(orgMap.keySet());
         Collections.sort(organizationIdList);
-        IdComparator<DocumentNodeResource> byId = new IdComparator<DocumentNodeResource>();
-        for(List<DocumentNodeResource> docList : orgMap.values())
-        {
-            Collections.sort(docList, byId);
-        }
+        Comparator<NavigationNodeResource> docComparator = new CustomModificationTimeComparator(
+            TimeComparator.Direction.ASC);
 
         // build DOM tree
         DateFormat dateFormat = (DateFormat)this.dateFormat.clone();
@@ -126,7 +126,7 @@ public class OutgoingOrganizationsService
         {
             Element orgElm = organizationElm(organizationId);
             List<DocumentNodeResource> docList = orgMap.get(organizationId);
-            Collections.sort(docList, DocumentComparator.INSTANCE);
+            Collections.sort(docList, docComparator);
             for(DocumentNodeResource doc : docList)
             {
                 try
@@ -228,17 +228,5 @@ public class OutgoingOrganizationsService
         organization.detach();
         doc.add(organization);
         return doc;
-    }
-
-    private static class DocumentComparator
-        implements Comparator<DocumentNodeResource>
-    {
-        public static final DocumentComparator INSTANCE = new DocumentComparator();
-
-        @Override
-        public int compare(DocumentNodeResource doc1, DocumentNodeResource doc2)
-        {
-            return doc1.getCustomModificationTime().compareTo(doc2.getCustomModificationTime());
-        }
     }
 }

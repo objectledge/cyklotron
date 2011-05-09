@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -15,6 +16,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.TimeComparator;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.DateFormatTool;
 import org.objectledge.i18n.DateFormatter;
@@ -41,6 +43,7 @@ import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.ngodatabase.Organization;
+import net.cyklotron.cms.structure.table.CustomModificationTimeComparator;
 import net.cyklotron.cms.util.OfflineLinkRenderingService;
 
 public class OrganizationNewsFeedService
@@ -143,6 +146,8 @@ public class OrganizationNewsFeedService
                 List<DocumentNodeResource> documents = updatedDocumentsProvider.queryDocuments(
                     updatedDocumentsProvider.getSites(newsFeedSites, coralSession), endDate,
                     organizationId, coralSession);
+                Collections.sort(documents, new CustomModificationTimeComparator(
+                    TimeComparator.Direction.ASC));
                 SyndFeed feed = buildFeed(organization, documents, startDate, endDate, coralSession);
                 feedContents = saveCachedFeed(organizationId, feed);
             }
