@@ -235,6 +235,11 @@ public class OrganizationNewsFeedService
             description = new SyndContentImpl();
             description.setType("text/plain");
             description.setValue(docDescription);
+            if(doc.isValidityEndDefined())
+            {
+                entry.setPublishedDate(doc.getValidityStart());
+            }
+            entry.setUpdatedDate(doc.getCustomModificationTime());
             entry.setDescription(description);
             entry.setCategories(documentCategories(doc, coralSession));
             entries.add(entry);
