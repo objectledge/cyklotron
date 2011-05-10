@@ -1,0 +1,18 @@
+#if($header)<h2>$header</h2>#end
+<form name="category_query_form" action="$link">
+ <input type="hidden" name="qpid" value="$qpid">
+ <select onChange="document.category_query_form.submit();" class="category-queries" name="query_id">
+  <option value="0" #if($selected_query_id==0)selected=selected#end>Niezdefiniowane</option>
+  #foreach ($query in $queries)
+  <option value="$query.id" #if($selected_query_id==$query.id)selected=selected#end>$query.name</option>
+ #end
+ </select>
+</form>
+<ol class="category-resource">
+#foreach ($row in $table.rows)
+#set($definition = $cms_tool.getClassDefinition($row.object))##
+<li><a href='$link.set('x',$row.object.id)'>$cms_tool.resourceAttribute($row.object, $definition.indexTitle)</a></li>
+#end
+</ol>
+#set($tableLink = $link.set('tableId',$table.id).set('x',$cms_data.node.id))
+#tableView_pager($table $tableLink)

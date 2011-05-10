@@ -1,0 +1,122 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="Browse">
+    <prefix name="strings">
+      <item name="title">Przeglądanie indeksu - katalog</item>
+      <item name="notConfigured">Aplikacja nie jest prawidłowo skonfigurowana
+      </item>
+      <item name="noItemsFound">Nie znaleziono żadnych publikacji</item>
+      <item name="searchHeading">Wyszukiwanie pełnotekstowe</item>
+      <item name="vivibleColumnsHeading">Widoczne kolumny</item>
+      <item name="searchButton">szukaj</item>
+      <item name="changeButton">zmień</item>      
+      <item name="downloads">Pliki do pobrania</item>
+    </prefix>
+  </prefix>
+  <prefix name="Problems">
+    <prefix name="strings">
+      <item name="title">Raport błędów - katalog</item>
+      <item name="notConfigured">Aplikacja nie jest prawidłowo skonfigurowana
+      </item>
+      <item name="noProblemsFound">Nie znaleziono problemów</item>
+      <item name="filtersHeading">Filtry</item>
+      <item name="filtersButton">zastosuj</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="resource">Zasób</item>
+      <item name="documents">Dokumenty</item>
+      <item name="files">Pliki</item>
+      <item name="problems">Problemy</item>
+      <item name="missingProperties">Niewypełnione pola</item>      
+    </prefix>
+    <prefix name="problems">
+      <item name="INVALID_CLASS">Niewłaściwa klasa zasobu</item>
+      <item name="INVALID_METADATA">Nieprawidłowe metadane (dokument uszkodzony)
+      </item>
+      <item name="MISSING_PROPERTIES">Nie wypełnione pola</item>
+      <item name="MISSING_DESCRIPTION_DOC">Brak dokumentu - karty indeksowej dla pliku</item>
+      <item name="MULTIPLE_DESCRIPTION_DOCS">Wiele dokumentów - kart indeksowych dla jednego
+        pliku</item>
+      <item name="REQUIRED_CATEGORY_MISSING">Nie nadano wymaganej kategorii</item>
+      <item name="DOCUMENT_NOT_ACCESSIBLE">Dokument niewidoczny dla niezalogowanych
+        użytkowników</item>
+      <item name="FILE_NOT_ACCESSIBLE">Plik niewidoczny dla niezalogowanych użytkowników
+      </item>
+    </prefix>
+  </prefix>
+  <prefix name="IndexConf">
+    <prefix name="strings">
+      <item name="title">Konfiguracja ekranu osadzonego</item>
+      <item name="catalogue">Katalog</item>
+      <item name="notSelected">nie wybrany</item>
+      <item name="sortColumn">Kryterium sortowania</item>
+      <item name="sortDirection">Kierunek sortowania</item>
+      <item name="asc">rosnąco</item>
+      <item name="desc">malejąco</item>
+      <item name="pageSize">Ilość dokumentów na stronie</item>
+      <item name="save">Zapisz</item>
+      <item name="cancel">Anuluj</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="title">Tytył</item>
+      <item name="authors">Autorzy</item>
+      <item name="pubYear">Rok publikacji</item>
+      <item name="keywords">Słowa kluczowe</item>
+    </prefix>
+  </prefix>
+  <prefix name="Config">
+    <prefix name="strings">
+      <item name="title">Konfiguracja katalogu</item>
+      <item name="name">Nazwa katalogu</item>
+      <item name="category">Kategoria</item>
+      <item name="indexPool">Zestaw indeksów</item>
+      <item name="requiredProperties">Wymagane pola</item>
+      <item name="select">wybierz</item>
+      <item name="save">zapisz</item>
+    </prefix>
+    <prefix name="help">
+      <item name="general"><![CDATA[<p>Każda pozycja katalogu składa się z dokumentu (tzw. karty 
+      indeksowej) oraz, opcjonalnie, powiązanych z nim plików. Zarówno dokumenty jak i pliki muszą 
+      być oznaczone kateorią wybraną poniżej. Plik musi być dowiązany do dokładnie jednego 
+      dokumentu.</p>
+      <p>Zestaw indeksów wyszukiwania powinien obejmować zarówno pliki jak i dokumenty, należy
+      ograniczyć zasoby indeksowane do najmniejszego komplentego zbioru, poprzez wybór odpowiednich
+      ścieżek i kategorii wymaganej, co pozwoli przyspieszyć wyszukiwanie.</p>
+      <p>Można wybrać pola dokumentu których wypełnienie będzie konieczne aby karta indeksowa
+      została uznana za poprawną.</p>]]>
+      </item>
+    </prefix>
+  </prefix>
+  <prefix name="List">
+    <prefix name="columns">
+      <item name="name">Nazwa</item>
+      <item name="creator.name">Twórca</item>
+      <item name="creation.time">Data utworzenia</item>
+    </prefix>
+    <prefix name="strings">
+      <item name="title">Katalogi</item>
+      <item name="noneDefined">Nie utworzono żadnych katalogów</item>
+      <item name="config">Konfiguracja</item>
+      <item name="browse">Przeglądanie</item>
+      <item name="problems">Raport błędów</item>
+      <item name="new">Nowy katalog</item>
+    </prefix>
+  </prefix>
+  <prefix name="Common">
+    <prefix name="properties">
+      <item name="TITLE">Tytuł</item>
+      <item name="SUBTITLE">Podtytuł</item>
+      <item name="KEYWORDS">Słowa kluczowe</item>
+      <item name="ABSTRACT">Skrót</item>
+      <item name="EVENT_TITLE">Nazwa wydarzenia</item>
+      <item name="EVENT_PLACE">Miejsce wydarzenia</item>
+      <item name="EVENT_START">Początek wydarzenia</item>
+      <item name="EVENT_END">Koniec wydarzenia</item>
+      <item name="VALIDITY_START">Początek ważności dokumentu</item>
+      <item name="VALIDITY_END">Koniec ważności dokumentu</item>
+      <item name="PUB_YEAR">Rok publikacji</item>
+      <item name="AUTHORS">Autorzy</item>
+      <item name="SOURCES">Źródła</item>
+      <item name="ORGANIZATIONS">Organizacje</item>
+    </prefix>
+  </prefix>
+</strings>

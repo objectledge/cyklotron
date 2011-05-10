@@ -1,0 +1,232 @@
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.core.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.widget.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.position.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.autocomplete.js')##
+$pageTool.addScriptLink('script/jquery/ui/plugin/jquery.autocomplete.js')##
+$pageTool.addScriptLink("script/ngodatabase/autocomplete.js")##
+$pageTool.addScriptLink("script/urlsformatter.js")##
+$pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.base.css')##
+$pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.theme.css')##
+$pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
+##
+#set($nodeLink = $link.set('x',$parametersTool.get('x','-1')))
+#set($formAction = $nodeLink.action('structure.ProposeDocument'))
+##
+
+<script>  
+   jQuery(document).ready(function()
+   {
+     initProposeDocumentAutocomplete(5, '$link.view('ngodatabase.JsonOrganizations')', '$link.view('ngodatabase.JsonLocations')');
+   });
+     
+   function formatUrlFileds()
+   {
+      convertProposeDocumentUrlFileds(5);
+   }
+</script>
+
+##
+#genericScreenHeader('Document proposal')
+
+#result_inline_message('results.structure')
+
+<form name="propose_document" method="post" enctype="multipart/form-data" action="$formAction">
+
+<table border="0" class="genericScreen" width="100%" cellspacing="0">
+  <input type="hidden" name="name" value="$format_date.pattern("yyyyMMddHHmmssSSSS").format($format_date.now())">
+  <tr>
+    <td width='50%'>Title:</td>
+    <td width='50%'><input type="text" name="title" style="width: 100%;" value="$!title" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Shortcut:</td>
+    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="abstract">$!abstract</textarea></td>
+  </tr>
+
+  <tr>
+    <td>Document contents:</td>
+	#if($add_document_visual_editor)
+    <td>#simple_html_editor('content' 'style.css' '100%' '300' $content)</td>
+	#else
+    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="content">$!content</textarea></td>	
+	#end
+  </tr>
+  
+  <tr>
+    <td>Event place:</td>
+    <td><input type="text" name="event_place" style="width: 100%;" value="$!event_place" maxlength="150"></td>
+  </tr>
+  
+  <tr>
+    <td>Event address(Street):</td>
+    <td> 
+        <input type="text" id="event_street" name="event_street" style="width: 100%;" value="$!event_street" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Event address(Post Code):</td>
+    <td> 
+       <input type="text" id="event_postCode" name="event_postCode" style="width: 100%;" value="$!event_postCode" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Event address(City):</td>
+    <td> 
+       <input type="text" id="event_city" name="event_city" style="width: 100%;" value="$!event_city" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Event address(Province):</td>
+    <td> 
+      <input type="text" id="event_province" name="event_province" style="width: 100%;" value="$!event_province" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Event start date:</td>
+    <td>#dateSelectorOptionalTS("event_start" $event_start "brak")</td>
+  </tr>
+  <tr>
+    <td>Event end date:</td>
+    <td>#dateSelectorOptionalTS("event_end" $event_end "brak")</td>
+  </tr>
+
+  <tr>
+    <td>Document validity start:</td>
+    <td>#dateSelectorOptionalTS("validity_start" $validity_start "teraz")</td>
+  </tr>
+  
+  <tr>
+    <td>Document validity end:</td>
+    <td>#dateSelectorOptionalTS("validity_end" $validity_end "bezterminowo")</td>
+  </tr>
+</table>
+
+#set($orgFields = [['name',"Organization name"],['province',"Organization's address (Province)"],['postCode',"Organization's address (Post code)"],['city',"Organization's address (City)"],['street',"Organization's address (Street)"],['phone',"Organization's phone"],['fax',"Organization's fax"],['email',"Organization's e-mail"],['www',"Organization's website address"]]) 
+#set($max_organizations = 5)
+<script>
+function addOrganization(i)
+{
+ document.getElementById('organization_' + i).style.display = 'inline';
+}
+</script>
+
+#foreach($index in [1 .. $max_organizations]) ## organization loop
+#set($orgIdKey = "organization_${index}_id")
+<div id='organization_${index}' #if($index==1 || $templatingContext.containsKey($orgIdKey)) style="display:block;" #else style="display:none;" #end>
+ <table border="0" class="genericScreen" width="100%" cellspacing="0">
+  <input type="hidden" id="$orgIdKey" name="$orgIdKey" value="$!templatingContext.get($orgIdKey)">
+  #foreach($orgFiled in $orgFields) 
+   #set($key = "organization_${index}_${orgFiled.get(0)}")
+   <tr>
+    <td width='50%'>#if($index!=1 && $orgFiled.get(0)=='name') next #end ${orgFiled.get(1)}:</td>
+    <td width='50%'>
+         <input type="text" id="$key" name="$key" style="width: 100%;" value="$!templatingContext.get($key)" maxlength="150">
+    </td>
+   </tr>
+  #end ## field loop
+  #if($index+1 < $max_organizations)
+   <tr>
+    <td></td>
+    <td><input type="button" onClick="javascript:addOrganization($index+1)" value="add next organization" style="float:right;"></td>
+   </tr>
+  #end
+ </table>
+</div>
+#end ## organization loo
+
+<table border="0" class="genericScreen" width="100%" cellspacing="0">  
+  <tr>
+    <td width='50%'>Information source name:</td>
+    <td width='50%'><input type="text" name="source_name" style="width: 100%;" value="$!source_name" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Information source website address:</td>
+    <td><input type="text" name="source_url" style="width: 100%;" value="$!source_url" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Submitter's name and surname:</td>
+    <td><input type="text" name="proposer_credentials" style="width: 100%;" value="$!proposer_credentials" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Submitter's email address:</td>
+    <td><input type="text" name="proposer_email" style="width: 100%;" value="$!proposer_email" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Additional remarks:</td>
+    <td><textarea rows="" cols="" style="width: 100%; height:3em;"
+    name="description">$!description</textarea></td>
+  </tr>
+
+  #if($categories_1.size() > 0)
+  <tr>
+    <td>Choose category</td>
+    <td>
+  	  <select name="selected_categories">
+	  	<option value="-1">---</option>
+	  	#foreach($category in $categories_1)  
+	  	<option value="$category.id">$category.name</option>
+	  	#end
+	  </select>
+    </td>
+  </tr>
+  #end
+  #if($categories_2.size() > 0)
+  <tr>
+    <td>Choose main category</td>
+    <td>
+	   <select name="selected_categories">
+	  	<option value="-1">---</option>
+	  	#foreach($category in $categories_2)
+	  	 <option value="$category.id"#if($selected_categories.contains($category)) selected#end>$category.name</option>
+		#end
+	   </select>
+    </td>
+  </tr>
+  #end  
+#if($attachments_enabled and $attachments_max_count > 0 and $attachments_max_size > 0)
+  <tr>
+    <td>Attached files</td>
+    <td>You may attach file(s) sized up to $attachments_max_size kB of the following types: $attachments_allowed_formats <br/>
+    #foreach($i in [1 .. $attachments_max_count])
+        file $i <input type="file" name="attachment_${i}" /> <br/>
+        description $i <input type="text" name="attachment_description_${i}" style="width:80%;" value="$!attachmentDescriptions.get(i)"> <br/> 
+	#end
+    </td>
+  </tr>
+#end
+#if($add_captcha)
+  <tr>
+    <td>Captcha verification</td>
+    <td>
+       $captcha.createCaptchaWidget()
+    </td>
+  </tr>
+#end 
+</table>
+
+</form>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+#if($cms_data.userData.hasPermission($parent_node, "cms.structure.submit"))
+    <a OnClick="javascript:formatUrlFileds();" href="javascript:document.propose_document.submit();">Add document</a>
+#end
+  </div>
+</div>
+
+
+#genericScreenTrailer()

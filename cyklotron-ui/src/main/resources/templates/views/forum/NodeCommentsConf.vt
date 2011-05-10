@@ -1,0 +1,66 @@
+
+$viewEnclosureTool.override('popup.Default')
+#genericScreenHeader('Node comments component configuration')
+
+#if($cms_data.node)
+<form name="configSend" method="post"
+  target="cyklotron_$cms_data.node.id"
+  action="$link.unsetView().action('structure.UpdatePreferences').set('x',$cms_data.node.id)">
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#else
+<form name="configSend" method="post"
+  target="cyklotron"
+  action="$link.unsetView().action('structure.UpdatePreferences')">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+</form>
+
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "use_screen", "viewType", "add_captcha");
+// -->
+</script>
+
+
+<form name="nodeCommentsConf">
+
+<table width="100%" class="genericScreen" cellspacing="0">
+<tr>
+  <td>Use forum screen for message viewing and posting</td>
+  <td><input type="checkbox" name="use_screen" value="true"#if($componentConfig.getBoolean('use_screen', false)) checked="true"#end/></td>
+</tr>
+<tr>
+  <td>Choose comments initial view type:</td>
+  <td><select size="1" name="viewType">
+  #set($opts = [["list", false], ["tree", true]])
+  #options($opts $componentConfig.getBoolean('viewType', true))
+    </select></td>
+</tr>
+<tr>
+  <td>Add Captcha verification</td>
+  <td><input type="checkbox" name="add_captcha" value="true"#if($componentConfig.getBoolean('add_captcha', false)) checked#end></td>
+</tr>
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+#if($cms_data.node)
+  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'nodeCommentsConf', 'configSend', fieldNames)">Save</a>
+#else
+  <a href="javascript:submitConfig('cyklotron', 'nodeCommentsConf', 'configSend', fieldNames)">Save</a>
+#end
+  <a href="javascript:window.close();">Cancel</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

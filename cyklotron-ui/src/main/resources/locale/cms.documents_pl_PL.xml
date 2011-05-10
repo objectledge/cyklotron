@@ -1,0 +1,76 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="FootersList">
+    <prefix name="strings">
+      <item name="title">Lista stopek</item>    
+    </prefix>
+    <prefix name="labels">
+      <item name="title">Lista stopek</item>
+      <item name="name">Nazwa</item>
+      <item name="content">Treść</item>
+      <item name="enabled">Aktywna</item>
+      <item name="delete">usuń</item>
+      <item name="yes">Tak</item>
+      <item name="no">Nie</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="add_footer">Dodaj stopkę</item>
+      <item name="save_sequence">Zapisz kolejność</item>
+    </prefix>
+  </prefix>
+  <prefix name="AddFooter">
+    <prefix name="strings">
+      <item name="title">Dodawanie stopki</item>    
+    </prefix>
+    <prefix name="labels">
+      <item name="name">Nazwa</item>
+      <item name="content">Treść</item>
+      <item name="enabled">Aktywna</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="add">Dodaj</item>
+      <item name="cancel">Anuluj</item>
+    </prefix>
+  </prefix>  
+  <prefix name="EditFooter">
+    <prefix name="strings">
+      <item name="title">Edycja stopki</item>    
+    </prefix>
+    <prefix name="labels">
+      <item name="name">Nazwa</item>
+      <item name="content">Treść</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="update">Zapisz</item>
+      <item name="cancel">Anuluj</item>
+    </prefix>
+  </prefix>  
+  
+  <prefix name="ProposeDocumentConf">
+    <prefix name="strings">
+      <item name="title">Konfiguracja komponentu Zaproponuj dokument</item>
+      <item name="no_parent">Jeśli nie wybrano żadnego dokumentu, proponowany dokument pojawi się pod węzłem gdzie znajduje się formularz.</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="category1">źródło pierwszej listy kategorii</item>
+      <item name="category2">źródło drugiej listy kategorii</item>
+      <item name="category_depth">ilość poziomów wyświetlanych kategorii</item>
+      <item name="choose">wybierz</item>
+      <item name="inherit_categories">skopiuj kategorie z dokumentu nadrzędnego</item>
+      <item name="calendar_tree">umieść dokument w strukturze kalendarzowej</item>
+      <item name="attachments_enabled">zezwalaj na dołączanie plików</item>
+      <item name="attachments_dir">lokalizacja plików</item>
+      <item name="attachments_max_count">maksymalna ilość plików</item>
+      <item name="attachments_max_size">maksymalny rozmiar pliku (kB)</item>
+      <item name="attachments_allowed_formats">dozwolone formaty</item>
+      <item name="parent">lokalizacja docelowa</item>
+      <item name="owner_login">wybierz redaktora</item>
+      <item name="editing_enabled">zezwalaj na edycję dokumentów przez autorów</item>
+      <item name="add_document_visual_editor">edytor wizualny na ekranie AddDocument</item>
+      <item name="add_captcha">dodaj weryfikację Captcha</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="save">Zapisz</item>
+      <item name="cancel">Anuluj</item>
+    </prefix>
+  </prefix>
+</strings>

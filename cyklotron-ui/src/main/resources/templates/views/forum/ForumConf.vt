@@ -1,0 +1,122 @@
+##
+## Poll application: poll list screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: ForumConf.vt,v 1.3 2005-05-24 01:17:39 pablo Exp $
+##
+##
+## TITLE BAR
+$viewEnclosureTool.override('popup.Default')
+
+#genericScreenHeader('Forum component configuration')
+
+#macro(listTable $table $headerMessage $emptyMessage)
+$table.getColumn('name').set('label', 'Name')
+$table.getColumn('select').set('label', 'Select')
+$table.getColumn('select').set('width','10px')
+<table width="100%" class="genericItemTree" cellspacing="0">
+  <tr>
+    <th colspan="2">$headerMessage</th>
+  </tr>
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+
+#if($table.pageRowCount == 0)
+  <tr class="row1">
+    <td colspan="$tableColumnOrder.size()">$emptyMessage</td>
+  </tr>
+#else
+
+#foreach($row in $table.rows)
+#set($object = $row.object)
+<tr>
+<td style="width: 10px; text-align: center;">
+<input type="radio" name="did" value="$object.id" id="pool-$object.id" ##
+  #if($object.id == $selected.id) checked="checked" #end />
+</td>
+<td>
+<label for="pool-$object.id">
+#tableView_linesAndFoldersBase($table $row $link)
+$object.name
+<small>$!object.description</small>
+</label>
+</td>
+</tr>
+#end
+<tr>
+  <th colspan="2" align="center" class="bottomLine">
+  #tableView_pager($table $tableLink)
+  #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+  </th>
+</tr>
+#end
+</table>
+#end
+
+#if($cms_data.node)
+<form name="configSend" method="post"
+  target="cyklotron_$cms_data.node.id"
+  action="$link.unsetView().action('structure.UpdatePreferences').set('x',$cms_data.node.id)">
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#else
+<form name="configSend" method="post"
+  target="cyklotron"
+  action="$link.unsetView().action('structure.UpdatePreferences')">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+</form>
+
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "did", "statefull", "add_captcha");
+// -->
+</script>
+
+<form name="forumConf">
+#set($baseLink = $link.set('component_instance',$instance).set('node_id',$cms_data.node.id))
+#set($columnOrder = ['select','name'])
+
+#set($tableLink = $baseLink.set('tableId',$discussions_table.getId()))
+#listTable($discussions_table "Choose discussion to be shown in component" "No discussions defined")
+
+<hr/>
+
+#set($tableLink = $baseLink.set('tableId',$comments_table.getId()))
+#listTable($comments_table "Choose comment to be shown in component" "No comments defined")
+
+<hr/>
+
+<table class="genericScreen" width="100%" cellspacing="0">
+  <tr>
+    <td>
+    Shall component keep its state when document is changed:<br>
+    <td><input type="checkbox" name="statefull" value="true"#if($componentConfig.getBoolean('statefull', true)) checked#end></td>
+  </tr>
+  <tr>
+   <td>Add Captcha verification</td>
+   <td><input type="checkbox" name="add_captcha" value="true"#if($componentConfig.getBoolean('add_captcha', false)) checked#end></td>
+  </tr>
+</table>
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+#if($cms_data.node)
+  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'forumConf', 'configSend', fieldNames)">Save</a>
+#else
+  <a href="javascript:submitConfig('cyklotron', 'forumConf', 'configSend', fieldNames)">Save</a>
+#end
+  <a href="javascript:window.close();">Cancel</a>
+  </div>
+</div>
+
+#genericScreenTrailer()
