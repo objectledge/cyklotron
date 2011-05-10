@@ -22,6 +22,6 @@ public class CustomModificationTimeComparator extends TimeComparator<NavigationN
     @Override
     protected Date getDate(NavigationNodeResource resource)
     {
-        return resource.getValidityStart();
+        return resource.getCustomModificationTime();
     }    
 }
