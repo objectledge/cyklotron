@@ -1,0 +1,12 @@
+CREATE RESOURCE CLASS ABSTRACT 'seeable'
+JAVA CLASS 'net.cyklotron.cms.SeeableResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+ATTRIBUTES (
+boolean hidden
+);
+
+ALTER RESOURCE CLASS cms.files.item ADD SUPERCLASS seeable;
+
+ALTER RESOURCE CLASS category.category ADD SUPERCLASS seeable;
+
+
