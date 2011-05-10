@@ -1,0 +1,26 @@
+# RML sources
+# class definitions
+rml/cyklotron/common/base.rml
+rml/cyklotron/common/abstract.rml
+rml/cyklotron/integration/integration.rml
+rml/cyklotron/security/security.rml
+rml/cyklotron/preferences/preferences.rml
+rml/cyklotron/site/site.rml
+rml/cyklotron/style/style.rml
+rml/cyklotron/skins/skins.rml
+rml/cyklotron/workflow/workflow.rml
+rml/cyklotron/link/link.rml
+rml/cyklotron/category/category.rml
+rml/cyklotron/files/files.rml
+rml/cyklotron/structure/structure.rml
+rml/cyklotron/search/search.rml
+rml/cyklotron/category/category-query.rml
+rml/cyklotron/related/related.rml
+rml/cyklotron/forum/forum.rml
+rml/cyklotron/poll/poll.rml
+rml/cyklotron/banner/banner.rml
+rml/cyklotron/httpfeed/httpfeed.rml
+rml/cyklotron/syndication/syndication.rml
+rml/cyklotron/aggregation/aggregation.rml
+rml/cyklotron/periodicals/periodicals.rml
+rml/cyklotron/catalogue/catalogue.rml
