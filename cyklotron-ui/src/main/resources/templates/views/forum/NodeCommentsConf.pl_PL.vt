@@ -40,7 +40,7 @@ var fieldNames = new Array( "use_screen", "viewType", "captcha_verification");
 </tr>
 <tr>
     <td>Weryfikacja Captcha</td>
-    #set($opts = [["Dla wszystkich", "all"], ["Dla niezalogowanych", "anonymous"], ["Wyłącz", ""]])
+    #set($opts = [["Dla wszystkich",'all'], ["Dla niezalogowanych",'anonymous'], ["Wyłącz",'']])
     <td><select size="1" name="captcha_verification" >
     #options($opts $componentConfig.get('captcha_verification', ''))
     </select></td>

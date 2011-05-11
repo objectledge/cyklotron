@@ -12,9 +12,6 @@
 ##
 ## STATUS: almost final
 $pageTool.addScriptLink('script/CMSPopups.js')
-$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
-$pageTool.addScriptLink("script/captcha/verify.js")##
-
 #genericScreenHeader('DODAWANIE KOMENTARZA DO DOKUMENTU')
 
 <table width="100%" class="genericScreen" cellspacing="0">
@@ -73,15 +70,6 @@ $pageTool.addScriptLink("script/captcha/verify.js")##
       </select>
     </td>
       </tr>        
-    #set($add_captcha = $captcha.isCaptchaRequired($cms_data.component.configuration, $cms_tool.subject.principal))
-    #if($add_captcha)
- 	 <tr>
- 	  <td><b>Weryfikacja Captcha</b></td>
- 	 	<td>
- 	 	  $captcha.createCaptchaWidget()
- 	   </td>
- 	 </tr>
- 	#end
     </table>
 
     <div align="right">
@@ -89,17 +77,12 @@ $pageTool.addScriptLink("script/captcha/verify.js")##
     <tr>
       <td NOWRAP class="usualbutton">      
       <script language="javascript">
-        function addcommentary(captcha, form)
+        function addcommentary()
         {
-           if(captcha)
-           {
-             captchaVerify('$link.view('captcha.Verify')', form, 'Nieprawidłowy kod captcha.');
-           }else{
-             form.submit();
+            document.form1.submit();
            }
-        }
       </script>
-      <a href="javascript:addcommentary($add_captcha, document.form1);">Wyślij</a>
+      <a href="javascript:addcommentary()">Dodaj</a>
     </td>
       <td>
         <table height="22" class="buttonTable">

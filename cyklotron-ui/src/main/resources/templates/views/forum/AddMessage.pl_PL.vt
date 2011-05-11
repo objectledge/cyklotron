@@ -91,16 +91,16 @@ $parent_content #end</textarea></td>
       </td>
     </tr>
     #end
-    
-    #if($add_captcha)
+    #if($cms_data.getNode())
+     #if($add_captcha)
  	 <tr>
  	  <td><b>Weryfikacja Captcha</b></td>
  	 	<td>
  	 	  $captcha.createCaptchaWidget()
  	   </td>
  	 </tr>
- 	#end
-
+ 	 #end
+    #end
   </table>
 
 #if($discussion && $discussion.state.name == 'moderated')
@@ -115,9 +115,10 @@ Uwaga, wiadomość pojawi się na liście dopiero po uzyskaniu akceptacji modera
     <tr align="right">
       <td width="90%"></td>
       <td NOWRAP class="usualbutton">
-        <script language="javascript">
-        function sendaddpost(captcha, form)
-        {
+        #if($cms_data.getNode())
+         <script language="javascript">
+         function sendaddpost(captcha, form)
+         {
           if(form.name.value=="")
           {
             alert("Pole 'Tytuł' nie zostało wypełnione.");
@@ -133,6 +134,15 @@ Uwaga, wiadomość pojawi się na liście dopiero po uzyskaniu akceptacji modera
         }
         </script>
         <a href="javascript:sendaddpost($add_captcha, document.form1);">Wyślij</a>
+        #else
+        <script language="javascript">
+        function sendaddpost()
+        {
+             document.form1.submit();
+        }
+        </script>
+        <a href="javascript:sendaddpost();">Wyślij</a>
+        #end
       </td>
       <td NOWRAP class="usualbutton">
       #if ($parent.getId() != $discussion.getId())

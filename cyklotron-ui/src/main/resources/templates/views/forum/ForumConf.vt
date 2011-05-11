@@ -98,7 +98,7 @@ var fieldNames = new Array( "did", "statefull", "captcha_verification");
   </tr>
   <tr>
     <td>Captcha verification</td>
-    #set($opts = [["for all", "all"], ["for anonymous", "anonymous"], ["disabled", ""]])
+    #set($opts = [["for all",'all'], ["for anonymous",'anonymous'], ["disabled",'']])
     <td><select size="1" name="captcha_verification" >
     #options($opts $componentConfig.get('captcha_verification',''))
     </select></td>

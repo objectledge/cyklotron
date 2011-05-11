@@ -108,20 +108,23 @@ public class AddMessage
 				return;
             }
             
-            CmsData cmsData = cmsDataFactory.getCmsData(context);
-            ForumResource forum = forumService.getForum(coralSession, cmsData.getSite());
-            Parameters config = cmsData.getComponent(instanceName).getConfiguration();
-            if(config == null)
+            CmsData cmsData = cmsDataFactory.getCmsData(context);            
+            ForumResource forum = forumService.getForum(coralSession, cmsData.getSite());            
+            if(cmsData.getNode() != null)
             {
-                config = cmsData.getEmbeddedScreenConfig();
-            }
-
-            if(captchaService.isCaptchaRequired(config, coralSession.getUserSubject().getPrincipal())
-                && !captchaService.checkCaptcha(httpContext, (RequestParameters)parameters))
-            {
-                templatingContext.put("result", "invalid_captcha_verification");
-                parameters.set("state", "NewMessage");
-                return;
+                Parameters config = cmsData.getComponent(instanceName).getConfiguration();
+                if(config == null)
+                {
+                    config = cmsData.getEmbeddedScreenConfig(cmsData.getNode());
+                }
+                if(captchaService.isCaptchaRequired(config, coralSession.getUserSubject()
+                    .getPrincipal())
+                    && !captchaService.checkCaptcha(httpContext, (RequestParameters)parameters))
+                {
+                    templatingContext.put("result", "invalid_captcha_verification");
+                    parameters.set("state", "NewMessage");
+                    return;
+                }
             }
             
             String content = parameters.get("content","");
