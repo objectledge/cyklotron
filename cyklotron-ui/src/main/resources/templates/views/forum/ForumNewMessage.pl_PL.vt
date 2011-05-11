@@ -108,7 +108,7 @@ $parent_content #else $!content #end</textarea></td>
         {
           if(document.form1.name.value=="")
           {
-            alert("Pole 'nazwa' nie zostało wypełnione.");
+            alert("Pole 'Tytuł' nie zostało wypełnione.");
           }
           else{
            if(captcha)

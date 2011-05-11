@@ -120,12 +120,12 @@ Warning! Message will appear after moderator accepts it.
         {
           if(form.name.value=="")
           {
-            alert("Pole 'nazwa' nie zostało wypełnione.");
+            alert("Field 'Title' is empty.");
           }
           else{
            if(captcha)
            {
-             captchaVerify('$link.view('captcha.Verify')', form, 'Nieprawidłowy kod captcha.');
+             captchaVerify('$link.view('captcha.Verify')', form, 'Invalid captcha.');
            }else{
              form.submit();
            }

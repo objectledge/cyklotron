@@ -109,12 +109,12 @@ $parent_content #else $!content #end</textarea></td>
         {
           if(document.form1.name.value=="")
           {
-            alert("Pole 'nazwa' nie zostało wypełnione.");
+            alert("Field 'Title' is empty.");
           }
           else{
            if(captcha)
            {
-             captchaVerify('$link.view('captcha.Verify')', document.form1, 'Nieprawidłowy kod captcha.');
+             captchaVerify('$link.view('captcha.Verify')', document.form1, 'Invalid captcha.');
            }else{
              document.form1.submit();
            }

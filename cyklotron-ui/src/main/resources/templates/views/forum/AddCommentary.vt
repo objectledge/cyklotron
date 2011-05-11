@@ -93,7 +93,7 @@ $pageTool.addScriptLink("script/captcha/verify.js")##
         {
            if(captcha)
            {
-             captchaVerify('$link.view('captcha.Verify')', form, 'Nieprawidłowy kod captcha.');
+             captchaVerify('$link.view('captcha.Verify')', form, 'Invalid captcha.');
            }else{
              form.submit();
            }

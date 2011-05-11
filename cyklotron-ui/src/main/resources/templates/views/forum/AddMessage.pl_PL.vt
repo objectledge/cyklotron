@@ -120,7 +120,7 @@ Uwaga, wiadomość pojawi się na liście dopiero po uzyskaniu akceptacji modera
         {
           if(form.name.value=="")
           {
-            alert("Pole 'nazwa' nie zostało wypełnione.");
+            alert("Pole 'Tytuł' nie zostało wypełnione.");
           }
           else{
            if(captcha)
