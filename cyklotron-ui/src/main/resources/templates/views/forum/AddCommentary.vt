@@ -12,6 +12,8 @@
 ##
 ## STATUS: almost final
 $pageTool.addScriptLink('script/CMSPopups.js')
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink("script/captcha/verify.js")##
 
 #genericScreenHeader('COMMENT DOCUMENT')
 
@@ -71,19 +73,33 @@ $pageTool.addScriptLink('script/CMSPopups.js')
       </select>
     </td>
       </tr>
+    #set($add_captcha = $captcha.isCaptchaRequired($cms_data.component.configuration, $cms_tool.subject.principal))
+    #if($add_captcha)
+ 	 <tr>
+       <td><b>Captcha verification</b></td>
+ 	 	<td>
+ 	 	  $captcha.createCaptchaWidget()
+ 	   </td>
+ 	 </tr>
+ 	#end
     </table>
 
     <div align="right">
       <table class="layoutTable" align="right" border="0">
     <tr>
       <td NOWRAP class="usualbutton">
-	    <script language="javascript">
-	      function addcommentary()
-	      {
-            document.form1.submit();
-	      }
-	    </script>
-	    <a href="javascript:addcommentary()">Add</a>
+      <script language="javascript">
+        function addcommentary(captcha, form)
+        {
+           if(captcha)
+           {
+             captchaVerify('$link.view('captcha.Verify')', form, 'Nieprawidłowy kod captcha.');
+           }else{
+             form.submit();
+           }
+        }
+      </script>
+      <a href="javascript:addcommentary($add_captcha, document.form1);">Add</a>
 	  </td>
       <td>
         <table height="22" class="buttonTable">

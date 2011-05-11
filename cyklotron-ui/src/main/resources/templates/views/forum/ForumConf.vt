@@ -72,7 +72,7 @@ $object.name
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "did", "statefull", "add_captcha");
+var fieldNames = new Array( "did", "statefull", "captcha_verification");
 // -->
 </script>
 
@@ -97,8 +97,11 @@ var fieldNames = new Array( "did", "statefull", "add_captcha");
     <td><input type="checkbox" name="statefull" value="true"#if($componentConfig.getBoolean('statefull', true)) checked#end></td>
   </tr>
   <tr>
-   <td>Add Captcha verification</td>
-   <td><input type="checkbox" name="add_captcha" value="true"#if($componentConfig.getBoolean('add_captcha', false)) checked#end></td>
+    <td>Captcha verification</td>
+    #set($opts = [["for all", "all"], ["for anonymous", "anonymous"], ["disabled", ""]])
+    <td><select size="1" name="captcha_verification" >
+    #options($opts $componentConfig.get('captcha_verification',''))
+    </select></td>
   </tr>
 </table>
 </form>

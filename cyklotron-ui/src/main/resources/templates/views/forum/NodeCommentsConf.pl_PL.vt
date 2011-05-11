@@ -19,7 +19,7 @@ $viewEnclosureTool.override('popup.Default')
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "use_screen", "viewType", "add_captcha");
+var fieldNames = new Array( "use_screen", "viewType", "captcha_verification");
 // -->
 </script>
 
@@ -39,8 +39,11 @@ var fieldNames = new Array( "use_screen", "viewType", "add_captcha");
     </select></td>
 </tr>
 <tr>
-  <td>Dodaj weryfikację Captcha</td>
-  <td><input type="checkbox" name="add_captcha" value="true"#if($componentConfig.getBoolean('add_captcha', false)) checked#end></td>
+    <td>Weryfikacja Captcha</td>
+    #set($opts = [["Dla wszystkich", "all"], ["Dla niezalogowanych", "anonymous"], ["Wyłącz", ""]])
+    <td><select size="1" name="captcha_verification" >
+    #options($opts $componentConfig.get('captcha_verification', ''))
+    </select></td>
 </tr>
 </table>
 

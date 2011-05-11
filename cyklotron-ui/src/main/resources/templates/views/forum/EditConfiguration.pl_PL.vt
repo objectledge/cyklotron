@@ -135,11 +135,6 @@ Komunikat wyświetlany zamiast treści zablokowanych wiadomości:
   <textarea name="reject_message" cols="80" rows="6">$!forum.getRejectMessage()</textarea>
 </td>
 </tr>
-<tr>
-<td align="right" width="30%">Dodaj weryfikację Captcha</td>
-<td><input type="checkbox" name="add_captcha" value="true"#if($!forum.getCaptchaEnabled(false)) checked#end></td>
-</tr>
-
 </table>
 
 </form>

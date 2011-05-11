@@ -108,29 +108,15 @@ public class AddMessage
 				return;
             }
             
-            boolean captcha_enabled = false;
             CmsData cmsData = cmsDataFactory.getCmsData(context);
             ForumResource forum = forumService.getForum(coralSession, cmsData.getSite());
-
-            // check if subject has forum administrator right.
-            if(!coralSession.getUserSubject().hasRole(forum.getAdministrator()))
+            Parameters config = cmsData.getComponent(instanceName).getConfiguration();
+            if(config == null)
             {
-                if(parameters.isDefined("ci")) // if request sent from component
-                {
-                    Parameters config = cmsData.getComponent(instanceName).getConfiguration();
-                    if(config != null)
-                    {
-                        captcha_enabled = config.getBoolean("add_captcha", false);
-                    }
-                }
-                else
-                // if request sent from application
-                {
-                    captcha_enabled = forum.getCaptchaEnabled();
-                }
+                config = cmsData.getEmbeddedScreenConfig();
             }
 
-            if(captcha_enabled
+            if(captchaService.isCaptchaRequired(config, coralSession.getUserSubject().getPrincipal())
                 && !captchaService.checkCaptcha(httpContext, (RequestParameters)parameters))
             {
                 templatingContext.put("result", "invalid_captcha_verification");
@@ -241,5 +227,3 @@ public class AddMessage
         }
     }
 }
-
-

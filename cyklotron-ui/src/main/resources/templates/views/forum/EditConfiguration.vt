@@ -135,10 +135,6 @@ Message to display in place of rejected message's body
   <textarea name="reject_message" cols="80" rows="6">$!forum.getRejectMessage()</textarea>
 </td>
 </tr>
-<tr>
-<td align="right" width="30%">Add Captcha verification</td>
-<td><input type="checkbox" name="add_captcha" value="true"#if($!forum.getCaptchaEnabled(false)) checked#end></td>
-</tr>
 </table>
 
 </form>

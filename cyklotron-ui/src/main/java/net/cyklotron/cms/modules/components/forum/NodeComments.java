@@ -15,6 +15,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.Templating;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
@@ -37,9 +38,9 @@ public class NodeComments
 {
     public NodeComments(Context context, Logger logger, Templating templating,
         CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
-        TableStateManager tableStateManager, ForumService forumService)
+        TableStateManager tableStateManager, ForumService forumService, CaptchaService captchaService)
     {
-        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder, captchaService,
                         tableStateManager, forumService);
         
     }

@@ -31,6 +31,7 @@ import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
@@ -64,6 +65,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 public class Forum
     extends BaseSkinableScreen
 {
+    protected CaptchaService captchaService;
     /** forum serivce. */
     protected ForumService forumService;
     
@@ -76,11 +78,12 @@ public class Forum
 
     public Forum(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
-        StructureService structureService, StyleService styleService, SkinService skinService,
+        StructureService structureService, StyleService styleService, SkinService skinService,CaptchaService captchaService,
         MVCFinder mvcFinder, TableStateManager tableStateManager, ForumService forumService, WorkflowService workflowService)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
+        this.captchaService = captchaService;
         this.forumService = forumService;
         this.workflowService = workflowService;
         allowedStates.add("Discussions");
@@ -376,11 +379,14 @@ public class Forum
     public void prepareNewMessage(Context context)
         throws ProcessingException
     {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
         Parameters parameters = RequestParameters.getRequestParameters(context);
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         HttpContext httpContext = HttpContext.getHttpContext(context);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        
 
         long did = parameters.getLong("did", -1);
         long mid = parameters.getLong("mid", -1);
@@ -414,7 +420,8 @@ public class Forum
             templatingContext.put("priority", parameters.getInt("priority", 2));
             
             ForumResource forum = forumService.getForum(coralSession, getSite());
-            templatingContext.put("add_captcha",forum.getCaptchaEnabled(false));
+            templatingContext.put("add_captcha", captchaService.isCaptchaRequired(screenConfig,
+                coralSession.getUserPrincipal()));
         }
         catch(EntityDoesNotExistException e)
         {
@@ -423,6 +430,10 @@ public class Forum
         catch(ForumException e)
         {
             screenError(getNode(), context, "resource not found", e);
+        }
+        catch(Exception e)
+        {
+            screenError(getNode(), context, "Resource not found", e);
         }
     }
     
@@ -434,12 +445,11 @@ public class Forum
             CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
             TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
             ForumResource forum = forumService.getForum(coralSession, getSite());
-            templatingContext.put("add_captcha",forum.getCaptchaEnabled(false));
         }
         catch(ForumException e)
         {
             screenError(getNode(), context, "resource not found", e);
-        }    
+        }
     }
 
     private String prepareContent(String content)

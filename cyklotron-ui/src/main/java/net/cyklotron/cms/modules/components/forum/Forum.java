@@ -29,6 +29,7 @@ import org.objectledge.table.TableTool;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
@@ -55,12 +56,15 @@ import net.cyklotron.cms.util.ProtectedViewFilter;
 public class Forum
     extends BaseForumComponent
 {
+    protected CaptchaService captchaService;
+    
     public Forum(org.objectledge.context.Context context, Logger logger, Templating templating,
-        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder, CaptchaService captchaService,
         TableStateManager tableStateManager, ForumService forumService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder,
                         tableStateManager, forumService);
+        this.captchaService = captchaService;
     }
 
     private static Map<String, String> stateMap = new HashMap<String, String>();
@@ -393,6 +397,9 @@ public class Forum
         HttpContext httpContext = HttpContext.getHttpContext(context);
         I18nContext i18nContext = I18nContext.getI18nContext(context);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        String thisComponentInstance = cmsDataFactory.getCmsData(context).getComponent().getInstanceName();
+        Parameters config = cmsData.getComponent(thisComponentInstance).getConfiguration();
         long did = ((Parameters)templatingContext.get("parameters")).getLong("did",-1);
         long mid = ((Parameters)templatingContext.get("parameters")).getLong("mid",-1);
         long resid = ((Parameters)templatingContext.get("parameters")).getLong("resid",-1);
@@ -419,6 +426,8 @@ public class Forum
                 templatingContext.put("discussion",discussion);
                 templatingContext.put("parent",message);
             }
+            templatingContext.put("add_captcha", captchaService.isCaptchaRequired(config,
+                coralSession.getUserSubject().getPrincipal()));
         }
         catch(EntityDoesNotExistException e)
         {

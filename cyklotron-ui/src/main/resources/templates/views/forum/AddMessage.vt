@@ -11,6 +11,9 @@
 ## TODO: permissions checking
 #####
 
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink("script/captcha/verify.js")##
+
 ## SET LOCAL VARS
   #set($priorities_list = [['high','1'], ['normal','2'], ['low', '3']])
 
@@ -88,6 +91,15 @@ $parent_content #end</textarea></td>
       </td>
     </tr>
     #end
+    
+    #if($add_captcha)
+ 	 <tr>
+ 	  <td><b>Captcha verification</b></td>
+ 	 	<td>
+ 	 	  $captcha.createCaptchaWidget()
+ 	   </td>
+ 	 </tr>
+ 	#end
 
   </table>
 
@@ -104,12 +116,23 @@ Warning! Message will appear after moderator accepts it.
       <td width="90%"></td>
       <td NOWRAP class="usualbutton">
         <script language="javascript">
-        function sendaddpost()
+        function sendaddpost(captcha, form)
         {
-          document.form1.submit();
+          if(form.name.value=="")
+          {
+            alert("Pole 'nazwa' nie zostało wypełnione.");
+          }
+          else{
+           if(captcha)
+           {
+             captchaVerify('$link.view('captcha.Verify')', form, 'Nieprawidłowy kod captcha.');
+           }else{
+             form.submit();
+           }
+          }
         }
         </script>
-        <a href="javascript:sendaddpost()">Send</a>
+        <a href="javascript:sendaddpost($add_captcha, document.form1);">Send</a>
       </td>
       <td NOWRAP class="usualbutton">
       #if ($parent.getId() != $discussion.getId())
