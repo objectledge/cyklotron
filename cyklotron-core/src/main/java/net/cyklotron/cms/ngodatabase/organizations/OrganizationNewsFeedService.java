@@ -147,7 +147,7 @@ public class OrganizationNewsFeedService
                     updatedDocumentsProvider.getSites(newsFeedSites, coralSession), endDate,
                     organizationId, coralSession);
                 Collections.sort(documents, new CustomModificationTimeComparator(
-                    TimeComparator.Direction.ASC));
+                    TimeComparator.Direction.DESC));
                 SyndFeed feed = buildFeed(organization, documents, startDate, endDate, coralSession);
                 feedContents = saveCachedFeed(organizationId, feed);
             }
