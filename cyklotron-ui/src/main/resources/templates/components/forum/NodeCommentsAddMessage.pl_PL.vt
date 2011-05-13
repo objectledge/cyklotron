@@ -11,6 +11,9 @@
 ## TODO: permissions checking
 #####
 
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink("script/captcha/verify.js")##
+
 #set($x = $parametersTool.get('x',""))
 #if($x.length() == 0)
   #set($cmsLink = $link)
@@ -86,7 +89,7 @@ $parent_content #end</textarea></td>
   </select>
       </td>
     </tr>
-    #if($cms_data.component.configuration.getBoolean('add_captcha', false))
+    #if($add_captcha)
  	 <tr>
  	  <td><b>Weryfikacja Captcha</b></td>
  	 	<td>
@@ -108,7 +111,24 @@ Uwaga, wiadomość pojawi się na liście dopiero po uzyskaniu akceptacji modera
     <tr align="right">
       <td width="90%"></td>
       <td NOWRAP class="usualbutton">
-        <a href="javascript:document.${instance}_forum_add_message.submit();">Wyślij</a>
+         <script language="javascript">
+         function sendaddpost(captcha, form)
+         {
+          if(form.name.value=="")
+          {
+            alert("Pole 'Tytuł' nie zostało wypełnione.");
+          }
+          else{
+           if(captcha)
+           {
+             captchaVerify('$link.view('captcha.Verify')', form, 'Nieprawidłowy kod captcha.');
+           }else{
+             form.submit();
+           }
+          }
+        }
+        </script>
+        <a href="javascript:sendaddpost($add_captcha, document.${instance}_forum_add_message);">Wyślij</a>      
       </td>
       <td NOWRAP class="usualbutton">
       #if ($parent && $parent.getId() != $discussion.getId())

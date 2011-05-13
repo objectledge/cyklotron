@@ -91,7 +91,7 @@ $parent_content #end</textarea></td>
       </td>
     </tr>
     #end
-    #if($cms_data.getNode())    
+    #if($parametersTool.isDefined("x"))    
     #if($add_captcha)
  	 <tr>
  	  <td><b>Captcha verification</b></td>
@@ -115,7 +115,7 @@ Warning! Message will appear after moderator accepts it.
     <tr align="right">
       <td width="90%"></td>
       <td NOWRAP class="usualbutton">
-        #if($cms_data.getNode())
+        #if($parametersTool.isDefined("x"))
         <script language="javascript">
         function sendaddpost(captcha, form)
         {

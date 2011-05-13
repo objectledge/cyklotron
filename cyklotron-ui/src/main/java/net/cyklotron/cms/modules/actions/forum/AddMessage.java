@@ -110,7 +110,7 @@ public class AddMessage
             
             CmsData cmsData = cmsDataFactory.getCmsData(context);            
             ForumResource forum = forumService.getForum(coralSession, cmsData.getSite());            
-            if(cmsData.getNode() != null)
+            if(parameters.isDefined("x"))
             {
                 Parameters config = cmsData.getComponent(instanceName).getConfiguration();
                 if(config == null)

@@ -11,6 +11,9 @@
 ## TODO: permissions checking
 #####
 
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink("script/captcha/verify.js")##
+
 #set($x = $parametersTool.get('x',""))
 #if($x.length() == 0)
   #set($cmsLink = $link)
@@ -86,7 +89,7 @@ $parent_content #end</textarea></td>
   </select>
       </td>
     </tr>
-  #if($cms_data.component.configuration.getBoolean('add_captcha', false))
+    #if($add_captcha)
     <tr>
     <td><b>Captcha verification</b></td>
     <td>
@@ -108,7 +111,24 @@ Be warned that this message will appear after moderator accepts it.
     <tr align="right">
       <td width="90%"></td>
       <td NOWRAP class="usualbutton">
-        <a href="javascript:document.${instance}_forum_add_message.submit();">Wyślij</a>
+       <script language="javascript">
+        function sendaddpost(captcha, form)
+        {
+          if(form.name.value=="")
+          {
+            alert("Field 'Title' is empty.");
+          }
+          else{
+           if(captcha)
+           {
+             captchaVerify('$link.view('captcha.Verify')', form, 'Invalid captcha.');
+           }else{
+             form.submit();
+           }
+          }
+        }
+        </script>
+        <a href="javascript:sendaddpost($add_captcha, document.${instance}_forum_add_message);">Send</a>      
       </td>
       <td NOWRAP class="usualbutton">
       #if ($parent && $parent.getId() != $discussion.getId())

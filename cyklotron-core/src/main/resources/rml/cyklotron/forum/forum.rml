@@ -29,8 +29,7 @@ REQUIRED resource(site.site) site,
 resource(structure.navigation_node) forumNode,
 resource(workflow.state) initialCommentaryState,
 text replyTo,
-text rejectMessage,
-boolean captchaEnabled
+text rejectMessage
 );
 
 # discussion node owner = owner of the specific mailing list (for purposes

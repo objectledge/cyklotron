@@ -59,9 +59,6 @@ public class ForumResourceImpl
     /** Class variables initialization status. */
     private static boolean definitionsInitialized;
 	
-    /** The AttributeDefinition object for the <code>captchaEnabled</code> attribute. */
-    private static AttributeDefinition captchaEnabledDef;
-
     /** The AttributeDefinition object for the <code>forumNode</code> attribute. */
     private static AttributeDefinition forumNodeDef;
 
@@ -152,85 +149,6 @@ public class ForumResourceImpl
     }
 
     // public interface //////////////////////////////////////////////////////
-
-    /**
-     * Returns the value of the <code>captchaEnabled</code> attribute.
-     *
-     * @return the value of the <code>captchaEnabled</code> attribute.
-     * @throws IllegalStateException if the value of the attribute is 
-     *         undefined.
-     */
-    public boolean getCaptchaEnabled()
-        throws IllegalStateException
-    {
-	    Boolean value = (Boolean)getInternal(captchaEnabledDef, null);
-        if(value != null)
-        {
-            return value.booleanValue();
-        }
-        else
-        {
-            throw new IllegalStateException("value of attribute captchaEnabled is undefined"+
-			    " for resource #"+getId());
-        }
-    }
-
-    /**
-     * Returns the value of the <code>captchaEnabled</code> attribute.
-     *
-     * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>captchaEnabled</code> attribute.
-     */
-    public boolean getCaptchaEnabled(boolean defaultValue)
-    {
-		return ((Boolean)getInternal(captchaEnabledDef, new Boolean(defaultValue))).booleanValue();
-	}
-
-    /**
-     * Sets the value of the <code>captchaEnabled</code> attribute.
-     *
-     * @param value the value of the <code>captchaEnabled</code> attribute.
-     */
-    public void setCaptchaEnabled(boolean value)
-    {
-        try
-        {
-            set(captchaEnabledDef, new Boolean(value));
-        }
-        catch(ModificationNotPermitedException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-        catch(ValueRequiredException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-    }
-	
-	/**
-     * Removes the value of the <code>captchaEnabled</code> attribute.
-     */
-    public void unsetCaptchaEnabled()
-    {
-        try
-        {
-            unset(captchaEnabledDef);
-        }
-        catch(ValueRequiredException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }     
-    } 
-   
-	/**
-	 * Checks if the value of the <code>captchaEnabled</code> attribute is defined.
-	 *
-	 * @return <code>true</code> if the value of the <code>captchaEnabled</code> attribute is defined.
-	 */
-    public boolean isCaptchaEnabledDefined()
-	{
-	    return isDefined(captchaEnabledDef);
-	}
  
     /**
      * Returns the value of the <code>forumNode</code> attribute.
