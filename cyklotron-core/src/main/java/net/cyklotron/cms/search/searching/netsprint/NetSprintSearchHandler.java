@@ -10,6 +10,8 @@ import java.util.Map;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
@@ -19,6 +21,7 @@ import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableTool;
 import org.objectledge.utils.StringUtils;
+import org.objectledge.web.mvc.tools.LinkTool;
 
 import net.cyklotron.cms.search.ExternalPoolResource;
 import net.cyklotron.cms.search.SearchConstants;
@@ -34,7 +37,7 @@ import net.cyklotron.cms.search.searching.SearchingException;
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: NetSprintSearchHandler.java,v 1.5 2005-05-30 00:18:41 zwierzem Exp $
  */
-public class NetSprintSearchHandler implements SearchHandler
+public class NetSprintSearchHandler implements SearchHandler<NetSprintSearchHit>
 {
     boolean initialized;
 
@@ -165,5 +168,11 @@ public class NetSprintSearchHandler implements SearchHandler
             // results parsing failed
             return null;
         }
+    }
+    
+    public void resolveUrls(NetSprintSearchHit hit, Subject subject, Context context,
+        boolean generateEditLink, LinkTool link)
+    {
+        
     }
 }

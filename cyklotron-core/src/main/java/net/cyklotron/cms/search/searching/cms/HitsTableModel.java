@@ -12,24 +12,27 @@ import org.objectledge.table.TableRowSet;
 import org.objectledge.table.TableState;
 import org.objectledge.web.mvc.tools.LinkTool;
 
+import net.cyklotron.cms.search.searching.SearchHandler;
+import net.cyklotron.cms.search.searching.SearchHit;
+
 /**
  * A <code>TableModel</code> implementation which wraps up lucene's search results.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: HitsTableModel.java,v 1.4 2005-06-03 07:29:35 pablo Exp $
  */
-public class HitsTableModel implements TableModel
+public class HitsTableModel<T extends SearchHit> implements TableModel<T>
 {
-    protected List<LuceneSearchHit> hits;
-    protected HitsRowSet rowSet;
-    protected LuceneSearchHandler searchHandler;
+    protected List<T> hits;
+    protected HitsRowSet<T> rowSet;
+    protected SearchHandler<T> searchHandler;
     protected LinkTool link;
     protected Context context;
     protected Subject subject;
     protected boolean generateEditLink;
     
-    public HitsTableModel(Context context, List<LuceneSearchHit> hits,
-        LuceneSearchHandler searchHandler,
+    public HitsTableModel(Context context, List<T> hits,
+        SearchHandler<T> searchHandler,
         LinkTool link, Subject subject, boolean generateEditLink)
     {
         this.context = context;
@@ -40,17 +43,18 @@ public class HitsTableModel implements TableModel
         this.generateEditLink = generateEditLink;
     }
 
-    public TableColumn[] getColumns()
+    public TableColumn<T>[] getColumns()
     {
-        TableColumn[] columns = new TableColumn[6];
+        @SuppressWarnings("unchecked")
+        TableColumn<T>[] columns = new TableColumn[6];
         try
         {
-            columns[0] = new TableColumn("id", null);
-            columns[1] = new TableColumn("modification.time", null);
-            columns[2] = new TableColumn("site.name", null);
-            columns[3] = new TableColumn("index.title", null);
-            columns[4] = new TableColumn("index.abbreviation", null);
-            columns[5] = new TableColumn("resource.class.id", null);
+            columns[0] = new TableColumn<T>("id", null);
+            columns[1] = new TableColumn<T>("modification.time", null);
+            columns[2] = new TableColumn<T>("site.name", null);
+            columns[3] = new TableColumn<T>("index.title", null);
+            columns[4] = new TableColumn<T>("index.abbreviation", null);
+            columns[5] = new TableColumn<T>("resource.class.id", null);
         }
         catch(TableException e)
         {
@@ -59,11 +63,11 @@ public class HitsTableModel implements TableModel
         return columns;
     }
 
-    public TableRowSet getRowSet(TableState state, TableFilter[] filters)
+    public TableRowSet<T> getRowSet(TableState state, TableFilter<T>[] filters)
     {
         if(rowSet == null)
         {
-            rowSet = new HitsRowSet(context, hits, state, searchHandler, link, filters, subject, generateEditLink);
+            rowSet = new HitsRowSet<T>(context, hits, state, searchHandler, link, filters, subject, generateEditLink);
             hits = null; // make GC happy
         }
         return rowSet;

@@ -24,9 +24,11 @@ import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableTool;
 import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.mvc.tools.LinkTool;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.CmsLinkTool;
+import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.search.PoolResource;
@@ -42,7 +44,7 @@ import net.cyklotron.cms.search.searching.SearchingException;
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: LuceneSearchHandler.java,v 1.7 2005-06-03 07:29:35 pablo Exp $
  */
-public class LuceneSearchHandler implements SearchHandler
+public class LuceneSearchHandler implements SearchHandler<LuceneSearchHit>
 {
     /** search service for getting searchers. */
     private SearchService searchService;
@@ -59,7 +61,7 @@ public class LuceneSearchHandler implements SearchHandler
         this.context = context;
     }
 
-    public TableModel search(CoralSession coralSession, Resource[] searchPools,
+    public TableModel<LuceneSearchHit> search(CoralSession coralSession, Resource[] searchPools,
         SearchMethod method, TableState state, Parameters parameters, I18nContext i18nContext)
         throws SearchingException
     {
@@ -100,7 +102,7 @@ public class LuceneSearchHandler implements SearchHandler
         
         // search
         Searcher searcher = null;
-        TableTool tool = null;
+        TableTool<LuceneSearchHit> tool = null;
         try
         {
             // prepare link tool
@@ -113,7 +115,7 @@ public class LuceneSearchHandler implements SearchHandler
             searcher = searchService.getSearchingFacility().getSearcher(pools, subject);
             List<LuceneSearchHit> hits = getLuceneSearchHits(searcher, query, sort);
             AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
-            TableModel model = new HitsTableModel(context, hits, this, link, subject, authContext.isUserAuthenticated());
+            TableModel<LuceneSearchHit> model = new HitsTableModel<LuceneSearchHit>(context, hits, this, link, subject, authContext.isUserAuthenticated());
             return model;
         }
         catch(SearchException e)
@@ -184,6 +186,37 @@ public class LuceneSearchHandler implements SearchHandler
         catch(EntityDoesNotExistException e)
         {
             return null;
+        }
+    }
+    
+    public void resolveUrls(LuceneSearchHit hit, Subject subject, Context context,
+        boolean generateEditLink, LinkTool link)
+    {
+        try
+        {
+            CoralSession coralSession = context.getAttribute(CoralSession.class);
+            ResourceClassResource rcr = getHitResourceClassResource(coralSession, hit);
+            hit.setUrl(link.view(rcr.getView()).set("res_id", hit.getId()).toString());
+            if(generateEditLink)
+            {
+                Resource resource = getHitResource(coralSession, hit);
+                if(resource != null)
+                {
+                    if(!(resource instanceof ProtectedResource)
+                        || ((ProtectedResource)resource).canModify(coralSession, subject))
+                    {
+                        if(rcr.getEditView() != null)
+                        {
+                            hit.setEditUrl(link.view(rcr.getEditView()).set("res_id", hit.getId())
+                                .toString());
+                        }
+                    }
+                }
+            }
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            // could not retrieve ResourceClass - leave empty URL
         }
     }
 }

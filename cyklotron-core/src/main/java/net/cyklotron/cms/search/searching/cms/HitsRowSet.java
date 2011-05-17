@@ -16,6 +16,8 @@ import org.objectledge.web.mvc.tools.LinkTool;
 
 import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.integration.ResourceClassResource;
+import net.cyklotron.cms.search.searching.SearchHandler;
+import net.cyklotron.cms.search.searching.SearchHit;
 
 /**
  * A <code>TableRowSet</code> implementation which wraps up lucene's search results.
@@ -26,13 +28,13 @@ import net.cyklotron.cms.integration.ResourceClassResource;
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: HitsRowSet.java,v 1.9 2007-11-18 21:23:33 rafal Exp $
  */
-public class HitsRowSet extends BaseRowSet
+public class HitsRowSet<T extends SearchHit> extends BaseRowSet<T>
 {
-    protected TableRow[] rows;
+    protected TableRow<T>[] rows;
     protected int totalRowCount;
 
-    public HitsRowSet(Context context, List<LuceneSearchHit> uniqueHits, TableState state,
-        LuceneSearchHandler searchHandler, LinkTool link, TableFilter[] filters, 
+    public HitsRowSet(Context context, List<T> uniqueHits, TableState state,
+        SearchHandler<T> searchHandler, LinkTool link, TableFilter<T>[] filters, 
         Subject subject, boolean generateEditLink)
     {
         super(state, filters);
@@ -54,37 +56,15 @@ public class HitsRowSet extends BaseRowSet
 
             end = ( end<listSize )? end: listSize;
         }
-        rows = new TableRow[end-start];
+        @SuppressWarnings("unchecked")
+        TableRow<T>[] t = new TableRow[end-start]; 
+        rows = t;
 
         for(int i=start, j=0; i<end; i++, j++)
         {
-            LuceneSearchHit hit = uniqueHits.get(i);
-            try
-            {
-                    CoralSession coralSession = context.getAttribute(CoralSession.class);
-                    ResourceClassResource rcr = searchHandler.getHitResourceClassResource(coralSession, hit);
-                    hit.setUrl(link.view(rcr.getView()).set("res_id", hit.getId()).toString());
-                    if(generateEditLink)
-                    {
-                        Resource resource = searchHandler.getHitResource(coralSession, hit);
-                        if(resource != null)
-                        {
-                            if(!(resource instanceof ProtectedResource) || 
-                                ((ProtectedResource)resource).canModify(coralSession, subject))
-                            {
-                                if(rcr.getEditView() != null)
-                                {
-                                    hit.setEditUrl(link.view(rcr.getEditView()).set("res_id", hit.getId()).toString());
-                                }
-                            }
-                        }
-                    }
-            }
-            catch(EntityDoesNotExistException e)
-            {
-                    // could not retrieve ResourceClass - leave empty URL
-            }
-            rows[j] = new TableRow(Integer.toString(i), hit, 0, 0, 0);
+            T hit = uniqueHits.get(i);
+            searchHandler.resolveUrls(hit, subject, context, generateEditLink, link);
+            rows[j] = new TableRow<T>(Integer.toString(i), hit, 0, 0, 0);
         }
     }
     
@@ -93,17 +73,17 @@ public class HitsRowSet extends BaseRowSet
         return rows.length;
     }
 
-    public TableRow getParentRow(TableRow childRow)
+    public TableRow<T> getParentRow(TableRow<T> childRow)
     {
         return null;
     }
 
-    public TableRow getRootRow()
+    public TableRow<T> getRootRow()
     {
         return null;
     }
 
-    public TableRow[] getRows()
+    public TableRow<T>[] getRows()
     {
         return rows;
     }
@@ -119,17 +99,17 @@ public class HitsRowSet extends BaseRowSet
         return totalRowCount;
     }
 
-    public boolean hasMoreChildren(TableRow ancestorRow, TableRow descendantRow)
+    public boolean hasMoreChildren(TableRow<T> ancestorRow, TableRow<T> descendantRow)
     {
         return false;
     }
     
-    public List<LuceneSearchHit> filterSearchHits(List<LuceneSearchHit> uniqueHits)
+    public List<T> filterSearchHits(List<T> uniqueHits)
     {
-        List<LuceneSearchHit> filteredHits = new ArrayList<LuceneSearchHit>();
+        List<T> filteredHits = new ArrayList<T>();
         for (int i = 0; i < uniqueHits.size(); i++)
         {
-            LuceneSearchHit hit = uniqueHits.get(i);
+            T hit = uniqueHits.get(i);
             if(accept(hit))
             {
                 filteredHits.add(hit);
