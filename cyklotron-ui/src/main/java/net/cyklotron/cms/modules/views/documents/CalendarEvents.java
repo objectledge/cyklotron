@@ -14,6 +14,7 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
@@ -41,7 +42,6 @@ import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
-import net.cyklotron.cms.util.CmsResourceListTableModel;
 import net.cyklotron.cms.util.SiteFilter;
 
 /**
@@ -222,7 +222,8 @@ public class CalendarEvents
                 }
             }
 
-            TableTool hitsTable = searchHandler.search(coralSession, pools, method, state, filters, parameters, i18nContext);
+            TableModel hitsTableModel = searchHandler.search(coralSession, pools, method, state, parameters, i18nContext); 
+            TableTool hitsTable = new TableTool(state, filters, hitsTableModel);
             
             if(hitsTable == null)
             {

@@ -20,7 +20,6 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
-import org.objectledge.table.TableException;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableTool;
@@ -60,9 +59,8 @@ public class LuceneSearchHandler implements SearchHandler
         this.context = context;
     }
 
-    public TableTool search(CoralSession coralSession, Resource[] searchPools, 
-        SearchMethod method, TableState state, List tableFilters, 
-        Parameters parameters, I18nContext i18nContext)
+    public TableModel search(CoralSession coralSession, Resource[] searchPools,
+        SearchMethod method, TableState state, Parameters parameters, I18nContext i18nContext)
         throws SearchingException
     {
         Subject subject = coralSession.getUserSubject();
@@ -116,8 +114,7 @@ public class LuceneSearchHandler implements SearchHandler
             List<LuceneSearchHit> hits = getLuceneSearchHits(searcher, query, sort);
             AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
             TableModel model = new HitsTableModel(context, hits, this, link, subject, authContext.isUserAuthenticated());
-            
-            tool = new TableTool(state, tableFilters, model);
+            return model;
         }
         catch(SearchException e)
         {
@@ -127,10 +124,6 @@ public class LuceneSearchHandler implements SearchHandler
         {
             throw new SearchingException("problem while searching the indexes", e);
         }
-        catch(TableException e)
-        {
-            throw new SearchingException("problem while creating the table tool", e);
-        }
         catch(Exception e)
         {
             throw new SearchingException("problem while getting the searcher", e);
@@ -139,7 +132,6 @@ public class LuceneSearchHandler implements SearchHandler
         {
             searchService.getSearchingFacility().returnSearcher(searcher);
         }
-        return tool;
     }
 
     List<LuceneSearchHit> getLuceneSearchHits(Searcher searcher, Query query, Sort sort)

@@ -6,6 +6,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
+import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableTool;
 
@@ -19,6 +20,7 @@ import org.objectledge.table.TableTool;
  */
 public interface SearchHandler
 {
-    public TableTool search(CoralSession coralSession, Resource[] searchPools, SearchMethod method, TableState state, List tableFilters, Parameters parameters, I18nContext i18nContext)
+    public TableModel search(CoralSession coralSession, Resource[] searchPools,
+        SearchMethod method, TableState state, Parameters parameters, I18nContext i18nContext)
         throws SearchingException;
 }

@@ -51,8 +51,8 @@ public class NetSprintSearchHandler implements SearchHandler
         fieldNameCms2NetSprint.put(SearchConstants.FIELD_INDEX_CONTENT, "any");
     }
     
-    public TableTool search(CoralSession coralSession, Resource[] searchPools, SearchMethod method, TableState state, List filters,
-        Parameters parameters, I18nContext i18nContext)
+    public TableModel search(CoralSession coralSession, Resource[] searchPools,
+        SearchMethod method, TableState state, Parameters parameters, I18nContext i18nContext)
         throws SearchingException
     {
         // get URL template
@@ -154,7 +154,7 @@ public class NetSprintSearchHandler implements SearchHandler
             // parse XML results 
             TableModel model = new NetSprintTableModel(responseBody);
             
-            return new TableTool(state, filters, model);
+            return model;
         }
         catch(TableException e)
         {

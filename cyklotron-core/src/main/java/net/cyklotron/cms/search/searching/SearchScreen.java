@@ -14,6 +14,7 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
@@ -183,9 +184,11 @@ public class SearchScreen
         {
             ArrayList filters = new ArrayList();
             filters.add(filter);
-            hitsTable = searchHandler.search(coralSession, pools, method, state, filters, parameters, i18nContext);
+
+            TableModel hitsTableModel = searchHandler.search(coralSession, pools, method, state, parameters, i18nContext); 
+            hitsTable = new TableTool(state, filters, hitsTableModel);
         }
-        catch(SearchingException e1)
+        catch(Exception e1)
         {
             throw new ProcessingException("Problem while searching", e1);
         }

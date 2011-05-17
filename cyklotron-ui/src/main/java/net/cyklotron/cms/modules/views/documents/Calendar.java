@@ -14,6 +14,7 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
@@ -262,7 +263,9 @@ public class Calendar
                 }
             }
 
-			TableTool hitsTable = searchHandler.search(coralSession, pools, method, state, filters, parameters, i18nContext);
+            TableModel hitsTableModel = searchHandler.search(coralSession, pools, method, state, parameters, i18nContext); 
+            TableTool hitsTable = new TableTool(state, filters, hitsTableModel);
+			
 			if(hitsTable == null)
 			{
 				hitsTable = new TableTool(state, null, new EmptyTableModel());
