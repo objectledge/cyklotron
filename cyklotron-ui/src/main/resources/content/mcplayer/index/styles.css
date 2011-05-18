@@ -1,0 +1,104 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:0.8em;
+	background-color: #F9F9F9;
+}
+h1 {font-size:1.5em; }
+h2 {font-size:1.3em; }
+h3 {font-size:1.2em; }
+h4 {font-size:1.1em; }
+a:hover {color: #CC0000;}
+a[rel~="external"] {
+	padding: 0 15px 0 0;
+	margin-right: 2px;
+	background: url(/images/icons/external-link.gif) no-repeat right center;
+}
+td {
+	font-size:1em;
+}
+#boundary{
+ border:1px solid #E6E6E6;
+ background-color:#fff;
+ clear:both;
+ padding: 5px 25px 14px 28px;
+ max-width:1200px;
+ margin:1px auto;
+}
+#content{
+ clear:both;
+ padding: 0px 25px 40px 28px;
+ text-align:left;
+}
+#bc {
+height:30px;
+font-size:0.9em;
+margin:0; padding:5px 0px 10px 0px;
+text-align:left;
+border-bottom:1px solid #E6E6E6;
+}
+.homebtn {float:left;margin:0px 15px 0px 0px;}
+#bc ul{
+	margin:0; padding:0;
+	/*clear:right;*/
+}
+#bc li{
+	list-style-type:none;
+	float:left;
+	margin:7px 6px 0px 0px;
+	padding:0px 4px 0px 18px;
+	color: #2D6EB4;
+	font-weight:bold;
+	display:inline;
+	background-image: url(/images/bullet-01.gif);
+    background-repeat:no-repeat;
+	line-height: 14px;
+}
+#bc li a{
+  text-decoration: none;
+  color: #2D6EB4;
+}
+#bc li:hover a
+{
+  color: #CC0000;
+}
+
+#adsenseFooter {
+width:100%;
+text-align:center;
+padding:0px;
+margin:10px 0px 0px 0px;
+}
+#footer {
+clear:both;
+border-top:1px solid #E6E6E6;
+padding: 10px 0px 0px 0px;
+text-align:center;
+font-size: 0.9em;
+}
+/*.content {
+	width: 94%;
+	max-width:1200px;
+	text-align:left;
+}*/
+.content2 {
+	max-width:800px;
+	text-align:left;
+	clear:both;
+}
+
+.code1 { background: #EFEFEF; padding: 0.6em; border: 1px dashed #CCCCCC; font-family:  Verdana, Helvetica, Arial; font-size: 11px; color:#000000; font-weight: normal; text-decoration: none; line-height: 1.4; overflow:auto; }
+.codeinline {
+	/*display: inline;*/
+	background: #EFEFEF;
+	font-family:  Verdana, Helvetica, Arial;
+	/*font-size: 11px;*/
+	color:#000000;
+	font-weight: normal;
+	text-decoration: none;
+	/*line-height: 2.6em;*/
+	padding: 0px 3px 0px 3px;
+}
+.code2 { font-family: Verdana, Helvetica, Arial; font-size: 11px; color: #0000CC; font-weight: bold; text-decoration: none; line-height: 1.4 }
+.code3 { font-family: Verdana, Helvetica, Arial; font-size: 11px; color: #000000; font-weight: bold; text-decoration: none; line-height: 1.4 }
+.userinput { font-family: Verdana, Helvetica, Arial; font-size: 11px; color: #003761; font-weight: bold; text-decoration: none; line-height: 1.4 }
+.filename { font-family: mono, sans-serif; font-size: 12px; color: #001E33; font-weight: bold; text-decoration: none; line-height: 1.4 }

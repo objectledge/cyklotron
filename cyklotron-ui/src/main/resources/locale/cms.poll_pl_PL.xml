@@ -1,0 +1,31 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="EditVoteTemplate">
+    <prefix name="buttons">
+      <prefix name="cancel">
+        <value>Anuluj</value>
+      </prefix>
+      <prefix name="save">
+        <value>Zapisz</value>
+      </prefix>
+    </prefix>
+    <prefix name="labels">
+      <prefix name="contents">
+        <value>Treść</value>
+      </prefix>
+      <prefix name="name">
+        <value>Nazwa</value>
+      </prefix>
+    </prefix>
+    <prefix name="strings">
+      <prefix name="click_to_download">
+        <value>Kliknij aby pobrać</value>
+      </prefix>
+      <prefix name="subtitle_info">
+        <value>Sondaż</value>
+      </prefix>
+      <prefix name="title">
+        <value>EDYCJA SZABLONU DLA SONDAŻU</value>
+      </prefix>
+    </prefix>
+  </prefix>
+</strings>
