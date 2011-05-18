@@ -50,6 +50,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
     private String[] fieldNames;
     private Query query;
     private String textQuery;
+    private String[] acceptedSiteNames;
     
     public CalendarEventsSearchMethod(
         SearchService searchService,
@@ -77,7 +78,37 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         this(searchService, parameters, locale, log, startDate, endDate);
         this.textQuery = textQuery;
     }
-
+    
+    public CalendarEventsSearchMethod(
+        SearchService searchService,
+        Parameters parameters,
+        Locale locale,
+        Logger log,
+        Date startDate,
+        Date endDate, 
+        String textQuery,   
+        String[] acceptedSiteNames)
+    {
+        this(searchService, parameters, locale, log, startDate, endDate);
+        this.acceptedSiteNames = acceptedSiteNames;
+    }
+    
+    public CalendarEventsSearchMethod(SearchService searchService, Parameters parameters, Locale locale, CalendarEventsSearchParameters searchParameters, Logger log)
+    {
+        super(searchService, parameters, locale);
+        this.startDate = searchParameters.getStartDate();
+        this.endDate = searchParameters.getEndDate();
+        this.textQuery = searchParameters.getTextQuery();
+        if(searchParameters.getCategoryQuery() != null)
+        {
+            this.acceptedSiteNames = searchParameters.getCategoryQuery().getAcceptedSiteNames();
+        }
+        else
+        {
+            this.acceptedSiteNames = null;
+        }
+    }
+    
     @Override
     public Query getQuery(CoralSession coralSession)
     throws Exception
@@ -126,13 +157,14 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         if(query == null)
         {
             String range = parameters.get("range","ongoing");
-            query = getQuery(coralSession, startDate, endDate, range, textQuery);
+            query = getQuery(coralSession, startDate, endDate, range, textQuery, acceptedSiteNames);
         }
         return query;
     }
 
     
-    private Query getQuery(CoralSession coralSession, Date startDate, Date endDate, String range, String textQuery)
+    private Query getQuery(CoralSession coralSession, Date startDate, Date endDate, String range,
+        String textQuery, String[] acceptedSiteNames)
         throws Exception
     {
         Analyzer analyzer = searchService.getAnalyzer(locale);
@@ -189,6 +221,18 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
 
         aQuery.add(new BooleanClause(new TermQuery(new Term("titleCalendar",
             DocumentNodeResource.EMPTY_TITLE)), BooleanClause.Occur.MUST_NOT));
+        
+        if(acceptedSiteNames != null)
+        {
+            BooleanQuery sQuery = new BooleanQuery();
+            for(String siteName : acceptedSiteNames)
+            {
+                sQuery.add(new BooleanClause(new TermQuery(new Term(
+                    SearchConstants.FIELD_SITE_NAME, siteName)), BooleanClause.Occur.SHOULD));
+            }
+            aQuery.add(new BooleanClause(sQuery, BooleanClause.Occur.MUST));
+        }
+
         return aQuery;
     }
 
