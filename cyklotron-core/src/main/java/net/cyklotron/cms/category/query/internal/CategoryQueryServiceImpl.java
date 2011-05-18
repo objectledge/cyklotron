@@ -26,6 +26,8 @@ import net.cyklotron.cms.category.query.CategoryResolver;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
+import bak.pcj.set.LongSet;
+
 /**
  * Implementation of Category Query Service.
  *
@@ -222,7 +224,7 @@ public class CategoryQueryServiceImpl
 		return new Resource[0];
 	}
 
-    public Resource[] forwardQuery(CoralSession coralSession, String query, Set idSet) throws Exception
+    public Resource[] forwardQuery(CoralSession coralSession, String query, LongSet idSet) throws Exception
     {
         if(query != null && query.length() > 0)
         {

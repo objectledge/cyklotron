@@ -32,6 +32,7 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.coral.util.PrimitiveCollections;
 import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
 import org.objectledge.parameters.DefaultParameters;
@@ -852,13 +853,11 @@ public class StructureServiceImpl
      * @retunrs all documents have validityStart at or after the specified date.
      * @throws StructureException
      */
-    public Set<Long> getDocumentsValidAtOrAfter(Date date, CoralSession coralSession)
+    public LongSet getDocumentsValidAtOrAfter(Date date, CoralSession coralSession)
         throws StructureException
     {
-        @SuppressWarnings("unchecked")
-        Set<Long> adapter = new LongSetToSetAdapter(getDocumentsValidAtOrAfterFromCache(date,
+        return PrimitiveCollections.unmodifiableLongSet(getDocumentsValidAtOrAfterFromCache(date,
             coralSession));
-        return adapter;
     }
 
     private boolean validityStartCacheLoaded = false;

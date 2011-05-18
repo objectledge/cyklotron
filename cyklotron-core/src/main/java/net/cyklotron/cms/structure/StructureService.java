@@ -14,6 +14,8 @@ import net.cyklotron.cms.documents.DocumentAliasResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.site.SiteResource;
 
+import bak.pcj.set.LongSet;
+
 /**
  *
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
@@ -329,6 +331,6 @@ public interface StructureService
      * @retunrs all documents have validityStart at or after the specified date.
      * @throws StructureException
      */
-    public Set<Long> getDocumentsValidAtOrAfter(Date date, CoralSession coralSession)
+    public LongSet getDocumentsValidAtOrAfter(Date date, CoralSession coralSession)
         throws StructureException;
 }

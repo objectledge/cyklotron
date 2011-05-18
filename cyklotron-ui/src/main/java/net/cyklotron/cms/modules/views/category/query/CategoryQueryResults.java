@@ -36,6 +36,8 @@ import net.cyklotron.cms.structure.ComponentDataCacheService;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
 
+import bak.pcj.set.LongSet;
+
 /**
  * Category Query Resutls screen.
  * 
@@ -172,7 +174,7 @@ public class CategoryQueryResults
         throws Exception
     {
         String query = resList.getQuery(coralSession, config);
-        Set idSet = resList.getIdSet(coralSession, config);
+        LongSet idSet = resList.getIdSet(coralSession, config);
         if(idSet != null)
         {
             return categoryQueryService.forwardQuery(coralSession, query, idSet);

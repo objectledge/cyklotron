@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
@@ -38,6 +37,9 @@ import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
+
+import bak.pcj.set.LongOpenHashSet;
+import bak.pcj.set.LongSet;
 
 /**
  *
@@ -80,7 +82,7 @@ public class EditorialTasks
         httpContext.setSessionAttribute("cms.structure.EditorialTasks.filter.offset", offset);
 
         SiteResource site = getSite();
-        HashSet<Long> classifiedNodes = new HashSet<Long>();
+        LongSet classifiedNodes = new LongOpenHashSet();
         boolean showUnclassified = structureService.isShowUnclassifiedNodes();
         if(showUnclassified)
         {

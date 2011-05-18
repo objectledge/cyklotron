@@ -32,6 +32,8 @@ import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.ComponentDataCacheService;
 import net.cyklotron.cms.structure.StructureService;
 
+import bak.pcj.set.LongSet;
+
 /**
  * Base component for displaying lists of resources assigned to queried categories.
  * 
@@ -175,7 +177,7 @@ public abstract class BaseResourceList
     {
         // get resources based on category query
         String query = resList.getQuery(coralSession, config);
-        Set idSet = resList.getIdSet(coralSession, config);
+        LongSet idSet = resList.getIdSet(coralSession, config);
         try
         {
             if(idSet != null)

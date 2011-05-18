@@ -1,7 +1,6 @@
 package net.cyklotron.cms.category.components;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -22,6 +21,8 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.util.CmsResourceClassFilter;
 import net.cyklotron.cms.util.CmsResourceListTableModel;
 import net.cyklotron.cms.util.ProtectedValidityViewFilter;
+
+import bak.pcj.set.LongSet;
 
 /**
  * Class which hold basic logic for component for displaying lists of resources assigned to
@@ -125,7 +126,7 @@ public abstract class BaseResourceList
 
     /** Return a filterig id set for this resource list component. 
      * @param coralSession */
-    public Set getIdSet(CoralSession coralSession, BaseResourceListConfiguration config)
+    public LongSet getIdSet(CoralSession coralSession, BaseResourceListConfiguration config)
         throws ProcessingException
     {
         return null;

@@ -25,6 +25,8 @@ import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
 
+import bak.pcj.set.LongSet;
+
 /**
  * This class contains logic of component which displays lists of documents assigned
  * to queried categories.
@@ -69,7 +71,7 @@ extends ResourceList
         return null;
     }
     
-    public Set<Long> getIdSet(CoralSession coralSession, BaseResourceListConfiguration config)
+    public LongSet getIdSet(CoralSession coralSession, BaseResourceListConfiguration config)
         throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);

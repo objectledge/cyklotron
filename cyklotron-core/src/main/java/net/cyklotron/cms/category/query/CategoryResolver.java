@@ -12,6 +12,9 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
 
+import bak.pcj.set.LongOpenHashSet;
+import bak.pcj.set.LongSet;
+
 
 public class CategoryResolver
     implements ResourceIdentifierResolver
@@ -42,14 +45,14 @@ public class CategoryResolver
      * @param identifier string representing resource indentifier
      * @return ids of resources
      */
-    public Set<Long> resolveIdentifier(String identifier)
+    public LongSet resolveIdentifier(String identifier)
     {
 		CategoryResource category = resolveCategoryIdentifier(identifier);
         CategoryResource[] categories = categoryService.getSubCategories(coralSessionFactory.getCurrentSession(), category, true);
-        Set<Long> ids = new HashSet<Long>(categories.length);
+        LongSet ids = new LongOpenHashSet(categories.length);
         for (int i = 0; i < categories.length; i++)
         {
-            ids.add(categories[i].getIdObject());
+            ids.add(categories[i].getId());
         }
         return ids;
     }

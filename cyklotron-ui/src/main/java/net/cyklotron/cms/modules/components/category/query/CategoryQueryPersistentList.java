@@ -41,6 +41,8 @@ import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.ComponentDataCacheService;
 import net.cyklotron.cms.structure.StructureService;
 
+import bak.pcj.set.LongSet;
+
 /**
  * Category Query Persistent List component.
  * 
@@ -279,7 +281,7 @@ public class CategoryQueryPersistentList
         throws Exception
     {
         String query = resList.getQuery(coralSession, config);
-        Set idSet = resList.getIdSet(coralSession, config);
+        LongSet idSet = resList.getIdSet(coralSession, config);
         if(idSet != null)
         {
             return categoryQueryService.forwardQuery(coralSession, query, idSet);

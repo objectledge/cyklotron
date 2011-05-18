@@ -27,6 +27,8 @@ import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
 
+import bak.pcj.set.LongSet;
+
 /**
  * Configuration screen for HoldingResourceList component.
  * 
@@ -66,7 +68,7 @@ public class HoldingResourceListComponentConf extends BaseResourceListComponentC
 		// get resources based on category query
 		Resource[] resources = null;
 		String query = resList.getQuery(coralSession,  config);
-        Set idSet = resList.getIdSet(coralSession, config);
+        LongSet idSet = resList.getIdSet(coralSession, config);
         try
         {
             if(idSet != null)

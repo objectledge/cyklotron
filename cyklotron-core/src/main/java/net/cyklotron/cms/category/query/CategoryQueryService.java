@@ -1,15 +1,15 @@
 package net.cyklotron.cms.category.query;
 
 import java.util.Map;
-import java.util.Set;
 
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 
-import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+
+import bak.pcj.set.LongSet;
 
 /**
  * This service manages and executes category queries.
@@ -128,7 +128,7 @@ public interface CategoryQueryService
     public Resource[] forwardQuery(CoralSession coralSession, String query)
         throws Exception;
 
-    public Resource[] forwardQuery(CoralSession coralSession, String query, Set idSet)
+    public Resource[] forwardQuery(CoralSession coralSession, String query, LongSet idSet)
         throws Exception;
 
     //public Resource[] reverseQuery(CoralSession coralSession, String query)
