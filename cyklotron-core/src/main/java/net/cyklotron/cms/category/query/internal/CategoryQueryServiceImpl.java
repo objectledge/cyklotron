@@ -240,6 +240,12 @@ public class CategoryQueryServiceImpl
         }
         return new Resource[0];
     }
+    
+    public LongSet forwardQueryIds(CoralSession coralSession, String query, LongSet idSet)
+        throws Exception
+    {
+        return coralSession.getRelationQuery().queryIds(query, getCategoryResolver(), idSet);
+    }    
 
 	private CategoryResolver resolver;
 

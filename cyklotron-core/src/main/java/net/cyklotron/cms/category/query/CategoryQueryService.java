@@ -130,6 +130,10 @@ public interface CategoryQueryService
 
     public Resource[] forwardQuery(CoralSession coralSession, String query, LongSet idSet)
         throws Exception;
+    
+    public LongSet forwardQueryIds(CoralSession coralSession, String query, LongSet idSet)
+        throws Exception;
+
 
     //public Resource[] reverseQuery(CoralSession coralSession, String query)
     //    throws Exception;
