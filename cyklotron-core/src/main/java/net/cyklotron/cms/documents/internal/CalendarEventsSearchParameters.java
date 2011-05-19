@@ -1,6 +1,8 @@
 package net.cyklotron.cms.documents.internal;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 
 import net.cyklotron.cms.category.query.CategoryQueryResource;
@@ -8,37 +10,58 @@ import net.cyklotron.cms.search.PoolResource;
 
 public class CalendarEventsSearchParameters
 {
-    private final Date startDate;
+    private Date startDate;
 
-    private final Date endDate;
+    private Date endDate;
 
-    private final String range;
+    private String range;
 
-    private final String textQuery;
+    private String textQuery;
 
-    private final String textQueryField;
+    private String textQueryField;
 
-    private final CategoryQueryResource categoryQuery;
+    private CategoryQueryResource categoryQuery;
     
-    private final Set<PoolResource> indexPools;
+    private Set<PoolResource> indexPools;
 
     public Set<PoolResource> getIndexPools()
     {
         return indexPools;
     }
 
-    public CalendarEventsSearchParameters(Date startDate, Date endDate, String range, String textQuery,
-        String textQueryField, CategoryQueryResource categoryQuery, Set<PoolResource> indexPools)
+    public CalendarEventsSearchParameters(int year, int month, int day, int offset, Date now, Locale locale, Set<PoolResource> indexPools)
     {
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.range = range;
-        this.textQuery = textQuery;
-        this.textQueryField = textQueryField;
-        this.categoryQuery = categoryQuery;
+        Calendar calendar = Calendar.getInstance(locale);
+        
+        calendar.setTime(now);
+        calendar.set(java.util.Calendar.DAY_OF_MONTH, day);
+        calendar.set(java.util.Calendar.MONTH, month - 1);
+        calendar.set(java.util.Calendar.YEAR, year);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);        
+        startDate = calendar.getTime();
+        
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.add(Calendar.DAY_OF_MONTH, offset);
+        endDate = calendar.getTime();
+        
         this.indexPools = indexPools;
     }
-
+        
+    public void setTextQuery(String textQuery, String textQueryField)
+    {
+        this.textQuery = textQuery;
+        this.textQueryField = textQueryField;
+    }
+    
+    public void setCategoryQuery(CategoryQueryResource categoryQuery)
+    {
+        this.categoryQuery = categoryQuery;
+    }
+    
     public Date getStartDate()
     {
         return startDate;

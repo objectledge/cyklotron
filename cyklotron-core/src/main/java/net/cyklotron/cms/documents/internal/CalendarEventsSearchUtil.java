@@ -1,5 +1,8 @@
 package net.cyklotron.cms.documents.internal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -8,13 +11,13 @@ import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableRow;
-import org.objectledge.table.TableRowSet;
 import org.objectledge.table.TableState;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryException;
+import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.searching.SearchHandler;
 import net.cyklotron.cms.search.searching.SearchHit;
 import net.cyklotron.cms.search.searching.SearchingException;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
@@ -33,12 +36,16 @@ public class CalendarEventsSearchUtil
 
     private final CmsDataFactory cmsDataFactory;
 
+    private final CategoryQueryService categoryQueryService;
+
     public CalendarEventsSearchUtil(SearchService searchService,
-        IntegrationService integrationService, CmsDataFactory cmsDataFactory, Logger logger)
+        IntegrationService integrationService, CmsDataFactory cmsDataFactory,
+        CategoryQueryService catetoryQueryService, Logger logger)
     {
         this.searchService = searchService;
         this.integrationService = integrationService;
         this.cmsDataFactory = cmsDataFactory;
+        this.categoryQueryService = catetoryQueryService;
         this.logger = logger;
     }
 
@@ -49,28 +56,52 @@ public class CalendarEventsSearchUtil
         CalendarEventsSearchMethod method = new CalendarEventsSearchMethod(searchService,
             parameters, i18nContext.getLocale(), searchParameters, logger);
 
-        SearchHandler<LuceneSearchHit> searchHandler = new LuceneSearchHandler(context, searchService,
+        LuceneSearchHandler searchHandler = new LuceneSearchHandler(context, searchService,
             integrationService, cmsDataFactory);
 
-        TableState allHits = new TableState("<local>", -1);
-        allHits.setPageSize(-1);
-        
         Resource[] pools = searchParameters.getIndexPools().toArray(
             new Resource[searchParameters.getIndexPools().size()]);
-        TableModel<LuceneSearchHit> hitsTableModel = searchHandler.search(coralSession, pools, method,
-            allHits, parameters, i18nContext);
-        
-        TableRow<LuceneSearchHit>[] hits = hitsTableModel.getRowSet(allHits, null).getRows();
-        LongSet docIds = new LongOpenHashSet(hits.length);
-        for(TableRow<LuceneSearchHit> hit : hits)
-        {
-            docIds.add(hit.getObject().getId());
-        }
+        TableModel<LuceneSearchHit> hitsTableModel = searchHandler.search(coralSession, pools,
+            method, null, parameters, i18nContext);
 
-        // run category query with docIds initial set
-        
-        // intersect lucene search results wiht category query results
-        
-        return hitsTableModel;
+        if(searchParameters.getCategoryQuery() == null)
+        {
+            return hitsTableModel;
+        }
+        else
+        {
+            TableState allHits = new TableState("<local>", -1);
+            allHits.setPageSize(-1);
+
+            TableRow<LuceneSearchHit>[] rows = hitsTableModel.getRowSet(allHits, null).getRows();
+            LongSet docIds = new LongOpenHashSet(rows.length);
+            for(TableRow<LuceneSearchHit> row : rows)
+            {
+                docIds.add(row.getObject().getId());
+            }
+
+            try
+            {
+                // run category query, limited to document set returned by lucene search
+                docIds = categoryQueryService.forwardQueryIds(coralSession, searchParameters
+                    .getCategoryQuery().getQuery(), docIds);
+
+                // retain only those documents present in category query results
+                List<LuceneSearchHit> filteredHits = new ArrayList<LuceneSearchHit>(docIds.size());
+                for(TableRow<LuceneSearchHit> row : rows)
+                {
+                    if(docIds.contains(row.getObject().getId()))
+                    {
+                        filteredHits.add(row.getObject());
+                    }
+                }
+
+                return searchHandler.hitsTableModel(filteredHits, coralSession);
+            }
+            catch(CategoryQueryException e)
+            {
+                throw new SearchingException("category query failed", e);
+            }
+        }
     }
 }
