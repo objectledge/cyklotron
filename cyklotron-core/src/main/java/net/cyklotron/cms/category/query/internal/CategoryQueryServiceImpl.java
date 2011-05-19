@@ -7,6 +7,7 @@ import java.util.Set;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.CoralRelationQuery;
+import org.objectledge.coral.relation.MalformedRelationQueryException;
 import org.objectledge.coral.relation.query.parser.TokenMgrError;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
@@ -14,6 +15,7 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
+import org.objectledge.coral.util.PrimitiveCollections;
 
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
@@ -207,24 +209,26 @@ public class CategoryQueryServiceImpl
 
     // queries /////////////////////////////////////////////////////////////////////////
 
-	public Resource[] forwardQuery(CoralSession coralSession, String query) throws Exception
-	{
-		if(query != null && query.length() > 0)
-		{
-		    CoralRelationQuery crq = coralSession.getRelationQuery();
+    public Resource[] forwardQuery(CoralSession coralSession, String query)
+        throws CategoryQueryException
+    {
+        if(query != null && query.length() > 0)
+        {
+            CoralRelationQuery crq = coralSession.getRelationQuery();
             try
             {
                 return crq.query(query, getCategoryResolver());
             }
-            catch(TokenMgrError e)
+            catch(Exception e)
             {
-                throw new CategoryQueryException("Parser exception: ", e);
+                throw new CategoryQueryException("failed to execute query", e);
             }
-		}
-		return new Resource[0];
-	}
+        }
+        return new Resource[0];
+    }
 
-    public Resource[] forwardQuery(CoralSession coralSession, String query, LongSet idSet) throws Exception
+    public Resource[] forwardQuery(CoralSession coralSession, String query, LongSet idSet)
+        throws CategoryQueryException
     {
         if(query != null && query.length() > 0)
         {
@@ -233,19 +237,30 @@ public class CategoryQueryServiceImpl
             {
                 return crq.query(query, getCategoryResolver(), idSet);
             }
-            catch(TokenMgrError e)
+            catch(Exception e)
             {
-                throw new CategoryQueryException("Parser exception: ", e);
+                throw new CategoryQueryException("failed to execute query", e);
             }
         }
         return new Resource[0];
     }
-    
+
     public LongSet forwardQueryIds(CoralSession coralSession, String query, LongSet idSet)
-        throws Exception
+        throws CategoryQueryException
     {
-        return coralSession.getRelationQuery().queryIds(query, getCategoryResolver(), idSet);
-    }    
+        if(query != null && query.length() > 0)
+        {
+            try
+            {
+                return coralSession.getRelationQuery().queryIds(query, getCategoryResolver(), idSet);
+            }
+            catch(Exception e)
+            {
+                throw new CategoryQueryException("failed to execute query", e);
+            }            
+        }
+        return PrimitiveCollections.EMPTY_LONG_SET;
+    }
 
 	private CategoryResolver resolver;
 
