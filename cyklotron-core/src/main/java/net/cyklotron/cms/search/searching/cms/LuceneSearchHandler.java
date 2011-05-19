@@ -65,8 +65,6 @@ public class LuceneSearchHandler implements SearchHandler<LuceneSearchHit>
         SearchMethod method, TableState state, Parameters parameters, I18nContext i18nContext)
         throws SearchingException
     {
-        Subject subject = coralSession.getUserSubject();
-        
         // get the query
         Query query = null;
         try
@@ -102,21 +100,11 @@ public class LuceneSearchHandler implements SearchHandler<LuceneSearchHit>
         
         // search
         Searcher searcher = null;
-        TableTool<LuceneSearchHit> tool = null;
+        List<LuceneSearchHit> hits;
         try
         {
-            // prepare link tool
-            TemplatingContext tContext = (TemplatingContext)
-                context.getAttribute(TemplatingContext.class);
-            CmsLinkTool link = (CmsLinkTool)tContext.get("link");
-            link = (CmsLinkTool)(link.unsetAction().unsetView());
-
-            // perform searching
-            searcher = searchService.getSearchingFacility().getSearcher(pools, subject);
-            List<LuceneSearchHit> hits = getLuceneSearchHits(searcher, query, sort);
-            AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
-            TableModel<LuceneSearchHit> model = new HitsTableModel<LuceneSearchHit>(context, hits, this, link, subject, authContext.isUserAuthenticated());
-            return model;
+            searcher = searchService.getSearchingFacility().getSearcher(pools, coralSession.getUserSubject());
+            hits = getLuceneSearchHits(searcher, query, sort);
         }
         catch(SearchException e)
         {
@@ -134,6 +122,23 @@ public class LuceneSearchHandler implements SearchHandler<LuceneSearchHit>
         {
             searchService.getSearchingFacility().returnSearcher(searcher);
         }
+        TableModel<LuceneSearchHit> model = hitsTableModel(hits, coralSession);
+        return model;
+    }
+
+    public TableModel<LuceneSearchHit> hitsTableModel(List<LuceneSearchHit> hits,
+        CoralSession coralSession)
+    {
+        // prepare link tool
+        TemplatingContext tContext = (TemplatingContext)
+        context.getAttribute(TemplatingContext.class);
+        CmsLinkTool link = (CmsLinkTool)tContext.get("link");
+        link = (CmsLinkTool)(link.unsetAction().unsetView());
+        
+        Subject subject = coralSession.getUserSubject();
+        AuthenticationContext authContext = AuthenticationContext.getAuthenticationContext(context);
+        TableModel<LuceneSearchHit> model = new HitsTableModel<LuceneSearchHit>(context, hits, this, link, subject, authContext.isUserAuthenticated());
+        return model;
     }
 
     List<LuceneSearchHit> getLuceneSearchHits(Searcher searcher, Query query, Sort sort)
