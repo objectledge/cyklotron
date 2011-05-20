@@ -183,7 +183,7 @@ public class CalendarEvents
             }
 
             TableModel<LuceneSearchHit> hitsTableModel = searchUtil.search(searchParameters,
-                context, parameters, i18nContext, coralSession);
+                false, context, parameters, i18nContext, coralSession);
 
             TableState state = tableStateManager.getState(context,
                 "cms.documents.calendar.events.results");

@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
@@ -26,6 +27,7 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.search.PoolResource;
 import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.searching.SearchMethod;
 import net.cyklotron.cms.search.searching.SearchingException;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
@@ -41,17 +43,21 @@ public class CalendarSearchService
 
     private final CategoryQueryService categoryQueryService;
 
+    private final Logger logger;
+
     public CalendarSearchService(SearchService searchService,
         IntegrationService integrationService, CmsDataFactory cmsDataFactory,
-        CategoryQueryService catetoryQueryService)
+        CategoryQueryService catetoryQueryService, Logger logger)
     {
         this.searchService = searchService;
         this.integrationService = integrationService;
         this.cmsDataFactory = cmsDataFactory;
         this.categoryQueryService = catetoryQueryService;
+        this.logger = logger;
     }
-    
-    public Set<PoolResource> searchPools(Parameters config, CoralSession coralSession, CmsData cmsData)
+
+    public Set<PoolResource> searchPools(Parameters config, CoralSession coralSession,
+        CmsData cmsData)
         throws SearchException, EntityDoesNotExistException
     {
         Set<PoolResource> pools = new HashSet<PoolResource>();
@@ -77,11 +83,21 @@ public class CalendarSearchService
     }
 
     public TableModel<LuceneSearchHit> search(CalendarSearchParameters searchParameters,
-        Context context, Parameters parameters, I18nContext i18nContext, CoralSession coralSession)
+        boolean useLegacyMethod, Context context, Parameters parameters, I18nContext i18nContext,
+        CoralSession coralSession)
         throws SearchingException
     {
-        CalendarEventsSearchMethod method = new CalendarEventsSearchMethod(searchService,
-            parameters, i18nContext.getLocale(), searchParameters);
+        SearchMethod method;
+        if(useLegacyMethod)
+        {
+            method = new CalendarSearchMethod(searchService, parameters, i18nContext.getLocale(),
+                logger, searchParameters.getStartDate(), searchParameters.getEndDate());
+        }
+        else
+        {
+            method = new CalendarEventsSearchMethod(searchService, parameters,
+                i18nContext.getLocale(), searchParameters);
+        }
 
         LuceneSearchHandler searchHandler = new LuceneSearchHandler(context, searchService,
             integrationService, cmsDataFactory);
