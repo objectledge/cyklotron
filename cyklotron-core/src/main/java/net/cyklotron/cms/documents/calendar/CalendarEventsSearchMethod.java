@@ -1,4 +1,4 @@
-package net.cyklotron.cms.documents.internal;
+package net.cyklotron.cms.documents.calendar;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -86,7 +86,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         this.acceptedSiteNames = acceptedSiteNames;
     }
     
-    public CalendarEventsSearchMethod(SearchService searchService, Parameters parameters, Locale locale, CalendarEventsSearchParameters searchParameters)
+    public CalendarEventsSearchMethod(SearchService searchService, Parameters parameters, Locale locale, CalendarSearchParameters searchParameters)
     {
         super(searchService, parameters, locale);
         this.startDate = searchParameters.getStartDate();

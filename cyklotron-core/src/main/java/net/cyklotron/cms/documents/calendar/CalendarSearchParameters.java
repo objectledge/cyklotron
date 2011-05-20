@@ -1,4 +1,4 @@
-package net.cyklotron.cms.documents.internal;
+package net.cyklotron.cms.documents.calendar;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -8,7 +8,7 @@ import java.util.Set;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.search.PoolResource;
 
-public class CalendarEventsSearchParameters
+public class CalendarSearchParameters
 {
     private int startDay;
 
@@ -46,7 +46,7 @@ public class CalendarEventsSearchParameters
         return calendar;
     }
 
-    private CalendarEventsSearchParameters(Calendar calendar, Set<PoolResource> indexPools)
+    private CalendarSearchParameters(Calendar calendar, Set<PoolResource> indexPools)
     {
         this.startYear = calendar.get(java.util.Calendar.YEAR);
         this.startMonth = calendar.get(java.util.Calendar.MONTH) + 1;
@@ -55,7 +55,7 @@ public class CalendarEventsSearchParameters
         this.indexPools = indexPools;
     }
 
-    private CalendarEventsSearchParameters(Calendar calendar, int offset,
+    private CalendarSearchParameters(Calendar calendar, int offset,
         Set<PoolResource> indexPools)
     {
         this(calendar, indexPools);
@@ -80,7 +80,7 @@ public class CalendarEventsSearchParameters
      * endOffset = 0 means one full day.
      * </p>
      */
-    public CalendarEventsSearchParameters(Date startDay, int endOffset, Locale locale,
+    public CalendarSearchParameters(Date startDay, int endOffset, Locale locale,
         Set<PoolResource> indexPools)
     {
         this(calendar(startDay, locale), endOffset, indexPools);
@@ -94,13 +94,13 @@ public class CalendarEventsSearchParameters
      * endOffset = 0 means one full day.
      * </p>
      */
-    public CalendarEventsSearchParameters(int startYear, int startMonth, int startDay,
+    public CalendarSearchParameters(int startYear, int startMonth, int startDay,
         int endOffset, Locale locale, Set<PoolResource> indexPools)
     {
         this(calendar(startYear, startMonth, startDay, locale), endOffset, indexPools);
     }
 
-    private CalendarEventsSearchParameters(Calendar calendar, String period,
+    private CalendarSearchParameters(Calendar calendar, String period,
         Set<PoolResource> indexPools)
     {
         this(calendar, indexPools);
@@ -160,7 +160,7 @@ public class CalendarEventsSearchParameters
      * week may vary according to locale!
      * </p>
      */
-    public CalendarEventsSearchParameters(Date date, String period, Locale locale,
+    public CalendarSearchParameters(Date date, String period, Locale locale,
         Set<PoolResource> indexPools)
     {
         this(calendar(date, locale), period, indexPools);
@@ -177,7 +177,7 @@ public class CalendarEventsSearchParameters
      * week may vary according to locale!
      * </p>
      */
-    public CalendarEventsSearchParameters(int startYear, int startMonth, int startDay,
+    public CalendarSearchParameters(int startYear, int startMonth, int startDay,
         String period, Locale locale, Set<PoolResource> indexPools)
     {
         this(calendar(startYear, startMonth, startDay, locale), period, indexPools);

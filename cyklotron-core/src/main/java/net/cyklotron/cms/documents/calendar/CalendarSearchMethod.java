@@ -1,4 +1,4 @@
-package net.cyklotron.cms.documents.internal;
+package net.cyklotron.cms.documents.calendar;
 
 import java.util.Date;
 import java.util.Locale;

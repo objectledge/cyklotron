@@ -1,4 +1,4 @@
-package net.cyklotron.cms.documents.internal;
+package net.cyklotron.cms.documents.calendar;
 
 import java.io.IOException;
 import java.text.ParseException;

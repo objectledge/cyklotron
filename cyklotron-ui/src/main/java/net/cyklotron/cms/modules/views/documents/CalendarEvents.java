@@ -25,8 +25,8 @@ import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResourceImpl;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.cyklotron.cms.documents.internal.CalendarEventsSearchParameters;
-import net.cyklotron.cms.documents.internal.CalendarEventsSearchUtil;
+import net.cyklotron.cms.documents.calendar.CalendarSearchParameters;
+import net.cyklotron.cms.documents.calendar.CalendarSearchService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.PoolResource;
@@ -55,7 +55,7 @@ public class CalendarEvents
     
     protected CategoryQueryService categoryQueryService;
 
-    private final CalendarEventsSearchUtil searchUtil;
+    private final CalendarSearchService searchUtil;
 
     public CalendarEvents(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
@@ -63,7 +63,7 @@ public class CalendarEvents
         CategoryQueryService categoryQueryService, StyleService styleService,
         SkinService skinService, MVCFinder mvcFinder, TableStateManager tableStateManager,
         SearchService searchService, IntegrationService integrationService,
-        CalendarEventsSearchUtil searchUtil)
+        CalendarSearchService searchUtil)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
@@ -89,18 +89,18 @@ public class CalendarEvents
         {
             Set<PoolResource> indexPools = searchUtil.searchPools(config, coralSession, cmsData);
             
-            CalendarEventsSearchParameters searchParameters;
+            CalendarSearchParameters searchParameters;
             int offset = parameters.getInt("period", 1) - 1; // offset = 0 means one full day
             if(parameters.isDefined("year") && parameters.isDefined("month")
                 && parameters.isDefined("day"))
             {
-                searchParameters = new CalendarEventsSearchParameters(parameters.getInt("year"),
+                searchParameters = new CalendarSearchParameters(parameters.getInt("year"),
                     parameters.getInt("month"), parameters.getInt("day"),
                     offset, i18nContext.getLocale(), indexPools);
             }
             else
             {
-                searchParameters = new CalendarEventsSearchParameters(cmsData.getDate(),
+                searchParameters = new CalendarSearchParameters(cmsData.getDate(),
                     offset, i18nContext.getLocale(), indexPools);
             }
 

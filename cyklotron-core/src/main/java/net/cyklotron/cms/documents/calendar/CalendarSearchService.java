@@ -1,4 +1,4 @@
-package net.cyklotron.cms.documents.internal;
+package net.cyklotron.cms.documents.calendar;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,7 +31,7 @@ import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
 import net.cyklotron.cms.site.SiteResource;
 
-public class CalendarEventsSearchUtil
+public class CalendarSearchService
 {
     private final SearchService searchService;
 
@@ -41,7 +41,7 @@ public class CalendarEventsSearchUtil
 
     private final CategoryQueryService categoryQueryService;
 
-    public CalendarEventsSearchUtil(SearchService searchService,
+    public CalendarSearchService(SearchService searchService,
         IntegrationService integrationService, CmsDataFactory cmsDataFactory,
         CategoryQueryService catetoryQueryService)
     {
@@ -76,7 +76,7 @@ public class CalendarEventsSearchUtil
         return pools;
     }
 
-    public TableModel<LuceneSearchHit> search(CalendarEventsSearchParameters searchParameters,
+    public TableModel<LuceneSearchHit> search(CalendarSearchParameters searchParameters,
         Context context, Parameters parameters, I18nContext i18nContext, CoralSession coralSession)
         throws SearchingException
     {

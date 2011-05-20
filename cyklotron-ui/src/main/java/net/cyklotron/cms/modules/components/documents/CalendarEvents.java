@@ -30,8 +30,8 @@ import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
-import net.cyklotron.cms.documents.internal.CalendarEventsSearchParameters;
-import net.cyklotron.cms.documents.internal.CalendarEventsSearchUtil;
+import net.cyklotron.cms.documents.calendar.CalendarSearchParameters;
+import net.cyklotron.cms.documents.calendar.CalendarSearchService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
 import net.cyklotron.cms.search.PoolResource;
@@ -70,14 +70,14 @@ public class CalendarEvents
 
     private final ComponentDataCacheService componentDataCacheService;
 
-    private final CalendarEventsSearchUtil searchUtil;
+    private final CalendarSearchService searchUtil;
 
     public CalendarEvents(org.objectledge.context.Context context, Logger logger,
         Templating templating, CmsDataFactory cmsDataFactory, SkinService skinService,
         MVCFinder mvcFinder, StructureService structureService, SearchService searchService,
         CacheFactory cacheFactory, IntegrationService integrationService,
         CategoryQueryService categoryQueryService, SiteService siteService,
-        TableStateManager tableStateManager, ComponentDataCacheService componentDataCacheService, CalendarEventsSearchUtil searchUtil)
+        TableStateManager tableStateManager, ComponentDataCacheService componentDataCacheService, CalendarSearchService searchUtil)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
         this.structureService = structureService;
@@ -158,17 +158,17 @@ public class CalendarEvents
         {
             Set<PoolResource> indexPools = searchUtil.searchPools(config, coralSession, cmsData);
 
-            CalendarEventsSearchParameters searchParameters;
+            CalendarSearchParameters searchParameters;
             if(parameters.isDefined("year") && parameters.isDefined("month")
                 && parameters.isDefined("day"))
             {
-                searchParameters = new CalendarEventsSearchParameters(parameters.getInt("year"),
+                searchParameters = new CalendarSearchParameters(parameters.getInt("year"),
                     parameters.getInt("month"), parameters.getInt("day"),
                     config.getInt("offset", 0), i18nContext.getLocale(), indexPools);
             }
             else
             {
-                searchParameters = new CalendarEventsSearchParameters(cmsData.getDate(),
+                searchParameters = new CalendarSearchParameters(cmsData.getDate(),
                     config.getInt("offset", 0), i18nContext.getLocale(), indexPools);
             }
 
