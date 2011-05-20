@@ -366,7 +366,9 @@
 
   <component class-key="net.cyklotron.cms.documents.DocumentService"
              class="net.cyklotron.cms.documents.internal.DocumentServiceImpl"/>
-
+             
+  <component class="net.cyklotron.cms.documents.calendar.CalendarSearchService" />
+             
   <component class-key="net.cyklotron.cms.files.FilesService"
              class="net.cyklotron.cms.files.internal.FilesServiceImpl">
     <parameter/>
