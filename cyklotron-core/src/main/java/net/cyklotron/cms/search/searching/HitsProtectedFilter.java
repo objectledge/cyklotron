@@ -15,7 +15,7 @@ import net.cyklotron.cms.ProtectedResource;
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: HitsProtectedFilter.java,v 1.6 2005-06-15 12:37:24 zwierzem Exp $
  */
-public class HitsProtectedFilter extends BaseHitsFilter
+public class HitsProtectedFilter<T extends SearchHit> extends BaseHitsFilter<T>
 {
     private Subject subject;
     private Date date;

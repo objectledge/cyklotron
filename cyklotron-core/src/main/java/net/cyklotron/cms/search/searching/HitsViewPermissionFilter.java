@@ -12,7 +12,7 @@ import net.cyklotron.cms.ProtectedResource;
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: HitsViewPermissionFilter.java,v 1.6 2005-06-15 12:37:25 zwierzem Exp $
  */
-public class HitsViewPermissionFilter extends BaseHitsFilter
+public class HitsViewPermissionFilter<T extends SearchHit> extends BaseHitsFilter<T>
 {
     private Subject subject;
 

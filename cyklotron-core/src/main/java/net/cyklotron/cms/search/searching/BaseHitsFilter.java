@@ -16,10 +16,10 @@ import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: BaseHitsFilter.java,v 1.7 2007-11-18 21:23:29 rafal Exp $
  */
-public abstract class BaseHitsFilter 
-    implements TableFilter
+public abstract class BaseHitsFilter<T extends SearchHit> 
+    implements TableFilter<T>
 {
-    private HashMap branchAccessCache = new HashMap();
+    private HashMap<String, Boolean> branchAccessCache = new HashMap<String, Boolean>();
 
     protected CoralSession coralSession;
     
@@ -28,9 +28,8 @@ public abstract class BaseHitsFilter
         this.coralSession = coralSession;
     }
 
-    public boolean accept(Object object)
+    public boolean accept(T hit)
     {
-        SearchHit hit = (SearchHit)object;
         if(hit instanceof LuceneSearchHit)
         {
             String branchId = hit.get("branch_id");
@@ -39,15 +38,15 @@ public abstract class BaseHitsFilter
                 try
                 {
                     Resource branch = coralSession.getStore().getResource(Long.parseLong(branchId));
-                    branchAccessCache.put(branchId, new Boolean( checkAccess(branch) ));
+                    branchAccessCache.put(branchId, Boolean.valueOf(checkAccess(branch)));
                 }
                 catch(EntityDoesNotExistException e)
                 {
                     // WARN: Maybe we should log it!!
-                    branchAccessCache.put(branchId, new Boolean(false));
+                    branchAccessCache.put(branchId, Boolean.FALSE);
                 }
             }
-            return ((Boolean)(branchAccessCache.get(branchId))).booleanValue();
+            return branchAccessCache.get(branchId);
         }
         else
         {
