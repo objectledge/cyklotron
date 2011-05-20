@@ -148,7 +148,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         Analyzer analyzer = searchService.getAnalyzer(locale);
         BooleanQuery aQuery = new BooleanQuery();
 
-        if(textQuery.length() > 0)
+        if(textQuery != null && textQuery.length() > 0)
         {
             QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, EXTENDED_FIELD_NAMES,
                 analyzer);
