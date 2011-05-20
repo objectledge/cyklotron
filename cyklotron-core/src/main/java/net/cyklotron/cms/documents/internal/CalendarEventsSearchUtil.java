@@ -1,10 +1,12 @@
 package net.cyklotron.cms.documents.internal;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
@@ -13,24 +15,25 @@ import org.objectledge.table.TableModel;
 import org.objectledge.table.TableRow;
 import org.objectledge.table.TableState;
 
+import bak.pcj.set.LongOpenHashSet;
+import bak.pcj.set.LongSet;
+
+import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryException;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.search.PoolResource;
+import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
-import net.cyklotron.cms.search.searching.SearchHit;
 import net.cyklotron.cms.search.searching.SearchingException;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
-
-import bak.pcj.set.LongOpenHashSet;
-import bak.pcj.set.LongSet;
+import net.cyklotron.cms.site.SiteResource;
 
 public class CalendarEventsSearchUtil
 {
     private final SearchService searchService;
-
-    private final Logger logger;
 
     private final IntegrationService integrationService;
 
@@ -40,21 +43,45 @@ public class CalendarEventsSearchUtil
 
     public CalendarEventsSearchUtil(SearchService searchService,
         IntegrationService integrationService, CmsDataFactory cmsDataFactory,
-        CategoryQueryService catetoryQueryService, Logger logger)
+        CategoryQueryService catetoryQueryService)
     {
         this.searchService = searchService;
         this.integrationService = integrationService;
         this.cmsDataFactory = cmsDataFactory;
         this.categoryQueryService = catetoryQueryService;
-        this.logger = logger;
+    }
+    
+    public Set<PoolResource> searchPools(Parameters config, CoralSession coralSession, CmsData cmsData)
+        throws SearchException, EntityDoesNotExistException
+    {
+        Set<PoolResource> pools = new HashSet<PoolResource>();
+        long indexId = config.getLong("index_id", -1);
+        if(indexId == -1)
+        {
+            SiteResource site = cmsData.getSite();
+            Resource parent = searchService.getPoolsRoot(coralSession, site);
+            for(Resource child : coralSession.getStore().getResource(parent))
+            {
+                if(child instanceof PoolResource)
+                {
+                    pools.add((PoolResource)child);
+                }
+            }
+        }
+        else
+        {
+            Resource index = coralSession.getStore().getResource(indexId);
+            pools.add((PoolResource)index);
+        }
+        return pools;
     }
 
-    public TableModel<? extends SearchHit> search(CalendarEventsSearchParameters searchParameters,
+    public TableModel<LuceneSearchHit> search(CalendarEventsSearchParameters searchParameters,
         Context context, Parameters parameters, I18nContext i18nContext, CoralSession coralSession)
         throws SearchingException
     {
         CalendarEventsSearchMethod method = new CalendarEventsSearchMethod(searchService,
-            parameters, i18nContext.getLocale(), searchParameters, logger);
+            parameters, i18nContext.getLocale(), searchParameters);
 
         LuceneSearchHandler searchHandler = new LuceneSearchHandler(context, searchService,
             integrationService, cmsDataFactory);

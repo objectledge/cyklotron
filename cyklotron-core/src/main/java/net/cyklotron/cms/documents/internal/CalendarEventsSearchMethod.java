@@ -15,15 +15,14 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.FieldCache;
+import org.apache.lucene.search.FieldCache.LongParser;
 import org.apache.lucene.search.FieldComparator;
 import org.apache.lucene.search.FieldComparatorSource;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
-import org.apache.lucene.search.FieldCache.LongParser;
 import org.apache.lucene.util.Version;
-import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableState;
@@ -43,11 +42,9 @@ import net.cyklotron.cms.search.searching.PageableResultsSearchMethod;
  */
 public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
 {
-    private Logger log;
     private Date startDate;
     private Date endDate;
     
-    private String[] fieldNames;
     private Query query;
     private String textQuery;
     private String[] acceptedSiteNames;
@@ -56,26 +53,23 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         SearchService searchService,
         Parameters parameters,
         Locale locale,
-        Logger log,
         Date startDate,
         Date endDate)
     {
         super(searchService, parameters, locale);
         this.startDate = startDate;
         this.endDate = endDate;
-        this.log = log;
     }
     
     public CalendarEventsSearchMethod(
         SearchService searchService,
         Parameters parameters,
         Locale locale,
-        Logger log,
         Date startDate,
         Date endDate, 
         String textQuery)
     {
-        this(searchService, parameters, locale, log, startDate, endDate);
+        this(searchService, parameters, locale, startDate, endDate);
         this.textQuery = textQuery;
     }
     
@@ -83,17 +77,16 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         SearchService searchService,
         Parameters parameters,
         Locale locale,
-        Logger log,
         Date startDate,
         Date endDate, 
         String textQuery,   
         String[] acceptedSiteNames)
     {
-        this(searchService, parameters, locale, log, startDate, endDate);
+        this(searchService, parameters, locale, startDate, endDate);
         this.acceptedSiteNames = acceptedSiteNames;
     }
     
-    public CalendarEventsSearchMethod(SearchService searchService, Parameters parameters, Locale locale, CalendarEventsSearchParameters searchParameters, Logger log)
+    public CalendarEventsSearchMethod(SearchService searchService, Parameters parameters, Locale locale, CalendarEventsSearchParameters searchParameters)
     {
         super(searchService, parameters, locale);
         this.startDate = searchParameters.getStartDate();
@@ -113,7 +106,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
     public Query getQuery(CoralSession coralSession)
     throws Exception
     {
-        return getQuery(coralSession, getFieldNames());
+        return getCachedQuery(coralSession);
     }
 
     @Override
@@ -121,7 +114,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
     {
         try
         {
-            Query query = getQuery(coralSession, getFieldNames());
+            Query query = getCachedQuery(coralSession);
             return query.toString();
         }
         catch(Exception e)
@@ -130,28 +123,13 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         }
     }
 
-    private String[] getFieldNames()
-    {
-        if(fieldNames == null)
-        {
-            fieldNames = DEFAULT_FIELD_NAMES;
-            String qField = parameters.get("field","any");
-            if(!qField.equals("any"))
-            {
-                fieldNames = new String[1];
-                fieldNames[0] = qField;
-            }
-        }
-        return fieldNames;
-    }
-
     @Override
     public void setupTableState(TableState state)
     {
         super.setupTableState(state);
     }
 
-    private Query getQuery(CoralSession coralSession, String[] fieldNames)
+    private Query getCachedQuery(CoralSession coralSession)
        throws Exception
     {
         if(query == null)
@@ -172,7 +150,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
 
         if(textQuery.length() > 0)
         {
-            QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, DEFAULT_FIELD_NAMES,
+            QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, EXTENDED_FIELD_NAMES,
                 analyzer);
             parser.setDefaultOperator(QueryParser.AND_OPERATOR);
             parser.setDateResolution(DateTools.Resolution.SECOND);
@@ -268,7 +246,6 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
     public void storeQueryParameters(TemplatingContext templatingContext)
     {
         super.storeQueryParameters(templatingContext);
-        storeQueryParameter("field", templatingContext);
         storeQueryParameter("range", templatingContext);
     }
     
@@ -346,7 +323,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
           }
 
           @Override
-          public Comparable value(int slot) {
+          public Comparable<?> value(int slot) {
             return Long.valueOf(values[slot]);
           }
         }
