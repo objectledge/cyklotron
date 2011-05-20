@@ -200,7 +200,7 @@ public class CalendarEvents
             int i = 0;
             for(TableRow<LuceneSearchHit> row : rows)
             {
-                searchHits[i] = row.getObject();
+                searchHits[i++] = row.getObject();
             }
             return searchHits;
         }
