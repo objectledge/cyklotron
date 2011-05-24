@@ -38,7 +38,6 @@ import net.cyklotron.cms.search.searching.SearchingException;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.ComponentDataCacheService;
 import net.cyklotron.cms.structure.StructureService;
 
 /**
@@ -119,12 +118,12 @@ public class CalendarEvents
                 searchParameters.setCategoryQuery(categoryQuery);
             }
 
-            TableModel<LuceneSearchHit> hitsTableModel = searchUtil.search(searchParameters, false,
-                context, parameters, i18nContext, coralSession);
-
             TableState state = tableStateManager.getState(context,
                 "cms.documents.components.CalendarEvents/" + cmsData.getNode().getIdString() + "/"
-                    + cmsData.getComponent().getInstanceName());
+                + cmsData.getComponent().getInstanceName());
+
+            TableModel<LuceneSearchHit> hitsTableModel = searchUtil.search(searchParameters, false,
+                context, parameters, state, i18nContext, coralSession);
 
             List<TableFilter<LuceneSearchHit>> filters = new ArrayList<TableFilter<LuceneSearchHit>>();
             TableFilter<LuceneSearchHit> filter = new HitsViewPermissionFilter<LuceneSearchHit>(

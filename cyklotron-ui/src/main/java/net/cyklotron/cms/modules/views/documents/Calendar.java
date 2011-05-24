@@ -139,10 +139,10 @@ public class Calendar
             TableFilter<LuceneSearchHit> filter = new HitsViewPermissionFilter<LuceneSearchHit>(coralSession.getUserSubject(), coralSession);
             filters.add(filter);
             
-            TableState state = tableStateManager.getState(context, "cms.documents.calendar.results."+cmsData.getNode().getIdString());
+            TableState state = tableStateManager.getState(context, "cms.documents.screens.Calendar/"+cmsData.getNode().getIdString());
                     
             TableModel<LuceneSearchHit> hitsTableModel = searchUtil.search(searchParameters,
-                true, context, parameters, i18nContext, coralSession);
+                true, context, parameters, state, i18nContext, coralSession);
             TableTool<LuceneSearchHit> hitsTable = new TableTool<LuceneSearchHit>(state, filters, hitsTableModel);
 
             templatingContext.put("hits_table", hitsTable);

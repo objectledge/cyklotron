@@ -83,8 +83,8 @@ public class CalendarSearchService
     }
 
     public TableModel<LuceneSearchHit> search(CalendarSearchParameters searchParameters,
-        boolean useLegacyMethod, Context context, Parameters parameters, I18nContext i18nContext,
-        CoralSession coralSession)
+        boolean useLegacyMethod, Context context, Parameters parameters, TableState tableState,
+        I18nContext i18nContext, CoralSession coralSession)
         throws SearchingException
     {
         SearchMethod method;
@@ -98,12 +98,15 @@ public class CalendarSearchService
             method = new CalendarEventsSearchMethod(searchService, parameters,
                 i18nContext.getLocale(), searchParameters);
         }
+        
+        method.setupTableState(tableState);
 
         LuceneSearchHandler searchHandler = new LuceneSearchHandler(context, searchService,
             integrationService, cmsDataFactory);
 
         Resource[] pools = searchParameters.getIndexPools().toArray(
             new Resource[searchParameters.getIndexPools().size()]);
+        
         TableModel<LuceneSearchHit> hitsTableModel = searchHandler.search(coralSession, pools,
             method, null, parameters, i18nContext);
 
