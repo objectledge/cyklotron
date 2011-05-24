@@ -94,19 +94,8 @@ public class CalendarEvents
         {
             Set<PoolResource> indexPools = searchUtil.searchPools(config, coralSession, cmsData);
 
-            CalendarSearchParameters searchParameters;
-            if(parameters.isDefined("year") && parameters.isDefined("month")
-                && parameters.isDefined("day"))
-            {
-                searchParameters = new CalendarSearchParameters(parameters.getInt("year"),
-                    parameters.getInt("month"), parameters.getInt("day"),
-                    config.getInt("offset", 0), i18nContext.getLocale(), indexPools);
-            }
-            else
-            {
-                searchParameters = new CalendarSearchParameters(cmsData.getDate(), config.getInt(
+            CalendarSearchParameters searchParameters = new CalendarSearchParameters(cmsData.getDate(), config.getInt(
                     "offset", 0), i18nContext.getLocale(), indexPools);
-            }
 
             String categoryQueryName = config.get("categoryQueryName", "");
             Resource[] queries = coralSession.getStore().getResource(
@@ -123,7 +112,7 @@ public class CalendarEvents
                 + cmsData.getComponent().getInstanceName());
 
             TableModel<LuceneSearchHit> hitsTableModel = searchUtil.search(searchParameters, false,
-                context, parameters, state, i18nContext, coralSession);
+                context, config, state, i18nContext, coralSession);
 
             List<TableFilter<LuceneSearchHit>> filters = new ArrayList<TableFilter<LuceneSearchHit>>();
             TableFilter<LuceneSearchHit> filter = new HitsViewPermissionFilter<LuceneSearchHit>(
