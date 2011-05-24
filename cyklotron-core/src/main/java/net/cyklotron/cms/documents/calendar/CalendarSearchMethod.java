@@ -56,6 +56,7 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         this.startDate = startDate;
         this.endDate = endDate;
         this.log = log;
+        this.textQuery = "";
     }
     
     public CalendarSearchMethod(

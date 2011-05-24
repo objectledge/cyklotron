@@ -92,7 +92,7 @@ public class CalendarSearchService
         if(useLegacyMethod)
         {
             method = new CalendarSearchMethod(searchService, parameters, i18nContext.getLocale(),
-                logger, searchParameters.getStartDate(), searchParameters.getEndDate());
+                logger, searchParameters.getStartDate(), searchParameters.getEndDate(),searchParameters.getTextQuery());
         }
         else
         {

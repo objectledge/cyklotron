@@ -59,6 +59,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         super(searchService, parameters, locale);
         this.startDate = startDate;
         this.endDate = endDate;
+        this.textQuery = "";
     }
     
     public CalendarEventsSearchMethod(
@@ -82,7 +83,7 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         String textQuery,   
         String[] acceptedSiteNames)
     {
-        this(searchService, parameters, locale, startDate, endDate);
+        this(searchService, parameters, locale, startDate, endDate, textQuery);
         this.acceptedSiteNames = acceptedSiteNames;
     }
     
