@@ -155,11 +155,6 @@
             <version>2.1-beta-1</version>
             <configuration>
               <webXml>src/main/webapp/WEB-INF/eclipse-web.xml</webXml>
-              <webResources>
-                <resource>
-                  <directory>src/main/webapp-overlay</directory>
-                </resource>
-              </webResources>
             </configuration>
           </plugin>
         </plugins>
