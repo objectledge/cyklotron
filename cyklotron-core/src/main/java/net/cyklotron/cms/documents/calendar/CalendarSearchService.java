@@ -15,6 +15,7 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableRow;
 import org.objectledge.table.TableState;
+import org.objectledge.templating.TemplatingContext;
 
 import bak.pcj.set.LongOpenHashSet;
 import bak.pcj.set.LongSet;
@@ -84,7 +85,7 @@ public class CalendarSearchService
 
     public TableModel<LuceneSearchHit> search(CalendarSearchParameters searchParameters,
         boolean useLegacyMethod, Context context, Parameters parameters, TableState tableState,
-        I18nContext i18nContext, CoralSession coralSession)
+        I18nContext i18nContext, CoralSession coralSession, TemplatingContext templatingContext)
         throws SearchingException
     {
         SearchMethod method;
@@ -100,6 +101,8 @@ public class CalendarSearchService
         }
         
         method.setupTableState(tableState);
+        String queryString = method.getQueryString(coralSession);
+        templatingContext.put("query", queryString);
 
         LuceneSearchHandler searchHandler = new LuceneSearchHandler(context, searchService,
             integrationService, cmsDataFactory);

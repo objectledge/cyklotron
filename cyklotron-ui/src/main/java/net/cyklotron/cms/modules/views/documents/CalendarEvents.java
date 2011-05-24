@@ -143,7 +143,7 @@ public class CalendarEvents
                 "cms.documents.screens.CalendarEvents/" + cmsData.getNode().getIdString());
 
             TableModel<LuceneSearchHit> hitsTableModel = searchUtil.search(searchParameters, false,
-                context, parameters, state, i18nContext, coralSession);
+                context, parameters, state, i18nContext, coralSession, templatingContext);
             TableTool<LuceneSearchHit> hitsTable = new TableTool<LuceneSearchHit>(state, filters,
                 hitsTableModel);
 

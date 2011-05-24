@@ -112,7 +112,7 @@ public class CalendarEvents
                 + cmsData.getComponent().getInstanceName());
 
             TableModel<LuceneSearchHit> hitsTableModel = searchUtil.search(searchParameters, false,
-                context, config, state, i18nContext, coralSession);
+                context, config, state, i18nContext, coralSession, templatingContext);
 
             List<TableFilter<LuceneSearchHit>> filters = new ArrayList<TableFilter<LuceneSearchHit>>();
             TableFilter<LuceneSearchHit> filter = new HitsViewPermissionFilter<LuceneSearchHit>(
