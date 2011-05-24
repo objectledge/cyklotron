@@ -123,7 +123,7 @@ public class CalendarSearchService
             allHits.setPageSize(-1);
 
             TableRow<LuceneSearchHit>[] rows = hitsTableModel.getRowSet(allHits, null).getRows();
-            LongSet docIds = new LongOpenHashSet(rows.length);
+            LongSet docIds = new LongOpenHashSet();
             for(TableRow<LuceneSearchHit> row : rows)
             {
                 docIds.add(row.getObject().getId());
