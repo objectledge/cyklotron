@@ -48,6 +48,8 @@ import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.spans.SpanFirstQuery;
+import org.apache.lucene.search.spans.SpanTermQuery;
 import org.apache.lucene.util.Version;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
@@ -68,6 +70,8 @@ public class OrganizationsIndex
     private static final int FUZZY_QUERY_PREFIX_LENGTH = 3;
 
     private static final float FUZZY_QUERY_MIN_SIMILARITY = 0.75f;
+    
+    private static final int FUZZY_QUERY_MIN_TERM_LENGTH = 4;
 
     private static final int MAX_RESULTS = 25;
 
@@ -136,12 +140,22 @@ public class OrganizationsIndex
         {
             BooleanQuery query = new BooleanQuery();
             List<Term> terms = analyze("name", name);
+            int i = 0;
             for(Term term : terms)
             {
-                Query fuzzyQuery = new FuzzyQuery(term, FUZZY_QUERY_MIN_SIMILARITY,
-                    FUZZY_QUERY_PREFIX_LENGTH);
-                query.add(fuzzyQuery, BooleanClause.Occur.SHOULD);
-                query.add(new PrefixQuery(term), BooleanClause.Occur.SHOULD);
+				if(FUZZY_QUERY_MIN_TERM_LENGTH < term.text().length())
+				{
+					FuzzyQuery fuzzyQuery = new FuzzyQuery(term,FUZZY_QUERY_MIN_SIMILARITY,FUZZY_QUERY_PREFIX_LENGTH);
+					fuzzyQuery.setBoost((1 - (getSearcher().docFreq(term) / getSearcher().maxDoc()))/10);
+					query.add(fuzzyQuery, BooleanClause.Occur.SHOULD);
+				}
+				SpanFirstQuery spanFirstQuery = new SpanFirstQuery(new SpanTermQuery(term), ++i);
+            	spanFirstQuery.setBoost((terms.size()+1)-i);
+            	query.add(spanFirstQuery, BooleanClause.Occur.SHOULD);
+				
+                PrefixQuery prefixQuery = new PrefixQuery(term);
+                prefixQuery.setBoost(1);
+                query.add(prefixQuery, BooleanClause.Occur.SHOULD);
             }
             Timer timer = new Timer();
             List<Organization> results = results(getSearcher().search(query, null, MAX_RESULTS));
