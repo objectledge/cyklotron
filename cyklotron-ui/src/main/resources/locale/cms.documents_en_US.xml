@@ -64,6 +64,7 @@
             <item name="owner_login">choose owner</item>
             <item name="editing_enabled">allow editing of own document by authors</item>
             <item name="add_document_visual_editor">visual editor in AddDocument screen</item>
+            <item name="clear_org_if_not_match">clear auto-complete data if organization name dose not match</item>
             <item name="add_captcha">add Captcha verification</item>
 		</prefix>
 		<prefix name="buttons">

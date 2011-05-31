@@ -1,6 +1,11 @@
 var acOrganizedByOptions = {
 	minChars : 1,
 	max : 25,
+	autoFocus : true,
+	allowHide : true,
+    clearIfNotMatch : false,
+	mustMatch: false,
+	selectFirst: false,
 	cacheLength: 0,	
 	dataType : "json",
 	parse : function(data) {
@@ -52,14 +57,30 @@ function flushCacheIfEmpty(fields) {
 	}
 }
 
+function clearFields(fields){
+    fields.id.val("");
+    fields.id.attr("rel", "");
+    fields.street.val("");
+    fields.city.val("");
+    fields.postCode.val("");
+    fields.province.val("");
+    flushCacheIfEmpty(fields);
+}
+
 function initOrganizationAutocomplete(fields, jsonOrganizationDataUrl) {
 	fields.name.autocomplete(jsonOrganizationDataUrl, acOrganizedByOptions)
 			.result(function(e, item) {
 				fields.id.val(item.id);
+				fields.id.attr("rel", item.name);
 				fields.street.val(item.street);
 				fields.city.val(item.city);
 				fields.postCode.val(item.postCode);
 				fields.province.val(item.province);
+			}).change(function(e, item) {
+				if (acOrganizedByOptions.clearIfNotMatch
+					&& $(this).val() != fields.id.attr("rel")) {
+					 clearFields(fields);
+					}
 			}); // fill data when complete
 }
 
@@ -204,7 +225,8 @@ function editDocumentEventFields() {
 }
 
 function initProposeDocumentAutocomplete(maxOrgs, jsonOrganizationDataUrl,
-		jsonLocationDataUrl) {
+		jsonLocationDataUrl, clearIfNotMatch) {
+	if(typeof(clearIfNotMatch) != 'undefined'){ acOrganizedByOptions.clearIfNotMatch = clearIfNotMatch;}
 	for(var i = 1; i <= maxOrgs; i++) {
 		var fields = proposeDocumentOrgFields(i);
 			if(typeof fields.name != 'undefined') {
@@ -216,7 +238,8 @@ function initProposeDocumentAutocomplete(maxOrgs, jsonOrganizationDataUrl,
 }
 
 function initEditDocumentAutocomplete(maxOrgs, jsonOrganizationDataUrl,
-		jsonLocationDataUrl) {
+		jsonLocationDataUrl, clearIfNotMatch) {
+	if(typeof(clearIfNotMatch) != 'undefined'){ acOrganizedByOptions.clearIfNotMatch = clearIfNotMatch;}
 	for(var i = 1; i <= maxOrgs; i++) {
 		var fields = editDocumentOrgFields(i);
 			if(typeof fields.name != 'undefined') {

@@ -139,6 +139,8 @@ public class ProposedDocumentData
     private NavigationNodeResource origin;
 
     private boolean addDocumentVisualEditor;
+    
+    private boolean clearOrganizationIfNotMatch;
 
     protected Logger logger;
 
@@ -167,6 +169,7 @@ public class ProposedDocumentData
         attachmentFormatList = Arrays.asList(attachmentsAllowedFormats.toLowerCase().split("\\s+"));
         attachmentDirId = configuration.getLong("attachments_dir_id", -1L);
         addDocumentVisualEditor = configuration.getBoolean("add_document_visual_editor", false);
+        clearOrganizationIfNotMatch = configuration.getBoolean("clear_org_if_not_match", false);
     }
 
     public void fromParameters(Parameters parameters, CoralSession coralSession)
@@ -280,6 +283,7 @@ public class ProposedDocumentData
         }
         templatingContext.put("editorial_note", DocumentMetadataHelper.enc(editorialNote));
         templatingContext.put("add_document_visual_editor", addDocumentVisualEditor);
+        templatingContext.put("clear_org_if_not_match", clearOrganizationIfNotMatch);
     }
 
     public void fromNode(DocumentNodeResource node, CategoryService categoryService,

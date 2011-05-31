@@ -17,7 +17,7 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 <script>  
    jQuery(document).ready(function()
    {
-     initProposeDocumentAutocomplete(5, '$link.view('ngodatabase.JsonOrganizations')', '$link.view('ngodatabase.JsonLocations')');
+     initProposeDocumentAutocomplete(5, '$link.view('ngodatabase.JsonOrganizations')', '$link.view('ngodatabase.JsonLocations')', $clear_org_if_not_match);
    });
      
    function formatUrlFileds()
