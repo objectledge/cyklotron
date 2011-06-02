@@ -157,6 +157,14 @@ public class OrganizationsIndex
                 prefixQuery.setBoost(1);
                 query.add(prefixQuery, BooleanClause.Occur.SHOULD);
             }
+            terms = analyze("city", name);
+			SpanFirstQuery spanFirstQuery = new SpanFirstQuery(new SpanTermQuery(terms.get(terms.size()-1)), 1);
+        	spanFirstQuery.setBoost(1);
+        	query.add(spanFirstQuery, BooleanClause.Occur.SHOULD);
+            PrefixQuery prefixQuery = new PrefixQuery(terms.get(terms.size()-1));
+            prefixQuery.setBoost(1);
+            query.add(prefixQuery, BooleanClause.Occur.SHOULD);
+            
             Timer timer = new Timer();
             Sort sort = new Sort(new SortField[]{SortField.FIELD_SCORE,new SortField("name",SortField.STRING),new SortField("city",SortField.STRING)});
             List<Organization> results = results(getSearcher().search(query, null, MAX_RESULTS, sort));

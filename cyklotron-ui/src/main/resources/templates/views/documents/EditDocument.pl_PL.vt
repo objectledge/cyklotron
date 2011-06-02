@@ -102,7 +102,7 @@ function categorizeDocument(url,docid)
 // organizations / events autocomplete
 jQuery(document).ready(function()
 {
-   initEditDocumentAutocomplete(5, '$link.view('ngodatabase.JsonOrganizations')', '$link.view('ngodatabase.JsonLocations')');
+   initEditDocumentAutocomplete(5, '$link.view('ngodatabase.JsonOrganizations')', '$link.view('ngodatabase.JsonLocations')', true);
 });
 
 // -->
