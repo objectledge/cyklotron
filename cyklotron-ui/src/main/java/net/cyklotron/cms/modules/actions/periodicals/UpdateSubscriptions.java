@@ -131,6 +131,7 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                     EmailConfirmationRequestResource req = periodicalsSubscriptionService
                         .getSubscriptionRequest(coralSession, cookie);
                     email = req.getEmail();
+                    site = getSite(context);
                 }
                 
                 Set selected = new HashSet();
@@ -153,10 +154,6 @@ public class UpdateSubscriptions extends BasePeriodicalsAction
                 {
                     site = CmsTool.getSite((Resource)selected.toArray()[0]);
                 }
-                else
-                {
-                    site = getSite(context);
-                }                
                 
                 EmailPeriodicalResource[] subscribedArray = periodicalsSubscriptionService
                     .getSubscribedEmailPeriodicals(coralSession, site, email);
