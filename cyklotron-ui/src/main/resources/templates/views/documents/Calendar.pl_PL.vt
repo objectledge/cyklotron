@@ -1,0 +1,123 @@
+
+<h1>$node.title</h1>
+
+#result_inline_message('results.search')
+
+<form name="search" method="get" action="$link.set('x',$node.id)" class="searchscreen">
+<table>
+<tr>  
+<td>
+
+<input type="text" name="text_query" />
+	
+#if($source_type.equals("sourceCategories"))
+<select name="category_id_1">
+<option value="-1">---</option>
+#foreach($category in $categories_1)  
+<option value="$category.id" #if($category_id_1 == $category.id) selected="selected" #end>$category.name</option>
+#end
+</select>
+
+<select name="category_id_2">
+<option value="-1">---</option>	  
+#foreach($category in $categories_2)  
+<option value="$category.id" #if($category_id_2 == $category.id) selected="selected" #end>$category.name</option>
+#end
+</select>
+#else
+<select name="query_id">
+<option value="-1">---</option>	  
+#foreach($row in $queries)  
+<option value="$row.id" #if($query_id == $row.id) selected="selected" #end>$row.name</option>
+#end
+</select>
+#end
+
+<select size="1" name="period">
+<option value="daily" #if($period == "daily") selected #end>Widok dzienny</option>
+<option value="weekly" #if($period == "weekly") selected #end>Widok tygodniowy</option>
+<option value="monthly" #if($period == "monthly") selected #end>Widok miesięczny</option>
+</select>
+	  
+<select size="1" name="range">
+<option value="all" #if($range == "all") selected #end>wszystkie</option>
+<option value="in" #if($range == "in") selected #end>zawarte</option>
+<option value="starting" #if($range == "starting") selected #end>rozpoczynające się</option>
+<option value="ending" #if($range == "ending") selected #end>kończące się</option>
+</select>
+	  
+dla daty
+<select name="day">
+#foreach($el in [1..31])
+<option value="$el" #if($el == $day) selected #end>$el</option>
+#end
+</select>
+-
+<select name="month">
+#foreach($el in [1..12])
+<option value="$el" #if($el == $month) selected #end>$el</option>
+#end
+</select>
+-
+<select name="year">
+#foreach($el in [2000..2010])
+<option value="$el" #if($el == $year) selected #end>$el</option>
+#end
+</select>
+<input type="submit" value="Zobacz" name="B1">
+
+</td>     
+</tr>
+
+<tr>
+<td>
+
+Sortowanie wyników
+<select name="sort_field">
+#set($opts = [["według trafności","score"],["według czasu modyfikacji","modification_time"],["według czasu publikacji","validityStart"],["według początku wydarzenia","eventStart"],["według końca wydarzenia","eventEnd"]])
+#options($opts $parametersTool.get('sort_field',"event_start"))
+</select>
+<select name="sort_order">
+#set($opts = [["malejąco","desc"],["rosnąco","asc"]])
+#options($opts $parametersTool.get('sort_order',"desc"))
+</select>
+
+</td>
+</tr>
+  
+</table>
+</form>
+
+<h4>debug:</h4>
+<p>
+Query: $query<br />
+Start: <b>$format_date.format($start_date)</b><br />
+Koniec: <b>$format_date.format($end_date)</b><br />
+</p>
+
+#if($hits_table)
+
+<p>Liczba znalezionych dokumentów: $hits_table.totalRowCount</p>
+
+
+#set($start = $hits_table.pageSize * ($hits_table.currentPage - 1) + 1)
+<ol start="$start">
+#foreach ($row in $hits_table.rows)
+<li>
+<a href="$row.object.url">$row.object.get('titleCalendar')</a>
+<div style="font-size: 80%; color: grey;">
+<p>
+&nbsp;
+#if($row.object.isPlainDate('event_start'))
+od: <b>$format_date.format($row.object.getAsDate('eventStart'))</b>
+#end
+#if($row.object.isPlainDate('event_end'))
+do: <b>$format_date.format($row.object.getAsDate('eventEnd'))</b>
+#end
+</p>
+</div>
+</li>
+#end
+</ol>
+#end
+

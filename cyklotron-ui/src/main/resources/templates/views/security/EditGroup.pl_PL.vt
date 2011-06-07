@@ -1,0 +1,34 @@
+#genericScreenHeader('EDYCJA GRUPY')
+
+#result_inline_message("results.security")
+
+<form name="form1" method="POST" action="$link.view('security.GroupList').action('security.UpdateGroup')">
+<input type="hidden" name="group_id" value="$group.id"/>
+<script language="javascript">
+     function send()
+     {
+         document.form1.submit();
+     }
+</script>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="right">Nazwa</td>
+    <td width="99%">
+      <input type="text" style="width:100%;" name="name" value="$!name"/> <br/>
+      Dozwolone znaki: litery, cyfry, znak podkreślenia i spacja
+    </td>
+  </tr>
+  <tr>
+    <td align="right">Opis</td>
+    <td width="99%"><input type="text" style="width:100%;" name="description" value="$!description"/></td>    
+  </tr>
+  <tr>
+    <td align="right"><input type="checkbox" id="sharingWorkgroup" name="sharingWorkgroup" value="true" #if($sharingWorkgroup)checked#end/></td>
+    <td width="99%"><label for="sharingWorkgroup">Grupa współdzieląca zasoby</label></td>    
+  </tr>  
+</table>
+</form>
+
+#command_bar([["javascript:send();",'Zapisz']])
+
+#genericScreenTrailer()
