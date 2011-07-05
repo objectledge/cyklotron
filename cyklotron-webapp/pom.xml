@@ -73,7 +73,7 @@
     <dependency>
       <groupId>org.objectledge.coral</groupId>
       <artifactId>coral-browser</artifactId>
-      <classifier>classes</classifier>      
+      <classifier>classes</classifier>
     </dependency>
     <dependency>
       <groupId>org.objectledge.coral</groupId>
@@ -146,7 +146,7 @@
             <overlay>
               <!-- cyklotron-webapp -->
             </overlay>
-          </overlays>          
+          </overlays>
         </configuration>
       </plugin>
     </plugins>
@@ -160,7 +160,13 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-war-plugin</artifactId>
             <configuration>
-              <webXml>src/main/webapp/WEB-INF/eclipse-web.xml</webXml>
+              <webResources>
+                <resource>
+                  <!-- override web.xml for development mode -->
+                  <directory>src/main/webapp-eclipse</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </webResources>
             </configuration>
           </plugin>
         </plugins>
