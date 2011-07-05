@@ -24,6 +24,7 @@
     <dependency>
       <groupId>org.cyklotron</groupId>
       <artifactId>cyklotron-ui</artifactId>
+      <classifier>classes</classifier>
     </dependency>
     <dependency>
       <groupId>org.cyklotron</groupId>
@@ -48,11 +49,17 @@
     <dependency>
       <groupId>org.objectledge</groupId>
       <artifactId>ledge-forms</artifactId>
+      <classifier>classes</classifier>
     </dependency>
     <dependency>
       <groupId>org.objectledge</groupId>
       <artifactId>ledge-forms</artifactId>
       <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>org.objectledge</groupId>
+      <artifactId>ledge-web</artifactId>
+      <classifier>classes</classifier>
     </dependency>
     <dependency>
       <groupId>org.objectledge</groupId>
@@ -66,6 +73,7 @@
     <dependency>
       <groupId>org.objectledge.coral</groupId>
       <artifactId>coral-browser</artifactId>
+      <classifier>classes</classifier>      
     </dependency>
     <dependency>
       <groupId>org.objectledge.coral</groupId>

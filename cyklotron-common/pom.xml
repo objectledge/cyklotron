@@ -121,6 +121,7 @@
       <dependency>
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-web</artifactId>
+        <classifier>classes</classifier>
         <version>${versions.ledge}</version>
       </dependency>
       <dependency>
@@ -137,6 +138,7 @@
       <dependency>
         <groupId>org.objectledge</groupId>
         <artifactId>ledge-forms</artifactId>
+        <classifier>classes</classifier>
         <version>${versions.ledge}</version>
       </dependency>
       <dependency>
@@ -168,6 +170,7 @@
       <dependency>
         <groupId>org.objectledge.coral</groupId>
         <artifactId>coral-browser</artifactId>
+        <classifier>classes</classifier>
         <version>${versions.coral}</version>
       </dependency>
       <dependency>
@@ -196,6 +199,7 @@
       <dependency>
         <groupId>org.cyklotron</groupId>
         <artifactId>cyklotron-ui</artifactId>
+        <classifier>classes</classifier>
         <version>${project.version}</version>
       </dependency>
       <dependency>

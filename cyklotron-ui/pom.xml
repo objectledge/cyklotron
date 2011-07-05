@@ -3,7 +3,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.cyklotron</groupId>
   <artifactId>cyklotron-ui</artifactId>
-  <name>Cyklotron Core</name>
+  <name>Cyklotron UI</name>
+  <packaging>war</packaging>
   <parent>
     <artifactId>cyklotron-common</artifactId>
     <groupId>org.cyklotron</groupId>
@@ -23,10 +24,12 @@
     <dependency>
       <groupId>org.objectledge</groupId>
       <artifactId>ledge-web</artifactId>
+      <classifier>classes</classifier>      
     </dependency>
     <dependency>
       <groupId>org.objectledge</groupId>
       <artifactId>ledge-forms</artifactId>
+      <classifier>classes</classifier>      
     </dependency>
     <dependency>
       <groupId>org.objectledge.coral</groupId>
@@ -76,28 +79,22 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.2-beta-5</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.objectledge</groupId>
-            <artifactId>ledge-maven-assemblies</artifactId>
-            <version>${versions.ledge}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <descriptors>
-                <descriptor>content-war.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <webResources>
+            <resource>
+              <directory>src/main/resources</directory>
+              <includes>
+                <include>content/**</include>
+                <include>locale/**</include>
+                <include>templates/**</include>
+              </includes>
+            </resource>
+          </webResources>
+          <attachClasses>true</attachClasses>
+          <classesClassifier /> <!-- due to limitation of maven-war-plugin classifier=classes anyway -->
+          <packagingExcludes>WEB-INF/lib/*.jar,WEB-INF/classes/**</packagingExcludes>
+        </configuration>
       </plugin>
     </plugins>
   </build>
