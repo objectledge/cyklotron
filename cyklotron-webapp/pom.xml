@@ -160,9 +160,11 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-war-plugin</artifactId>
             <configuration>
+              <!-- override web.xml for development mode -->
+              <webXml>src/main/webapp-eclipse/WEB-INF/web.xml</webXml>
+              <!-- workaround for https://issues.sonatype.org/browse/MNGECLIPSE-2357 -->
               <webResources>
                 <resource>
-                  <!-- override web.xml for development mode -->
                   <directory>src/main/webapp-eclipse</directory>
                   <filtering>true</filtering>
                 </resource>
