@@ -8,7 +8,7 @@
 #####################  
 #macro (formtool_htmlarea_visual $field $loopIndex)
 ##
-$pageTool.addScriptLink('fckeditor/fckeditor.js')##
+$pageTool.addScriptLink('ckeditor/ckeditor.js')##
 
 
 
@@ -28,7 +28,7 @@ $!htmlValue
 <script type="text/javascript">
 <!--
 
-var sBasePath = '$jslink.content('fckeditor/')';
+var sBasePath = '$jslink.content('ckeditor/')';
 var oFCKeditor = new FCKeditor( '$field.name' ) ;
 
 var browserUrl = '$link.view('popup.ChooseResource')'; 
