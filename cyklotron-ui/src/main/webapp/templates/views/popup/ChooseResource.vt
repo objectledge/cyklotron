@@ -10,16 +10,23 @@ function fSub(action)
 }
 function SelectFile( fileUrl, fileId )
 {
-window.opener.SetUrl( fileUrl , fileId ) ;
-if( window.opener.SetId )
-{
-  window.opener.SetId (fileId); 
-}   
-window.close() ;
+  if($parametersTool.isDefined('CKEditor') && $parametersTool.isDefined('CKEditorFuncNum')){
+    window.opener.CKEDITOR.tools.callFunction($parametersTool.get('CKEditorFuncNum', '2'), fileUrl);
+  }else{
+    window.opener.SetUrl( fileUrl , fileId ) ;
+    if(window.opener.SetId)
+    {
+       window.opener.SetId(fileId); 
+    }
+  }
+  window.close() ;
 }
 
 //-->
 </script>
+#if($parametersTool.isDefined('CKEditor') && $parametersTool.isDefined('CKEditorFuncNum'))
+  #set($link = $link.set('CKEditor',$parametersTool.get('CKEditor')).set('CKEditorFuncNum',$parametersTool.get('CKEditorFuncNum'))) 
+#end
 
 <div style="float: right;">
 <form name="form3" method="POST" action="$link">
