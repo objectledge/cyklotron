@@ -29,17 +29,16 @@ $!htmlValue
 <!--
 
 var sBasePath = '$jslink.content('ckeditor/')';
-var oFCKeditor = new FCKeditor( '$field.name' ) ;
-
-var browserUrl = '$link.view('popup.ChooseResource')'; 
-oFCKeditor.Config['CustomConfigurationsPath'] = sBasePath + 'cyklotronConfig.js?d=' + ( new Date() * 1 );
-oFCKeditor.Config['EditorAreaCSS'] = '$link.skinResource('style.css')';
-oFCKeditor.Config['ImageBrowserURL'] = browserUrl; 
-oFCKeditor.Config['LinkUploadURL'] = browserUrl; 
-oFCKeditor.Config['LinkBrowserURL'] = browserUrl;
-oFCKeditor.BasePath	= sBasePath ;
-oFCKeditor.Height = '600' ;
-oFCKeditor.ReplaceTextarea() ;
+var oFCKeditor = CKEDITOR.replace('$field.name');
+var browserUrl = '$link.view('popup.ChooseResource')';
+oFCKeditor.config.customConfig = sBasePath + 'cyklotronConfig.js?d=' + ( new Date() * 1 ); 
+oFCKeditor.config.filebrowserImageBrowseUrl = browserUrl;
+oFCKeditor.config.filebrowserUploadUrl = browserUrl;
+oFCKeditor.config.filebrowserBrowseUrl = browserUrl;
+oFCKeditor.BasePath	= sBasePath;
+oFCKeditor.config.height = 600;
+oFCKeditor.config.resize_enabled = false;
+oFCKeditor.config.language = '$i18nContext.getLocale()';
 //-->
 </script>
 
