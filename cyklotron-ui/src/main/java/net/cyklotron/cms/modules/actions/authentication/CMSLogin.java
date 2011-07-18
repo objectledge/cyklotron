@@ -5,6 +5,7 @@ import java.security.Principal;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.AuthenticationException;
+import org.objectledge.authentication.SingleSignOnService;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -23,12 +24,13 @@ public class CMSLogin
     extends BaseAuthenticationAction
 {
     private final SecurityService cmsSecurityService;
+
     private final CoralSessionFactory coralSessionFactory;
 
-    public CMSLogin(Logger logger, UserManager userManager, SecurityService cmsSecurityService,
-        CoralSessionFactory coralSessionFactory)
+    public CMSLogin(UserManager userManager, SingleSignOnService singleSignOnService,
+        SecurityService cmsSecurityService, CoralSessionFactory coralSessionFactory, Logger logger)
     {
-        super(logger, userManager);
+        super(userManager, singleSignOnService, logger);
         this.cmsSecurityService = cmsSecurityService;
         this.coralSessionFactory = coralSessionFactory;
     }
@@ -86,6 +88,8 @@ public class CMSLogin
                 logger.debug("unknown username " + login);
                 principal = null;
             }
+            AuthenticationContext authenticationContext = AuthenticationContext
+                .getAuthenticationContext(context);
             boolean authenticated;
             if(principal == null)
             {
@@ -95,11 +99,15 @@ public class CMSLogin
             else
             {
                 authenticated = true;
-                httpContext.getRequest().getSession().setAttribute(
-                    WebConstants.PRINCIPAL_SESSION_KEY, principal);
+                String domain = httpContext.getRequest().getServerName();
+                if(authenticationContext.isUserAuthenticated())
+                {
+                    Principal previousPrincipal = authenticationContext.getUserPrincipal();
+                    singleSignOnService.logOut(previousPrincipal, domain);                    
+                }
+                httpContext.setSessionAttribute(WebConstants.PRINCIPAL_SESSION_KEY, principal);
+                singleSignOnService.logIn(principal, domain);
             }
-            AuthenticationContext authenticationContext = AuthenticationContext
-                .getAuthenticationContext(context);
             authenticationContext.setUserPrincipal(principal, authenticated);
 
             // Create Coral Subject if necessary
@@ -112,7 +120,7 @@ public class CMSLogin
             finally
             {
                 coralSession.close();
-            }         
+            }
 
             result = authenticated ? "login_successful" : "login_failed";
         }
