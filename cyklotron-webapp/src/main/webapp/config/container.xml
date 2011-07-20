@@ -78,7 +78,9 @@
     <sequence>
       <component class="org.objectledge.coral.security.CoralUserManagementParticipant"/>
     </sequence>
-  </component>             
+  </component>      
+  <component class-key="org.objectledge.authentication.sso.SingleSignOnService"
+             class="org.objectledge.authentication.sso.LocalSingleSignOnService" />      
              
   <component class-key="org.objectledge.templating.Templating"
              class="org.objectledge.templating.velocity.VelocityTemplating"/>
@@ -189,6 +191,7 @@
   <component class="net.cyklotron.util.WorkflowToolFactory"/>
   <component class="org.objectledge.forms.FormToolFactory"/>
   <component class="org.objectledge.web.captcha.CaptchaToolFactory"/>
+  <component class="org.objectledge.authentication.sso.SingleSignOnToolFactory"/>
 
   <component class="org.objectledge.templating.tools.ContextTools">
     <sequence>
@@ -210,6 +213,7 @@
       <parameter class-key="net.cyklotron.util.WorkflowToolFactory"/>      
       <parameter class-key="org.objectledge.forms.FormToolFactory"/>      
       <parameter class-key="org.objectledge.web.captcha.CaptchaToolFactory"/>
+      <parameter class-key="org.objectledge.authentication.sso.SingleSignOnToolFactory"/>
     </sequence>
   </component>      
   <component class="org.objectledge.upload.FileUpload"/>    
@@ -223,6 +227,7 @@
   <component class="org.objectledge.web.mvc.MVCResultsValve"/>
   <component class="org.objectledge.web.mvc.MVCInitializerValve"/>
   <component class="org.objectledge.authentication.AuthenticationValve"/>
+  <component class="org.objectledge.authentication.sso.SingleSignOnValve"/>
   <component class="org.objectledge.authentication.UserTrackingValve"/>
   <component class="org.objectledge.parameters.RequestParametersLoaderValve"/>
   <component class="org.objectledge.i18n.LocaleLoaderValve"/>
@@ -277,6 +282,7 @@
     <sequence>			 
       <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
       <parameter class-key="org.objectledge.authentication.AuthenticationValve"/>
+      <parameter class-key="org.objectledge.authentication.sso.SingleSignOnValve"/>
       <parameter class-key="org.objectledge.authentication.UserTrackingValve"/>
       <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
       <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
