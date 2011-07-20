@@ -30,7 +30,6 @@
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: Login.pl_PL.vt,v 1.2 2005-07-29 13:47:17 pablo Exp $
  *###
-## ConvertTemplates:IMMUTABLE
 
   <div align="center">
     <table class="genericLayout" cellspacing="0" cellpadding="0">
@@ -42,58 +41,3 @@
     </table>
   </div>
 
-#stop
-
-
-<div class="screen-content" style="width: 500px; margin-left: auto; margin-right: auto;">
-
-#if($result)
-<div class="action-error-result">
-<i>$i18n.get($result, $result)</i><br/>
-</div>
-#else
-<div class="action-result">
-Dostęp chroniony, proszę zaloguj się.
-</div>
-#end
-
-#set($loginAction = $link.self().action('authentication.Login'))
-#if($originalView)
-#set($loginAction = $loginAction.view($originalView))
-#else
-#set($loginAction = $loginAction.view('site.SiteList'))
-#end
-
-<form name="form1" method="post" action='$loginAction'>
-<table cellspacing="0">
-
-<tr class="row#odd()">
-<td class="label">
-Identyfikator
-</td>
-<td>
-<input type="text" name="login" value="" maxlength="50" />
-</td>
-</tr>
-
-<tr class="row#odd()">
-<td class="label">
-Hasło
-</td>
-<td>
-<input type="password" name="password" value="" maxlength="50" />
-</td>
-</tr>   
-</table>
-</form>
-
-<div class="action-buttons">
-  <div class="additional">
-    ## Tutaj akcje dodatkowe
-  </div>
-  <div class="modification">
-  <a href="javascript:document.form1.submit();">Zaloguj</a>
-  </div>
-</div>
-
-</div>
