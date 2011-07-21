@@ -1,45 +1,88 @@
-## ConvertTemplates:IMMUTABLE
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+#if($ssoTool.active)
+$pageTool.addScriptLink('script/SingleSignOn.js')##
+#end
 
 <script type="text/javascript">
-<!--
-	function focus() {
-		if (document.loginform.login) {
-			document.loginform.login.focus();
-		}
-	}
-	window.onload = focus;
-// -->
+var J = jQuery;
+J(document).ready(function() {
+
+    J('#loading').hide();
+
+#if($ssoTool.active)
+    J('#loading').ajaxStart(function() {
+        J(this).show();
+    });
+    J('#loading').ajaxStop(function() {
+        J(this).hide();
+    });
+
+#if(!$ssoTool.loggedIn)    
+    sso.migrateSession('$ssoTool.ticketUrl()', function(status) {
+        if(status == 'success') {
+            J("#loginform").submit();
+        }
+    });
+
+#end    
+    J('#submitbutton').click(function() {
+        sso.login('$ssoTool.loginUrl()', J('#login').val(), J('#password').val(), function(status) {
+            if(status == 'success') {
+                J("#loginform").submit();
+            } else {
+                alert('niepoprawny login lub hasło');
+            }
+        });
+    });
+
+#else
+    J('#submitbutton').click(function() {
+        J("#loginform").submit();
+    });
+
+#end        
+    J('#login').focus();
+});
 </script>
+
+#if($ssoTool.active)
+#set($loginLink = $link.view($originalView))
+#else
 #set($loginLink = $link.view($originalView).action("authentication.Login"))
+#end
+
 #foreach($key in $parametersTool.parameterNames)
 #if($parametersTool.isQueryStringParameter($key) && $key != 'action' && $key != 'view')
 #set($loginLink = $loginLink.set($key, $parametersTool.get($key)))
 #end
 #end
+
+<div id="loading"><img src="$link.content('images/loading.gif')"/> Logowanie ... </div>
+
 <form name="loginform"##
-    id="loginform" 
+    id="loginform"## 
     action="$loginLink"##
     method="post" class="defaultForm">
+
 #foreach($key in $parametersTool.parameterNames)
 #if($parametersTool.isPOSTParameter($key))
-
 #set($values = $parametersTool.getStrings($key))
- #foreach($value in $values)
+#foreach($value in $values)
 <input type="hidden" name="$key" value="$stringTool.wrap($htmlEncoder.encodeAttribute($value,true),2048)"/>
- #end
 #end
 #end
+#end
+
 <table width="100%" class="genericComponent" cellspacing="0">
   <tr>
     <td>Login:</td><td><input id="login" type="text" name="login" class="login-input" /></td>
   </tr>
   <tr>
-    <td>Hasło:</td><td><input type="password" name="password" class="login-input" /></td>
+    <td>Hasło:</td><td><input type="password" id="password" name="password" class="login-input" /></td>
   </tr>
   <tr>
-    <td align="center" colspan="2"><input type="submit" class="submitbutton" value="Zaloguj" class="login-button" /></td>
+	<td align="center" colspan="2"><input type="button" id="submitbutton" class="submitbutton" value="Zaloguj" class="login-button" /></td>
   </tr>
- <tr>
 </table>
-## Załóż nowe <a href="$link.view('security.AddUser')">konto</a>
+
 </form>
