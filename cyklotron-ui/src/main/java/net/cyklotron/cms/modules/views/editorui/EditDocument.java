@@ -154,7 +154,7 @@ public class EditDocument extends BaseDocumentScreen
     {
         try
         {
-            return formService.getInstance(DocumentService.FORM_NAME + "#" + doc.getIdString(),httpContext);
+            return formService.getInstance(DocumentService.FORM_NAME, doc.getIdString(), httpContext);
         }
         catch(FormsException e)
         {
