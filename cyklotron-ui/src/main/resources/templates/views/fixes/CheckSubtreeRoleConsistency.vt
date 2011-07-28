@@ -1,0 +1,6 @@
+$viewEnclosureTool.override('Page')
+#result_inline_message('fixes')
+
+<pre>
+$!script
+</pre>

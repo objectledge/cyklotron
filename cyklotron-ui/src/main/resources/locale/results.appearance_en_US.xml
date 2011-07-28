@@ -1,0 +1,114 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="directory_created">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Contact administrator to solve this problem.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Name cannot contain / character.</value>
+    </prefix>
+    <prefix name="file_already_exists">
+      <value>.</value>
+    </prefix>
+    <prefix name="file_created">
+      <value>.</value>
+    </prefix>
+    <prefix name="file_not_selected">
+      <value>.</value>
+    </prefix>
+    <prefix name="file_or_directory_exists">
+      <value>.</value>
+    </prefix>
+    <prefix name="incorrect_extenstion">
+      <value>.</value>
+    </prefix>
+    <prefix name="renamed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="required_field_missing">
+      <value>.</value>
+    </prefix>
+    <prefix name="skin_exists">
+      <value>.</value>
+    </prefix>
+    <prefix name="template_parse_error">
+      <value>.</value>
+    </prefix>
+    <prefix name="template_sockets_mismatch">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="variant_exists">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Removed successfully.</value>
+    </prefix>
+    <prefix name="directory_created">
+      <value>Directory has been created.</value>
+    </prefix>
+    <prefix name="empty_name">
+      <value>Name cannot be empty</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Name is not valid</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Wystąpił błąd.</value>
+    </prefix>
+    <prefix name="file_already_exists">
+      <value>Template with this name already exists.</value>
+    </prefix>
+    <prefix name="file_created">
+      <value>File created.</value>
+    </prefix>
+    <prefix name="file_not_selected">
+      <value>No file chosen.</value>
+    </prefix>
+    <prefix name="file_or_directory_exists">
+      <value>File or directory with this name already exists.</value>
+    </prefix>
+    <prefix name="incorrect_extenstion">
+      <value>Velocity template expected (.vt)</value>
+    </prefix>
+    <prefix name="renamed_successfully">
+      <value>Name changed successfully.</value>
+    </prefix>
+    <prefix name="required_field_missing">
+      <value>Required field missing.</value>
+    </prefix>
+    <prefix name="skin_exists">
+      <value>Skin with this name already exists.</value>
+    </prefix>
+    <prefix name="template_parse_error">
+      <value>Template contains errors!</value>
+    </prefix>
+    <prefix name="template_saved_parse_error">
+      <value>Template saved, but it contains errors!</value>
+    </prefix>
+    <prefix name="template_saved_sockets_mismatch">
+      <value>Template saved, but it contains slots different than those defined in layout!</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Updated successfully.</value>
+    </prefix>
+    <prefix name="variant_exists">
+      <value>Variant with this name already exists.</value>
+    </prefix>
+  </prefix>
+</strings>

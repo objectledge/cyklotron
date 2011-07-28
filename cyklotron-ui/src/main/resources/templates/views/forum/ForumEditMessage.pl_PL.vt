@@ -1,0 +1,69 @@
+$pageTool.addScriptLink("script/WinPopup.js")
+## SET LOCAL VARS
+#set($priorities_list = [['wysoki','1'], ['średni','2'], ['niski', '3']])
+#set($cms_link = $link.set('x',$parametersTool.getLong('x')))
+#set($cms_link = $cms_link.set('state',$parametersTool.get('state','Messages')))
+
+## COMMAND BAR PREPROCESSING
+#macro(commandbar)
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      #if($cms_tool.getUserData().hasPermission($message.getDiscussion(), 'cms.forum.modify'))
+      <td NOWRAP class="usualbutton">
+	    <a href="javascript:document.form1.submit()">Zapisz</a>
+      </td>
+      <td NOWRAP class="usualbutton">
+        <a href="$cms_link.set('state','Messages').set('did', $message.getDiscussion().getId())">Anuluj</a>
+      </td>
+      #end
+    </tr>
+  </table>
+#end
+## END COMMAND BAR PREPROCESSING
+
+
+#genericScreenHeader('EDYCJA WIADOMOŚCI')
+
+#result_inline_message('results.forum')
+
+<form name="form1" method="post" action="$cms_link.action('forum.UpdateMessage').set('state','Messages').set('did', $message.getDiscussion().getId()).set('mid', $message.getId())">
+<table border="0" class="postHeaderTable">
+     #if ($message.getDiscussion().getId() != $message.getParent().getId())
+     <tr>
+	   <td width="25%"><b>W odpowiedzi na:</b></td>
+	   <td>$message.getParent().getName()</td>
+     </tr>
+     #end
+     <tr>
+	  <td width="25%"><b>Wiadomość od:</b></td>
+	  <td>#cms_personal_credentials($message.createdBy)</td>
+     </tr>
+</table>
+&nbsp;
+<table border="0" class="defaultTable">
+    <tr>
+	 <td align="right"><b>Tytuł:</b></td>
+	 <td><input type="text" name="name" size="63" value="$!htmlEncoder.encodeAttribute($!name)" maxlength="150"></td>
+    </tr>
+    <tr>
+	 <td align="right"><b>Treść:</b></td>
+	 <td><textarea rows="10" cols="58" name="content">$!content</textarea></td>
+    </tr>
+    <tr>
+	 <td align="right"><b>Priorytet:</b></td>
+	 <td>
+	  <select name="priority">
+	    #options($priorities_list "$priority")  
+	  </select>
+	 </td>
+    </tr>
+    <tr>
+      <td align="right"><b>Stan:</b></td>
+      <td><i>$message.getState().getName()</i></td>
+    </tr>
+</table>
+</form>
+
+#commandbar()
+#genericScreenTrailer()

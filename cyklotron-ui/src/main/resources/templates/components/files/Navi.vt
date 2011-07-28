@@ -1,0 +1,8 @@
+#if(($files)&&($site))
+  #set($main = $files.getFilesRoot($site).getId())
+  #set($dir_id = $parametersTool.getLong('dir_id',$main))
+ 
+  #genericNaviHeader('Files')
+    #linkCell('' 'File list' $link.view('files.ListDirectory'))
+  #genericNaviTrailer()
+#end
