@@ -13,6 +13,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleService;
@@ -36,7 +37,8 @@ public class CancelEditDocument extends BaseDocumentAction
         throws ProcessingException
     {
         // prepare needed variables
-        Instance instance = getInstance(httpContext);
+        DocumentNodeResource doc = getDocument(context);
+        Instance instance = getInstance(httpContext, doc);
 
         // kill da instance
         formService.removeInstance(httpContext, instance);

@@ -57,7 +57,7 @@ public class UpdateDocument extends BaseDocumentAction
         // get processed node
         DocumentNodeResource doc = getDocument(context);
 
-        Instance instance = getInstance(httpContext);
+        Instance instance = getInstance(httpContext, doc);
         Subject subject = coralSession.getUserSubject();
 
         // process the form instance

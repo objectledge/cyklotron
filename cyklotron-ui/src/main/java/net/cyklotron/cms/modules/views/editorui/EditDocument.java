@@ -74,14 +74,14 @@ public class EditDocument extends BaseDocumentScreen
         DocumentNodeResource doc = getDocument();
 
         // prepare needed variables
-        Instance instance = getInstance(httpContext);
+        Instance instance = getInstance(httpContext, doc);
         Subject subject = coralSession.getUserSubject();
 
 		// kill da instance
 		if (parameters.getBoolean("from_list",false))
 		{
 			formService.removeInstance(httpContext, instance);
-            instance = getInstance(httpContext);
+            instance = getInstance(httpContext, doc);
 		}
 
         // initialise instance with document data if this is the first hit
@@ -149,12 +149,12 @@ public class EditDocument extends BaseDocumentScreen
         return coralSession.getUserSubject().hasRole(getSite().getSeniorEditor());
     }
     
-    protected Instance getInstance(HttpContext httpContext)
+    protected Instance getInstance(HttpContext httpContext, DocumentNodeResource doc)
         throws ProcessingException
     {
         try
         {
-            return formService.getInstance(DocumentService.FORM_NAME,httpContext);
+            return formService.getInstance(DocumentService.FORM_NAME + "#" + doc.getIdString(),httpContext);
         }
         catch(FormsException e)
         {

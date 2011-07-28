@@ -44,12 +44,12 @@ public abstract class BaseDocumentAction
         this.documentService = documentService;
     }
 
-    protected Instance getInstance(HttpContext httpContext)
+    protected Instance getInstance(HttpContext httpContext, DocumentNodeResource doc)
         throws ProcessingException
     {
         try
         {
-            return formService.getInstance(DocumentService.FORM_NAME, httpContext);
+            return formService.getInstance(DocumentService.FORM_NAME  + "#" + doc.getIdString(), httpContext);
         }
         catch(FormsException e)
         {
