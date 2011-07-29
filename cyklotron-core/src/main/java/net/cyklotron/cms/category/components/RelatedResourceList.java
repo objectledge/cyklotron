@@ -1,13 +1,9 @@
 package net.cyklotron.cms.category.components;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
-import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableFilter;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
@@ -15,11 +11,16 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.category.query.CategoryResolver;
-import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.util.SiteFilter;
+
+import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableFilter;
 
 /**
  * This component displays lists of resources assigned to categories assigned to current document
@@ -65,42 +66,27 @@ extends BaseResourceList
 		return config2.getResourceClasses();
 	}
 
-    protected TableFilter[] getTableFilters(CoralSession coralSession, BaseResourceListConfiguration config)
-    throws ProcessingException
+    protected TableFilter<Resource>[] getTableFilters(CoralSession coralSession, BaseResourceListConfiguration config)
+                    throws ProcessingException
     {
-        CmsData cmsData = cmsDataFactory.getCmsData(context);
-       
         RelatedResourceListConfiguration config2 = (RelatedResourceListConfiguration)config;
-		SiteFilter siteFilter = new SiteFilter(new SiteResource[] { cmsData.getSite() });
+		List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
         if(contextNode != null)
         {
+            filters.add(new RejectResourceFilter(contextNode));
             if(config2.isSiteFilterEnabled())
             {
-                TableFilter[] filters = new TableFilter[2];
-                filters[0] = new RejectResourceFilter(contextNode);
-                filters[1] = siteFilter;
-                return filters;
-            }
-            else
-            {
-                return new TableFilter[] { new RejectResourceFilter(contextNode) };
+                filters.add(new SiteFilter(new SiteResource[] { contextNode.getSite() }));
             }
         }
-        else if(config2.isSiteFilterEnabled())
-        {
-            return new TableFilter[] { siteFilter };
-        }
-        else
-        {
-            return new TableFilter[] {};
-        }
+        return filters.toArray(new TableFilter[filters.size()]);
     }
 
     public String getQuery(CoralSession coralSession, BaseResourceListConfiguration config)
     throws ProcessingException
     {
         // get categories accepted in query
-        Set acceptedCategories = new HashSet();
+        Set<CategoryResource> acceptedCategories = new HashSet<CategoryResource>();
 
 		CategoryResolver resolver = categoryQueryService.getCategoryResolver();
 			
@@ -170,7 +156,7 @@ extends BaseResourceList
     // implementation /////////////////////////////////////////////////////////////////////////////
     
     private class RejectResourceFilter
-    implements TableFilter
+        implements TableFilter<Resource>
     {
         Resource rejectedResource;
         
@@ -179,15 +165,9 @@ extends BaseResourceList
             this.rejectedResource = rejectedResource;
         }
         
-        public boolean accept(Object o)
+        public boolean accept(Resource o)
         {
-            if(!(o instanceof Resource))
-            {
-                return false;
-            }
-            
-            Resource r = (Resource)o;
-            return rejectedResource.getId() != r.getId();
+            return rejectedResource.getId() != o.getId();
         }
     }
 }
