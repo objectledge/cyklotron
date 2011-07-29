@@ -11,22 +11,25 @@ CKEDITOR.dialog.add( 'cykloaddextresource', function( editor ) {
 
 function insertResourceOntoEditor()
 {
-       elem = this.getContentElement('cykloaddextresource_dialog','cykloaddextresource_url');
-       var media_source_url = elem.getValue();
-       // Check if youtube source url
-       if(media_source_url.indexOf('youtube.com/watch?v=') != -1)
-       {
-           media_source_url = media_source_url.replace('/watch?v=','/embed/'); 
-       }else
-    	 // Check if vimeo source url
-         if(media_source_url.indexOf('vimeo.com/') != -1)
-         {
-           media_source_url = media_source_url.replace('vimeo.com/','player.vimeo.com/video/');
-         }else{
-           // Do nothing. Paste string as defined in inputbox.
-         }
-       }
-       this._.editor.insertHtml('<P><span id="embeddedMedia"><iframe src="'+media_source_url+'">&nbsp;</iframe></span></P>');
+    elem = this.getContentElement('cykloaddextresource_dialog','cykloaddextresource_url');
+    var media_source_url = elem.getValue();
+    if(media_source_url.indexOf('youtube.com/watch?v=') != -1)
+    {
+        if(media_source_url.indexOf('&') != -1){
+          // remove unwanted params
+          media_source_url = media_source_url.substring(0, media_source_url.indexOf('&'));
+        }
+        media_source_url = media_source_url.replace('/watch?v=','/embed/');
+    }else if(media_source_url.indexOf('vimeo.com/') != -1){
+        if(media_source_url.indexOf('?') != -1){
+          // remove unwanted params
+          media_source_url = media_source_url.substring(0, media_source_url.indexOf('?'));
+        }
+        media_source_url = media_source_url.replace('vimeo.com/','player.vimeo.com/video/');
+    }else{
+        // Do nothing. Paste string as defined in inputbox.
+    }
+    this._.editor.insertHtml('<P><span id="embeddedMedia"><iframe src="'+media_source_url+'">&nbsp;</iframe></span></P>');
 }
 
 
