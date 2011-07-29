@@ -17,8 +17,9 @@ J(document).ready(function() {
         J(this).hide();
     });
 
+	var sso = new SSO('$ssoTool.baseUrl');
 #if(!$ssoTool.loggedIn)    
-    sso.migrateSession('$ssoTool.ticketUrl()', function(status) {
+    sso.migrateSession(function(status) {
         if(status == 'success') {
             J("#loginform").submit();
         }
@@ -26,7 +27,7 @@ J(document).ready(function() {
 
 #end    
     J('#submitbutton').click(function() {
-        sso.login('$ssoTool.loginUrl()', J('#login').val(), J('#password').val(), function(status) {
+        sso.login(J('#login').val(), J('#password').val(), function(status) {
             if(status == 'success') {
                 J("#loginform").submit();
             } else {
