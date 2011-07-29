@@ -20,6 +20,7 @@ function insertResourceOntoEditor()
           media_source_url = media_source_url.substring(0, media_source_url.indexOf('&'));
         }
         media_source_url = media_source_url.replace('/watch?v=','/embed/');
+        media_source_url += "?rel=0"; // do not show other movies after end.
     }else if(media_source_url.indexOf('vimeo.com/') != -1){
         if(media_source_url.indexOf('?') != -1){
           // remove unwanted params
