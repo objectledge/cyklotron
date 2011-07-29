@@ -11,12 +11,22 @@ CKEDITOR.dialog.add( 'cykloaddextresource', function( editor ) {
 
 function insertResourceOntoEditor()
 {
-       //var writer = new CKEDITOR.htmlWriter();
        elem = this.getContentElement('cykloaddextresource_dialog','cykloaddextresource_url');
-       //var fragment = CKEDITOR.htmlParser.fragment.fromHtml('<span id="embeddedMedia"><iframe src="'+elem.getValue()+'">&nbsp;</iframe></span>' );
-       //fragment.writeHtml(writer);
-       //this._.editor.insertHtml(writer.getHtml());
-       this._.editor.insertHtml('<P><span id="embeddedMedia"><iframe src="'+elem.getValue()+'">&nbsp;</iframe></span></P>');
+       var media_source_url = elem.getValue();
+       // Check if youtube source url
+       if(media_source_url.indexOf('youtube.com/watch?v=') != -1)
+       {
+           media_source_url = media_source_url.replace('/watch?v=','/embed/'); 
+       }else
+    	 // Check if vimeo source url
+         if(media_source_url.indexOf('vimeo.com/') != -1)
+         {
+           media_source_url = media_source_url.replace('vimeo.com/','player.vimeo.com/video/');
+         }else{
+           // Do nothing. Paste string as defined in inputbox.
+         }
+       }
+       this._.editor.insertHtml('<P><span id="embeddedMedia"><iframe src="'+media_source_url+'">&nbsp;</iframe></span></P>');
 }
 
 
