@@ -19,6 +19,21 @@ pre {
   font-weight: normal;
 }
 
+/* LOGINFORM */
+#loginform {
+  margin:0;
+}
+#loading {
+  padding-top: 5px;
+}
+#loginform .info {
+  padding:7px 0 10px 12px;
+  float: left;
+}
+#loginform img {
+ display: block;
+ float: left 		
+}
 /*
 UNIVERSAL CLASSES
 */
