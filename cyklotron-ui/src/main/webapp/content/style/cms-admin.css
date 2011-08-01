@@ -22,6 +22,13 @@ pre {
 /* LOGINFORM */
 #loginform {
   margin:0;
+  padding: 10px;
+  background-color: #eee;
+}
+#loginform table {
+  border-right: none;
+  border-bottom: none;
+  padding: 0;
 }
 #loading {
   padding-top: 5px;
