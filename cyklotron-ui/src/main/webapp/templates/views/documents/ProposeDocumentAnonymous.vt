@@ -8,14 +8,83 @@ You can either log in or submit the document anonymously.
 If you choose to log it, you will be able to enter corrections to the published document by yourself.<br/>
 If you choose to proceed anonymously, you will need to contact the administrator to have the document corrected.
 </p>
+<!-- login form -->
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+#if($ssoTool.active)
+$pageTool.addScriptLink('script/SingleSignOn.js')##
+#end
+<script type="text/javascript">
+var J = jQuery;
 
-#set($loginLink = $link.set('x',$parameters.get('x')).action('authentication.CMSLogin'))
+#if($ssoTool.active)
+function enableLoadingForm(enable) {
+    if(enable) {
+        J('#loading').hide();
+	    J('#submitbutton').show();
+		J('#login').attr('disabled', false);
+        J('#password').attr('disabled', false);
+    } else {
+	    J('#loading').show();
+		J('#submitbutton').hide();
+        J('#login').attr('disabled', true);
+        J('#password').attr('disabled', true);
+    }  
+}
+
+#end
+J(document).ready(function() {
+#if($ssoTool.active)
+    J('#loading').ajaxStart(function() {
+        enableLoadingForm(false);
+    });
+    J('#loading').ajaxStop(function() {
+        enableLoadingForm(true);
+    });
+
+    var sso = new SSO('$ssoTool.baseUrl');
+    sso.migrateSession(function(status) {
+        if(status == 'success') {
+            J("#loginform").submit();
+        }
+    });
+
+    J('#submitbutton').click(function() {
+        sso.login(J('#login').val(), J('#password').val(), function(status) {
+            if(status == 'success') {
+                J("#loginform").submit();
+            } else {
+                alert('invalid login name or passowrd');
+            }
+        });
+    });
+
+#else
+    J('#submitbutton').click(function() {
+        J("#loginform").submit();
+    });
+
+#end        
+    J('#loading').hide();
+    J('#login').focus();
+});
+</script>
+#if($ssoTool.active)
+#set($loginLink = $link.set('x', $cmsData.node.id))
+#else
+#set($loginLink = $link.set('x', $cmsData.node.id).action("authentication.CMSLogin"))
+#end
+##
 #foreach($key in $parametersTool.parameterNames)
 #if($parametersTool.isQueryStringParameter($key) && $key != 'action' && $key != 'view')
 #set($loginLink = $loginLink.set($key, $parametersTool.get($key)))
 #end
 #end
-<form name="loginform" id="loginform" action="$loginLink" method="POST"> 
+##
+<form name="loginform"##
+    id="loginform"## 
+    action="$loginLink"##
+    method="post" class="defaultForm">
+##
 #foreach($key in $parametersTool.parameterNames)
 #if($parametersTool.isPOSTParameter($key))
 #set($values = $parametersTool.getStrings($key))
@@ -24,21 +93,29 @@ If you choose to proceed anonymously, you will need to contact the administrator
 #end
 #end
 #end
-<table width="200" class="genericComponent" cellspacing="0">
+##
+<table width="300" class="genericComponent" cellspacing="0">
+#if($result == 'login_failed')
+  <tr><td colspan="2" align="center">invalid login name or passowrd</td></tr>	
+#end	
   <tr>
-    <td>Login:</td><td><input id="login" type="text" name="login" class="login-input" /></td>
+    <td>Login name:</td><td><input id="login" type="text" name="login" class="login-input" /></td>
   </tr>
   <tr>
-    <td>Password:</td><td><input type="password" name="password" class="login-input" /></td>
+    <td>Password:</td><td><input type="password" id="password" name="password" class="login-input" /></td>
   </tr>
   <tr>
-    <td align="center" colspan="2"><input type="submit" class="submitbutton" value="Log in" class="login-button" /></td>
+     <td align="center" colspan="2">
+       <input type="button" id="submitbutton" class="submitbutton" value="Log in" class="login-button" />
+       <div id="loading">
+         <img src="$link.content('images/loading.gif')"/>
+         <div class="info">Logging in ...</div>
+       </div>
+    </td>
   </tr>
- <tr>
 </table>
 </form>
-
-
+<!-- /login form -->
 <p>
 <a href="$link.set('x',$parameters.get('x')).set('state','AddDocument')">Submit document anonymously</a>
 </p>
