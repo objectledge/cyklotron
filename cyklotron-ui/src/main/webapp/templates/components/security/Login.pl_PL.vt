@@ -61,9 +61,9 @@ J(document).ready(function() {
 });
 </script>
 #if($ssoTool.active)
-#set($loginLink = $link.view($originalView))
+#set($loginLink = $link.set('x', $cmsData.node.id))
 #else
-#set($loginLink = $link.view($originalView).action("authentication.CMSLogin"))
+#set($loginLink = $link.set('x', $cmsData.node.id).action("authentication.CMSLogin"))
 #end
 ##
 #foreach($key in $parametersTool.parameterNames)
