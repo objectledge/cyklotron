@@ -3,12 +3,27 @@ $pageTool.addScriptLink('script/jquery/jquery-latest.js')##
 $pageTool.addScriptLink('script/SingleSignOn.js')##
 #end
 
+<!-- login form -->
 <script type="text/javascript">
 var J = jQuery;
+
+#if($ssoTool.active)
+function enableLoadingForm(enable) {
+    if(enable) {
+        J('#loading').hide();
+	    J('#submitbutton').show();
+		J('#login').attr('disabled', false);
+        J('#password').attr('disabled', false);
+    } else {
+	    J('#loading').show();
+		J('#submitbutton').hide();
+        J('#login').attr('disabled', true);
+        J('#password').attr('disabled', true);
+    }  
+}
+
+#end
 J(document).ready(function() {
-
-    J('#loading').hide();
-
 #if($ssoTool.active)
     J('#loading').ajaxStart(function() {
         enableLoadingForm(false);
@@ -17,7 +32,7 @@ J(document).ready(function() {
         enableLoadingForm(true);
     });
 
-	var sso = new SSO('$ssoTool.baseUrl');
+    var sso = new SSO('$ssoTool.baseUrl');
 #if(!$ssoTool.loggedIn)    
     sso.migrateSession(function(status) {
         if(status == 'success') {
@@ -42,36 +57,27 @@ J(document).ready(function() {
     });
 
 #end        
+    J('#loading').hide();
     J('#login').focus();
 });
-
-function enableLoadingForm(enable) {
-  if(enable){J('#loading').hide();J('#submitbutton').show();}
-  else{J('#loading').show();J('#submitbutton').hide();}
-  
-  J('#login').attr('disabled', !enable);
-  J('#password').attr('disabled', !enable);
-}
 </script>
-
 #if($ssoTool.active)
 #set($loginLink = $link.view($originalView))
 #else
 #set($loginLink = $link.view($originalView).action("authentication.Login"))
 #end
-
+##
 #foreach($key in $parametersTool.parameterNames)
 #if($parametersTool.isQueryStringParameter($key) && $key != 'action' && $key != 'view')
 #set($loginLink = $loginLink.set($key, $parametersTool.get($key)))
 #end
 #end
-
-
+##
 <form name="loginform"##
     id="loginform"## 
     action="$loginLink"##
     method="post" class="defaultForm">
-
+##
 #foreach($key in $parametersTool.parameterNames)
 #if($parametersTool.isPOSTParameter($key))
 #set($values = $parametersTool.getStrings($key))
@@ -80,7 +86,7 @@ function enableLoadingForm(enable) {
 #end
 #end
 #end
-
+##
 <table width="100%" class="genericComponent" cellspacing="0">
   <tr>
     <td>Login name:</td><td><input id="login" type="text" name="login" class="login-input" /></td>
@@ -89,14 +95,14 @@ function enableLoadingForm(enable) {
     <td>Password:</td><td><input type="password" id="password" name="password" class="login-input" /></td>
   </tr>
   <tr>
-	<td align="center" colspan="2">
-		<input type="button" id="submitbutton" class="submitbutton" value="Zaloguj" class="login-button" />
-	    <div id="loading">
-				<img src="$link.content('images/loading.gif')"/>
-				<div class="info">Logging in ...</div>
-		</div>
-	</td>
+     <td align="center" colspan="2">
+       <input type="button" id="submitbutton" class="submitbutton" value="Zaloguj" class="login-button" />
+       <div id="loading">
+         <img src="$link.content('images/loading.gif')"/>
+         <div class="info">Logging in ...</div>
+       </div>
+    </td>
   </tr>
 </table>
-
 </form>
+<!-- /login form -->
