@@ -11,10 +11,10 @@ J(document).ready(function() {
 
 #if($ssoTool.active)
     J('#loading').ajaxStart(function() {
-        J(this).show();
+        enableLoadingForm(false);
     });
     J('#loading').ajaxStop(function() {
-        J(this).hide();
+        enableLoadingForm(true);
     });
 
 	var sso = new SSO('$ssoTool.baseUrl');
@@ -44,6 +44,14 @@ J(document).ready(function() {
 #end        
     J('#login').focus();
 });
+
+function enableLoadingForm(enable) {
+  if(enable){J('#loading').hide();J('#submitbutton').show();}
+  else{J('#loading').show();J('#submitbutton').hide();}
+  
+  J('#login').attr('disabled', !enable);
+  J('#password').attr('disabled', !enable);
+}
 </script>
 
 #if($ssoTool.active)
@@ -58,7 +66,6 @@ J(document).ready(function() {
 #end
 #end
 
-<div id="loading"><img src="$link.content('images/loading.gif')"/> Logging in ... </div>
 
 <form name="loginform"##
     id="loginform"## 
@@ -82,7 +89,13 @@ J(document).ready(function() {
     <td>Password:</td><td><input type="password" id="password" name="password" class="login-input" /></td>
   </tr>
   <tr>
-	<td align="center" colspan="2"><input type="button" id="submitbutton" class="submitbutton" value="Log in" class="login-button" /></td>
+	<td align="center" colspan="2">
+		<input type="button" id="submitbutton" class="submitbutton" value="Zaloguj" class="login-button" />
+	    <div id="loading">
+				<img src="$link.content('images/loading.gif')"/>
+				<div class="info">Logging in ...</div>
+		</div>
+	</td>
   </tr>
 </table>
 
