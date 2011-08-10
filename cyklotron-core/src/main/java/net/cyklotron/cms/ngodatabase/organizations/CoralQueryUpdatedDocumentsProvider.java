@@ -24,7 +24,7 @@ public class CoralQueryUpdatedDocumentsProvider
         super(siteService);
     }
 
-    public List<DocumentNodeResource> queryDocuments(SiteResource[] sites, Date endDate,
+    public List<DocumentNodeResource> queryDocuments(SiteResource[] sites, Date startDate,
         long organizationId, CoralSession coralSession)
     {
         try
@@ -50,7 +50,7 @@ public class CoralQueryUpdatedDocumentsProvider
                 query.append("AND organizationIds != '' ");
             }
             query.append("AND customModificationTime > ");
-            query.append(getDateLiteral(endDate, coralSession));
+            query.append(getDateLiteral(startDate, coralSession));
             QueryResults results = coralSession.getQuery().executeQuery(query.toString());
             List<DocumentNodeResource> documents = new ArrayList<DocumentNodeResource>();
     

@@ -33,7 +33,6 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.coral.table.comparator.IdComparator;
 import org.objectledge.coral.table.comparator.TimeComparator;
 import org.objectledge.filesystem.FileSystem;
 
@@ -79,12 +78,12 @@ public class OutgoingOrganizationsService
     {
         // query documents
         List<DocumentNodeResource> documents = null;
-        Date endDate = updatedDocumentsProvider.offsetDate(new Date(), outgoingQueryDays);
+        Date startDate = updatedDocumentsProvider.offsetDate(new Date(), outgoingQueryDays);
         CoralSession coralSession = coralSessionFactory.getAnonymousSession();
         try
         {
             documents = updatedDocumentsProvider.queryDocuments(updatedDocumentsProvider.getSites(
-                outgoingSites, coralSession), endDate, -1L, coralSession);
+                outgoingSites, coralSession), startDate, -1L, coralSession);
         }
         catch(Exception e)
         {

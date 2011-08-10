@@ -80,10 +80,10 @@ public class CachingUpdatedDocumentsProvider
     }
     
     @Override
-    public List<DocumentNodeResource> queryDocuments(SiteResource[] sites, Date endDate,
+    public List<DocumentNodeResource> queryDocuments(SiteResource[] sites, Date startDate,
         long organizationId, CoralSession coralSession)
     {
-        LongSet documents = queryDocuments(sites, endDate, organizationId);
+        LongSet documents = queryDocuments(sites, startDate, organizationId);
         List<DocumentNodeResource> result = new ArrayList<DocumentNodeResource>(documents.size());
         try
         {
@@ -106,7 +106,7 @@ public class CachingUpdatedDocumentsProvider
         }
     }
 
-    private LongSet queryDocuments(SiteResource[] sites, Date date, long org)
+    private LongSet queryDocuments(SiteResource[] sites, Date startDate, long org)
     {
         r.lock();
         try
@@ -126,14 +126,14 @@ public class CachingUpdatedDocumentsProvider
                 result.addAll(documentToOrganization.keySet());
             }
             
-            Calendar calendar = new GregorianCalendar();
-            calendar.setTime(date);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            long dateKey = calendar.getTimeInMillis();
+            Calendar startCal = new GregorianCalendar();
+            startCal.setTime(startDate);
+            startCal.set(Calendar.SECOND, 0);
+            startCal.set(Calendar.MILLISECOND, 0);
+            long startDateKey = startCal.getTimeInMillis();
             
             LongSet temp = new LongOpenHashSet();
-            for(SortedMap.Entry<Long, LongSet> entry : updateTimeToDocument.tailMap(dateKey)
+            for(SortedMap.Entry<Long, LongSet> entry : updateTimeToDocument.tailMap(startDateKey)
                             .entrySet())
             {
                 temp.addAll(entry.getValue());
