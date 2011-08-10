@@ -137,7 +137,7 @@ public class CachingUpdatedDocumentsProvider
             if(endDate != null)
             {
                 Calendar endCal = new GregorianCalendar();
-                endCal.setTime(startDate);
+                endCal.setTime(endDate);
                 endCal.set(Calendar.SECOND, 0);
                 endCal.set(Calendar.MILLISECOND, 0);
                 long endDateKey = endCal.getTimeInMillis();
