@@ -145,7 +145,7 @@ public class OrganizationNewsFeedService
                 Date endDate = updatedDocumentsProvider.offsetDate(startDate, newsFeedQueryDays);
                 List<DocumentNodeResource> documents = updatedDocumentsProvider.queryDocuments(
                     updatedDocumentsProvider.getSites(newsFeedSites, coralSession), endDate,
-                    organizationId, coralSession);
+                    null, organizationId, coralSession);
                 Collections.sort(documents, new CustomModificationTimeComparator(
                     TimeComparator.Direction.DESC));
                 SyndFeed feed = buildFeed(organization, documents, startDate, endDate, coralSession);

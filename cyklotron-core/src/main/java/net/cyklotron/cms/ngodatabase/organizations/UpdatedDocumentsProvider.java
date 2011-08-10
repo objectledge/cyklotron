@@ -49,5 +49,5 @@ public abstract class UpdatedDocumentsProvider
     }
 
     public abstract List<DocumentNodeResource> queryDocuments(SiteResource[] sites, Date startDate,
-        long organizationId, CoralSession coralSession);
+        Date endDate, long organizationId, CoralSession coralSession);
 }

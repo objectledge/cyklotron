@@ -83,7 +83,7 @@ public class OutgoingOrganizationsService
         try
         {
             documents = updatedDocumentsProvider.queryDocuments(updatedDocumentsProvider.getSites(
-                outgoingSites, coralSession), startDate, -1L, coralSession);
+                outgoingSites, coralSession), startDate, null, -1L, coralSession);
         }
         catch(Exception e)
         {
