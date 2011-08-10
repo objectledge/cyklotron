@@ -28,6 +28,7 @@
 
 package net.cyklotron.cms.ngodatabase;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -149,6 +150,7 @@ public class NgoDatabaseServiceImpl
 
     @Override
     public void updateOutgoing(Date startDate, Date endDate, OutputStream outputStream)
+        throws IOException
     {
         outgoing.updateOutgoing(startDate, endDate, outputStream);
     }    

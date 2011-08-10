@@ -84,16 +84,16 @@ public class OutgoingOrganizationsService
             {
                 fileSystem.mkdirs(directoryPath(OUTGOING_FILE));
             }
+            OutputStream outputStream = fileSystem.getOutputStream(OUTGOING_FILE);
+            updateOutgoing(startDate, endDate, outputStream);
         }
         catch(IOException e)
         {
             logger.error("failed to write outgoing data", e);
         }
-        OutputStream outputStream = fileSystem.getOutputStream(OUTGOING_FILE);
-        updateOutgoing(startDate, endDate, outputStream);
     }
 
-    public void updateOutgoing(Date startDate, Date endDate, OutputStream outputStream)
+    public void updateOutgoing(Date startDate, Date endDate, OutputStream outputStream) throws IOException
     {
         // query documents
         List<DocumentNodeResource> documents = null;
@@ -163,16 +163,9 @@ public class OutgoingOrganizationsService
         Document doc = doc(update);
 
         // serialize DOM to XML
-        try
-        {
-            XMLWriter xmlWriter = new XMLWriter(outputStream, OUTGOING_FORMAT);
-            xmlWriter.write(doc);
-            outputStream.close();
-        }
-        catch(IOException e)
-        {
-            logger.error("failed to write outgoing data", e);
-        }
+        XMLWriter xmlWriter = new XMLWriter(outputStream, OUTGOING_FORMAT);
+        xmlWriter.write(doc);
+        outputStream.close();
     }
 
     private static Element organizationElm(Long organizationId)
