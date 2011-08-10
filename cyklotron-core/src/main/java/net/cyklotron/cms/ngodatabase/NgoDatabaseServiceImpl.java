@@ -28,10 +28,21 @@
 
 package net.cyklotron.cms.ngodatabase;
 
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.ngodatabase.organizations.IncomingOrganizationsService;
+import net.cyklotron.cms.ngodatabase.organizations.OrganizationNewsFeedService;
+import net.cyklotron.cms.ngodatabase.organizations.OrganizationsIndex;
+import net.cyklotron.cms.ngodatabase.organizations.OutgoingOrganizationsService;
+import net.cyklotron.cms.ngodatabase.organizations.UpdatedDocumentsProvider;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.util.OfflineLinkRenderingService;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
@@ -44,15 +55,6 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Templating;
 import org.objectledge.utils.StringUtils;
 import org.picocontainer.Startable;
-
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.ngodatabase.organizations.IncomingOrganizationsService;
-import net.cyklotron.cms.ngodatabase.organizations.OrganizationNewsFeedService;
-import net.cyklotron.cms.ngodatabase.organizations.OrganizationsIndex;
-import net.cyklotron.cms.ngodatabase.organizations.OutgoingOrganizationsService;
-import net.cyklotron.cms.ngodatabase.organizations.UpdatedDocumentsProvider;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.util.OfflineLinkRenderingService;
 
 public class NgoDatabaseServiceImpl
     implements NgoDatabaseService, Startable
@@ -145,6 +147,12 @@ public class NgoDatabaseServiceImpl
         outgoing.updateOutgoing();
     }
 
+    @Override
+    public void updateOutgoing(Date startDate, Date endDate, OutputStream outputStream)
+    {
+        outgoing.updateOutgoing(startDate, endDate, outputStream);
+    }    
+    
     // news feeds
 
     @Override

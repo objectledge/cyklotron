@@ -19,6 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.table.CustomModificationTimeComparator;
+
 import org.dom4j.Branch;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -35,10 +39,6 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.table.comparator.TimeComparator;
 import org.objectledge.filesystem.FileSystem;
-
-import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.table.CustomModificationTimeComparator;
 
 public class OutgoingOrganizationsService
 {
@@ -76,14 +76,34 @@ public class OutgoingOrganizationsService
 
     public void updateOutgoing()
     {
+        Date startDate = updatedDocumentsProvider.offsetDate(new Date(), outgoingQueryDays);
+        Date endDate = null;
+        try
+        {
+            if(!fileSystem.isDirectory(directoryPath(OUTGOING_FILE)))
+            {
+                fileSystem.mkdirs(directoryPath(OUTGOING_FILE));
+            }
+        }
+        catch(IOException e)
+        {
+            logger.error("failed to write outgoing data", e);
+        }
+        OutputStream outputStream = fileSystem.getOutputStream(OUTGOING_FILE);
+        updateOutgoing(startDate, endDate, outputStream);
+    }
+
+    public void updateOutgoing(Date startDate, Date endDate, OutputStream outputStream)
+    {
         // query documents
         List<DocumentNodeResource> documents = null;
-        Date startDate = updatedDocumentsProvider.offsetDate(new Date(), outgoingQueryDays);
+
         CoralSession coralSession = coralSessionFactory.getAnonymousSession();
         try
         {
-            documents = updatedDocumentsProvider.queryDocuments(updatedDocumentsProvider.getSites(
-                outgoingSites, coralSession), startDate, null, -1L, coralSession);
+            documents = updatedDocumentsProvider.queryDocuments(
+                updatedDocumentsProvider.getSites(outgoingSites, coralSession), startDate, endDate,
+                -1L, coralSession);
         }
         catch(Exception e)
         {
@@ -145,11 +165,6 @@ public class OutgoingOrganizationsService
         // serialize DOM to XML
         try
         {
-            if(!fileSystem.isDirectory(directoryPath(OUTGOING_FILE)))
-            {
-                fileSystem.mkdirs(directoryPath(OUTGOING_FILE));
-            }
-            OutputStream outputStream = fileSystem.getOutputStream(OUTGOING_FILE);
             XMLWriter xmlWriter = new XMLWriter(outputStream, OUTGOING_FORMAT);
             xmlWriter.write(doc);
             outputStream.close();
