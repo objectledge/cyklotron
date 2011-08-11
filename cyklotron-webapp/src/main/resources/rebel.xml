@@ -34,8 +34,6 @@
 		</dir>
 		<dir name="${workspace.root}/ledge-lgpl/target/classes">
 		</dir>
-		<dir name="${workspace.root}/ledge-maven-assemblies/target/classes">
-		</dir>
 		<dir name="${workspace.root}/ledge-web/target/classes">
 		</dir>
 	</classpath>
