@@ -1,4 +1,4 @@
-﻿﻿CKEDITOR.plugins.setLang("cykloaddextresource","en",{
+﻿CKEDITOR.plugins.setLang("cykloaddextresource","en",{
   cykloaddextresource:
     {
 	button_title:'Add external resource as ngo layout',
