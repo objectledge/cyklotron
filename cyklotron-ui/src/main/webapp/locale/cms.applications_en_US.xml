@@ -181,6 +181,17 @@
           <value>Recommend document</value>
         </prefix>
       </prefix>
+      <prefix name="community_votes">
+        <item name="name">Community votes</item>
+        <item name="description">Allows users to cast positive/negative votes for the current document
+        </item>
+      </prefix>
+      <prefix name="community_vote_results">
+        <item name="name">Community vote results</item>
+        <item name="description">Displays a list of document published in a definite date range, sorted 
+        according to criteria based on community vote results.
+        </item>
+      </prefix>
     </prefix>
     <prefix name="description">
       <value>Base module</value>

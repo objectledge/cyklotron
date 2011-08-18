@@ -181,6 +181,18 @@
           <value>Poleć dokument</value>
         </prefix>
       </prefix>
+      <prefix name="community_votes">
+        <item name="name">Głosowanie społecznościowe</item>
+        <item name="description">Umożliwia użytkownikom oddawanie pozytywnych lub negatywnych głosów nad bieżący
+          dokument
+        </item>
+      </prefix>
+      <prefix name="community_vote_results">
+        <item name="name">Wyniki głosowania społecznościowego</item>
+        <item name="description">Wyświetla dokumenty opublikowane w określonym zakresie czasowym, posortowane
+        według kryteriów opartych o głosy oddane przez użytkowników.
+        </item>
+      </prefix>
     </prefix>
     <prefix name="description">
       <value>Moduł podstawowy</value>

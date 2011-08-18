@@ -607,6 +607,20 @@ ATTRIBUTES (
   configurationView = 'documents.CalendarEventsConf'
 );
 
+CREATE RESOURCE 'community_votes'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.CommunityVotes'
+);
+
+CREATE RESOURCE 'community_vote_results'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.CommunityVoteResults',
+  configurationView = 'documents.CommunityVoteResultsConf'
+);
 
 CREATE RESOURCE 'screens'
 RESOURCE CLASS 'node'
