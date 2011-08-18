@@ -1,0 +1,8 @@
+ALTER RESOURCE CLASS RESOURCE CLASS 'structure.navigation_node'
+ADD ATTRIBUTE integer votesPositive;
+
+ALTER RESOURCE CLASS RESOURCE CLASS 'structure.navigation_node'
+ADD ATTRIBUTE integer votesNegative;
+
+
+
