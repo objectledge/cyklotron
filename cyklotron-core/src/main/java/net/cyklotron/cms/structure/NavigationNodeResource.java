@@ -505,6 +505,80 @@ public interface NavigationNodeResource
 	 * @return <code>true</code> if the value of the <code>visitor</code> attribute is defined.
 	 */
     public boolean isVisitorDefined();
+	
+    /**
+     * Returns the value of the <code>votesNegagtive</code> attribute.
+     *
+     * @return the value of the the <code>votesNegagtive</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public int getVotesNegagtive()
+		throws IllegalStateException;
+
+	/**
+     * Returns the value of the <code>votesNegagtive</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>votesNegagtive</code> attribute.
+     */
+    public int getVotesNegagtive(int defaultValue);
+
+    /**
+     * Sets the value of the <code>votesNegagtive</code> attribute.
+     *
+     * @param value the value of the <code>votesNegagtive</code> attribute.
+     */
+    public void setVotesNegagtive(int value);
+
+	/**
+     * Removes the value of the <code>votesNegagtive</code> attribute.
+     */
+    public void unsetVotesNegagtive();
+   
+	/**
+	 * Checks if the value of the <code>votesNegagtive</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>votesNegagtive</code> attribute is defined.
+	 */
+    public boolean isVotesNegagtiveDefined();
+	
+    /**
+     * Returns the value of the <code>votesPositive</code> attribute.
+     *
+     * @return the value of the the <code>votesPositive</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public int getVotesPositive()
+		throws IllegalStateException;
+
+	/**
+     * Returns the value of the <code>votesPositive</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>votesPositive</code> attribute.
+     */
+    public int getVotesPositive(int defaultValue);
+
+    /**
+     * Sets the value of the <code>votesPositive</code> attribute.
+     *
+     * @param value the value of the <code>votesPositive</code> attribute.
+     */
+    public void setVotesPositive(int value);
+
+	/**
+     * Removes the value of the <code>votesPositive</code> attribute.
+     */
+    public void unsetVotesPositive();
+   
+	/**
+	 * Checks if the value of the <code>votesPositive</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>votesPositive</code> attribute is defined.
+	 */
+    public boolean isVotesPositiveDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
 

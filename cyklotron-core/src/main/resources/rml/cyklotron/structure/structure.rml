@@ -32,7 +32,9 @@ role administrator,
 subject lockedBy, # subject that edit the document
 integer editorialPriority,
 resource(cms.files.file) thumbnail,
-date customModificationTime
+date customModificationTime,
+integer votesPositive,
+integer votesNegagtive
 );
 
 #

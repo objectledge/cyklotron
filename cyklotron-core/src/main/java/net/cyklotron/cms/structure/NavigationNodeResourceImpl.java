@@ -136,6 +136,12 @@ public class NavigationNodeResourceImpl
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
     private static AttributeDefinition visitorDef;
 
+    /** The AttributeDefinition object for the <code>votesNegagtive</code> attribute. */
+    private static AttributeDefinition votesNegagtiveDef;
+
+    /** The AttributeDefinition object for the <code>votesPositive</code> attribute. */
+    private static AttributeDefinition votesPositiveDef;
+
 	// custom injected fields /////////////////////////////////////////////////
 	
     /** The net.cyklotron.cms.security.SecurityService. */
@@ -1505,6 +1511,164 @@ public class NavigationNodeResourceImpl
     public boolean isVisitorDefined()
 	{
 	    return isDefined(visitorDef);
+	}
+
+    /**
+     * Returns the value of the <code>votesNegagtive</code> attribute.
+     *
+     * @return the value of the <code>votesNegagtive</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public int getVotesNegagtive()
+        throws IllegalStateException
+    {
+	    Integer value = (Integer)getInternal(votesNegagtiveDef, null);
+        if(value != null)
+        {
+            return value.intValue();
+        }
+        else
+        {
+            throw new IllegalStateException("value of attribute votesNegagtive is undefined"+
+			    " for resource #"+getId());
+        }
+    }
+
+    /**
+     * Returns the value of the <code>votesNegagtive</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>votesNegagtive</code> attribute.
+     */
+    public int getVotesNegagtive(int defaultValue)
+    {
+		return ((Integer)getInternal(votesNegagtiveDef, new Integer(defaultValue))).intValue();
+	}
+
+    /**
+     * Sets the value of the <code>votesNegagtive</code> attribute.
+     *
+     * @param value the value of the <code>votesNegagtive</code> attribute.
+     */
+    public void setVotesNegagtive(int value)
+    {
+        try
+        {
+            set(votesNegagtiveDef, new Integer(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+	
+	/**
+     * Removes the value of the <code>votesNegagtive</code> attribute.
+     */
+    public void unsetVotesNegagtive()
+    {
+        try
+        {
+            unset(votesNegagtiveDef);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }     
+    } 
+   
+	/**
+	 * Checks if the value of the <code>votesNegagtive</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>votesNegagtive</code> attribute is defined.
+	 */
+    public boolean isVotesNegagtiveDefined()
+	{
+	    return isDefined(votesNegagtiveDef);
+	}
+
+    /**
+     * Returns the value of the <code>votesPositive</code> attribute.
+     *
+     * @return the value of the <code>votesPositive</code> attribute.
+     * @throws IllegalStateException if the value of the attribute is 
+     *         undefined.
+     */
+    public int getVotesPositive()
+        throws IllegalStateException
+    {
+	    Integer value = (Integer)getInternal(votesPositiveDef, null);
+        if(value != null)
+        {
+            return value.intValue();
+        }
+        else
+        {
+            throw new IllegalStateException("value of attribute votesPositive is undefined"+
+			    " for resource #"+getId());
+        }
+    }
+
+    /**
+     * Returns the value of the <code>votesPositive</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>votesPositive</code> attribute.
+     */
+    public int getVotesPositive(int defaultValue)
+    {
+		return ((Integer)getInternal(votesPositiveDef, new Integer(defaultValue))).intValue();
+	}
+
+    /**
+     * Sets the value of the <code>votesPositive</code> attribute.
+     *
+     * @param value the value of the <code>votesPositive</code> attribute.
+     */
+    public void setVotesPositive(int value)
+    {
+        try
+        {
+            set(votesPositiveDef, new Integer(value));
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+	
+	/**
+     * Removes the value of the <code>votesPositive</code> attribute.
+     */
+    public void unsetVotesPositive()
+    {
+        try
+        {
+            unset(votesPositiveDef);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }     
+    } 
+   
+	/**
+	 * Checks if the value of the <code>votesPositive</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>votesPositive</code> attribute is defined.
+	 */
+    public boolean isVotesPositiveDefined()
+	{
+	    return isDefined(votesPositiveDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////
