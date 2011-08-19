@@ -105,8 +105,8 @@ function categorizeResource(url)
 //-->
 </script>
 <style>
-#related_order  { margin:0; padding:0; }
-#related_order li { border:1px solid #DADADA; background-color:#EFEFEF; padding:3px 5px; margin-bottom:3px; margin-top:3px; width:500px; list-style-type:none;
+#related_order  { margin:0; padding:0; width: 100% }
+#related_order li { border:1px solid #DADADA; background-color:#EFEFEF; padding:3px 5px; margin-bottom:3px; margin-top:3px; list-style-type:none;
 	color:#666666; }
 #related_order li:hover { 	background-color:#FFF; cursor:move; }
 #related_order li a { padding-right: 0.5 em; } 
