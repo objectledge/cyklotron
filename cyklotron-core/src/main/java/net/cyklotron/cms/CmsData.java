@@ -175,7 +175,7 @@ public class CmsData
                 long doc_id = parameters.getLong("doc_id", -1L);
                 contentNode = (DocumentNodeResource)coralSession.getStore().getResource(doc_id);
                 // check if subject can view this node.
-                if(!node.canView(coralSession, coralSession.getUserSubject(), getDate()))
+                if(!contentNode.canView(coralSession, coralSession.getUserSubject(), getDate()))
                 {
                     contentNode = node;
                 }
