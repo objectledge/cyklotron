@@ -4,5 +4,21 @@ ADD ATTRIBUTE integer votesPositive;
 ALTER RESOURCE CLASS RESOURCE CLASS 'structure.navigation_node'
 ADD ATTRIBUTE integer votesNegative;
 
+CREATE RESOURCE 'community_votes'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.CommunityVotes'
+);
+
+CREATE RESOURCE 'community_vote_results'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.CommunityVoteResults',
+  configurationView = 'documents.CommunityVoteResultsConf'
+);
+
+
 
 
