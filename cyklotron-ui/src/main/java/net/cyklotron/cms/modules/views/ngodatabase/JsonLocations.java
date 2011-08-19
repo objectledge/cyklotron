@@ -1,29 +1,25 @@
 package net.cyklotron.cms.modules.views.ngodatabase;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.ngodatabase.Location;
+import net.cyklotron.cms.ngodatabase.LocationDatabaseService;
+import net.cyklotron.cms.preferences.PreferencesService;
+
+import org.codehaus.jackson.JsonGenerationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
-import org.objectledge.templating.Template;
-import org.objectledge.utils.StackTrace;
-import org.objectledge.web.mvc.builders.AbstractBuilder;
-import org.objectledge.web.mvc.builders.BuildException;
-import org.objectledge.web.mvc.builders.EnclosingView;
-import org.objectledge.web.mvc.security.SecurityChecking;
-
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.ngodatabase.Location;
-import net.cyklotron.cms.ngodatabase.LocationDatabaseService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.sf.json.JSONArray;
+import org.objectledge.web.json.AbstractJsonView;
 
 /**
  * The screen for serving files.
@@ -32,74 +28,27 @@ import net.sf.json.JSONArray;
  * @version $Id: Download.java,v 1.6 2006-01-02 11:42:17 rafal Exp $
  */
 public class JsonLocations
-    extends AbstractBuilder
-    implements SecurityChecking
+    extends AbstractJsonView
 {
     private static final int DEFAULT_LIMIT = 25;
-
-    /** The logging service. */
-    private Logger logger;
 
     /** The Location service. */
     private LocationDatabaseService locationDatabaseService;
 
-    public JsonLocations(Context context, Logger logger, PreferencesService preferencesService,
+    public JsonLocations(Context context, Logger log, PreferencesService preferencesService,
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
         LocationDatabaseService locationDatabaseService)
     {
-        super(context);
-        this.logger = logger;
+        super(context, log);
         this.locationDatabaseService = locationDatabaseService;
     }
-
-    public String build(Template template, String embeddedBuildResults)
-        throws BuildException, ProcessingException
+    
+    @Override
+    protected void buildJsonStream()
+        throws ProcessingException, JsonGenerationException, IOException
     {
-        try
-        {
-            List<String> fieldValues = getFieldValues(context);
-            return JSONArray.fromObject(fieldValues).toString();
-        }
-        catch(Exception e)
-        {
-            logger.error("exception occured", e);
-            return new StackTrace(e).toString();
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean requiresAuthenticatedUser(Context context)
-        throws Exception
-    {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean requiresSecureChannel(Context context)
-        throws Exception
-    {
-        return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean checkAccessRights(Context context)
-        throws ProcessingException
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public EnclosingView getEnclosingView(String thisViewName)
-    {
-        return EnclosingView.TOP;
+        List<String> fieldValues = getFieldValues(context);
+        writeResponseValue(fieldValues);
     }
 
     private List<String> getFieldValues(Context context)
