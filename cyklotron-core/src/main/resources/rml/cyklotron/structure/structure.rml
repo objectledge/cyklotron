@@ -34,7 +34,7 @@ integer editorialPriority,
 resource(cms.files.file) thumbnail,
 date customModificationTime,
 integer votesPositive,
-integer votesNegagtive
+integer votesNegative
 );
 
 #

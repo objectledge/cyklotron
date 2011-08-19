@@ -136,8 +136,8 @@ public class NavigationNodeResourceImpl
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
     private static AttributeDefinition visitorDef;
 
-    /** The AttributeDefinition object for the <code>votesNegagtive</code> attribute. */
-    private static AttributeDefinition votesNegagtiveDef;
+    /** The AttributeDefinition object for the <code>votesNegative</code> attribute. */
+    private static AttributeDefinition votesNegativeDef;
 
     /** The AttributeDefinition object for the <code>votesPositive</code> attribute. */
     private static AttributeDefinition votesPositiveDef;
@@ -1514,48 +1514,48 @@ public class NavigationNodeResourceImpl
 	}
 
     /**
-     * Returns the value of the <code>votesNegagtive</code> attribute.
+     * Returns the value of the <code>votesNegative</code> attribute.
      *
-     * @return the value of the <code>votesNegagtive</code> attribute.
+     * @return the value of the <code>votesNegative</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getVotesNegagtive()
+    public int getVotesNegative()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(votesNegagtiveDef, null);
+	    Integer value = (Integer)getInternal(votesNegativeDef, null);
         if(value != null)
         {
             return value.intValue();
         }
         else
         {
-            throw new IllegalStateException("value of attribute votesNegagtive is undefined"+
+            throw new IllegalStateException("value of attribute votesNegative is undefined"+
 			    " for resource #"+getId());
         }
     }
 
     /**
-     * Returns the value of the <code>votesNegagtive</code> attribute.
+     * Returns the value of the <code>votesNegative</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>votesNegagtive</code> attribute.
+     * @return the value of the <code>votesNegative</code> attribute.
      */
-    public int getVotesNegagtive(int defaultValue)
+    public int getVotesNegative(int defaultValue)
     {
-		return ((Integer)getInternal(votesNegagtiveDef, new Integer(defaultValue))).intValue();
+		return ((Integer)getInternal(votesNegativeDef, new Integer(defaultValue))).intValue();
 	}
 
     /**
-     * Sets the value of the <code>votesNegagtive</code> attribute.
+     * Sets the value of the <code>votesNegative</code> attribute.
      *
-     * @param value the value of the <code>votesNegagtive</code> attribute.
+     * @param value the value of the <code>votesNegative</code> attribute.
      */
-    public void setVotesNegagtive(int value)
+    public void setVotesNegative(int value)
     {
         try
         {
-            set(votesNegagtiveDef, new Integer(value));
+            set(votesNegativeDef, new Integer(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -1568,13 +1568,13 @@ public class NavigationNodeResourceImpl
     }
 	
 	/**
-     * Removes the value of the <code>votesNegagtive</code> attribute.
+     * Removes the value of the <code>votesNegative</code> attribute.
      */
-    public void unsetVotesNegagtive()
+    public void unsetVotesNegative()
     {
         try
         {
-            unset(votesNegagtiveDef);
+            unset(votesNegativeDef);
         }
         catch(ValueRequiredException e)
         {
@@ -1583,13 +1583,13 @@ public class NavigationNodeResourceImpl
     } 
    
 	/**
-	 * Checks if the value of the <code>votesNegagtive</code> attribute is defined.
+	 * Checks if the value of the <code>votesNegative</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>votesNegagtive</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>votesNegative</code> attribute is defined.
 	 */
-    public boolean isVotesNegagtiveDefined()
+    public boolean isVotesNegativeDefined()
 	{
-	    return isDefined(votesNegagtiveDef);
+	    return isDefined(votesNegativeDef);
 	}
 
     /**

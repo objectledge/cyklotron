@@ -507,41 +507,41 @@ public interface NavigationNodeResource
     public boolean isVisitorDefined();
 	
     /**
-     * Returns the value of the <code>votesNegagtive</code> attribute.
+     * Returns the value of the <code>votesNegative</code> attribute.
      *
-     * @return the value of the the <code>votesNegagtive</code> attribute.
+     * @return the value of the the <code>votesNegative</code> attribute.
      * @throws IllegalStateException if the value of the attribute is 
      *         undefined.
      */
-    public int getVotesNegagtive()
+    public int getVotesNegative()
 		throws IllegalStateException;
 
 	/**
-     * Returns the value of the <code>votesNegagtive</code> attribute.
+     * Returns the value of the <code>votesNegative</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>votesNegagtive</code> attribute.
+     * @return the value of the <code>votesNegative</code> attribute.
      */
-    public int getVotesNegagtive(int defaultValue);
+    public int getVotesNegative(int defaultValue);
 
     /**
-     * Sets the value of the <code>votesNegagtive</code> attribute.
+     * Sets the value of the <code>votesNegative</code> attribute.
      *
-     * @param value the value of the <code>votesNegagtive</code> attribute.
+     * @param value the value of the <code>votesNegative</code> attribute.
      */
-    public void setVotesNegagtive(int value);
+    public void setVotesNegative(int value);
 
 	/**
-     * Removes the value of the <code>votesNegagtive</code> attribute.
+     * Removes the value of the <code>votesNegative</code> attribute.
      */
-    public void unsetVotesNegagtive();
+    public void unsetVotesNegative();
    
 	/**
-	 * Checks if the value of the <code>votesNegagtive</code> attribute is defined.
+	 * Checks if the value of the <code>votesNegative</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>votesNegagtive</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>votesNegative</code> attribute is defined.
 	 */
-    public boolean isVotesNegagtiveDefined();
+    public boolean isVotesNegativeDefined();
 	
     /**
      * Returns the value of the <code>votesPositive</code> attribute.
