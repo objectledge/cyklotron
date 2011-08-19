@@ -101,6 +101,9 @@ function fSub(action)
 
 #genericScreenHeader('CHOOSE CATEGORIES')
 
+#resource_type($resource) #resource_title($resource)
+<hr/>
+
 #result_inline_message('results.category')
 
 #if($removed_categories)
