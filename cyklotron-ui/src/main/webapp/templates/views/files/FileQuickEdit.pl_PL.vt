@@ -42,11 +42,23 @@ $viewEnclosureTool.override('popup.Default')
     </tr>
     <tr>
       <td align="right"><b>Krótki opis pliku:</b></td>
-      <td><textarea cols="40" name="description">$!file.description</textarea></td>
+      <td><textarea cols="60" name="description">$!file.description</textarea></td>
     </tr>
     <tr>
       <td align="right"><b>Rozmiar:</b></td>
       <td>$file.size</td>
+    </tr>
+	<tr>
+        <td align="right">
+        Kategorie:<br/><a href="#categorize($file)">Edytuj</a>
+        </td>
+        <td class="nob">
+        #set($categories = $category_context_tool.getCategoriesAsList($file, false))
+        #foreach($cat in $categories)
+        $cat.name#if($velocityCount < $categories.size()), #end 
+        #end
+        &nbsp;  
+        </td>
     </tr>
 	<tr>
 		<td align="right"><b>Podgląd:</b></td>
