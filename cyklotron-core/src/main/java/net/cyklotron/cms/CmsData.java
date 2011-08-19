@@ -21,6 +21,7 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -63,6 +64,7 @@ public class CmsData
     private String modeOverride;
     private SiteResource site;
     private NavigationNodeResource node;
+    private NavigationNodeResource contentNode;
     private NavigationNodeResource homePage;
     private Parameters preferences;
     private Parameters systemPreferences;
@@ -91,9 +93,6 @@ public class CmsData
         this.userManager = userManager;
         this.integrationService = integrationService;
         Parameters parameters = RequestParameters.getRequestParameters(context);
-        // init cms data
-        nodesSetup(parameters);
-        preferencesSetup(parameters);            
         // get date from session
         HttpContext httpContext = HttpContext.getHttpContext(context);
         date = (Date)(httpContext.getSessionAttribute(CMS_DATE_KEY));
@@ -101,6 +100,9 @@ public class CmsData
         {
             date = new Date();
         }
+        // init cms data
+        nodesSetup(parameters);
+        preferencesSetup(parameters);            
         // skin preview
         if(site != null)
         {
@@ -116,6 +118,7 @@ public class CmsData
     private void nodesSetup(Parameters parameters)
         throws ProcessingException
     {
+        CoralSession coralSession = getCoralSession(context);
         adminMode = true;
         modeOverride = null;
         if(parameters.isDefined("x"))
@@ -140,7 +143,7 @@ public class CmsData
                 {
                     try
                     {
-                        Resource siteRes = getCoralSession(context).getStore().getResource(site_id);
+                        Resource siteRes = coralSession.getStore().getResource(site_id);
                         if(siteRes instanceof SiteResource)
                         {
                             site = (SiteResource)siteRes;
@@ -154,7 +157,7 @@ public class CmsData
                     {
                         logger.error("Site with id="+site_id+" does not exist", e);
                     }
-                    node = getHomePage(getCoralSession(context), site);
+                    node = getHomePage(coralSession, site);
                 }
             }
         }
@@ -162,7 +165,29 @@ public class CmsData
         if(node != null)
         {
             site = node.getSite();
-            homePage = getHomePage(getCoralSession(context), site);
+            homePage = getHomePage(coralSession, site);
+        }
+        
+        if(parameters.isDefined("doc_id"))
+        {
+            try
+            {
+                long doc_id = parameters.getLong("doc_id", -1L);
+                contentNode = (DocumentNodeResource)coralSession.getStore().getResource(doc_id);
+                // check if subject can view this node.
+                if(!node.canView(coralSession, coralSession.getUserSubject(), getDate()))
+                {
+                    contentNode = node;
+                }
+            }
+            catch(EntityDoesNotExistException e)
+            {
+                contentNode = node;
+            }
+        }
+        else
+        {
+            contentNode = node;
         }
     }
     
@@ -290,6 +315,21 @@ public class CmsData
     public NavigationNodeResource getNode()
     {
         return node;
+    }
+    
+    /**
+     * Returns the navigation node providing content.
+     * <p>
+     * Generally {@code contentNode} is synonymous to {@code node}. When {@code doc_id} request
+     * parameter is defined, and it's value is the identifier of a valid NavigationNodeResource that
+     * the current user can view, {@node contentNode} is determined by {@code doc_id}.
+     * </p>
+     * 
+     * @return navigation node providing content.
+     */
+    public NavigationNodeResource getContentNode()
+    {
+        return contentNode;
     }
 
     /**

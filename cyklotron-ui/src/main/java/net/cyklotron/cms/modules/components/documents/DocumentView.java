@@ -39,7 +39,7 @@ public class DocumentView
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
         throws ProcessingException
     {
-        NavigationNodeResource node = getContextNode(coralSession, getCmsData(), parameters);
+        NavigationNodeResource node = getCmsData().getContentNode();
         if(node != null)
         {
             if(node instanceof DocumentNodeResource)
@@ -55,32 +55,5 @@ public class DocumentView
         {
             componentError(context, "No navigation node selected");            
         }
-    }
-    
-    private NavigationNodeResource getContextNode(CoralSession coralSession, CmsData cmsData, Parameters parameters)
-    {    
-        NavigationNodeResource node;
-        if(parameters.isDefined("doc_id"))
-        {
-            try
-            {
-                long doc_id = parameters.getLong("doc_id", -1L);
-                node = (DocumentNodeResource)coralSession.getStore().getResource(doc_id);
-                // check if subject can view this node.
-                if(!node.canView(coralSession, coralSession.getUserSubject(),cmsData.getDate()))
-                {
-                    node = cmsData.getNode();
-                }
-                return node;
-            }
-            catch(EntityDoesNotExistException e)
-            {
-                return cmsData.getNode();
-            }
-        }
-        else
-        {
-            return cmsData.getNode();
-        } 
     }
 }

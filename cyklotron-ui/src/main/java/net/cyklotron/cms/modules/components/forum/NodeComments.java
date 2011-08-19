@@ -69,10 +69,8 @@ public class NodeComments
     protected DiscussionResource getDiscussion(HttpContext httpContext, CoralSession coralSession, Context context, boolean errorOnNull)
         throws ProcessingException
     {
-
-        Parameters parameters = RequestParameters.getRequestParameters(context);
         CmsData cmsData = cmsDataFactory.getCmsData(context);    
-        NavigationNodeResource node = getContextNode(coralSession, cmsData, parameters);
+        NavigationNodeResource node = cmsData.getContentNode();
         if(node == null)
         {
             componentError(context, "No node selected");
@@ -91,36 +89,7 @@ public class NodeComments
         {
             throw new ProcessingException("failed to retrieve forum information", e);
         }
-    }
-   
-    
-    private NavigationNodeResource getContextNode(CoralSession coralSession, CmsData cmsData, Parameters parameters)
-    {    
-        NavigationNodeResource node;
-        if(parameters.isDefined("doc_id"))
-        {
-            try
-            {
-                long doc_id = parameters.getLong("doc_id", -1L);
-                node = (DocumentNodeResource)coralSession.getStore().getResource(doc_id);
-                // check if subject can view this node.
-                if(!node.canView(coralSession, coralSession.getUserSubject(),cmsData.getDate()))
-                {
-                    node = cmsData.getNode();
-                }
-                return node;
-            }
-            catch(EntityDoesNotExistException e)
-            {
-                return cmsData.getNode();
-            }
-        }
-        else
-        {
-            return cmsData.getNode();
-        } 
-    }
-    
+    }    
     
     private ForumResource getForum(CoralSession coralSession,
         NavigationNodeResource node, SiteResource site)

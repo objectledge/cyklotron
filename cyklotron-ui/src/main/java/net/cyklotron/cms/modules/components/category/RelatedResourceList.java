@@ -59,7 +59,7 @@ public class RelatedResourceList
     {
         return new net.cyklotron.cms.category.components.RelatedResourceList(context,
             integrationService, cmsDataFactory, categoryQueryService, categoryService,
-            getContextNode(context, cmsData, parameters));
+            cmsData.getContentNode());
     }
 
     /*
@@ -71,34 +71,5 @@ public class RelatedResourceList
     protected CmsNodeResource getCacheKeyNode(BaseResourceListConfiguration config, CmsData cmsData)
     {
         return cmsData.getNode();
-    }
-
-    protected NavigationNodeResource getContextNode(Context context, CmsData cmsData,
-        Parameters parameters)
-    {
-        if(parameters.isDefined("doc_id"))
-        {
-            try
-            {
-                Long docId = parameters.getLong("doc_id", -1L);
-                CoralSession coralSession = context.getAttribute(CoralSession.class);
-                NavigationNodeResource node = (NavigationNodeResource)StructureUtil.getNode(
-                    coralSession, docId);
-                // check if subject can view this node.
-                if(!node.canView(coralSession, coralSession.getUserSubject(), cmsData.getDate()))
-                {
-                    node = cmsData.getNode();
-                }
-                return node;
-            }
-            catch(ProcessingException e)
-            {
-                return cmsData.getNode();
-            }
-        }
-        else
-        {
-            return cmsData.getNode();
-        }
     }
 }
