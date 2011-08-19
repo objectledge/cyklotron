@@ -5,7 +5,7 @@ CKEDITOR.editorConfig = function( config )
 	
 	config.toolbar_Full = [ ['Format'], 
 	                   ['Bold','Italic','Underline','Strike','-','Subscript','Superscript'],
-                   	   ['Cut','Copy','Paste','PasteText','PasteFromWord','-','SpellChecker'],
+                   	   ['Cut','Copy','Paste','PasteText','PasteFromWord'],
                    	   ['Undo','Redo','-','Find','Replace'],
                    	   '/',
                    	   ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','-','CreateDiv'],
@@ -18,7 +18,7 @@ CKEDITOR.editorConfig = function( config )
                      ] ;
 
 	config.toolbar_Restricted = [ ['Bold'],
-	                              ['Cut','Copy','Paste','PasteText','PasteFromWord','-','SpellChecker'],
+	                              ['Cut','Copy','Paste','PasteText','PasteFromWord'],
 	                              ['Undo','Redo','-','Find','Replace'],
 	                              ['NumberedList','BulletedList'],
 	                              ['Link','Unlink']
@@ -54,8 +54,9 @@ CKEDITOR.editorConfig = function( config )
 	
 	config.removeFormatTags = 'b,big,code,del,dfn,em,font,i,ins,kbd,q,samp,small,span,strike,strong,sub,sup,tt,u,var,hr,meta,link,xml';	
 	
+	config.removePlugins = 'scayt';
 	config.extraPlugins = 'cyklopagebreak,cykloaddextresource';
-}
+};
 
 CKEDITOR.on('dialogDefinition', function( ev )
 {
