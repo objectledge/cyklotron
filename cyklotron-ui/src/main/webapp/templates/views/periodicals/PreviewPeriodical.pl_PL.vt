@@ -1,0 +1,37 @@
+#genericScreenHeader("PODGLĄD")
+
+#result_inline_message("results.periodicals")
+
+#if($periodical.resourceClass.name.equals("cms.periodicals.email_periodical"))
+#set($type = 'biuletynu')
+#set($email = 'Email')
+#else
+#set($type = 'periodyka')
+#end
+
+<p>Podgląd $type $periodical.name</p>
+
+#if(!$isEmail || ( $isEmail && ($periodical.sendEmpty || !$results.empty)))
+<p>Wygenerowano następujące pliki:</p>
+
+#foreach($file in $results)
+	<a href="$files.getLink($file)">$file.name</a> <br/>
+#end
+#else
+<p>Biuletyn nie został wygenerowany bo nie zawiera wiadomości.</p>
+#end
+
+#if($isEmail)
+	#if($recipient && $recipient.trim().length() > 0)
+		<p>Wiadomość testową wysłano do: $recipient</p>
+	#else
+		<p>Nie wysłano wiadomości testowej (<a href="$link.view('periodicals.ConfigureEmailPeriodicals')">ustaw adresata</a>)</p>
+	#end
+#end
+
+<p style="text-align: right;">
+	<a href="$link.action('periodicals.PreviewPeriodical').set('periodical_id', $periodical.id)">Kolejny podgląd</a>
+	<a href="$link.view("periodicals.$!{email}Periodicals").set('site_id', $cmsData.site.id)">Powrót do listy</a>
+</p>
+
+#genericScreenTrailer()
