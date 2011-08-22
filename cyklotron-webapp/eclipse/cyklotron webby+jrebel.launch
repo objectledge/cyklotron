@@ -9,7 +9,7 @@
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-6-sun-1.6.0.26"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="cyklotron-webapp"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.sonatype.m2e.webby.sourcepathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-javaagent:${env_var:JREBEL_HOME}/jrebel.jar -Dworkspace.root=${workspace_loc} -Drebel.velocity_plugin=true"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-javaagent:${env_var:JREBEL_HOME}/jrebel.jar &#10;-Dworkspace.root=${workspace_loc} &#10;-Drebel.velocity_plugin=true"/>
 <stringAttribute key="org.sonatype.m2e.webby.containerHome" value="/home/rafal/opt/apache-tomcat-7.0.20"/>
 <stringAttribute key="org.sonatype.m2e.webby.containerId" value="tomcat7x"/>
 <intAttribute key="org.sonatype.m2e.webby.containerPort" value="8080"/>
