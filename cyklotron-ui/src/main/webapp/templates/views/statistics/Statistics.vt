@@ -4,7 +4,7 @@ $pageTool.addScriptLink('script/Forms.js')
 <script language="javascript">
   function clear(item)
   {
-      setValue('select',item,'');
+      Forms.setValue('select', item, '');
   }
   function fSub(action)
   {

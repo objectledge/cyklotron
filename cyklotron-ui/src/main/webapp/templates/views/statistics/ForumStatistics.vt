@@ -14,7 +14,7 @@ $pageTool.addScriptLink('script/Forms.js')
   
   function clear(item)
   {
-     setValue('select',item,'');
+     Forms.setValue('select', item, '');
   }
 
   function changeState(select)

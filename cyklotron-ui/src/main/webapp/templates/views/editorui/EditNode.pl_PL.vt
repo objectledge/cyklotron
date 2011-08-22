@@ -70,11 +70,11 @@ function fSub(action)
 }
 function SetUrl(url)                                                                                                                                                                                         
 {                                                                                                                                                                                                            
-  setValue('form1','thumbnail',url.substring($cmsData.site.path.length()+2));                                                                                                                       
+  Forms.setValue('form1','thumbnail',url.substring($cmsData.site.path.length()+2));                                                                                                                       
 }                                                                                                                                                                                                            
 function SetId(id)                                                                                                                                                                                           
 {                                                                                                                                                                                                            
-  setValue('form1','thumbnail_id',id);                                                                                                                                                                     
+  Forms.setValue('form1','thumbnail_id',id);                                                                                                                                                                     
 }    
 //-->
 </script>
@@ -139,16 +139,16 @@ function SetId(id)
 <script language="javascript">
   function clearPhoto()
   {
-      setValue('form1','thumbnail_id','');
-      setValue('form1','thumbnail','');
+      Forms.setValue('form1','thumbnail_id','');
+      Forms.setValue('form1','thumbnail','');
   }
   function SetUrl(url)
   {
-      setValue('form1','thumbnail',url.substring($cmsData.site.parent.path.length()+2));
+      Forms.setValue('form1','thumbnail',url.substring($cmsData.site.parent.path.length()+2));
   }
   function SetId(id)
   {
-      setValue('form1','thumbnail_id',id);
+      Forms.setValue('form1','thumbnail_id',id);
   }
 </script>
 <tr>

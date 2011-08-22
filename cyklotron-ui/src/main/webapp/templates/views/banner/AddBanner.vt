@@ -31,7 +31,7 @@ $pageTool.addScriptLink('script/Forms.js')
     <tr>
       <td align="right" nowrap><b>Banner title:</b></td>
       <td colspan="3" width="95%"><input type="text" name="title" value="$parametersTool.get('title','')" style="width:100%;"></td>
-    <tr>
+    </tr>
 
     <tr>
       <td align="right" nowrap><b>Short description:</b></td>
@@ -75,7 +75,7 @@ http://#end" style="width:100%;"></td>
       <script language="javascript">
       function selectBannerItem()
       {
-        setValue('add_banner', 'src_type', 'media')
+        Forms.setValue('add_banner', 'src_type', 'media')
         selectItem('path', 'add_banner', 'int_src', '$link.view('popup.DirectoryWithUpload').set('mode','choose')')
       }
       </script>

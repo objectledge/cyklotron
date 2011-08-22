@@ -16,7 +16,7 @@ function submitConfig(targetWindowName, sourceFormName, targetFormName, fieldNam
         var name = fieldNames[i];
         if(srcForm.elements[name] != null)
         {
-            var value = getValue (sourceFormName, name);
+            var value = Forms.getValue (sourceFormName, name);
             config += name+'='+value+'\n';
         }
         else if(typeof(computeProperty) == 'function')

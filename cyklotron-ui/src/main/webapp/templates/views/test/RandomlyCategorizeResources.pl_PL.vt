@@ -134,11 +134,11 @@ $pageTool.addScriptLink('script/Forms.js')
 function checkAll(name, value)
 {
   //alert(name +'\n'+ value);
-  var ids = getValue ('form1', name+'-visible');
+  var ids = Forms.getValue ('form1', name + '-visible');
   //alert(ids);
   for(var i=0; i<ids.length; i++)
   {
-    setValue('form1', name+'-'+ids[i], value);
+    Forms.setValue('form1',  name + '-' + ids[i], value);
   }
 }
 //-->

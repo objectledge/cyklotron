@@ -52,7 +52,7 @@ function onRootConfigTypeChange(control)
     {
         if(rootPathControl != null)
         {
-            setValue('naviConf', 'rootPath', lastRootPath);
+            Forms.setValue('naviConf', 'rootPath', lastRootPath);
             rootPathControl.disabled = false;
         }
         rootLevelControl.disabled = true;
@@ -62,8 +62,8 @@ function onRootConfigTypeChange(control)
     {
         if(rootPathControl != null)
         {
-            lastRootPath = getValue('naviConf', 'rootPath');
-            setValue('naviConf', 'rootPath', '');
+            lastRootPath = Forms.getValue('naviConf', 'rootPath');
+            Forms.setValue('naviConf', 'rootPath', '');
             rootPathControl.disabled = true;
         }
         rootLevelControl.disabled = false;
@@ -73,8 +73,8 @@ function onRootConfigTypeChange(control)
     {
         if(rootPathControl != null)
         {
-            lastRootPath = getValue('naviConf', 'rootPath');
-            setValue('naviConf', 'rootPath', '');
+            lastRootPath = Forms.getValue('naviConf', 'rootPath');
+            Forms.setValue('naviConf', 'rootPath', '');
             rootPathControl.disabled = true;
         }
         rootLevelControl.disabled = true;

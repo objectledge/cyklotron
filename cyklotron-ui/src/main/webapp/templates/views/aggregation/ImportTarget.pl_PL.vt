@@ -41,13 +41,13 @@ $pageTool.addScriptLink('script/Forms.js')##
 <!--
 function sendParent(parentId)
 {
-    setValue("importResource", "parent_id", parentId);
+    Forms.setValue("importResource", "parent_id", parentId);
     document.forms.importResource.submit();
 }
 
 function sendParentRecursive(parentId, action)
 {
-    setValue("importResource", "parent_id", parentId);
+    Forms.setValue("importResource", "parent_id", parentId);
     document.forms.importResource.action = action;
     document.forms.importResource.submit();
 }

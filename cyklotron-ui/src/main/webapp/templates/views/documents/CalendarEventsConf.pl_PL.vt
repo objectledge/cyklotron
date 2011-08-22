@@ -27,8 +27,8 @@ function sendConfig()
 
 function clearCategory(item)
 {
-    setValue('form1','category_id_'+item,'');
-    setValue('form1','category_name_'+item,'');
+    Forms.setValue('form1', 'category_id_' + item, '');
+    Forms.setValue('form1', 'category_name_' + item, '');
 }
 //-->
 </script>

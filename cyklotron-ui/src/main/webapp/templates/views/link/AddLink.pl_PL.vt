@@ -69,13 +69,13 @@
   </td>
             <td width="60%">
           <input type=hidden name="structure_path" value="$data_site.getPath()/structure">
-          <input type=text name="int_target" value="$parametersTool.get('int_target',"")" style="width:100%;"  onclick="setValue('add_link', 'src_type', 'cms');">
+          <input type=text name="int_target" value="$parametersTool.get('int_target',"")" style="width:100%;"  onclick="Forms.setValue('add_link', 'src_type', 'cms');">
   </td>
         <td class="actionlink">
           <script language="javascript">
           function selectLinkTarget()
           {
-              setValue('add_link', 'src_type', 'cms')
+              Forms.setValue('add_link', 'src_type', 'cms')
               selectNode('relative_path', 'add_link', 'int_target', '$link.view('popup.NodeList').set('root',$data_site_root.id)')
           }
           </script>
@@ -88,7 +88,7 @@
     <input type=radio name="src_type" value="external" checked><b>zewnętrzny:</b>
     </td>
     <td colspan="2">
-    <input type=text name="ext_target" value="http://" size="50" style="width:100%;" onfocus="setValue('add_link', 'src_type', 'external');">
+    <input type=text name="ext_target" value="http://" size="50" style="width:100%;" onfocus="Forms.setValue('add_link', 'src_type', 'external');">
   </td>
       </tr>
 
