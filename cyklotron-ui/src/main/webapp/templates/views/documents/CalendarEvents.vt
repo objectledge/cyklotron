@@ -1,0 +1,101 @@
+
+<h1>$node.title</h1>
+
+#result_inline_message('results.search')
+
+<form name="search" method="get" action="$link.set('x',$node.id)" class="searchscreen">
+<table>
+  <tr>  
+    <td>
+	  <input type="text" name="text_query" />
+	  
+      <select name="query_id">
+       <option value="-1">---</option>	  
+        #foreach($row in $queries)  
+        <option value="$row.id" #if($query_id == $row.id) selected="selected" #end>$row.name</option>
+        #end
+       </select>		
+	  <select size="1" name="period">
+	    <option value="1" #if($period == 1) selected #end>Daily view</option>
+	    <option value="7" #if($period == 7) selected #end>7 days view</option>
+	    <option value="30" #if($period == 30) selected #end>30 days view</option>
+	  </select>
+	  
+	  <select size="1" name="range">
+	    <option value="ongoing" #if($range == "ongoing") selected #end>all ongoing</option>
+	    <option value="in" #if($range == "in") selected #end>in</option>
+	    <option value="starting" #if($range == "starting") selected #end>starting</option>
+	    <option value="ending" #if($range == "ending") selected #end>ending</option>
+	  </select>
+         
+      for date
+      <select name="day">
+        #foreach($el in [1..31])
+        <option value="$el" #if($el == $day) selected #end>$el</option>
+        #end
+      </select>
+      -
+      <select name="month">
+      	#foreach($el in [1..12])
+        <option value="$el" #if($el == $month) selected #end>$el</option>
+        #end
+      </select>
+      -
+      <select name="year">
+        #foreach($el in [2000..2020])
+        <option value="$el" #if($el == $year) selected #end>$el</option>
+        #end
+      </select>
+      <input type="submit" value="Zobacz" name="B1">
+    </td>     
+</tr>
+<tr>
+<td>
+Result order
+<select name="sort_field">
+#set($opts = [["by score","score"],["by modified date","modification_time"],["by publish date","validityStart"],["by event start date","eventStart"],["by event end date","eventEnd"],["by closest event","closestEventStart"]])
+#options($opts $parametersTool.get('sort_field',"event_start"))
+</select>
+<select name="sort_order">
+#set($opts = [["descending","desc"],["ascending","asc"]])
+#options($opts $parametersTool.get('sort_order',"desc"))
+</select>
+</td>
+</tr>
+  
+</table>
+</form>
+
+<h4>debug:</h4>
+<p>
+Query: $query<br />
+Start: <b>$format_date.format($start_date)</b><br />
+End: <b>$format_date.format($end_date)</b><br />
+</p>
+
+#if($hits_table)
+
+<p>Number of hits: $hits_table.totalRowCount</p>
+
+
+#set($start = $hits_table.pageSize * ($hits_table.currentPage - 1) + 1)
+<ol start="$start">
+#foreach ($row in $hits_table.rows)
+<li>
+<a href="$row.object.url">$row.object.get('title_calendar')</a>
+<div style="font-size: 80%; color: grey;">
+<p>
+&nbsp;
+#if($row.object.isPlainDate('event_start'))
+starting at: <b>$format_date.format($row.object.getAsDate('event_start'))</b>
+#end
+#if($row.object.isPlainDate('event_end'))
+ending at: <b>$format_date.format($row.object.getAsDate('event_end'))</b>
+#end
+</p>
+</div>
+</li>
+#end
+</ol>
+#end
+

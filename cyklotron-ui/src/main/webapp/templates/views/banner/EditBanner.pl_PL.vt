@@ -1,0 +1,141 @@
+##
+## Banner application: banner adding screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: EditBanner.pl_PL.vt,v 1.8 2005-12-29 12:04:50 pablo Exp $
+##
+##
+##
+$pageTool.addScriptLink('script/CMSPopups.js')
+#set($pid = $parametersTool.get('pid',''))
+#set($bsid = $parametersTool.get('bsid','-1'))
+#set($bannerLink = $link.set('bsid',$bsid))
+#set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
+
+#set($bannerTitle = $parametersTool.get('title',$banner.getName()))
+#set($bannerDescription = $parametersTool.get('description',$banner.getDescription()))
+#set($bannerAltText = $parametersTool.get('alt_text',$banner.getAltText()))
+#set($bannerTarget = $parametersTool.get('target',$banner.getTarget()))
+
+
+#genericScreenHeader('EDYCJA BANNERA')
+
+#result_inline_message("results.banner")
+
+#if($pid == '')
+<form name="edit_banner" method="post" action="$link.view("banner.BannerList").action("banner.UpdateBanner")" class="defaultForm">
+#else
+<form name="edit_banner" method="post" action="$link.view("banner.EditPool").set("pid",$pid).action("banner.UpdateBanner")" class="defaultForm">
+#end
+
+  <input type="hidden" name="bid" value="$banner.getId()">
+  <input type="hidden" name="bsid" value="$bsid" size="30">
+
+  <table width="100%" class="genericScreen" cellspacing="0">
+    <tr>
+      <td align="right" nowrap><b>Tytuł banera:</b></td>
+      <td width="95%" colspan="2"><input type="text" name="title" value="$bannerTitle" style="width:100%;"></td>
+    </tr>
+
+    <tr>
+      <td align="right" nowrap><b>Krótki opis:</b></td>
+      <td colspan="2"><input type="text" name="description" value="$!bannerDescription" style="width:100%;"></td>
+    </tr>
+
+    <tr>
+      <td align="right"><b>Aktywny od:</b></td>
+      <td nowrap colspan="2">
+        #dateSelectorTS("start_time" $parametersTool.getLong('start_time',$banner.getStartDate().getTime()))
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right"><b>Aktywny do:</b></td>
+      <td nowrap colspan="2">
+        #dateSelectorTS("end_time" $parametersTool.getLong('end_time',$banner.getEndDate().getTime()))
+      </td>
+    </tr>
+
+    <tr>
+      <td align="right" nowrap><b>Opis obrazka (alt):</b></td>
+      <td colspan="2"><input type="text" name="alt_text" value="$bannerAltText" style="width:100%;"></td>
+    </tr>
+    <tr>
+      <td align="right" nowrap><b>Adres docelowy:</b></td>
+      <td colspan="2"><input type="text" name="target" value="$bannerTarget" style="width:100%;"></td>
+    </tr>
+    <tr>
+      <td align="right" nowrap><b>Źródło obrazka:</b></td>
+      #if($banner.getResourceClass().getName().equals("cms.banner.media_banner"))
+      <td>
+        <input type="text" name="src" value="$parametersTool.get('src',$banner.getMedia().getPath().substring(11))" style="width:100%;">
+      </td>
+      <script language="javascript">
+        function selectBannerItem()
+        {
+           selectItem('path', 'edit_banner', 'src', '$link.view('popup.DirectoryWithUpload').set('mode','choose')')
+        }
+      </script>
+      <td>
+        #set($filesRoot = $files.getFilesRoot($site))
+        #if($cms_tool.getUserData().hasPermission($filesRoot, "cms.files.read"))    
+        <a href="javascript:selectBannerItem();">wybierz</a>
+        #else
+        -
+        #end
+      </td>
+       #else
+      <td colspan="2">
+        <input type="text" name="src" value="$parametersTool.get('src',$banner.getImage())" style="width:100%;">
+
+      </td>
+
+    #end
+    </tr>
+    <tr>
+      <td align="right"><b>Foldery:</b></td>
+      <td td colspan="2">
+      #if($pools.size() > 0)
+      <table>
+        #foreach($pool in $pools)
+        <tr>
+          <td>
+			<input type="checkbox" name="pool_id" value="$pool.id" #if($pools_map.get($pool)) checked #end>
+          </td>
+          <td>
+    	    $pool.getName()
+	      </td>
+    	</tr>
+  	    #end
+      </table>
+      #else
+      &nbsp;
+      #end
+    </td>
+  </tr>
+    
+  </table>
+
+  <div align="right">
+    <table class="layoutTable" align="right" border="0">
+      <tr>
+        <td NOWRAP class="usualbutton"><a href="javascript:document.edit_banner.submit();">Zapisz</a></td>
+        <td>
+          <table height="22" class="buttonTable">
+            <tr>
+              <td>
+                #if($pid == '')
+                <a href="$link.view("banner.BannerList").set("bsid",$bsid)">Zaniechaj</a>
+                #else
+                <a href="$link.view("banner.EditPool").set("pid",$pid)">Zaniechaj</a>
+                #end
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+</form>
+

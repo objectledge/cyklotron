@@ -1,0 +1,161 @@
+#####
+## TYPE: S
+## NAME: Information adding screen
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: AddMessage.pl_PL.vt,v 1.2 2005-02-03 22:30:26 pablo Exp $
+## DESCR: Allows adding new information to notes board
+## DESCR: 
+## STATUS: final
+## TODO: create pre-template for internationalization
+## TODO: permissions checking
+#####
+
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink("script/captcha/verify.js")##
+
+## SET LOCAL VARS
+  #set($priorities_list = [['wysoki','1'], ['średni','2'], ['niski', '3']])
+
+## current user (whole DN), default user if no principal in 
+  #if ($authenticationContext.getUserPrincipal())
+  #set ($current_user = $authenticationContext.getUserPrincipal().getName())
+  #else
+  #set ($current_user = $default_user)
+  #end
+
+## current users's username
+  #set ($current_user_username = $cms_tool.userData.login)
+
+## END SET LOCAL VARS
+
+  #genericScreenHeader('NOWA WIADOMOŚĆ')
+
+<form name="form1" method="post" action="$link.view('forum.MessageList').action('forum.AddMessage')" class="defaultForm">
+  <input type="hidden" name="did" value="$discussion.getId()">
+  <input type="hidden" name="parent" value="$parent.getId()">
+
+  <table width="100%" class="genericScreen" cellspacing="0">
+  #if ($parent.getId() != $discussion.getId())
+    <tr>
+      <td align="right" width="25%"><b>W odpowiedzi na:</b></td>
+      <td>$parent.getName()</td>
+    </tr>
+  #end
+    <tr>
+      <td align="right" width="25%"><b>Wiadomość w dyskusji:</b></td>
+      <td>$discussion.getName()</td>
+    </tr>
+
+    <tr>
+      <td align="right" width="25%"><b>Wiadomość od:</b></td>
+      <td>#cms_personal_credentials($cms_tool.subject)</td>
+    </tr>
+
+##  </table>
+
+##  <table width="100%" class="genericScreen" cellspacing="0">  
+    <tr>
+      <td align="right"><b>Tytuł:</b></td>
+      <td><input type="text" name="name" size="63" value="" maxlength="150"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Treść:</b></td>
+      <td><textarea rows="10" cols="58" name="content">#if ($parent.getId() != $discussion.getId())>On $format_date.format($parent.getCreationTime()) #cms_personal_credentials($parent.createdBy) wrote:
+$parent_content #end</textarea></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Autor:</b></td>
+      <td><input type="text" name="author" size="63" value="" maxlength="150"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>E-mail autora:</b></td>
+      <td><input type="text" name="email" size="63" value="" maxlength="150"></td>
+    </tr>
+    <tr>
+      <td align="right"><b>Priorytet:</b></td>
+      <td>
+        <select name="priority">
+	#options($priorities_list '2')
+	</select>
+      </td>
+    </tr>
+
+    #if(false)
+    <tr>
+      <td align="right"><b>Język:</b></td>
+      <td>
+        <select name="locale">
+        #options($locale_list $locale_selected)
+        </select>
+      </td>
+    </tr>
+    #end
+    #if($parametersTool.isDefined("x"))
+     #if($add_captcha)
+ 	 <tr>
+ 	  <td><b>Weryfikacja Captcha</b></td>
+ 	 	<td>
+ 	 	  $captcha.createCaptchaWidget()
+ 	   </td>
+ 	 </tr>
+ 	 #end
+    #end
+  </table>
+
+#if($discussion && $discussion.state.name == 'moderated')
+<p>
+Uwaga, wiadomość pojawi się na liście dopiero po uzyskaniu akceptacji moderatora.
+</p>
+#end
+
+## COMMAND BAR
+
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      <td NOWRAP class="usualbutton">
+        #if($parametersTool.isDefined("x"))
+         <script language="javascript">
+         function sendaddpost(captcha, form)
+         {
+          if(form.name.value=="")
+          {
+            alert("Pole 'Tytuł' nie zostało wypełnione.");
+          }
+          else{
+           if(captcha)
+           {
+             captchaVerify('$link.view('captcha.Verify')', form, 'Nieprawidłowy kod captcha.');
+           }else{
+             form.submit();
+           }
+          }
+        }
+        </script>
+        <a href="javascript:sendaddpost($add_captcha, document.form1);">Wyślij</a>
+        #else
+        <script language="javascript">
+        function sendaddpost()
+        {
+             document.form1.submit();
+        }
+        </script>
+        <a href="javascript:sendaddpost();">Wyślij</a>
+        #end
+      </td>
+      <td NOWRAP class="usualbutton">
+      #if ($parent.getId() != $discussion.getId())
+        <a href="$link.view('forum.Message').set('mid',$parent.getId())">Zaniechaj</a>
+      #else
+        <a href="$link.view('forum.MessageList').set('did',$discussion.getId())">Zaniechaj</a>
+      #end
+      </td>
+    </tr>
+  </table>
+</form>
+
+    
+
+## END COMMAND BAR
+
