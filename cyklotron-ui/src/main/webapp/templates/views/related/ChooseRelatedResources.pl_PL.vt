@@ -27,12 +27,12 @@ function selCheckbox(id) {
 </script> 				    
 
 #macro( show_actions )
-<div class="action-buttons">
+<div class="action-buttons clearfix" style="width:100%; padding: 5px 0px 5px 0px;">
   <div class="additional">
   <a href="javascript:fSub('$link.action('related.ResetRelatedState')');">Usuń zmiany</a>
   </div>
 
-  <div class="modification">
+  <div class="modification" style="float: rigth; margin: 0px;">
 #if($resource.canModify($cms_tool.coralSession,$cms_tool.getUserData().getSubject()))
   <a href="javascript:fSub('$link.action('related.UpdateRelations')');">Zapisz zmiany</a>
 #end
@@ -94,7 +94,7 @@ function fSubConf(link, actionType)
  {
    fSub(link);
  }
-} 
+}
 
 function categorizeResource(url)
 {
@@ -106,10 +106,11 @@ function categorizeResource(url)
 </script>
 <style>
 #related_order  { margin:0; padding:0; width: 100% }
-#related_order li { border:1px solid #DADADA; background-color:#EFEFEF; padding:3px 5px; margin-bottom:3px; margin-top:3px; list-style-type:none;
-	color:#666666; }
+#related_order li { border:1px solid #DADADA; background-color:#EFEFEF; margin-bottom:3px; margin-top:3px; list-style-type:none;
+	color:#666666; width: 100% }
 #related_order li:hover { 	background-color:#FFF; cursor:move; }
-#related_order li a { padding-right: 0.5 em; } 
+#related_order li .actions a { padding-right: 0.5em; } 
+#related_order div { float: left; padding: 4px 0px 4px 4px }
 </style>
 
 <div style="float: right;">
@@ -143,13 +144,26 @@ function categorizeResource(url)
 
 #show_actions()
 #set($categorizeResourceClassDefNames = ['cms.files.file'])
+#set($previewExtensions = ['jpg','jpeg','png','gif'])
 
 #if($related_to.size() > 0)
 <h5>Ustaw kolejność zasobów powiązanych:</h5>
 <ul id="related_order">
 #foreach($row in $related_to)
   #set($definition = $cms_tool.getClassDefinition($row))##
-  <li id="listItem_$row.id">
+  <li id="listItem_$row.id" class="clearfix">
+  #if($cms_tool.isInstance($row, 'cms.files.file') && $previewExtensions.contains($files.getExtension($row)))
+  <div>
+  #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
+	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">
+  	  <img src="$files.getLink($row)" height="28px"/>
+	</a>
+  #else	
+    <img src="$files.getLink($row)" height="28px"/>
+  #end
+  </div>
+  #end
+  <div class="actions">
   #resource_label($row) 
   #set($categories = $category_context_tool.getCategoriesAsList($row, false))
   #foreach($cat in $categories)
@@ -159,13 +173,14 @@ function categorizeResource(url)
   #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
 	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
   #end
-  	<a href="javascript:fSubConf('$link.view('related.ChooseRelatedResources').action('related.RemoveRelation').set('item_id', $row.id)','unbind');">Odwiąż</a>
   #if($categorizeResourceClassDefNames.contains("$definition.name") && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession, $cms_tool.subject))
   	 <a href="javascript:categorizeResource('$link.view('category.Categorize').set('res_id',$row.id)');">Kategorie</a>
   #end
+  	<a href="javascript:fSubConf('$link.view('related.ChooseRelatedResources').action('related.RemoveRelation').set('item_id', $row.id)','unbind');">Odwiąż</a>
   #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
  	<a href="javascript:fSubConf('$link.view('related.ChooseRelatedResources').action('files.DeleteRelatedFile').set('file_id',$row.id)','delete');">Usuń</a>
   #end
+  </div>
   </li>
 #end
 </ul>
@@ -186,7 +201,7 @@ $("#related_order").sortable();
   
 
 #if( $res_class_res.name == "documents.document_node" )
-<div style="float: left;" >
+<div style="float: left;">
 		<input type="checkbox" name="sym_rel" value="true" #if($sym_rel) checked #end /><I> utwórz</I> / <I>usuń</I> powiązania symetryczne
 </div>
 <div style="float: right;" >	
