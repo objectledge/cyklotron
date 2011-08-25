@@ -1,0 +1,71 @@
+#macro(audio_player $name $resource $width $height $playOnStart)
+<div id='$name'></div>
+$pageTool.addScriptLink('mcplayer/cyklotron_mcmp_0.8.js')##
+#set($jslink = $link.sessionless())##
+#if($playOnStart==1) #set($pfAction = "play") #else #set($pfAction = "") #end##
+#if($height > 24 || $height < 0) #set($height = 24) #end##
+#if($width < 50) #set($width = 50) #end##
+#if($cms_tool.getClassDefinition($resource) && $cms_tool.getClassDefinition($resource).view) 
+	#set($resourceSitePath = $files.getLink($resource))
+#else 
+	#set($resourceSitePath = "")
+#end
+<script type="text/javascript">
+var sBasePath = '$jslink.content('mcplayer/')';
+var playerFile =  sBasePath + "mcmp_0.8.swf";
+var playerSize = '$width'+'x'+'$height';
+var sourceFile = '$resourceSitePath';
+var mcplayer = new McPlayer( playerFile, sourceFile, playerSize);
+
+mcplayer.fpAction = '$pfAction';
+mcplayer.cpInfoBtnPosition = '$width'+'x-'+'$height';   		// hide info button
+mcplayer.cpRepeatBtnPosition = '$width'+'x-'+'$height'; 		// hide repeat button
+mcplayer.cpFullscreenBtnPosition = '$width'+'x-'+'$height'; 	// hide fullscreen button
+mcplayer.fpButtonPosition = "177x60";
+mcplayer.fpButtonSize = "126x126";
+mcplayer.fpButtonOpacity = "0";
+mcplayer.cpBackgroundOpacity = "100";
+mcplayer.cpPlayBtnPosition = "8x4";
+mcplayer.cpStopBtnPosition = "30x4";
+mcplayer.cpVolumeBtnPosition = "55x2";
+mcplayer.cpScrubberPosition = "95x8";
+mcplayer.cpCounterPosition = "205x4";
+mcplayer.cpHidePanel = "never";
+mcplayer.write('$name');
+</script>
+#end
+
+#macro(video_player $name $resource $width $height $playOnStart)
+<div id='$name'></div>
+$pageTool.addScriptLink('mcplayer/cyklotron_mcmp_0.8.js')##
+#set($jslink = $link.sessionless())##
+#if($playOnStart==1) #set($pfAction = "play") #else #set($pfAction = "") #end##
+#if($cms_tool.getClassDefinition($resource) && $cms_tool.getClassDefinition($resource).view) 
+	#set($resourceSitePath = $files.getLink($resource))
+#else 
+	#set($resourceSitePath = "")
+#end
+<script type="text/javascript">
+var sBasePath = '$jslink.content('mcplayer/')';
+var playerFile =  sBasePath + "mcmp_0.8.swf";
+var playerSize = '$width'+'x'+'$height';
+var sourceFile = '$resourceSitePath';
+var mcplayer = new McPlayer( playerFile, sourceFile, playerSize);
+
+mcplayer.fpAction = '$pfAction';
+mcplayer.cpInfoBtnPosition = '$width'+'x-'+'$height';   // hide info button
+mcplayer.cpRepeatBtnPosition = '$width'+'x-'+'$height'; // hide repeat button
+mcplayer.fpButtonSize = "35x35";
+mcplayer.colorScheme = "";
+mcplayer.playerBackgroundColor = "333333";
+mcplayer.defaultEndAction = "pauseAtStart";
+mcplayer.cpBackgroundColor = "0";
+mcplayer.fpPreviewImageSize = "original";
+mcplayer.cpVolumeStart = "75";
+mcplayer.cpHidePanel = "mouseout";
+mcplayer.cpHideDelay = "0";
+mcplayer.tooltipBackgroundColor = "999999";
+mcplayer.write('$name');
+</script>
+#end
+

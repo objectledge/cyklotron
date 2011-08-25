@@ -1,0 +1,78 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="illegal_sequence">
+      <value>.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="invalid_description">
+      <value>Zmień zawartość pola "Krótki opis".</value>
+    </prefix>
+    <prefix name="invalid_target">
+      <value>Zmień zawartość pola "Adres docelowy".</value>
+    </prefix>
+    <prefix name="invalid_title">
+      <value>Zmień zawartość pola "Tytuł odsyłacza".</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Nazwa nie może zawierać znaku /</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Dodano pomyślnie.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>Zmieniono pomyślnie.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Usunięto pomyślnie.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Wystąpił błąd.</value>
+    </prefix>
+    <prefix name="illegal_sequence">
+      <value>Błąd przy ustawianiu kolejności.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Nieprawidłowy parametr.</value>
+    </prefix>
+    <prefix name="invalid_description">
+      <value>Nieprawidłowy opis.</value>
+    </prefix>
+    <prefix name="invalid_target">
+      <value>Nieprawidłowy adres docelowy.</value>
+    </prefix>
+    <prefix name="invalid_title">
+      <value>Nieprawidłowy tytuł.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Wprowadzona nazwa jest nieprawidłowa.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Nie wypełniono wymagenego pola w formularzu.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Zapisano pomyślnie.</value>
+    </prefix>
+  </prefix>
+</strings>

@@ -1,0 +1,35 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="ForumStatistics">
+    <prefix name="strings">
+      <item name="title">Forum statistics</item>    
+      <item name="build_query">Build query</item>
+    </prefix>
+    <prefix name="labels">
+      <prefix name="resource_type">
+        <value>Resource type</value>
+        <item name="comment">Comments</item>
+        <item name="discussion">Discussions</item>
+        <item name="cPost">Posts in comments</item>
+        <item name="dPost">Posts in discussions</item>
+      </prefix>
+      <item name="creation_date_in">Creation date in</item>
+      <item name="since">Since</item>
+      <item name="until">Until</item>
+      <item name="no_limit">No limit</item>
+      <item name="created_by">Created by</item>
+      <item name="categorized_with">Categorized with</item>
+      <item name="unselected">unselected</item>
+      <item name="required">required</item>
+      <item name="optional">optional</item>
+      <item name="global_categories">Global categories</item>
+      <item name="site_categories">Site categories</item>
+      <item name="stat">stat</item>
+      <item name="value">value</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="choose">Choose</item>
+      <item name="clear">Clear</item>
+      <item name="see">See</item>
+    </prefix>
+  </prefix>
+</strings>
