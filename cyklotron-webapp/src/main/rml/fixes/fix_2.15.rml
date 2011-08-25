@@ -1,0 +1,19 @@
+CREATE RESOURCE 'category_query_persistent_list'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/category/components'
+ATTRIBUTES (
+  componentName = 'category.query.CategoryQueryPersistentList',
+  configurationView = 'category.query.CategoryQueryPersistentListComponentConf'
+);
+
+CREATE RESOURCE 'reject_assigned'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/structure.navigation_node/transitions'
+ATTRIBUTES (
+  description = 'Take the document to moderate',
+  from = '/cms/workflow/automata/structure.navigation_node/states/assigned',
+  to = '/cms/workflow/automata/structure.navigation_node/states/rejected',
+  performPermission = 'cms.structure.modify'
+);
+
+ALTER RESOURCE CLASS cms.periodicals.email_periodical ADD ATTRIBUTE boolean sendEmpty VALUE false;

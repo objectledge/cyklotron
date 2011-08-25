@@ -1,0 +1,46 @@
+ALTER RESOURCE CLASS 'site.site'
+ADD ATTRIBUTE role editor;
+
+ALTER RESOURCE CLASS 'site.site'
+ADD ATTRIBUTE role seniorEditor;
+
+CREATE RESOURCE 'cms.site.senior_editor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator'
+ATTRIBUTES (
+  roleAttributeName = 'seniorEditor',
+  suffixAttributeName = 'name',
+  deletable = false,
+  recursive = true,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator',
+  subtreeRole = false
+);
+
+CREATE RESOURCE 'cms.site.editor'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.site.senior_editor'
+ATTRIBUTES (
+  suffixAttributeName = 'name',
+  roleAttributeName = 'editor',
+  deletable = false,
+  recursive = true,
+  superRole = '/cms/applications/site/resources/site.site/roles/cms.site.administrator/cms.site.senior_editor', 
+  subtreeRole = false
+);
+
+ALTER RESOURCE CLASS 'cms.security.role'
+ADD ATTRIBUTE REQUIRED boolean sharingWorkgroup VALUE false;
+
+CREATE PERMISSION 'cms.structure.modify_group';
+
+ALTER RESOURCE CLASS 'structure.navigation_node'
+ADD PERMISSIONS (
+  'cms.structure.modify_group'
+);
+
+CREATE RESOURCE 'cms.structure.modify_group'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
+ATTRIBUTES (
+  recursive = true
+);
