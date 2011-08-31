@@ -98,8 +98,13 @@ $i18n.get("cms.integration.resources.of.${resource.resourceClass.name}")##
 
 
 
-#macro(resource_label $resource)
-#resource_type($resource) $cms_tool.getSitePath($resource)##
+#macro(resource_label $resource)	
+#resource_type($resource) ##
+#if($cms_tool.isInstance($resource, 'structure.navigation_node'))
+$cms_tool.getSiteNamePath($resource)##
+#else	
+$cms_tool.getSitePath($resource)##
+#end
 #end
 
 #macro(resource_title_link $resource $href)

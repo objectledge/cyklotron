@@ -420,11 +420,17 @@ public class CmsTool
         String resPath = "";
 
         while(res instanceof NavigationNodeResource)
-        {
-            resPath = "/" + ((DocumentNodeResource)res).getTitle() + resPath;
+        {   if(res.getParent() instanceof NavigationNodeResource)
+            {
+                resPath = "/" + ((DocumentNodeResource)res).getTitle() + resPath;
+            }
             res = res.getParent();
         }
-        resPath = "/" + siteName + resPath;
+        if(resPath.length() == 0)
+        {
+            resPath = "/";
+        }
+        resPath = siteName + resPath;
         return resPath;
     }
     
