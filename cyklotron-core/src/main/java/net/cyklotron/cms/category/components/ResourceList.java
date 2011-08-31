@@ -65,11 +65,6 @@ public class ResourceList
 		} 
 		return query;
     }
-    
-    public String getTableStateName()
-    {
-        return "net.cyklotron.cms.category.resource_list";
-    }
 
     protected String[] getResourceClasses(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException

@@ -53,11 +53,6 @@ extends DocumentResourceList
     {
 		return query.getQuery();
     }
-    
-    public String getTableStateName()
-    {
-        return "net.cyklotron.cms.category.category_query_results."+query.getPath();
-    }
 
     protected String[] getResourceClasses(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException

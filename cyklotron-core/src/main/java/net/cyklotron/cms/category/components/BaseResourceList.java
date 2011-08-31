@@ -109,7 +109,10 @@ public abstract class BaseResourceList
     }
     
 	/** Returns a table state name unique for this resource list component. */
-	public abstract String getTableStateName();
+	public String getTableStateName(CmsData cmsData)
+	{
+	    return "net.cyklotron.cms.category.resource_list." + cmsData.getNode().getIdString()+"."+cmsData.getComponent().getInstanceName();
+	}
     
 	/**
 	 * Returns accepted resource classes for this component.

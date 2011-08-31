@@ -59,11 +59,6 @@ extends DocumentResourceList
 		return query.getQuery();
     }
     
-    public String getTableStateName()
-    {
-        return "net.cyklotron.cms.category.category_query_persistent_list."+query.getPath();
-    }
-    
     protected void setupPaging(
         BaseResourceListConfiguration config, TableState state, Parameters parameters)
     {

@@ -93,7 +93,7 @@ public class CategoryQueryPersistentList
 
         try
         {
-            SiteResource site = cmsDataFactory.getCmsData(context).getSite();
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
 
             templatingContext.put("header", config.getHeader());
 
@@ -156,7 +156,7 @@ public class CategoryQueryPersistentList
                 return;
             }
 
-            TableState state = tableStateManager.getState(context, resList.getTableStateName());
+            TableState state = tableStateManager.getState(context, resList.getTableStateName(cmsData));
             TableTool table = resList.getTableTool(coralSession, context, config, state, resources);
             templatingContext.put("table", table);
 

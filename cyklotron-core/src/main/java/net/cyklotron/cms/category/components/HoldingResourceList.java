@@ -39,11 +39,6 @@ extends DocumentResourceList
     {
         return new HoldingResourceListConfiguration(cmsDataFactory.getCmsData(context).getDate());
     }
-    
-    public String getTableStateName()
-    {
-        return "net.cyklotron.cms.category.prioritized_resource_list";
-    }
 
     protected TableModel getTableModel(
         Resource[] resources,

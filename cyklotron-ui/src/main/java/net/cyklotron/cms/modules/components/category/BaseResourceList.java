@@ -111,7 +111,7 @@ public abstract class BaseResourceList
             Resource[] resources = getResources(coralSession, resList, config);
 
             // setup table tool
-            TableState state = tableStateManager.getState(context, resList.getTableStateName());
+            TableState state = tableStateManager.getState(context, resList.getTableStateName(cmsData));
             TableTool tool = resList.getTableTool(coralSession, context, config, state, resources);
             templatingContext.put("table", tool);
 

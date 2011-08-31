@@ -53,11 +53,6 @@ extends BaseResourceList
     {
         return new RelatedResourceListConfiguration();
     }
-    
-    public String getTableStateName()
-    {
-        return "net.cyklotron.cms.category.related_resource_list";
-    }
 
 	protected String[] getResourceClasses(CoralSession coralSession, BaseResourceListConfiguration config)
 	throws ProcessingException

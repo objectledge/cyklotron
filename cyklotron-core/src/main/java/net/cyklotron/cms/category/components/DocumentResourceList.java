@@ -53,11 +53,6 @@ extends ResourceList
         return new DocumentResourceListConfiguration();
     }
 
-    public String getTableStateName()
-    {
-        return "net.cyklotron.cms.category.document_resource_list";
-    }
-
     private static String[] resourceClasses = { DocumentNodeResource.CLASS_NAME };
 
     protected String[] getResourceClasses(org.objectledge.coral.session.CoralSession coralSession, BaseResourceListConfiguration config)
