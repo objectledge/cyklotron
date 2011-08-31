@@ -1,0 +1,25 @@
+$pageTool.addScriptLink('script/documents/CommunityVotes.js')##
+<script>
+    var J = jQuery;
+    var communityVotes = new CommunityVotes($cmsData.node.id,
+        "$link.view('documents.ajax.CommunityVotes')",
+        "${voteBaseUrl}/view/documents.ajax.CommunityVotes");
+    
+	communityVotes.fetch();
+	
+    J(document).ready(function() {
+    	J('#positiveVote').click(function(){
+             communityVotes.vote('positive');
+        });
+        J('#negativeVote').click(function(){
+             communityVotes.vote('negative');
+        });
+	});
+</script>
+<div id="communityVotes">
+Oceń artykuł: 
+<a id="positiveVote" href="#vote">podoba mi się</a> 
+<span id="positiveCount">$positive</span>
+<a id="negativeVote"href="#vote">nie podoba mi się</a>
+<span id="negativeCount">$negative</span>
+</div>
