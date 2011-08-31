@@ -1,0 +1,45 @@
+#set($vi18n = $i18n.usePrefix('cms.catalogue.List'))
+#set($strings = $vi18n.usePrefix('strings'))
+#genericScreenHeader($strings.title)
+#result_inline_message("results.catalogue.UpdateConfig")
+$pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addStyleLink("style/cms-popupmenu.css")
+
+#set($columnOrder = ['name','creator.name','creation.time'])
+#foreach($column in $columnOrder)
+$table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
+#end
+
+#if(!$table.rows.empty)
+#set($tableLink = $link.set('tableId',$table.id))
+<table class="genericItemList" width="100%" cellspacing="0">
+	<tr>
+		#tableView_header($table $tableLink $columnOrder)
+	</tr>
+#foreach($row in $table.rows)
+#set($odd = $velocityCount % 2)
+#set($catLink = $link.set('cid',$row.object.id))
+    <tr class="row$odd">
+		<td>
+			<span class="cms-popupmenubutton">
+				<span>$row.object.name</span>
+				<div class="cms-popupmenu">
+					<a href="$catLink.view('catalogue.Config')">$strings.config</a>
+					<a href="$catLink.view('catalogue.Browse')">$strings.browse</a>
+					<a href="$catLink.view('catalogue.Problems')">$strings.problems</a>
+				</div>
+			</span>	
+		</td>		
+		<td nowrap align="center">#cms_personal_credentials($row.object.createdBy)</td>
+        <td nowrap align="center">$format_date.format($row.object.creationTime)</td>
+	</tr>
+#end		
+</table>
+#else
+<table class="genericItemList" width="100%" cellspacing="0">
+	<tr><td>$strings.noneDefined</td></tr>
+</table>
+#end
+
+#command_bar([[$link.view('catalogue.Config').set('cid','new'),$strings.new]])
+#genericScreenTrailer()

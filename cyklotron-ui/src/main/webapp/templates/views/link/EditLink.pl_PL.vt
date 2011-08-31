@@ -1,0 +1,144 @@
+##
+## Banner application: banner adding screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: EditLink.pl_PL.vt,v 1.6 2005-05-16 09:40:07 pablo Exp $
+##
+##
+##
+$pageTool.addScriptLink('script/CMSPopups.js')
+
+#set($lsid = $parametersTool.get('lsid','-1'))
+#set($linkLink = $link.set('lsid',$lsid))
+#set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
+#set($pid = $parametersTool.get('pid',''))
+
+
+      #genericScreenHeader('EDYCJA ODSYŁACZA')
+
+      #result_inline_message('results.link')
+
+
+  #if($pid == '')
+  <form name="edit_link" method="post" action="$linkLink.view("link.LinkList").action("link.UpdateLink")" class="defaultForm">
+  #else
+  <form name="edit_link" method="post" action="$linkLink.view("link.EditPool").action("link.UpdateLink").set('pid',$pid)" class="defaultForm">
+  #end
+  <input type="hidden" name="lid" value="$linkResource.getId()">
+  ##<input type="hidden" name="pid" value="$pid" size="30">
+  ##<input type="hidden" name="lsid" value="$lsid" size="30">
+  <input type="hidden" name="row_id" value="-1">
+
+    <table class="genericItemList" width="100%" cellspacing="0">
+      <tr>
+  <td align="left">
+    <b>Tytuł odsyłacza:</b>
+  </td>
+        <td colspan="2">
+          <input type="text" name="title" value="$!htmlEncoder.encodeAttribute($parametersTool.get('title',$linkResource.name))" style="width:100%;" maxlength="255">
+        </td>
+      </tr>
+
+      <tr>
+  <td align="left">
+    <b>Krótki opis:</b>
+  </td>
+  <td colspan="2">
+    <input type="text" name="description" value="$!htmlEncoder.encodeAttribute($parametersTool.get('description',$linkResource.description))" style="width:100%;" maxlength="255">
+  </td>
+      </tr>
+
+
+      <tr>
+  <td align="left"><b>Aktywny od:</b></td>
+        <td nowrap colspan="2">
+          #dateSelectorTS("start_time" $parametersTool.getLong('start_time',$linkResource.getStartDate().getTime()))
+        </td>
+      </tr>
+
+      <tr>
+  <td align="left"><b>Aktywny do:</b></td>
+  <td nowrap colspan="2">
+        #if($linkResource.getEternal())
+          #dateSelectorOptionalTS("end_time" $undefinied "bezterminowo")
+        #else
+          #dateSelectorOptionalTS("end_time" $parametersTool.getLong('end_time',$linkResource.getEndDate().getTime()) "bezterminowo")
+        #end
+        </td>
+      </tr>
+
+      <tr>
+        <td align="left"><b>Stan:</b></td>
+        <td colspan="2" nowrap>
+        #getState($linkResource)
+        #if($workflow_tool.getAllowedTransitions($linkResource).size() != 0)
+        (#fireTransition($linkResource $linkLink.set('pid',$pid).set('lid',$linkResource.getId())) )
+        #end &nbsp;
+        </td>
+      </tr>
+
+      <tr>
+        #if($linkResource.resourceClass.name.equals("cms.link.external_link"))
+  <td align="left">
+    <b>Adres docelowy:</b>
+  </td>
+  <td colspan="2">
+    <input type="text" name="target" value="$!htmlEncoder.encodeAttribute($linkResource.target)" size="30" style="width:100%;">
+  </td>
+        #else
+  <td align="left">
+    <b>Węzęł docelowy:</b>
+  </td>
+  <td>
+          <input type=hidden name="structure_path" value="$data_site.getPath()/structure">
+          <input type=hidden name="selected_node" value="$linkResource.node.id">
+    <input type="text" name="int_target" value="$parametersTool.get('int_target',$linkResource.getNode().getPath().substring($data_site.getPath().length()).substring(10))" style="width:100%;">
+  </td>
+        <td class="actionlink">
+          <script language="javascript">
+          function selectLinkTarget()
+          {
+              selectNode('relative_path', 'edit_link', 'int_target', '$link.view('popup.NodeList').set('root',$data_site_root.id)')
+          }
+          </script>
+          <a href="javascript:selectLinkTarget();">wybierz</a>
+        </td>
+        #end
+      </tr>
+  <tr>
+    <td align="left">
+	  <b>Foldery:</b>
+	</td>
+    <td td colspan="2">
+      <table>
+      #foreach($pool in $pools)
+        <tr>
+          <td>
+			<input type="checkbox" name="pool_id" value="$pool.id" #if($pools_map.get($pool)) checked #end>
+          </td>
+          <td>
+    	    $pool.getName()
+	      </td>
+    	</tr>
+	  #end
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap colspan="5" class="commandbar">
+      <a href="javascript:document.edit_link.submit();">Zapisz</a> &nbsp; &nbsp;
+
+      #if($pid == '')
+      <a href="$linkLink.view("link.LinkList")">Zaniechaj</a> &nbsp;
+      #else
+      <a href="$linkLink.view("link.EditPool").set('pid',$pid)">Zaniechaj</a> &nbsp;
+      #end
+
+    </td>
+    </tr>
+</table>
+
+
+</form>
+

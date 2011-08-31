@@ -1,0 +1,47 @@
+##
+## author: <a href="mailto:pablo@caltha.pl">Paweł Potempski</a>
+##
+## $Id: AddFooter.vt,v 1.1 2006-05-08 12:51:43 pablo Exp $
+##
+#set($ui_strings = $i18n.usePrefix("cms.documents.AddFooter.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.documents.AddFooter.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.documents.AddFooter.buttons"))
+#genericScreenHeader($ui_strings.get('title'))
+
+#result_inline_message('results.documents')
+
+<form name="add_footer" method="post" action="$link.view("documents.FootersList").action("documents.AddFooter").set('reset','true')" class="defaultForm">
+  <table width="100%" class="genericScreen" cellspacing="0">
+    <tr>
+      <td align="right" nowrap><b>$ui_labels.get('name'):</b></td>
+      <td colspan="3" width="95%"><input type="text" name="name" value="$parametersTool.get('name','')" style="width:100%;"></td>
+    <tr>
+
+    <tr>
+      <td align="right" nowrap><b>$ui_labels.get('content'):</b></td>
+      <td colspan="3"><input type="text" name="content" value="$parametersTool.get('content','')" style="width:100%;"></td>
+    </tr>
+
+    <tr>
+      <td align="left"><b>$ui_labels.get('enabled'):</b></td>
+      <td nowrap colspan="3">
+        <input type="checkbox" value="true" checked="checked" name="enabled"/>
+      </td>
+    </tr>
+  </table>
+
+  <div align="right">
+    <table align="right" border="0">
+      <tr>
+        <td NOWRAP class="usualbutton">
+          <a href="javascript:document.add_footer.submit();">$ui_buttons.get('add')</a>
+        </td>
+        <td NOWRAP class="usualbutton">
+          <a href="$link.view("documents.FootersList")">$ui_buttons.get('cancel')</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</form>
+
+#genericScreenTrailer()

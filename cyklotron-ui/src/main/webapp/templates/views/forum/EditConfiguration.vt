@@ -1,0 +1,156 @@
+
+$pageTool.addScriptLink('script/CMSPopups.js')
+
+#set($subject = $cms_tool.subject)
+
+#genericScreenHeader('Application configuration - Forum')
+
+#result_inline_message('results.forum')
+
+<form name="form1" method="post" action="$link.action('forum.UpdateConfiguration')">
+
+<table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+<tr>
+<td align="right" width="30%">
+Path to forum screen:
+</td>
+<td>
+<input type="text" name="forumNodePath" value="$!forum_node.sitePath" size="60" />
+#if($cms_tool.getUserData().hasPermission($cms_tool.getHomePage(), "cms.structure.view"))
+<a href="#select_node('relative_path' $forum_node.id 'form1' 'forumNodePath')">Choose</a>
+#end
+</td>
+</tr>
+<tr>
+<td align="right" width="30%">
+Permissions:
+</td>
+<td>
+<table class="genericItemTree" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>
+      <img src="$link.content('images/tree/folderopen.gif')" />
+      Forum root node:
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="$link.content('images/tree/T.gif')" />
+      <img src="$link.content('images/tree/file.gif')" />
+      #if($cms_tool.checkAdministrator())
+      <a href="#roles($discussionsRoot $discussionsRoot)">Discussions</a>
+      #else
+      Discussions
+      #end
+    </td>
+  </tr>
+  #foreach($discussion in $discussions)
+  <tr>
+    <td>
+      <img src="$link.content('images/tree/T.gif')" />
+      <img src="$link.content('images/tree/T.gif')" />
+      <img src="$link.content('images/tree/file.gif')" />
+      #if($cms_tool.checkAdministrator())
+        <a href="#roles($discussion $discussion)">$discussion.name</a>
+      #else
+ 	    $discussion.name
+      #end
+    </td>
+  </tr>
+  #end
+  <tr>
+    <td>
+      <img src="$link.content('images/tree/L.gif')" />
+      <img src="$link.content('images/tree/file.gif')" />
+      #if($cms_tool.checkAdministrator())
+      <a href="#roles($comments $comments)">Comments</a>
+      #else
+      Comments
+      #end
+    </td>
+  </tr>
+</table>
+</td>
+</tr>
+<tr>
+<td align="right" width="30%">
+Number of last added:
+</td>
+<td>
+<table class="genericItemTree" width="100%" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="30%">
+      Forum root node
+    </td>
+    <td align="left" width="70%">
+      <input type="text" name="forum_last_added_size" value="$forum.getLastlyAddedSize(10)" size="3"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+	  Discussions
+    </td>
+    <td>
+      <input type="text" name="discussions_last_added_size" value="$discussionsRoot.getLastlyAddedSize(10)" size="3" />
+    </td>    
+  </tr>
+  <tr>
+    <td>
+	  Comments
+    </td>
+    <td>
+      <input type="text" name="comments_last_added_size" value="$comments.getLastlyAddedSize(10)" size="3" />    
+    </td>    
+  </tr>
+</table>
+</td>
+</tr>
+<tr>
+<td align="right" width="30%">
+Comments default state:
+</td>
+<td>
+   <select name="default_state">
+  	#foreach($state in $states)
+   <option value="$state.id" #if($state == $forum.initialCommentaryState) selected #end>
+    $i18n.get("workflow.cms.forum.discussion.states.$state.getName()") 
+   </option>
+   	#end
+   </select>
+</td>
+</tr>
+<tr>
+<td align="right" width="30%">
+Moderator email addresses:
+</td>
+<td>
+  <textarea name="reply_to">$!forum.getReplyTo()</textarea>
+</td>
+</tr>
+<tr>
+<td align="right" width="30%">
+Message to display in place of rejected message's body
+</td>
+<td>
+  <textarea name="reject_message" cols="80" rows="6">$!forum.getRejectMessage()</textarea>
+</td>
+</tr>
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:document.form1.submit();">Save</a>
+  <a href="javascript:document.form1.reset();">Cancel</a>
+  </div>
+</div>
+
+#genericScreenTrailer()
+
