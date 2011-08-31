@@ -4,6 +4,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import net.cyklotron.cms.site.SiteResource;
+
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
@@ -12,8 +14,6 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
-
-import net.cyklotron.cms.site.SiteResource;
 
 /**
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
@@ -201,4 +201,26 @@ public interface PollService
      */
     public void setVoteConfiramationTicketContents(VoteResource vote, String contents)
         throws ProcessingException;
+    
+    /**
+     * Returns vote base URL.
+     * <p>
+     * Returns the base URL that should be used for voting actions / ajax views. If {@code <voteBaseUrl>} is defined in service configuration,
+     * it will be returned. Otherwise the returned URL will be relative one, built from context and servlet path of the current request.
+     * </p>
+     * 
+     * @param vote base URL or {@code null}.
+     */
+    public String getVoteBaseUrl(HttpContext httpContext);
+    
+    /**
+     * Returns vote host.
+     * <p>
+     * Returns the base URL that should be used for voting actions / ajax views. If {@code <voteBaseUrl>} is defined in service configuration,
+     * host from this URL will be returned. Otherwise the host from HttpContext is returned.
+     * </p>
+     * 
+     * @param vote base URL or {@code null}.
+     */
+    public String getVoteHost(HttpContext httpContext);
 }

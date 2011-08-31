@@ -1,5 +1,7 @@
 package net.cyklotron.cms.poll.internal;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -11,6 +13,8 @@ import java.util.Set;
 
 import javax.servlet.http.Cookie;
 
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -89,14 +93,17 @@ public class PollServiceImpl
     private final FileSystem fileSystem;
     
     private final LongKeyMap ballotsEmailsMap = new LongKeyOpenHashMap();
+    
+    private final URL voteBaseUrl;
 
     // initialization ////////////////////////////////////////////////////////
 
     /**
      * Initializes the service.
+     * @throws ConfigurationException 
      */
-    public PollServiceImpl(CoralSessionFactory sessionFactory, Logger logger,
-        WorkflowService workflowService, FileSystem fileSystem, Templating templating)
+    public PollServiceImpl(Configuration config, CoralSessionFactory sessionFactory, Logger logger,
+        WorkflowService workflowService, FileSystem fileSystem, Templating templating) throws ConfigurationException
     {
         this.log = logger;
         this.workflowService = workflowService;
@@ -111,6 +118,23 @@ public class PollServiceImpl
         finally
         {
             coralSession.close();
+        }
+        Configuration voteBaseUrlConfig = config.getChild("voteBaseUrl", false);
+        if(voteBaseUrlConfig != null)
+        {
+            try
+            {
+                voteBaseUrl = new URL(voteBaseUrlConfig.getValue());
+            }
+            catch(MalformedURLException e)
+            {
+                throw new ConfigurationException("invalid URL", voteBaseUrlConfig.getPath(),
+                    voteBaseUrlConfig.getLocation(), e);
+            }
+        }
+        else
+        {
+            voteBaseUrl = null;
         }
     }
 
@@ -776,4 +800,41 @@ public class PollServiceImpl
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getVoteBaseUrl(HttpContext httpContext)
+    {
+        if(voteBaseUrl == null)
+        {
+            return httpContext.getRequest().getContextPath()
+                + httpContext.getRequest().getServletPath();
+        }
+        else
+        {
+            String urlStr = voteBaseUrl.toString();
+            if(urlStr.endsWith("/"))
+            {
+                urlStr = urlStr.substring(0, urlStr.length() - 1);
+            }
+            return urlStr;
+        }
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getVoteHost(HttpContext httpContext)
+    {
+        if(voteBaseUrl == null)
+        {
+            return httpContext.getRequest().getServerName();
+        }
+        else
+        {
+            return voteBaseUrl.getHost();
+        }
+    }
 }
