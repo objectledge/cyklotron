@@ -127,23 +127,16 @@ public class Voting
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         CmsData cmsData = cmsDataFactory.getCmsData(context);
-
         try
         {
-            if(templatingContext.get("already_voted") != null
-                && ((Boolean)templatingContext.get("already_voted")).booleanValue())
-            {
-                return true;
-            }
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
             VoteResource vote = pollService.getVote(coralSession, screenConfig);
             if(vote == null)
             {
                 return false;
             }
-            return pollService.hasVoted(httpContext, templatingContext, vote);
+            return pollService.hasVoted(httpContext, vote);
         }
         catch(Exception e)
         {

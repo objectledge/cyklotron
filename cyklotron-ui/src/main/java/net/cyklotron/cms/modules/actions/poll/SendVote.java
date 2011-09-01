@@ -4,24 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.context.Context;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.i18n.I18nContext;
-import org.objectledge.parameters.Parameters;
-import org.objectledge.parameters.RequestParameters;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.templating.Template;
-import org.objectledge.templating.TemplatingContext;
-import org.objectledge.utils.StackTrace;
-import org.objectledge.web.HttpContext;
-import org.objectledge.web.captcha.CaptchaService;
-import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
@@ -34,6 +17,21 @@ import net.cyklotron.cms.poll.VoteResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.util.OfflineLinkRenderingService;
 import net.cyklotron.cms.workflow.WorkflowService;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.context.Context;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.Parameters;
+import org.objectledge.parameters.RequestParameters;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService;
+import org.objectledge.web.mvc.MVCContext;
 
 /**
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
@@ -107,7 +105,7 @@ public class SendVote
             VoteResource voteResource = VoteResourceImpl.getVoteResource(coralSession, vid);
             Set<String> voteEmails = pollService.getBallotsEmails(coralSession, voteResource);
 
-            if(pollService.hasVoted(httpContext, templatingContext, voteResource)
+            if(pollService.hasVoted(httpContext, voteResource)
                 || voteEmails.contains(email))
             {
                 templatingContext.put("already_voted", Boolean.TRUE);
@@ -130,11 +128,11 @@ public class SendVote
                     entries.put("vote", voteResource);
                     emailConfirmationRequestService.sendConfirmationRequest(confirmationRequest,
                         voteResource.getSenderAddress(), email, entries, cmsData.getNode(),
-                        template, "PLAIN", linkRenderer, coralSession);
-                    setCookie(httpContext, vid, answerId);
+                        template, "PLAIN", linkRenderer, coralSession);                    
                     break;
                 }
             }
+            pollService.trackVote(httpContext, voteResource);
         }
         catch(Exception e)
         {
@@ -145,17 +143,6 @@ public class SendVote
 
         templatingContext.put("result", "responded_successfully");
         templatingContext.put("already_voted", Boolean.TRUE);
-    }
-
-    private void setCookie(HttpContext httpContext, Integer vid, Long answerId)
-    {
-
-        String cookieKey = "vote_" + vid;
-        Cookie cookie = new Cookie(cookieKey, answerId.toString());
-        cookie.setMaxAge(30 * 24 * 3600);
-        cookie.setPath("/");
-        httpContext.getResponse().addCookie(cookie);
-
     }
 
     public boolean checkAccessRights(Context context)

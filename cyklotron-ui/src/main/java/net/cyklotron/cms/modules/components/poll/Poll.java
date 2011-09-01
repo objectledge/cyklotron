@@ -139,15 +139,8 @@ public class Poll extends SkinableCMSComponent
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        I18nContext i18nContext = I18nContext.getI18nContext(context);
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-
         try
         {
-            if(templatingContext.get("already_voted") != null && ((Boolean)templatingContext.get("already_voted")).booleanValue())
-            {
-                return true;
-            }
             Parameters componentConfig = getConfiguration();
             PollsResource pollsResource = pollService.getPollsParent(coralSession, getSite(context),pollService.POLLS_ROOT_NAME);
             PollResource poll = pollService.getPoll(coralSession, pollsResource, componentConfig);
@@ -155,7 +148,7 @@ public class Poll extends SkinableCMSComponent
             {
                 return false;
             }
-            return pollService.hasVoted(httpContext, templatingContext, poll);
+            return pollService.hasVoted(httpContext, poll);
         }
         catch(Exception e)
         {

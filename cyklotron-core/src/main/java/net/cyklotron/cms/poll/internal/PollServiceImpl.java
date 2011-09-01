@@ -11,7 +11,24 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.Cookie;
+import net.cyklotron.cms.poll.AnswerResource;
+import net.cyklotron.cms.poll.BallotResource;
+import net.cyklotron.cms.poll.PollException;
+import net.cyklotron.cms.poll.PollResource;
+import net.cyklotron.cms.poll.PollService;
+import net.cyklotron.cms.poll.PollsResource;
+import net.cyklotron.cms.poll.PollsResourceImpl;
+import net.cyklotron.cms.poll.PoolResource;
+import net.cyklotron.cms.poll.PoolResourceImpl;
+import net.cyklotron.cms.poll.QuestionResource;
+import net.cyklotron.cms.poll.VoteResource;
+import net.cyklotron.cms.poll.VoteResourceImpl;
+import net.cyklotron.cms.poll.util.Answer;
+import net.cyklotron.cms.poll.util.Question;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.workflow.ProtectedTransitionResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
@@ -33,28 +50,8 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
-import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.picocontainer.Startable;
-
-import net.cyklotron.cms.poll.AnswerResource;
-import net.cyklotron.cms.poll.BallotResource;
-import net.cyklotron.cms.poll.PollException;
-import net.cyklotron.cms.poll.PollResource;
-import net.cyklotron.cms.poll.PollService;
-import net.cyklotron.cms.poll.PollsResource;
-import net.cyklotron.cms.poll.PollsResourceImpl;
-import net.cyklotron.cms.poll.PoolResource;
-import net.cyklotron.cms.poll.PoolResourceImpl;
-import net.cyklotron.cms.poll.QuestionResource;
-import net.cyklotron.cms.poll.VoteResource;
-import net.cyklotron.cms.poll.VoteResourceImpl;
-import net.cyklotron.cms.poll.util.Answer;
-import net.cyklotron.cms.poll.util.Question;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.workflow.ProtectedTransitionResource;
-import net.cyklotron.cms.workflow.WorkflowException;
-import net.cyklotron.cms.workflow.WorkflowService;
 
 import bak.pcj.map.LongKeyMap;
 import bak.pcj.map.LongKeyOpenHashMap;
@@ -95,6 +92,8 @@ public class PollServiceImpl
     private final LongKeyMap ballotsEmailsMap = new LongKeyOpenHashMap();
     
     private final URL voteBaseUrl;
+    
+    private final VoteTracking voteTracking;
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -136,6 +135,7 @@ public class PollServiceImpl
         {
             voteBaseUrl = null;
         }
+        voteTracking = new VoteTracking();
     }
 
     public void start()
@@ -339,82 +339,23 @@ public class PollServiceImpl
         }
     }
 
+    
     /**
      * {@inheritDoc}
      */
-    public boolean hasVoted(HttpContext httpContext, TemplatingContext templatingContext,
-        PollResource poll)
-        throws PollException
+    public boolean hasVoted(HttpContext httpContext, Resource resource)
     {
-        try
-        {
-            if(templatingContext.get("already_voted") != null
-                && ((Boolean)templatingContext.get("already_voted")).booleanValue())
-            {
-                return true;
-            }
-            if(poll == null)
-            {
-                return false;
-            }
-            String cookieKey = "poll_" + poll.getId();
-            Cookie[] cookies = httpContext.getRequest().getCookies();
-            if(cookies != null)
-            {
-                for(int i = 0; i < cookies.length; i++)
-                {
-                    if(cookies[i].getName().equals(cookieKey))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        catch(Exception e)
-        {
-            throw new PollException("exception occured", e);
-        }
+        return voteTracking.hasVoted(httpContext, resource);
     }
-
+    
     /**
      * {@inheritDoc}
      */
-    public boolean hasVoted(HttpContext httpContext, TemplatingContext templatingContext,
-        VoteResource vote)
-        throws PollException
+    public void trackVote(HttpContext httpContext, Resource resource)
     {
-        try
-        {
-            if(templatingContext.get("already_voted") != null
-                && ((Boolean)templatingContext.get("already_voted")).booleanValue())
-            {
-                return true;
-            }
-            if(vote == null)
-            {
-                return false;
-            }
-            String cookieKey = "vote_" + vote.getId();
-            Cookie[] cookies = httpContext.getRequest().getCookies();
-            if(cookies != null)
-            {
-                for(int i = 0; i < cookies.length; i++)
-                {
-                    if(cookies[i].getName().equals(cookieKey))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-        catch(Exception e)
-        {
-            throw new PollException("exception occured", e);
-        }
+        voteTracking.trackVote(httpContext, resource);
     }
-
+    
     /**
      * @param poll
      * @param questions

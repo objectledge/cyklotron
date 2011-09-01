@@ -45,4 +45,10 @@ public class CommunityVotes
             jsonGenerator.writeNull();
         }
     }
+
+    @Override
+    protected String getCallbackParameterName()
+    {
+        return "callback";
+    }
 }

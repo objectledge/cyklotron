@@ -68,7 +68,7 @@ public class RespondPoll
         try
         {
             PollResource pollResource = PollResourceImpl.getPollResource(coralSession, pid);
-            if(pollService.hasVoted(httpContext, templatingContext, pollResource))
+            if(pollService.hasVoted(httpContext, pollResource))
             {
                 templatingContext.put("result", "already_responded");
                 templatingContext.put("already_voted", Boolean.TRUE);
@@ -102,38 +102,21 @@ public class RespondPoll
                 questionResource.setVotesCount(questionResource.getVotesCount()+1);
                 questionResource.update();
             }
+
+            if(instanceName.length() > 0)
+            {
+                pollService.trackVote(httpContext, pollResource);
+            }
+            
+            templatingContext.put("result", "responded_successfully");
+            templatingContext.put("already_voted", Boolean.TRUE);
         }
         catch(Exception e)
         {
             templatingContext.put("result", "exception");
             templatingContext.put("trace", new StackTrace(e));
             logger.error("Exception in poll,RespondPoll action", e);
-            return;
         }
-
-        if(instanceName.length() > 0)
-        {
-            String cookieKey = "poll_"+pid;
-            Cookie cookie = new Cookie(cookieKey, "1");
-            cookie.setMaxAge(30*24*3600);
-            StringBuilder path = new StringBuilder();
-            path.append(httpContext.getRequest().getContextPath());
-            if(!httpContext.getRequest().getServletPath().startsWith("/"))
-            {
-                path.append('/');
-            }
-            String servletPath = httpContext.getRequest().getServletPath();
-            if(servletPath.endsWith("/"))
-            {
-                servletPath = servletPath.substring(0, servletPath.length() - 1);
-            }
-            path.append(servletPath);
-            cookie.setPath(path.toString());
-            httpContext.getResponse().addCookie(cookie);
-        }
-
-        templatingContext.put("result", "responded_successfully");
-        templatingContext.put("already_voted", Boolean.TRUE);
     }
 	
     public boolean checkAccessRights(Context context)

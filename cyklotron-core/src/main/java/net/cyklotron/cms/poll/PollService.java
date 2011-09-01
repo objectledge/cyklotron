@@ -9,10 +9,10 @@ import net.cyklotron.cms.site.SiteResource;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
-import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 
 /**
@@ -107,28 +107,23 @@ public interface PollService
     public void checkPollState(CoralSession coralSession);
 
     /**
-     * checks whether the poll has been voted by user 
+     * Checks whether the given resource has been voted on by the user.
      * 
-     * @param httpContext the http context of the request.
-     * @param poll the poll
+     * @param httpContext the HTTP context of the request.
+     * @param resource the resource.
      * @return <code>true</code> if already voted.
-     * @throws PollException if anything goes wrong.
      */
-    public boolean hasVoted(HttpContext httpContext, 
-        TemplatingContext templatingContext, PollResource poll)
-        throws PollException;
+    public boolean hasVoted(HttpContext httpContext, Resource resource);
     
     /**
-     * checks whether the vote has been voted by user 
+     * Tracks the event that the given resource has been voted on by the user.
      * 
-     * @param httpContext the http context of the request.
-     * @param vote the vote
+     * <p>The information is kept in HTTP session and cookies.</p>
+     * @param httpContext the HTTP context of the request.
+     * @param resource the resource.
      * @return <code>true</code> if already voted.
-     * @throws PollException if anything goes wrong.
      */
-    public boolean hasVoted(HttpContext httpContext, 
-        TemplatingContext templatingContext, VoteResource vote)
-        throws PollException;
+    public void trackVote(HttpContext httpContext, Resource resource);
 
 	/**
 	 * @param poll
