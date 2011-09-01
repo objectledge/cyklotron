@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 import org.codehaus.jackson.JsonGenerationException;
@@ -18,10 +19,14 @@ public class CommunityVotes
 {
     private final CmsDataFactory cmsDataFactory;
 
-    public CommunityVotes(CmsDataFactory cmsDataFactory, Context context, Logger log)
+    private final PollService pollService;
+
+    public CommunityVotes(CmsDataFactory cmsDataFactory, Context context, Logger log,
+        PollService pollService)
     {
         super(context, log);
         this.cmsDataFactory = cmsDataFactory;
+        this.pollService = pollService;
     }
 
     @Override
@@ -31,6 +36,23 @@ public class CommunityVotes
         CmsData cmsData = cmsDataFactory.getCmsData(context);
         CoralSession coralSession = context.getAttribute(CoralSession.class);
         NavigationNodeResource node = cmsData.getContentNode();
+        
+        String vote = getRequestParameters().get("vote", null);
+        if(vote != null && !pollService.hasVoted(getHttpContext(), node))
+        {
+            if(vote.equals("positive"))
+            {
+                node.setVotesPositive(node.isVotesPositiveDefined() ? node.getVotesPositive() + 1 : 1);
+                node.update();
+            }
+            else if(vote.equals("negative"))
+            {
+                node.setVotesNegative(node.isVotesNegativeDefined() ? node.getVotesNegative() + 1 : 1);
+                node.update();
+            }
+            pollService.trackVote(getHttpContext(), node);
+        }
+
         if(node != null && node.canView(coralSession, coralSession.getUserSubject()))
         {
             jsonGenerator.writeStartObject();
