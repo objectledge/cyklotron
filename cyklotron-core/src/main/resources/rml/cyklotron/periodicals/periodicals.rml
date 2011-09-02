@@ -1,0 +1,87 @@
+#
+# Initial script for the CMS periodical subsystem
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# version $Id: periodicals.rml,v 1.9 2008-08-21 14:21:16 rafal Exp $
+#
+
+ECHO ' - periodical';
+
+CREATE RESOURCE CLASS 'cms.periodicals.node'
+JAVA CLASS 'net.cyklotron.cms.periodicals.PeriodicalsNodeResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' , 'protected')
+ATTRIBUTES (
+role administrator,
+role visitor
+);
+
+CREATE RESOURCE CLASS 'cms.periodicals.email.root'
+JAVA CLASS 'net.cyklotron.cms.periodicals.EmailPeriodicalsRootResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'cms.periodicals.node' )
+ATTRIBUTES (
+resource(structure.navigation_node) subscriptionNode,
+string previewRecipient
+);
+
+CREATE RESOURCE CLASS 'cms.periodicals.periodical'
+JAVA CLASS 'net.cyklotron.cms.periodicals.PeriodicalResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'cms.periodicals.node' )
+ATTRIBUTES (
+resource(category.query.pool) categoryQuerySet,
+date lastPublished,
+date publishAfter,
+string renderer,
+string template,
+string locale,
+string encoding,
+string sortOrder,
+string sortDirection,
+resource(cms.files.directory) storePlace
+);
+
+CREATE RESOURCE CLASS 'cms.periodicals.email_periodical'
+JAVA CLASS 'net.cyklotron.cms.periodicals.EmailPeriodicalResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'cms.periodicals.periodical' )
+ATTRIBUTES (
+text addresses,
+boolean fullContent,
+boolean sendEmpty,
+string notificationRenderer,
+string notificationTemplate,
+string fromHeader,
+string replyToHeader,
+string subject
+);
+
+CREATE RESOURCE CLASS 'cms.periodicals.publication_time'
+JAVA CLASS 'net.cyklotron.cms.periodicals.PublicationTimeResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+integer dayOfMonth,
+integer dayOfWeek,
+integer hour
+);
+
+CREATE PERMISSION 'cms.periodicals.administer';
+CREATE PERMISSION 'cms.periodicals.view';
+
+ALTER RESOURCE CLASS 'cms.periodicals.node'
+ADD PERMISSIONS (
+  'cms.periodicals.administer',
+  'cms.periodicals.view'
+);
+
+CREATE RESOURCE CLASS 'cms.periodicals.subscription_request'
+JAVA CLASS 'net.cyklotron.cms.periodicals.SubscriptionRequestResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED string email,
+string items
+);
+
