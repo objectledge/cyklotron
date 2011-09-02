@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<document>
+  <properties>
+    <title>Roadmap</title>
+  </properties>
+  
+  <body>
+    <section name="Completed releases">
+      <subsection name="2.0-b1 release">
+        <p>Planned release: July 11th, 2005</p>
+        <p>Actual release: July 15th, 2005</p>
+        <p><b>Goal</b></p>
+        <p>Initial pre-release of Cyklotron based on ObjectLedge platform</p>
+      </subsection>
+    </section>
+    <section name="Planned releases">
+      <subsection name="2.0 release">
+        <p>Planned release: July 25th, 2005</p>
+        <p><b>Goal</b></p>
+        <p>Initial release of Cyklotron based on ObjectLedge platform</p>
+      </subsection>
+    </section>
+  </body>
+</document>
