@@ -29,7 +29,9 @@ import net.cyklotron.cms.integration.ResourceClassResource;
 public class RelatedResourceListConfiguration
 extends BaseResourceListConfiguration
 {
-	public static String KEY = "cms.category.related_resource_list.configuration";
+	private static final String CATEGORY_SELECTION_STATE = "net.cyklotron.category.related";
+	
+    public static String KEY = "cms.category.related_resource_list.configuration";
 
     public static RelatedResourceListConfiguration getConfig(Context context)
         throws ProcessingException
@@ -73,12 +75,14 @@ extends BaseResourceListConfiguration
 		super.shortInit(componentConfig);	
 	}
 
-	/** Initialisation used during component configuration. Initialises category selection state. */
-	public void init(CoralSession coralSession, Parameters componentConfig, CategoryQueryService categoryQueryService)
+	/** Initialisation used during component configuration. Initialises category selection state. 
+	 * @param cmsData */
+    public void init(CoralSession coralSession, Parameters componentConfig, Parameters parameters,
+        CategoryQueryService categoryQueryService)
 	{
 		super.init(componentConfig);
-		categorySelectionState =
-			new ResourceSelectionState(CategoryConstants.CATEGORY_SELECTION_STATE);
+        categorySelectionState = new ResourceSelectionState(CATEGORY_SELECTION_STATE + ":"
+            + parameters.get("node_id","?") + ":" + parameters.get("component_instance","?"));
 		categorySelectionState.setPrefix("category");
 		categorySelectionState.init(buildInitialState(coralSession,componentConfig, categoryQueryService));
 		enableSiteFilter = componentConfig.getBoolean(SITE_FILTER_PARAM_KEY, true);  // set as true if not defined.

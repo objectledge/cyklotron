@@ -31,8 +31,9 @@ import net.cyklotron.cms.site.SiteService;
  * @version $Id: RandomlyCategorizeResources.java,v 1.7 2008-07-03 14:26:11 rafal Exp $
  */
 public class RandomlyCategorizeResources extends CategoryList
-{
-    
+{    
+    public static final String STATE_ID = "cms.test.RandomlyCategorizeResources";
+        
     public RandomlyCategorizeResources(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, CategoryService categoryService,
@@ -50,13 +51,13 @@ public class RandomlyCategorizeResources extends CategoryList
         templatingContext.put("category_tool", categoryTool);
 
         // get category selection state
-        ResourceSelectionState categorizationState =
-            ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
+        ResourceSelectionState categorizationState = ResourceSelectionState.getState(context,
+            STATE_ID + ":categories");
         if(parameters.getBoolean("reset-state",false))
         {
             CoralEntitySelectionState.removeState(context, categorizationState);
-            categorizationState =
-                ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
+            categorizationState = ResourceSelectionState.getState(context,
+                STATE_ID + ":categories");
         }
 
         if(categorizationState.isNew())
@@ -73,11 +74,11 @@ public class RandomlyCategorizeResources extends CategoryList
 
         // get resource selection state
         ResourceSelectionState resSelState =
-            ResourceSelectionState.getState(context, RES_SELECTION_STATE);
+            ResourceSelectionState.getState(context, STATE_ID + ":resources");
         if(parameters.getBoolean("reset-state",false))
         {
             CoralEntitySelectionState.removeState(context, resSelState);
-            resSelState = ResourceSelectionState.getState(context, RES_SELECTION_STATE);
+            resSelState = ResourceSelectionState.getState(context, STATE_ID + ":resources");
         }
 
         // modify res ids state
@@ -90,8 +91,6 @@ public class RandomlyCategorizeResources extends CategoryList
 
     protected String getTableStateBaseName()
     {
-        return "cms:screens:test,RandomlyCategorizeResources";
-    }
-    
-    public static final String RES_SELECTION_STATE = "test res sel state ugaxdasd";
+        return STATE_ID + ":table";
+    }   
 }

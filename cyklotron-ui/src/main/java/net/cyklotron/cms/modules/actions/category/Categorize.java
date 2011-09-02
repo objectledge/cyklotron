@@ -56,8 +56,8 @@ public class Categorize extends BaseCategorizationAction
         Resource resource = getResource(coralSession, parameters);
 
         // get and modify category ids state
-        ResourceSelectionState categorizationState =
-            ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
+        ResourceSelectionState categorizationState = ResourceSelectionState.getState(context,
+            CategoryConstants.CATEGORY_SELECTION_STATE + ":" + resource.getIdString());
         if(categorizationState.isNew())
         {
             categorizationState.setPrefix("category");

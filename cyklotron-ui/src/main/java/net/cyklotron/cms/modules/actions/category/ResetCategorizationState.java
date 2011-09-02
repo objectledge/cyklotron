@@ -3,6 +3,7 @@ package net.cyklotron.cms.modules.actions.category;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.util.CoralEntitySelectionState;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.parameters.Parameters;
@@ -38,15 +39,14 @@ public class ResetCategorizationState extends BaseCategorizationAction
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
-    {
+    {        
+        // prepare categorized resource
+        Resource resource = getResource(coralSession, parameters);
+        
         // clean category seletion state
-        ResourceSelectionState categorizationState =
-            ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
-        if(categorizationState.isNew())
-        {
-            categorizationState.setPrefix("category");
-        }
-
+        ResourceSelectionState categorizationState = ResourceSelectionState.getState(context,
+            CategoryConstants.CATEGORY_SELECTION_STATE + ":" + resource.getIdString());
+        
         CoralEntitySelectionState.removeState(context, categorizationState);
 
         templatingContext.put("result","reseted_successfully");

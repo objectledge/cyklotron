@@ -60,14 +60,14 @@ public class Categorize extends CategoryList
         templatingContext.put("category_tool", categoryTool);
 
         // get category selection state
-        boolean resetState = parameters.getBoolean("reset-state",false); 
-        ResourceSelectionState categorizationState =
-            ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
+        boolean resetState = parameters.getBoolean("reset-state", false);
+        ResourceSelectionState categorizationState = ResourceSelectionState.getState(context,
+            CategoryConstants.CATEGORY_SELECTION_STATE + ":" + resource.getIdString());
         if(resetState)
         {
             CoralEntitySelectionState.removeState(context, categorizationState);
-            categorizationState =
-                ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
+            categorizationState = ResourceSelectionState.getState(context,
+                CategoryConstants.CATEGORY_SELECTION_STATE + ":" + resource.getIdString());
         }
 
         Set expandedCategoriesIds = new HashSet();

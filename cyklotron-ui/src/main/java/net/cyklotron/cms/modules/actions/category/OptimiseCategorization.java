@@ -6,6 +6,7 @@ import java.util.Set;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.util.ResourceSelectionState;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -40,9 +41,12 @@ public class OptimiseCategorization extends BaseCategorizationAction
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
+        // prepare categorized resource
+        Resource resource = getResource(coralSession, parameters);
+        
         // get and modify category ids state
-        ResourceSelectionState categorizationState =
-            ResourceSelectionState.getState(context, CategoryConstants.CATEGORY_SELECTION_STATE);
+        ResourceSelectionState categorizationState = ResourceSelectionState.getState(context,
+            CategoryConstants.CATEGORY_SELECTION_STATE + ":" + resource.getIdString());
         if(categorizationState.isNew())
         {
             categorizationState.setPrefix("category");

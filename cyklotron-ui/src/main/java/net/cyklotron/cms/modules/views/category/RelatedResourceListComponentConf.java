@@ -59,7 +59,7 @@ public class RelatedResourceListComponentConf extends CategoryList
         if(config.isNew() || parameters.getBoolean("from_component_wrapper",false))
         {
             // initialise config
-            config.init(coralSession, componentConfig, categoryQueryService);
+            config.init(coralSession, componentConfig, parameters, categoryQueryService);
             
             // prepare expanded categories - includes inherited ones
             Map initialState = config.getCategorySelectionState().getEntities(coralSession);
