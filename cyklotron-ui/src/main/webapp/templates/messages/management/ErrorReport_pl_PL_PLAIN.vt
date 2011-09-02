@@ -1,0 +1,12 @@
+#set($subject = "Błąd na stronie $url")
+Znacznik pozycji loga: $requestMarker
+
+Data i czas: $time
+
+URL: $url
+
+Stos wyjątku:
+$stackTrace
+
+Dodatkowe informacje:
+$additionalInfo

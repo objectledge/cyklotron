@@ -1,0 +1,69 @@
+##
+## Poll application: poll editing screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: PollResults.pl_PL.vt,v 1.3 2005-04-14 06:53:09 rafal Exp $
+##
+##
+<script language="JavaScript" src="$link.content('script/submit.js')"></script>
+
+#set ($psid = $parametersTool.get('psid','-1'))
+#set ($pollLink = $link.set('psid',$psid))
+
+## TITLE BAR
+  <table class="titleTable">
+    <tr>
+      <td>
+        <b>Wyniki ankiety - liczba odpowiedzi: $count</b>
+      </td>
+    </tr>
+  </table>
+
+  <table class="defaultTable">
+    <tr>
+      <th align="left">
+        <b>Tytuł ankiety:</b>
+      </th>
+      <td>
+        $poll.getName()
+      </td>
+    </tr>
+
+    <tr>
+      <td align="left">
+        <b>Opis:</b>
+      </td>
+      <td>
+       $!poll.getDescription()
+      </td>
+    </tr>
+
+    #foreach($questionKey in $questionKeys)
+    <tr>
+      <td>
+      Pytanie: $questions.get($questionKey).getTitle() <br>
+        #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
+          <tr><td>
+              $questions.get($questionKey).getAnswers().get($answerKey).getTitle() 
+              - $results.get($questions.get($questionKey).getAnswers().get($answerKey).getId()) 
+              - $percent.get($questions.get($questionKey).getAnswers().get($answerKey).getId())%
+         </td></tr>
+        #end
+      </td>
+    </tr>
+    <tr>
+      <td align="left">
+        <hr>
+      </td>
+    </tr>
+    #end
+   </table>
+
+   <table height="22" class="buttonTable">
+     <tr>
+       <td>
+         <a href="$pollLink.view("poll.PollList")">Powrót do listy ankiet</a>
+       </td>
+     </tr>
+   </table>

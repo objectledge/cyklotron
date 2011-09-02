@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="msg">
+    <prefix name="exception"><value>Wystąpił błąd.</value></prefix>
+    <prefix name="FeedAlreadyExistsException"><value>Kanał o tej nazwie już istnieje.</value></prefix>
+    <prefix name="EmptyFeedNameException"><value>Nazwa kanału nie może być pusta.</value></prefix>
+    <prefix name="EmptyDescriptionException"><value>Opis kanału nie może być pusty.</value></prefix>
+	<prefix name="InvalidResourceNameException"><value>Nazwa kanału zawiera niedozwolone znaki - użyj tylko liter i cyfr.</value></prefix>
+    <prefix name="EmptyUrlException"><value>Adres kanału nie może być pusty.</value></prefix>
+    <prefix name="MalformedURIException"><value>Adres kanału nie jest poprawny.</value></prefix>
+    <prefix name="EntityInUseException"><value>Zasób kanału używany jest przez inny zasób. Nie można usunąć kanału.</value></prefix>
+    <prefix name="error_refreshing_feed"><value>Wystąpił błąd przy odświeżaniu kanału.</value></prefix>
+    <prefix name="refreshed_successfully"><value>Odświeżono pomyślnie.</value></prefix>
+    <prefix name="updated_successfully"><value>Zapisano pomyślnie.</value></prefix>
+    <prefix name="added_successfully"><value>Dodano pomyślnie.</value></prefix>
+    <prefix name="deleted_successfully"><value>Usunięto pomyślnie.</value></prefix>
+  </prefix>
+  <prefix name="help">
+    <prefix name="exception"><value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value></prefix>
+    <prefix name="FeedAlreadyExistsException"><value>.</value></prefix>
+    <prefix name="EmptyFeedNameException"><value>.</value></prefix>
+    <prefix name="EmptyDescriptionException"><value>.</value></prefix>
+	<prefix name="InvalidResourceNameException"><value>.</value></prefix>
+    <prefix name="EmptyUrlException"><value>.</value></prefix>
+    <prefix name="MalformedURIException"><value>.</value></prefix>
+    <prefix name="EntityInUseException"><value>.</value></prefix>
+    <prefix name="error_refreshing_feed"><value>.</value></prefix>
+    <prefix name="refreshed_successfully"><value>.</value></prefix>
+    <prefix name="updated_successfully"><value>.</value></prefix>
+    <prefix name="added_successfully"><value>.</value></prefix>
+    <prefix name="deleted_successfully"><value>.</value></prefix>
+  </prefix>
+</strings>

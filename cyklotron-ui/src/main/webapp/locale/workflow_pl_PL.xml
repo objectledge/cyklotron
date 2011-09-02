@@ -1,0 +1,344 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="cms">
+    <prefix name="banner">
+      <prefix name="banner">
+        <prefix name="states">
+          <prefix name="active">
+            <value>Aktywny</value>
+          </prefix>
+          <prefix name="expired">
+            <value>Po terminie</value>
+          </prefix>
+          <prefix name="new">
+            <value>Nowy</value>
+          </prefix>
+          <prefix name="ready">
+            <value>Oczekujący</value>
+          </prefix>
+          <prefix name="rejected">
+            <value>Odrzucony</value>
+          </prefix>
+          <prefix name="suspended">
+            <value>Zawieszony</value>
+          </prefix>
+        </prefix>
+        <prefix name="transitions">
+          <prefix name="accept">
+            <value>Akceptuj</value>
+          </prefix>
+          <prefix name="activate">
+            <value>Uaktywnij</value>
+          </prefix>
+          <prefix name="expire_active">
+            <value>Wyłącz</value>
+          </prefix>
+          <prefix name="expire_ready">
+            <value>Wyłącz</value>
+          </prefix>
+          <prefix name="reapply">
+            <value>Popraw</value>
+          </prefix>
+          <prefix name="refresh_active">
+            <value>Odśwież aktywny</value>
+          </prefix>
+          <prefix name="reject">
+            <value>Odrzuć</value>
+          </prefix>
+          <prefix name="suspend_active">
+            <value>Wstrzymaj</value>
+          </prefix>
+          <prefix name="suspend_ready">
+            <value>Wstrzymaj</value>
+          </prefix>
+          <prefix name="unexpire">
+            <value>Reaktywuj</value>
+          </prefix>
+          <prefix name="unsuspend">
+            <value>Wznów</value>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="forum">
+      <prefix name="discussion">
+        <prefix name="states">
+          <prefix name="hidden">
+            <value>Ukryty</value>
+          </prefix>
+          <prefix name="moderated">
+            <value>Moderowany</value>
+          </prefix>
+          <prefix name="open">
+            <value>Publiczny</value>
+          </prefix>
+        </prefix>
+        <prefix name="transitions">
+          <prefix name="hide">
+            <prefix name="moderated">
+              <value>Schowaj</value>
+            </prefix>
+            <prefix name="open">
+              <value>Schowaj</value>
+            </prefix>
+          </prefix>
+          <prefix name="show">
+            <prefix name="moderated">
+              <value>Włącz jako moderowane</value>
+            </prefix>
+            <prefix name="open">
+              <value>Włącz jako publiczne</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="message">
+        <prefix name="states">
+          <prefix name="deleted">
+            <value>Skasowany</value>
+          </prefix>
+          <prefix name="new">
+            <value>Nowy</value>
+          </prefix>
+          <prefix name="locked">
+            <value>Zablokowany</value>
+          </prefix>
+          <prefix name="rejected">
+            <value>Odrzucony</value>
+          </prefix>
+          <prefix name="visible">
+            <value>Aktywny</value>
+          </prefix>
+        </prefix>
+        <prefix name="transitions">
+          <prefix name="accept">
+            <value>Akceptuj</value>
+          </prefix>
+          <prefix name="delete">
+            <prefix name="new">
+              <value>Skasuj</value>
+            </prefix>
+            <prefix name="visible">
+              <value>Skasuj</value>
+            </prefix>
+          </prefix>
+          <prefix name="lock">
+              <value>Zablokuj</value>
+          </prefix>
+          <prefix name="reject">
+            <value>Odrzuć</value>
+          </prefix>
+          <prefix name="undelete">
+            <value>Wznów</value>
+          </prefix>
+          <prefix name="unlock">
+            <value>Odblokuj</value>
+          </prefix>          
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="link">
+      <prefix name="base_link">
+        <prefix name="states">
+          <prefix name="active">
+            <value>Aktywny</value>
+          </prefix>
+          <prefix name="expired">
+            <value>Po terminie</value>
+          </prefix>
+          <prefix name="new">
+            <value>Nowy</value>
+          </prefix>
+          <prefix name="ready">
+            <value>Oczekujący</value>
+          </prefix>
+          <prefix name="rejected">
+            <value>Odrzucony</value>
+          </prefix>
+          <prefix name="suspended">
+            <value>Zawieszony</value>
+          </prefix>
+        </prefix>
+        <prefix name="transitions">
+          <prefix name="accept">
+            <value>Akceptuj</value>
+          </prefix>
+          <prefix name="activate">
+            <value>Uaktywnij</value>
+          </prefix>
+          <prefix name="expire_active">
+            <value>Wyłącz</value>
+          </prefix>
+          <prefix name="expire_ready">
+            <value>Wyłącz</value>
+          </prefix>
+          <prefix name="reapply">
+            <value>Popraw</value>
+          </prefix>
+          <prefix name="refresh_active">
+            <value>Odśwież aktywny</value>
+          </prefix>
+          <prefix name="reject">
+            <value>Odrzuć</value>
+          </prefix>
+          <prefix name="suspend_active">
+            <value>Wstrzymaj</value>
+          </prefix>
+          <prefix name="suspend_ready">
+            <value>Wstrzymaj</value>
+          </prefix>
+          <prefix name="unexpire">
+            <value>Reaktywuj</value>
+          </prefix>
+          <prefix name="unsuspend">
+            <value>Wznów</value>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="poll">
+      <prefix name="poll">
+        <prefix name="states">
+          <prefix name="active">
+            <value>Aktywny</value>
+          </prefix>
+          <prefix name="expired">
+            <value>Po terminie</value>
+          </prefix>
+          <prefix name="new">
+            <value>Nowy</value>
+          </prefix>
+          <prefix name="ready">
+            <value>Oczekujący</value>
+          </prefix>
+          <prefix name="rejected">
+            <value>Odrzucony</value>
+          </prefix>
+          <prefix name="suspended">
+            <value>Zawieszony</value>
+          </prefix>
+        </prefix>
+        <prefix name="transitions">
+          <prefix name="accept">
+            <value>Akceptuj</value>
+          </prefix>
+          <prefix name="activate">
+            <value>Uaktywnij</value>
+          </prefix>
+          <prefix name="expire_active">
+            <value>Wyłącz</value>
+          </prefix>
+          <prefix name="expire_ready">
+            <value>Wyłącz</value>
+          </prefix>
+          <prefix name="reapply">
+            <value>Popraw</value>
+          </prefix>
+          <prefix name="refresh_active">
+            <value>Odśwież aktywny</value>
+          </prefix>
+          <prefix name="reject">
+            <value>Odrzuć</value>
+          </prefix>
+          <prefix name="suspend_active">
+            <value>Wstrzymaj</value>
+          </prefix>
+          <prefix name="suspend_ready">
+            <value>Wstrzymaj</value>
+          </prefix>
+          <prefix name="unexpire">
+            <value>Reaktywuj</value>
+          </prefix>
+          <prefix name="unsuspend">
+            <value>Wznów</value>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="structure">
+    <prefix name="navigation_node">
+      <prefix name="states">
+        <prefix name="accepted">
+          <value>Zaakceptowany</value>
+        </prefix>
+        <prefix name="assigned">
+          <value>Przypisany</value>
+        </prefix>
+        <prefix name="expired">
+          <value>Po terminie</value>
+        </prefix>
+        <prefix name="locked">
+          <value>Zablokowany</value>
+        </prefix>
+        <prefix name="new">
+          <value>Nowy</value>
+        </prefix>
+        <prefix name="prepared">
+          <value>Gotowy</value>
+        </prefix>
+        <prefix name="published">
+          <value>Opublikowany</value>
+        </prefix>
+        <prefix name="rejected">
+          <value>Odrzucony</value>
+        </prefix>
+        <prefix name="taken">
+          <value>Obsługiwany</value>
+        </prefix>
+      </prefix>
+      <prefix name="transitions">
+        <prefix name="accept">
+          <value>Akceptuj</value>
+        </prefix>
+        <prefix name="assign">
+          <value>Przypisz</value>
+        </prefix>
+        <prefix name="expire">
+          <value>Wyłącz</value>
+        </prefix>
+        <prefix name="finish">
+          <value>Do akceptacji</value>
+        </prefix>
+        <prefix name="lock">
+          <value>Zablokuj</value>
+        </prefix>
+        <prefix name="publish">
+          <value>Publikuj</value>
+        </prefix>
+        <prefix name="expire_new">
+          <value>Wyłącz nieopublikowany document</value>
+        </prefix>
+        <prefix name="expire_assigned">
+          <value>Wyłącz nieopublikowany document</value>
+        </prefix>    
+        <prefix name="expire_taken">
+          <value>Wyłącz nieopublikowany document</value>
+        </prefix>        
+        <prefix name="expire_prepared">
+          <value>Wyłącz nieopublikowany document</value>
+        </prefix>
+        <prefix name="reject_accepted">
+          <value>Do poprawki</value>
+        </prefix>
+        <prefix name="reject_expired">
+          <value>Do poprawki</value>
+        </prefix>
+        <prefix name="reject_prepared">
+          <value>Do poprawki</value>
+        </prefix>
+        <prefix name="reject_published">
+          <value>Do poprawki</value>
+        </prefix>
+        <prefix name="take_assigned">
+          <value>Przyjmij</value>
+        </prefix>
+        <prefix name="take_rejected">
+          <value>Przyjmij</value>
+        </prefix>
+        <prefix name="unlock">
+          <value>Zwolnij</value>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+</strings>

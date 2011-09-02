@@ -1,0 +1,157 @@
+#genericScreenHeader('Wyszukiwanie zaawansowane')
+
+#result_inline_message('results.search')
+
+<form name="search" method="get" action='$link'>
+<div>
+<input type="hidden" name="site_id" value="$cmsData.site.id" />
+
+<table>
+<tbody>
+
+#if($pools.size() > 0)
+<tr>
+<td>Szukaj w</td>
+<td>
+<select name="pool_id">  
+  <option value="-1"#if(!$selected_pool) selected#end>w całym serwisie</option>
+  #foreach($pool in $pools)
+    <option value="$pool.id"#if($selected_pool.id == $pool.id) selected#end>$pool.name</option>
+  #end
+</select>
+</td>
+</tr>
+#end
+
+<tr>
+<td>Szukaj w polu zasobu</td>
+<td>
+<select name="field">
+#set($opts = [['gdziekolwiek','extended'],['w tytule, skrócie i treści','standard'],['w tytule','index_title'],['w skrócie','index_abbreviation'],['w treści','index_content'],['w opisie administracyjnym','description'],['w indentyfikatorach zasobów','id'],['w loginach właścicieli','owner'],['w loginach twórców','created_by'],['w słowach kluczowych','keywords'],['w tytule kalendarzowym','titleCalendar'],['w polu ostatni edytor','lastEditor'],['w polu autorzy','authors'],['w polu źródła','sources']])
+#options($opts $!field)
+</select>
+</td>
+</tr>
+
+<tr>
+<td>ze wszystkimi słowami</td>
+<td>
+<input type="text" size="25" name="q_and" value="$!q_and" />
+</td>
+</tr>
+
+<tr>
+<td>z wyrażeniem</td>
+<td>
+<input type="text" size="25" name="q_expr" value="$!q_expr" />
+</td>
+</tr>
+
+<tr>
+<td>z którymkolwiek ze słów</td>
+<td>
+<input type="text" size="25" name="q_or" value="$!q_or" />
+</td>
+</tr>
+
+<tr>
+<td>bez słów</td>
+<td>
+<input type="text" size="25" name="q_not" value="$!q_not" />
+</td>
+</tr>
+
+<tr>
+<td>Pokaż zasoby zmodyfikowane w ciągu</td>
+<td>
+<select name="q_time">
+#set($opts = [['kiedykolwiek','all'],['ostatniego tygodnia','7'],['ostatniego miesiąca','31'],['ostatnich 3 miesięcy','92'],['ostatnich 6 miesięcy','185'],['ostatniego roku','365']])
+#options($opts $!q_time)
+</select>
+</td>
+</tr>
+
+<tr>
+<td>Pokaż zasoby opublikowane w ciągu</td>
+<td>
+<select name="v_time">
+#options($opts $!v_time)
+</select>
+</td>
+</tr>
+
+<tr>
+<td>Sortowanie wyników</td>
+<td>
+<select name="sort_field">
+#set($opts = [["według trafności","score"],["według czasu modyfikacji","modification_time"],["według czasu publikacji","validityStart"],["według początku wydarzenia","eventStart"],["według końca wydarzenia","eventEnd"]])
+#options($opts $!sort_field)
+</select>
+<select name="sort_order">
+#set($opts = [["malejąco","desc"],["rosnąco","asc"]])
+#options($opts $!sort_order)
+</select>
+</td>
+</tr>
+
+</tbody>
+</table>
+
+<input type="submit" name="go" value="Szukaj" />
+
+</div>
+
+</form>
+
+#if($hits_table)
+
+<h2>Wyniki wyszukiwania</h2>
+<p>Liczba znalezionych zasobów: $hits_table.totalRowCount</p>
+
+#set($start = $hits_table.pageSize * ($hits_table.currentPage - 1) + 1)
+<ol start="$start">
+#foreach ($row in $hits_table.rows)
+<li>
+##set($definition = $cms_tool.getClassDefinition($row.object.getResourceClass().id))##
+##<img src="$link.skinResource("icons/rc/$definition.image")" alt="$definition.name" />##
+#if($row.object.title)
+<a href="$row.object.url">$row.object.title</a>
+#else
+<a href="$row.object.url">...</a>
+#end
+#if($row.object.editUrl)
+<a href="$row.object.editUrl">edytuj</a>
+#end
+<div>
+$!row.object.abbreviation
+</div>
+<div style="font-size: 80%; color: grey;">
+<div style="float: right;">
+#set($score = $row.object.score / 10)
+<div style="border: 1px grey solid; width: 100px;"><div style="background-color: red; width: ${score}px;">&nbsp;</div></div>
+</div>
+<p>
+&nbsp;
+#if($row.object.get('validityStart'))
+Data publikacji: $format_date.format($row.object.getAsDate('validityStart'))
+#end
+#if($row.object.modificationTime)
+Ostatnia modyfikacja: $format_date.format($row.object.modificationTime)
+#end
+#if($row.object.get('site_name'))
+Serwis: $!row.object.get('site_name')
+#end
+</p>
+</div>
+</li>
+#end
+</ol>
+#set($tableLink = $link.self().set('tableId', $hits_table.id))
+#tableView_pageSizeChooser($hits_table $tableLink [10,50,100])
+#tableView_pager($hits_table $tableLink)
+
+#end
+
+#genericScreenTrailer()
+
+
