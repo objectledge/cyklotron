@@ -60,6 +60,7 @@ public class CommunityVotes
                 node.isVotesPositiveDefined() ? node.getVotesPositive() : 0);
             jsonGenerator.writeNumberField("negative",
                 node.isVotesNegativeDefined() ? node.getVotesNegative() : 0);
+            jsonGenerator.writeBooleanField("voted", pollService.hasVoted(getHttpContext(), node));
             jsonGenerator.writeEndObject();
         }
         else
