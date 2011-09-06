@@ -14,7 +14,7 @@ import net.cyklotron.cms.ProtectedResource;
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @version $Id: ProtectedValidityViewFilter.java,v 1.6 2007-11-18 21:23:14 rafal Exp $
  */
-public class ProtectedValidityViewFilter implements TableFilter
+public class ProtectedValidityViewFilter<T extends ProtectedResource> implements TableFilter<T>
 {
     private CmsData data;
     
@@ -29,13 +29,8 @@ public class ProtectedValidityViewFilter implements TableFilter
         this.subject = subject;
     }
 
-    public boolean accept(Object object)
+    public boolean accept(ProtectedResource protectedRes)
     {
-        if(!(object instanceof ProtectedResource))
-        {
-            return true;
-        }
-        ProtectedResource protectedRes = (ProtectedResource)object;
         return protectedRes.canView(coralSession, data, subject);
     }
 }
