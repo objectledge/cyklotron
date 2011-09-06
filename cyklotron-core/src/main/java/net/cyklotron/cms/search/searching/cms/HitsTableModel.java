@@ -21,7 +21,8 @@ import net.cyklotron.cms.search.searching.SearchHit;
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: HitsTableModel.java,v 1.4 2005-06-03 07:29:35 pablo Exp $
  */
-public class HitsTableModel<T extends SearchHit> implements TableModel<T>
+public class HitsTableModel<T extends SearchHit> 
+    implements TableModel<T>
 {
     protected List<T> hits;
     protected HitsRowSet<T> rowSet;
@@ -61,6 +62,18 @@ public class HitsTableModel<T extends SearchHit> implements TableModel<T>
             throw new RuntimeException("Problem creating a column object: "+e.getMessage());
         }
         return columns;
+    }
+    
+    public TableColumn<T> getColumn(String name)
+    {
+        for(TableColumn<T> column : getColumns())
+        {
+            if(column.getName().equals(name))
+            {
+                return column;
+            }
+        }
+        return null;
     }
 
     public TableRowSet<T> getRowSet(TableState state, TableFilter<T>[] filters)

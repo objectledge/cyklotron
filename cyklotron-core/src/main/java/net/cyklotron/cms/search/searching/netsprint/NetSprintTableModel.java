@@ -19,7 +19,8 @@ import org.xml.sax.InputSource;
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: NetSprintTableModel.java,v 1.2 2005-01-20 06:52:43 pablo Exp $
  */
-public class NetSprintTableModel implements TableModel
+public class NetSprintTableModel 
+    implements TableModel
 {
     private NetSprintResultParser parser;
     
@@ -50,6 +51,18 @@ public class NetSprintTableModel implements TableModel
             throw new RuntimeException("Problem creating a column object: "+e.getMessage());
         }
         return columns;
+    }
+    
+    public TableColumn getColumn(String name)
+    {
+        for(TableColumn column : getColumns())
+        {
+            if(column.getName().equals(name))
+            {
+                return column;
+            }
+        }
+        return null;
     }
 
     public TableRowSet getRowSet(TableState state, TableFilter[] filters)
