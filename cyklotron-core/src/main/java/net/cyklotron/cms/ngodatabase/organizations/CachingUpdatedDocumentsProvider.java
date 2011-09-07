@@ -119,7 +119,11 @@ public class CachingUpdatedDocumentsProvider
             
             if(org > 0L)
             {
-                result.addAll((LongSet)organizationToDocument.get(org));
+                LongSet orgDocs = (LongSet)organizationToDocument.get(org);
+                if(orgDocs != null)
+                {
+                    result.addAll(orgDocs);
+                }
             }
             else
             {
