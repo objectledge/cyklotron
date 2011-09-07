@@ -1,0 +1,13 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="UpdateConfig">
+    <prefix name="msg">
+      <item name="name_empty">Name may not be empty.</item>
+      <item name="name_invalid">Name contains disallowed characters.</item>
+      <item name="name_in_use">Catalogue with this name already exists.</item>
+      <item name="cateogory_not_selected">Category was not chosen.</item>
+      <item name="search_pool_not_selected">Search index pool was not chosen.</item>
+      <item name="exception">An error has occurred.</item>
+      <item name="success">Configuration was saved.</item>      
+    </prefix>
+  </prefix>
+</strings>

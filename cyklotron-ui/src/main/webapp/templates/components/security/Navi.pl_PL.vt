@@ -1,0 +1,10 @@
+#genericNaviHeader('ZESPÓŁ')
+#if($cmsData.site)    
+  #linkCell('' 'Lista ról' $link.view('security.RoleList'))
+  #linkCell('' 'Lista grup' $link.view('security.GroupList'))
+  #linkCell('' 'Lista osób' $link.view('security.MemberList'))
+#end
+#if($cms_tool.hasRole($cmsData.userData.subject, 'root') || $cms_tool.hasRole($cmsData.userData.subject, 'cms.administrator'))
+  #linkCell('' 'Nowe konto' $link.view('security.AddUser'))
+#end  
+#genericNaviTrailer()
