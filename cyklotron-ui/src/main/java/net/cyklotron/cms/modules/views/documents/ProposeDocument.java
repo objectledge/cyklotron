@@ -14,19 +14,17 @@ import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.comparator.CreationTimeComparator;
+import org.objectledge.coral.table.ResourceListTableModel;
 import org.objectledge.html.HTMLService;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.InverseFilter;
-import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
-import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
@@ -42,7 +40,6 @@ import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.internal.ProposedDocumentData;
-import net.cyklotron.cms.structure.table.TitleComparator;
 import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.workflow.AutomatonResource;
 import net.cyklotron.cms.workflow.StateFilter;
@@ -239,10 +236,8 @@ public class ProposeDocument
                 + cmsData.getSite().getIdString();
             List<Resource> myDocuments = (List<Resource>)coralSession.getQuery().executeQuery(query).getList(1);
 
-            TableColumn<Resource> columns[] = new TableColumn[2];
-            columns[0] = new TableColumn<Resource>("creation.time", new CreationTimeComparator());
-            columns[1] =  new TableColumn<Resource>("title", new TitleComparator(i18nContext.getLocale()));
-            ListTableModel<Resource> model = new ListTableModel<Resource>(myDocuments, columns);
+            ResourceListTableModel<Resource> model = new ResourceListTableModel<Resource>(
+                myDocuments, i18nContext.getLocale());
 
             List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
             ResourceClass navigationNodeClass = coralSession.getSchema().getResourceClass(
