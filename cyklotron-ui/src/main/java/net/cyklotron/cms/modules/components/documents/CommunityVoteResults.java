@@ -76,8 +76,13 @@ public class CommunityVoteResults
 
             Parameters componentConfiguration = cmsData.getComponent().getConfiguration();
             int cutoffDateOffset = componentConfiguration.getInt("cutoffDateOffset", 30);
-            String primarySortOrderNames = componentConfiguration.get("primarySortOrders",
-                "POSITIVE,NEGATIVE,TOTAL");
+            
+            String primarySortOrderNames[] = componentConfiguration.getStrings("primarySortOrders");
+            if(primarySortOrderNames.length == 0)
+            {
+                primarySortOrderNames = "POSITIVE,NEGATIVE,TOTAL".split(",");
+            }
+            
             String secondarySortOrder = componentConfiguration.get("secondarySortOrder",
                 "priority.validity.start");
             String secondarySortDirection = componentConfiguration.get(
@@ -92,7 +97,7 @@ public class CommunityVoteResults
             cal.set(Calendar.DAY_OF_MONTH, -cutoffDateOffset);
             Date cutoffDate = cal.getTime();
             Set<SortOrder> primarySortOrders = new HashSet<SortOrder>();
-            for(String sortOrderName : primarySortOrderNames.split(","))
+            for(String sortOrderName : primarySortOrderNames)
             {
                 primarySortOrders.add(SortOrder.valueOf(sortOrderName));
             }
