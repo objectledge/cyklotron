@@ -77,11 +77,11 @@ public class CommunityVoteResults
             Parameters componentConfiguration = cmsData.getComponent().getConfiguration();
             int cutoffDateOffset = componentConfiguration.getInt("cutoffDateOffset", 30);
             String primarySortOrderNames = componentConfiguration.get("primarySortOrders",
-                "POSITIVE,NEGATIVE,POSITIVE_RATIO,NEGATIVE_RATIO,TOTAL");
+                "POSITIVE,NEGATIVE,TOTAL");
             String secondarySortOrder = componentConfiguration.get("secondarySortOrder",
                 "priority.validity.start");
-            String secondarySortOrderDirection = componentConfiguration.get(
-                "secondarySortOrderDirection", "ASC");
+            String secondarySortDirection = componentConfiguration.get(
+                "secondarySortDirection", "ASC");
             int resulPageSize = componentConfiguration.getInt("resultPageSize", 10);
 
             Calendar cal = new GregorianCalendar();
@@ -98,7 +98,7 @@ public class CommunityVoteResults
             }
             Comparator<NavigationNodeResource> secondarySortOrderComparator = model.getColumn(
                 secondarySortOrder).getComparator();
-            if("DESC".equals(secondarySortOrderDirection))
+            if("DESC".equals(secondarySortDirection))
             {
                 secondarySortOrderComparator = Collections
                     .reverseOrder(secondarySortOrderComparator);
