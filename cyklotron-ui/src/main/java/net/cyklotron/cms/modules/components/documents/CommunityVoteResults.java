@@ -80,6 +80,9 @@ public class CommunityVoteResults
                 "POSITIVE,NEGATIVE,POSITIVE_RATIO,NEGATIVE_RATIO,TOTAL");
             String secondarySortOrder = componentConfiguration.get("secondarySortOrder",
                 "priority.validity.start");
+            String secondarySortOrderDirection = componentConfiguration.get(
+                "secondarySortOrderDirection", "ASC");
+            int resulPageSize = componentConfiguration.getInt("resultPageSize", 10);
 
             Calendar cal = new GregorianCalendar();
             cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -95,6 +98,11 @@ public class CommunityVoteResults
             }
             Comparator<NavigationNodeResource> secondarySortOrderComparator = model.getColumn(
                 secondarySortOrder).getComparator();
+            if("DESC".equals(secondarySortOrderDirection))
+            {
+                secondarySortOrderComparator = Collections
+                    .reverseOrder(secondarySortOrderComparator);
+            }
 
             Map<SortOrder, List<NavigationNodeResource>> results = communityVote.getResults(
                 cutoffDate, primarySortOrders, secondarySortOrderComparator, coralSession);
@@ -112,6 +120,11 @@ public class CommunityVoteResults
                 TableState tableState = tableStateManager.getState(context,
                     "cms.structure.communityVote/" + cmsData.getNode().getIdString() + "/"
                         + cmsData.getComponent().getInstanceName() + sortOrder.name());
+                if(tableState.isNew())
+                {
+                    tableState.setTreeView(false);
+                    tableState.setPageSize(resulPageSize);
+                }
                 TableModel<NavigationNodeResource> tableModel = new CmsResourceListTableModel<NavigationNodeResource>(
                     context, integrationService, results.get(sortOrder), i18nContext.getLocale());
                 TableTool<NavigationNodeResource> tableTool = new TableTool<NavigationNodeResource>(
