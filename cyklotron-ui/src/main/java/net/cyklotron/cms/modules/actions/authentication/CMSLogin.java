@@ -110,18 +110,6 @@ public class CMSLogin
             }
             authenticationContext.setUserPrincipal(principal, authenticated);
 
-            // Create Coral Subject if necessary
-            CoralSession coralSession = null;
-            try
-            {
-                coralSession = coralSessionFactory.getRootSession();
-                cmsSecurityService.getSubject(coralSession, principal.getName());
-            }
-            finally
-            {
-                coralSession.close();
-            }
-
             result = authenticated ? "login_successful" : "login_failed";
         }
         templatingContext.put("result", result);

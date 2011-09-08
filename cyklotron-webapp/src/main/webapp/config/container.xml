@@ -258,6 +258,7 @@
      <parameter value="1800"/>
      <parameter value="300"/>
   </component>
+  <component class="net.cyklotron.cms.security.CmsSecurityValve"/>
   <!-- end of valves -->      
 
 
@@ -270,6 +271,7 @@
         <parameter class-key="org.objectledge.authentication.UserTrackingValve"/>
         <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>
         <parameter class-key="org.objectledge.i18n.EncodingLoaderValve"/>
+        <parameter class-key="net.cyklotron.cms.security.CmsSecurityValve"/>
         <parameter class-key="org.objectledge.coral.session.CoralSessionVerificationValve"/>
         <parameter class-key="org.objectledge.web.mvc.security.PolicyCheckingValve"/>
         <parameter class-key="org.objectledge.web.SessionDurationValve"/>
