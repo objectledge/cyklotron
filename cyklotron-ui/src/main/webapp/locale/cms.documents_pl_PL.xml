@@ -1,7 +1,7 @@
 <strings xmlns="http://objectledge.org/i18n/1.0">
   <prefix name="FootersList">
     <prefix name="strings">
-      <item name="title">Lista stopek</item>    
+      <item name="title">Lista stopek</item>
     </prefix>
     <prefix name="labels">
       <item name="title">Lista stopek</item>
@@ -19,7 +19,7 @@
   </prefix>
   <prefix name="AddFooter">
     <prefix name="strings">
-      <item name="title">Dodawanie stopki</item>    
+      <item name="title">Dodawanie stopki</item>
     </prefix>
     <prefix name="labels">
       <item name="name">Nazwa</item>
@@ -30,10 +30,10 @@
       <item name="add">Dodaj</item>
       <item name="cancel">Anuluj</item>
     </prefix>
-  </prefix>  
+  </prefix>
   <prefix name="EditFooter">
     <prefix name="strings">
-      <item name="title">Edycja stopki</item>    
+      <item name="title">Edycja stopki</item>
     </prefix>
     <prefix name="labels">
       <item name="name">Nazwa</item>
@@ -43,12 +43,13 @@
       <item name="update">Zapisz</item>
       <item name="cancel">Anuluj</item>
     </prefix>
-  </prefix>  
-  
+  </prefix>
+
   <prefix name="ProposeDocumentConf">
     <prefix name="strings">
       <item name="title">Konfiguracja komponentu Zaproponuj dokument</item>
-      <item name="no_parent">Jeśli nie wybrano żadnego dokumentu, proponowany dokument pojawi się pod węzłem gdzie znajduje się formularz.</item>
+      <item name="no_parent">Jeśli nie wybrano żadnego dokumentu, proponowany dokument pojawi się pod
+        węzłem gdzie znajduje się formularz.</item>
     </prefix>
     <prefix name="labels">
       <item name="category1">źródło pierwszej listy kategorii</item>
@@ -72,6 +73,47 @@
     <prefix name="buttons">
       <item name="save">Zapisz</item>
       <item name="cancel">Anuluj</item>
+    </prefix>
+  </prefix>
+  <prefix name="CommunityVoteResultsConf">
+    <prefix name="strings">
+      <item name="title">Wyniki głosowania społecznościowego</item>
+      <item name="save">Zapisz</item>
+      <item name="cancel">Anuluj</item>
+      <item name="cutoffDateOffset">Zliczaj dokumenty utworzone w ciągu ostatnich</item>
+      <item name="daysAgo">dni</item>
+      <item name="primarySortOrders">Dostępne rankingi (sortowania pierwszego poziomu)</item>
+      <item name="secondarySortOrder">Porządek sortowania drugiego poziomu</item>
+      <item name="secondarySortDirection">Kierunek sortowania drugiego poziomu</item>
+      <item name="resultPageSize">Ilość wyświetlanych wyników</item>
+    </prefix>
+    <prefix name="primarySortOrderNames">
+      <item name="POSITIVE">Najbardziej lubiane</item>
+      <item name="POSITIVE_RATIO">Najbardziej lubiane, procentowo</item>
+      <item name="NEGATIVE">Najmniej lubiane</item>
+      <item name="NEGATIVE_RATIO">Najmniej lubiane, procentowo</item>
+      <item name="TOTAL">Najczęściej oceniane</item>
+    </prefix>
+    <prefix name="secondarySortOrderNames">
+      <item name="unsorted">bez sortowania</item>
+      <item name="id">identyfikator</item>
+      <item name="name">nazwa systemowa</item>
+      <item name="path">ścieżka systemowa</item>
+      <item name="creator.name">identyfikator autora</item>
+      <item name="modifier.name">identyfikator ostatniego redaktora</item>
+      <item name="owner.name">identyfikator przypisanego redaktora</item>
+      <item name="creation.time">czas utworzenia</item>
+      <item name="modification.time">czas modyfikacji</item>
+      <item name="index.title">tytuł</item>
+      <item name="priority">priorytet</item>
+      <item name="validity.start">data publikacji</item>
+      <item name="priority.validity.start">priorytet i data publikacji</item>
+      <item name="event.start">data rozpoczęcia wydarzenia</item>
+      <item name="event.end">data zakończenia wydarzenia</item>
+    </prefix>
+    <prefix name="sortDirections">
+      <item name="ASC">rosnąco</item>
+      <item name="DESC">malejąco</item>
     </prefix>
   </prefix>
 </strings>

@@ -1,75 +1,117 @@
 <strings xmlns="http://objectledge.org/i18n/1.0">
-	<prefix name="FootersList">
-		<prefix name="strings">
-			<item name="title">Footers list</item>
-		</prefix>
-		<prefix name="labels">
-			<item name="name">Name</item>
-			<item name="content">Content</item>
-			<item name="enabled">Enabled</item>
-			<item name="delete">delete</item>
-			<item name="yes">Yes</item>
-			<item name="no">No</item>
-		</prefix>
-		<prefix name="buttons">
-			<item name="add_footer">Add footer</item>
-			<item name="save_sequence">Save sequence</item>
-		</prefix>
-	</prefix>
-	<prefix name="AddFooter">
-		<prefix name="strings">
-			<item name="title">Add footer</item>
-		</prefix>
-		<prefix name="labels">
-			<item name="name">Name</item>
-			<item name="content">Content</item>
-			<item name="enabled">Enabled</item>
-		</prefix>
-		<prefix name="buttons">
-			<item name="add">Add</item>
-			<item name="cancel">Cancel</item>
-		</prefix>
-	</prefix>
-	<prefix name="EditFooter">
-		<prefix name="strings">
-			<item name="title">Edit footer</item>
-		</prefix>
-		<prefix name="labels">
-			<item name="name">Name</item>
-			<item name="content">Content</item>
-		</prefix>
-		<prefix name="buttons">
-			<item name="update">Update</item>
-			<item name="cancel">Cancel</item>
-		</prefix>
-	</prefix>
-	<prefix name="ProposeDocumentConf">
-		<prefix name="strings">
-			<item name="title">Propose document component configuration</item>
-            <item name="no_parent">If none is selected, new documents will be placed under the proposal form.</item>
-		</prefix>
-		<prefix name="labels">
-			<item name="category1">1st category list source</item>
-			<item name="category2">2nd category list source</item>
-			<item name="category_depth">depth of category list retrieval</item>
-			<item name="choose">choose</item>
-            <item name="inherit_categories">inherit categories from parent document</item>
-            <item name="calendar_tree">use calendar tree structure</item>
-			<item name="attachments_enabled">allow attaching files</item>
-			<item name="attachments_dir">files upload location</item>
-			<item name="attachments_max_count">maximum number of files</item>
-			<item name="attachments_max_size">maximum size of files (kB)</item>
-			<item name="attachments_allowed_formats">allowed formats</item>
-            <item name="parent">target location of the new documents</item>
-            <item name="owner_login">choose owner</item>
-            <item name="editing_enabled">allow editing of own document by authors</item>
-            <item name="add_document_visual_editor">visual editor in AddDocument screen</item>
-            <item name="clear_org_if_not_match">clear auto-complete data if organization name dose not match</item>
-            <item name="add_captcha">add Captcha verification</item>
-		</prefix>
-		<prefix name="buttons">
-			<item name="save">Save</item>
-			<item name="cancel">Cancel</item>
-		</prefix>
-	</prefix>
+  <prefix name="FootersList">
+    <prefix name="strings">
+      <item name="title">Footers list</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="name">Name</item>
+      <item name="content">Content</item>
+      <item name="enabled">Enabled</item>
+      <item name="delete">delete</item>
+      <item name="yes">Yes</item>
+      <item name="no">No</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="add_footer">Add footer</item>
+      <item name="save_sequence">Save sequence</item>
+    </prefix>
+  </prefix>
+  <prefix name="AddFooter">
+    <prefix name="strings">
+      <item name="title">Add footer</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="name">Name</item>
+      <item name="content">Content</item>
+      <item name="enabled">Enabled</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="add">Add</item>
+      <item name="cancel">Cancel</item>
+    </prefix>
+  </prefix>
+  <prefix name="EditFooter">
+    <prefix name="strings">
+      <item name="title">Edit footer</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="name">Name</item>
+      <item name="content">Content</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="update">Update</item>
+      <item name="cancel">Cancel</item>
+    </prefix>
+  </prefix>
+  <prefix name="ProposeDocumentConf">
+    <prefix name="strings">
+      <item name="title">Propose document component configuration</item>
+      <item name="no_parent">If none is selected, new documents will be placed under the proposal form.
+      </item>
+    </prefix>
+    <prefix name="labels">
+      <item name="category1">1st category list source</item>
+      <item name="category2">2nd category list source</item>
+      <item name="category_depth">depth of category list retrieval</item>
+      <item name="choose">choose</item>
+      <item name="inherit_categories">inherit categories from parent document</item>
+      <item name="calendar_tree">use calendar tree structure</item>
+      <item name="attachments_enabled">allow attaching files</item>
+      <item name="attachments_dir">files upload location</item>
+      <item name="attachments_max_count">maximum number of files</item>
+      <item name="attachments_max_size">maximum size of files (kB)</item>
+      <item name="attachments_allowed_formats">allowed formats</item>
+      <item name="parent">target location of the new documents</item>
+      <item name="owner_login">choose owner</item>
+      <item name="editing_enabled">allow editing of own document by authors</item>
+      <item name="add_document_visual_editor">visual editor in AddDocument screen</item>
+      <item name="clear_org_if_not_match">clear auto-complete data if organization name dose not match</item>
+      <item name="add_captcha">add Captcha verification</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="save">Save</item>
+      <item name="cancel">Cancel</item>
+    </prefix>
+  </prefix>
+  <prefix name="CommunityVoteResultsConf">
+    <prefix name="strings">
+      <item name="title">Community vote results</item>
+      <item name="save">Save</item>
+      <item name="cancel">Cancel</item>
+      <item name="cutoffDateOffset">Include documents created within last</item>
+      <item name="daysAgo">days</item>
+      <item name="primarySortOrders">Available rankings (primary sort orders)</item>
+      <item name="secondarySortOrder">Secondary sort order</item>
+      <item name="secondarySortDirection">Secondary sort direction</item>
+      <item name="resultPageSize">Displayed number of results</item>
+    </prefix>
+    <prefix name="primarySortOrderNames">
+      <item name="POSITIVE">Most liked</item>
+      <item name="POSITIVE_RATIO">Most liked, relative</item>
+      <item name="NEGATIVE">Least liked</item>
+      <item name="NEGATIVE_RATIO">Least liked, relative</item>
+      <item name="TOTAL">Most voted on</item>
+    </prefix>
+    <prefix name="secondarySortOrderNames">
+      <item name="unsorted">not sorted</item>
+      <item name="id">identifier</item>
+      <item name="name">system name</item>
+      <item name="path">system path</item>
+      <item name="creator.name">creator name</item>
+      <item name="modifier.name">last editor name</item>
+      <item name="owner.name">assigned editor name</item>
+      <item name="creation.time">creation time</item>
+      <item name="modification.time">modification time</item>
+      <item name="index.title">title</item>
+      <item name="priority">priority</item>
+      <item name="validity.start">validity start date</item>
+      <item name="priority.validity.start">priority and validity start date </item>
+      <item name="event.start">event start date</item>
+      <item name="event.end">event end date</item>
+    </prefix>
+    <prefix name="sortDirections">
+      <item name="ASC">ascending</item>
+      <item name="DESC">descending</item>
+    </prefix>
+  </prefix>
 </strings>
