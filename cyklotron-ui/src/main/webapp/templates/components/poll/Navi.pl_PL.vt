@@ -1,0 +1,8 @@
+
+
+  #set ($pollLink = $link.set('psid',$cms_tool.getApplication("polls").getId()))
+
+  #genericNaviHeader('SONDAŻE')
+    #linkCell('' 'Lista sondaży' $pollLink.view('poll.PoolList'))
+    #linkCell('' 'Lista ankiet' $pollLink.view('poll.VoteList'))
+  #genericNaviTrailer()

@@ -1,0 +1,22 @@
+
+#set($periodicalsLink = $link.set('ci',$cms_data.component.instanceName))
+#if($parametersTool.isDefined('x'))
+#set($periodicalsLink = $periodicalsLink.set('x',$parametersTool.get('x')))
+#end
+<div class="periodicals-component">
+#if($cms_data.component.configuration.isDefined('header'))
+  <p class="header">$cms_data.component.configuration.get('header')</p>
+#end
+#if($periodicals.size() > 0)
+  <ul>
+  #foreach($periodical in $periodicals)
+    <li><a href="$periodicalsLink.set('periodical',$periodical.id)">$periodical.name</a></li>
+  #end
+  </ul>
+#end
+#if($subscriptionNode)
+<p class="subscription">
+  <a href="$link.set('x',$subscriptionNode.id)">Subskrybcja</a>
+</p>
+#end
+</div>
