@@ -7,7 +7,6 @@
     <version>2.20-SNAPSHOT</version>
     <relativePath>../cyklotron-common</relativePath>
   </parent>
-  <groupId>org.cyklotron</groupId>
   <artifactId>cyklotron-ui-fckeditor</artifactId>
   <packaging>war</packaging>
   <name>Cyklotron UI CKEditor plugin</name>
