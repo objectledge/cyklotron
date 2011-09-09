@@ -114,4 +114,21 @@
       <item name="DESC">descending</item>
     </prefix>
   </prefix>
+    <prefix name="CommunityVoteStatistics">
+    <prefix name="strings">
+      <item name="title">Community vote results</item>
+      <item name="anonymous">anonymous</item>
+      <item name="cutoffDateOffset">Published within last</item>
+      <item name="days">days</item>
+      <item name="show">pokaż</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="position">position</item>
+      <item name="title">title</item>
+      <item name="validity_start">published on</item>
+      <item name="creator_name">author</item>
+      <item name="votesPositive">liked</item>
+      <item name="votesNegative">disliked</item>
+    </prefix>
+  </prefix>
 </strings>

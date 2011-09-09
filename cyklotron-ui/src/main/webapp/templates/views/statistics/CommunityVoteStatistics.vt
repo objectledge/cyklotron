@@ -1,0 +1,111 @@
+##
+## option settings
+##
+#set($cuttoffDateOffsetOptions = ['7', '14', '30', '60', '90', '365'])
+#set($defaultSecondarySort = 'priority.validity.start/ASC')
+#set($sortDirectionOptions = ['ASC','DESC'])
+#set($resultPageSizeOptions = [20, 50, 100])
+#set($defaultResultPageSize = '50')
+##
+## i18n
+##
+#set($strings = $i18n.usePrefix('cms.documents.CommunityVoteStatistics.strings'))
+#set($columnLabels = $i18n.usePrefix('cms.documents.CommunityVoteStatistics.columns'))
+## borrowing some strings from CommunityVoteResultsConf view
+#set($primarySortOrderNames = $i18n.usePrefix('cms.documents.CommunityVoteResultsConf.primarySortOrderNames'))
+#set($secondarySortOrderNames = $i18n.usePrefix('cms.documents.CommunityVoteResultsConf.secondarySortOrderNames'))
+#set($sortDirectionNames = $i18n.usePrefix('cms.documents.CommunityVoteResultsConf.sortDirections'))
+##
+## table setup
+##
+#set($columnOrder = ['position','title','validity_start','creator_name','votesPositive','votesNegative'])
+#foreach($column in $columnOrder)
+$table.getColumn($column).set('label', $columnLabels.get($column))##
+#end
+$table.getColumn('position').set('width','1%')##
+$table.getColumn('title').set('width','60%')##
+$table.getColumn('validity_start').set('width','20%')##
+$table.getColumn('creator_name').set('width','17%')##
+$table.getColumn('votesPositive').set('width','1%')##
+$table.getColumn('votesNegative').set('width','1%')##
+#set($tableLink = $filesLink.set('tableId',$table.getId()))
+##
+## header
+##
+#genericScreenHeader($strings.title)
+##
+## parameters 
+##
+<div align="right">
+<form name="form1" method="POST" action="$link">
+	$strings.cutoffDateOffset
+	<select name="cutoffDateOffset">
+	#foreach($offset in $cuttoffDateOffsetOptions)
+		<option value="$offset"#selected($offset.equals($currentCutoffDateOffset))>$offset</option>
+	#end
+	</select>
+	$strings.days
+	<select name="primarySort">
+	#foreach($sortOrder in $availablePrimarySortOrders)
+		<option value="$sortOrder"#selected($sortOrder.equals($currentPrimarySort))>$primarySortOrderNames.get($sortOrder)</option>
+	#end
+	</select>
+	<select name="secodarySort">
+	#foreach($sortOrder in $availableSecondarySortOrders)
+	#foreach($sortDirection in $sortDirectionOptions)
+		#set($sort = "${sortOrder}/${sortDirection}")
+        <option value="$sort"#selected($sort.equals($currentSecondarySort))>$secondarySortOrderNames.get($sortOrder), $sortDirectionNames.get($sortDirection)</option>
+	#end
+	#end	
+	</select>
+	<input type="submit" value="$strings.show"/>
+</form>
+</div>
+##
+## data table
+##
+<table width="100%" class="genericItemList" cellspacing="0">
+	<thead>
+		<tr>
+			#tableView_header($table $tableLink $columnOrder)
+		</tr>
+	</thead>
+	<tbody>
+	#foreach($row in $table.rows)
+		<tr>
+			#set($position = $table.rows.indexOf($row) + 1) 
+			<td>$position</td>
+			<td>$row.object.title</td>
+			<td>$format_date.style('date').format($row.object.validityStart)</td>
+			<td>
+			#if($cms_tool.getUserData($row.object.createdBy).login == 'anonymous')
+				$strings.anonymous <i>$row.object.getFieldValue('authors')</i>
+			#else
+				#cms_personal_credentials($row.object.createdBy)				
+			#end
+			</td>
+		#if($tname.endsWith('RATIO'))
+            #set($posRatio = $row.object.getVotesPositive(0) * 100 / ($row.object.getVotesPositive(0) + $row.object.getVotesNegative(0)))	
+            #set($negRatio = $row.object.getVotesNegative(0) * 100 / ($row.object.getVotesPositive(0) + $row.object.getVotesNegative(0)))	
+			<td>${posRatio}%</td>
+			<td>${negRatio}%</td
+		#else
+			<td>$row.object.getVotesPositive(0)</td>
+			<td>$row.object.getVotesNegative(0)</td
+		#end			
+		</tr>
+	#end
+	</tbody>
+	<tfoot>
+		<tr>			
+    		<td colspan="6" align="center">
+        		#tableView_pager($table $tableLink)
+        		#tableView_pageSizeChooser($table $tableLink $resultPageSizeOptions)
+    		</td>
+		</tr>
+    </tfoot>
+</table>
+##
+## footer
+##
+#genericScreenTrailer()

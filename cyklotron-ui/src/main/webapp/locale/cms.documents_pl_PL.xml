@@ -80,7 +80,7 @@
       <item name="title">Wyniki głosowania społecznościowego</item>
       <item name="save">Zapisz</item>
       <item name="cancel">Anuluj</item>
-      <item name="cutoffDateOffset">Zliczaj dokumenty utworzone w ciągu ostatnich</item>
+      <item name="cutoffDateOffset">Zliczaj dokumenty opublikowane w ciągu ostatnich</item>
       <item name="daysAgo">dni</item>
       <item name="primarySortOrders">Dostępne rankingi (sortowania pierwszego poziomu)</item>
       <item name="secondarySortOrder">Porządek sortowania drugiego poziomu</item>
@@ -114,6 +114,23 @@
     <prefix name="sortDirections">
       <item name="ASC">rosnąco</item>
       <item name="DESC">malejąco</item>
+    </prefix>
+  </prefix>  
+  <prefix name="CommunityVoteStatistics">
+    <prefix name="strings">
+      <item name="title">Wyniki głosowania społecznościowego</item>
+      <item name="anonymous">niezalogowany</item>
+      <item name="cutoffDateOffset">Opublikowane w ciągu ostatnich</item>
+      <item name="days">dni</item>
+      <item name="show">pokaż</item>
+    </prefix>
+    <prefix name="columns">
+      <item name="position">pozycja</item>
+      <item name="title">tytuł</item>
+      <item name="validity_start">data publikacji</item>
+      <item name="creator_name">autor</item>
+      <item name="votesPositive">lubiany</item>
+      <item name="votesNegative">nielubiany</item>
     </prefix>
   </prefix>
 </strings>
