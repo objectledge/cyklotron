@@ -315,7 +315,7 @@ public class ProposeDocument
         CoralSession rootSession = coralSessionFactory.getRootSession();        
         try
         {
-            if(ownerLogin != "")
+            if(ownerLogin.length() > 0)
             {
                 String dn = userManager.getUserByLogin(ownerLogin).getName();
                 Subject owner = rootSession.getSecurity().getSubject(dn);
