@@ -1,0 +1,1 @@
+ALTER RESOURCE CLASS cms.forum.forum ADD ATTRIBUTE text rejectMessage;
