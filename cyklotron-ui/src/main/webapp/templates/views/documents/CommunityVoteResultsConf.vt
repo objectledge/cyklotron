@@ -68,6 +68,7 @@ function sendConfig()
 #foreach($option in $sortDirectionOptions)
 	                <option value="$option"#selected($option.equals($config.get('secondarySortDirection', $defaultSecondarySortDirection)))>$sortDirectionNames.get($option)</option>
 #end	
+                </select>
 			</td>
 		</tr>
 		<tr>
