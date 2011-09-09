@@ -143,9 +143,6 @@
               <groupId>org.cyklotron</groupId>
               <artifactId>cyklotron-ui-fckeditor</artifactId>
             </overlay>
-            <overlay>
-              <!-- cyklotron-webapp -->
-            </overlay>
           </overlays>
         </configuration>
       </plugin>
