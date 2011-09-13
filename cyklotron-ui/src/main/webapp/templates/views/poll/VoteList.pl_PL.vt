@@ -7,7 +7,7 @@ $pageTool.addStyleLink("style/cms-popupmenu.css")
 #genericScreenHeader("ANKIETY")
 #result_inline_message("results.vote") 
 
-$table.getColumn('name').set('label', 'Nazwa sondażu')
+$table.getColumn('name').set('label', 'Nazwa ankiety')
 $table.getColumn('creator.name').set('label', 'Twórca')
 $table.getColumn('creation.time').set('label', 'Data powstania')
 $table.getColumn('delete').set('label', 'Usuń')
