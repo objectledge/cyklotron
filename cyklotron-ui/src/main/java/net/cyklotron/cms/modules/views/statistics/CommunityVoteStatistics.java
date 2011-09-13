@@ -1,6 +1,7 @@
 package net.cyklotron.cms.modules.views.statistics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,7 +13,9 @@ import java.util.Map;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -29,9 +32,12 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
+import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.vote.CommunityVote;
 import net.cyklotron.cms.structure.vote.SortOrder;
@@ -45,14 +51,17 @@ public class CommunityVoteStatistics
 
     private final CommunityVote communityVote;
 
+    private final CategoryQueryService categoryQueryService;
+
     public CommunityVoteStatistics(Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, IntegrationService integrationService,
-        CommunityVote communityVote)
+        CommunityVote communityVote, CategoryQueryService categoryQueryService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
         this.integrationService = integrationService;
         this.communityVote = communityVote;
+        this.categoryQueryService = categoryQueryService;
     }
 
     @Override
@@ -78,6 +87,10 @@ public class CommunityVoteStatistics
             String secondarySortElements[] = secondarySort.split("/");
             String secondarySortOrder = secondarySortElements[0];
             String secondarySortDirection = secondarySortElements[1];
+            boolean singleSiteOnly = parameters.getBoolean("singleSite", false);
+            templatingContext.put("singleSite", singleSiteOnly);
+            long categoryQueryId = parameters.getLong("categoryQuery", -1L);
+            templatingContext.put("categoryQuery", categoryQueryId);
 
             Calendar cal = new GregorianCalendar();
             cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -95,9 +108,23 @@ public class CommunityVoteStatistics
                     .reverseOrder(secondarySortOrderComparator);
             }
 
+            SiteResource singleSite = singleSiteOnly ? cmsData.getSite() : null;
+            CategoryQueryResource categoryQuery = null;
+            if(categoryQueryId != -1L)
+            {
+                try            
+                {
+                    categoryQuery = (CategoryQueryResource)coralSession.getStore().getResource(categoryQueryId);
+                }
+                catch(EntityDoesNotExistException e)
+                {
+                    throw new ProcessingException("invalid category query id", e);
+                }
+            }
+            
             Map<SortOrder, List<NavigationNodeResource>> results = communityVote.getResults(
                 cutoffDate, EnumSet.of(primarySortOrder), secondarySortOrderComparator,
-                coralSession);
+                coralSession, singleSite, categoryQuery);
 
             TableModel<NavigationNodeResource> tableModel = new CmsResourceListTableModel<NavigationNodeResource>(
                 context, integrationService, results.get(primarySortOrder), i18nContext.getLocale());
@@ -136,6 +163,11 @@ public class CommunityVoteStatistics
             }
             templatingContext.put("availableSecondarySortOrders", availableSecondarySortOrders);
             
+            Resource queryRoot = categoryQueryService.getCategoryQueryRoot(coralSession,
+                cmsData.getSite());
+            List<Resource> availableCategoryQueries = Arrays.asList(queryRoot.getChildren());
+            templatingContext.put("availableCategoryQueries", availableCategoryQueries);    
+            templatingContext.put("noCategoryQuery", -1L);
         }
         catch(Exception e)
         {

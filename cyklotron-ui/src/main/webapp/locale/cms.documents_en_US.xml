@@ -120,7 +120,10 @@
       <item name="anonymous">anonymous</item>
       <item name="cutoffDateOffset">Published within last</item>
       <item name="days">days</item>
-      <item name="show">pokaż</item>
+      <item name="singleSite">current site</item>
+      <item name="categoryQuery">category query</item>
+      <item name="noRestrition">no restriction</item>
+      <item name="show">show</item>
     </prefix>
     <prefix name="columns">
       <item name="position">position</item>

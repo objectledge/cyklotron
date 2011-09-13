@@ -44,7 +44,16 @@ $table.getColumn('votesNegative').set('width','1%')##
 		<option value="$offset"#selected($offset.equals($currentCutoffDateOffset))>$offset</option>
 	#end
 	</select>
-	$strings.days
+	$strings.days,
+	<input type="checkbox" name="singleSite" value="true"#checked($singleSite)/>
+	$strings.singleSite,
+	$strings.categoryQuery
+	<select name="categoryQuery">
+        <option value="-1"#selected($categoryQuery.equals($noCategoryQuery))>[ $strings.noRestriction ]</option>
+	#foreach($query in $availableCategoryQueries)
+		<option value="$query.id"#selected($categoryQuery.equals($query.id))>$query.name</option>
+	#end
+	</select>
 	<select name="primarySort">
 	#foreach($sortOrder in $availablePrimarySortOrders)
 		<option value="$sortOrder"#selected($sortOrder.equals($currentPrimarySort))>$primarySortOrderNames.get($sortOrder)</option>

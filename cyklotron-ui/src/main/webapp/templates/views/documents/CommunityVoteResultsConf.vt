@@ -16,7 +16,7 @@
 #set($save_action = "$link.unsetView().action('structure.UpdatePreferences').set('x',$node.id)")
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
-var fieldNames = [ "cutoffDateOffset", "primarySortOrders", "secondarySortOrder", "secondarySortDirection", "resultPageSize" ];
+var fieldNames = [ "cutoffDateOffset", "singleSite", "categoryQuery", "primarySortOrders", "secondarySortOrder", "secondarySortDirection", "resultPageSize" ];
 
 function sendConfig()
 {
@@ -38,6 +38,21 @@ function sendConfig()
 #foreach($option in $cuttoffDateOffsetOptions)
                     <option value="$option"#selected($option.equals($config.get('cutoffDateOffset', $defaultCutoffDateOffset)))>$option</option>
 #end
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>$strings.singleSite</td>
+			<td><input type="checkbox" name="singleSite" value="true"#checked($config.get('singleSite', 'false').equals('true'))/></td>
+		</tr>
+		<tr>
+			<td>$strings.categoryQuery</td>
+			<td>
+				<select name="categoryQuery">
+					<option value="-1"#selected($config.get('categoryQuery', '-1').equals('-1'))>[ $strings.noRestriction ]</option>
+				#foreach($query in $availableCategoryQueries)
+					<option value="$query.id"#selected($config.get('categoryQuery', '-1').equals($query.idString))>$query.name</option>
+				#end
 				</select>
 			</td>
 		</tr>

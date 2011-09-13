@@ -82,6 +82,9 @@
       <item name="cancel">Anuluj</item>
       <item name="cutoffDateOffset">Zliczaj dokumenty opublikowane w ciągu ostatnich</item>
       <item name="daysAgo">dni</item>
+      <item name="singleSite">tylko bieżący serwis</item>
+      <item name="categoryQuery">ogranicz do wyników zapytania</item>
+      <item name="noRestriction">bez ograniczenia</item>      
       <item name="primarySortOrders">Dostępne rankingi (sortowania pierwszego poziomu)</item>
       <item name="secondarySortOrder">Porządek sortowania drugiego poziomu</item>
       <item name="secondarySortDirection">Kierunek sortowania drugiego poziomu</item>
@@ -122,6 +125,9 @@
       <item name="anonymous">niezalogowany</item>
       <item name="cutoffDateOffset">Opublikowane w ciągu ostatnich</item>
       <item name="days">dni</item>
+      <item name="singleSite">bieżący serwis</item>
+      <item name="categoryQuery">zapytanie</item>
+      <item name="noRestriction">bez ograniczenia</item>
       <item name="show">pokaż</item>
     </prefix>
     <prefix name="columns">

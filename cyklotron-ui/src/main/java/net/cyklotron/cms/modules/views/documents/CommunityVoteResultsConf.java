@@ -6,18 +6,10 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.modules.views.BaseCMSScreen;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.vote.SortOrder;
-import net.cyklotron.cms.util.CmsResourceListTableModel;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -28,17 +20,32 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryException;
+import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.modules.views.BaseCMSScreen;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.vote.SortOrder;
+import net.cyklotron.cms.util.CmsResourceListTableModel;
+
 public class CommunityVoteResultsConf
     extends BaseCMSScreen
 {
     private final IntegrationService integrationService;
 
+    private final CategoryQueryService categoryQueryService;
+
     public CommunityVoteResultsConf(Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
-        TableStateManager tableStateManager, IntegrationService integrationService)
+        TableStateManager tableStateManager, IntegrationService integrationService,
+        CategoryQueryService categoryQueryService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
         this.integrationService = integrationService;
+        this.categoryQueryService = categoryQueryService;
     }
 
     @Override
@@ -56,7 +63,7 @@ public class CommunityVoteResultsConf
         }
         templatingContext.put("availablePrimarySortOrders", availablePrimarySortOrders);
         List<String> currentPrimarySortOrders = new ArrayList<String>();
-        String [] currentPrimarySortOrderNames  = componentConfig.getStrings("primarySortOrders");
+        String[] currentPrimarySortOrderNames = componentConfig.getStrings("primarySortOrders");
         if(currentPrimarySortOrderNames.length == 0)
         {
             currentPrimarySortOrderNames = "POSITIVE,NEGATIVE,TOTAL".split(",");
@@ -66,12 +73,12 @@ public class CommunityVoteResultsConf
             currentPrimarySortOrders.add(sortOrderName);
         }
         templatingContext.put("currentPrimarySortOrders", currentPrimarySortOrders);
-        
+
         CmsResourceListTableModel<NavigationNodeResource> model;
         try
         {
-            model = new CmsResourceListTableModel<NavigationNodeResource>(
-                context, integrationService, Collections.EMPTY_LIST, i18nContext.getLocale());
+            model = new CmsResourceListTableModel<NavigationNodeResource>(context,
+                integrationService, Collections.EMPTY_LIST, i18nContext.getLocale());
         }
         catch(TableException e)
         {
@@ -83,6 +90,18 @@ public class CommunityVoteResultsConf
             availableSecondarySortOrders.add(column.getName());
         }
         templatingContext.put("availableSecondarySortOrders", availableSecondarySortOrders);
+
+        try
+        {
+            Resource queryRoot = categoryQueryService.getCategoryQueryRoot(coralSession,
+                getCmsData().getSite());
+            List<Resource> availableCategoryQueries = Arrays.asList(queryRoot.getChildren());
+            templatingContext.put("availableCategoryQueries", availableCategoryQueries);
+        }
+        catch(CategoryQueryException e)
+        {
+            throw new ProcessingException(e);
+        }
     }
 
     public boolean checkAccessRights(Context context)

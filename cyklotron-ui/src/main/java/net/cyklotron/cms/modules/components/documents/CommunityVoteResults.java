@@ -13,8 +13,10 @@ import java.util.Set;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureException;
@@ -25,6 +27,7 @@ import net.cyklotron.cms.util.ProtectedValidityViewFilter;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -76,17 +79,17 @@ public class CommunityVoteResults
 
             Parameters componentConfiguration = cmsData.getComponent().getConfiguration();
             int cutoffDateOffset = componentConfiguration.getInt("cutoffDateOffset", 30);
-            
+
             String primarySortOrderNames[] = componentConfiguration.getStrings("primarySortOrders");
             if(primarySortOrderNames.length == 0)
             {
                 primarySortOrderNames = "POSITIVE,NEGATIVE,TOTAL".split(",");
             }
-            
+
             String secondarySortOrder = componentConfiguration.get("secondarySortOrder",
                 "priority.validity.start");
-            String secondarySortDirection = componentConfiguration.get(
-                "secondarySortDirection", "ASC");
+            String secondarySortDirection = componentConfiguration.get("secondarySortDirection",
+                "ASC");
             int resulPageSize = componentConfiguration.getInt("resultPageSize", 10);
 
             Calendar cal = new GregorianCalendar();
@@ -109,8 +112,27 @@ public class CommunityVoteResults
                     .reverseOrder(secondarySortOrderComparator);
             }
 
+            boolean singleSiteOnly = parameters.getBoolean("singleSite", false);
+            SiteResource singleSite = singleSiteOnly ? cmsData.getSite() : null;
+
+            long categoryQueryId = parameters.getLong("categoryQuery", -1L);
+            CategoryQueryResource categoryQuery = null;
+            if(categoryQueryId != -1L)
+            {
+                try
+                {
+                    categoryQuery = (CategoryQueryResource)coralSession.getStore().getResource(
+                        categoryQueryId);
+                }
+                catch(EntityDoesNotExistException e)
+                {
+                    throw new ProcessingException("invalid category query id", e);
+                }
+            }
+
             Map<SortOrder, List<NavigationNodeResource>> results = communityVote.getResults(
-                cutoffDate, primarySortOrders, secondarySortOrderComparator, coralSession);
+                cutoffDate, primarySortOrders, secondarySortOrderComparator, coralSession,
+                singleSite, categoryQuery);
 
             TableFilter<NavigationNodeResource> filter = new ProtectedValidityViewFilter<NavigationNodeResource>(
                 coralSession, cmsData, coralSession.getUserSubject());
