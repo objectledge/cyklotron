@@ -154,7 +154,17 @@ $cms_tool.resourceAttribute($resource,$cms_tool.getClassDefinition($resource).in
 $component.embed('CMSComponentWrapper', [['instance',$component_instance_name]])##
 #end
 
-
+#macro(ajax_socket $component_instance_name)
+<div id="ajax-component-${component_instance_name}">
+$component.embed('CMSComponentWrapper', [['instance',$component_instance_name]])<!-- static rendering (pre AJAX)-->##
+</div>
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		jQuery('#ajax-component-${component_instance_name}').
+			load('$link.renderComponent($component_instance_name)');
+	});
+</script>
+#end
 
 #
 # Categories tree
