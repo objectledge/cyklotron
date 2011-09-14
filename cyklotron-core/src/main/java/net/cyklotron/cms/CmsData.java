@@ -403,6 +403,16 @@ public class CmsData
     {
         modeOverride = mode;
     }
+    
+    /**
+     * Overrides the administrative mode for the current request.
+     *
+     * @param mode the mode.
+     */
+    public void setAdminMode(boolean mode)
+    {
+        this.adminMode = mode;
+    }
 
     /**
      * Set the date.
