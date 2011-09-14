@@ -140,4 +140,20 @@ public class CmsLinkTool extends LinkTool
             return unsetView().unset("x");
         }
     }
+    
+    /**
+     * Returns a link pointing to RenderComponent view for the specified component instance on the
+     * current page.
+     * 
+     * @param instanceName component instance name.
+     * @return
+     * @throws ProcessingException
+     */
+    public LinkTool renderComponent(String instanceName)
+        throws ProcessingException
+    {
+        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        return view("RenderComponent").set("node_id", cmsData.getNode().getId()).set(
+            "component_instance", instanceName);
+    }
 }
