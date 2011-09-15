@@ -6,7 +6,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.forms.Form;
-
+import org.objectledge.html.HTMLContentFilter;
 
 import net.cyklotron.cms.site.SiteResource;
 
@@ -46,6 +46,15 @@ public interface DocumentService
 
     public String getFooterContent(CoralSession coralSession, SiteResource site, String name)
         throws InvalidResourceNameException;
+    
+    /**
+     * Returns HTMLContentFilter applicable to the specified document.
+     * 
+     * @param doc the document.
+     * @param coralSession Coral session.
+     * @return HTMLContentFilter insntance.
+     */
+    public HTMLContentFilter getContentFilter(DocumentNodeResource doc, CoralSession coralSession);
     
 /*    public long[] getEmbededImageResourceIds(DocumentNodeResource doc)
     throws DocumentException;

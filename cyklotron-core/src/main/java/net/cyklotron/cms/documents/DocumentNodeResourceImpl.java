@@ -45,6 +45,7 @@ import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.html.HTMLContentFilter;
+import org.objectledge.html.HTMLContentFilterChain;
 import org.objectledge.html.HTMLException;
 import org.objectledge.html.HTMLService;
 import org.objectledge.html.PassThroughHTMLContentFilter;
@@ -1160,6 +1161,7 @@ public class DocumentNodeResourceImpl
     // @import org.objectledge.context.Context
     // @import org.objectledge.coral.session.CoralSession
     // @import org.objectledge.html.HTMLContentFilter
+    // @import org.objectledge.html.HTMLContentFilterChain
     // @import org.objectledge.html.HTMLException
     // @import org.objectledge.html.HTMLService
     // @import org.objectledge.html.PassThroughHTMLContentFilter    
@@ -1383,9 +1385,10 @@ public class DocumentNodeResourceImpl
             {
                 HttpContext httpContext = HttpContext.getHttpContext(context);
                 CoralSession coralSession = context.getAttribute(CoralSession.class);
+                HTMLContentFilter filter = documentService.getContentFilter(this, coralSession);
                 docHelper = new DocumentRenderingHelper(coralSession, siteService, structureService,
                     htmlService, this, new RequestLinkRenderer(siteService, httpContext,
-                        linkToolFactory), new PassThroughHTMLContentFilter());
+                        linkToolFactory), filter);
                 helperMap.put(getIdObject(), docHelper);
             }
             return docHelper;
@@ -1401,16 +1404,17 @@ public class DocumentNodeResourceImpl
         }
     }
 
-	public DocumentTool getDocumentTool(CoralSession coralSession,
-		LinkRenderer linkRenderer, HTMLContentFilter filter, String characterEncoding)
-	throws ProcessingException
-	{
-		DocumentRenderingHelper tmpDocHelper =
-			new DocumentRenderingHelper(coralSession, siteService,
-                structureService, htmlService,this, linkRenderer, filter);
-		// create tool
-		return new DocumentTool(tmpDocHelper, 1, characterEncoding);
-	} 
+    public DocumentTool getDocumentTool(CoralSession coralSession, LinkRenderer linkRenderer,
+        HTMLContentFilter filter, String characterEncoding)
+        throws ProcessingException
+    {
+        HTMLContentFilter stdFilter = documentService.getContentFilter(this, coralSession);
+        DocumentRenderingHelper tmpDocHelper = new DocumentRenderingHelper(coralSession,
+            siteService, structureService, htmlService, this, linkRenderer, new HTMLContentFilterChain(
+                stdFilter, filter));
+        // create tool
+        return new DocumentTool(tmpDocHelper, 1, characterEncoding);
+    }
     
     public String getFooterContent(Context context)
         throws Exception

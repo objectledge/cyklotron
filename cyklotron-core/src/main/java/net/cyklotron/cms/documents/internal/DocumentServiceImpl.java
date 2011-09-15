@@ -29,7 +29,9 @@ import org.objectledge.forms.ConstructionException;
 import org.objectledge.forms.Form;
 import org.objectledge.forms.FormsException;
 import org.objectledge.forms.FormsService;
+import org.objectledge.html.HTMLContentFilter;
 import org.objectledge.html.HTMLException;
+import org.objectledge.html.PassThroughHTMLContentFilter;
 import org.picocontainer.Startable;
 
 
@@ -504,8 +506,12 @@ public class DocumentServiceImpl
     {
         ((DocumentNodeResource)resource).clearCache();
     }
-    
-    
-    
-    
+
+    // keywords ///////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public HTMLContentFilter getContentFilter(DocumentNodeResource doc, CoralSession coralSession)
+    {        
+        return new PassThroughHTMLContentFilter();
+    }
 }
