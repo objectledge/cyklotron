@@ -25,30 +25,6 @@ CKEDITOR.editorConfig = function( config )
 								] ;
 
 	config.toolbar_Basic = [ ['Bold','Italic','-','NumberedList','BulletedList','-','Link','Unlink','-','About'] ] ;
-
-	
-	config.keystrokes = [
-	                    	[ CKEDITOR.CTRL + 65 /*A*/, true ],
-	                    	[ CKEDITOR.CTRL + 67 /*C*/, true ],
-	                    	[ CKEDITOR.CTRL + 70 /*F*/, true ],
-	                    	[ CKEDITOR.CTRL + 83 /*S*/, true ],
-	                    	[ CKEDITOR.CTRL + 84 /*T*/, true ],
-	                    	[ CKEDITOR.CTRL + 88 /*X*/, true ],
-	                    	[ CKEDITOR.CTRL + 86 /*V*/, 'Paste' ],
-	                    	[ CKEDITOR.CTRL + 45 /*INS*/, true ],
-	                    	[ CKEDITOR.SHIFT + 45 /*INS*/, 'Paste' ],
-	                    	[ CKEDITOR.CTRL + 88 /*X*/, 'Cut' ],
-	                    	[ CKEDITOR.SHIFT + 46 /*DEL*/, 'Cut' ],
-	                    	[ CKEDITOR.CTRL + 90 /*Z*/, 'Undo' ],
-	                    	[ CKEDITOR.CTRL + 89 /*Y*/, 'Redo' ],
-	                    	[ CKEDITOR.SHIFT + 90 /*Z*/, 'Redo' ],
-	                    	[ CKEDITOR.CTRL + 76 /*L*/, 'Link' ],
-	                    	[ CKEDITOR.CTRL + 66 /*B*/, 'Bold' ],
-	                    	[ CKEDITOR.CTRL + 73 /*I*/, 'Italic' ],
-	                    	[ CKEDITOR.CTRL + 85 /*U*/, 'Underline' ],
-	                    	[ CKEDITOR.SHIFT + 83 /*S*/, 'Save' ],
-	                    	[ CKEDITOR.ALT + 13 /*ENTER*/, 'Maximize' ]
-	                    ] ;
 	
 	config.undoStackSize = 30;
 	
