@@ -150,6 +150,11 @@
   <profiles>
     <profile>
       <id>eclipse</id>
+      <activation>
+        <property>
+          <name>m2e.version</name>
+        </property>
+      </activation>
       <build>
         <plugins>
           <plugin>
@@ -172,6 +177,11 @@
     </profile>
     <profile>
       <id>bamboo</id>
+      <activation>
+        <property>
+          <name>buildId</name>
+        </property>
+      </activation>
       <build>
         <finalName>cyklotron-b${buildId}</finalName>
       </build>
