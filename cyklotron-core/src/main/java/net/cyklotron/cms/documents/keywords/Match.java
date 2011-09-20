@@ -40,11 +40,11 @@ class Match
     {
         if(o.start <= start)
         {
-            return o.end >= start;
+            return o.end > start;
         }
         else
         {
-            return end >= o.start;
+            return end > o.start;
         }
     }
 
