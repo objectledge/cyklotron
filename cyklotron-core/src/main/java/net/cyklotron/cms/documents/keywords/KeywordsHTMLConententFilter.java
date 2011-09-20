@@ -11,7 +11,7 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.objectledge.html.HTMLContentFilter;
 
-public class KeywordsHTMLConentenFilter
+public class KeywordsHTMLConententFilter
     implements HTMLContentFilter
 {
     private final List<Keyword> keywords;
@@ -20,7 +20,7 @@ public class KeywordsHTMLConentenFilter
 
     private final List<String> excludedClasses;
 
-    public KeywordsHTMLConentenFilter(List<KeywordResource> keywordsResources,
+    public KeywordsHTMLConententFilter(List<KeywordResource> keywordsResources,
         List<String> excludedElements, List<String> excludedClasses)
     {
         this.excludedElements = excludedElements;
