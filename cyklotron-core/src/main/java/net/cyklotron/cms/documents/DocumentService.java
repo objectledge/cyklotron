@@ -51,11 +51,13 @@ public interface DocumentService
      * Returns HTMLContentFilter applicable to the specified document.
      * 
      * @param doc the document.
+     * @param linkRenderer a LinkRenderer instance.
      * @param coralSession Coral session.
      * @return HTMLContentFilter insntance.
      */
-    public HTMLContentFilter getContentFilter(DocumentNodeResource doc, CoralSession coralSession);
-    
+    public HTMLContentFilter getContentFilter(DocumentNodeResource doc, LinkRenderer linkRenderer,
+        CoralSession coralSession);
+
 /*    public long[] getEmbededImageResourceIds(DocumentNodeResource doc)
     throws DocumentException;
 

@@ -39,6 +39,7 @@ import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.documents.FooterResource;
+import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -510,7 +511,8 @@ public class DocumentServiceImpl
     // keywords ///////////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public HTMLContentFilter getContentFilter(DocumentNodeResource doc, CoralSession coralSession)
+    public HTMLContentFilter getContentFilter(DocumentNodeResource doc, LinkRenderer linkRenderer,
+        CoralSession coralSession)
     {        
         return new PassThroughHTMLContentFilter();
     }

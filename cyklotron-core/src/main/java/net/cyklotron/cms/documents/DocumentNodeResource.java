@@ -401,9 +401,9 @@ public interface DocumentNodeResource
         throws ProcessingException;
     public void clearCache();
 
-	public DocumentTool getDocumentTool(CoralSession coralSession,
-		LinkRenderer linkRenderer, HTMLContentFilter filter, String characterEncoding)
-	    throws ProcessingException;
+    public DocumentTool getDocumentTool(CoralSession coralSession, LinkRenderer linkRenderer,
+        HTMLContentFilter filter, String characterEncoding)
+        throws ProcessingException;
     
     public static final String EMPTY_TITLE = "1cmsdocumenttitlecalendarempty1";
     

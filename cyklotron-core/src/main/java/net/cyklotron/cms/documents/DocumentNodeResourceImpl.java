@@ -1385,10 +1385,11 @@ public class DocumentNodeResourceImpl
             {
                 HttpContext httpContext = HttpContext.getHttpContext(context);
                 CoralSession coralSession = context.getAttribute(CoralSession.class);
-                HTMLContentFilter filter = documentService.getContentFilter(this, coralSession);
+                RequestLinkRenderer linkRenderer = new RequestLinkRenderer(siteService, httpContext,
+                    linkToolFactory);
+                HTMLContentFilter filter = documentService.getContentFilter(this, linkRenderer, coralSession);
                 docHelper = new DocumentRenderingHelper(coralSession, siteService, structureService,
-                    htmlService, this, new RequestLinkRenderer(siteService, httpContext,
-                        linkToolFactory), filter);
+                    htmlService, this, linkRenderer, filter);
                 helperMap.put(getIdObject(), docHelper);
             }
             return docHelper;
@@ -1408,7 +1409,7 @@ public class DocumentNodeResourceImpl
         HTMLContentFilter filter, String characterEncoding)
         throws ProcessingException
     {
-        HTMLContentFilter stdFilter = documentService.getContentFilter(this, coralSession);
+        HTMLContentFilter stdFilter = documentService.getContentFilter(this, linkRenderer, coralSession);
         DocumentRenderingHelper tmpDocHelper = new DocumentRenderingHelper(coralSession,
             siteService, structureService, htmlService, this, linkRenderer, new HTMLContentFilterChain(
                 stdFilter, filter));
