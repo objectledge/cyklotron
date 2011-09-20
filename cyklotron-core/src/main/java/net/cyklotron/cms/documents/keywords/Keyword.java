@@ -3,6 +3,15 @@ package net.cyklotron.cms.documents.keywords;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.dom4j.dom.DOMElement;
+import org.dom4j.dom.DOMText;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.pipeline.ProcessingException;
+
+import net.cyklotron.cms.documents.LinkRenderer;
+
 class Keyword
 {
     private final Pattern pattern;
@@ -32,9 +41,38 @@ class Keyword
 
     private static String simplePatternToRegexp(String s)
     {
-        s = s.replace(".","\\.");
-        s = s.replace("?","[^ \\t\\r\\n\\u00A0]?");
-        s = s.replaceAll("*", "[^ \\t\\r\\n\\u00A0]*?");
-        return s;                                
+        String r = s.replace(".","\\.");
+        r = r.replace("?","[^ \\t\\r\\n\\u00A0]?");
+        r = r.replace("*", "[^ \\t\\r\\n\\u00A0]*?");
+        return r;                                
+    }
+    
+    public Node link(String content, LinkRenderer linkRenderer, CoralSession coralSession)
+        throws ProcessingException
+    {
+        Element a = new DOMElement("A");
+        if(keyword.getExternal() && keyword.isHrefExternalDefined())
+        {
+            a.addAttribute("href", keyword.getHrefExternal());
+        }
+        else if(!keyword.getExternal() && keyword.isHrefInternalDefined())
+        {
+            a.addAttribute("href", linkRenderer.getNodeURL(coralSession, keyword.getHrefInternal()));
+        }
+        else 
+        {
+            // invalid keyword - href not defined
+            return new DOMText(content);
+        }
+        if(keyword.getNewWindow())
+        {
+            a.addAttribute("target", "_blank");
+        }
+        if(keyword.isTitleDefined())
+        {
+            a.addAttribute("title", keyword.getTitle());
+        }
+        a.addText(content);
+        return a;
     }
 }

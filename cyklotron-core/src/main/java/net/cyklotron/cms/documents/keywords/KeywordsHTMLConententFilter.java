@@ -9,7 +9,12 @@ import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.dom4j.dom.DOMText;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.html.HTMLContentFilter;
+import org.objectledge.pipeline.ProcessingException;
+
+import net.cyklotron.cms.documents.LinkRenderer;
 
 public class KeywordsHTMLConententFilter
     implements HTMLContentFilter
@@ -20,11 +25,18 @@ public class KeywordsHTMLConententFilter
 
     private final List<String> excludedClasses;
 
+    private final LinkRenderer linkRenderer;
+
+    private final CoralSession coralSession;
+
     public KeywordsHTMLConententFilter(List<KeywordResource> keywordsResources,
-        List<String> excludedElements, List<String> excludedClasses)
+        List<String> excludedElements, List<String> excludedClasses, LinkRenderer linkRenderer,
+        CoralSession coralSession)
     {
         this.excludedElements = excludedElements;
         this.excludedClasses = excludedClasses;
+        this.linkRenderer = linkRenderer;
+        this.coralSession = coralSession;
 
         keywords = new ArrayList<Keyword>();
         for(KeywordResource keywordResource : keywordsResources)
@@ -60,33 +72,70 @@ public class KeywordsHTMLConententFilter
 
     @Override
     public Document filter(Document dom)
+        throws ProcessingException
     {
         @SuppressWarnings("unchecked")
         List<Node> textNodes = (List<Node>)dom.selectNodes("//text()");
         for(Node textNode : textNodes)
         {
-            if(textNode.getParent() instanceof Element)
+            Element parent = (Element)textNode.getParent();
+            if(excludedElements.contains(parent.getName()))
             {
-                Element parent = (Element)textNode.getParent();
-                if(excludedElements.contains(parent.getName()))
+                continue;
+            }
+            Attribute classAttr = (Attribute)parent.selectSingleNode("//@class");
+            if(classAttr != null)
+            {
+                String[] cssClasses = classAttr.getValue().split("[ ,]*");
+                for(String cssClass : cssClasses)
                 {
-                    continue;
-                }
-                Attribute classAttr = (Attribute)parent.selectSingleNode("//@class");
-                if(classAttr != null)
-                {
-                    String[] cssClasses = classAttr.getValue().split("[ ,]*");
-                    for(String cssClass : cssClasses)
+                    if(excludedClasses.contains(cssClass))
                     {
-                        if(excludedClasses.contains(cssClass))
-                        {
-                            continue;
-                        }
+                        continue;
                     }
                 }
-                List<Match> matches = findMatches(textNode.getText());
+            }
+            String text = textNode.getText();
+            List<Match> matches = findMatches(text);
+            if(matches.size() > 0)
+            {
+                List<Node> replacement = new ArrayList<Node>(matches.size() * 2 + 1);
+                int p = 0;
+                for(Match m : matches)
+                {
+                    if(m.getStart() - p > 0)
+                    {
+                        replacement.add(text(text, p, m.getStart()));
+                    }
+                    replacement.add(link(text, m));
+                    p = m.getEnd();
+                }
+                if(text.length() - p > 0)
+                {
+                    replacement.add(text(text, p, text.length()));
+                }
+                @SuppressWarnings("unchecked")
+                List<Node> parentContent = parent.content();
+                p = parentContent.indexOf(textNode);
+                parentContent.remove(p);
+                for(Node r : replacement)
+                {
+                    parentContent.add(p++, r);
+                }
             }
         }
         return dom;
+    }
+
+    private Node text(String text, int start, int end)
+    {
+        return new DOMText(text.substring(start, end));
+    }
+
+    private Node link(String text, Match m)
+        throws ProcessingException
+    {
+        return m.getKeyword().link(text.substring(m.getStart(), m.getEnd()), linkRenderer,
+            coralSession);
     }
 }
