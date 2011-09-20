@@ -45,30 +45,7 @@ public class KeywordsHTMLConententFilter
         }
     }
 
-    private List<Match> findMatches(String s)
-    {
-        List<Match> matches = new ArrayList<Match>();
-        for(Keyword keyword : keywords)
-        {
-            Matcher m = keyword.matcher(s);
-            while(m.find())
-            {
-                matches.add(new Match(m.start(), m.end(), keyword));
-            }
-        }
-        Collections.sort(matches);
-        List<Match> result = new ArrayList<Match>(matches.size());
-        Match last = null;
-        for(Match match : matches)
-        {
-            if(last == null || !match.overlaps(last))
-            {
-                result.add(match);
-                last = match;
-            }
-        }
-        return result;
-    }
+
 
     @Override
     public Document filter(Document dom)
@@ -96,7 +73,7 @@ public class KeywordsHTMLConententFilter
                 }
             }
             String text = textNode.getText();
-            List<Match> matches = findMatches(text);
+            List<Match> matches = Match.findMatches(keywords, text);
             if(matches.size() > 0)
             {
                 List<Node> replacement = new ArrayList<Node>(matches.size() * 2 + 1);
