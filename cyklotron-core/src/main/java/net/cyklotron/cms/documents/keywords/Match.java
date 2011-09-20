@@ -63,6 +63,23 @@ class Match
         }
     }
     
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(obj instanceof Match)
+        {
+            Match m = (Match)obj;
+            return m.start == start && m.end == end;
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return start * 19 + end * 37;
+    }
+
     public static List<Match> findMatches(List<Keyword> keywords, String text)
     {
         List<Match> matches = new ArrayList<Match>();
