@@ -90,13 +90,13 @@ public class MatchTest
             });
         Keyword keyword1 = new Keyword(keywordResource1);
         Keyword keyword2 = new Keyword(keywordResource2);
-        List<Keyword> keywords = Arrays.asList(keyword1, keyword2);        
+        List<Keyword> keywords = Arrays.asList(keyword1, keyword2);
         List<Match> matches = Match.findMatches(keywords, "aa bb cc");
         assertNotNull(matches);
         assertEquals(1, matches.size());
         assertSame(keyword1, matches.get(0).getKeyword());
     }
-    
+
     public void testFindMatchesOverlappingDifferentStart()
     {
         final KeywordResource keywordResource1 = mock(KeywordResource.class, "1");
@@ -117,10 +117,80 @@ public class MatchTest
             });
         Keyword keyword1 = new Keyword(keywordResource1);
         Keyword keyword2 = new Keyword(keywordResource2);
-        List<Keyword> keywords = Arrays.asList(keyword1, keyword2);        
+        List<Keyword> keywords = Arrays.asList(keyword1, keyword2);
         List<Match> matches = Match.findMatches(keywords, "aa bb cc");
         assertNotNull(matches);
         assertEquals(1, matches.size());
         assertSame(keyword1, matches.get(0).getKeyword());
+    }
+
+    public void testFindWholeWord()
+    {
+        final KeywordResource keywordResource = mock(KeywordResource.class);
+        checking(new Expectations()
+            {
+                {
+                    one(keywordResource).getPattern();
+                    will(returnValue("aa"));
+                    one(keywordResource).getRegexp();
+                    will(returnValue(true));
+                }
+            });
+        List<Keyword> keywords = Collections.singletonList(new Keyword(keywordResource));
+        List<Match> matches = Match.findMatches(keywords, "aa aa aaa aa");
+        assertNotNull(matches);
+        assertEquals(3, matches.size());
+        assertEquals(0, matches.get(0).getStart());
+        assertEquals(2, matches.get(0).getEnd());
+        assertEquals(3, matches.get(1).getStart());
+        assertEquals(5, matches.get(1).getEnd());
+        assertEquals(10, matches.get(2).getStart());
+        assertEquals(12, matches.get(2).getEnd());
+    }
+
+    public void testFindNonAscii()
+    {
+        final KeywordResource keywordResource = mock(KeywordResource.class);
+        checking(new Expectations()
+            {
+                {
+                    one(keywordResource).getPattern();
+                    will(returnValue("łąś"));
+                    one(keywordResource).getRegexp();
+                    will(returnValue(true));
+                }
+            });
+        List<Keyword> keywords = Collections.singletonList(new Keyword(keywordResource));
+        List<Match> matches = Match.findMatches(keywords, "łąś bbb łąś bbb łąś");
+        assertNotNull(matches);
+        assertEquals(3, matches.size());
+        assertEquals(0, matches.get(0).getStart());
+        assertEquals(3, matches.get(0).getEnd());
+        assertEquals(8, matches.get(1).getStart());
+        assertEquals(11, matches.get(1).getEnd());
+        assertEquals(16, matches.get(2).getStart());
+        assertEquals(19, matches.get(2).getEnd());
+    }
+    
+    public void testFindNbsp()
+    {
+        final KeywordResource keywordResource = mock(KeywordResource.class);
+        checking(new Expectations()
+            {
+                {
+                    one(keywordResource).getPattern();
+                    will(returnValue("aa"));
+                    one(keywordResource).getRegexp();
+                    will(returnValue(true));
+                }
+            });
+        List<Keyword> keywords = Collections.singletonList(new Keyword(keywordResource));
+        List<Match> matches = Match.findMatches(keywords, "aa\u00A0aa");
+        assertNotNull(matches);
+        assertEquals(2, matches.size());
+        assertEquals(0, matches.get(0).getStart());
+        assertEquals(2, matches.get(0).getEnd());
+        assertEquals(3, matches.get(1).getStart());
+        assertEquals(5, matches.get(1).getEnd());        
     }
 }

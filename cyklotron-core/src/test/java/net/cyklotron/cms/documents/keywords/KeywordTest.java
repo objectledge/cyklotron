@@ -14,11 +14,10 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
 
 public class KeywordTest
     extends MockObjectTestCase
-{
-    public void testSimplePattern()
+{   
+    public void testSimpleOne()
     {
         final KeywordResource keywordResource = mock(KeywordResource.class);
-        final Sequence sequence = sequence("sequence");
         checking(new Expectations()
             {
                 {
@@ -26,16 +25,7 @@ public class KeywordTest
                     will(returnValue(false));
 
                     one(keywordResource).getPattern();
-                    inSequence(sequence);
                     will(returnValue("aaa? bbb"));
-
-                    one(keywordResource).getPattern();
-                    inSequence(sequence);
-                    will(returnValue("aaa* bbb"));
-
-                    one(keywordResource).getPattern();
-                    inSequence(sequence);
-                    will(returnValue("aaa. bbb"));
                 }
             });
 
@@ -46,15 +36,99 @@ public class KeywordTest
         assertTrue(keyword.matcher("aaa bbb").find());
         assertTrue(keyword.matcher("aaax bbb").find());
         assertFalse(keyword.matcher("aaayy bbb").find());
+    }
+    
+    public void testSimpleMany()
+    {
+        final KeywordResource keywordResource = mock(KeywordResource.class);
+        checking(new Expectations()
+            {
+                {
+                    allowing(keywordResource).getRegexp();
+                    will(returnValue(false));
 
+                    one(keywordResource).getPattern();
+                    will(returnValue("aaa* bbb"));
+                }
+            });
+
+        Keyword keyword;
         keyword = new Keyword(keywordResource);
+        assertSame(keywordResource, keyword.getKeyword());
+
         assertTrue(keyword.matcher("aaa bbb").find());
         assertTrue(keyword.matcher("aaax bbb").find());
         assertTrue(keyword.matcher("aaayy bbb").find());
+    }
+    
+    public void testSimpleQote()
+    {
+        final KeywordResource keywordResource = mock(KeywordResource.class);
+        checking(new Expectations()
+            {
+                {
+                    allowing(keywordResource).getRegexp();
+                    will(returnValue(false));
 
+                    one(keywordResource).getPattern();
+                    will(returnValue("aaa. bbb"));
+                }
+            });
+
+        Keyword keyword;
         keyword = new Keyword(keywordResource);
+        assertSame(keywordResource, keyword.getKeyword());
+
         assertTrue(keyword.matcher("aaa. bbb").find());
         assertFalse(keyword.matcher("aaa, bbb").find());
+    }
+    
+    public void testSimpleMidOne()
+    {
+        final KeywordResource keywordResource = mock(KeywordResource.class);
+        checking(new Expectations()
+            {
+                {
+                    allowing(keywordResource).getRegexp();
+                    will(returnValue(false));
+
+                    one(keywordResource).getPattern();
+                    will(returnValue("a?a"));
+                }
+            });
+
+        Keyword keyword;
+        keyword = new Keyword(keywordResource);
+        assertSame(keywordResource, keyword.getKeyword());
+
+        assertTrue(keyword.matcher("aa").find());
+        assertTrue(keyword.matcher("aba").find());
+        assertFalse(keyword.matcher("a a").find());        
+        //assertFalse(keyword.matcher("a\u00A0a").find()); TODO
+    }
+    
+    public void testSimpleTwoMany()
+    {
+        final KeywordResource keywordResource = mock(KeywordResource.class);
+        checking(new Expectations()
+            {
+                {
+                    allowing(keywordResource).getRegexp();
+                    will(returnValue(false));
+
+                    one(keywordResource).getPattern();
+                    will(returnValue("*aa*"));
+                }
+            });
+
+        Keyword keyword;
+        keyword = new Keyword(keywordResource);
+        assertSame(keywordResource, keyword.getKeyword());
+
+        assertTrue(keyword.matcher("aa").find());
+        assertTrue(keyword.matcher(" qqaa").find());
+        assertFalse(keyword.matcher("aqq").find());
+        assertTrue(keyword.matcher(" qqaaa").find());
     }
 
     public void testLinkExternal()

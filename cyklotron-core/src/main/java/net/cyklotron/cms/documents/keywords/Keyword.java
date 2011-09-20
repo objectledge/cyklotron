@@ -17,7 +17,7 @@ class Keyword
     private final Pattern pattern;
 
     private final KeywordResource keyword;
-
+    
     public Keyword(KeywordResource keyword)
     {
         this.keyword = keyword;
@@ -26,6 +26,8 @@ class Keyword
         {
             p = simplePatternToRegexp(p);
         }
+        p = "\\b" + p + "\\b";
+        System.out.println(p);
         this.pattern = Pattern.compile(p, Pattern.CASE_INSENSITIVE + Pattern.UNICODE_CASE);
     }
 
@@ -39,12 +41,21 @@ class Keyword
         return pattern.matcher(input);
     }
 
-    private static String simplePatternToRegexp(String s)
+    private static String simplePatternToRegexp(String p)
     {
-        String r = s.replace(".","\\.");
-        r = r.replace("?","[^ \\t\\r\\n\\u00A0]?");
-        r = r.replace("*", "[^ \\t\\r\\n\\u00A0]*?");
-        return r;                                
+        String[] segs = p.split("\\s+");
+        StringBuilder b = new StringBuilder();
+        for(String seg : segs)
+        {
+            String r = "\\Q" + seg + "\\E";
+            r = r.replace("?", "\\E\\S?\\Q");
+            r = r.replace("*", "\\E\\S*\\Q");
+            r = r.replace("\\Q\\E","");
+            b.append(r);
+            b.append("\\s+");
+        }
+        b.setLength(b.length() - 3); // crop trailing \s+
+        return b.toString();                                
     }
     
     public Node link(String content, LinkRenderer linkRenderer, CoralSession coralSession)
