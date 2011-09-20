@@ -27,7 +27,6 @@ class Keyword
             p = simplePatternToRegexp(p);
         }
         p = "\\b" + p + "\\b";
-        System.out.println(p);
         this.pattern = Pattern.compile(p, Pattern.CASE_INSENSITIVE + Pattern.UNICODE_CASE);
     }
 
@@ -48,13 +47,13 @@ class Keyword
         for(String seg : segs)
         {
             String r = "\\Q" + seg + "\\E";
-            r = r.replace("?", "\\E\\S?\\Q");
-            r = r.replace("*", "\\E\\S*\\Q");
+            r = r.replace("?", "\\E[^\\s\\u00A0]?\\Q");
+            r = r.replace("*", "\\E[^\\s\\u00A0]*\\Q");
             r = r.replace("\\Q\\E","");
             b.append(r);
-            b.append("\\s+");
+            b.append("[\\s\\u00A0]+");
         }
-        b.setLength(b.length() - 3); // crop trailing \s+
+        b.setLength(b.length() - 11); // crop trailing [\s\u00A0]+
         return b.toString();                                
     }
     

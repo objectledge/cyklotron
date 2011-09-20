@@ -104,7 +104,7 @@ public class KeywordTest
         assertTrue(keyword.matcher("aa").find());
         assertTrue(keyword.matcher("aba").find());
         assertFalse(keyword.matcher("a a").find());        
-        //assertFalse(keyword.matcher("a\u00A0a").find()); TODO
+        assertFalse(keyword.matcher("a\u00A0a").find());
     }
     
     public void testSimpleTwoMany()
