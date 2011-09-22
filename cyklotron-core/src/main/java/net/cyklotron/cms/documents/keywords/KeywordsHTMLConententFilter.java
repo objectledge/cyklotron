@@ -45,30 +45,28 @@ public class KeywordsHTMLConententFilter
         }
     }
 
-
-
     @Override
     public Document filter(Document dom)
         throws ProcessingException
     {
         @SuppressWarnings("unchecked")
         List<Node> textNodes = (List<Node>)dom.selectNodes("//text()");
-        for(Node textNode : textNodes)
+        textNodeLoop: for(Node textNode : textNodes)
         {
             Element parent = (Element)textNode.getParent();
             if(excludedElements.contains(parent.getName()))
             {
-                continue;
+                continue textNodeLoop;
             }
-            Attribute classAttr = (Attribute)parent.selectSingleNode("//@class");
+            Attribute classAttr = (Attribute)parent.selectSingleNode("./@class");
             if(classAttr != null)
             {
-                String[] cssClasses = classAttr.getValue().split("[ ,]*");
+                String[] cssClasses = classAttr.getValue().split(" +");
                 for(String cssClass : cssClasses)
                 {
                     if(excludedClasses.contains(cssClass))
                     {
-                        continue;
+                        continue textNodeLoop;
                     }
                 }
             }
