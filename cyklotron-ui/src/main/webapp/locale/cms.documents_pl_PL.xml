@@ -44,7 +44,29 @@
       <item name="cancel">Anuluj</item>
     </prefix>
   </prefix>
-
+  <prefix name="KeywordsList">
+    <prefix name="strings">
+      <item name="title">Lista słów kluczowych</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="name">Nazwa</item>
+      <item name="yes">Tak</item>
+      <item name="no">Nie</item>
+      <item name="pattern">wzorzec</item>
+      <item name="reg_exp">wyrażenie regularne</item>
+      <item name="title">tytuł</item>
+      <item name="link_type">typ linka</item>
+      <item name="new_window">otwórz w nowym oknie</item>
+      <item name="category">kategoria</item>
+      <item name="style">klasy styli</item>
+      <item name="no_defined"> - </item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="add">Dodaj słowo kluczowe</item>
+      <item name="edit">Edytuj</item>
+      <item name="delete">Usuń</item>
+    </prefix>
+  </prefix>
   <prefix name="ProposeDocumentConf">
     <prefix name="strings">
       <item name="title">Konfiguracja komponentu Zaproponuj dokument</item>

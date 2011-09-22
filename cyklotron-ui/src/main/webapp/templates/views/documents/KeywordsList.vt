@@ -1,0 +1,50 @@
+#set($ui_strings = $i18n.usePrefix("cms.documents.KeywordsList.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.documents.KeywordsList.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.documents.KeywordsList.buttons"))
+
+#set($nodeLink = $link)
+#genericScreenHeader($ui_strings.get('title'))
+
+<br/>
+
+<form name="form1" method="post" action="">
+<table width="100%" cellspacing="0" class="genericItemList">
+<tr>
+  <th>$ui_labels.get('pattern')</th>
+  <th>$ui_labels.get('reg_exp')</th>
+  <th>$ui_labels.get('title')</th>
+  <th>$ui_labels.get('link_type')</th>
+  <th>$ui_labels.get('new_window')</th>
+  <th>$ui_labels.get('category')</th>
+  <th>$ui_labels.get('style')</th>
+  <th> - </th>
+</tr>
+
+#set($size = $keywords.size())
+#foreach($keyword in $keywords)
+<tr>
+  <td>$!keyword.getPattern()</td>
+  <td>#if($keyword.getRegexp()) $ui_labels.get('yes') #else $ui_labels.get('no') #end</td>
+  <td>$!keyword.getTitle()</td>
+  <td>#if($keyword.isHrefInternalDefined()) <a href="">$keyword.getHrefInternal()</a> #else #if($keyword.isHrefExternalDefined()) <a href="$keyword.getHrefExternal()">$keyword.getHrefExternal()</a> #else $ui_labels.get('no_defined') #end #end
+  <td>#if($keyword.getNewWindow()) $ui_labels.get('yes') #else $ui_labels.get('no') #end</td>
+  <td>#if($keyword.isCategoryDefined()) $keyword.category.name #else $ui_labels.get('no_defined') #end</td> 
+  <td>$keyword.getLinkClass()</td>
+  <td>
+    <a href="$link.action('documents.EditKeyword').set('keywordId',$keyword.id)">$ui_buttons.get('edit')</a>
+    <a href="$link.action('documents.DeleteKeyword').set('keywordId',$keyword.id)">$ui_buttons.get('delete')</a>
+  </td>
+</tr>
+#end
+</table>
+</form>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+    <a href="$nodeLink.view('documents.AddKeyword')">$ui_buttons.get('add')</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

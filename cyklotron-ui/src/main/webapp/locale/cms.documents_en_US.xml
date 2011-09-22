@@ -43,6 +43,29 @@
       <item name="cancel">Cancel</item>
     </prefix>
   </prefix>
+  <prefix name="KeywordsList">
+    <prefix name="strings">
+      <item name="title">Keywords list</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="name">Name</item>
+      <item name="yes">Yes</item>
+      <item name="no">No</item>
+      <item name="pattern">pattern</item>
+      <item name="reg_exp">regular expression</item>
+      <item name="title">title</item>
+      <item name="link_type">link type</item>
+      <item name="new_window">open new window</item>
+      <item name="category">category</item>
+      <item name="style">style sheet classes</item>
+      <item name="no_defined"> - </item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="add">Add keyword</item>
+      <item name="edit">Edit</item>
+      <item name="delete">Delete</item>
+    </prefix>
+  </prefix>
   <prefix name="ProposeDocumentConf">
     <prefix name="strings">
       <item name="title">Propose document component configuration</item>
