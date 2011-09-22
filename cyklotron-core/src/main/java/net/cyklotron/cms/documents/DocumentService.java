@@ -8,7 +8,6 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.forms.Form;
 import org.objectledge.html.HTMLContentFilter;
 
-import net.cyklotron.cms.documents.keywords.KeywordResource;
 import net.cyklotron.cms.site.SiteResource;
 
 /** DocumentService is used to operate on CMS documents.
@@ -42,18 +41,51 @@ public interface DocumentService
     public void copyFromDocumentNode(Resource doc, Document destDoc)
         throws DocumentException;
 
-    public Resource getDocumentsApplicationRoot(CoralSession coralSession, SiteResource site)
-        throws InvalidResourceNameException;
-    
-    public Resource getKeywordsRoot(CoralSession coralSession, SiteResource site)
-        throws InvalidResourceNameException;
-    
-    public Resource getFootersRoot(CoralSession coralSession, SiteResource site)
-        throws InvalidResourceNameException;
+    /**
+     * Returns the root node of documents application.
+     * <p>
+     * This is the currently /cms/sites/<i>site</i>/applications/documents.
+     * </p>
+     * <p>
+     * Note that the site's documents reside under /cms/sites/<i>site</i>/structure node
+     * </p>
+     * 
+     * @param coralSession coral session.
+     * @param site the site.
+     * @return root node of documents application.
+     */
+    public Resource getDocumentsApplicationRoot(CoralSession coralSession, SiteResource site);
 
-    public String getFooterContent(CoralSession coralSession, SiteResource site, String name)
-        throws InvalidResourceNameException;
-    
+    /**
+     * Returns the parent node of keyword resources.
+     * 
+     * @param coralSession coral session.
+     * @param site the site.
+     * @return parent node of keyword resources.
+     */
+    public Resource getKeywordsRoot(CoralSession coralSession, SiteResource site);
+
+    /**
+     * Returns the parent node of footer resources.
+     * 
+     * @param coralSession coral session.
+     * @param site the site.
+     * @return parent node of footer resources.
+     */
+    public Resource getFootersRoot(CoralSession coralSession, SiteResource site);
+
+    /**
+     * Returns contents of the selected footer.
+     * 
+     * @param coralSession coral session.
+     * @param site the site.
+     * @param name footer resource name.
+     * @return contents of the selected footer, or empty string if no such footer exists, or the
+     *         selected footer is disabled.
+     * @throws InvalidResourceNameException
+     */
+    public String getFooterContent(CoralSession coralSession, SiteResource site, String name);
+
     /**
      * Returns HTMLContentFilter applicable to the specified document.
      * 
