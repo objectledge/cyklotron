@@ -1,9 +1,7 @@
 package net.cyklotron.cms.documents.keywords;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
 
 import org.dom4j.Attribute;
 import org.dom4j.Document;
@@ -29,12 +27,15 @@ public class KeywordsHTMLConententFilter
 
     private final CoralSession coralSession;
 
+    private final String defaultLinkClass;
+
     public KeywordsHTMLConententFilter(List<KeywordResource> keywordsResources,
-        List<String> excludedElements, List<String> excludedClasses, LinkRenderer linkRenderer,
-        CoralSession coralSession)
+        List<String> excludedElements, List<String> excludedClasses, String defaultLinkClass,
+        LinkRenderer linkRenderer, CoralSession coralSession)
     {
         this.excludedElements = excludedElements;
         this.excludedClasses = excludedClasses;
+        this.defaultLinkClass = defaultLinkClass;
         this.linkRenderer = linkRenderer;
         this.coralSession = coralSession;
 
@@ -110,7 +111,7 @@ public class KeywordsHTMLConententFilter
     private Node link(String text, Match m)
         throws ProcessingException
     {
-        return m.getKeyword().link(text.substring(m.getStart(), m.getEnd()), linkRenderer,
-            coralSession);
+        return m.getKeyword().link(text.substring(m.getStart(), m.getEnd()), defaultLinkClass,
+            linkRenderer, coralSession);
     }
 }

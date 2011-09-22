@@ -154,6 +154,9 @@ public class KeywordTest
 
                     one(keywordResource).isTitleDefined();
                     will(returnValue(false));
+                    
+                    one(keywordResource).isLinkClassDefined();
+                    will(returnValue(false));
 
                     ignoring(same(keywordResource)).method("getRegexp");
                     ignoring(same(keywordResource)).method("getPattern");
@@ -165,7 +168,7 @@ public class KeywordTest
         Node link;
 
         keyword = new Keyword(keywordResource);
-        link = keyword.link("foo", linkRenderer, coralSession);
+        link = keyword.link("foo", "keyword", linkRenderer, coralSession);
 
         assertTrue(link instanceof Element);
         assertEquals("A", link.getName());
@@ -173,6 +176,7 @@ public class KeywordTest
         assertNull(link.selectSingleNode("./@title"));
         assertNull(link.selectSingleNode("./@target"));
         assertEquals("http://objectledge.org/", link.selectObject("string(./@href)"));
+        assertEquals("keyword", link.selectObject("string(./@class)"));
     }
 
     public void testLinkInternal()
@@ -205,6 +209,12 @@ public class KeywordTest
 
                     one(linkRenderer).getNodeURL(coralSession, hrefInternal);
                     will(returnValue("http://cyklotron.org/x/100"));
+                    
+                    one(keywordResource).isLinkClassDefined();
+                    will(returnValue(true));
+                    
+                    one(keywordResource).getLinkClass();
+                    will(returnValue("special-keyword"));
 
                     ignoring(same(keywordResource)).method("getRegexp");
                     ignoring(same(keywordResource)).method("getPattern");
@@ -215,7 +225,7 @@ public class KeywordTest
         Node link;
 
         keyword = new Keyword(keywordResource);
-        link = keyword.link("foo", linkRenderer, coralSession);
+        link = keyword.link("foo", "keyword", linkRenderer, coralSession);
 
         assertTrue(link instanceof Element);
         assertEquals("A", link.getName());
@@ -223,6 +233,7 @@ public class KeywordTest
         assertEquals("title", link.selectObject("string(./@title)"));
         assertNotNull(link.selectSingleNode("./@target"));
         assertEquals("http://cyklotron.org/x/100", link.selectObject("string(./@href)"));
+        assertEquals("special-keyword", link.selectObject("string(./@class)"));
     }
 
     public void testInvalid()
@@ -261,13 +272,13 @@ public class KeywordTest
 
         // external
         keyword = new Keyword(keywordResource);
-        link = keyword.link("foo", linkRenderer, coralSession);        
+        link = keyword.link("foo", null, linkRenderer, coralSession);        
         assertTrue(link instanceof Text);
         assertEquals("foo", link.getText());
         
         // internal
         keyword = new Keyword(keywordResource);
-        link = keyword.link("foo", linkRenderer, coralSession);        
+        link = keyword.link("foo", null, linkRenderer, coralSession);        
         assertTrue(link instanceof Text);
         assertEquals("foo", link.getText());
     }

@@ -71,6 +71,9 @@ public class KeywordResourceImpl
     /** The AttributeDefinition object for the <code>hrefInternal</code> attribute. */
     private static AttributeDefinition hrefInternalDef;
 
+    /** The AttributeDefinition object for the <code>linkClass</code> attribute. */
+    private static AttributeDefinition linkClassDef;
+
     /** The AttributeDefinition object for the <code>newWindow</code> attribute. */
     private static AttributeDefinition newWindowDef;
 
@@ -374,6 +377,66 @@ public class KeywordResourceImpl
     public boolean isHrefInternalDefined()
 	{
 	    return isDefined(hrefInternalDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>linkClass</code> attribute.
+     *
+     * @return the value of the <code>linkClass</code> attribute.
+     */
+    public String getLinkClass()
+    {
+        return (String)getInternal(linkClassDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>linkClass</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>linkClass</code> attribute.
+     */
+    public String getLinkClass(String defaultValue)
+    {
+        return (String)getInternal(linkClassDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>linkClass</code> attribute.
+     *
+     * @param value the value of the <code>linkClass</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setLinkClass(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(linkClassDef, value);
+            }
+            else
+            {
+                unset(linkClassDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>linkClass</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>linkClass</code> attribute is defined.
+	 */
+    public boolean isLinkClassDefined()
+	{
+	    return isDefined(linkClassDef);
 	}
  
     /**

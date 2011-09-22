@@ -129,6 +129,28 @@ public interface KeywordResource
 	 * @return <code>true</code> if the value of the <code>hrefInternal</code> attribute is defined.
 	 */
     public boolean isHrefInternalDefined();
+ 
+    /**
+     * Returns the value of the <code>linkClass</code> attribute.
+     *
+     * @return the value of the the <code>linkClass</code> attribute.
+     */
+    public String getLinkClass();
+
+    /**
+     * Sets the value of the <code>linkClass</code> attribute.
+     *
+     * @param value the value of the <code>linkClass</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setLinkClass(String value);   
+   
+	/**
+	 * Checks if the value of the <code>linkClass</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>linkClass</code> attribute is defined.
+	 */
+    public boolean isLinkClassDefined();
 	
     /**
      * Returns the value of the <code>newWindow</code> attribute.

@@ -23,6 +23,8 @@ public class KeywordsHTMLContentFilterTest
 
     private List<String> excludedClasses = new ArrayList<String>();
 
+    private String defaultLinkClass = null;
+    
     private LinkRenderer linkRenderer;
 
     private CoralSession coralSession;
@@ -61,6 +63,9 @@ public class KeywordsHTMLContentFilterTest
 
                     allowing(keywordResource).getNewWindow();
                     will(returnValue(false));
+                    
+                    one(keywordResource).isLinkClassDefined();
+                    will(returnValue(false));                    
                 }
             });
     }
@@ -68,7 +73,7 @@ public class KeywordsHTMLContentFilterTest
     private HTMLContentFilter newFilter(KeywordResource... keywords)
     {
         return new KeywordsHTMLConententFilter(Arrays.asList(keywords), excludedElements,
-            excludedClasses, linkRenderer, coralSession);
+            excludedClasses, defaultLinkClass, linkRenderer, coralSession);
     }
 
     private Document dom(String text)
@@ -80,12 +85,14 @@ public class KeywordsHTMLContentFilterTest
     public void testSimple()
         throws ProcessingException, DocumentException
     {
+        defaultLinkClass = "keyword";
         HTMLContentFilter filter = newFilter(keywordResource);
         Document result = filter.filter(dom("aaa bbb aaa"));
         Node a = result.selectSingleNode("//A");
         assertNotNull(a);
         assertEquals("bbb", a.getText());
         assertEquals("http://objectledge.org/", a.selectObject("string(./@href)"));
+        assertEquals("keyword", a.selectObject("string(./@class)"));
     }
 
     public void testExcludeElement()

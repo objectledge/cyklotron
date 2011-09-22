@@ -17,7 +17,7 @@ class Keyword
     private final Pattern pattern;
 
     private final KeywordResource keyword;
-    
+
     public Keyword(KeywordResource keyword)
     {
         this.keyword = keyword;
@@ -49,15 +49,16 @@ class Keyword
             String r = "\\Q" + seg + "\\E";
             r = r.replace("?", "\\E[^\\s\\u00A0]?\\Q");
             r = r.replace("*", "\\E[^\\s\\u00A0]*\\Q");
-            r = r.replace("\\Q\\E","");
+            r = r.replace("\\Q\\E", "");
             b.append(r);
             b.append("[\\s\\u00A0]+");
         }
         b.setLength(b.length() - 11); // crop trailing [\s\u00A0]+
-        return b.toString();                                
+        return b.toString();
     }
-    
-    public Node link(String content, LinkRenderer linkRenderer, CoralSession coralSession)
+
+    public Node link(String content, String defaultLinkClass, LinkRenderer linkRenderer,
+        CoralSession coralSession)
         throws ProcessingException
     {
         Element a = new DOMElement("A");
@@ -69,7 +70,7 @@ class Keyword
         {
             a.addAttribute("href", linkRenderer.getNodeURL(coralSession, keyword.getHrefInternal()));
         }
-        else 
+        else
         {
             // invalid keyword - href not defined
             return new DOMText(content);
@@ -81,6 +82,19 @@ class Keyword
         if(keyword.isTitleDefined())
         {
             a.addAttribute("title", keyword.getTitle());
+        }
+        String linkClass = null;
+        if(keyword.isLinkClassDefined())
+        {
+            linkClass = keyword.getLinkClass();
+        }
+        else if(defaultLinkClass != null)
+        {
+            linkClass = defaultLinkClass;
+        }
+        if(linkClass != null && linkClass.trim().length() > 0)
+        {
+            a.addAttribute("class", linkClass);
         }
         a.addText(content);
         return a;

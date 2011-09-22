@@ -95,7 +95,8 @@ ATTRIBUTES (
   REQUIRED boolean newWindow,
   resource('structure.navigation_node') hrefInternal,
   string hrefExternal,
-  string title
+  string title,
+  string linkClass
 );
 
 # // security ////////////////////////////////////////////////////////////////
