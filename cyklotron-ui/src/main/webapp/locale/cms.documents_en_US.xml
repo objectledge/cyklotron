@@ -51,13 +51,13 @@
       <item name="name">Name</item>
       <item name="yes">Yes</item>
       <item name="no">No</item>
-      <item name="pattern">pattern</item>
-      <item name="reg_exp">regular expression</item>
-      <item name="title">title</item>
-      <item name="link_type">link type</item>
-      <item name="new_window">open new window</item>
-      <item name="category">category</item>
-      <item name="style">style sheet classes</item>
+      <item name="pattern">Pattern</item>
+      <item name="reg_exp">Regular expression</item>
+      <item name="title">Title</item>
+      <item name="link_type">Link type</item>
+      <item name="new_window">Open new window</item>
+      <item name="category">Category</item>
+      <item name="style">Style sheet classes</item>
       <item name="no_defined"> - </item>
     </prefix>
     <prefix name="buttons">
