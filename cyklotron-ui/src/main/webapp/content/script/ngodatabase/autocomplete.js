@@ -180,47 +180,47 @@ function initLocationAutocomplete(fields, jsonDataUrl) {
 
 function proposeDocumentOrgFields(index) {
 	var fields = {};
-	fields["name"] = $("#organization_" + index + "_name");
-	fields["id"] = $("#organization_" + index + "_id");
-	fields["street"] = $("#organization_" + index + "_street");
-	fields["postCode"] = $("#organization_" + index + "_postCode");
-	fields["city"] = $("#organization_" + index + "_city");
-	fields["province"] = $("#organization_" + index + "_province");
+	fields["name"] = jQuery("#organization_" + index + "_name");
+	fields["id"] = jQuery("#organization_" + index + "_id");
+	fields["street"] = jQuery("#organization_" + index + "_street");
+	fields["postCode"] = jQuery("#organization_" + index + "_postCode");
+	fields["city"] = jQuery("#organization_" + index + "_city");
+	fields["province"] = jQuery("#organization_" + index + "_province");
 	return fields;
 }
 
 function proposeDocumentEventFields() {
 	var fields = {};
-	fields["street"] = $("#event_street");
-	fields["postCode"] = $("#event_postCode");
-	fields["city"] = $("#event_city");
-	fields["province"] = $("#event_province");
+	fields["street"] = jQuery("#event_street");
+	fields["postCode"] = jQuery("#event_postCode");
+	fields["city"] = jQuery("#event_city");
+	fields["province"] = jQuery("#event_province");
 	return fields;
 }
 
 function editDocumentOrgFields(index) {
 	var fields = {};
-	fields["name"] = $("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
+	fields["name"] = jQuery("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.input-0");
-	fields["id"] = $("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
+	fields["id"] = jQuery("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.hidden-6");
-	fields["street"] = $("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
+	fields["street"] = jQuery("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.group-1\\.input-0");
 	fields["postCode"] = $("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.group-1\\.input-1");
-	fields["city"] = $("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
+	fields["city"] = jQuery("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.group-1\\.input-2");
-	fields["province"] = $("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
+	fields["province"] = jQuery("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.group-1\\.input-3");
 	return fields;
 }
 
 function editDocumentEventFields() {
 	var fields = {};
-	fields["street"] = $("#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-0");
-	fields["postCode"] = $("#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-1");
-	fields["city"] = $("#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-2");
-	fields["province"] = $("#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-3");
+	fields["street"] = jQuery("#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-0");
+	fields["postCode"] = jQuery("#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-1");
+	fields["city"] = jQuery("#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-2");
+	fields["province"] = jQuery("#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-3");
 	return fields;
 }
 
