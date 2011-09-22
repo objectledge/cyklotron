@@ -40,19 +40,16 @@ public interface DocumentService
     /** Copies the contents of a DocumentNodeResource
      * into a given dom4j Document object. */
     public void copyFromDocumentNode(Resource doc, Document destDoc)
-    throws DocumentException;
+        throws DocumentException;
 
     public Resource getDocumentsRoot(CoralSession coralSession, SiteResource site)
-    throws InvalidResourceNameException;
+        throws InvalidResourceNameException;
     
     public Resource getKeywordsRoot(CoralSession coralSession, SiteResource site)
-    throws InvalidResourceNameException;
-    
-    public KeywordResource getkeywordResource(CoralSession coralSession, SiteResource site, String name)
-    throws InvalidResourceNameException;
+        throws InvalidResourceNameException;
     
     public Resource getFootersRoot(CoralSession coralSession, SiteResource site)
-    throws InvalidResourceNameException;
+        throws InvalidResourceNameException;
 
     public String getFooterContent(CoralSession coralSession, SiteResource site, String name)
         throws InvalidResourceNameException;

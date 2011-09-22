@@ -419,22 +419,6 @@ public class DocumentServiceImpl
             return NodeImpl.createNode(coralSession, "keywords", documentsRoot);
     }
     
-    public KeywordResource getkeywordResource(CoralSession coralSession, SiteResource site, String name)
-            throws InvalidResourceNameException
-    {
-            if(name == null || name.length() == 0)
-            {
-                return null;
-            }
-            Resource root = getKeywordsRoot(coralSession, site);
-            Resource[] keywords = coralSession.getStore().getResource(root, name.replace("/"," "));
-            if(keywords.length == 0)
-            {
-                return null;
-            }
-            return (KeywordResource)keywords[0];
-    }
-    
     public Resource getFootersRoot(CoralSession coralSession, SiteResource site)
         throws InvalidResourceNameException
     {
