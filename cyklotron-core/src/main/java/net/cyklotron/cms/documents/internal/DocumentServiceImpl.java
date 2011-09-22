@@ -1,9 +1,12 @@
 package net.cyklotron.cms.documents.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
@@ -34,6 +37,8 @@ import org.objectledge.html.HTMLException;
 import org.objectledge.html.PassThroughHTMLContentFilter;
 import org.picocontainer.Startable;
 
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
@@ -78,6 +83,8 @@ public class DocumentServiceImpl
     private HashMap attrMap;
     private HashMap domDocMap;
 
+    private final CategoryService categoryService;
+
     /** Performs document service initialisationin in a following order:
      *  <ul>
      *      <li>document edit form initalisation</li>
@@ -88,16 +95,17 @@ public class DocumentServiceImpl
      */
     public DocumentServiceImpl(Configuration config, Logger logger, 
         FormsService formsService, CoralSessionFactory sessionFactory,
-        SiteService siteService)
+ SiteService siteService, CategoryService categoryService)
         throws ComponentInitializationError, ConfigurationException
     {
         this.siteService = siteService;
+        this.categoryService = categoryService;
         this.log = logger;
         this.sessionFactory = sessionFactory;
 
         // I. document edit form initalisation
         this.formsService = formsService;
-        String docEditFormURI = config.getChild("document.edit.form.definition.uri").getValue(null);
+        String docEditFormURI = config.getChild("forms").getChild("definitionUri").getValue(null);
         if(docEditFormURI == null)
         {
             throw new ComponentInitializationError("Document edit form definition URI is not defined.");
@@ -120,12 +128,13 @@ public class DocumentServiceImpl
         
         attrMap = new HashMap();
         domDocMap = new HashMap();
-        Configuration[] cDefs = config.getChildren("attributeDefinition");
+        Configuration[] cDefs = config.getChild("forms").getChild("attributes")
+            .getChildren("attribute");
         for(int i = 0; i < cDefs.length;i++)
         {
             String name = cDefs[i].getAttribute("name");
-            String attrName = cDefs[i].getAttribute("xPathAttribute");
-            String domDoc = cDefs[i].getAttribute("xPathDomDoc");
+            String attrName = cDefs[i].getAttribute("resourcePath");
+            String domDoc = cDefs[i].getAttribute("formPath");
             attrMap.put(name, attrName);
             domDocMap.put(name, domDoc);
         }

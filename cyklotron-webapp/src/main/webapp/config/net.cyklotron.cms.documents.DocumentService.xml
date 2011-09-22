@@ -25,20 +25,24 @@
  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
---> 
+-->
 
 <config>
-  <document.edit.form.definition.uri>ledge:config/forms/new-document-form.xml</document.edit.form.definition.uri>
-  <attributeDefinition name="title" xPathAttribute="text()" xPathDomDoc="/document/title"/>
-  <attributeDefinition name="lang" xPathAttribute="text()" xPathDomDoc="/document/lang"/>
-  <attributeDefinition name="subTitle" xPathAttribute="text()" xPathDomDoc="/document/subtitle"/>
-  <attributeDefinition name="titleCalendar" xPathAttribute="text()" xPathDomDoc="/document/caltitle"/>
-  <attributeDefinition name="keywords" xPathAttribute="text()" xPathDomDoc="/document/keywords"/>
-  <attributeDefinition name="abstract" xPathAttribute="text()" xPathDomDoc="/document/abstract"/>
-  <attributeDefinition name="content" xPathAttribute="text()" xPathDomDoc="/document/content"/>
-  <attributeDefinition name="footer" xPathAttribute="text()" xPathDomDoc="/document/footnote"/>
-  <attributeDefinition name="meta" xPathAttribute="/" xPathDomDoc="/document/meta"/>
-  <attributeDefinition name="eventPlace" xPathAttribute="text()" xPathDomDoc="/document/event/place"/>
-  <attributeDefinition name="eventStart" xPathAttribute="text()" xPathDomDoc="/document/event/start"/>
-  <attributeDefinition name="eventEnd" xPathAttribute="text()" xPathDomDoc="/document/event/end"/>
+  <forms>
+    <definitionUri>ledge:config/forms/new-document-form.xml</definitionUri>
+    <attributeMapping>
+      <attribute name="title" resourcePath="text()" formPath="/document/title" />
+      <attribute name="lang" resourcePath="text()" formPath="/document/lang" />
+      <attribute name="subTitle" resourcePath="text()" formPath="/document/subtitle" />
+      <attribute name="titleCalendar" resourcePath="text()" formPath="/document/caltitle" />
+      <attribute name="keywords" resourcePath="text()" formPath="/document/keywords" />
+      <attribute name="abstract" resourcePath="text()" formPath="/document/abstract" />
+      <attribute name="content" resourcePath="text()" formPath="/document/content" />
+      <attribute name="footer" resourcePath="text()" formPath="/document/footnote" />
+      <attribute name="meta" resourcePath="/" formPath="/document/meta" />
+      <attribute name="eventPlace" resourcePath="text()" formPath="/document/event/place" />
+      <attribute name="eventStart" resourcePath="text()" formPath="/document/event/start" />
+      <attribute name="eventEnd" resourcePath="text()" formPath="/document/event/end" />
+    </attributeMapping>
+  </forms>
 </config>
