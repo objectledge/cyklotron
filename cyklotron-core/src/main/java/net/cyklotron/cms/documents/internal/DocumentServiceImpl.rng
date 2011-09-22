@@ -42,4 +42,15 @@
       </zeroOrMore>
     </element>
   </element>
+  <element name="keywords">
+    <element name="excludedElements">
+      <text/>
+    </element>
+    <element name="excludedClasses">
+      <text />
+    </element>
+    <element name="defaultLinkClass">
+      <text />
+    </element>
+  </element>
 </element>

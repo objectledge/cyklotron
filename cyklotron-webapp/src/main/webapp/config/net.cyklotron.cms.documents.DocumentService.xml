@@ -45,4 +45,9 @@
       <attribute name="eventEnd" resourcePath="text()" formPath="/document/event/end" />
     </attributeMapping>
   </forms>
+  <keywords>
+    <excludedElements>SCRIPT PRE A</excludedElements>
+    <excludedClasses>no-keywords</excludedClasses>
+    <defaultLinkClass>keyword</defaultLinkClass>
+  </keywords>
 </config>

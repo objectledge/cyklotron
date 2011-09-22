@@ -45,6 +45,7 @@ import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.documents.FooterResource;
 import net.cyklotron.cms.documents.LinkRenderer;
 import net.cyklotron.cms.documents.keywords.KeywordResource;
+import net.cyklotron.cms.documents.keywords.KeywordsHTMLConententFilter;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -82,6 +83,12 @@ public class DocumentServiceImpl
 
     private HashMap attrMap;
     private HashMap domDocMap;
+
+    private final List<String> keywordsExcludedElements;
+
+    private final List<String> keywordsExcludedClasses;
+
+    private final String keywordsDefaultLinkClass;
 
     private final CategoryService categoryService;
 
@@ -138,8 +145,14 @@ public class DocumentServiceImpl
             attrMap.put(name, attrName);
             domDocMap.put(name, domDoc);
         }
-    }
 
+        keywordsExcludedElements = Arrays.asList(config.getChild("keywords")
+            .getChild("excludedElements").getValue().split(" "));
+        keywordsExcludedClasses = Arrays.asList(config.getChild("keywords")
+            .getChild("excludedClasses").getValue().split(" "));
+        keywordsDefaultLinkClass = config.getChild("keywords").getChild("defaultLinkClass")
+            .getValue();
+    }
     
     public void start()
     {
@@ -573,7 +586,33 @@ public class DocumentServiceImpl
     @Override
     public HTMLContentFilter getContentFilter(DocumentNodeResource doc, LinkRenderer linkRenderer,
         CoralSession coralSession)
-    {        
-        return new PassThroughHTMLContentFilter();
+    {
+        List<KeywordResource> keywords = new ArrayList<KeywordResource>();
+        Set<CategoryResource> docCategories = new HashSet<CategoryResource>(
+            Arrays.asList(categoryService.getCategories(coralSession, doc, true)));
+        for(Resource res : getKeywordsRoot(coralSession, doc.getSite()).getChildren())
+        {
+            if(res instanceof KeywordResource)
+            {
+                KeywordResource keyword = (KeywordResource)res;
+                if(keyword.isCategoryDefined())
+                {
+                    if(!docCategories.contains(keyword.getCategory()))
+                    {
+                        continue;
+                    }
+                }
+                keywords.add(keyword);
+            }
+        }
+        if(keywords.isEmpty())
+        {
+            return new PassThroughHTMLContentFilter();
+        }
+        else
+        {
+            return new KeywordsHTMLConententFilter(keywords, keywordsExcludedElements,
+                keywordsExcludedClasses, keywordsDefaultLinkClass, linkRenderer, coralSession);
+        }
     }
 }
