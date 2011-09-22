@@ -63,7 +63,7 @@ public class CYKLO834
             	Resource footersRoot = getOldFootersRoot(coralSession, site);
             	if(footersRoot != null)
             	{
-            		Resource documentsRoot = documentService.getDocumentsRoot(coralSession, site);
+            		Resource documentsRoot = documentService.getDocumentsApplicationRoot(coralSession, site);
             		coralSession.getStore().setParent(footersRoot, documentsRoot);
             	}
             }

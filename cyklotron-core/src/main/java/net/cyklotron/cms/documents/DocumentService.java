@@ -42,7 +42,7 @@ public interface DocumentService
     public void copyFromDocumentNode(Resource doc, Document destDoc)
         throws DocumentException;
 
-    public Resource getDocumentsRoot(CoralSession coralSession, SiteResource site)
+    public Resource getDocumentsApplicationRoot(CoralSession coralSession, SiteResource site)
         throws InvalidResourceNameException;
     
     public Resource getKeywordsRoot(CoralSession coralSession, SiteResource site)

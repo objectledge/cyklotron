@@ -383,7 +383,7 @@ public class DocumentServiceImpl
         }
     }
 
-    public Resource getDocumentsRoot(CoralSession coralSession, SiteResource site)
+    public Resource getDocumentsApplicationRoot(CoralSession coralSession, SiteResource site)
             throws InvalidResourceNameException
         {
             Resource[] applications = coralSession.getStore().getResource(site, "applications");
@@ -406,7 +406,7 @@ public class DocumentServiceImpl
     public Resource getKeywordsRoot(CoralSession coralSession, SiteResource site)
             throws InvalidResourceNameException
     {
-            Resource documentsRoot = getDocumentsRoot(coralSession, site);
+            Resource documentsRoot = getDocumentsApplicationRoot(coralSession, site);
             Resource[] keywords = coralSession.getStore().getResource(documentsRoot, "keywords");
             if(keywords.length > 1)
             {
@@ -422,7 +422,7 @@ public class DocumentServiceImpl
     public Resource getFootersRoot(CoralSession coralSession, SiteResource site)
         throws InvalidResourceNameException
     {
-        Resource documentsRoot = getDocumentsRoot(coralSession, site);
+        Resource documentsRoot = getDocumentsApplicationRoot(coralSession, site);
         Resource[] footers = coralSession.getStore().getResource(documentsRoot, "footers");
         if(footers.length > 1)
         {
