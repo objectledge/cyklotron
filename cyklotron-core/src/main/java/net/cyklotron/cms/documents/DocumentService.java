@@ -8,6 +8,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.forms.Form;
 import org.objectledge.html.HTMLContentFilter;
 
+import net.cyklotron.cms.documents.keywords.KeywordResource;
 import net.cyklotron.cms.site.SiteResource;
 
 /** DocumentService is used to operate on CMS documents.
@@ -41,6 +42,15 @@ public interface DocumentService
     public void copyFromDocumentNode(Resource doc, Document destDoc)
     throws DocumentException;
 
+    public Resource getDocumentsRoot(CoralSession coralSession, SiteResource site)
+    throws InvalidResourceNameException;
+    
+    public Resource getKeywordsRoot(CoralSession coralSession, SiteResource site)
+    throws InvalidResourceNameException;
+    
+    public KeywordResource getkeywordResource(CoralSession coralSession, SiteResource site, String name)
+    throws InvalidResourceNameException;
+    
     public Resource getFootersRoot(CoralSession coralSession, SiteResource site)
     throws InvalidResourceNameException;
 

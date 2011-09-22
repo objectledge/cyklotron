@@ -40,6 +40,7 @@ import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.documents.FooterResource;
 import net.cyklotron.cms.documents.LinkRenderer;
+import net.cyklotron.cms.documents.keywords.KeywordResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -382,16 +383,63 @@ public class DocumentServiceImpl
         }
     }
 
+    public Resource getDocumentsRoot(CoralSession coralSession, SiteResource site)
+            throws InvalidResourceNameException
+        {
+            Resource[] applications = coralSession.getStore().getResource(site, "applications");
+            if(applications.length != 1)
+            {
+                throw new IllegalStateException("there should be one and only one applications node in site: "+site.getName());
+            }
+            Resource[] documents = coralSession.getStore().getResource(applications[0], "documents");
+            if(documents.length > 1)
+            {
+                throw new IllegalStateException("thers should be only one documents application in site:"+site.getName());
+            }
+            if(documents.length == 1)
+            {
+                return documents[0];
+            }
+            return NodeImpl.createNode(coralSession, "documents", applications[0]);
+        } 
+    
+    public Resource getKeywordsRoot(CoralSession coralSession, SiteResource site)
+            throws InvalidResourceNameException
+    {
+            Resource documentsRoot = getDocumentsRoot(coralSession, site);
+            Resource[] keywords = coralSession.getStore().getResource(documentsRoot, "keywords");
+            if(keywords.length > 1)
+            {
+                throw new IllegalStateException("thers should be only one keywords application in site:"+site.getName());
+            }
+            if(keywords.length == 1)
+            {
+                return keywords[0];
+            }
+            return NodeImpl.createNode(coralSession, "keywords", documentsRoot);
+    }
+    
+    public KeywordResource getkeywordResource(CoralSession coralSession, SiteResource site, String name)
+            throws InvalidResourceNameException
+    {
+            if(name == null || name.length() == 0)
+            {
+                return null;
+            }
+            Resource root = getKeywordsRoot(coralSession, site);
+            Resource[] keywords = coralSession.getStore().getResource(root, name.replace("/"," "));
+            if(keywords.length == 0)
+            {
+                return null;
+            }
+            return (KeywordResource)keywords[0];
+    }
     
     public Resource getFootersRoot(CoralSession coralSession, SiteResource site)
         throws InvalidResourceNameException
     {
-        Resource[] applications = coralSession.getStore().getResource(site, "applications");
-        if(applications.length != 1)
-        {
-            throw new IllegalStateException("there should be one and only one applications node in site: "+site.getName());
-        }
-        Resource[] footers = coralSession.getStore().getResource(applications[0], "footers");
+        Resource documentsRoot = getDocumentsRoot(coralSession, site);
+        Resource[] footers = coralSession.getStore().getResource(documentsRoot, "footers");
         if(footers.length > 1)
         {
             throw new IllegalStateException("thers should be only one footers application in site:"+site.getName());
@@ -400,7 +448,7 @@ public class DocumentServiceImpl
         {
             return footers[0];
         }
-        return NodeImpl.createNode(coralSession, "footers", applications[0]);
+        return NodeImpl.createNode(coralSession, "footers", documentsRoot);
     }
 
     public String getFooterContent(CoralSession coralSession, SiteResource site, String name)
