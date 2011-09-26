@@ -49,13 +49,14 @@
       <item name="title">Lista słów kluczowych</item>
     </prefix>
     <prefix name="labels">
-      <item name="name">Nazwa</item>
       <item name="yes">Tak</item>
       <item name="no">Nie</item>
+      <item name="external">zew</item>
+      <item name="internal">wew</item>
       <item name="pattern">Wzorzec</item>
-      <item name="reg_exp">Wyrażenie regularne</item>
+      <item name="reg_exp">wyrażenie regularne</item>
       <item name="title">Tytuł</item>
-      <item name="link_type">typ linka</item>
+      <item name="link_type">Odsyłacz</item>
       <item name="new_window">Otwórz w nowym oknie</item>
       <item name="category">Kategoria</item>
       <item name="style">Klasy styli</item>
@@ -65,6 +66,48 @@
       <item name="add">Dodaj słowo kluczowe</item>
       <item name="edit">Edytuj</item>
       <item name="delete">Usuń</item>
+    </prefix>
+  </prefix>
+  <prefix name="AddKeyword">
+    <prefix name="strings">
+      <item name="title">Dodaj słowo kluczowe</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="choose">wybierz</item>
+      <item name="external">zewnętrzny</item>
+      <item name="internal">wewnętrzny</item>
+      <item name="pattern">Wzorzec</item>
+      <item name="reg_exp">wyrażenie regularne</item>
+      <item name="title">Tytuł</item>
+      <item name="link_type">Typ odsyłacza</item>
+      <item name="new_window">otwórz w nowym oknie</item>
+      <item name="category">Kategoria</item>
+      <item name="style">Klasy styli</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="add">Dodaj</item>
+      <item name="cancel">Anuluj</item>
+    </prefix>
+  </prefix>
+  <prefix name="EditKeyword">
+    <prefix name="strings">
+      <item name="title">Edytuj słowo kluczowe</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="choose">wybierz</item>
+      <item name="external">zewnętrzny</item>
+      <item name="internal">wewnętrzny</item>
+      <item name="pattern">Wzorzec</item>
+      <item name="reg_exp">wyrażenie regularne</item>
+      <item name="title">Tytuł</item>
+      <item name="link_type">Typ linka</item>
+      <item name="new_window">otwórz w nowym oknie</item>
+      <item name="category">Kategoria</item>
+      <item name="style">Klasy styli</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="save">Zapisz</item>
+      <item name="cancel">Anuluj</item>
     </prefix>
   </prefix>
   <prefix name="ProposeDocumentConf">

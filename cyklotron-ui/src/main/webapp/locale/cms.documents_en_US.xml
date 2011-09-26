@@ -48,22 +48,65 @@
       <item name="title">Keywords list</item>
     </prefix>
     <prefix name="labels">
-      <item name="name">Name</item>
       <item name="yes">Yes</item>
       <item name="no">No</item>
+      <item name="external">ext</item>
+      <item name="internal">int</item>
       <item name="pattern">Pattern</item>
-      <item name="reg_exp">Regular expression</item>
+      <item name="reg_exp">regular expression</item>
       <item name="title">Title</item>
-      <item name="link_type">Link type</item>
+      <item name="link_type">Link</item>
       <item name="new_window">Open new window</item>
       <item name="category">Category</item>
-      <item name="style">Style sheet classes</item>
+      <item name="style">Link classes</item>
       <item name="no_defined"> - </item>
     </prefix>
     <prefix name="buttons">
       <item name="add">Add keyword</item>
       <item name="edit">Edit</item>
       <item name="delete">Delete</item>
+    </prefix>
+  </prefix>
+  <prefix name="AddKeyword">
+    <prefix name="strings">
+      <item name="title">Add keyword</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="choose">choose</item>
+      <item name="external">external</item>
+      <item name="internal">internal</item>
+      <item name="pattern">Pattern</item>
+      <item name="reg_exp">regular expression</item>
+      <item name="title">Title</item>
+      <item name="link_type">Link type</item>
+      <item name="new_window">open new window</item>
+      <item name="category">Category</item>
+      <item name="style">Link classes</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="add">Add</item>
+      <item name="cancel">Cancel</item>
+    </prefix>
+  </prefix>
+  <prefix name="EditKeyword">
+    <prefix name="strings">
+      <item name="title">Edit keyword</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="choose">choose</item>
+      <item name="external">external</item>
+      <item name="internal">internal</item>
+      <item name="pattern">Pattern</item>
+      <item name="reg_exp">regular expression</item>
+      <item name="title">Title</item>
+      <item name="link_type">Link type</item>
+      <item name="new_window">open new window</item>
+      <item name="category">Category</item>
+      <item name="style">Link classes</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="save">Save</item>
+      <item name="cancel">Cancel</item>
     </prefix>
   </prefix>
   <prefix name="ProposeDocumentConf">

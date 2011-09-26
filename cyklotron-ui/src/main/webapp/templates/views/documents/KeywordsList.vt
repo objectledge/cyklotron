@@ -10,28 +10,26 @@
 <form name="form1" method="post" action="">
 <table width="100%" cellspacing="0" class="genericItemList">
 <tr>
-  <th>$ui_labels.get('pattern')</th>
-  <th>$ui_labels.get('reg_exp')</th>
-  <th>$ui_labels.get('title')</th>
-  <th>$ui_labels.get('link_type')</th>
-  <th>$ui_labels.get('new_window')</th>
-  <th>$ui_labels.get('category')</th>
-  <th>$ui_labels.get('style')</th>
+  <th width="20%">$ui_labels.get('pattern')</th>
+  <th width="20%">$ui_labels.get('title')</th>
+  <th width="20%">$ui_labels.get('link_type')</th>
+  <th width="10%">$ui_labels.get('new_window')</th>
+  <th width="10%">$ui_labels.get('category')</th>
+  <th width="10%">$ui_labels.get('style')</th>
   <th> - </th>
 </tr>
 
 #set($size = $keywords.size())
 #foreach($keyword in $keywords)
 <tr>
-  <td>$!keyword.getPattern()</td>
-  <td>#if($keyword.getRegexp()) $ui_labels.get('yes') #else $ui_labels.get('no') #end</td>
+  <td>$!keyword.getPattern() #if($keyword.getRegexp())<br/><i>($ui_labels.get('reg_exp'))</i>#end</td>
   <td>$!keyword.getTitle()</td>
-  <td>#if($keyword.isHrefInternalDefined()) <a href="">$keyword.getHrefInternal()</a> #else #if($keyword.isHrefExternalDefined()) <a href="$keyword.getHrefExternal()">$keyword.getHrefExternal()</a> #else $ui_labels.get('no_defined') #end #end
+  <td>#if($keyword.getExternal()) <a href="$keyword.getHrefExternal()" target="_blank">$keyword.getHrefExternal()</a> ($ui_labels.get('external'))#else <a href="$keyword.getHrefInternal().getPath()" target="_blank">$keyword.getHrefInternal().getTitle()</a> ($ui_labels.get('internal'))#end
   <td>#if($keyword.getNewWindow()) $ui_labels.get('yes') #else $ui_labels.get('no') #end</td>
   <td>#if($keyword.isCategoryDefined()) $keyword.category.name #else $ui_labels.get('no_defined') #end</td> 
-  <td>$keyword.getLinkClass()</td>
-  <td>
-    <a href="$link.action('documents.EditKeyword').set('keywordId',$keyword.id)">$ui_buttons.get('edit')</a>
+  <td>$keyword.getLinkClass() &nbsp</td>
+  <td align="right">
+    <a href="$link.view('documents.EditKeyword').set('keywordId',$keyword.id)">$ui_buttons.get('edit')</a>
     <a href="$link.action('documents.DeleteKeyword').set('keywordId',$keyword.id)">$ui_buttons.get('delete')</a>
   </td>
 </tr>
