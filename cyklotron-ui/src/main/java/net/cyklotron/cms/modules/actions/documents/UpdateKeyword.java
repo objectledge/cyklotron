@@ -112,4 +112,11 @@ public class UpdateKeyword
             throw new ProcessingException("failed to update keyword", e);
         }
     }
+    
+    public boolean checkAccessRights(Context context)
+                    throws ProcessingException
+    {
+          CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
+          return coralSession.getUserSubject().hasRole(getSite(context).getAdministrator());
+    }
 }
