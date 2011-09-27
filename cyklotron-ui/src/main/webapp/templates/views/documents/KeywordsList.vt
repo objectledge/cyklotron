@@ -41,7 +41,10 @@
 $pageTool.addStyleLink('style/action-buttons.css')##
 <div class="action-buttons">
   <div class="additional">
-    <a href="$nodeLink.view('documents.AddKeyword')">$ui_buttons.get('add')</a>
+     <a href="$nodeLink.view('documents.AddKeyword')">$ui_buttons.get('add')</a>
+  </div>
+  <div class="additional" style="float:right;">
+     <a href="$nodeLink.view('documents.KeywordsList').action('documents.FlushRenderingCache')">$ui_buttons.get('flush_cache')</a>
   </div>
 </div>
 
