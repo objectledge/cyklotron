@@ -1,15 +1,13 @@
 #genericNaviHeader('REPORTS')
 
-#if($cms_tool.hasRole($cms_tool.subject, 'cms.administrator'))
+#if($cms_tool.checkCmsAdministrator())
   #linkCell('' 'Global statistics' $link.view('statistics.Statistics').unset('site_id'))  
   #linkCell('' 'Recently updated' $link.view('statistics.RecentlyUpdated'))  
-#end
-#if($site)
-  #linkCell('' 'Site statistics' $link.view('statistics.Statistics').set('site_id',$cmsData.site.id))
-  #if($cms_tool.checkCmsAdministrator())
   #linkCell('' 'Forum statistics' $link.view('statistics.ForumStatistics').set('site_id',$cmsData.site.id))
-  ####linkCell('' 'POLL REPORTS' $link.view('statistics.PollStatistics').set('site_id',$cmsData.site.id))
+  ##linkCell('' 'Poll statistics' $link.view('statistics.PollStatistics').set('site_id',$cmsData.site.id))
+#end
+#if($site && $cms_tool.checkAdministrator())
+  #linkCell('' 'Site statistics' $link.view('statistics.Statistics').set('site_id',$cmsData.site.id))
   #linkCell('' 'Community voting' $link.view('statistics.CommunityVoteStatistics').set('site_id',$cmsData.site.id))
-  #end
 #end
 #genericNaviTrailer()

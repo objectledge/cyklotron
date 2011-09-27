@@ -1,15 +1,13 @@
 #genericNaviHeader('STATYSTYKI')
 
-#if($cms_tool.hasRole($cms_tool.subject, 'cms.administrator'))
+#if($cms_tool.checkCmsAdministrator())
   #linkCell('' 'Statystyki globalne' $link.view('statistics.Statistics').unset('site_id'))  
   #linkCell('' 'Ostatnio zmienione dokumenty' $link.view('statistics.RecentlyUpdated'))  
-#end
-#if($site)
-  #linkCell('' 'Statystyki dla serwisu' $link.view('statistics.Statistics').set('site_id',$cmsData.site.id))
-  #if($cms_tool.checkCmsAdministrator())  
   #linkCell('' 'Statystyki forum' $link.view('statistics.ForumStatistics').set('site_id',$cmsData.site.id))
   ###linkCell('' 'Statystyki sondaży' $link.view('statistics.PollStatistics').set('site_id',$cmsData.site.id))
+#end
+#if($site && $cms_tool.checkAdministrator())
+  #linkCell('' 'Statystyki dla serwisu' $link.view('statistics.Statistics').set('site_id',$cmsData.site.id))
   #linkCell('' 'Oceny dokumentów' $link.view('statistics.CommunityVoteStatistics').set('site_id',$cmsData.site.id))
-  #end
 #end
 #genericNaviTrailer()
