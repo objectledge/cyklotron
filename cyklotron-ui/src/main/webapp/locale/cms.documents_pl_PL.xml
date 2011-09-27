@@ -55,11 +55,11 @@
       <item name="internal">wew</item>
       <item name="pattern">Wzorzec</item>
       <item name="reg_exp">wyrażenie regularne</item>
-      <item name="title">Tytuł</item>
+      <item name="title">Dymek</item>
       <item name="link_type">Odsyłacz</item>
       <item name="new_window">Otwórz w nowym oknie</item>
       <item name="category">Kategoria</item>
-      <item name="style">Klasy styli</item>
+      <item name="style">Klasa CSS</item>
       <item name="no_defined"> - </item>
     </prefix>
     <prefix name="buttons">
@@ -78,11 +78,11 @@
       <item name="internal">wewnętrzny</item>
       <item name="pattern">Wzorzec</item>
       <item name="reg_exp">wyrażenie regularne</item>
-      <item name="title">Tytuł</item>
+      <item name="title">Dymek</item>
       <item name="link_type">Typ odsyłacza</item>
       <item name="new_window">otwórz w nowym oknie</item>
       <item name="category">Kategoria</item>
-      <item name="style">Klasy styli</item>
+      <item name="style">Klasa CSS</item>
     </prefix>
     <prefix name="buttons">
       <item name="add">Dodaj</item>
@@ -99,11 +99,11 @@
       <item name="internal">wewnętrzny</item>
       <item name="pattern">Wzorzec</item>
       <item name="reg_exp">wyrażenie regularne</item>
-      <item name="title">Tytuł</item>
+      <item name="title">Dymek</item>
       <item name="link_type">Typ linka</item>
       <item name="new_window">otwórz w nowym oknie</item>
       <item name="category">Kategoria</item>
-      <item name="style">Klasy styli</item>
+      <item name="style">Klasa CSS</item>
     </prefix>
     <prefix name="buttons">
       <item name="save">Zapisz</item>
