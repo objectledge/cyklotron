@@ -1,5 +1,3 @@
-scriptLoader.loadCommon("jquery/jquery-latest.js");
-
 function CommunityVotes(docId, fetchUrl, voteUrl) {
 	this.docId = docId;
 	this.voteUrl = voteUrl;

@@ -1,3 +1,4 @@
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
 $pageTool.addScriptLink('script/documents/CommunityVotes.js')##
 <script>
     var communityVotes = new CommunityVotes($cmsData.node.id,
