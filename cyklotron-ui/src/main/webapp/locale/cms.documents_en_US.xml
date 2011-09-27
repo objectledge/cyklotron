@@ -65,7 +65,7 @@
       <item name="add">Add keyword</item>
       <item name="edit">Edit</item>
       <item name="delete">Delete</item>
-      <item name="flush_cache">Flush cache</item>
+      <item name="flush_cache">Refresh documents</item>
     </prefix>
   </prefix>
   <prefix name="AddKeyword">

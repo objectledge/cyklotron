@@ -37,16 +37,16 @@ $pageTool.addScriptLink('script/Forms.js')
          #set($relative_path = $cms_data.site.getPath()+"/structure")
          <input type=hidden name="relative_path" value="$relative_path">
          #if($keyword.isHrefInternalDefined() && !$keyword.external)
-          <input type=text name="href_internal" value="$!keyword.getHrefInternal().getPath().substring($relative_path.length())" readonly style="width:100%;" onclick="setValue('edit_keyword', 'link_type', 'internal');" >
+          <input type=text name="href_internal" value="$!keyword.getHrefInternal().getPath().substring($relative_path.length())" readonly style="width:100%;" onclick="Forms.setValue('edit_keyword', 'link_type', 'internal');" >
          #else
-          <input type=text name="href_internal" value="$!parametersTool.get('href_internal','')" readonly style="width:100%;" onclick="setValue('edit_keyword', 'link_type', 'internal');" >
+          <input type=text name="href_internal" value="$!parametersTool.get('href_internal','')" readonly style="width:100%;" onclick="Forms.setValue('edit_keyword', 'link_type', 'internal');" >
          #end
        </td>
        <td align="left" class="actionlink">
           <script language="javascript">
           function selectLinkTarget()
           {
-              setValue('edit_keyword', 'link_type', 'internal');
+              Forms.setValue('edit_keyword', 'link_type', 'internal');
               selectNode('relative_path', 'edit_keyword', 'href_internal', '$link.view('popup.NodeList').set('root',$cms_data.getHomePage().id)');
           }
           </script>
@@ -59,9 +59,9 @@ $pageTool.addScriptLink('script/Forms.js')
       </td>
       <td align="left" colspan="2">
         #if($keyword.isHrefExternalDefined() && $keyword.external)
-        <input type=text name="href_external" value="$!parametersTool.get('href_external',$!keyword.getHrefExternal())" size="50" style="width:100%;" onfocus="setValue('edit_keyword', 'link_type', 'external');">
+        <input type=text name="href_external" value="$!parametersTool.get('href_external',$!keyword.getHrefExternal())" size="50" style="width:100%;" onfocus="Forms.setValue('edit_keyword', 'link_type', 'external');">
         #else
-        <input type=text name="href_external" value="$!parametersTool.get('href_external','')" size="50" style="width:100%;" onfocus="setValue('edit_keyword', 'link_type', 'external');">
+        <input type=text name="href_external" value="$!parametersTool.get('href_external','')" size="50" style="width:100%;" onfocus="Forms.setValue('edit_keyword', 'link_type', 'external');">
         #end
       </td>
     </tr>
