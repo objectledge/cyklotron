@@ -18,35 +18,35 @@ $pageTool.addScriptLink('script/Forms.js')
   <table width="100%" class="genericScreen" cellspacing="0">
     <tr>
       <td align="left" rowspan="2" nowrap><b>$ui_labels.get('pattern'):</b></td>
-      <td colspan="3" width="95%">
-          <input type="text" name="pattern" value="$parametersTool.get('pattern',$!keyword.pattern)" style="width:100%;">
+      <td align="left" colspan="3" width="95%">
+          <input type="text" name="pattern" value="$!parametersTool.get('pattern',$!keyword.pattern)" style="width:100%;">
       </td>
     </tr>
     <tr>
       <td align="left" nowrap><b>$ui_labels.get('reg_exp'):</b></td>
-      <td colspan="2" width="95%">
-          <input type="checkbox" name="reg_exp" value="true" #if($parametersTool.getBoolean('reg_exp',$keyword.external)) checked #end style="width:100%;">
+      <td align="left" colspan="2" width="95%">
+          <input type="checkbox" name="reg_exp" value="true" #if($parametersTool.getBoolean('reg_exp',$!keyword.external)) checked #end style="width:100%;">
       </td>
     </tr>
     <tr>
       <td align="left" nowrap><b>$ui_labels.get('title'):</b></td>
-      <td colspan="3"><input type="text" name="title" value="$parametersTool.get('title',$!keyword.title)" style="width:100%;"></td>
+      <td align="left" colspan="3"><input type="text" name="title" value="$!parametersTool.get('title',$!keyword.title)" style="width:100%;"></td>
     </tr>    
     <tr>
        <td align="left" rowspan="3" nowrap valign="center"><b>$ui_labels.get('link_type'):</b></td>
-       <td nowrap>
+       <td align="left" nowrap>
            <input type=radio name="link_type" value="internal" #if(!$keyword.getExternal()) checked #end><b>$ui_labels.get('internal'):</b>
        </td>
-       <td width="75%">
+       <td align="left" width="75%">
          #set($relative_path = $cms_data.site.getPath()+"/structure")
          <input type=hidden name="relative_path" value="$relative_path">
          #if($keyword.isHrefInternalDefined() && !$keyword.external)
-          <input type=text name="href_internal" value="$parametersTool.get('href_internal', $keyword.getHrefInternal().getPath().substring($relative_path.length()))" style="width:100%;" onclick="setValue('edit_keyword', 'link_type', 'internal');" >
+          <input type=text name="href_internal" value="$!keyword.getHrefInternal().getPath().substring($relative_path.length()))" style="width:100%;" onclick="setValue('edit_keyword', 'link_type', 'internal');" >
          #else
-          <input type=text name="href_internal" value="$parametersTool.get('href_internal','')" style="width:100%;" onclick="setValue('edit_keyword', 'link_type', 'internal');" >
+          <input type=text name="href_internal" value="$!parametersTool.get('href_internal','')" style="width:100%;" onclick="setValue('edit_keyword', 'link_type', 'internal');" >
          #end
        </td>
-       <td class="actionlink">
+       <td align="left" class="actionlink">
           <script language="javascript">
           function selectLinkTarget()
           {
@@ -58,24 +58,24 @@ $pageTool.addScriptLink('script/Forms.js')
        </td>
     </tr>
     <tr>
-      <td>
+      <td align="left" >
         <input type=radio name="link_type" value="external" #if($keyword.getExternal()) checked #end><b>$ui_labels.get('external'):</b>
       </td>
-      <td colspan="2">
+      <td align="left" colspan="2">
         #if($keyword.isHrefExternalDefined() && $keyword.external)
-        <input type=text name="href_external" value="$parametersTool.get('href_external',$!keyword.getHrefExternal())" size="50" style="width:100%;" onfocus="setValue('edit_keyword', 'link_type', 'external');">
+        <input type=text name="href_external" value="$!parametersTool.get('href_external',$!keyword.getHrefExternal())" size="50" style="width:100%;" onfocus="setValue('edit_keyword', 'link_type', 'external');">
         #else
-        <input type=text name="href_external" value="$parametersTool.get('href_external','')" size="50" style="width:100%;" onfocus="setValue('edit_keyword', 'link_type', 'external');">
+        <input type=text name="href_external" value="$!parametersTool.get('href_external','')" size="50" style="width:100%;" onfocus="setValue('edit_keyword', 'link_type', 'external');">
         #end
       </td>
     </tr>
     <tr>
       <td align="left" nowrap><b>$ui_labels.get('new_window'):</b></td>
-      <td colspan="2"><input type="checkbox" name="new_window" value="true" #if($parametersTool.getBoolean('new_window',$keyword.getNewWindow())) checked #end style="width:100%;"></td>
+      <td align="left" colspan="2"><input type="checkbox" name="new_window" value="true" #if($!parametersTool.getBoolean('new_window',$keyword.getNewWindow())) checked #end style="width:100%;"></td>
     </tr>
     <tr>
       <td align="left" nowrap><b>$ui_labels.get('style'):</b></td>
-      <td colspan="3"><input type="text" name="link_class" value="$parametersTool.get('link_class',$keyword.getLinkClass())" style="width:100%;"></td>
+      <td colspan="3"><input type="text" name="link_class" value="$!parametersTool.get('link_class',$!keyword.getLinkClass())" style="width:100%;"></td>
     </tr>
     
   </table>

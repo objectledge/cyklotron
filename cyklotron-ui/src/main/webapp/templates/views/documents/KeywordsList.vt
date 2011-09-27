@@ -24,10 +24,10 @@
 <tr>
   <td>$!keyword.getPattern() #if($keyword.getRegexp())<br/><i>($ui_labels.get('reg_exp'))</i>#end</td>
   <td>$!keyword.getTitle()</td>
-  <td>#if($keyword.getExternal()) <a href="$keyword.getHrefExternal()" target="_blank">$keyword.getHrefExternal()</a> ($ui_labels.get('external'))#else <a href="$keyword.getHrefInternal().getPath()" target="_blank">$keyword.getHrefInternal().getTitle()</a> ($ui_labels.get('internal'))#end
+  <td>#if($keyword.getExternal()) <a href="$!keyword.getHrefExternal()" target="_blank">$!keyword.getHrefExternal()</a> ($ui_labels.get('external'))#else <a href="$link.unsetView().unset('site_id').set('x',$!keyword.getHrefInternal().id).action('SetBrowseMode').set('mode','preview')" target="_blank">$!keyword.getHrefInternal().getTitle()</a> ($ui_labels.get('internal'))#end
   <td>#if($keyword.getNewWindow()) $ui_labels.get('yes') #else $ui_labels.get('no') #end</td>
-  <td>#if($keyword.isCategoryDefined()) $keyword.category.name #else $ui_labels.get('no_defined') #end</td> 
-  <td>$keyword.getLinkClass() &nbsp</td>
+  <td>#if($keyword.isCategoryDefined()) $!keyword.category.name #else $ui_labels.get('no_defined') #end</td> 
+  <td>$!keyword.getLinkClass() &nbsp</td>
   <td align="right">
     <a href="$link.view('documents.EditKeyword').set('keywordId',$keyword.id)">$ui_buttons.get('edit')</a>
     <a href="$link.action('documents.DeleteKeyword').set('keywordId',$keyword.id)">$ui_buttons.get('delete')</a>
