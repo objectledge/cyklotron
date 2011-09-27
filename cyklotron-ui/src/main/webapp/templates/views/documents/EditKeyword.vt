@@ -29,10 +29,6 @@ $pageTool.addScriptLink('script/Forms.js')
       </td>
     </tr>
     <tr>
-      <td align="left" nowrap><b>$ui_labels.get('title'):</b></td>
-      <td align="left" colspan="3"><input type="text" name="title" value="$!parametersTool.get('title',$!keyword.title)" style="width:100%;"></td>
-    </tr>    
-    <tr>
        <td align="left" rowspan="3" nowrap valign="center"><b>$ui_labels.get('link_type'):</b></td>
        <td align="left" nowrap>
            <input type=radio name="link_type" value="internal" #if(!$keyword.getExternal()) checked #end><b>$ui_labels.get('internal'):</b>
@@ -41,9 +37,9 @@ $pageTool.addScriptLink('script/Forms.js')
          #set($relative_path = $cms_data.site.getPath()+"/structure")
          <input type=hidden name="relative_path" value="$relative_path">
          #if($keyword.isHrefInternalDefined() && !$keyword.external)
-          <input type=text name="href_internal" value="$!keyword.getHrefInternal().getPath().substring($relative_path.length())" style="width:100%;" onclick="setValue('edit_keyword', 'link_type', 'internal');" >
+          <input type=text name="href_internal" value="$!keyword.getHrefInternal().getPath().substring($relative_path.length())" readonly style="width:100%;" onclick="setValue('edit_keyword', 'link_type', 'internal');" >
          #else
-          <input type=text name="href_internal" value="$!parametersTool.get('href_internal','')" style="width:100%;" onclick="setValue('edit_keyword', 'link_type', 'internal');" >
+          <input type=text name="href_internal" value="$!parametersTool.get('href_internal','')" readonly style="width:100%;" onclick="setValue('edit_keyword', 'link_type', 'internal');" >
          #end
        </td>
        <td align="left" class="actionlink">
@@ -72,6 +68,23 @@ $pageTool.addScriptLink('script/Forms.js')
     <tr>
       <td align="left" nowrap><b>$ui_labels.get('new_window'):</b></td>
       <td align="left" colspan="2"><input type="checkbox" name="new_window" value="true" #if($!parametersTool.getBoolean('new_window',$keyword.getNewWindow())) checked #end></td>
+    </tr>
+    <tr>
+      <td align="left" nowrap><b>$ui_labels.get('title'):</b></td>
+      <td align="left" colspan="3"><input type="text" name="title" value="$!parametersTool.get('title',$!keyword.title)" style="width:100%;"></td>
+    </tr>    
+    <tr>
+    	<td align="left" nowrap valign="center"><b>$ui_labels.get('category'):</b></td>
+    	<td colspan="2">
+    	  #if($keyword.isCategoryDefined())
+    	   #set($categoryResource = $keyword.getCategory())
+    	  #end
+    	  <input name="category_id" value="$!categoryResource.getId()" type="hidden"/>
+    	  <input type="text" name="category_name" value="$!categoryResource.name" readonly style="width:100%;">
+    	</td>
+    	<td align="left" class="actionlink">
+    		<a href="#select_category('id name' 'edit_keyword' 'category_id category_name')">$ui_labels.get('choose')</a>
+    	</td>
     </tr>
     <tr>
       <td align="left" nowrap><b>$ui_labels.get('style'):</b></td>

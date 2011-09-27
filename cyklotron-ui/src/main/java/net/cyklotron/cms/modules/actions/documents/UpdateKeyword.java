@@ -2,6 +2,7 @@ package net.cyklotron.cms.modules.actions.documents;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.forms.FormsService;
@@ -12,6 +13,8 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.documents.keywords.KeywordResource;
 import net.cyklotron.cms.documents.keywords.KeywordResourceImpl;
@@ -82,6 +85,22 @@ public class UpdateKeyword
                 }
                 keyword.setHrefInternal((NavigationNodeResource)section[0]);
             }
+
+            long category_id = parameters.getLong("category_id", -1L);
+            CategoryResource category = null;
+            try
+            {
+                if(category_id != -1L)
+                {
+                    category = CategoryResourceImpl.getCategoryResource(coralSession, category_id);
+                }
+                keyword.setCategory(category);
+            }
+            catch(EntityDoesNotExistException e)
+            {
+                route(mvcContext, templatingContext, "documents.UpdateKeyword", "invalid_category");
+            }
+
             keyword.setNewWindow(newWindow);
             keyword.setRegexp(regExp);
             keyword.setPattern(pattern);

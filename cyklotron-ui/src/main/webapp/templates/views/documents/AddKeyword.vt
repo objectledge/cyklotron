@@ -30,17 +30,13 @@ $pageTool.addScriptLink('script/Forms.js')
       </td>
     </tr>
     <tr>
-      <td align="left" nowrap><b>$ui_labels.get('title'):</b></td>
-      <td colspan="3"><input type="text" name="title" value="$!parametersTool.get('title','')" style="width:100%;"></td>
-    </tr>    
-    <tr>
        <td align="left" rowspan="3" nowrap valign="center"><b>$ui_labels.get('link_type'):</b></td>
        <td align="left" nowrap>
            <input type=radio name="link_type" value="internal"><b>$ui_labels.get('internal'):</b>
        </td>
        <td align="left" width="75%">
          <input type=hidden name="relative_path" value="$cms_data.site.getPath()/structure">
-         <input type=text name="href_internal" value="$!parametersTool.get('href_internal',"")" style="width:100%;" onclick="setValue('add_keyword', 'link_type', 'internal');" >
+         <input type=text name="href_internal" value="$!parametersTool.get('href_internal',"")" readonly style="width:100%;" onclick="setValue('add_keyword', 'link_type', 'internal');" >
        </td>
        <td align="left" class="actionlink">
           <script language="javascript">
@@ -64,7 +60,21 @@ $pageTool.addScriptLink('script/Forms.js')
     <tr>
       <td align="left" nowrap><b>$ui_labels.get('new_window'):</b></td>
       <td align="left" colspan="2"><input type="checkbox" name="new_window" value="true" #if($parametersTool.getBoolean('new_window',true)) checked #end></td>
+    </tr>    
+    <tr>
+    	<td align="left" nowrap valign="center"><b>$ui_labels.get('category'):</b></td>
+    	<td colspan="2">
+    	  <input name="category_id" value="" type="hidden"/>
+    	  <input type="text" name="category_name" value="" readonly style="width:100%;">
+    	</td>
+    	<td align="left" class="actionlink">
+    		<a href="#select_category('id name' 'add_keyword' 'category_id category_name')">$ui_labels.get('choose')</a>
+    	</td>
     </tr>
+    <tr>
+      <td align="left" nowrap><b>$ui_labels.get('title'):</b></td>
+      <td colspan="3"><input type="text" name="title" value="$!parametersTool.get('title','')" style="width:100%;"></td>
+    </tr>    
     <tr>
       <td align="left" nowrap><b>$ui_labels.get('style'):</b></td>
       <td align="left" colspan="3"><input type="text" name="link_class" value="$!parametersTool.get('link_class','')" style="width:100%;"></td>
