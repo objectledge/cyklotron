@@ -66,7 +66,7 @@
       <item name="add">Dodaj słowo kluczowe</item>
       <item name="edit">Edytuj</item>
       <item name="delete">Usuń</item>
-      <item name="flush_cache">Odświerz dokumenty</item>
+      <item name="flush_cache">Odśwież dokumenty</item>
     </prefix>
   </prefix>
   <prefix name="AddKeyword">
