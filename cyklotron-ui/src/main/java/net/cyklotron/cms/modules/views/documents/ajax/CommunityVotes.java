@@ -56,8 +56,8 @@ public class CommunityVotes
         if(node != null && node.canView(coralSession, coralSession.getUserSubject()))
         {
             jsonGenerator.writeStartObject();
-            jsonGenerator.writeNumberField("positive", node.getVotesPositive(0));
-            jsonGenerator.writeNumberField("negative", node.getVotesNegative(0));
+            jsonGenerator.writeStringField("positive", Integer.toString(node.getVotesPositive(0)));
+            jsonGenerator.writeStringField("negative", Integer.toString(node.getVotesNegative(0)));
             jsonGenerator.writeBooleanField("voted", pollService.hasVoted(getHttpContext(), node));
             jsonGenerator.writeEndObject();
         }
