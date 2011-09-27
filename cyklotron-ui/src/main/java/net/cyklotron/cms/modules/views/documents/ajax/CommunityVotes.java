@@ -2,17 +2,17 @@ package net.cyklotron.cms.modules.views.documents.ajax;
 
 import java.io.IOException;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.poll.PollService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-
 import org.codehaus.jackson.JsonGenerationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.json.AbstractJsonView;
+
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.poll.PollService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
 public class CommunityVotes
     extends AbstractJsonView
@@ -42,12 +42,12 @@ public class CommunityVotes
         {
             if(vote.equals("positive"))
             {
-                node.setVotesPositive(node.isVotesPositiveDefined() ? node.getVotesPositive() + 1 : 1);
+                node.setVotesPositive(node.getVotesPositive(0) + 1);
                 node.update();
             }
             else if(vote.equals("negative"))
             {
-                node.setVotesNegative(node.isVotesNegativeDefined() ? node.getVotesNegative() + 1 : 1);
+                node.setVotesNegative(node.getVotesNegative(0) + 1);
                 node.update();
             }
             pollService.trackVote(getHttpContext(), node);
@@ -56,10 +56,8 @@ public class CommunityVotes
         if(node != null && node.canView(coralSession, coralSession.getUserSubject()))
         {
             jsonGenerator.writeStartObject();
-            jsonGenerator.writeNumberField("positive",
-                node.isVotesPositiveDefined() ? node.getVotesPositive() : 0);
-            jsonGenerator.writeNumberField("negative",
-                node.isVotesNegativeDefined() ? node.getVotesNegative() : 0);
+            jsonGenerator.writeNumberField("positive", node.getVotesPositive(0));
+            jsonGenerator.writeNumberField("negative", node.getVotesNegative(0));
             jsonGenerator.writeBooleanField("voted", pollService.hasVoted(getHttpContext(), node));
             jsonGenerator.writeEndObject();
         }

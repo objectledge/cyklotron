@@ -1,11 +1,5 @@
 package net.cyklotron.cms.modules.components.documents;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.modules.components.SkinableCMSComponent;
-import net.cyklotron.cms.poll.PollService;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -17,6 +11,12 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.poll.PollService;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
 public class CommunityVotes extends SkinableCMSComponent
 {
@@ -37,7 +37,7 @@ public class CommunityVotes extends SkinableCMSComponent
     {
         NavigationNodeResource node = cmsDataFactory.getCmsData(context).getNode();        
         templatingContext.put("voteBaseUrl", pollService.getVoteBaseUrl(httpContext));
-        templatingContext.put("positive", node.isVotesPositiveDefined() ? node.getVotesPositive() : 0);
-        templatingContext.put("negative", node.isVotesNegativeDefined() ? node.getVotesNegative() : 0);
+        templatingContext.put("positive", node.getVotesPositive(0));
+        templatingContext.put("negative", node.getVotesNegative(0));
     }
 }

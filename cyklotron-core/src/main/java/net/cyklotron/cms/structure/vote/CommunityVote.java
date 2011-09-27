@@ -80,11 +80,9 @@ public class CommunityVote
                 NavigationNodeResource document = (NavigationNodeResource)coralSession.getStore()
                     .getResource(id);
                 documents.put(id, document);
-                int positive = document.isVotesPositiveDefined() ? document.getVotesPositive() : 0;
-                int negative = document.isVotesNegativeDefined() ? document.getVotesNegative() : 0;
                 for(SortHandler<? > handler : handlers.values())
                 {
-                    handler.process(id, positive, negative);
+                    handler.process(id, document.getVotesPositive(0), document.getVotesNegative(0));
                 }
             }
             catch(EntityDoesNotExistException e)
