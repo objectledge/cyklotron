@@ -64,6 +64,7 @@ public class UpdateKeyword
                 : false;
 
             keyword.setTitle(title);
+            keyword.setExternal(external);
             if(external)
             {
                 if(!(hrefExternal.startsWith("http://") || hrefExternal.startsWith("https://")))
