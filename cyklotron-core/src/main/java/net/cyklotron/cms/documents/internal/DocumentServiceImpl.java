@@ -135,7 +135,7 @@ public class DocumentServiceImpl
         
         attrMap = new HashMap();
         domDocMap = new HashMap();
-        Configuration[] cDefs = config.getChild("forms").getChild("attributes")
+        Configuration[] cDefs = config.getChild("forms").getChild("attributeMapping")
             .getChildren("attribute");
         for(int i = 0; i < cDefs.length;i++)
         {
