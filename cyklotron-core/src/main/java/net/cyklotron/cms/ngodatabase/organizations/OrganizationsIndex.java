@@ -264,8 +264,8 @@ public class OrganizationsIndex
             @Override
             public int compare(int slot1, int slot2)
             {
-                final String slot1Value = values[slot1];
-                final String slot2Value = values[slot2];
+                final String slot1Value = getValue(values[slot1]);
+                final String slot2Value = getValue(values[slot2]);
                 return slot1Value.compareTo(slot2Value);
             }
 
