@@ -137,7 +137,7 @@ public class NgoDatabaseServiceImpl
     @Override
     public List<Organization> getOrganizations(String substring)
     {
-        return organizationsIndex.getOrganizations(substring);
+        return organizationsIndex.getOrganizations(substring, locale);
     }
 
     // outgoing organization data

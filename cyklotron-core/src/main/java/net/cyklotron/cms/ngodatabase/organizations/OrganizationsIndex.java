@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.LowerCaseFilter;
@@ -41,13 +42,9 @@ import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.NumericField;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.FieldCache;
-import org.apache.lucene.search.FieldComparator;
-import org.apache.lucene.search.FieldComparatorSource;
 import org.apache.lucene.search.FuzzyQuery;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.PrefixQuery;
@@ -102,10 +99,14 @@ public class OrganizationsIndex
             .add(new NumericField("id", 4, Field.Store.YES, true).setLongValue(organization.getId()));
         document.add(new Field("name", organization.getName(), Field.Store.YES, Field.Index.ANALYZED,
             Field.TermVector.WITH_POSITIONS_OFFSETS));
+        document.add(new Field("sort_by_name", getSortValue(organization.getName()),
+            Field.Store.YES, Field.Index.NOT_ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
         document.add(new Field("province", organization.getProvince(), Field.Store.YES,
             Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
         document.add(new Field("city", organization.getCity(), Field.Store.YES, Field.Index.ANALYZED,
             Field.TermVector.WITH_POSITIONS_OFFSETS));
+        document.add(new Field("sort_by_city", getSortValue(organization.getCity()),
+            Field.Store.YES, Field.Index.NOT_ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
         document.add(new Field("street", organization.getStreet(), Field.Store.YES,
             Field.Index.ANALYZED, Field.TermVector.WITH_POSITIONS_OFFSETS));
         document.add(new Field("postCode", organization.getPostCode(), Field.Store.YES,
@@ -138,7 +139,7 @@ public class OrganizationsIndex
         }
     }
 
-    public List<Organization> getOrganizations(String name)
+    public List<Organization> getOrganizations(String name, Locale locale)
     {
         try
         {
@@ -147,30 +148,32 @@ public class OrganizationsIndex
             int i = 0;
             for(Term term : terms)
             {
-				if(FUZZY_QUERY_PREFIX_LENGTH < term.text().length())
-				{
-					FuzzyQuery fuzzyQuery = new FuzzyQuery(term,FUZZY_QUERY_MIN_SIMILARITY,FUZZY_QUERY_PREFIX_LENGTH);
-					fuzzyQuery.setBoost((1 - (getSearcher().docFreq(term) / getSearcher().maxDoc()))/10);
-					query.add(fuzzyQuery, BooleanClause.Occur.SHOULD);
-				}
-				SpanFirstQuery spanFirstQuery = new SpanFirstQuery(new SpanTermQuery(term), ++i);
-            	spanFirstQuery.setBoost((terms.size()+1)-i);
-            	query.add(spanFirstQuery, BooleanClause.Occur.SHOULD);
-				
+                if(FUZZY_QUERY_PREFIX_LENGTH < term.text().length())
+                {
+                    FuzzyQuery fuzzyQuery = new FuzzyQuery(term,FUZZY_QUERY_MIN_SIMILARITY,FUZZY_QUERY_PREFIX_LENGTH);
+                    fuzzyQuery.setBoost((1 - (getSearcher().docFreq(term) / getSearcher().maxDoc()))/10);
+                    query.add(fuzzyQuery, BooleanClause.Occur.SHOULD);
+                }
+                SpanFirstQuery spanFirstQuery = new SpanFirstQuery(new SpanTermQuery(term), ++i);
+                spanFirstQuery.setBoost((terms.size()+1)-i);
+                query.add(spanFirstQuery, BooleanClause.Occur.SHOULD);
+                
                 PrefixQuery prefixQuery = new PrefixQuery(term);
                 prefixQuery.setBoost(1);
                 query.add(prefixQuery, BooleanClause.Occur.SHOULD);
             }
             terms = analyze("city", name);
-			SpanFirstQuery spanFirstQuery = new SpanFirstQuery(new SpanTermQuery(terms.get(terms.size()-1)), 1);
-        	spanFirstQuery.setBoost(1);
-        	query.add(spanFirstQuery, BooleanClause.Occur.SHOULD);
+            SpanFirstQuery spanFirstQuery = new SpanFirstQuery(new SpanTermQuery(terms.get(terms.size()-1)), 1);
+            spanFirstQuery.setBoost(1);
+            query.add(spanFirstQuery, BooleanClause.Occur.SHOULD);
             PrefixQuery prefixQuery = new PrefixQuery(terms.get(terms.size()-1));
             prefixQuery.setBoost(1);
             query.add(prefixQuery, BooleanClause.Occur.SHOULD);
             
             Timer timer = new Timer();
-            Sort sort = new Sort(new SortField[]{SortField.FIELD_SCORE,new SortField("name",new OrganizationNameFieldComparator()),new SortField("city",SortField.STRING)});
+            Sort sort = new Sort(new SortField[]{SortField.FIELD_SCORE,
+                            new SortField("sort_by_name", locale),
+                            new SortField("sort_by_city", locale)});
             List<Organization> results = results(getSearcher().search(query, null, MAX_RESULTS, sort));
             logger.debug("query: " + query.toString() + " " + results.size() + " in "
                 + timer.getElapsedMillis() + "ms");
@@ -226,83 +229,10 @@ public class OrganizationsIndex
             return filteredTokenStream;
         }
     }
-    
-    
-    public class OrganizationNameFieldComparator
-        extends FieldComparatorSource
+
+    private String getSortValue(String value)
     {
-
-        public FieldComparator newComparator(String fieldname, int numHits, int sortPos,
-            boolean reversed)
-            throws IOException
-        {
-            return new OrganizationNameComparator(numHits, fieldname);
-        }
-
-        public class OrganizationNameComparator
-            extends FieldComparator
-        {
-            private final String[] values;
-
-            private String[] currentReaderValues;
-
-            private final String field;
-
-            private String bottom;
-
-            OrganizationNameComparator(int numHits, String field)
-            {
-                values = new String[numHits];
-                this.field = field;
-            }
-
-            public String getValue(String value)
-            {
-                return value.replaceAll("[^\\p{L}\\p{N}]", "");
-            }
-
-            @Override
-            public int compare(int slot1, int slot2)
-            {
-                final String slot1Value = getValue(values[slot1]);
-                final String slot2Value = getValue(values[slot2]);
-                return slot1Value.compareTo(slot2Value);
-            }
-
-            @Override
-            public int compareBottom(int doc)
-            {
-                final String docValue = getValue(currentReaderValues[doc]);
-                final String bottomValue = getValue(bottom);
-                return bottomValue.compareTo(docValue);
-            }
-
-            @Override
-            public void copy(int slot, int doc)
-            {
-                values[slot] = currentReaderValues[doc];
-            }
-
-            @Override
-            public void setNextReader(IndexReader reader, int docBase)
-                throws IOException
-            {
-                currentReaderValues = FieldCache.DEFAULT.getStrings(reader, field);
-            }
-
-            @Override
-            public void setBottom(final int bottom)
-            {
-                this.bottom = values[bottom];
-            }
-
-            @Override
-            public Comparable<? > value(int slot)
-            {
-                return String.valueOf(getValue(values[slot]));
-            }
-
-        }
+        return value.replaceAll("[^\\p{L}\\p{N}]", "").trim();
     }
 
 }
