@@ -54,4 +54,9 @@
     <config>LRUMap(1000)</config>    
     <config>StatisticsMap()</config>    
   </instance>
+  
+  <instance name="velocityTemplates" graph="true">
+    <config>LRUMap(1500)</config>
+    <config>StatisticsMap()</config>
+  </instance>
 </config>
