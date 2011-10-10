@@ -1,0 +1,6 @@
+bin
+.clover
+target
+*.log*
+.settings
+work
