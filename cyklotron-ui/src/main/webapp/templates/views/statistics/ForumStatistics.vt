@@ -1,0 +1,126 @@
+#set($ui_strings = $i18n.usePrefix("cms.statistics.ForumStatistics.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.statistics.ForumStatistics.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.statistics.ForumStatistics.buttons"))
+
+$pageTool.addScriptLink('script/CMSPopups.js')
+$pageTool.addScriptLink('script/Forms.js')
+
+<script type="text/javascript">
+  function fSub(action)
+  {
+     document.select.action = action;
+     document.select.submit();
+  }
+  
+  function clear(item)
+  {
+     Forms.setValue('select', item, '');
+  }
+
+  function changeState(select)
+  {
+     var display = ('comment' == select.value || 'cPost' == select.value) ? "table-row" : "none";
+     //alert(display);
+     var element = document.getElementById('category_selector');
+     element.style.display = display
+  }
+</script>
+
+#genericScreenHeader($ui_strings.get('title'))
+
+#result_inline_message("results.statistics")
+
+$ui_strings.get('build_query'):
+
+<form name="select" action="$link" method="post">
+<input type="hidden" name="show" value="true">
+<table width="70%">
+  <tr><td colspan="2"><hr/></td></tr>  
+  <tr>
+    <td align="left">$ui_labels.get('resource_type'):</td>
+    <td align="right">
+	   <select name="type" onchange="javascript:changeState(this);">
+	     <option value="discussion" #if($type == 'discussion') selected="selected" #end>$ui_labels.get('resource_type.discussion')</option>
+	     <option value="comment" #if($type == 'comment') selected="selected" #end>$ui_labels.get('resource_type.comment')</option>
+	     <option value="dPost" #if($type == 'dPost') selected="selected" #end>$ui_labels.get('resource_type.dPost')</option>
+	     <option value="cPost" #if($type == 'cPost') selected="selected" #end>$ui_labels.get('resource_type.cPost')</option>	     	     	   
+	   </select>
+    </td>
+  </tr>
+  <tr><td colspan="2"><hr/>$ui_labels.get('creation_date_in')</td></tr>
+  <tr>
+    <td align="left">$ui_labels.get('since')</td>
+    <td align="right">#dateSelectorOptionalTS("created_start" $created_start.time $ui_labels.get('no_limit'))</td>
+  </tr>
+  <tr>  
+    <td align="left">$ui_labels.get('until')</td>
+    <td align="right">#dateSelectorOptionalTS("created_end" $created_end.time $ui_labels.get('no_limit'))</td>
+  </tr>  
+  <tr><td colspan="2"><hr/></td></tr>  
+  <tr>
+    <td align="left">$ui_labels.get('created_by'):</td>
+    <td align="right">
+      <input type="text" name="created_by" value="$!created_by">
+      <a href="#select_user('login' 'select' 'created_by')">$ui_buttons.get('choose')</a>
+      <a href="javascript:clear('created_by')">$ui_buttons.get('clear')</a>
+    </td>
+  </tr>
+  <tr><td colspan="2"><hr/></td></tr>  
+  
+  #if($type == 'comment' || $type == 'cPost')
+    <tr id="category_selector" style="display: table-row;">
+  #else
+    <tr id="category_selector" style="display: none;">
+  #end
+    <td align="left">$ui_labels.get('categorized_with'):</td>
+    <td align="right">
+#set($category_sel_opts = [[$ui_labels.get('unselected'), "unselected"], [$ui_labels.get('required'),"required"], [$ui_labels.get('optional'), "one of"]])
+<br />
+#category_tree($globaltable $ui_labels.get('global_categories'))
+<br />
+#category_tree($sitetable $ui_labels.get('site_categories'))
+    </td>
+  </tr>
+  <tr><td colspan="2"><hr/></td></tr>
+  <tr>  
+    <td colspan="2" align="right">
+      <input type="submit" value="$ui_buttons.get('see')" name="B1">
+    </td>     
+  </tr>
+</table>
+</form>
+
+<table width="70%">
+  <tr>
+    <th align="left">$ui_labels.get('stat')</th>
+    <th align="right">$ui_labels.get('value')</th>
+  </tr>
+  #if($type == 'comment')
+  <tr>
+    <td align="left">$ui_labels.get('resource_type.comment'):</td> 
+    <td align="right">$!comments.size()</td>
+  </tr>
+  #end
+  #if($type == 'cPost')
+  <tr>
+    <td align="left">$ui_labels.get('resource_type.cPost'):</td> 
+    <td align="right">$!cMessages</td>
+  </tr>  
+  #end
+  #if($type == 'discussion')
+  <tr>
+    <td align="left">$ui_labels.get('resource_type.discussion'):</td> 
+    <td align="right">$!discussions.size()</td>
+  </tr>
+  #end
+  #if($type == 'dPost')
+  <tr>
+    <td align="left">$ui_labels.get('resource_type.dPost'):</td> 
+    <td align="right">$!dMessages</td>
+  </tr>    
+  #end
+</table>
+
+##<br/><br/><br/>
+##$!query
+#genericScreenTrailer()
