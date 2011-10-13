@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<packages version="1.3">
+   <package name="content" type="jar" todir="workdir" exploded="true" inWorkspace="true">
+      <fileset dir="/coral-browser/src/main/resources/content" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <fileset dir="/cyklotron-ui/src/main/resources/content" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <fileset dir="/ledge-forms/src/main/resources/content" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <fileset dir="/ledge-web/src/main/resources/content" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <properties>
+         <property name="org.jboss.ide.eclipse.as.core.packages.ModuleIDPropertyKey" value="1251926168305"></property>
+      </properties>
+   </package>
+   <package name="fckeditor" type="jar" todir="workdir/content" exploded="true" inWorkspace="true">
+      <fileset dir="/fckeditor" includes="fck*.js,fck*.xml,editor/**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <fileset dir="/cyklotron-ui-fckeditor/src/main/webapp/content/fckeditor" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <properties></properties>
+   </package>
+   <package name="templates" type="jar" todir="workdir" exploded="true" inWorkspace="true">
+      <fileset dir="/cyklotron-ui-fckeditor/src/main/webapp/templates" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <fileset dir="/coral-browser/src/main/resources/templates" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <fileset dir="/cyklotron-ui/src/main/resources/templates" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <fileset dir="/ledge-forms/src/main/resources/templates" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <fileset dir="/ledge-web/src/main/resources/templates" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <properties></properties>
+   </package>
+   <package name="locale" type="jar" todir="workdir" exploded="true" inWorkspace="true">
+      <fileset dir="/cyklotron-ui/src/main/resources/locale" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <fileset dir="/ledge-forms/src/main/resources/locale" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <fileset dir="/ledge-web/src/main/resources/locale" includes="**" excludes="**/.svn/**" inWorkspace="true" flatten="false">
+         <properties></properties>
+      </fileset>
+      <properties></properties>
+   </package>
+   <properties></properties>
+</packages>
