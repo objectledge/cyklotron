@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<strings xmlns="http://objectledge.org/i18n/1.0">
+<prefix name="document.info"><value>Document information</value></prefix>
+
+<prefix name="document.language"><value>Language</value></prefix>
+<prefix name="document.language.help"><value>Correctly chosen document language will improve searching for it.</value></prefix>
+<prefix name="polish"><value>Polish</value></prefix>
+<prefix name="english"><value>English</value></prefix>
+<prefix name="other"><value>Other</value></prefix>
+
+<prefix name="title"><value>Title</value></prefix>
+<prefix name="title.help"><value>Document title will appear as it's name in site's navigational components.</value></prefix>
+
+<prefix name="subtitle"><value>Subtitle</value></prefix>
+<prefix name="caltitle"><value>Calendar title</value></prefix>
+
+<prefix name="keywords"><value>Keywords</value></prefix>
+<prefix name="keywords.help"><value>Keywords allow focused searching for a document.</value></prefix>
+<prefix name="keywords.hint"><value>Input keywords related to document's content.</value></prefix>
+
+<prefix name="abstract"><value>Abstract</value></prefix>
+<prefix name="abstract.hint"><value>Input document content's abstract</value></prefix>
+
+<prefix name="footnote"><value>Footnote</value></prefix>
+
+<prefix name="organizations"><value>Organizations</value></prefix>
+<prefix name="add.organization"><value>Add organization</value></prefix>
+<prefix name="add.organization.help"><value> You may enter organization's data here</value></prefix>
+<prefix name="organization"><value>Organization</value></prefix>
+<prefix name="delete.organization"><value>Delete organization</value></prefix>
+<prefix name="name"><value>Name</value></prefix>
+<prefix name="address"><value>Address</value></prefix>
+<prefix name="street"><value>Street</value></prefix>
+<prefix name="postcode"><value>Post code</value></prefix>
+<prefix name="postcode.alert"><value>Post code must start with 2 digits then sign -(minus) and next 3 digits. Example: 01-111</value></prefix>
+<prefix name="city"><value>City</value></prefix>
+<prefix name="province"><value>Province</value></prefix>
+<prefix name="tel"><value>Phones</value></prefix>
+<prefix name="fax"><value>Faxes</value></prefix>
+<prefix name="tel.alert"><value>Phone number must be at least 7 digits long, can start with + (plus) character, can contain spaces and - (dash). Multiple numbers can be seperated with ; (semicolon). After number, you can put short description, like: +48 00-00-000 ext. 10 ; 3456678 ask for Mr. Smith</value></prefix>
+
+<prefix name="id"><value>Id</value></prefix>
+<prefix name="id.alert"><value>Id is number</value></prefix>
+
+<prefix name="e-mail"><value>E-mail</value></prefix>
+<prefix name="e-mail.alert"><value>E-mail must be formed as following: account@domain.tld</value></prefix>
+
+<prefix name="e-mails"><value>E-mails</value></prefix>
+<prefix name="e-mails.alert"><value>E-mail must be formed as following: account@domain.tld, multiple e-mails must be seperated with ; (semicolon)</value></prefix>
+
+<prefix name="www"><value>Website address</value></prefix>
+<prefix name="url.address.alert"><value>This is not an URL</value></prefix>
+
+<prefix name="event"><value>Event</value></prefix>
+<prefix name="place"><value>Place</value></prefix>
+<prefix name="start"><value>Event start</value></prefix>
+<prefix name="end"><value>Event end</value></prefix>
+
+<prefix name="authors"><value>Authors</value></prefix>
+<prefix name="add.author"><value>Add an author</value></prefix>
+<prefix name="add.author.help"><value>In these fields You may input document's authors names.</value></prefix>
+<prefix name="author"><value>Author</value></prefix>
+<prefix name="author.hint"><value>Input author's name and surname.</value></prefix>
+<prefix name="delete.author"><value>Delete author</value></prefix>
+
+<prefix name="document.content"><value>Document's content</value></prefix>
+<prefix name="document.content.help"><value>In this field You may input document's content. If You're using MS Internet Explorer version 5.5 or higher, You may use rich text formatting tools. If You're using other browser, You have to use HTML tags to format the text.</value></prefix>
+<prefix name="document.content.alert"><value>Entered content is not valid HTML code</value></prefix>
+
+<prefix name="document.sources.info"><value>Sources information</value></prefix>
+<prefix name="add.source"><value>Add source</value></prefix>
+<prefix name="source"><value>source</value></prefix>
+<prefix name="source.title"><value>Source title</value></prefix>
+
+<prefix name="delete.source"><value>Remove source</value></prefix>
+
+<prefix name="save.changes"><value>Save changes</value></prefix>
+</strings>

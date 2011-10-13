@@ -1,0 +1,56 @@
+#genericScreenHeader('Konfiguracja kalendarza v2')
+
+
+#set($from_component = true)
+#set($save_action = "$link.unsetView().action('structure.UpdateScreenPreferences').set('x',$node.id)")
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array("query_pool_id", "index_id" );
+
+function sendConfig()
+{
+    document.form1.action = "$save_action";
+    document.form1.target = "cyklotron_document_calendar_config_${cms_data.node.id}";
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+
+//-->
+</script>
+
+<form name="form1" method="post" action="">
+  <input type="hidden" name="node_id" value="$node.id">
+  <input type="hidden" name="config" value="" />
+<table border="0" class="genericScreen" width="100%">
+  <tr>
+    <td colspan="2" align="left">Źródło zestawu zapytań po kategoriach:</td>
+    <td>
+     <a href="#select_category_query_pool('name id' 'form1' 'query_pool_name query_pool_id')">wybierz</a>
+     <input type="text" name="query_pool_name" style="width:100%;" value="$!query_pool.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="query_pool_id" value="$!query_pool.id"/>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" align="left">Index / zestaw indexów:</td>
+    <td>
+     <a href="#select_index_pool('name id' 'form1' 'index_name index_id')">wybierz</a>
+     <input type="text" name="index_name" style="width:100%;" value="$!index.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="index_id" value="$!index.id"/>
+    </td>
+  </tr>
+</table>
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+  <a href="javascript:sendConfig()">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

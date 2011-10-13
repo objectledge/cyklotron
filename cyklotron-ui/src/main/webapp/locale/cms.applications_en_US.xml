@@ -1,0 +1,1205 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="banner">
+    <prefix name="components">
+      <prefix name="banner_view">
+        <prefix name="description">
+          <value>Displays banner on the page.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Show banner</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Allows displaying banners on pages and managing them.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Banners</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="cms">
+        <prefix name="banner">
+          <prefix name="banner">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>banner</value>
+            </prefix>
+            <prefix name="of">
+              <value>banner's</value>
+            </prefix>
+          </prefix>
+          <prefix name="banners">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>banners application node</value>
+            </prefix>
+            <prefix name="of">
+              <value>banners' application node</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="category">
+    <prefix name="components">
+      <prefix name="category_query_list">
+        <prefix name="description">
+          <value>Displays resources according to predefined category query.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Category query list.</value>
+        </prefix>
+      </prefix>
+      <prefix name="category_query_persistent_list">
+        <prefix name="description">
+          <value>Displays resources according to persistent category query.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Category query persistent list</value>
+        </prefix>
+      </prefix>
+      <prefix name="document_resource_list">
+        <prefix name="description">
+          <value>Displays documents from given category.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Document resource list</value>
+        </prefix>
+      </prefix>
+      <prefix name="holding_resource_list">
+        <prefix name="description">
+          <value>Displays resources from given category and in addition, allows to keep chosen resources displayed for a longer time.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Holding resource list</value>
+        </prefix>
+      </prefix>
+      <prefix name="related_resource_list">
+        <prefix name="description">
+          <value>Displays resources from the same category as currently displayed document.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Related resource list</value>
+        </prefix>
+      </prefix>
+      <prefix name="resource_list">
+        <prefix name="description">
+          <value>Displays resources from given category.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Resource list</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Allows categorizing resources in site.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Categories</value>
+    </prefix>
+    <prefix name="screens">
+      <prefix name="category_query_results">
+        <prefix name="description">
+          <value>Displays category query results.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Category query results.</value>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="components">
+    <prefix name="components">
+      <prefix name="empty">
+        <prefix name="description">
+          <value>Can be used to blank out unused component slots in a page.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Empty component</value>
+        </prefix>
+      </prefix>
+      <prefix name="screen">
+        <prefix name="description">
+          <value>Embedds an application screen in the page.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Application screen</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Components that don't belong in any other module.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Other componets</value>
+    </prefix>
+  </prefix>
+  <prefix name="documents">
+    <prefix name="components">
+      <prefix name="calendar_events">
+        <prefix name="description">
+          <value>Displays documents based on event information in them.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Calendar events.</value>
+        </prefix>
+      </prefix>
+      <prefix name="document_view">
+        <prefix name="description">
+          <value>Displays document embedded in given node.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Document view</value>
+        </prefix>
+      </prefix>
+      <prefix name="print_document">
+        <prefix name="description">
+          <value>Displays link to 'Print document' screen.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Print document</value>
+        </prefix>
+      </prefix>
+      <prefix name="propose_document">
+        <prefix name="description">
+          <value>Displays link to 'Document proposal' screen.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Document proposal</value>
+        </prefix>
+      </prefix>
+      <prefix name="recommend_document">
+        <prefix name="description">
+          <value>Displays link to 'Recommend document to your friend' screen.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Recommend document</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Base module</value>
+    </prefix>
+    <prefix name="name">
+      <value>Documents</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="document_node">
+        <prefix name="description">
+          <value>.</value>
+        </prefix>
+        <prefix name="name">
+          <value>document</value>
+        </prefix>
+        <prefix name="of">
+          <value>document</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="screens">
+      <prefix name="calendar">
+        <prefix name="description">
+          <value>Allows browsing and searching documents with event information.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Events calendar</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Search screen.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Search screen</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="calendar_events">
+        <prefix name="description">
+          <value>Allows browsing and searching documents with event information.</value>
+        </prefix>
+        <prefix name="name">
+          <value>New events calendar</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Search screen.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Search screen</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="print_document">
+        <prefix name="description">
+          <value>Displays document in print layout.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Print document</value>
+        </prefix>
+      </prefix>
+      <prefix name="propose_document">
+        <prefix name="description">
+          <value>Allows placing document proposal.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Document proposal</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Anonymous">
+            <item name="name">Welcome screen</item>
+            <item name="description">Allows logging in or proceeding to submitting a document anonymously.</item>
+          </prefix>
+          <prefix name="MyDocuments">
+            <item name="name">My Documents</item>
+            <item name="description">Allows browsing, editing, removing of documents submitted before, or submitting more.</item>
+          </prefix>
+          <prefix name="AddDocument">
+            <item name="name">Add Document</item>
+            <item name="description">Allows submission of a new document.</item>
+          </prefix>
+          <prefix name="DocumentCategory">
+            <item name="name">Set Document Category</item>
+            <item name="description">Allows set document main category.</item>
+          </prefix>
+          <prefix name="EditDocument">
+            <item name="name">Edit document</item>
+            <item name="description">Allows edition of document submitted before</item>
+          </prefix>
+          <prefix name="RemovalRequest">
+            <item name="name">Removal request</item>
+            <item name="description">Allows requesting removal of a document submitted before</item>
+          </prefix>
+          <prefix name="RedactorsNote">
+            <item name="name">Note from redactor</item>
+            <item name="description">Display redactor's note</item>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="recommend_document">
+        <prefix name="description">
+          <value>Allows recommending a document by email.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Recommend document to your friend</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="ClosePopup">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Popup closing.</value>
+            </prefix>
+          </prefix>
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Allows submitting information for recommendation.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Recommendation placing.</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="files">
+    <prefix name="components">
+      <prefix name="files">
+        <prefix name="description">
+          <value>Displays the list of files for given directory.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Repository view</value>
+        </prefix>
+      </prefix>
+      <prefix name="publicUpload">
+       <prefix name="description">
+          <value>Allow registered users uploading files for given directory.</value>
+       </prefix>
+       <prefix name="name">
+          <value>File upload</value>
+       </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Allows storing files in directories.</value>
+    </prefix>
+    <prefix name="name">
+      <value>File repository</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="cms">
+        <prefix name="files">
+          <prefix name="directory">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>directory</value>
+            </prefix>
+            <prefix name="of">
+              <value>directory's</value>
+            </prefix>
+          </prefix>
+          <prefix name="file">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>file</value>
+            </prefix>
+            <prefix name="of">
+              <value>file's</value>
+            </prefix>
+          </prefix>
+          <prefix name="files_map">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>directory</value>
+            </prefix>
+            <prefix name="of">
+              <value>directory's</value>
+            </prefix>
+          </prefix>
+          <prefix name="root_directory">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>directory</value>
+            </prefix>
+            <prefix name="of">
+              <value>directory's</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="forum">
+    <prefix name="components">
+      <prefix name="forum">
+        <prefix name="description">
+          <value>Displays complete forum.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Forum</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="add_message">
+            <prefix name="description">
+              <value>Allows adding new message.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Add message</value>
+            </prefix>
+          </prefix>
+          <prefix name="discussion_list">
+            <prefix name="description">
+              <value>Displays the list of discussions in the site.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Discussion list</value>
+            </prefix>
+          </prefix>
+          <prefix name="message">
+            <prefix name="description">
+              <value>Displays single message.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Message</value>
+            </prefix>
+          </prefix>
+          <prefix name="message_list">
+            <prefix name="description">
+              <value>Displays message list.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Message list</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="last_added">
+        <prefix name="description">
+          <value>Displays recently added messages.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Recently added messages</value>
+        </prefix>
+      </prefix>
+      <prefix name="node_comments">
+        <prefix name="description">
+          <value>Displays comments related with current document.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Comments</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="add_message">
+            <prefix name="description">
+              <value>Allows adding new comment.</value>
+            </prefix>
+            <prefix name="name">
+              <value>New comment</value>
+            </prefix>
+          </prefix>
+          <prefix name="message_list">
+            <prefix name="description">
+              <value>Displays comment list.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Comment list</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Allows running a discussion forum in your site.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Forum</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="cms">
+        <prefix name="forum">
+          <prefix name="commentary">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>comment</value>
+            </prefix>
+            <prefix name="of">
+              <value>comment</value>
+            </prefix>
+          </prefix>
+          <prefix name="discussion">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>discussion</value>
+            </prefix>
+            <prefix name="of">
+              <value>discussion</value>
+            </prefix>
+          </prefix>
+          <prefix name="forum">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>forum</value>
+            </prefix>
+            <prefix name="of">
+              <value>forum</value>
+            </prefix>
+          </prefix>
+          <prefix name="message">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>message</value>
+            </prefix>
+            <prefix name="of">
+              <value>message</value>
+            </prefix>
+          </prefix>
+          <prefix name="node">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>node</value>
+            </prefix>
+            <prefix name="of">
+              <value>node</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="screens">
+      <prefix name="forum">
+        <prefix name="description">
+          <value>Allows running a discussion forum in your site.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Forum</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Discussions">
+            <prefix name="description">
+              <value>Displays the list of available discussions.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Discussion list</value>
+            </prefix>
+          </prefix>
+          <prefix name="EditMessage">
+            <prefix name="description">
+              <value>Allows administrator edit message.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Edit message</value>
+            </prefix>
+          </prefix>
+          <prefix name="Message">
+            <prefix name="description">
+              <value>Displays single message in the discussion.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Message</value>
+            </prefix>
+          </prefix>
+          <prefix name="Messages">
+            <prefix name="description">
+              <value>Displayes the list of messages within given discussion.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Message list</value>
+            </prefix>
+          </prefix>
+          <prefix name="NewDiscussion">
+            <prefix name="description">
+              <value>Allows adding new discussion.</value>
+            </prefix>
+            <prefix name="name">
+              <value>New discussion</value>
+            </prefix>
+          </prefix>
+          <prefix name="NewMessage">
+            <prefix name="description">
+              <value>Allows adding new message.</value>
+            </prefix>
+            <prefix name="name">
+              <value>New message</value>
+            </prefix>
+          </prefix>
+          <prefix name="ModeratorTasks">
+            <prefix name="description">
+              <value>Allows administrator moderate forum.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Screen to moderate forum</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="httpfeed">
+    <prefix name="components">
+      <prefix name="feed_view">
+        <prefix name="description">
+          <value>Shows HTTP feed inside the page.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Show HTTP feed</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Allows insertion of external HTTP feeds into site pages.</value>
+    </prefix>
+    <prefix name="name">
+      <value>HTTP Feeds</value>
+    </prefix>
+  </prefix>
+  <prefix name="link">
+    <prefix name="components">
+      <prefix name="link_view">
+        <prefix name="description">
+          <value>Displays link collection.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Link collection</value>
+        </prefix>
+      </prefix>
+      <prefix name="propose_link">
+        <prefix name="description">
+          <value>Allows recommending a link to be adde to collecion.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Recommend link</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Allows building link collections and managing them.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Links</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="cms">
+        <prefix name="link">
+          <prefix name="cms_link">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>internal link</value>
+            </prefix>
+            <prefix name="of">
+              <value>internal link</value>
+            </prefix>
+          </prefix>
+          <prefix name="external_link">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>external link</value>
+            </prefix>
+            <prefix name="of">
+              <value>external link</value>
+            </prefix>
+          </prefix>
+          <prefix name="link_root">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Links application root node</value>
+            </prefix>
+            <prefix name="of">
+              <value>Links application root node</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="periodicals">
+    <prefix name="components">
+      <prefix name="email_periodicals">
+        <prefix name="description">
+          <value>Displays detailed information about given bulletin (email periodicals).</value>
+        </prefix>
+        <prefix name="name">
+          <value>Bulletins (email periodicals)</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="default">
+            <prefix name="description">
+              <value>Displays the list of bulletins in site and links to subsciption page.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Bulletin list</value>
+            </prefix>
+          </prefix>
+          <prefix name="details">
+            <prefix name="description">
+              <value>Displays detailed information about given bulletin.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Bulletin details</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="periodicals">
+        <prefix name="description">
+          <value>Displays the list of periodicals in site and archives for each periodical.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Periodicals</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="default">
+            <prefix name="description">
+              <value>Displays the list of periodicals in site</value>
+            </prefix>
+            <prefix name="name">
+              <value>Periodical list</value>
+            </prefix>
+          </prefix>
+          <prefix name="details">
+            <prefix name="description">
+              <value>Displays detailed information about given periodical.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Information about given periodical</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Allows publishing online periodicals and email subscription.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Periodical</value>
+    </prefix>
+    <prefix name="screens">
+      <prefix name="subscriptions">
+        <prefix name="description">
+          <value>Allows subscribing to new periodicals and checking current subscription status.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Subscription</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Confirm">
+            <prefix name="description">
+              <value>TODO.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Confirmation</value>
+            </prefix>
+          </prefix>
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Default screen for periodicals.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Default</value>
+            </prefix>
+          </prefix>
+          <prefix name="Edit">
+            <prefix name="description">
+              <value>TODO.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Edit</value>
+            </prefix>
+          </prefix>
+          <prefix name="NewTicket">
+            <prefix name="description">
+              <value>Request a new ticket.</value>
+            </prefix>
+            <prefix name="name">
+              <value>New ticket</value>
+            </prefix>
+          </prefix>
+          <prefix name="InvalidTicket">
+            <prefix name="description">
+              <value>Display information about invalid ticket.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Invalid ticket</value>
+            </prefix>
+          </prefix>
+          <prefix name="TicketSent">
+            <prefix name="description">
+              <value>Displays information about sent ticked.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Ticket sent</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="poll">
+    <prefix name="components">
+      <prefix name="poll">
+        <prefix name="description">
+          <value>Displays poll form on the page.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Display poll</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="already_voted">
+            <prefix name="description">
+              <value>Displays questions and 'results' link.</value>
+            </prefix>
+            <prefix name="name">
+              <value>After voting</value>
+            </prefix>
+          </prefix>
+          <prefix name="default">
+            <prefix name="description">
+              <value>Displays questions and 'vote' button.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Before voting</value>
+            </prefix>
+          </prefix>
+          <prefix name="results">
+            <prefix name="description">
+              <value>Displays poll results.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Poll results</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="poll_link">
+        <prefix name="description">
+          <value>Displays link to screen with pool content</value>
+        </prefix>
+        <prefix name="name">
+          <value>Show poll pool</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Allows you to run online polls and display their results.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Polls</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="cms">
+        <prefix name="poll">
+          <prefix name="poll">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>poll</value>
+            </prefix>
+            <prefix name="of">
+              <value>poll</value>
+            </prefix>
+          </prefix>
+          <prefix name="polls">
+            <prefix name="description">
+              <value>.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Polls application root node</value>
+            </prefix>
+            <prefix name="of">
+              <value>Polls application root node</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="screens">
+      <prefix name="pools">
+        <prefix name="description">
+          <value>Displays pools content</value>
+        </prefix>
+        <prefix name="name">
+          <value>Polls</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="PoolList">
+            <prefix name="description">
+              <value>Show pool list.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Pool list</value>
+            </prefix>
+          </prefix>
+          <prefix name="PoolView">
+            <prefix name="description">
+              <value>Show pool content.</value>
+            </prefix>
+            <prefix name="name">
+              <value>View pool</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+      <prefix name="voting">
+        <prefix name="description">
+          <value>Voting screen</value>
+        </prefix>
+        <prefix name="name">
+          <value>Voting</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Default voting screen.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Default</value>
+            </prefix>
+          </prefix>
+          <prefix name="Confirm">
+            <prefix name="description">
+              <value>Confirm ballot.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Confirm</value>
+            </prefix>
+          </prefix>
+          <prefix name="InvalidBallot">
+            <prefix name="description">
+              <value>Invalid ballot screen.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Invalid ballot</value>
+            </prefix>
+          </prefix>
+          <prefix name="BallotSent">
+            <prefix name="description">
+              <value>Ballot sent screen.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Ballot sent</value>
+            </prefix>
+          </prefix>
+          <prefix name="Results">
+            <prefix name="description">
+              <value>Display results.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Results</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="related">
+    <prefix name="components">
+      <prefix name="related">
+        <prefix name="description">
+          <value>Displays related resources list.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Related resources list</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Allows defining direct relations between resources.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Resource relations</value>
+    </prefix>
+  </prefix>
+  <prefix name="search">
+    <prefix name="components">
+      <prefix name="search_site">
+        <prefix name="description">
+          <value>Allows searching within current site.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Search in site</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Allows searching through system resources.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Search engine</value>
+    </prefix>
+    <prefix name="screens">
+      <prefix name="search_site">
+        <prefix name="description">
+          <value>Displays search results for given site.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Search results</value>
+        </prefix>
+        <prefix name="states">
+          <prefix name="Default">
+            <prefix name="description">
+              <value>Allows defining search query.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Search query</value>
+            </prefix>
+          </prefix>
+          <prefix name="Results">
+            <prefix name="description">
+              <value>Displays search results.</value>
+            </prefix>
+            <prefix name="name">
+              <value>Search results</value>
+            </prefix>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="security">
+    <prefix name="components">
+      <prefix name="login">
+        <prefix name="description">
+          <value>Contains login form.</value>
+        </prefix>
+        <prefix name="name">
+          <value>System login</value>
+        </prefix>
+      </prefix>
+      <prefix name="change_password">
+        <prefix name="description">
+          <value>Contains change password form.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Change password</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Security components.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Security</value>
+    </prefix>
+  </prefix>
+  <prefix name="structure">
+    <prefix name="components">
+      <prefix name="bread_crumb_navigation">
+        <prefix name="description">
+          <value>Displays the path from given to current node.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Bread crumb navigation</value>
+        </prefix>
+      </prefix>
+      <prefix name="dynamic_navigation">
+        <prefix name="description">
+          <value>Allows manual expanding and folding document tree nodes Windows Internet Explorer style. Warning! Generates severe system load, use only when really needed.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Dynamic navigation</value>
+        </prefix>
+      </prefix>
+      <prefix name="list_navigation">
+        <prefix name="description">
+          <value>Displays given part of document tree in a list form.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Navigation - list</value>
+        </prefix>
+      </prefix>
+      <prefix name="site_map_navigation">
+        <prefix name="description">
+          <value>Displays complete site document tree.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Site map</value>
+        </prefix>
+      </prefix>
+      <prefix name="tree_navigation">
+        <prefix name="description">
+          <value>Basic type of navigation used in web sites.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Tree navigation</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Base module allowing navigation node and documents editing.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Structure</value>
+    </prefix>
+    <prefix name="resources">
+      <prefix name="structure.navigation_node">
+        <prefix name="description">
+          <value>.</value>
+        </prefix>
+        <prefix name="name">
+          <value>navigation node</value>
+        </prefix>
+        <prefix name="of">
+          <value>navigation node</value>
+        </prefix>
+      </prefix>
+      <prefix name="documents.document_node">
+        <prefix name="description">
+          <value>.</value>
+        </prefix>
+        <prefix name="name">
+          <value>document</value>
+        </prefix>
+        <prefix name="of">
+          <value>document</value>
+        </prefix>
+      </prefix>
+      <prefix name="documents.document_alias">
+        <prefix name="description">
+          <value>.</value>
+        </prefix>
+        <prefix name="name">
+          <value>document alias</value>
+        </prefix>
+        <prefix name="of">
+          <value>document alias</value>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+
+  <prefix name="syndication">
+    <prefix name="components">
+      <prefix name="incoming_feed_view">
+        <prefix name="name">
+          <value>Show incoming web feed</value>
+        </prefix>
+        <prefix name="description">
+          <value>Shows a web feed inside the page.</value>
+        </prefix>
+      </prefix>
+      <prefix name="outgoing_feed_list">
+        <prefix name="name">
+          <value>Show list of outgoing web feeds</value>
+        </prefix>
+        <prefix name="description">
+          <value>Shows a list of outgoing web feeds inside the page.</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="description">
+      <value>Allows insertion of external web feeds into site pages and publication of feeds with document lists.</value>
+    </prefix>
+    <prefix name="name">
+      <value>Syndication</value>
+    </prefix>
+  </prefix>
+  
+  <prefix name="aggregation">
+    <prefix name="name">
+      <value>Aggregation</value>
+    </prefix>
+    <prefix name="description">
+      <value>Aggregation of documents from satellite sites to a central site.</value>
+    </prefix>
+  </prefix>
+  
+  <prefix name="statistics">
+    <prefix name="name">
+      <value>Statistics</value>
+    </prefix>
+    <prefix name="description">
+      <value>Statistics of site changes and editors activity.</value>
+    </prefix>
+  </prefix>
+
+  <prefix name="catalogue">
+    <item name="name">Catalogue</item>
+    <prefix name="screens">
+      <prefix name="index">
+        <item name="name">Catalogue index</item>
+        <item name="description">Displays catalogue index in tabular form.</item>
+        <prefix name="states">
+          <prefix name="Default">
+            <item name="description">Displays catalogue index in tabular form.</item>
+          </prefix>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>    
+  
+</strings>

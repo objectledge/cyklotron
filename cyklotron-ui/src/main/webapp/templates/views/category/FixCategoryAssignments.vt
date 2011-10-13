@@ -1,0 +1,70 @@
+
+
+#genericScreenHeader('Fixing categorization')
+
+#set($catLink = $link.set('cat_id',$category.id).view('category.EditCategory'))
+
+<table border="0" class="genericScreen" width="100%">
+    <tr>
+      <td align="right"><b>Name:</b></td>
+        <td>$category.name</td>
+    </tr>
+
+    <tr>
+      <td align="right" valign="top"><b>Description:</b></td>
+      <td width="90%">$category.description</td>
+    </tr>
+</table>
+
+
+<form name="form1" method="post" action="$catLink.action('category.RemoveResources')">
+
+<table border="0" class="genericScreen" width="100%">
+<tr><th colspan="3">
+  Resources assigned to this category scheduled for removal
+</th></tr>
+
+#if($resources.size() == 0)
+<tr><td colspan="3">
+  No resources scheduled for removal.
+</td></tr>
+#else
+##
+<tr>
+  <td><b>Id</b></td>
+  <td><b>Type</b></td>
+  <td><b>Name/path</b></td>
+</tr>
+#foreach($resource in $resources)
+<tr>
+  <td>$resource.id
+<input type="hidden" name="res_id" value="$resource.id" />
+  </td>
+  #set($definition = $cms_tool.getClassDefinition($resource))
+  <td><img src="$link.appResource("icons/rc/$definition.image")" ##
+    alt="$definition.name" title="$definition.name" /></td>
+  <td>$resource.name<br />
+      $resource.path</td>
+</tr>
+#end
+##
+#end
+
+</table>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="javascript:document.form1.submit();">Remove resource categorization</a>
+    <a href="$catLink">Cancel</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<cross-domain-policy>
+   <allow-access-from domain="www.mcmediaplayer.com" />
+</cross-domain-policy>
+
+<!-- Upload this file to the document root of your website, i.e. the same directory as your website home page.
+This will allow you to import your settings directly into the MC Media Player setup tool any time you like.
+You can delete this comment (3 lines).  -->

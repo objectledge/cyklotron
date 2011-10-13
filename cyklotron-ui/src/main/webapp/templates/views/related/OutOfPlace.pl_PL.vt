@@ -1,0 +1,74 @@
+#genericScreenHeader("ZAGUBIONE POWIĄZANIA")
+
+#foreach($s in $outOfPlace.keySet())
+<table class="genericScreen" width="100%">
+<tr>
+<th colspan="2">
+<a href="$link.self().set('site_id', $s.id)">$s.name</a>
+</th>
+</tr>
+#set($items = $outOfPlace.get($s))
+#foreach($i in $items)
+<tr>
+<td>
+#resource_view_link($i.node) &raquo; 
+#set($moveLink = $link.action('related.MoveOutOfPlace').set('rel_site', $i.relationSite.id).set('rel_resource', $i.node.id))
+</td>
+<td>
+<a href="$moveLink.set('rel_action', 'move')">przywróć wszystkie</a> <br/>
+<a href="$moveLink.set('rel_action', 'delete')">usuń wszystkie</a>
+</td>
+</tr>
+<tr>
+#foreach($t in $i.targets)
+<tr>
+<td widht="100%">
+&raquo; #resource_view_link($t) / $i.relationSite.name
+</td>
+<td>
+#set($moveLink = $link.action('related.MoveOutOfPlace').set('rel_site', $i.relationSite.id).set('rel_resource', $i.node.id).set('rel_target', $t.id))
+<a href="$moveLink.set('rel_action', 'move')">przywróć</a> |
+<a href="$moveLink.set('rel_action', 'delete')">usuń</a>
+#if($velocityCount < $i.targets.size())
+<br/>
+#end
+</td>
+</tr>
+#end
+#end
+<tr>
+<td>
+Cały serwis:
+</td>
+<td>
+#set($moveLink = $link.action('related.MoveOutOfPlace').set('rel_source_site', $s.id))
+<a href="$moveLink.set('rel_action', 'move')">przywróć wszystkie</a> <br/>
+<a href="$moveLink.set('rel_action', 'delete')">usuń wszystkie</a>
+</td>
+</tr>
+</table>
+<br/>
+#end
+#if(!$parametersTool.isDefined("site_id"))
+#if(!$outOfPlace.empty())
+<table class="genericScreen" width="100%">
+<tr>
+<th>
+Wszystkie serwisy
+</th>
+</tr>
+<tr>
+<td>
+#set($moveLink = $link.action('related.MoveOutOfPlace'))
+<a href="$moveLink.set('rel_action', 'move')">przywróć wszystkie</a> <br/>
+<a href="$moveLink.set('rel_action', 'delete')">usuń wszystkie</a>
+</td>		
+</tr>
+</table>
+#else
+<h4>Nie znaleziono zagubionych powiązań.</h4>
+#end
+#end
+
+#genericScreenTrailer()
+
