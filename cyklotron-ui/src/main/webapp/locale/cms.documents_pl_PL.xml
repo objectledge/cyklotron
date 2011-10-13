@@ -79,6 +79,7 @@
       <item name="internal">wewnętrzny</item>
       <item name="pattern">Wzorzec</item>
       <item name="reg_exp">wyrażenie regularne</item>
+      <item name="remove">usuń</item>
       <item name="title">Dymek</item>
       <item name="link_type">Typ odsyłacza</item>
       <item name="new_window">otwórz w nowym oknie</item>
@@ -100,6 +101,7 @@
       <item name="internal">wewnętrzny</item>
       <item name="pattern">Wzorzec</item>
       <item name="reg_exp">wyrażenie regularne</item>
+      <item name="remove">usuń</item>
       <item name="title">Dymek</item>
       <item name="link_type">Typ linka</item>
       <item name="new_window">otwórz w nowym oknie</item>

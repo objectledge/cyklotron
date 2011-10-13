@@ -54,6 +54,7 @@ public class ChooseCategory extends BaseCMSScreen
 				globalState.setRootId(globalRootId);
 				globalState.setTreeView(true);
 				globalState.setShowRoot(true);
+				globalState.setSortColumnName("name");
 				globalState.setExpanded(globalRootId);	
 				globalState.setPageSize(0);
             }
@@ -71,6 +72,7 @@ public class ChooseCategory extends BaseCMSScreen
 					localState.setRootId(localRootId);
 					localState.setTreeView(true);
 					localState.setShowRoot(true);
+					localState.setSortColumnName("name");
 					localState.setExpanded(localRootId);	
 					localState.setPageSize(0);
 				}

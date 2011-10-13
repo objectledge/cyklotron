@@ -21,8 +21,12 @@ function select(name, id)
   <tr>
     <td>
       #tableView_linesAndFolders($global_table $row $tableLink)
-      $row.object.name
-      <a href="javascript:select('$row.object.name','$row.object.id')">choose</a>
+      #if($global_table.rootRow == $row)
+       global categories
+      #else
+       $row.object.name
+       <a href="javascript:select('$row.object.name','$row.object.id')">choose</a>
+      #end
     </td>
   </tr>
 #end
@@ -37,8 +41,12 @@ function select(name, id)
   <tr>
     <td>
       #tableView_linesAndFolders($local_table $row $tableLink)
-      $row.object.name
-      <a href="javascript:select('$row.object.name','$row.object.id')">choose</a>
+      #if($local_table.rootRow == $row)
+       site categories
+      #else
+       $row.object.name
+       <a href="javascript:select('$row.object.name','$row.object.id')">choose</a>
+      #end
     </td>
   </tr>
 #end

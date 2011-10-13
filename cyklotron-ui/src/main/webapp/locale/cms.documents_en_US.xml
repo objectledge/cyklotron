@@ -78,6 +78,7 @@
       <item name="internal">internal</item>
       <item name="pattern">Pattern</item>
       <item name="reg_exp">regular expression</item>
+      <item name="remove">remove</item>
       <item name="title">Tool tip</item>
       <item name="link_type">Link type</item>
       <item name="new_window">open new window</item>
@@ -99,6 +100,7 @@
       <item name="internal">internal</item>
       <item name="pattern">Pattern</item>
       <item name="reg_exp">regular expression</item>
+      <item name="remove">remove</item>
       <item name="title">Tool tip</item>
       <item name="link_type">Link type</item>
       <item name="new_window">open new window</item>

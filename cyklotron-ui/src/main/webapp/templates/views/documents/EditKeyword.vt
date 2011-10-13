@@ -49,6 +49,11 @@ $pageTool.addScriptLink('script/Forms.js')
               Forms.setValue('edit_keyword', 'link_type', 'internal');
               selectNode('relative_path', 'edit_keyword', 'href_internal', '$link.view('popup.NodeList').set('root',$cms_data.getHomePage().id)');
           }
+          function removeCategory()
+          {
+				Forms.setValue('edit_keyword', 'category_id', '');
+				Forms.setValue('edit_keyword', 'category_name', '');
+          }
           </script>
           <a href="javascript:selectLinkTarget();">$ui_labels.get('choose')</a>
        </td>
@@ -84,6 +89,7 @@ $pageTool.addScriptLink('script/Forms.js')
     	</td>
     	<td align="left" class="actionlink">
     		<a href="#select_category('id name' 'edit_keyword' 'category_id category_name')">$ui_labels.get('choose')</a>
+    		<a href="javascript:removeCategory();">$ui_labels.get('remove')</a>
     	</td>
     </tr>
     <tr>
