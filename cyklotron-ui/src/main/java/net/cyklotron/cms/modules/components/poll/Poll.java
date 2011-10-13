@@ -64,7 +64,7 @@ public class Poll extends SkinableCMSComponent
             {
                 templatingContext.put("already_voted",Boolean.TRUE);
             }
-
+            templatingContext.put("voteBaseUrl", pollService.getVoteBaseUrl(httpContext));
 
             String instanceName = (String)(templatingContext.get(CMSComponentWrapper.INSTANCE_PARAM_KEY));
             templatingContext.put("result_scope", "poll_"+instanceName);
