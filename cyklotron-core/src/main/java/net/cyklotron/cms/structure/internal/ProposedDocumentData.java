@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -127,6 +128,12 @@ public class ProposedDocumentData
     private List<Resource> attachments;
 
     private List<String> attachmentDescriptions;
+    
+    private String contentMovie;
+    
+    private boolean contentMovieEnabled;
+    
+    public static String CONTENT_MOVIE_ID = "embeddedMedia";
 
     private boolean removalRequested;
 
@@ -170,6 +177,7 @@ public class ProposedDocumentData
         attachmentDirId = configuration.getLong("attachments_dir_id", -1L);
         addDocumentVisualEditor = configuration.getBoolean("add_document_visual_editor", false);
         clearOrganizationIfNotMatch = configuration.getBoolean("clear_org_if_not_match", false);
+        contentMovieEnabled = configuration.getBoolean("content_movie_enabled", false);
     }
 
     public void fromParameters(Parameters parameters, CoralSession coralSession)
@@ -232,8 +240,12 @@ public class ProposedDocumentData
                 }
             }
         }
+        if(contentMovieEnabled)
+        {
+            contentMovie = stripTags(DocumentMetadataHelper.dec(parameters.get("content_movie", "")));
+        }
     }
-
+    
     /**
      * Transfers the data into the templating context.
      * <p>
@@ -281,6 +293,11 @@ public class ProposedDocumentData
             }
             templatingContext.put("attachment_descriptions", DocumentMetadataHelper.enc(attachmentDescriptions));
         }
+        if(contentMovieEnabled)
+        {
+            templatingContext.put("content_movie_enabled", contentMovieEnabled);
+            templatingContext.put("content_movie", contentMovie);
+        }
         templatingContext.put("editorial_note", DocumentMetadataHelper.enc(editorialNote));
         templatingContext.put("add_document_visual_editor", addDocumentVisualEditor);
         templatingContext.put("clear_org_if_not_match", clearOrganizationIfNotMatch);
@@ -313,6 +330,10 @@ public class ProposedDocumentData
             sourceUrl = stripTags(selectFirstText(metaDom, "/meta/sources/source/url"));
             proposerCredentials = stripTags(selectFirstText(metaDom, "/meta/authors/author/name"));
             proposerEmail = stripTags(selectFirstText(metaDom, "/meta/authors/author/e-mail"));
+            if(contentMovieEnabled)
+            {
+                contentMovie = getMovieFromContent();
+            }
         }
         catch(HTMLException e)
         {
@@ -437,6 +458,7 @@ public class ProposedDocumentData
                         + node.getId() + " error. " + e.getMessage());
                 }
             }
+            contentMovie = getMovieFromContent();
             removalRequested = selectFirstText(proposalDom, "/document/request").equals("remove");
             long originId = Long.parseLong(selectFirstText(proposalDom, "/document/origin/ref"));
             origin = NavigationNodeResourceImpl.getNavigationNodeResource(coralSession, originId);
@@ -533,15 +555,6 @@ public class ProposedDocumentData
                 setValidationFailure("invalid_html");
                 return false;
             }
-            else
-            {
-                htmlService.collapseSubsequentBreaksInParas(contentDom);
-                htmlService.trimBreaksFromParas(contentDom);
-                htmlService.removeEmptyParas(contentDom);
-                StringWriter contentWriter = new StringWriter();
-                htmlService.dom4jToText(contentDom, contentWriter, true);
-                content = contentWriter.toString();
-            }
         }
         catch(HTMLException e)
         {
@@ -622,6 +635,11 @@ public class ProposedDocumentData
     public int getAttachmentsMaxCount()
     {
         return attachmentsMaxCount;
+    }
+    
+    public boolean isContentMovieEnabled()
+    {
+        return contentMovieEnabled;
     }
 
     // getters
@@ -785,6 +803,11 @@ public class ProposedDocumentData
     {
         return attachments;
     }
+    
+    public String getContentMovie()
+    {
+        return contentMovie;
+    }
 
     public void setTitle(String title)
     {
@@ -905,6 +928,11 @@ public class ProposedDocumentData
         attachmentDescriptions.remove(index);
         return file;
     }
+    
+    public void setAttachmentMovie(String attachmentMovie)
+    {
+        this.contentMovie = attachmentMovie;
+    }
 
     public boolean isRemovalRequested()
     {
@@ -955,6 +983,42 @@ public class ProposedDocumentData
         }
     }
 
+    
+    public void addContent(HTMLService htmlService)
+        throws ProcessingException
+    {
+        try
+        {
+            if(!addDocumentVisualEditor)
+            {
+                content = makePara(stripTags(content));
+            }
+            StringWriter errorWriter = new StringWriter();
+            Document contentDom = htmlService.textToDom4j(content, errorWriter, "proposeDocument");
+            if(contentDom == null)
+            {
+                throw new ProcessingException("HTML processing failure");
+            }
+            else
+            {
+                if(contentMovieEnabled && !contentMovie.isEmpty())
+                {
+                    addMovieToContent(contentDom);
+                }
+                htmlService.collapseSubsequentBreaksInParas(contentDom);
+                htmlService.trimBreaksFromParas(contentDom);
+                htmlService.removeEmptyParas(contentDom);
+                StringWriter contentWriter = new StringWriter();
+                htmlService.dom4jToText(contentDom, contentWriter, true);
+                content = contentWriter.toString();
+            }
+        }
+        catch(HTMLException e)
+        {
+            throw new ProcessingException("HTML processing failure", e);
+        }
+    }
+    
     /**
      * Filters document content according to 'proposeDocument' cleanup profile. This method is
      * called when creating change proposal from document to avoid showing document author any
@@ -1000,6 +1064,33 @@ public class ProposedDocumentData
         content = cleanupContent(content, htmlService);
     }
 
+    public void addMovieToContent(Document contentDom)
+        throws HTMLException
+    {
+        Element body = contentDom.getRootElement().element("BODY");
+        Element iframeElement = DocumentHelper.createElement("IFRAME");
+        iframeElement.addAttribute("src", contentMovie);
+        Element movieElement = DocumentHelper.createElement("SPAN");
+        movieElement.addAttribute("id", CONTENT_MOVIE_ID);
+        movieElement.add(iframeElement);
+        body.content().add(0, movieElement);
+    }
+    
+    public String getMovieFromContent()
+        throws HTMLException
+    {
+        String xpathAttachmentMovie = "//SPAN[@id='" + CONTENT_MOVIE_ID + "']/IFRAME";
+        Document contentDom = textToDom4j("<HTML><BODY>\n" + content + "\n</BODY></HTML>");
+        
+        Element body = contentDom.getRootElement().element("BODY");
+        List<Element> elements = body.selectNodes(xpathAttachmentMovie);
+        if(elements.size() == 1)
+        {
+            return elements.get(0).attributeValue("src", "");
+        }
+        return "";
+    }
+    
     private void setDate(TemplatingContext templatingContext, String key, Date value)
     {
         if(value != null)

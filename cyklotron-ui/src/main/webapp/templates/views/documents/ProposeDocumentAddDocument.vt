@@ -204,6 +204,47 @@ function addOrganization(i)
     </td>
   </tr>
 #end
+#if($content_movie_enabled)
+  <style type="text/css">
+    #display_content_movie #embeddedMedia iframe{width:300px;height:200px;}
+  </style>
+  <script>
+   function appendMovieFrame()
+   {
+     var movie_source = jQuery("#content_movie_input").val();
+     if(movie_source!=''){
+       movie_source = getMovieSourcePath(movie_source);
+       if(jQuery("#embeddedMedia IFRAME").size() > 0){
+         jQuery("#embeddedMedia IFRAME").attr('src', movie_source);
+       }else{
+         jQuery("#display_content_movie").append('<SPAN id="embeddedMedia"><IFRAME src="'+movie_source+'">&nbsp;</IFRAME></SPAN>');
+       }
+       jQuery("#content_movie_input").hide();
+       jQuery("#content_movie_button").attr('onClick','removeMovieFrame();').val('remove');
+     }else{
+       removeMovieFrame();
+     }
+     jQuery("#content_movie").val(movie_source);
+   }
+   function removeMovieFrame()
+   {
+      jQuery("#embeddedMedia").remove();
+      jQuery("#content_movie").val('');
+      jQuery("#content_movie_input").val('');
+      jQuery("#content_movie_input").show();
+      jQuery("#content_movie_button").attr('onClick','appendMovieFrame();').val('add');
+   }
+  </script>
+  <tr>
+	<td>Attached movie</td>
+	<td>You may attach movie from youtube or vimeo. To attach movie, paste url to movie site.<br/>
+		<input type="hidden" id="content_movie_src" name="attachment_movie" value="" />
+		<input type="input" id="content_movie" style="width: 100%;" name="content_movie_input" />
+		<input type="button" id="content_movie_button" onClick="appendMovieFrame();" value="add" style="float:right;">
+		<div id="display_content_movie"></div>
+	</td>
+  </tr>
+#end
 #if($add_captcha)
   <tr>
     <td>Captcha verification</td>
