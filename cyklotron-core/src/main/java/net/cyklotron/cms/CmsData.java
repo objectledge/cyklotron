@@ -70,6 +70,8 @@ public class CmsData
     private Parameters systemPreferences;
     private SiteResource globalComponentsDataSite;
     private String skinName;
+
+    private boolean skinNameOverridden;
     
     private Date date;
 
@@ -237,13 +239,15 @@ public class CmsData
                 throw new ProcessingException("globalComponentsData is set to noexistent site "+globalComponentsDataSiteName);
             }
         }
-        if(parameters.isDefined("site_skin"))
+        if(parameters.isDefined(CmsConstants.SKIN_OVERRIDE))
         {
-            skinName = parameters.get("site_skin");
+            skinName = parameters.get(CmsConstants.SKIN_OVERRIDE);
+            skinNameOverridden = true;
         } 
         else
         {
             skinName = preferences.get("site.skin","default");
+            skinNameOverridden = false;
         }
     }
     
@@ -432,6 +436,14 @@ public class CmsData
         return skinName;
     }
     
+    /**
+     * Checks if skin was overridden using request parameters
+     */
+    public boolean isSkinNameOverriden()
+    {
+        return skinNameOverridden;
+    }
+
     /**
      * Override the skin for the duration of the current request.
      */

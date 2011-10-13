@@ -64,4 +64,6 @@ public interface CmsConstants
     public static String BROWSE_MODE_EXPORT = "export"; 
 
     public static String CMS_DATE_KEY = "cms_date";
+
+    public static String SKIN_OVERRIDE = "site_skin";
 }

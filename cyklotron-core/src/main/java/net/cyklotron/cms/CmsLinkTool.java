@@ -153,7 +153,12 @@ public class CmsLinkTool extends LinkTool
         throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
-        return view("RenderComponent").set("node_id", cmsData.getNode().getId()).set(
+        LinkTool link = view("RenderComponent").set("node_id", cmsData.getNode().getId()).set(
             "component_instance", instanceName);
+        if(cmsData.isSkinNameOverriden())
+        {
+            link = link.set(CmsConstants.SKIN_OVERRIDE, cmsData.getSkinName());
+        }
+        return link;
     }
 }
