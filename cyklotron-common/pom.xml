@@ -353,7 +353,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>2.2-beta-5</version>
+          <version>2.2.1</version>
           <configuration>
             <archive>
               <manifestEntries>
@@ -363,6 +363,21 @@
             </archive>
           </configuration>         
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+        <plugin>
+          <groupId>de.jflex</groupId>
+          <artifactId>maven-jflex-plugin</artifactId>
+          <version>1.4.3</version>
+        </plugin>     
+        <plugin>
+          <groupId>org.objectledge.maven.plugins</groupId>
+          <artifactId>ckpackager-maven-plugin</artifactId>
+          <version>1.0.0</version>
+        </plugin>   
       </plugins>
     </pluginManagement>
     <plugins>
