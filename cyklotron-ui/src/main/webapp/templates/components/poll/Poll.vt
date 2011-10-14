@@ -8,6 +8,12 @@
 ##
 ##
 
+$pageTool.addScriptLink('script/poll/Poll.js')##
+<script type="text/javascript">
+ var poll = new Poll("$poll.id", "$component_instance", "${voteBaseUrl}/view/poll.ajax.Poll?action=poll.RespondPoll","${voteBaseUrl}/view/poll.ajax.Poll");
+ jQuery(document).ready(function(){ poll.fetch(); });
+</script>
+
 #set($component_instance = $cms_data.component.instanceName)
 #if($result_scope == "poll_$component_instance")
 #result_inline_message('results.poll')
@@ -22,6 +28,7 @@
  #set($cmsLink = $link.set('x',$x))
 #end
 
+<div id="voting">
   <form name="form_$component_instance" method="post" action="$cmsLink.action("poll.RespondPoll")" class="defaultForm">
   <input type="hidden" name="pid" value="$poll.id">
   <input type="hidden" name="poll_instance" value="$component_instance">
@@ -37,43 +44,78 @@
       <td>
       Question: $questions.get($questionKey).getTitle() <br>
         #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
+            #set($answer = $questions.get($questionKey).getAnswers().get($answerKey))
           <tr><td>
-            <input type="radio" id="answer_${poll.id}_$questionKey_$answerKey" name="question_$questionKey" value="$questions.get($questionKey).getAnswers().get($answerKey).getId()">
-            <label for="answer_${poll.id}_$questionKey_$answerKey">$questions.get($questionKey).getAnswers().get($answerKey).getTitle()</label>
+            <input type="radio" id="answer-${answer.id}" name="question_$questionKey" value="$answer.getId()">
+            <label for="answer-${answer.id}">$answer.getTitle()</label>
           </td></tr>
         #end
       </td>
     </tr>
     #end
 
-    #if($already_voted)
-    <tr>
-      <td>
-       Thank you for voting!
-      </td>
-    </tr>
-    #else
     <tr>
       <td NOWRAP class="usualbutton">
-      <script language="javascript">
-	function answerPoll()
-	{
-          document.form_${instance}.submit();
-	}
-      </script>
-      <a href="javascript:answerPoll()">Vote!</a>
+      <a id="sendVote" href="#vote">Vote!</a>
       </td>
     </tr>
-    #end
-      
     <tr>
      <td>
-       <a href="$cmsLink.set('poll_action', 'results').set('poll_instance', $component_instance).set('pid', $poll.id)">See results</a>
+       <a id="showResults" href="#vote">See results</a>
      </td>
     </tr>
 
    </table>
   </form>
+</div>
+<div id="results" style="display:none;"> 
+ <table class="titleTable">
+    <tr>
+      <td>
+        Poll results - number of answers: <b id="totalVotes">$!count</b>
+      </td>
+    </tr>
+  </table>
+
+  <table class="defaultTable">
+    <tr>
+      <th align="left">
+        <b>Poll title:</b>
+      </th>
+      <td>
+        $poll.getName()
+      </td>
+    </tr>
+
+    <tr>
+      <td align="left">
+        <b>Opis:</b>
+      </td>
+      <td>
+       $!poll.getDescription()
+      </td>
+    </tr>
+
+    #foreach($questionKey in $questionKeys)
+    <tr>
+      <td>
+      Question: $questions.get($questionKey).getTitle() <br>
+        #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
+          #set($answer = $questions.get($questionKey).getAnswers().get($answerKey))
+          <tr><td>
+              $answer.getTitle() - <span id="votes_for_answer-${answer.id}"></span> 
+         </td></tr>
+        #end
+      </td>
+    </tr>
+    <tr>
+      <td align="left">
+        <hr>
+      </td>
+    </tr>
+    #end
+   </table>
+</div>
 
 #else
   <table class="defaultTable">
