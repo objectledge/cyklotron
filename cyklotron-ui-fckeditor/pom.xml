@@ -11,13 +11,6 @@
   <packaging>war</packaging>
   <name>Cyklotron UI CKEditor plugin</name>
   <description>Drop-in replacement for ledge-forms-fckeditor customized for Cyklotron CMS</description>
-  <dependencies>
-    <dependency>
-      <groupId>org.cyklotron</groupId>
-      <artifactId>cyklotron-common</artifactId>
-      <type>pom</type>
-    </dependency>
-  </dependencies>
   <build>
     <plugins>
       <plugin>
