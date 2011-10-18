@@ -1,0 +1,112 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="already_exists">
+      <value>.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="created_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="directory_name_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="invalid_directory_name">
+      <value>Directory name can only contain letters, digits and followin characters: '.' , '-' ,'_'. Change directory name and try again.</value>
+    </prefix>
+    <prefix name="invalid_file_name">
+      <value>File name can only contain letters, digits and followin characters: '.' , '-' ,'_'. Insert new file name into Item name field.</value>
+    </prefix>
+    <prefix name="invalid_item_name">
+      <value>Item name can only contain letters, digits and followin characters: '.' , '-' ,'_'. Change item name and try again.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="uploaded_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="some_files_not_deleted">
+      <value>Some files are in use or you have not enought priviledges to delete them.</value>
+    </prefix>
+    
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="already_exists">
+      <value>The file or directory already exists.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>Changed successfully.</value>
+    </prefix>
+    <prefix name="created_successfully">
+      <value>Created successfully.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Deleted successfully.</value>
+    </prefix>
+    <prefix name="directory_name_empty">
+      <value>No directory name.</value>
+    </prefix>
+    <prefix name="file_type_not_allowed">
+      <value>File type not allowed.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Exception occured.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Illegal parameter</value>
+    </prefix>
+    <prefix name="invalid_directory_name">
+      <value>Invalid directory name.</value>
+    </prefix>
+    <prefix name="invalid_file_name">
+      <value>Invalid file name.</value>
+    </prefix>
+    <prefix name="invalid_item_name">
+      <value>Invalid item name.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Parameter not found.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Updated successfully.</value>
+    </prefix>
+    <prefix name="uploaded_successfully">
+      <value>Uploaded successfully.</value>
+    </prefix>
+    <prefix name="not_uploaded_correctly">
+      <value>Not uploaded correctly.</value>
+    </prefix>
+    <prefix name="directory_not_empty">
+      <value>Directory not empty.</value>
+    </prefix>
+    <prefix name="file_in_use">
+      <value>File is used by system.</value>
+    </prefix>
+    <prefix name="some_files_not_deleted">
+      <value>Some files couldn't be deleted.</value>
+    </prefix>
+    <prefix name="file_size_exceeded">
+      <value>File size exceeding the limit defined by the Administrator.</value>
+    </prefix>
+  </prefix>
+</strings>

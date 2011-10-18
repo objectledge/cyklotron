@@ -1,0 +1,231 @@
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.core.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.widget.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.position.js')##
+$pageTool.addScriptLink('script/jquery/ui/ui.autocomplete.js')##
+$pageTool.addScriptLink('script/jquery/ui/plugin/jquery.autocomplete.js')##
+$pageTool.addScriptLink("script/ngodatabase/autocomplete.js")##
+$pageTool.addScriptLink("script/urlsformatter.js")##
+$pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.base.css')##
+$pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.theme.css')##
+$pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
+##
+#set($nodeLink = $link.set('x',$parametersTool.get('x','-1')))
+#set($formAction = $nodeLink.action('structure.ProposeDocument'))
+##
+
+<script>
+   jQuery(document).ready(function()
+   {
+     initProposeDocumentAutocomplete(5, '$link.view('ngodatabase.JsonOrganizations')', '$link.view('ngodatabase.JsonLocations')', $clear_org_if_not_match);
+   });
+   
+   function formatUrlFileds()
+   {
+      convertProposeDocumentUrlFileds(5);
+   }
+</script>
+
+##
+#genericScreenHeader('Propozycja dokumentu')
+
+#result_inline_message('results.structure')
+
+<form name="propose_document" method="post" enctype="multipart/form-data" action="$formAction">
+
+<table border="0" class="genericScreen" width="100%" cellspacing="0">
+  <input type="hidden" name="name" value="$format_date.pattern("yyyyMMddHHmmssSSSS").format($format_date.now())">
+  <tr>
+    <td width='50%'>Tytuł:</td>
+    <td width='50%'><input type="text" name="title" style="width: 100%;" value="$!title" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Skrót:</td>
+    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="abstract">$!abstract</textarea></td>
+  </tr>
+
+  <tr>
+    <td>Treść dokumentu:</td>
+	#if($add_document_visual_editor)
+    <td>#simple_html_editor('content' 'style.css' '100%' '300' $content)</td>
+	#else
+    <td><textarea rows="" cols="" style="width: 100%; height:10em;" name="content">$!content</textarea></td>	
+	#end
+  </tr>
+  
+  <tr>
+    <td>Miejsce wydarzenia:</td>
+    <td><input type="text" name="event_place" style="width: 100%;" value="$!event_place" maxlength="150"></td>
+  </tr>
+  
+  <tr>
+    <td>Adres wydarzenia(Ulica):</td>
+    <td> 
+        <input type="text" id="event_street" name="event_street" style="width: 100%;" value="$!event_street" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Adres wydarzenia(Kod pocztowy):</td>
+    <td> 
+       <input type="text" id="event_postCode" name="event_postCode" style="width: 100%;" value="$!event_postCode" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Adres wydarzenia(Miasto):</td>
+    <td> 
+       <input type="text" id="event_city" name="event_city" style="width: 100%;" value="$!event_city" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Adres wydarzenia(Województwo):</td>
+    <td> 
+      <input type="text" id="event_province" name="event_province" style="width: 100%;" value="$!event_province" maxlength="150">
+    </td>
+  </tr>
+  
+  <tr>
+    <td>Data wydarzenia od:</td>
+    <td>#dateSelectorOptionalTS("event_start" $event_start "brak")</td>
+  </tr>
+  <tr>
+    <td>Data wydarzenia do:</td>
+	<td>#dateSelectorOptionalTS("event_end" $event_end "brak")</td>
+  </tr>
+
+  <tr>
+    <td>Początek wyświetlania ogłoszenia:</td>
+    <td>#dateSelectorOptionalTS("validity_start" $validity_start "teraz")</td>
+  </tr>
+  
+  <tr>
+    <td>Koniec wyświetlania ogłoszenia:</td>
+    <td>#dateSelectorOptionalTS("validity_end" $validity_end  "bezterminowo")</td>
+  </tr>
+</table>
+
+#set($orgFields = [['name','Organizacja'],['province','Adres organizacji (Województwo)'],['postCode','Adres organizacji (Kod pocztowy)'],['city','Adres organizacji (Miasto)'],['street','Adres organizacji (Ulica)'],['phone','Telefon organizacji'],['fax','Fax organizatora'],['email','Adres e-mail organizatora'],['www','Adres WWW organizatora']])
+#set($max_organizations = 5)
+<script>
+   function addOrganization(i)
+   {
+      document.getElementById('organization_' + i).style.display = 'inline';
+   }
+</script>
+
+#foreach($index in [1 .. $max_organizations]) ## organization loop
+#set($orgIdKey = "organization_${index}_id")
+<div id='organization_${index}' #if($index==1 || $templatingContext.containsKey($orgIdKey)) style="display:block;" #else style="display:none;" #end>
+ <table border="0" class="genericScreen" width="100%" cellspacing="0">
+  <input type="hidden" id="$orgIdKey" name="$orgIdKey" value="$!templatingContext.get($orgIdKey)">
+  #foreach($orgFiled in $orgFields) 
+   #set($key = "organization_${index}_${orgFiled.get(0)}")
+   <tr>
+    <td width='50%'>#if($index!=1 && $orgFiled.get(0)=='name') kolejna #end ${orgFiled.get(1)}:</td>
+    <td width='50%'>
+         <input type="text" id="$key" name="$key" style="width: 100%;" value="$!templatingContext.get($key)" maxlength="150">
+    </td>
+   </tr>
+  #end ## field loop
+  #if($index+1 < $max_organizations)
+   <tr>
+    <td></td>
+    <td><input type="button" onClick="javascript:addOrganization($index+1)" value="dodaj kolejną organizację" style="float:right;"></td>
+   </tr>
+  #end
+ </table>
+</div>
+#end ## organization loo
+
+<table border="0" class="genericScreen" width="100%" cellspacing="0">  
+  <tr>
+    <td width='50%'>Źródło informacji:</td>
+    <td width='50%'><input type="text" name="source_name" style="width: 100%;" value="$!source_name" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Adres WWW źródła informacji:</td>
+    <td><input type="text" name="source_url" style="width: 100%;" value="$!source_url" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Imię i nazwisko osoby wprowadzającej:</td>
+    <td><input type="text" name="proposer_credentials" style="width: 100%;" value="$!proposer_credentials" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Adres email osoby wprowadzającej:</td>
+    <td><input type="text" name="proposer_email" style="width: 100%;" value="$!proposer_email" maxlength="150"></td>
+  </tr>
+
+  <tr>
+    <td>Uwagi dodatkowe:</td>
+    <td><textarea rows="" cols="" style="width: 100%; height:3em;"
+    name="description">$!description</textarea></td>
+  </tr>
+  
+  #if($categories_1.size() > 0)
+  <tr>
+    <td>Wybierz kategorię</td>
+    <td>
+  	  <select name="selected_categories">
+	  	<option value="-1">---</option>
+	  	#foreach($category in $categories_1)  
+	  	<option value="$category.id"#if($selected_categories.contains($category)) selected#end>$category.name</option>
+	  	#end
+	  </select>
+    </td>
+  </tr>
+  #end
+  #if($categories_2.size() > 0)
+  <tr>
+    <td>Wybierz kategorię główną</td>
+    <td>
+	  <select name="selected_categories">
+	  	<option value="-1">---</option>	  
+	  	#foreach($category in $categories_2)  
+	  	<option value="$category.id"#if($selected_categories.contains($category)) selected#end>$category.name</option>
+	  	#end
+	  </select>
+    </td>
+  </tr>
+  #end  
+#if($attachments_enabled and $attachments_max_count > 0 and $attachments_max_size > 0)
+  <tr>
+	<td>Powiązane pliki</td>
+	<td>Możesz dołączyć do dokumentu plik(i) o rozmiarze do $attachments_max_size kB nastepujących typów: $attachments_allowed_formats <br/>
+	#foreach($i in [1 .. $attachments_max_count])
+		plik ${i} <input type="file" name="attachment_${i}" /> <br/>
+		opis pliku ${i} <input type="text" name="attachment_description_${i}" style="width:80%;" value="$!attachmentDescriptions.get(i)"> <br/> 
+	#end
+	</td>
+  </tr>
+#end 
+#if($add_captcha)
+  <tr>
+    <td>Weryfikacja Captcha</td>
+    <td>
+       $captcha.createCaptchaWidget()
+    </td>
+  </tr>
+#end 
+</table>
+
+</form>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+#if($cms_data.userData.hasPermission($parent_node, "cms.structure.submit"))
+    <a OnClick="javascript:formatUrlFileds();" href="javascript:document.propose_document.submit();">Dodaj dokument</a>
+#end
+  </div>
+</div>
+
+#genericScreenTrailer()

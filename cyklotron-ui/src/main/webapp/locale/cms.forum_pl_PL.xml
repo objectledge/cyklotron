@@ -1,0 +1,19 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="DeleteMessages">
+    <prefix name="strings">
+      <item name="title">Skasuj wybrane posty/komentarze</item>
+    </prefix>
+    <prefix name="labels">
+      <item name="name">Nazwa</item>
+      <item name="path">Ścieżka</item>
+      <item name="system-name">Nazwa systemowa</item>
+      <item name="description">-</item>
+      <item name="title">Tytuł</item>
+      <item name="no_nodes">Nie wybrano żadnego dokumentu</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="continue">Skasuj</item>
+      <item name="cancel">Anuluj</item>
+    </prefix>
+  </prefix>
+</strings>
