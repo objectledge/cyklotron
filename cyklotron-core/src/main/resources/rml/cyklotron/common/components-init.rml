@@ -1,0 +1,39 @@
+#
+# Initial script for the CMS special components subsystem
+#
+# author <a href="mailto:dgajda@ngo.pl">Damian Gajda</a>
+# version $Id: components-init.rml,v 1.6 2007-02-25 11:16:50 rafal Exp $
+#
+
+ECHO ' - components';
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 99,
+  enabled = true,
+  required = true
+);
+
+CREATE RESOURCE 'components'
+RESOURCE CLASS 'node'
+PARENT '/cms/applications/components';
+
+CREATE RESOURCE 'empty'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/components/components'
+ATTRIBUTES (
+  componentName = 'Empty'
+);
+
+CREATE RESOURCE 'screen'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/components/components'
+ATTRIBUTES (
+  componentName = 'EmbeddedScreen',
+  configurationView = 'popup.EmbeddedScreenConf'
+);
