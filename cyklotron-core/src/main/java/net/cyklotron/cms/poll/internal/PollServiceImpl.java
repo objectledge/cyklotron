@@ -11,25 +11,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import net.cyklotron.cms.poll.AnswerResource;
-import net.cyklotron.cms.poll.BallotResource;
-import net.cyklotron.cms.poll.PollException;
-import net.cyklotron.cms.poll.PollResource;
-import net.cyklotron.cms.poll.PollService;
-import net.cyklotron.cms.poll.PollsResource;
-import net.cyklotron.cms.poll.PollsResourceImpl;
-import net.cyklotron.cms.poll.PoolResource;
-import net.cyklotron.cms.poll.PoolResourceImpl;
-import net.cyklotron.cms.poll.QuestionResource;
-import net.cyklotron.cms.poll.VoteResource;
-import net.cyklotron.cms.poll.VoteResourceImpl;
-import net.cyklotron.cms.poll.util.Answer;
-import net.cyklotron.cms.poll.util.Question;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.workflow.ProtectedTransitionResource;
-import net.cyklotron.cms.workflow.WorkflowException;
-import net.cyklotron.cms.workflow.WorkflowService;
-
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
@@ -52,6 +33,25 @@ import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
 import org.objectledge.web.HttpContext;
 import org.picocontainer.Startable;
+
+import net.cyklotron.cms.poll.AnswerResource;
+import net.cyklotron.cms.poll.BallotResource;
+import net.cyklotron.cms.poll.PollException;
+import net.cyklotron.cms.poll.PollResource;
+import net.cyklotron.cms.poll.PollService;
+import net.cyklotron.cms.poll.PollsResource;
+import net.cyklotron.cms.poll.PollsResourceImpl;
+import net.cyklotron.cms.poll.PoolResource;
+import net.cyklotron.cms.poll.PoolResourceImpl;
+import net.cyklotron.cms.poll.QuestionResource;
+import net.cyklotron.cms.poll.VoteResource;
+import net.cyklotron.cms.poll.VoteResourceImpl;
+import net.cyklotron.cms.poll.util.Answer;
+import net.cyklotron.cms.poll.util.Question;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.workflow.ProtectedTransitionResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
 
 import bak.pcj.map.LongKeyMap;
 import bak.pcj.map.LongKeyOpenHashMap;
@@ -135,7 +135,7 @@ public class PollServiceImpl
         {
             voteBaseUrl = null;
         }
-        voteTracking = new VoteTracking();
+        voteTracking = new VoteTracking(voteBaseUrl);
     }
 
     public void start()

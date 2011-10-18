@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
@@ -26,6 +27,13 @@ public class VoteTracking
 
     private static final int COOKIE_MAX_AGE = 365 * 24 * 60 * 60;
     
+    private final String cookiePath;
+
+    public VoteTracking(URL baseUrl)
+    {
+        cookiePath = baseUrl.getPath();
+    }
+
     public boolean hasVoted(HttpContext httpContext, Resource item)       
     {
         HttpSession session = httpContext.getRequest().getSession();
@@ -79,8 +87,10 @@ public class VoteTracking
             }
         }
         Cookie cookie = new Cookie(STATE_ID, encode(history));
-        cookie.setPath(httpContext.getRequest().getContextPath()
-            + httpContext.getRequest().getServletPath());
+        if(cookiePath != null && cookiePath.length() > 0)
+        {
+            cookie.setPath(cookiePath);
+        }
         cookie.setMaxAge(COOKIE_MAX_AGE);
         httpContext.getResponse().addCookie(cookie);
     }

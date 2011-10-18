@@ -3,6 +3,8 @@ package net.cyklotron.cms.poll.internal;
 import static net.cyklotron.cms.poll.internal.VoteTracking.LIMIT;
 import static net.cyklotron.cms.poll.internal.VoteTracking.STATE_ID;
 
+import java.net.URL;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +45,7 @@ public class VoteTrackingTest
 
     @Override
     public void setUp()
+        throws Exception
     {
         mockHttpServletRequest = mock(HttpServletRequest.class);
         httpServletRequest = (HttpServletRequest)mockHttpServletRequest.proxy();
@@ -68,7 +71,7 @@ public class VoteTrackingTest
         mockHttpServletResponse.stubs().method("addCookie").with(isA(Cookie.class)).isVoid();
         mockResource.stubs().method("getId").withNoArguments().will(returnValue(1L));
 
-        voteTracking = new VoteTracking();
+        voteTracking = new VoteTracking(new URL("http://vote.cyklotron.org/"));
     }
 
     public void testEncode()
