@@ -127,7 +127,16 @@ implements SiteCreationListener, SiteDestructionValve, Startable
                 PollsResource polls = (PollsResource)res[0];
                 polls.setAdministrator(null);
                 polls.update();
+                res = polls.getChildren();
+                for(Resource r : res)
+                {
+                    if(r instanceof PollsResource)
+                    {
+                        ((PollsResource)r).setAdministrator(null);
+                        r.update();
+                    }
+                }
             }
-        }    
+        }
     }
 }

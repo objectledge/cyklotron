@@ -566,7 +566,7 @@ public class SiteServiceImpl
         }
         try
         {
-            coralSession.getStore().deleteResource(site);
+            coralSession.getStore().deleteTree(site);
         }
         catch(Exception e)
         {
