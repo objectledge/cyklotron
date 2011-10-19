@@ -31,7 +31,7 @@ public class VoteTracking
 
     public VoteTracking(URL baseUrl)
     {
-        cookiePath = baseUrl.getPath();
+        cookiePath = baseUrl == null ? null : baseUrl.getPath();
     }
 
     public boolean hasVoted(HttpContext httpContext, Resource item)       
