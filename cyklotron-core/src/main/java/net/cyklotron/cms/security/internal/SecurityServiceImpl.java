@@ -2,7 +2,6 @@ package net.cyklotron.cms.security.internal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -900,6 +899,8 @@ public class SecurityServiceImpl
         throws Exception 
     {
         site.setAdministrator(null);
+        site.setEditor(null);
+        site.setSeniorEditor(null);
         site.setLayoutAdministrator(null);
         site.setTeamMember(null);
         Role siteRole = site.getSiteRole();
