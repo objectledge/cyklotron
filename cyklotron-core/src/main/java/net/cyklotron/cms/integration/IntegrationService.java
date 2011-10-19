@@ -230,6 +230,14 @@ public interface IntegrationService
      */
     public void setApplicationEnabled(CoralSession coralSession, SiteResource site,
         ApplicationResource app, boolean enabled);
+
+    /**
+     * Clear enabled applications data for the site.
+     * 
+     * @param coralSession Coral session.
+     * @param site the site.
+     */
+    public void clearEnabledApplications(CoralSession coralSession, SiteResource site);
 }
 
      

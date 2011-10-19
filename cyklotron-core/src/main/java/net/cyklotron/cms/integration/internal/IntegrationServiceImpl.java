@@ -654,12 +654,9 @@ public class IntegrationServiceImpl
     }
 
     /**
-     * Check whether application is enabled within particular site.
-     * 
-     * @param site the site resource.
-     * @param applicationRes the integration application resource.
-     * @return <code>true</code> if application is enabled.
+     * {@inheritDoc}
      */
+    @Override
     public boolean isApplicationEnabled(CoralSession coralSession, SiteResource site, 
         ApplicationResource applicationRes)     
     {
@@ -678,11 +675,9 @@ public class IntegrationServiceImpl
     }
     
     /**
-     * Check which applications are enabled within particular site.
-     * 
-     * @param site the site resource.
-     * @return the enabled applications.
+     * {@inheritDoc}
      */
+    @Override
     public ApplicationResource[] getEnabledApplications(CoralSession coralSession, SiteResource site)
     {
         Relation siteApplications = getSiteApplicationsRelation(coralSession);
@@ -693,12 +688,9 @@ public class IntegrationServiceImpl
     }
     
     /**
-     * Change application enabled/disabled state within particular site. 
-     *  
-     * @param site the site resource.
-     * @param applicationRes the integration application resource.
-     * @return enabled <code>true</code> if application should be enabled.
+     * {@inheritDoc}
      */
+    @Override
     public void setApplicationEnabled(CoralSession coralSession, SiteResource site,
         ApplicationResource app, boolean enabled)
     {
@@ -715,6 +707,17 @@ public class IntegrationServiceImpl
         coralSession.getRelationManager().updateRelation(siteApplications, mod);
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void clearEnabledApplications(CoralSession coralSession, SiteResource site)
+    {
+        Relation siteApplications = getSiteApplicationsRelation(coralSession);
+        RelationModification mod = new RelationModification();
+        mod.remove(site);
+        coralSession.getRelationManager().updateRelation(siteApplications, mod);
+    }
     
     public void resourceCreated(Resource resource)
     {

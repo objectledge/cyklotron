@@ -10,20 +10,23 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.event.EventWhiteboard;
 import org.picocontainer.Startable;
 
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.security.SecurityService;
 
 public class SiteDestructionManager
     extends BaseSiteListener
     implements SiteDestructionListener, Startable
 {
-    private List<SiteDestructionValve> valves; 
+    private List<SiteDestructionValve> valves;
+
+    private final IntegrationService integrationService;
     
-    public SiteDestructionManager(Logger logger, 
-        CoralSessionFactory sessionFactory,
-        SecurityService cmsSecurityService, EventWhiteboard eventWhiteboard,
-        SiteDestructionValve[] valves)
+    public SiteDestructionManager(Logger logger, CoralSessionFactory sessionFactory,
+        IntegrationService integrationService, SecurityService cmsSecurityService,
+        EventWhiteboard eventWhiteboard, SiteDestructionValve[] valves)
     {
         super(logger, sessionFactory, cmsSecurityService, eventWhiteboard);
+        this.integrationService = integrationService;
         
         this.valves = new ArrayList<SiteDestructionValve>();
         for(SiteDestructionValve valve:valves)
@@ -68,6 +71,7 @@ public class SiteDestructionManager
             {
                 deleteSiteNode(coralSession, res[0]);
             }
+            integrationService.clearEnabledApplications(coralSession, site);
         }
         catch(Exception e)
         {

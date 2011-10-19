@@ -452,6 +452,7 @@
     <parameter/>
     <parameter/>
     <parameter/>
+    <parameter/>
     <sequence>
       <parameter class-key="net.cyklotron.cms.security.SecurityDestructionListener"/> 
       <parameter class-key="net.cyklotron.cms.aggregation.AggregationListener"/>
