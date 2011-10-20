@@ -1,5 +1,12 @@
 package net.cyklotron.cms.category;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.List;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
@@ -92,7 +99,30 @@ implements SiteCreationListener, SiteDestructionValve, Startable
         Resource[] res = coralSession.getStore().getResource(site, "categories");
         if(res.length > 0)
         {
-            unbindAndDelete(coralSession, res[0]);
+            // visit category tree and record resource sequence in a flat list
+            Deque<Resource> stack = new ArrayDeque<Resource>();
+            List<Resource> sequence = new ArrayList<Resource>();
+            stack.push(res[0]);
+            while(!stack.isEmpty())
+            {
+                Resource r = stack.pop();
+                sequence.add(r);
+                stack.addAll(Arrays.asList(r.getChildren()));
+            }
+            // reverse sequence - nested categories should be deleted before their enclosing
+            // categories
+            Collections.reverse(sequence);
+            for(Resource r : sequence)
+            {
+                if(r instanceof CategoryResource)
+                {
+                    categoryService.deleteCategory(coralSession, (CategoryResource)r);
+                }
+                else
+                {
+                    coralSession.getStore().deleteResource(r);
+                }
+            }
         }
     }
     
@@ -100,23 +130,5 @@ implements SiteCreationListener, SiteDestructionValve, Startable
     public void clearSecurity(CoralSession coralSession, SiteService siteService, SiteResource site) throws Exception
     {
         
-    }
-    
-    protected void unbindAndDelete(CoralSession coralSession, Resource node)
-        throws Exception
-    {
-        Resource[] children = coralSession.getStore().getResource(node);
-        for(Resource child: children)
-        {
-            unbindAndDelete(coralSession, child);
-        }
-        if(node instanceof CategoryResource)
-        {
-            categoryService.deleteCategory(coralSession, (CategoryResource)node);
-        }
-        else
-        {
-            coralSession.getStore().deleteResource(node);
-        }
     }
 }
