@@ -1,20 +1,23 @@
 package net.cyklotron.cms.category;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.List;
-
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.AmbigousEntityNameException;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.event.EventWhiteboard;
+import org.objectledge.visitor.DispatchOrder;
+import org.objectledge.visitor.Visitor;
 import org.picocontainer.Startable;
 
+import net.cyklotron.cms.category.internal.CategoryServiceImpl;
+import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
+import net.cyklotron.cms.category.query.CategoryQueryRootResource;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteCreationListener;
@@ -94,33 +97,60 @@ implements SiteCreationListener, SiteDestructionValve, Startable
     /**
      * {@inheritDoc}
      */
-    public void clearApplication(CoralSession coralSession, SiteService siteService, SiteResource site) throws Exception
+    public void clearApplication(final CoralSession coralSession, SiteService siteService,
+        SiteResource site)
+        throws Exception
     {
         Resource[] res = coralSession.getStore().getResource(site, "categories");
         if(res.length > 0)
         {
-            // visit category tree and record resource sequence in a flat list
-            Deque<Resource> stack = new ArrayDeque<Resource>();
-            List<Resource> sequence = new ArrayList<Resource>();
-            stack.push(res[0]);
-            while(!stack.isEmpty())
-            {
-                Resource r = stack.pop();
-                sequence.add(r);
-                stack.addAll(Arrays.asList(r.getChildren()));
-            }
-            // reverse sequence - nested categories should be deleted before their enclosing
-            // categories
-            Collections.reverse(sequence);
-            for(Resource r : sequence)
-            {
-                if(r instanceof CategoryResource)
+            Visitor<Resource> visitor = new SubtreeVisitor()
                 {
-                    categoryService.deleteCategory(coralSession, (CategoryResource)r);
-                }
-                else
+                    @SuppressWarnings("unused")
+                    @DispatchOrder(1)
+                    public void visit(CategoryResource category)
+                        throws EntityDoesNotExistException, AmbigousEntityNameException
+                    {
+                        Relation rel = coralSession.getRelationManager().getRelation(
+                            CategoryServiceImpl.CATEGORY_RESOURCE_CLASS_RELATION_NAME);
+                        RelationModification mod = new RelationModification();
+                        mod.remove(category);
+                        coralSession.getRelationManager().updateRelation(rel, mod);
+
+                        rel = coralSession.getRelationManager().getRelation(
+                            CategoryServiceImpl.CATEGORY_RESOURCE_RELATION_NAME);
+                        mod = new RelationModification();
+                        mod.remove(category);
+                        coralSession.getRelationManager().updateRelation(rel, mod);
+                    }
+                };
+            visitor.traverseDepthFirst(res[0]);
+        }
+
+        res = coralSession.getStore().getResource(site, "applications");
+        if(res.length > 0)
+        {
+            res = coralSession.getStore().getResource(res[0], "category_query");
+            if(res.length > 0)
+            {
+                if(res[0] instanceof CategoryQueryRootResource)
                 {
-                    coralSession.getStore().deleteResource(r);
+                    CategoryQueryRootResource cqr = (CategoryQueryRootResource)res[0];
+                    cqr.setDefaultQuery(null);
+                    cqr.setResultsNode(null);
+                    cqr.update();
+
+                    Visitor<Resource> visitor = new SubtreeVisitor()
+                        {
+                            @SuppressWarnings("unused")
+                            @DispatchOrder(1)
+                            public void visit(CategoryQueryPoolResource pool)
+                            {
+                                pool.setQueries(null);
+                                pool.update();
+                            }
+                        };
+                    visitor.traverseDepthFirst(res[0]);
                 }
             }
         }

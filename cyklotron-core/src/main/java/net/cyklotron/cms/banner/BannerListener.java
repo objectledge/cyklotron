@@ -4,7 +4,9 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.event.EventWhiteboard;
+import org.objectledge.visitor.Visitor;
 import org.picocontainer.Startable;
 
 import net.cyklotron.cms.security.SecurityService;
@@ -88,7 +90,9 @@ public class BannerListener
     /**
      * {@inheritDoc}
      */
-    public void clearApplication(CoralSession coralSession, SiteService siteService, SiteResource site) throws Exception
+    public void clearApplication(final CoralSession coralSession, SiteService siteService,
+        SiteResource site)
+        throws Exception
     {
         Resource[] res = coralSession.getStore().getResource(site, "applications");
         if(res.length > 0)
@@ -96,7 +100,16 @@ public class BannerListener
             res = coralSession.getStore().getResource(res[0], "banners");
             if(res.length > 0)
             {
-                deleteSiteNode(coralSession, res[0]);
+                Visitor<Resource> visitor = new SubtreeVisitor()
+                    {
+                        @SuppressWarnings("unused")
+                        public void visit(PoolResource pool)
+                        {
+                            pool.setBanners(null);
+                            pool.update();
+                        }
+                    };
+                visitor.traverseDepthFirst(res[0]);
             }
         }    
     }
@@ -110,7 +123,8 @@ public class BannerListener
             res = coralSession.getStore().getResource(res[0], "banners");
             if(res.length > 0)
             {
-                deleteSiteNode(coralSession, res[0]);
+                ((BannersResource)res[0]).setAdministrator(null);
+                res[0].update();
             }
         }    
     }

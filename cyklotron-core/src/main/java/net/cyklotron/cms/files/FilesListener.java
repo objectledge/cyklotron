@@ -123,7 +123,6 @@ implements SiteCreationListener, SiteDestructionValve, Startable
                 }
             }
         }
-        deleteSiteNode(coralSession,root);
     }
 
     
