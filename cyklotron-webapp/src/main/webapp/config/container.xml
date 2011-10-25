@@ -457,12 +457,12 @@
       <parameter class-key="net.cyklotron.cms.security.SecurityDestructionListener"/> 
       <parameter class-key="net.cyklotron.cms.aggregation.AggregationListener"/>
       <parameter class-key="net.cyklotron.cms.search.SearchListener"/>
+      <parameter class-key="net.cyklotron.cms.structure.StructureSiteDestructionListener"/>            
       <parameter class-key="net.cyklotron.cms.files.FilesListener"/>
       <parameter class-key="net.cyklotron.cms.forum.ForumListener"/>
       <parameter class-key="net.cyklotron.cms.poll.PollListener"/>
       <parameter class-key="net.cyklotron.cms.link.LinkListener"/>            
       <parameter class-key="net.cyklotron.cms.banner.BannerListener"/>
-      <parameter class-key="net.cyklotron.cms.structure.StructureSiteDestructionListener"/>            
       <parameter class-key="net.cyklotron.cms.skins.SkinsSiteDestructionListener"/>
       <parameter class-key="net.cyklotron.cms.style.StyleSiteDestructionListener"/>            
       <parameter class-key="net.cyklotron.cms.category.CategoryListener"/>

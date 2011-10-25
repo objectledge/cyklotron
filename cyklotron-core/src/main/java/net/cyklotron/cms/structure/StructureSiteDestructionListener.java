@@ -4,10 +4,13 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.event.EventWhiteboard;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.visitor.Visitor;
 import org.picocontainer.Startable;
 
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.security.SecurityService;
 import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteDestructionValve;
@@ -53,7 +56,18 @@ public class StructureSiteDestructionListener
         Resource[] res = coralSession.getStore().getResource(site, "structure");
         if(res.length > 0)
         {
-            deleteSiteNode(coralSession, res[0]);
+            Visitor<Resource> visitor = new SubtreeVisitor()
+                {
+                    @SuppressWarnings("unused")
+                    public void visit(DocumentNodeResource document)
+                    {
+                        document.unsetSequence();
+                        document.setStyle(null);
+                        document.setThumbnail(null);
+                        document.update();
+                    }
+                };
+            visitor.traverseDepthFirst(res[0]);
         }
     }
     
