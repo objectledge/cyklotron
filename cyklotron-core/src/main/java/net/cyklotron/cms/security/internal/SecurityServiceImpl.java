@@ -556,9 +556,12 @@ public class SecurityServiceImpl
                     coralSession.getSecurity().deleteSubRole(role, implication.getSubRole());
                 }
             }
-            for (Role subRole : subRoles)
+            if(superRole == null)
             {
-                coralSession.getSecurity().addSubRole(superRole, subRole);
+                for(Role subRole : subRoles)
+                {
+                    coralSession.getSecurity().addSubRole(superRole, subRole);
+                }
             }
             for(PermissionAssignment pa : role.getPermissionAssignments())
             {
