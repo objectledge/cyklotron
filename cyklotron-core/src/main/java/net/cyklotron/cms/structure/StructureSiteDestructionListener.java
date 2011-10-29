@@ -1,6 +1,9 @@
 package net.cyklotron.cms.structure;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.relation.CoralRelationManager;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
@@ -16,6 +19,7 @@ import net.cyklotron.cms.site.BaseSiteListener;
 import net.cyklotron.cms.site.SiteDestructionValve;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.internal.StructureServiceImpl;
 
 public class StructureSiteDestructionListener
     extends BaseSiteListener
@@ -51,8 +55,13 @@ public class StructureSiteDestructionListener
     /**
      * {@inheritDoc}
      */
-    public void clearApplication(CoralSession coralSession, SiteService siteService, SiteResource site) throws Exception
+    public void clearApplication(CoralSession coralSession, SiteService siteService,
+        SiteResource site)
+        throws Exception
     {
+        final CoralRelationManager relationManager = coralSession.getRelationManager();
+        final Relation aliases = relationManager
+            .getRelation(StructureServiceImpl.DOCUMENT_ALIAS_RELATION);
         Resource[] res = coralSession.getStore().getResource(site, "structure");
         if(res.length > 0)
         {
@@ -65,6 +74,10 @@ public class StructureSiteDestructionListener
                         document.setStyle(null);
                         document.setThumbnail(null);
                         document.update();
+                        RelationModification mod = new RelationModification();
+                        mod.remove(document);
+                        mod.removeInv(document);
+                        relationManager.updateRelation(aliases, mod);
                     }
                 };
             visitor.traverseDepthFirst(res[0]);

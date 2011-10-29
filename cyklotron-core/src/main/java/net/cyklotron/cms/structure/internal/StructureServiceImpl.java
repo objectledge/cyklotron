@@ -58,7 +58,6 @@ import net.cyklotron.cms.workflow.TransitionResource;
 import net.cyklotron.cms.workflow.WorkflowException;
 import net.cyklotron.cms.workflow.WorkflowService;
 
-import bak.pcj.adapter.LongSetToSetAdapter;
 import bak.pcj.map.LongKeyLongMap;
 import bak.pcj.map.LongKeyLongOpenHashMap;
 import bak.pcj.set.LongOpenHashSet;
@@ -110,7 +109,7 @@ public class StructureServiceImpl
     private HashSet<String> showUnclassifiedNodesInSites;
     
     /** The relation for tracking existing aliases */
-    private static final String DOCUMENT_ALIAS_RELATION = "structure.DocumentAliases";
+    public static final String DOCUMENT_ALIAS_RELATION = "structure.DocumentAliases";
     
     /** Home page preferences key for id of the node where propose document is deployed in the site */
     private static final String PROPOSE_DOCUMENT_NODE_KEY = "stucture.proposeDocumentNode";
