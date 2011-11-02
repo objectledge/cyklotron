@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.objectledge.coral.BackendException;
+import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
@@ -42,7 +43,6 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
-import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
@@ -59,8 +59,8 @@ public class KeywordResourceImpl
     /** Class variables initialization status. */
     private static boolean definitionsInitialized;
 	
-    /** The AttributeDefinition object for the <code>category</code> attribute. */
-    private static AttributeDefinition categoryDef;
+    /** The AttributeDefinition object for the <code>categories</code> attribute. */
+    private static AttributeDefinition categoriesDef;
 
     /** The AttributeDefinition object for the <code>external</code> attribute. */
     private static AttributeDefinition externalDef;
@@ -169,43 +169,43 @@ public class KeywordResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>category</code> attribute.
+     * Returns the value of the <code>categories</code> attribute.
      *
-     * @return the value of the <code>category</code> attribute.
+     * @return the value of the <code>categories</code> attribute.
      */
-    public CategoryResource getCategory()
+    public ResourceList getCategories()
     {
-        return (CategoryResource)getInternal(categoryDef, null);
+        return (ResourceList)getInternal(categoriesDef, null);
     }
     
     /**
-     * Returns the value of the <code>category</code> attribute.
+     * Returns the value of the <code>categories</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>category</code> attribute.
+     * @return the value of the <code>categories</code> attribute.
      */
-    public CategoryResource getCategory(CategoryResource defaultValue)
+    public ResourceList getCategories(ResourceList defaultValue)
     {
-        return (CategoryResource)getInternal(categoryDef, defaultValue);
+        return (ResourceList)getInternal(categoriesDef, defaultValue);
     }    
 
     /**
-     * Sets the value of the <code>category</code> attribute.
+     * Sets the value of the <code>categories</code> attribute.
      *
-     * @param value the value of the <code>category</code> attribute,
+     * @param value the value of the <code>categories</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setCategory(CategoryResource value)
+    public void setCategories(ResourceList value)
     {
         try
         {
             if(value != null)
             {
-                set(categoryDef, value);
+                set(categoriesDef, value);
             }
             else
             {
-                unset(categoryDef);
+                unset(categoriesDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -219,13 +219,13 @@ public class KeywordResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>category</code> attribute is defined.
+	 * Checks if the value of the <code>categories</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>category</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>categories</code> attribute is defined.
 	 */
-    public boolean isCategoryDefined()
+    public boolean isCategoriesDefined()
 	{
-	    return isDefined(categoryDef);
+	    return isDefined(categoriesDef);
 	}
  
     /**

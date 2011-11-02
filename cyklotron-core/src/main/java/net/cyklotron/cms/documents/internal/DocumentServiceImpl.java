@@ -595,9 +595,9 @@ public class DocumentServiceImpl
             if(res instanceof KeywordResource)
             {
                 KeywordResource keyword = (KeywordResource)res;
-                if(keyword.isCategoryDefined())
+                if(keyword.isCategoriesDefined())
                 {
-                    if(!docCategories.contains(keyword.getCategory()))
+                    if(!docCategories.containsAll(keyword.getCategories()))
                     {
                         continue;
                     }

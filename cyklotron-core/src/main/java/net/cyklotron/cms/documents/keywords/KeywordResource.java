@@ -28,11 +28,11 @@
  
 package net.cyklotron.cms.documents.keywords;
 
+import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsNodeResource;
-import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
@@ -51,26 +51,26 @@ public interface KeywordResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>category</code> attribute.
+     * Returns the value of the <code>categories</code> attribute.
      *
-     * @return the value of the the <code>category</code> attribute.
+     * @return the value of the the <code>categories</code> attribute.
      */
-    public CategoryResource getCategory();
+    public ResourceList getCategories();
 
     /**
-     * Sets the value of the <code>category</code> attribute.
+     * Sets the value of the <code>categories</code> attribute.
      *
-     * @param value the value of the <code>category</code> attribute,
+     * @param value the value of the <code>categories</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setCategory(CategoryResource value);   
+    public void setCategories(ResourceList value);   
    
 	/**
-	 * Checks if the value of the <code>category</code> attribute is defined.
+	 * Checks if the value of the <code>categories</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>category</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>categories</code> attribute is defined.
 	 */
-    public boolean isCategoryDefined();
+    public boolean isCategoriesDefined();
 	
     /**
      * Returns the value of the <code>external</code> attribute.
