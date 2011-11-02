@@ -26,7 +26,7 @@ SUPERCLASSES ( 'node' )
 ATTRIBUTES (
   REQUIRED string pattern,
   REQUIRED boolean regexp,
-  resource('category.category') category,
+  resource_list categories,
   REQUIRED boolean external,
   REQUIRED boolean newWindow,
   resource('structure.navigation_node') hrefInternal,

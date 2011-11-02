@@ -1,9 +1,13 @@
 package net.cyklotron.cms.modules.actions.documents;
 
+import java.util.Collections;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.forms.FormsService;
 import org.objectledge.parameters.Parameters;
@@ -11,7 +15,6 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
-
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryResource;
@@ -31,11 +34,14 @@ import net.cyklotron.cms.style.StyleService;
  */
 public class AddKeyword extends BaseDocumentAction
 {
+    private final CoralSessionFactory coralSessionFactory;
+
     public AddKeyword(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService, FormsService formsService,
-        DocumentService documentService)
+        DocumentService documentService, CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory, styleService, formsService, documentService);
+        this.coralSessionFactory = coralSessionFactory;
     }
     
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
@@ -99,7 +105,9 @@ public class AddKeyword extends BaseDocumentAction
                 {
                     category = CategoryResourceImpl.getCategoryResource(coralSession, category_id);
                 }
-                keyword.setCategory(category);
+                ResourceList<CategoryResource> categories = new ResourceList<CategoryResource>(
+                    coralSessionFactory, Collections.singletonList(category));
+                keyword.setCategories(categories);
             }
             catch(EntityDoesNotExistException e)
             {
