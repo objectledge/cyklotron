@@ -535,9 +535,12 @@ public class ProposedDocumentData
             }
             else
             {
+                htmlService.mergeAdjecentTextNodes(contentDom);
                 htmlService.collapseSubsequentBreaksInParas(contentDom);
                 htmlService.trimBreaksFromParas(contentDom);
                 htmlService.removeEmptyParas(contentDom);
+                htmlService.collapseWhitespace(contentDom);
+                htmlService.bulletsToLists(contentDom);
                 StringWriter contentWriter = new StringWriter();
                 htmlService.dom4jToText(contentDom, contentWriter, true);
                 content = contentWriter.toString();
