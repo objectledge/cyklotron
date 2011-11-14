@@ -466,11 +466,14 @@ public class ProposedDocumentData
         }
         catch(HTMLException e)
         {
-            throw new RuntimeException("malformed proposed changes descriptor", e);
+            throw new RuntimeException("malformed proposed changes descriptor in document #"
+                + node.getIdString(), e);
         }
         catch(EntityDoesNotExistException e)
         {
-            throw new RuntimeException("invalid resource id in proposed changes descriptor", e);
+            throw new RuntimeException(
+                "invalid resource id in proposed changes descriptor in document #"
+                    + node.getIdString(), e);
         }
     }
 
@@ -492,14 +495,20 @@ public class ProposedDocumentData
                     .getIdString()), elm("description", descriptionIterator.next())));
             }
         }
-        Document doc = doc(elm("document", elm("request", removalRequested ? "remove" : "update"),
-            elm("origin", elm("ref", origin.getIdString())), elm("name", name),
-            elm("title", title), elm("abstract", docAbstract), elm("content", cdata(content)), elm(
-                "description", description), elm("editorial", elm("note", editorialNote)), elm(
-                "validity", elm("start", date2text(validityStart)), elm("end",
-                    date2text(validityEnd))), elm("event", elm("place", eventPlace), elm("start",
-                date2text(eventStart)), elm("end", date2text(eventEnd))), getMetaElm(),
-            categoriesElm, attachmentsElm));
+        Document doc = doc(elm(
+            "document",
+            elm("request", removalRequested ? "remove" : "update"),
+            elm("origin", elm("ref", origin.getIdString())),
+            elm("name", name),
+            elm("title", title),
+            elm("abstract", cdata(docAbstract)),
+            elm("content", cdata(content)),
+            elm("description", description),
+            elm("editorial", elm("note", editorialNote)),
+            elm("validity", elm("start", date2text(validityStart)),
+                elm("end", date2text(validityEnd))),
+            elm("event", elm("place", eventPlace), elm("start", date2text(eventStart)),
+                elm("end", date2text(eventEnd))), getMetaElm(), categoriesElm, attachmentsElm));
         node.setProposedContent(dom4jToText(doc));
     }
 
