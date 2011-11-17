@@ -15,169 +15,161 @@
         <caption>document.language</caption>
         <help>document.language.help</help>
         <choices>
-          <item value="pl_PL"><caption>polish</caption></item>
-          <item value="en_US"><caption>english</caption></item>
-          <item value="other"><caption>other</caption></item>
+          <item value="pl_PL">
+            <caption>polish</caption>
+          </item>
+          <item value="en_US">
+            <caption>english</caption>
+          </item>
+          <item value="other">
+            <caption>other</caption>
+          </item>
         </choices>
       </selectOne>
 
-      <input ref="title" bind="req"
-        style="width: 100%; font-size:140%; font-weight:bold;">
+      <input ref="title" bind="req" style="width: 100%; font-size:140%; font-weight:bold;">
         <caption>title</caption>
         <help>title.help</help>
       </input>
 
-      <input ref="subtitle"
-        maxLength="255"
-        style="width: 100%;">
+      <input ref="subtitle" maxLength="255" style="width: 100%;">
         <caption>subtitle</caption>
       </input>
 
-      <input ref="caltitle"
-        maxLength="255"
-        style="width: 100%;">
+      <input ref="caltitle" maxLength="255" style="width: 100%;">
         <caption>caltitle</caption>
       </input>
 
-      <input ref="keywords"
-        style="width: 100%;">
+      <input ref="keywords" style="width: 100%;">
         <caption>keywords</caption>
         <help>keywords.help</help>
         <hint>keywords.hint</hint>
       </input>
 
-      <textarea ref="abstract"
-        style="width: 100%; height:4em;">
+      <textarea ref="abstract" style="width: 100%; height:4em;">
         <caption>abstract</caption>
         <hint>abstract.hint</hint>
       </textarea>
     </group>
-    
-    <htmlarea ref="content"
-      style="height:300px;">
+
+    <htmlarea ref="content" id="content" style="height:300px;">
       <caption>document.content</caption>
       <alert>document.content.alert</alert>
       <help>document.content.help</help>
     </htmlarea>
 
- 	<group>
-    <dynamicSelectOne ref="footnote" selectUI="pulldown" key="footerList">
-	  <caption>footnote</caption>
-    </dynamicSelectOne>
+    <group>
+      <caption>cleanup.content.caption</caption>
+      <button>
+        <caption>cleanup.content.button</caption>
+        <help>cleanup.content.help</help>
+        <dispatch name="cleanupContent" target="content" />
+      </button>
     </group>
-	
-   <group ref="meta/organizations">
+
+    <group>
+      <caption>footnote</caption>
+      <dynamicSelectOne ref="footnote" selectUI="pulldown" key="footerList">
+        <caption>footnote</caption>
+      </dynamicSelectOne>
+    </group>
+
+    <group ref="meta/organizations">
       <caption>organizations</caption>
 
-    <button bind="organizationadd">
+      <button bind="organizationadd">
         <caption>add.organization</caption>
         <insert repeat="organization" at="1" position="before" />
         <help>add.organization.help</help>
-    </button>
-      
-    <repeat nodeset="organization" id="organization" number="5">
-     <group>
-      <caption>organization</caption>
-
-      <input ref="name"
-          style="width: 100%;">
-        <caption>name</caption>
-      </input>
-
-      <group ref="address">       
-      <input ref="street"
-         style="width: 100%;">
-         <caption>street</caption>
-       </input>
-             
-       <input ref="postcode"
-         style="width: 100%;">
-         <caption>postcode</caption>
-         <alert>postcode.alert</alert>
-       </input>
-      
-       <input ref="city"
-         style="width: 100%;">
-         <caption>city</caption>
-       </input>
-      
-       <input ref="province"
-         style="width: 100%;">
-         <caption>province</caption>
-       </input>
-       </group>
-     
-      <input ref="tel"
-          style="width: 100%;">
-        <caption>tel</caption>
-        <alert>tel.alert</alert>
-      </input>
-      
-      <input ref="fax"
-          style="width: 100%;">
-        <caption>fax</caption>
-        <alert>tel.alert</alert>
-      </input>
-      
-      <input ref="e-mail"
-          style="width: 100%;">
-        <caption>e-mails</caption>
-        <alert>e-mails.alert</alert>
-      </input>
-
-      <input ref="url"
-          style="width: 100%;">
-        <caption>www</caption>
-        <alert>url.address.alert</alert>
-      </input>
-
-      <hidden ref="id"
-          style="width: 100%;">
-        <caption>id</caption>
-        <alert>id.alert</alert>
-      </hidden>
-      
-      <button>
-         <caption>delete.organization</caption>
-         <delete repeat="organization" at="count(../organization)-count(./following-sibling::organization)" />
       </button>
-     </group>
-    </repeat>
+
+      <repeat nodeset="organization" id="organization" number="5">
+        <group>
+          <caption>organization</caption>
+
+          <input ref="name" style="width: 100%;">
+            <caption>name</caption>
+          </input>
+
+          <group ref="address">
+            <input ref="street" style="width: 100%;">
+              <caption>street</caption>
+            </input>
+
+            <input ref="postcode" style="width: 100%;">
+              <caption>postcode</caption>
+              <alert>postcode.alert</alert>
+            </input>
+
+            <input ref="city" style="width: 100%;">
+              <caption>city</caption>
+            </input>
+
+            <input ref="province" style="width: 100%;">
+              <caption>province</caption>
+            </input>
+          </group>
+
+          <input ref="tel" style="width: 100%;">
+            <caption>tel</caption>
+            <alert>tel.alert</alert>
+          </input>
+
+          <input ref="fax" style="width: 100%;">
+            <caption>fax</caption>
+            <alert>tel.alert</alert>
+          </input>
+
+          <input ref="e-mail" style="width: 100%;">
+            <caption>e-mails</caption>
+            <alert>e-mails.alert</alert>
+          </input>
+
+          <input ref="url" style="width: 100%;">
+            <caption>www</caption>
+            <alert>url.address.alert</alert>
+          </input>
+
+          <hidden ref="id" style="width: 100%;">
+            <caption>id</caption>
+            <alert>id.alert</alert>
+          </hidden>
+
+          <button>
+            <caption>delete.organization</caption>
+            <delete repeat="organization" at="count(../organization)-count(./following-sibling::organization)" />
+          </button>
+        </group>
+      </repeat>
     </group>
 
     <group ref="event">
       <caption>event</caption>
 
-      <input ref="place"
-          maxLength="255"
-          style="width: 100%;">
+      <input ref="place" maxLength="255" style="width: 100%;">
         <caption>place</caption>
       </input>
-      
-       <group ref="../meta/event">
-       <group ref="address">
-       <input ref="street"
-         style="width: 100%;">
-         <caption>street</caption>
-       </input>
-             
-       <input ref="postcode"
-         style="width: 100%;">
-         <caption>postcode</caption>
-         <alert>postcode.alert</alert>
-       </input>
-      
-       <input ref="city"
-         style="width: 100%;">
-         <caption>city</caption>
-       </input>
-      
-       <input ref="province"
-         style="width: 100%;">
-         <caption>province</caption>
-       </input>
-       </group>
-       </group>
+
+      <group ref="../meta/event">
+        <group ref="address">
+          <input ref="street" style="width: 100%;">
+            <caption>street</caption>
+          </input>
+
+          <input ref="postcode" style="width: 100%;">
+            <caption>postcode</caption>
+            <alert>postcode.alert</alert>
+          </input>
+
+          <input ref="city" style="width: 100%;">
+            <caption>city</caption>
+          </input>
+
+          <input ref="province" style="width: 100%;">
+            <caption>province</caption>
+          </input>
+        </group>
+      </group>
 
       <date ref="start" optionalSelection="true">
         <caption>start</caption>
@@ -197,14 +189,12 @@
       </button>
 
       <repeat nodeset="author" id="author" number="10">
-        <input ref="name"
-            style="width: 100%;">
+        <input ref="name" style="width: 100%;">
           <caption>author</caption>
           <hint>author.hint</hint>
         </input>
 
-        <input ref="e-mail"
-            style="width: 100%;">
+        <input ref="e-mail" style="width: 100%;">
           <caption>e-mails</caption>
           <alert>e-mails.alert</alert>
         </input>
