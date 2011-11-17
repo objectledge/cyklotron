@@ -26,7 +26,7 @@
   <td>$!keyword.getTitle() &nbsp</td>
   <td>#if($keyword.getExternal()) <a href="$!keyword.getHrefExternal()" target="_blank">$!keyword.getHrefExternal()</a> ($ui_labels.get('external'))#else <a href="$link.unsetView().unset('site_id').set('x',$!keyword.getHrefInternal().id).action('SetBrowseMode').set('mode','preview')" target="_blank">$!keyword.getHrefInternal().getTitle()</a> ($ui_labels.get('internal'))#end
   <td>#if($keyword.getNewWindow()) $ui_labels.get('yes') #else $ui_labels.get('no') #end</td>
-  <td>#if($keyword.isCategoriesDefined()) 
+  <td>#if($keyword.isCategoriesDefined() && $keyword.getCategories().size() > 0) 
       #set($categories = $keyword.getCategories())
       #set($categories_names = "")
       #foreach($cat in $categories)
