@@ -20,7 +20,11 @@ function selectCategories()
   values['id'] = "";
   jQuery('input:checked').each( function(index)
   {    
-    values['name'] += $(this).attr('name').substring(9) + ", ";
+    if( index == 0 ) {   
+       values['name'] += $(this).attr('category-name').substring(9);
+    } else {
+       values['name'] += ", " + $(this).attr('category-name').substring(9);
+    }
     values['id'] +=  $(this).attr('id').substring(9) + " ";
   });
   window.opener.propertySelector.setValues(values);
@@ -50,12 +54,12 @@ function selCheckbox(id) {
 #if($table.rootRow == $row)
 &nbsp;
 #elseif($category_selection_state.getValue($row.object).equals('selected'))
-<input type="checkbox" name="category-$row.object.name" id="category-$row.id" value="selected" checked="checked" #if($readonly) disabled#else onChange="selCheckbox($row.id)"#end />
+<input type="checkbox" name="category-$row.id" category-name="category-$row.object.name" id="category-$row.id" value="selected" checked="checked" #if($readonly) disabled#else onChange="selCheckbox($row.id)"#end />
  #if($readonly)
-  <input type="hidden" name="category-$row.object.name" id="category-$row.id" value="selected"/>
+  <input type="hidden" name="category-$row.id" category-name="category-$row.object.name" id="category-$row.id" value="selected"/>
  #end
 #else
-<input type="checkbox" name="category-$row.object.name" id="category-$row.id" value="selected" #if($readonly) disabled#else onChange="selCheckbox($row.id)"#end />
+<input type="checkbox" name="category-$row.id" category-name="category-$row.object.name" id="category-$row.id" value="selected" #if($readonly) disabled#else onChange="selCheckbox($row.id)"#end />
 #end
       </td>
 #set($row_css_class = 'cms-category-no')
@@ -97,12 +101,12 @@ function fSub(action)
 #genericScreenHeader('WYBIERZ KATEGORIE')
 <hr/>
 
+<form name="form1" method="post" action="">
+
 <div>
 #set($expandLink = $resLink.set('tableId',$globaltable.id).add('tableId',$sitetable.id).action('table.ToggleExpandedAll'))
 #if($globaltable.allExpanded)<a href="$expandLink">Zwiń wszystko</a>#else<a href="$expandLink">Rozwiń wszystko</a>#end
 </div>
-
-<form name="form1" method="post" action="">
 
 #category_tree($globaltable 'kategorie globalne')
 <br />

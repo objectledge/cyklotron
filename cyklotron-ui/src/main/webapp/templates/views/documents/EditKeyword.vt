@@ -91,14 +91,14 @@ $pageTool.addScriptLink('script/Forms.js')
              #else
               #set($categories_names = $categories_names + $cat.name) 
              #end
-              #set($categories_ids = $cat.id + " ")
+              #set($categories_ids = $categories_ids + $cat.id + " ")
            #end
     	  #end
-    	  <input name="categories" value="$!categories_ids" type="hidden"/>
+    	  <input id="categories" name="categories" value="$!categories_ids" type="hidden"/>
     	  <input type="text" name="category_name" value="$!categories_names" readonly style="width:100%;">
     	</td>
     	<td align="left" class="actionlink">
-    		<a href="#select_categories($keyword 'id name' 'edit_keyword' 'categories category_name')">$ui_labels.get('choose')</a>
+    		<a href="javascript:#select_categories($keyword 'categories' 'id name' 'edit_keyword' 'categories category_name')">$ui_labels.get('choose')</a>
     		<a href="javascript:removeCategory();">$ui_labels.get('remove')</a>
     	</td>
     </tr>
