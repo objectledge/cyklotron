@@ -62,38 +62,41 @@ public class ChooseCategories
         CategoryInfoTool categoryTool = new CategoryInfoTool(context, integrationService,
             categoryService);
         templatingContext.put("category_tool", categoryTool);
-        boolean resetState = parameters.getBoolean("reset-state", true);
+        boolean resetState = parameters.getBoolean("reset-state", false);
 
         ResourceSelectionState categorizationState = ResourceSelectionState.getState(context,
             CategoryConstants.CATEGORY_SELECTION_STATE + ":" + "CHOOSE_SELECTION_RESOURCE");
-        if(categorizationState != null)
+        if(resetState)
         {
             CoralEntitySelectionState.removeState(context, categorizationState);
             categorizationState = ResourceSelectionState.getState(context,
-                CategoryConstants.CATEGORY_SELECTION_STATE + ":" + "CHOOSE_SELECTION_RESOURCE");
+            CategoryConstants.CATEGORY_SELECTION_STATE + ":" + "CHOOSE_SELECTION_RESOURCE");
         }
 
         Set expandedCategoriesIds = new HashSet();
+        if( categorizationState.isNew() )
+        {
+            categorizationState.setPrefix("category");
+            CategoryResource[] categories = getCategories(coralSession, parameters, false);
+            Map initialState = new HashMap();
+            for(int i = 0; i < categories.length; i++)
+            {
+                initialState.put(categories[i], "selected");
+            }
+            categorizationState.init(initialState);
 
-        categorizationState.setPrefix("category");
-        CategoryResource[] categories = getCategories(coralSession, parameters, false);
-        Map initialState = new HashMap();
-        for(int i = 0; i < categories.length; i++)
-        {
-            initialState.put(categories[i], "selected");
-        }
-        categorizationState.init(initialState);
-        
-        categories = getCategories(coralSession, parameters, true);
-        for(int i = 0; i < categories.length; i++)
-        {
-            expandedCategoriesIds.add(categories[i].getIdObject());
+            categories = getCategories(coralSession, parameters, true);
+            for(int i = 0; i < categories.length; i++)
+            {
+                expandedCategoriesIds.add(categories[i].getIdObject());
+            }
+
         }
 
         categorizationState.update(parameters);
         templatingContext.put("category_selection_state", categorizationState);
 
-        prepareTableTools(coralSession, templatingContext, i18nContext, expandedCategoriesIds, true);
+        prepareTableTools(coralSession, templatingContext, i18nContext, expandedCategoriesIds, resetState );
     }
 
     protected CategoryResource[] getCategories(CoralSession coralSession, Parameters parameters,

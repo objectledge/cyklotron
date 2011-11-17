@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -127,16 +128,19 @@ public class UpdateKeyword
         String parameterName,CoralSession coralSession, CoralSessionFactory coralSessionFactory)
         throws EntityDoesNotExistException
     {
-        CategoryResource category = null;
         ResourceList<CategoryResource> categories = new ResourceList<CategoryResource>(coralSessionFactory);
-        String[] tmp = parameters.get(parameterName).split(" ");
-
-        for(int i = 0; i < tmp.length; i++)
+        String ids = parameters.get(parameterName, "");
+        if(!ids.isEmpty())
         {
-            category = CategoryResourceImpl.getCategoryResource(coralSession, new Long(tmp[i]));
-            if(category != null)
+            CategoryResource category = null;
+            StringTokenizer st = new StringTokenizer(ids, " ");
+            while(st.hasMoreTokens())
             {
-                categories.add(category);
+                category = CategoryResourceImpl.getCategoryResource(coralSession, Long.parseLong(st.nextToken()));
+                if(category != null)
+                {
+                    categories.add(category);
+                }
             }
         }
         return categories;
