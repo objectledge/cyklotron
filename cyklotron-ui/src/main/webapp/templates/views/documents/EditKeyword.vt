@@ -81,14 +81,24 @@ $pageTool.addScriptLink('script/Forms.js')
     <tr>
     	<td align="left" nowrap valign="center"><b>$ui_labels.get('category'):</b></td>
     	<td colspan="2">
-    	  #if($keyword.isCategoryDefined())
-    	   #set($categoryResource = $keyword.getCategory())
+    	  #if($keyword.isCategoriesDefined())
+    	   #set($categories = $keyword.getCategories())
+    	   #set($categories_names = "")
+    	   #set($categories_ids = "")
+    	   #foreach($cat in $categories)
+             #if($velocityCount < $categories.size())
+              #set($categories_names = $categories_names + $cat.name + ", ")
+             #else
+              #set($categories_names = $categories_names + $cat.name) 
+             #end
+              #set($categories_ids = $cat.id + " ")
+           #end
     	  #end
-    	  <input name="category_id" value="$!categoryResource.getId()" type="hidden"/>
-    	  <input type="text" name="category_name" value="$!categoryResource.name" readonly style="width:100%;">
+    	  <input name="categories" value="$!categories_ids" type="hidden"/>
+    	  <input type="text" name="category_name" value="$!categories_names" readonly style="width:100%;">
     	</td>
     	<td align="left" class="actionlink">
-    		<a href="#select_category('id name' 'edit_keyword' 'category_id category_name')">$ui_labels.get('choose')</a>
+    		<a href="#select_categories($keyword 'id name' 'edit_keyword' 'categories category_name')">$ui_labels.get('choose')</a>
     		<a href="javascript:removeCategory();">$ui_labels.get('remove')</a>
     	</td>
     </tr>

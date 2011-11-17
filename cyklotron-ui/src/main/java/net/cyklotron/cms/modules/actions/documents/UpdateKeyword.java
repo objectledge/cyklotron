@@ -1,6 +1,12 @@
 package net.cyklotron.cms.modules.actions.documents;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -94,16 +100,10 @@ public class UpdateKeyword
                 keyword.setHrefInternal((NavigationNodeResource)section[0]);
             }
 
-            long category_id = parameters.getLong("category_id", -1L);
-            CategoryResource category = null;
             try
             {
-                if(category_id != -1L)
-                {
-                    category = CategoryResourceImpl.getCategoryResource(coralSession, category_id);
-                }
-                ResourceList<CategoryResource> categories = new ResourceList<CategoryResource>(
-                    coralSessionFactory, Collections.singletonList(category));
+                ResourceList<CategoryResource> categories = getCategories(parameters, "categories",
+                    coralSession, coralSessionFactory);
                 keyword.setCategories(categories);
             }
             catch(EntityDoesNotExistException e)
@@ -121,6 +121,25 @@ public class UpdateKeyword
         {
             throw new ProcessingException("failed to update keyword", e);
         }
+    }
+    
+    private static ResourceList<CategoryResource> getCategories(Parameters parameters,
+        String parameterName,CoralSession coralSession, CoralSessionFactory coralSessionFactory)
+        throws EntityDoesNotExistException
+    {
+        CategoryResource category = null;
+        ResourceList<CategoryResource> categories = new ResourceList<CategoryResource>(coralSessionFactory);
+        String[] tmp = parameters.get(parameterName).split(" ");
+
+        for(int i = 0; i < tmp.length; i++)
+        {
+            category = CategoryResourceImpl.getCategoryResource(coralSession, new Long(tmp[i]));
+            if(category != null)
+            {
+                categories.add(category);
+            }
+        }
+        return categories;
     }
     
     public boolean checkAccessRights(Context context)
