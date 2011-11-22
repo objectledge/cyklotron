@@ -1014,11 +1014,6 @@ public class ProposedDocumentData
                 {
                     addMovieToContent(contentDom);
                 }
-                htmlService.collapseSubsequentBreaksInParas(contentDom);
-                htmlService.trimBreaksFromParas(contentDom);
-                htmlService.removeEmptyParas(contentDom);
-                htmlService.collapseWhitespace(contentDom);
-                htmlService.bulletsToLists(contentDom);
                 StringWriter contentWriter = new StringWriter();
                 htmlService.dom4jToText(contentDom, contentWriter, true);
                 content = contentWriter.toString();
@@ -1054,9 +1049,6 @@ public class ProposedDocumentData
             }
             else
             {
-                htmlService.collapseSubsequentBreaksInParas(contentDom);
-                htmlService.trimBreaksFromParas(contentDom);
-                htmlService.removeEmptyParas(contentDom);
                 StringWriter contentWriter = new StringWriter();
                 htmlService.dom4jToText(contentDom, contentWriter, true);
                 return contentWriter.toString();
