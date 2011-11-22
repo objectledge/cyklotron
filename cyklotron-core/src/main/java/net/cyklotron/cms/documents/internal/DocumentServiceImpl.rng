@@ -53,4 +53,10 @@
       <text />
     </element>
   </element>
+  <optional>
+    <!-- name of HTMLService cleanup profile that will be used by formtool editor -->
+    <element name="htmlCleanupProfile">
+      <text/>
+    </element>
+  </optional>
 </element>
