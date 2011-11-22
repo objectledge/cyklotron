@@ -69,11 +69,11 @@ $pageTool.addScriptLink('script/Forms.js')
     <tr>
     	<td align="left" nowrap valign="center"><b>$ui_labels.get('category'):</b></td>
     	<td colspan="2">
-    	  <input name="category_id" value="" type="hidden"/>
+    	  <input id="categories" name="categories" value="" type="hidden"/>
     	  <input type="text" name="category_name" value="" readonly style="width:100%;">
     	</td>
     	<td align="left" class="actionlink">
-    		<a href="#select_category('id name' 'add_keyword' 'category_id category_name')">$ui_labels.get('choose')</a>
+    		<a href="javascript:#select_categories('categories' 'id name' 'add_keyword' 'categories category_name')">$ui_labels.get('choose')</a>
     		<a href="javascript:removeCategory();">$ui_labels.get('remove')</a>
     	</td>
     </tr>

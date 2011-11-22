@@ -26,7 +26,18 @@
   <td>$!keyword.getTitle() &nbsp</td>
   <td>#if($keyword.getExternal()) <a href="$!keyword.getHrefExternal()" target="_blank">$!keyword.getHrefExternal()</a> ($ui_labels.get('external'))#else <a href="$link.unsetView().unset('site_id').set('x',$!keyword.getHrefInternal().id).action('SetBrowseMode').set('mode','preview')" target="_blank">$!keyword.getHrefInternal().getTitle()</a> ($ui_labels.get('internal'))#end
   <td>#if($keyword.getNewWindow()) $ui_labels.get('yes') #else $ui_labels.get('no') #end</td>
-  <td>#if($keyword.isCategoryDefined()) $!keyword.category.name #else $ui_labels.get('no_defined') #end</td> 
+  <td>#if($keyword.isCategoriesDefined() && $keyword.getCategories().size() > 0) 
+      #set($categories = $keyword.getCategories())
+      #set($categories_names = "")
+      #foreach($cat in $categories)
+         #if($velocityCount < $categories.size())
+           #set($categories_names = $categories_names + $cat.name + ", ")
+         #else
+           #set($categories_names = $categories_names + $cat.name) 
+         #end
+      #end
+      $categories_names #else $ui_labels.get('no_defined') #end
+  </td> 
   <td>#if($keyword.isLinkClassDefined() && !$keyword.getLinkClass().isEmpty()) $!keyword.getLinkClass() #else $ui_labels.get('no_defined') #end</td>
   <td align="right">
     <a href="$link.view('documents.EditKeyword').set('keywordId',$keyword.id)">$ui_buttons.get('edit')</a>

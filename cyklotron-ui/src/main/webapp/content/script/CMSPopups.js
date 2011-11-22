@@ -44,6 +44,13 @@ function selectCategory(attribute, form, element, baseLink)
   getWinPopup('ChooseCategory').open(baseLink, 800, 400, 'center middle');
 }
 
+function selectCategories(attribute, form, element, baseLink, selected_element)
+{
+   baseLink += "&selected=" + document.getElementById(selected_element).value;
+   window.propertySelector = new PropertySelector(attribute, form, element);
+   getWinPopup('ChooseCategory').open(baseLink, 350, 0.9, 'right');
+}
+
 function selectIndexPool(attribute, form, element, baseLink)
 {
   window.propertySelector = new PropertySelector(attribute, form, element);
