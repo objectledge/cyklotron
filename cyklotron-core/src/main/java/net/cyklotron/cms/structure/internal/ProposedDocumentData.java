@@ -1014,7 +1014,6 @@ public class ProposedDocumentData
                 {
                     addMovieToContent(contentDom);
                 }
-                htmlService.mergeAdjecentTextNodes(contentDom);
                 htmlService.collapseSubsequentBreaksInParas(contentDom);
                 htmlService.trimBreaksFromParas(contentDom);
                 htmlService.removeEmptyParas(contentDom);
