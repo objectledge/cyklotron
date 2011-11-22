@@ -116,5 +116,12 @@
       <element name="STYLE"/>
       <element name="FORM"/>
     </removeElements>
+    <additionalCleanups>
+      <cleanup>REMOVE_EMPTY_PARAS</cleanup>
+      <cleanup>TRIM_BREAKS_FROM_PARAS</cleanup>
+      <cleanup>COLLAPSE_SUBSEQUENT_BREAKS_IN_PARAS</cleanup>
+      <cleanup>COLLAPSE_WHITESPACE</cleanup>
+      <cleanup>BULLET_PARAS_TO_LISTS</cleanup>
+    </additionalCleanups>
   </cleanupProfile>
 </config>
