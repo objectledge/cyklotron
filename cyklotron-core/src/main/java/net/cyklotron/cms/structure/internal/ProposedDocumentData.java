@@ -149,6 +149,10 @@ public class ProposedDocumentData
     
     private boolean clearOrganizationIfNotMatch;
 
+    private String cleanupProfile;
+
+    private static final String DEFAULT_CLENAUP_PROFILE = "proposeDocument";
+
     protected Logger logger;
 
     public ProposedDocumentData(Parameters configuration, Logger logger)
@@ -178,6 +182,7 @@ public class ProposedDocumentData
         addDocumentVisualEditor = configuration.getBoolean("add_document_visual_editor", false);
         clearOrganizationIfNotMatch = configuration.getBoolean("clear_org_if_not_match", false);
         contentMovieEnabled = configuration.getBoolean("content_movie_enabled", false);
+        cleanupProfile = configuration.get("cleanup_profile", DEFAULT_CLENAUP_PROFILE);
     }
 
     public void fromParameters(Parameters parameters, CoralSession coralSession)
@@ -558,7 +563,7 @@ public class ProposedDocumentData
         try
         {
             StringWriter errorWriter = new StringWriter();
-            Document contentDom = htmlService.textToDom4j(content, errorWriter, "proposeDocument");
+            Document contentDom = htmlService.textToDom4j(content, errorWriter, cleanupProfile);
             if(contentDom == null)
             {
                 setValidationFailure("invalid_html");
@@ -1003,7 +1008,7 @@ public class ProposedDocumentData
                 content = makePara(stripTags(content));
             }
             StringWriter errorWriter = new StringWriter();
-            Document contentDom = htmlService.textToDom4j(content, errorWriter, "proposeDocument");
+            Document contentDom = htmlService.textToDom4j(content, errorWriter, cleanupProfile);
             if(contentDom == null)
             {
                 throw new ProcessingException("HTML processing failure");
@@ -1032,7 +1037,7 @@ public class ProposedDocumentData
      * 
      * @param htmlService HTML Service.
      */
-    public static String cleanupContent(String content, HTMLService htmlService)
+    public String cleanupContent(String content, HTMLService htmlService)
         throws ProcessingException
     {
         if(content == null || content.trim().length() == 0)
@@ -1042,7 +1047,7 @@ public class ProposedDocumentData
         try
         {
             StringWriter errorWriter = new StringWriter();
-            Document contentDom = htmlService.textToDom4j(content, errorWriter, "proposeDocument");
+            Document contentDom = htmlService.textToDom4j(content, errorWriter, cleanupProfile);
             if(contentDom == null)
             {
                 throw new ProcessingException("HTML processing failure");

@@ -3,6 +3,7 @@ package net.cyklotron.cms.modules.views.documents;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.html.HTMLService;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -28,12 +29,14 @@ import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 public class ProposeDocumentConf
     extends BaseCMSScreen
 {
+    private final HTMLService htmlService;
+
     public ProposeDocumentConf(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
-        TableStateManager tableStateManager)
+        TableStateManager tableStateManager, HTMLService htmlService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
-
+        this.htmlService = htmlService;
     }
 
     @Override
@@ -113,6 +116,10 @@ public class ProposeDocumentConf
                     "clear_org_if_not_match", false));
             templatingContext.put("add_captcha", screenConfig.getBoolean(
                 "add_captcha", false));
+
+            templatingContext.put("cleanup_profile", screenConfig.get("cleanup_profile", ""));
+            templatingContext.put("available_cleanup_profiles",
+                htmlService.availableCleanupProfiles());
         }
         catch(Exception e)
         {
