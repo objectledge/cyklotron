@@ -51,7 +51,7 @@ $pageTool.addScriptLink('script/Forms.js')
           }
           function removeCategory()
           {
-				Forms.setValue('edit_keyword', 'category_id', '');
+				Forms.setValue('edit_keyword', 'categories', '');
 				Forms.setValue('edit_keyword', 'category_name', '');
           }
           </script>
