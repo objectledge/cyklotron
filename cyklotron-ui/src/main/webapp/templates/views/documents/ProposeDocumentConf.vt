@@ -111,6 +111,14 @@ function sendConfig()
     <td align="right">$ui_labels.get('add_captcha')</td>
     <td><input type="checkbox" name="add_captcha" value="true"#if($add_captcha) checked#end></td>
   </tr>
+  <tr>
+	<td align="right">$ui_labels.get('cleanup_profile')</td>
+	<td><select name="cleanup_profile">
+    #foreach($profile in $available_cleanup_profiles)
+	  <option name="$availableProfile"#if($cleanup_profile == $profile or $cleanup_profile == '' and $profile == 'proposeDocument') selected#end>$profile</option>
+    #end		
+	</select></td>
+  </tr>
 </table>
 </form>
 

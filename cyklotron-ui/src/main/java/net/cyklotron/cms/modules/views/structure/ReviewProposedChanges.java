@@ -17,9 +17,9 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.diff.DetailElement;
 import org.objectledge.diff.DiffUtil;
+import org.objectledge.diff.Element.State;
 import org.objectledge.diff.Sequence;
 import org.objectledge.diff.Splitter;
-import org.objectledge.diff.Element.State;
 import org.objectledge.html.HTMLService;
 import org.objectledge.html.HTMLWordBoundarySplitter;
 import org.objectledge.i18n.I18nContext;
@@ -161,7 +161,7 @@ public class ReviewProposedChanges
                 .getContent() : "";
             String proposedContent = proposedData.getContent() != null ? proposedData.getContent()
                 : "";
-            String publishedContentForComparison = ProposedDocumentData.cleanupContent(
+            String publishedContentForComparison = proposedData.cleanupContent(
                 publishedContent, htmlService);
             content = DiffUtil.diff(proposedContent, publishedContentForComparison,
                 HTMLWordBoundarySplitter.INSTANCE, Splitter.SP_SPLITTER); // HTMLParagraphSplitter.INSTANCE

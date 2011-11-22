@@ -32,13 +32,16 @@ import org.objectledge.forms.ConstructionException;
 import org.objectledge.forms.Form;
 import org.objectledge.forms.FormsException;
 import org.objectledge.forms.FormsService;
+import org.objectledge.forms.internal.ui.ActionNode;
 import org.objectledge.html.HTMLContentFilter;
 import org.objectledge.html.HTMLException;
+import org.objectledge.html.HTMLService;
 import org.objectledge.html.PassThroughHTMLContentFilter;
 import org.picocontainer.Startable;
 
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.documents.DocumentFormContentCleanupAction;
 import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
@@ -92,6 +95,8 @@ public class DocumentServiceImpl
 
     private final CategoryService categoryService;
 
+    private final HTMLService htmlService;
+
     /** Performs document service initialisationin in a following order:
      *  <ul>
      *      <li>document edit form initalisation</li>
@@ -100,15 +105,16 @@ public class DocumentServiceImpl
      *      <li></li>
      *  </ul>
      */
-    public DocumentServiceImpl(Configuration config, Logger logger, 
-        FormsService formsService, CoralSessionFactory sessionFactory,
- SiteService siteService, CategoryService categoryService)
+    public DocumentServiceImpl(Configuration config, Logger logger, FormsService formsService,
+        CoralSessionFactory sessionFactory, SiteService siteService,
+        CategoryService categoryService, HTMLService htmlService)
         throws ComponentInitializationError, ConfigurationException
     {
         this.siteService = siteService;
         this.categoryService = categoryService;
-        this.log = logger;
+        this.htmlService = htmlService;
         this.sessionFactory = sessionFactory;
+        this.log = logger;
 
         // I. document edit form initalisation
         this.formsService = formsService;
@@ -120,6 +126,13 @@ public class DocumentServiceImpl
         try
         {
             form = formsService.getForm(docEditFormURI, DocumentService.FORM_NAME);
+
+            String htmlCleanupProfile = config.getChild("htmlCleanupProfile").getValue(null);
+            if(htmlCleanupProfile != null)
+            {
+                ((ActionNode)form.getUI().getNodesById("content").get(0))
+                    .addAction(new DocumentFormContentCleanupAction(htmlService, htmlCleanupProfile));
+            }
         }
         catch(ConstructionException e)
         {

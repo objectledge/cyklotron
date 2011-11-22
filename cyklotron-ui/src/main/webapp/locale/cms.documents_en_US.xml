@@ -136,6 +136,7 @@
       <item name="add_document_visual_editor">visual editor in AddDocument screen</item>
       <item name="clear_org_if_not_match">clear auto-complete data if organization name dose not match</item>
       <item name="add_captcha">add Captcha verification</item>
+      <item name="cleanup_profile">HTML cleanup profile</item>      
     </prefix>
     <prefix name="buttons">
       <item name="save">Save</item>

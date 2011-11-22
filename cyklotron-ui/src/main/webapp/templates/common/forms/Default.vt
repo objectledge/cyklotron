@@ -135,7 +135,7 @@
     </tr>
     #end
 <tr class="formtool-button row$zeroIfEven">
-<td>&nbsp;</td>
+<td class="formtool-label">&nbsp;</td>
 <td>
 #else
     #if ($control.desc.help.text)

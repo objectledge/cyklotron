@@ -50,4 +50,5 @@
     <excludedClasses>no-keywords</excludedClasses>
     <defaultLinkClass>keyword</defaultLinkClass>
   </keywords>
+  <htmlCleanupProfile>proposeDocument</htmlCleanupProfile>
 </config>

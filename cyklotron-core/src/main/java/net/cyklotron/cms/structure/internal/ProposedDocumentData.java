@@ -142,6 +142,10 @@ public class ProposedDocumentData
     
     private boolean clearOrganizationIfNotMatch;
 
+    private String cleanupProfile;
+
+    private static final String DEFAULT_CLENAUP_PROFILE = "proposeDocument";
+
     protected Logger logger;
 
     public ProposedDocumentData(Parameters configuration, Logger logger)
@@ -536,7 +540,7 @@ public class ProposedDocumentData
         try
         {
             StringWriter errorWriter = new StringWriter();
-            Document contentDom = htmlService.textToDom4j(content, errorWriter, "proposeDocument");
+            Document contentDom = htmlService.textToDom4j(content, errorWriter, cleanupProfile);
             if(contentDom == null)
             {
                 setValidationFailure("invalid_html");
@@ -544,12 +548,6 @@ public class ProposedDocumentData
             }
             else
             {
-                htmlService.mergeAdjecentTextNodes(contentDom);
-                htmlService.collapseSubsequentBreaksInParas(contentDom);
-                htmlService.trimBreaksFromParas(contentDom);
-                htmlService.removeEmptyParas(contentDom);
-                htmlService.collapseWhitespace(contentDom);
-                htmlService.bulletsToLists(contentDom);
                 StringWriter contentWriter = new StringWriter();
                 htmlService.dom4jToText(contentDom, contentWriter, true);
                 content = contentWriter.toString();
@@ -974,7 +972,7 @@ public class ProposedDocumentData
      * 
      * @param htmlService HTML Service.
      */
-    public static String cleanupContent(String content, HTMLService htmlService)
+    public String cleanupContent(String content, HTMLService htmlService)
         throws ProcessingException
     {
         if(content == null || content.trim().length() == 0)
@@ -984,16 +982,13 @@ public class ProposedDocumentData
         try
         {
             StringWriter errorWriter = new StringWriter();
-            Document contentDom = htmlService.textToDom4j(content, errorWriter, "proposeDocument");
+            Document contentDom = htmlService.textToDom4j(content, errorWriter, cleanupProfile);
             if(contentDom == null)
             {
                 throw new ProcessingException("HTML processing failure");
             }
             else
             {
-                htmlService.collapseSubsequentBreaksInParas(contentDom);
-                htmlService.trimBreaksFromParas(contentDom);
-                htmlService.removeEmptyParas(contentDom);
                 StringWriter contentWriter = new StringWriter();
                 htmlService.dom4jToText(contentDom, contentWriter, true);
                 return contentWriter.toString();
