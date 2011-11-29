@@ -33,10 +33,14 @@ import java.io.Reader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.LowerCaseFilter;
+import org.apache.lucene.analysis.StopFilter;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.WordlistLoader;
 import org.apache.lucene.analysis.standard.StandardFilter;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.document.Document;
@@ -80,6 +84,10 @@ public class OrganizationsIndex
 
     private static final String INDEX_PATH = "ngo/database/incoming/index";
 
+    public static final String ORGANIZATION_NAME_STOPWORDS_LOCATION = "net/cyklotron/cms/ngodatabase/organizations/name_stop_words.txt";
+
+    public static final String STOPWORDS_ENCODING = "UTF-8";
+
     public OrganizationsIndex(FileSystem fileSystem, Logger log)
         throws IOException
     {
@@ -89,7 +97,7 @@ public class OrganizationsIndex
     protected Analyzer getAnalyzer(FileSystem fileSystem)
         throws IOException
     {
-        return new OrganizationNameAnalyzer();
+        return new OrganizationNameAnalyzer(fileSystem);
     }
 
     protected Document toDocument(Organization organization)
@@ -189,11 +197,33 @@ public class OrganizationsIndex
     private static class OrganizationNameAnalyzer
         extends Analyzer
     {
+        private final Set<String> stopWords;
+
+        public OrganizationNameAnalyzer(FileSystem fileSystem)
+            throws IOException
+        {
+            stopWords = WordlistLoader.getWordSet(fileSystem.getReader(
+                ORGANIZATION_NAME_STOPWORDS_LOCATION, STOPWORDS_ENCODING));
+        }
+
         private static final class SavedStreams
         {
-            StandardTokenizer tokenStream;
+            private final Tokenizer tokenizer;
 
-            TokenStream filteredTokenStream;
+            private final TokenStream tokenStream;
+
+            public SavedStreams(Tokenizer tokenizer, TokenStream tokenStream)
+            {
+                this.tokenizer = tokenizer;
+                this.tokenStream = tokenStream;
+            }
+
+            public TokenStream reset(Reader reader)
+                throws IOException
+            {
+                tokenizer.reset(reader);
+                return tokenStream;
+            }
         }
 
         @Override
@@ -203,29 +233,36 @@ public class OrganizationsIndex
             SavedStreams streams = (SavedStreams)getPreviousTokenStream();
             if(streams == null)
             {
-                streams = new SavedStreams();
-                setPreviousTokenStream(streams);
-                streams.tokenStream = new StandardTokenizer(Version.LUCENE_30, reader);
-                streams.tokenStream.setMaxTokenLength(MAX_TOKEN_LENGTH);
-                streams.filteredTokenStream = new StandardFilter(streams.tokenStream);
-                streams.filteredTokenStream = new LowerCaseFilter(streams.filteredTokenStream);
-                streams.filteredTokenStream = new AlphanumericFilter(streams.filteredTokenStream);
+                Tokenizer tokenizer = tokenizer(reader);
+                TokenStream filteredTokenStream = filteredTokenStream(tokenizer);
+                setPreviousTokenStream(new SavedStreams(tokenizer, filteredTokenStream));
+                return filteredTokenStream;
             }
             else
             {
-                streams.tokenStream.reset(reader);
+                return streams.reset(reader);
             }
-            return streams.filteredTokenStream;
         }
 
         @Override
         public TokenStream tokenStream(String fieldName, Reader reader)
         {
+            return filteredTokenStream(tokenizer(reader));
+        }
+
+        private Tokenizer tokenizer(Reader reader)
+        {
             StandardTokenizer tokenStream = new StandardTokenizer(Version.LUCENE_30, reader);
             tokenStream.setMaxTokenLength(MAX_TOKEN_LENGTH);
+            return tokenStream;
+        }
+
+        private TokenStream filteredTokenStream(Tokenizer tokenStream)
+        {
             TokenStream filteredTokenStream = new StandardFilter(tokenStream);
             filteredTokenStream = new LowerCaseFilter(filteredTokenStream);
             filteredTokenStream = new AlphanumericFilter(filteredTokenStream);
+            filteredTokenStream = new StopFilter(true, filteredTokenStream, stopWords);
             return filteredTokenStream;
         }
     }
