@@ -200,27 +200,27 @@ function proposeDocumentEventFields() {
 
 function editDocumentOrgFields(index) {
 	var fields = {};
-	fields["name"] = jQuery("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
+	fields["name"] = jQuery("#form\\.page-0\\.group-4\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.input-0");
-	fields["id"] = jQuery("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
+	fields["id"] = jQuery("#form\\.page-0\\.group-4\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.hidden-6");
-	fields["street"] = jQuery("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
+	fields["street"] = jQuery("#form\\.page-0\\.group-4\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.group-1\\.input-0");
-	fields["postCode"] = $("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
+	fields["postCode"] = $("#form\\.page-0\\.group-4\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.group-1\\.input-1");
-	fields["city"] = jQuery("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
+	fields["city"] = jQuery("#form\\.page-0\\.group-4\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.group-1\\.input-2");
-	fields["province"] = jQuery("#form\\.page-0\\.group-3\\.repeat-1\\.repeatSubTree-"
+	fields["province"] = jQuery("#form\\.page-0\\.group-4\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.group-1\\.input-3");
 	return fields;
 }
 
 function editDocumentEventFields() {
 	var fields = {};
-	fields["street"] = jQuery("#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-0");
-	fields["postCode"] = jQuery("#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-1");
-	fields["city"] = jQuery("#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-2");
-	fields["province"] = jQuery("#form\\.page-0\\.group-4\\.group-1\\.group-0\\.input-3");
+	fields["street"] = jQuery("#form\\.page-0\\.group-5\\.group-1\\.group-0\\.input-0"); 
+	fields["postCode"] = jQuery("#form\\.page-0\\.group-5\\.group-1\\.group-0\\.input-1");
+	fields["city"] = jQuery("#form\\.page-0\\.group-5\\.group-1\\.group-0\\.input-2");
+	fields["province"] = jQuery("#form\\.page-0\\.group-5\\.group-1\\.group-0\\.input-3");
 	return fields;
 }
 
