@@ -55,7 +55,9 @@ import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
-import org.apache.lucene.search.spans.SpanFirstQuery;
+import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.spans.SpanNearQuery;
+import org.apache.lucene.search.spans.SpanQuery;
 import org.apache.lucene.search.spans.SpanTermQuery;
 import org.apache.lucene.util.Version;
 import org.jcontainer.dna.Logger;
@@ -154,29 +156,48 @@ public class OrganizationsIndex
             BooleanQuery query = new BooleanQuery();
             List<Term> terms = analyze("name", name);
             int i = 0;
+            SpanQuery[] spans = new SpanQuery[terms.size()];
             for(Term term : terms)
             {
                 if(FUZZY_QUERY_PREFIX_LENGTH < term.text().length())
                 {
-                    FuzzyQuery fuzzyQuery = new FuzzyQuery(term,FUZZY_QUERY_MIN_SIMILARITY,FUZZY_QUERY_PREFIX_LENGTH);
-                    fuzzyQuery.setBoost((1 - (getSearcher().docFreq(term) / getSearcher().maxDoc()))/10);
+                    FuzzyQuery fuzzyQuery = new FuzzyQuery(term, FUZZY_QUERY_MIN_SIMILARITY,
+                        FUZZY_QUERY_PREFIX_LENGTH);
+                    fuzzyQuery.setBoost(0.5f);
                     query.add(fuzzyQuery, BooleanClause.Occur.SHOULD);
                 }
-                SpanFirstQuery spanFirstQuery = new SpanFirstQuery(new SpanTermQuery(term), ++i);
-                spanFirstQuery.setBoost((terms.size()+1)-i);
-                query.add(spanFirstQuery, BooleanClause.Occur.SHOULD);
                 
                 PrefixQuery prefixQuery = new PrefixQuery(term);
-                prefixQuery.setBoost(1);
                 query.add(prefixQuery, BooleanClause.Occur.SHOULD);
+
+                spans[i++] = new SpanTermQuery(term);
             }
+            if(spans.length > 1)
+            {
+                SpanNearQuery spanNearQuery = new SpanNearQuery(spans, 1, true);
+                spanNearQuery.setBoost(1.5f);
+                query.add(spanNearQuery, BooleanClause.Occur.SHOULD);
+            }
+
             terms = analyze("city", name);
-            SpanFirstQuery spanFirstQuery = new SpanFirstQuery(new SpanTermQuery(terms.get(terms.size()-1)), 1);
-            spanFirstQuery.setBoost(1);
-            query.add(spanFirstQuery, BooleanClause.Occur.SHOULD);
-            PrefixQuery prefixQuery = new PrefixQuery(terms.get(terms.size()-1));
-            prefixQuery.setBoost(1);
-            query.add(prefixQuery, BooleanClause.Occur.SHOULD);
+            if(terms.size() > 1)
+            {
+                TermQuery cityTermQuery = new TermQuery(terms.get(terms.size() - 1));
+                query.add(cityTermQuery, BooleanClause.Occur.SHOULD);
+
+                PrefixQuery cityPrefixQuery = new PrefixQuery(terms.get(terms.size() - 1));
+                cityPrefixQuery.setBoost(0.75f);
+                query.add(cityPrefixQuery, BooleanClause.Occur.SHOULD);
+            }
+            if(terms.size() > 2)
+            {
+                SpanQuery[] citySpans = new SpanQuery[2];
+                citySpans[0] = new SpanTermQuery(terms.get(terms.size() - 2));
+                citySpans[1] = new SpanTermQuery(terms.get(terms.size() - 1));
+                SpanNearQuery citySpanNearQuery = new SpanNearQuery(citySpans, 0, true);
+                citySpanNearQuery.setBoost(1.5f);
+                query.add(citySpanNearQuery, BooleanClause.Occur.SHOULD);
+            }
             
             Timer timer = new Timer();
             Sort sort = new Sort(new SortField[]{SortField.FIELD_SCORE,
