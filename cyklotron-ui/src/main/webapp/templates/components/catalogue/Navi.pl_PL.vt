@@ -1,0 +1,3 @@
+#genericNaviHeader('KATALOGI')
+  #linkCell('' 'Lista katalogów' $link.view('catalogue.List'))
+#genericNaviTrailer()
