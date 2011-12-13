@@ -1,0 +1,37 @@
+ALTER RESOURCE CLASS 'structure.navigation_node'
+ADD ATTRIBUTE integer votesPositive;
+
+ALTER RESOURCE CLASS 'structure.navigation_node'
+ADD ATTRIBUTE integer votesNegative;
+
+CREATE RESOURCE 'community_votes'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.CommunityVotes'
+);
+
+CREATE RESOURCE 'community_vote_results'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.CommunityVoteResults',
+  configurationView = 'documents.CommunityVoteResultsConf'
+);
+
+CREATE RESOURCE CLASS 'documents.keyword'
+JAVA CLASS 'net.cyklotron.cms.documents.keywords.KeywordResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED string pattern,
+  REQUIRED boolean regexp,
+  resource_list categories,
+  REQUIRED boolean external,
+  REQUIRED boolean newWindow,
+  resource('structure.navigation_node') hrefInternal,
+  string hrefExternal,
+  string title,
+  string linkClass
+);
+
