@@ -6,13 +6,13 @@
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-6-sun-1.6.0.26"/>
+<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="cyklotron-webapp"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.sonatype.m2e.webby.sourcepathProvider"/>
-<stringAttribute key="org.sonatype.m2e.webby.containerHome" value="/home/rafal/opt/apache-tomcat-7.0.14"/>
+<stringAttribute key="org.sonatype.m2e.webby.containerHome" value="${env_var:TOMCAT_HOME}"/>
 <stringAttribute key="org.sonatype.m2e.webby.containerId" value="tomcat7x"/>
 <intAttribute key="org.sonatype.m2e.webby.containerPort" value="8080"/>
 <stringAttribute key="org.sonatype.m2e.webby.containerType" value="installed"/>
-<stringAttribute key="org.sonatype.m2e.webby.contextName" value=""/>
+<stringAttribute key="org.sonatype.m2e.webby.contextName" value="cyklotron"/>
 <stringAttribute key="org.sonatype.m2e.webby.logLevel" value="medium"/>
 </launchConfiguration>
