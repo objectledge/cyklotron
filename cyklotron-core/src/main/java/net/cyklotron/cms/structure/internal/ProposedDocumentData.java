@@ -174,6 +174,7 @@ public class ProposedDocumentData
         attachmentDirId = configuration.getLong("attachments_dir_id", -1L);
         addDocumentVisualEditor = configuration.getBoolean("add_document_visual_editor", false);
         clearOrganizationIfNotMatch = configuration.getBoolean("clear_org_if_not_match", false);
+        cleanupProfile = configuration.get("cleanup_profile", DEFAULT_CLENAUP_PROFILE);
     }
 
     public void fromParameters(Parameters parameters, CoralSession coralSession)
