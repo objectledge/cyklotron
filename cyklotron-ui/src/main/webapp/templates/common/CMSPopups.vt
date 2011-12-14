@@ -1,0 +1,100 @@
+
+
+
+#macro( select_user $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectUser('$attribute_names', '$form', '$element_names', '$link.view('popup.UserList')')##
+#end
+
+
+
+#macro( select_node $attribute_names $selected_id $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+## selected id may be -1
+javascript:selectNode('$attribute_names', '$form', '$element_names', '$link.view('popup.NodeList').set('selected',$selected_id)')##
+#end
+
+
+
+#macro( select_file $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectItem('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseResource').set('reset', 'true').set('choose_class_disabled', '1')')##
+#end
+
+#macro( select_directory $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectItem('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseDirectory')')##
+#end
+
+#macro( select_category_link $attribute_names $form $element_names)
+$pageTool.addScriptLink('script/CMSPopups.js')##
+#if(!$cms_data.site)##
+  #set($lsid = $cms_tool.getApplication($cms_data.globalComponentsDataSite,"links").getId())##
+#else##
+  #set($lsid = $cms_tool.getApplication("links").getId())##
+#end##
+javascript:selectItem('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseLink').set('lsid',$lsid)')##
+#end
+
+#macro( select_category_query_pool $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectCategoryQueryPool('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseCategoryQueryPool')')##
+#end
+
+#macro( select_category $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectCategory('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseCategory')')##
+#end
+
+#macro( select_categories $selected_element $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectCategories('$attribute_names', '$form', '$element_names', '$link.view('category.ChooseCategories').set('reset-state',true)', '$selected_element')##
+#end
+
+#macro( select_index_pool $attribute_names $form $element_names )
+$pageTool.addScriptLink('script/CMSPopups.js')##
+javascript:selectIndexPool('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseIndexPool')')##
+#end
+
+
+#macro(categorize $resource)
+$pageTool.addScriptLink('script/WinPopup.js')##
+javascript:getWinPopup('categorization').open('$link.view('category.Categorize').set('res_id',$resource.id).set('reset-state',true)',  350, 0.9, 'right'); void(0);##
+#end
+
+#macro(add_alias $resource)
+$pageTool.addScriptLink('script/WinPopup.js')##
+javascript:getWinPopup('add alias').open('$link.view('structure.AddAlias').set('node_id',$resource.id)',  750, 550); void(0);##
+#end
+
+
+#macro(roles $resource $parent)
+$pageTool.addScriptLink('script/WinPopup.js')##
+#if($resource)
+javascript:getWinPopup('security').open('$link.view('security.ResourceRoles').set('res_id',$resource.id).set('root_id',$parent.id)',  550, 500); void(0);##
+#else
+javascript:getWinPopup('security').open('$link.view('security.ResourceRoles')',  550, 500); void(0);##
+#end
+#end
+
+
+#macro(share $resource)
+$pageTool.addScriptLink('script/WinPopup.js')##
+javascript:getWinPopup('aggregation').open('$link.view('aggregation.ShareResource').set('res_id',$resource.id)',  650, 550); void(0);##
+#end
+
+#macro(recommend $resource)
+$pageTool.addScriptLink('script/WinPopup.js')##
+javascript:getWinPopup('aggregation').open('$link.view('aggregation.RecommendResource').set('res_id',$resource.id)',  650, 550); void(0);##
+#end
+
+#macro(related $resource)
+$pageTool.addScriptLink('script/WinPopup.js')##
+javascript:getWinPopup('related').open('$link.view('related.ChooseRelatedResources').set('res_id',$resource.id).set('reset', 'true')',  650, 550); void(0);##
+#end
+
+#macro(quick_edit $resource)
+$pageTool.addScriptLink('script/WinPopup.js')##
+#set($quickEditView = $cms_tool.getClassDefinition($resource).relatedQuickEditView)
+javascript:getWinPopup('quickedit').open('$link.view($quickEditView).set('item_id',$resource.id).set('target_view','close')', 650, 550); void(0);## 
+#end

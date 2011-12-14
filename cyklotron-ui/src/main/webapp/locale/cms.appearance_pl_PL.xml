@@ -1,0 +1,1025 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="EditSite">
+    <prefix name="commands">
+      <prefix name="create">
+        <value>Utwórz</value>
+      </prefix>
+      <prefix name="delete">
+        <value>Usuń</value>
+      </prefix>
+      <prefix name="disable_preview">
+        <value>Wyłącz podgląd</value>
+      </prefix>
+      <prefix name="edit">
+        <value>Edytuj</value>
+      </prefix>
+      <prefix name="preview">
+        <value>Podgląd</value>
+      </prefix>
+      <prefix name="rename">
+        <value>Zmień nazwę</value>
+      </prefix>
+      <prefix name="select">
+        <value>Wybierz</value>
+      </prefix>
+    </prefix>
+    <prefix name="labels">
+      <prefix name="layouts">
+        <value>Układy stron</value>
+      </prefix>
+      <prefix name="site">
+        <value>Serwis</value>
+      </prefix>
+      <prefix name="skins">
+        <value>Skórki</value>
+      </prefix>
+      <prefix name="styles">
+        <value>Style</value>
+      </prefix>
+    </prefix>
+    <prefix name="strings">
+      <prefix name="current">
+        <value>wybrana</value>
+      </prefix>
+      <prefix name="preview">
+        <value>podgląd</value>
+      </prefix>
+      <prefix name="subtitle">
+        <value>Edycja wyglądu serwisu $1</value>
+      </prefix>
+      <prefix name="title">
+        <value>WYGLĄD SERWISU</value>
+      </prefix>
+    </prefix>
+  </prefix>
+  <prefix name="skin">
+    <prefix name="CreateComponentTemplate">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="create">
+          <value>Utwórz</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Aplikacja</value>
+        </prefix>
+        <prefix name="component">
+          <value>Komponent</value>
+        </prefix>
+        <prefix name="def_variant">
+          <value>Jak w wariancie domyślnym</value>
+        </prefix>
+        <prefix name="empty">
+          <value>Pusty</value>
+        </prefix>
+        <prefix name="file">
+          <value>Plik</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+        <prefix name="provided">
+          <value>Dostarczony z aplikacją, w języku</value>
+        </prefix>
+        <prefix name="state">
+          <value>Stan</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Wariant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="default">
+          <value>Domyślny</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Tworzony szablon</value>
+        </prefix>
+        <prefix name="subtitle_source">
+          <value>Wybierz początkową zawartość szablonu</value>
+        </prefix>
+        <prefix name="title">
+          <value>UTWÓRZ SZABLON KOMPONENTU</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateComponentVariant">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="create">
+          <value>Utwórz</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Aplikacja</value>
+        </prefix>
+        <prefix name="component">
+          <value>Komponent</value>
+        </prefix>
+        <prefix name="default">
+          <value>Domyślny</value>
+        </prefix>
+        <prefix name="description">
+          <value>Opis</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Wybierz nazwę nowego wariantu</value>
+        </prefix>
+        <prefix name="title">
+          <value>UTWÓRZ WARIANT KOMPONENTU</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateDirectory">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="create">
+          <value>Utwórz</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+        <prefix name="path">
+          <value>Katalog</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Podaj nazwę nowego katalogu</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Lokalizacja nowego katalogu</value>
+        </prefix>
+        <prefix name="title">
+          <value>UTWÓRZ KATALOG</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateFile">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="create">
+          <value>Utwórz</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="file">
+          <value>Plik</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+        <prefix name="path">
+          <value>Katalog</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Wybierz plik i podaj nazwę na serwerze, jeśli ma być inna.</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Lokalizacja nowego pliku</value>
+        </prefix>
+        <prefix name="title">
+          <value>UTWÓRZ PLIK</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateLayout">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="create">
+          <value>Utwórz</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="empty">
+          <value>Pusty</value>
+        </prefix>
+        <prefix name="file">
+          <value>Plik</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Wybierz początkową zawartość szablonu</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Tworzony szablon</value>
+        </prefix>
+        <prefix name="title">
+          <value>UTWÓRZ UKŁAD STRONY</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateSystemScreen">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="create">
+          <value>Utwórz</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="empty">
+          <value>Pusty</value>
+        </prefix>
+        <prefix name="file">
+          <value>Plik</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Wybierz początkową zawartość szablonu</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Tworzony szablon</value>
+        </prefix>
+        <prefix name="title">
+          <value>UTWÓRZ EKRAN SYSTEMOWY</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateScreenTemplate">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="create">
+          <value>Utwórz</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Aplikacja</value>
+        </prefix>
+        <prefix name="def_variant">
+          <value>Jak w wariancie domyślnym</value>
+        </prefix>
+        <prefix name="empty">
+          <value>Pusty</value>
+        </prefix>
+        <prefix name="file">
+          <value>Plik</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+        <prefix name="provided">
+          <value>Dostarczony z aplikacją, w języku</value>
+        </prefix>
+        <prefix name="screen">
+          <value>Ekran</value>
+        </prefix>
+        <prefix name="state">
+          <value>Stan</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Wariant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="default">
+          <value>Domyślny</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Tworzony szablon</value>
+        </prefix>
+        <prefix name="subtitle_source">
+          <value>Wybierz początkową zawartość szablonu</value>
+        </prefix>
+        <prefix name="title">
+          <value>UTWÓRZ SZABLON EKRANU</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateScreenVariant">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="create">
+          <value>Utwórz</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Aplikacja</value>
+        </prefix>
+        <prefix name="default">
+          <value>Domyślny</value>
+        </prefix>
+        <prefix name="description">
+          <value>Opis</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+        <prefix name="screen">
+          <value>Ekran</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Wybierz nazwę nowego wariantu</value>
+        </prefix>
+        <prefix name="title">
+          <value>UTWÓRZ WARIANT EKRANU</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="CreateSkin">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="create">
+          <value>Utwórz</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="copy">
+          <value>Kopia skórki</value>
+        </prefix>
+        <prefix name="empty">
+          <value>Pusta</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Nowa skórka dla serwisu $1</value>
+        </prefix>
+        <prefix name="title">
+          <value>UTWÓRZ NOWĄ SKÓRKĘ</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteComponentTemplate">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Usuń</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Aplikacja</value>
+        </prefix>
+        <prefix name="component">
+          <value>Komponent</value>
+        </prefix>
+        <prefix name="state">
+          <value>Stan</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Wariant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="default">
+          <value>Domyślny</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Usuwany szablon</value>
+        </prefix>
+        <prefix name="title">
+          <value>USUWAŃ SZABLONU KOMPONENTU</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteComponentVariant">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Usuń</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Aplikacja</value>
+        </prefix>
+        <prefix name="component">
+          <value>Komponent</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Wariant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="default">
+          <value>Domyślny</value>
+        </prefix>
+        <prefix name="delete_warning_stateful">
+          <value>Uwaga! szablony zostaną także usunięte.</value>
+        </prefix>
+        <prefix name="delete_warning_stateless">
+          <value>Uwaga! szablon zostanie także usunięty.</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Usuwany szablon</value>
+        </prefix>
+        <prefix name="title">
+          <value>USUŃ WARIANT KOMPONENTU</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteDirectory">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Usuń</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="directory">
+          <value>Katalog</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="delete_warning">
+          <value>Tej operacji nie można cofnąć.</value>
+        </prefix>
+        <prefix name="subtitle">
+          <value>Czy napewno chcesz skasować katalog wraz z zawartością?</value>
+        </prefix>
+        <prefix name="title">
+          <value>USUŃ KATALOG</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteFile">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Usuń</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="file">
+          <value>Plik</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="delete_warning">
+          <value>Tej operacji nie można cofnąć.</value>
+        </prefix>
+        <prefix name="subtitle">
+          <value>Czy napewno chcesz skasować plik?</value>
+        </prefix>
+        <prefix name="title">
+          <value>USUŃ KATALOG</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteLayout">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Usuń</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Czy napewno chcesz skasować szablon?</value>
+        </prefix>
+        <prefix name="title">
+          <value>USUŃ UKŁAD STRONY</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteSystemScreen">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Usuń</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="subtitle">
+          <value>Czy napewno chcesz skasować szablon?</value>
+        </prefix>
+        <prefix name="title">
+          <value>USUŃ EKRAN SYSTEMOWY</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteScreenTemplate">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Usuń</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Aplikacja</value>
+        </prefix>
+        <prefix name="screen">
+          <value>Ekran</value>
+        </prefix>
+        <prefix name="state">
+          <value>Stan</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Wariant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="default">
+          <value>Domyślny</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Usuwany szablon</value>
+        </prefix>
+        <prefix name="title">
+          <value>USUWAŃ SZABLONU EKRANU</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteScreenVariant">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Usuń</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Aplikacja</value>
+        </prefix>
+        <prefix name="screen">
+          <value>Ekran</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Wariant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="default">
+          <value>Domyślny</value>
+        </prefix>
+        <prefix name="delete_warning_stateful">
+          <value>Uwaga! szablony zostaną także usunięte.</value>
+        </prefix>
+        <prefix name="delete_warning_stateless">
+          <value>Uwaga! szablon zostanie także usunięty.</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Usuwany szablon</value>
+        </prefix>
+        <prefix name="title">
+          <value>USUŃ WARIANT EKRANU</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="DeleteSkin">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="delete">
+          <value>Usuń</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="skin">
+          <value>Skórka</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="delete_warning">
+          <value>Tej operacji nie można cofnąć.</value>
+        </prefix>
+        <prefix name="subtitle">
+          <value>Czy napewno chcesz skasować skórkę wraz z szablonami i plikami?</value>
+        </prefix>
+        <prefix name="title">
+          <value>USUŃ SKÓRKĘ</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditComponentTemplate">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="save">
+          <value>Zapisz</value>
+        </prefix>
+        <prefix name="saveAndContinue">
+          <value>Zapisz i zostań</value>
+        </prefix>              
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Aplikacja</value>
+        </prefix>
+        <prefix name="component">
+          <value>Komponent</value>
+        </prefix>
+        <prefix name="contents">
+          <value>Zawartość</value>
+        </prefix>
+        <prefix name="state">
+          <value>Stan</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Wariant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Kliknij aby pobrać.</value>
+        </prefix>
+        <prefix name="default">
+          <value>Domyślny</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Edytowany szablon</value>
+        </prefix>
+        <prefix name="title">
+          <value>ZMIEŃ SZABLON KOMPONENTU</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditFile">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="save">
+          <value>Zapisz</value>
+        </prefix>
+        <prefix name="saveAndContinue">
+          <value>Zapisz i zostań</value>
+        </prefix>              
+      </prefix>
+      <prefix name="labels">
+        <prefix name="contents">
+          <value>Zawartość</value>
+        </prefix>
+        <prefix name="file">
+          <value>Plik</value>
+        </prefix>
+        <prefix name="mime_type">
+          <value>Typ MIME</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Kliknij aby pobrać.</value>
+        </prefix>
+        <prefix name="title">
+          <value>ZMIEŃ PLIK</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditLayout">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="save">
+          <value>Zapisz</value>
+        </prefix>
+        <prefix name="saveAndContinue">
+          <value>Zapisz i zostań</value>
+        </prefix>              
+      </prefix>
+      <prefix name="labels">
+        <prefix name="contents">
+          <value>Zawartość</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Kliknij aby pobrać.</value>
+        </prefix>
+        <prefix name="title">
+          <value>ZMIEŃ UKŁAD STRONY</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditSystemScreen">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="save">
+          <value>Zapisz</value>
+        </prefix>
+        <prefix name="saveAndContinue">
+          <value>Zapisz i zostań</value>
+        </prefix>              
+      </prefix>
+      <prefix name="labels">
+        <prefix name="contents">
+          <value>Zawartość</value>
+        </prefix>
+        <prefix name="name">
+          <value>Nazwa</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Kliknij aby pobrać.</value>
+        </prefix>
+        <prefix name="title">
+          <value>ZMIEŃ EKRAN SYSTEMOWY</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditScreenTemplate">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="save">
+          <value>Zapisz</value>
+        </prefix>
+        <prefix name="saveAndContinue">
+          <value>Zapisz i zostań</value>
+        </prefix>              
+      </prefix>
+      <prefix name="labels">
+        <prefix name="application">
+          <value>Aplikacja</value>
+        </prefix>
+        <prefix name="contents">
+          <value>Zawartość</value>
+        </prefix>
+        <prefix name="screen">
+          <value>Ekran</value>
+        </prefix>
+        <prefix name="state">
+          <value>Stan</value>
+        </prefix>
+        <prefix name="variant">
+          <value>Wariant</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Kliknij aby pobrać.</value>
+        </prefix>
+        <prefix name="default">
+          <value>Domyślny</value>
+        </prefix>
+        <prefix name="subtitle_info">
+          <value>Edytowany szablon</value>
+        </prefix>
+        <prefix name="title">
+          <value>ZMIEŃ SZABLON EKRANU</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditSkin">
+      <prefix name="buttons">
+        <prefix name="back">
+          <value>Powrót</value>
+        </prefix>
+      </prefix>
+      <prefix name="commands">
+        <prefix name="create_directory">
+          <value>utwórz katalog</value>
+        </prefix>
+        <prefix name="create_file">
+          <value>utwórz plik</value>
+        </prefix>
+        <prefix name="create_template">
+          <value>utwórz szablon</value>
+        </prefix>
+        <prefix name="create_variant">
+          <value>utwórz wariant</value>
+        </prefix>
+        <prefix name="delete_directory">
+          <value>usuń katalog</value>
+        </prefix>
+        <prefix name="delete_file">
+          <value>usuń plik</value>
+        </prefix>
+        <prefix name="delete_template">
+          <value>usuń szablon</value>
+        </prefix>
+        <prefix name="delete_variant">
+          <value>usuń wariant</value>
+        </prefix>
+        <prefix name="edit_file">
+          <value>edytuj plik</value>
+        </prefix>
+        <prefix name="edit_stylesheet">
+          <value>edytuj arkusz styli</value>
+        </prefix>
+        <prefix name="edit_template">
+          <value>edytuj szablon</value>
+        </prefix>
+        <prefix name="view_file">
+          <value>pokaż plik</value>
+        </prefix>
+        <prefix name="view_template">
+          <value>pokaż szablon</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="applications">
+          <value>aplikacje</value>
+        </prefix>
+        <prefix name="components">
+          <value>komponenty</value>
+        </prefix>
+        <prefix name="content">
+          <value>pliki</value>
+        </prefix>
+        <prefix name="layouts">
+          <value>układy stron</value>
+        </prefix>
+        <prefix name="system_screens">
+          <value>ekrany systemowe</value>
+        </prefix>
+        <prefix name="screens">
+          <value>ekrany</value>
+        </prefix>
+        <prefix name="skin">
+          <value>skórka</value>
+        </prefix>
+        <prefix name="stylesheet">
+          <value>arkusz styli</value>
+        </prefix>
+        <prefix name="templates">
+          <value>szablony</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="current_skin_warning">
+          <value>Uwaga! Edytujesz aktualnie wybraną skórkę. Zmiany będą widoczne dla oglądających serwis.</value>
+        </prefix>
+        <prefix name="default_variant">
+          <value>Wariant domyślny</value>
+        </prefix>
+        <prefix name="subtitle">
+          <value>Edycja skórki $1 dla serwisu $2</value>
+        </prefix>
+        <prefix name="title">
+          <value>EDYCJA SKÓRKI</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="EditStylesheet">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="save">
+          <value>Zapisz</value>
+        </prefix>
+        <prefix name="saveAndContinue">
+          <value>Zapisz i zostań</value>
+        </prefix>              
+      </prefix>
+      <prefix name="strings">
+        <prefix name="title">
+          <value>ZMIEŃ ARKUSZ STYLI</value>
+        </prefix>
+        <prefix name="warning">
+          <value>Uwaga! Wpisanie niepopranych komend może spowodować nieprawidłowe wyświetlanie stron.</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="RenameSkin">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="rename">
+          <value>Zmień</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="name">
+          <value>Nowa nazwa</value>
+        </prefix>
+        <prefix name="skin">
+          <value>Skórka</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="title">
+          <value>ZMIEŃ NAZWĘ SKÓRKI</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="ValidateLayout">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+        <prefix name="edit">
+          <value>Edytuj</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="layout">
+          <value>Układ strony</value>
+        </prefix>
+        <prefix name="socket">
+          <value>Gniazdko</value>
+        </prefix>
+        <prefix name="template">
+          <value>Szablon</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="present">
+          <value>tak</value>
+        </prefix>
+        <prefix name="title">
+          <value>GNIAZDKA KOMPONENTÓW</value>
+        </prefix>
+      </prefix>
+    </prefix>
+    <prefix name="ViewFile">
+      <prefix name="buttons">
+        <prefix name="cancel">
+          <value>Anuluj</value>
+        </prefix>
+      </prefix>
+      <prefix name="labels">
+        <prefix name="contents">
+          <value>Zawartość</value>
+        </prefix>
+        <prefix name="file">
+          <value>Plik</value>
+        </prefix>
+        <prefix name="mime_type">
+          <value>Typ MIME</value>
+        </prefix>
+      </prefix>
+      <prefix name="strings">
+        <prefix name="click_to_download">
+          <value>Kliknij aby pobrać.</value>
+        </prefix>
+        <prefix name="title">
+          <value>PODGLĄD PLIKU</value>
+        </prefix>
+      </prefix>
+    </prefix>
+  </prefix>
+</strings>

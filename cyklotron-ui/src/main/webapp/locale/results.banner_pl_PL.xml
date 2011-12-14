@@ -1,0 +1,72 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="invalid_description">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Nazwa nie może zawierać znaku /</value>
+    </prefix>
+    <prefix name="invalid_media">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_title">
+      <value>.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="added_successfully">
+      <value>Dodano pomyślnie.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>Zmieniono pomyślnie.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Usunięto pomyślnie.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Wystąpił błąd.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Nieprawidłowy parameter</value>
+    </prefix>
+    <prefix name="invalid_description">
+      <value>Operacja nieudana - nieprawidłowy opis.</value>
+    </prefix>
+    <prefix name="invalid_name">
+      <value>Podana nazwa jest nieprawidłowa</value>
+    </prefix>
+    <prefix name="invalid_media">
+      <value>Nieprawidłowy identyfikator obrazka.</value>
+    </prefix>
+    <prefix name="invalid_title">
+      <value>Operacja nieudana - nieprawidłowy tytuł.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Nie wypełniono wymagenego pola w formularzu.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Zapisano pomyślnie.</value>
+    </prefix>
+  </prefix>
+</strings>
