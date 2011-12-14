@@ -1,0 +1,138 @@
+
+ALTER RESOURCE CLASS cms.forum.forum ADD ATTRIBUTE boolean captchaEnabled VALUE false;
+
+
+CREATE RESOURCE 'confirmationRequests'
+RESOURCE CLASS 'node'
+PARENT '/cms'
+ATTRIBUTES (
+  description = 'Parent node of email confirmation requests.'
+);
+
+CREATE RESOURCE CLASS 'cms.confirmation.email_confirmation_request'
+JAVA CLASS 'net.cyklotron.cms.confirmation.EmailConfirmationRequestResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED string email,
+string data
+);
+
+CREATE RESOURCE 'cms.poll.vote'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/poll/resources'
+ATTRIBUTES (
+  image = 'vote.png', # resource icon
+  view = 'poll.VoteSearchResult',
+  indexTitle = 'name',
+  indexDescription = 'name',
+  relatedSupported = 'false',
+  relatedQuickAddView = '',
+  pickerSupported = false,
+  categorizable = true
+);
+
+CREATE RESOURCE CLASS 'cms.poll.vote'
+JAVA CLASS 'net.cyklotron.cms.poll.VoteResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node', 'protected')
+ATTRIBUTES (
+role moderator,
+string senderAddress
+);
+
+CREATE RESOURCE CLASS 'cms.poll.ballot'
+JAVA CLASS 'net.cyklotron.cms.poll.BallotResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED string email,
+long answerId
+);
+
+
+CREATE RESOURCE 'voting'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/poll/screens'
+ATTRIBUTES (
+  screenName = 'poll.Voting',
+  configurationView = 'poll.VotingConf'
+);
+
+CREATE RESOURCE 'Default'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/poll/screens/voting';
+
+CREATE RESOURCE 'Confirm'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/poll/screens/voting';
+
+CREATE RESOURCE 'InvalidBallot'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/poll/screens/voting';
+
+CREATE RESOURCE 'BallotSent'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/poll/screens/voting';
+
+CREATE RESOURCE 'Results'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/poll/screens/voting';
+
+CREATE RESOURCE 'locked'
+RESOURCE CLASS 'workflow.state'
+PARENT '/cms/workflow/automata/forum.message/states'
+ATTRIBUTES (
+  description = 'A locked message',
+  initial = false
+);
+
+CREATE RESOURCE 'lock'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.message/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.message/states/visible',
+  to = '/cms/workflow/automata/forum.message/states/locked',
+  performPermission = 'cms.forum.moderate',
+  description = 'lock a visible message.'
+);
+
+CREATE RESOURCE 'unlock'
+RESOURCE CLASS 'workflow.protected_transition'
+PARENT '/cms/workflow/automata/forum.message/transitions'
+ATTRIBUTES (
+  from = '/cms/workflow/automata/forum.message/states/locked',
+  to = '/cms/workflow/automata/forum.message/states/visible',
+  performPermission = 'cms.forum.moderate',
+  description = 'Unlock a message.'
+);
+
+ALTER RESOURCE CLASS 'cms.forum.message' ADD ATTRIBUTE boolean sticky;
+
+CREATE RESOURCE 'ModeratorTasks'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/forum/screens/forum';
+
+CREATE RESOURCE 'EditMessage'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/forum/screens/forum';
+
+ALTER RESOURCE '/cms/applications/forum/screens/forum'
+SET ATTRIBUTE configurationView = 'forum.ForumScreenConf';
+
+ALTER RESOURCE '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.modify' 
+SET PARENT '/cms/applications/forum/resources/cms.forum.node/roles/cms.forum.administrator/cms.forum.moderator';
+
+# library -> catalogue
+
+ALTER RESOURCE CLASS 'cms.library.config' SET NAME 'cms.catalogue.config';
+
+ALTER RESOURCE CLASS 'cms.catalogue.config' SET JAVA CLASS 'net.cyklotron.cms.catalogue.CatalogueConfigResourceImpl';
+
+ALTER RESOURCE '/cms/applications/library' SET NAME 'catalogue';
+
+ALTER RESOURCE '/cms/applications/catalogue/screens/index' SET ATTRIBUTE screenName = 'catalogue.Index';
+
+ALTER RESOURCE '/cms/applications/catalogue/screens/index' SET ATTRIBUTE configurationView = 'catalogue.IndexConf';
+
+ALTER RESOURCE CLASS 'cms.catalogue.config' ADD ATTRIBUTE string requiredPropertyNames;

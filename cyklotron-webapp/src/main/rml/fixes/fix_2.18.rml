@@ -1,0 +1,2 @@
+
+ALTER RESOURCE CLASS cms.forum.forum DELETE ATTRIBUTE captchaEnabled;
