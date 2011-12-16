@@ -58,7 +58,7 @@ function flushCacheIfEmpty(fields) {
 }
 
 function clearFields(fields){
-    fields.id.val("");
+    fields.id.val("0");
     fields.id.attr("rel", "");
     fields.street.val("");
     fields.city.val("");
