@@ -1,9 +1,7 @@
 $pageTool.addScriptLink('script/jquery/jquery-latest.js')##
 $pageTool.addScriptLink('script/documents/CommunityVotes.js')##
 <script>
-    var communityVotes = new CommunityVotes($cmsData.node.id,
-        "$link.view('documents.ajax.CommunityVotes')",
-        "${voteBaseUrl}/view/documents.ajax.CommunityVotes");
+    var communityVotes = new CommunityVotes($cmsData.node.id, "${voteBaseUrl}");
     jQuery(document).ready(function() {
     	communityVotes.fetch();
 	});
