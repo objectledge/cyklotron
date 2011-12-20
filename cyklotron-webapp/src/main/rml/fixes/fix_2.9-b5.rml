@@ -1,0 +1,15 @@
+
+CREATE RESOURCE 'RemovalRequest'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/propose_document';
+
+CREATE RESOURCE 'DocumentCategory'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/propose_document';
+
+CREATE RESOURCE 'cms.structure.modify_own'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.reporter'
+ATTRIBUTES (
+  recursive = true
+);
