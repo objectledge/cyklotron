@@ -1,0 +1,125 @@
+
+## TITLE BAR
+#if($component_type.equals('periodicals,Periodicals'))
+#set($screen_title = 'Konfiguracja komponentu - lista periodyków')
+#else
+#set($screen_title = 'Konfiguracja komponentu - lista biuletynów')
+#end
+#genericScreenHeader($screen_title)
+
+##
+#set($from_component = true)
+
+#if($cms_data.node)
+<form name="configSend" method="POST" target="cyklotron_$cms_data.node.id"
+    action="$link.unsetView().action('structure.UpdatePreferences').set('x',$cms_data.node.id)">
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#else
+<form name="configSend" method="POST" target="cyklotron"
+    action="$link.unsetView().action('structure.UpdatePreferences')">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+</form>
+
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "header", "periodical" );
+
+// -->
+</script>
+
+<form name="periodicalConf">
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tbody>
+
+<tr>
+<td>
+Podaj tytuł komponentu:
+</td>
+<td>
+<input type="text" name="header" style="width: 100%;" value="$!header" />
+</td>
+</tr>
+
+</tbody>
+</table>
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+<tr>
+#if($component_type.equals('periodicals,Periodicals'))
+#set($table_title = 'Wybierz domyślny periodyk')
+#else
+#set($table_title = 'Wybierz domyślny biuletyn')
+#end
+<th colspan="2">$table_title</th>
+</tr>
+#if($table.pageRowCount == 0)
+<tr class="row1">
+<td colspan="$tableColumnOrder.size()">
+Brak.
+</td>
+</tr>
+#else
+
+<tr>
+<td style="width: 10px;">
+#if($selected_periodical)
+<input type="radio" name="periodical" value="" id="periodical_UNSELECTED" />
+#else
+<input type="radio" name="periodical" value="" id="periodical_UNSELECTED" checked="checked" />
+#end
+</td>
+<td>
+<label for="periodical_UNSELECTED">
+<b>nie wybrany</b>
+</label>
+
+</td>
+</tr>
+
+#foreach($row in $table.rows)
+<tr>
+<td style="width: 10px;">
+#if($selected_periodical == $row.object)
+<input type="radio" name="periodical" value="$row.object.name" id="periodical$row.object.id" checked="checked" />
+#else
+<input type="radio" name="periodical" value="$row.object.name" id="periodical$row.object.id" />
+#end
+</td>
+<td>
+<label for="periodical$row.object.id">
+$row.object.name
+<small>$!row.object.description</small>
+</label>
+
+</td>
+</tr>
+#end
+#end
+</table>
+
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+#if($cms_data.node.id)
+  <a href="javascript:submitConfig('cyklotron_$cms_data.node.id', 'periodicalConf', 'configSend', fieldNames)">Zapisz</a>
+#else
+  <a href="javascript:submitConfig('cyklotron', 'periodicalConf', 'configSend', fieldNames)">Zapisz</a>
+#end
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+
+#genericScreenTrailer()

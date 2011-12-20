@@ -1,0 +1,70 @@
+#genericScreenHeader('Kolejność zapytań o zasoby w zestawie')
+#set($poolLink = $link.set('query_pool_id', $pool.id))
+
+<table width="100%" cellspacing="0" class="genericScreen">
+<tr>
+<th colspan="2">Zestaw zapytań</th>
+</tr>
+<tr>
+<td width="5%">Nazwa</td>
+<td>$pool.name</td>
+</tr>
+</table>
+<br/>
+
+<table width="100%" cellspacing="0" class="genericScreen">
+<tr>
+<th colspan="5">Kolejność zapytań</th>
+</tr>
+#set($size = $queries.size())
+#foreach($queryId in $queryIds)
+#set($query = $queryObjs.get($queryId))
+#set($seqLink = $poolLink.action('category.query.CategoryQueryPoolUpdateOrder').set('pos', $velocityCount))
+<tr>
+  <td width="75%">$query.getName()</td>
+#if($velocityCount == 1)
+  <td class="arrows">&middot;</td>
+  <td class="arrows">&middot;</td>
+  <td class="arrows">
+    <a href="$seqLink.set('dir','1')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
+  </td>
+  <td class="arrows">
+    <a href="$seqLink.set('dir','2')"><img src="$link.content('images/tree/bottom.gif')" border="0"></a>
+  </td>
+#elseif($velocityCount == $size)
+  <td class="arrows"><a href="$seqLink.set('dir','-2')"><img src="$link.content('images/tree/top.gif')" border="0"></a>
+      ##<img src="/_images/_admin/ikony/kolejnosc/top.gif" width="11" height="10" border="0">
+  </td>
+  <td class="arrows"><a href="$seqLink.set('dir','-1')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
+      ##<img src="/_images/_admin/ikony/kolejnosc/up.gif" width="11" height="10" border="0">
+  </td>
+  <td class="arrows">&middot;</td>
+  <td class="arrows">&middot;</td>
+#else
+  <td class="arrows"><a href="$seqLink.set('dir','-2')"><img src="$link.content('images/tree/top.gif')" border="0"></a>
+      ##<img src="/_images/_admin/ikony/kolejnosc/top.gif" width="11" height="10" border="0">
+  </td>
+  <td class="arrows"><a href="$seqLink.set('dir','-1')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
+      ##<img src="/_images/_admin/ikony/kolejnosc/up.gif" width="11" height="10" border="0">
+  </td>
+  <td class="arrows"><a href="$seqLink.set('dir','1')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
+      ##<img src="/_images/_admin/ikony/kolejnosc/down.gif" width="11" height="10" border="0">
+  </td>
+  <td class="arrows"><a href="$seqLink.set('dir','2')"><img src="$link.content('images/tree/bottom.gif')" border="0"></a>
+      ##<img src="/_images/_admin/ikony/kolejnosc/bottom.gif" width="11" height="10" border="0">
+  </td>
+#end
+</tr>
+#end
+</table>
+
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="$poolLink.view('category.query.CategoryQueryPoolList').action('category.query.CategoryQueryPoolSaveOrder')">Zapisz</a>
+    <a href="$link.view('category.query.CategoryQueryPoolList')">Anuluj</a>
+  </div>
+</div>
