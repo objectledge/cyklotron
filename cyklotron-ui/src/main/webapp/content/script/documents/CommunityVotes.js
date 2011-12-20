@@ -1,13 +1,12 @@
-function CommunityVotes(docId, fetchUrl, voteUrl) {
+function CommunityVotes(docId, baseUrl) {
 	this.docId = docId;
-	this.voteUrl = voteUrl;
-	this.fetchUrl = fetchUrl;
+	this.voteUrl = baseUrl + "/view/documents.ajax.CommunityVotes";
 }
 
 CommunityVotes.prototype.fetch = function() {
 	$.ajax({
-		url : this.fetchUrl,
-		dataType : "json",
+		url : this.voteUrl,
+		dataType : "jsonp",
 		data : {
 			doc_id : this.docId
 		},
