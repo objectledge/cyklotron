@@ -11,8 +11,10 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.dom4j.Document;
@@ -37,6 +39,42 @@ public class DocumentImportServiceImpl
         // SimpleDateFormat is not thread safe
         DateFormat dateFormat = (DateFormat)config.getDateFormat().clone();
 
+        Collection<DocumentData> documents = new ArrayList<DocumentData>();
+        Collection<DocumentData> batch = loadBatch(config, start, end, dateFormat);
+        while(batch.size() > 0)
+        {
+            documents.addAll(batch);
+            Date newest = findNewest(batch);
+            batch = loadBatch(config, nextMinute(newest), end, dateFormat);
+        }
+        return documents;
+    }
+
+    private Date findNewest(Collection<DocumentData> documents)
+    {
+        Date newest = null;
+        for(DocumentData document : documents)
+        {
+            if(newest == null || document.getCreationDate().compareTo(newest) > 0)
+            {
+                newest = document.getCreationDate();
+            }
+        }
+        return newest;
+    }
+
+    private Date nextMinute(Date date)
+    {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        cal.add(Calendar.MINUTE, 1);
+        return cal.getTime();
+    }
+
+    protected Collection<DocumentData> loadBatch(ImportSourceConfiguration config, Date start,
+        Date end, DateFormat dateFormat)
+        throws MalformedURLException, IOException
+    {
         URL requestUrl = buildRequestURL(start, end, config, dateFormat);
 
         byte[] xmlData = download(requestUrl);
@@ -192,7 +230,7 @@ public class DocumentImportServiceImpl
                 request.append("=");
                 request.append(dateFormat.format(end));
             }
-            requestUrl = new URL(request.toString());
+            requestUrl = new URL(request.toString().replace(" ", "+"));
         }
         return requestUrl;
     }

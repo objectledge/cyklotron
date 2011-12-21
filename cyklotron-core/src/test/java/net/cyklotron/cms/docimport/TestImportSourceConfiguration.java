@@ -15,15 +15,19 @@ import java.util.regex.Pattern;
 public class TestImportSourceConfiguration
     implements ImportSourceConfiguration
 {
+    private final boolean localXML;
+
     private final boolean localAttachments;
 
     /**
      * Creates test ImportSourceConfiguration instance.
      * 
+     * @param localXML should XML data be loaded from disk?
      * @param localAttachments should attachments be loaded from disk?
      */
-    public TestImportSourceConfiguration(boolean localAttachments)
+    public TestImportSourceConfiguration(boolean localXML, boolean localAttachments)
     {
+        this.localXML = localXML;
         this.localAttachments = localAttachments;
     }
 
@@ -31,13 +35,20 @@ public class TestImportSourceConfiguration
     public URL getLocation()
         throws MalformedURLException
     {
-        return new File("src/test/resources/ngo/um/aktualnosci.xml").toURI().toURL();
+        if(localXML)
+        {
+            return new File("src/test/resources/ngo/um/aktualnosci.xml").toURI().toURL();
+        }
+        else
+        {
+            return new URL("http://ngo.um.warszawa.pl/xml/aktualnosci");
+        }
     }
 
     @Override
     public DateFormat getDateFormat()
     {
-        return new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm");
     }
 
     @Override
@@ -49,7 +60,7 @@ public class TestImportSourceConfiguration
     @Override
     public String getDateRangeEndParameter()
     {
-        return "creted_before";
+        return "created_before";
     }
 
     @Override
