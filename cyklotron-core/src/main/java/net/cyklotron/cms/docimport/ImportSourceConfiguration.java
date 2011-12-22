@@ -78,4 +78,9 @@ public interface ImportSourceConfiguration
      */
     URL transformAttachmentURL(String url)
         throws MalformedURLException;
+
+    /**
+     * The name of the HTML cleanup profile configured with HTMLService.
+     */
+    String getHTMLCleanupProfile();
 }

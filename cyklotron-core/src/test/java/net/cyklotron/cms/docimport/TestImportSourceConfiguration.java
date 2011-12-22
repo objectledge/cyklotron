@@ -155,4 +155,10 @@ public class TestImportSourceConfiguration
             return new URL(url);
         }
     }
+
+    @Override
+    public String getHTMLCleanupProfile()
+    {
+        return "passthrough";
+    }
 }

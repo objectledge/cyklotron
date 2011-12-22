@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,6 +24,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.objectledge.encodings.HTMLEntityDecoder;
+import org.objectledge.html.HTMLException;
+import org.objectledge.html.HTMLService;
 
 /**
  * An implementation of DocumentImportService.
@@ -31,6 +35,15 @@ import org.objectledge.encodings.HTMLEntityDecoder;
 public class DocumentImportServiceImpl
     implements DocumentImportService
 {
+    private final HTMLService htmlService;
+
+    private final HTMLEntityDecoder entityDecoder = new HTMLEntityDecoder();
+
+    public DocumentImportServiceImpl(HTMLService htmlService)
+    {
+        this.htmlService = htmlService;
+    }
+
     @Override
     public Collection<DocumentData> importDocuments(ImportSourceConfiguration config, Date start,
         Date end)
@@ -95,27 +108,18 @@ public class DocumentImportServiceImpl
         ImportSourceConfiguration config, DateFormat dateFormat)
         throws DocumentException, IOException
     {
-        HTMLEntityDecoder dec = new HTMLEntityDecoder();
         Collection<DocumentData> documents = new ArrayList<DocumentData>();
         @SuppressWarnings("unchecked")
         List<Node> documentNodes = xmlDocument.selectNodes(config.getDocumentXPath());
         for(Node documentNode : documentNodes)
         {
-            String title = documentNode.selectSingleNode(config.getTitleXPath()).getText();
-            if(config.isTitleEntityEncoded())
-            {
-                title = dec.decode(title);
-            }
-            String _abstract = documentNode.selectSingleNode(config.getAbstractXPath()).getText();
-            if(config.isAbstractEntityEncoded())
-            {
-                _abstract = dec.decode(_abstract);
-            }
-            String content = documentNode.selectSingleNode(config.getContentXPath()).getText();
-            if(config.isContentEntityEncoded())
-            {
-                content = dec.decode(content);
-            }
+            String title = convertText(documentNode.selectSingleNode(config.getTitleXPath()),
+                config.isTitleEntityEncoded(), config.getHTMLCleanupProfile());
+            String _abstract = convertText(
+                documentNode.selectSingleNode(config.getAbstractXPath()),
+                config.isAbstractEntityEncoded(), config.getHTMLCleanupProfile());
+            String content = convertText(documentNode.selectSingleNode(config.getContentXPath()),
+                config.isContentEntityEncoded(), config.getHTMLCleanupProfile());
 
             URI originalURI = parseURI(documentNode.selectSingleNode(config.getOriginalURLXPath()));
 
@@ -201,6 +205,28 @@ public class DocumentImportServiceImpl
         catch(ParseException e)
         {
             throw new DocumentException("malformed date at " + node.getUniquePath(), e);
+        }
+    }
+
+    private String convertText(Node node, boolean decodeEntities, String cleanupProfile)
+        throws DocumentException
+    {
+        Writer errorWriter = new StringWriter();
+        String text = node.getText();
+        if(decodeEntities)
+        {
+            text = entityDecoder.decode(text);
+        }
+        try
+        {
+            Document doc = htmlService.textToDom4j(text, errorWriter, "profile");
+            Writer textWriter = new StringWriter();
+            htmlService.dom4jToText(doc, textWriter, true);
+            return textWriter.toString();
+        }
+        catch(HTMLException e)
+        {
+            throw new DocumentException("malformed HTML at " + node.getUniquePath(), e);
         }
     }
 
