@@ -20,6 +20,11 @@ public interface ImportSourceConfiguration
     URL getLocation()
         throws MalformedURLException;
 
+    /**
+     * Name of the import source. Will be used in the documents metadata, sources section.
+     */
+    String getSourceName();
+
     /** DateFromat object to use for parsing and encoding dates. */
     DateFormat getDateFormat();
 

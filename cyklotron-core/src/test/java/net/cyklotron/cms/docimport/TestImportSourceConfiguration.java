@@ -45,6 +45,11 @@ public class TestImportSourceConfiguration
         }
     }
 
+    public String getSourceName()
+    {
+        return "Strona Urzędu Miasta Stołecznego Warszawy";
+    }
+
     @Override
     public DateFormat getDateFormat()
     {

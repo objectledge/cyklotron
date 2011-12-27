@@ -153,8 +153,8 @@ public class DocumentImportServiceImpl
                 }
             }
 
-            documents.add(new DocumentData(title, _abstract, content, originalURI, creationDate,
-                modificationDate, attachments));
+            documents.add(new DocumentData(title, _abstract, content, config.getSourceName(),
+                originalURI, creationDate, modificationDate, attachments));
         }
 
         return documents;

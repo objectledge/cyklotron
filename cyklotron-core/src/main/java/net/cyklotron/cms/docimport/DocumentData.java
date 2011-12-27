@@ -19,6 +19,8 @@ public class DocumentData
 
     private final String content;
 
+    private final String sourceName;
+
     private final URI originalURI;
 
     private final Date creationDate;
@@ -27,12 +29,14 @@ public class DocumentData
 
     private final Collection<AttachmentData> attachments;
 
-    public DocumentData(String title, String _abstract, String content, URI originalURI,
-        Date creationDate, Date modficicationDate, Collection<AttachmentData> attachments)
+    public DocumentData(String title, String _abstract, String content, String sourceName,
+        URI originalURI, Date creationDate, Date modficicationDate,
+        Collection<AttachmentData> attachments)
     {
         this.title = title;
         this._abstract = _abstract;
         this.content = content;
+        this.sourceName = sourceName;
         this.originalURI = originalURI;
         this.creationDate = creationDate;
         modificationDate = modficicationDate;
@@ -53,6 +57,11 @@ public class DocumentData
     public String getContent()
     {
         return content;
+    }
+
+    public String getSourceName()
+    {
+        return sourceName;
     }
 
     public URI getOriginalURI()
