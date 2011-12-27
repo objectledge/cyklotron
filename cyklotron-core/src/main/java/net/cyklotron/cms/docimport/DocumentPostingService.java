@@ -1,7 +1,9 @@
 package net.cyklotron.cms.docimport;
 
 import java.util.Collection;
+import java.util.Map;
 
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.structure.StructureException;
 
 /**
@@ -18,6 +20,7 @@ public interface DocumentPostingService
      * @param documents the documents to be posted.
      * @throws StructureException when posting fails
      */
-    void postDocuments(ImportTargetConfiguration config, Collection<DocumentData> documents)
+    Map<DocumentData, DocumentNodeResource> postDocuments(ImportTargetConfiguration config,
+        Collection<DocumentData> documents)
         throws StructureException;
 }

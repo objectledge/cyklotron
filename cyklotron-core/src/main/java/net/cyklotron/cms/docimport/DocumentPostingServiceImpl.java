@@ -10,6 +10,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,7 +75,8 @@ public class DocumentPostingServiceImpl
      * {@inheritDoc}
      */
     @Override
-    public void postDocuments(ImportTargetConfiguration config, Collection<DocumentData> documents)
+    public Map<DocumentData, DocumentNodeResource> postDocuments(ImportTargetConfiguration config,
+        Collection<DocumentData> documents)
         throws StructureException
     {
         Principal ownerPrincipal = null;
@@ -84,6 +87,7 @@ public class DocumentPostingServiceImpl
             ownerPrincipal = userManager.getUserByLogin(config.getContentOwnerLogin());
             coralSession = coralSessionFactory.getSession(ownerPrincipal);
             Subject ownerSubject = coralSession.getUserSubject();
+            Map<DocumentData, DocumentNodeResource> docMap = new HashMap<DocumentData, DocumentNodeResource>();
             for(DocumentData docData : documents)
             {
                 NavigationNodeResource docParent = structureService.getParent(coralSession,
@@ -103,7 +107,9 @@ public class DocumentPostingServiceImpl
                     coralSession);
 
                 addAttachmentRelations(docNode, atts, coralSession);
+                docMap.put(docData, docNode);
             }
+            return docMap;
         }
         catch(AuthenticationException e)
         {
