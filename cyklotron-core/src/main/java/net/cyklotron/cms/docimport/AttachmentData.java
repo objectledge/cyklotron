@@ -24,6 +24,12 @@ public class AttachmentData
         return originalURI;
     }
 
+    public String getOriginalName()
+    {
+        String[] pathSeg = originalURI.getPath().split("/");
+        return pathSeg[pathSeg.length - 1];
+    }
+
     public byte[] getContents()
     {
         return contents;

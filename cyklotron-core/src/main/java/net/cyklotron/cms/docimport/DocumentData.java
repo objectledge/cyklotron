@@ -69,6 +69,12 @@ public class DocumentData
         return originalURI;
     }
 
+    public String getOriginalName()
+    {
+        String[] pathSeg = originalURI.getPath().split("/");
+        return pathSeg[pathSeg.length - 1];
+    }
+
     public Date getCreationDate()
     {
         return creationDate;

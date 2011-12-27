@@ -6,14 +6,10 @@ import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
 
 import java.io.ByteArrayInputStream;
 import java.security.Principal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.dom4j.Document;
 import org.objectledge.authentication.AuthenticationException;
@@ -94,8 +90,7 @@ public class DocumentPostingServiceImpl
                     config.getTargetLocation(), docData.getCreationDate(),
                     config.getCalendarStructureType(), ownerSubject);
 
-                docName = getDocName(docData);
-
+                docName = docData.getOriginalName();
                 DocumentNodeResource docNode = structureService.addDocumentNode(coralSession,
                     docName, docData.getTitle(), docParent, ownerSubject);
 
@@ -134,24 +129,6 @@ public class DocumentPostingServiceImpl
                 coralSession.close();
             }
         }
-    }
-
-    private String getDocName(DocumentData doc)
-    {
-        String[] pathSegments = doc.getOriginalURI().getPath().split("/");
-        if(pathSegments.length > 0)
-        {
-            // strip file extension from lasts path segment
-            // a/b/c.html -> c
-            Matcher m = Pattern.compile("(.*?)(\\.[^.]+)?$").matcher(
-                pathSegments[pathSegments.length - 1]);
-            if(m.matches())
-            {
-                return m.group(1);
-            }
-        }
-        DateFormat df = new SimpleDateFormat("yyyyMMddHHmm");
-        return df.format(doc.getCreationDate());
     }
 
     private void fillDocument(DocumentData docData, DocumentNodeResource docNode)
@@ -201,8 +178,7 @@ public class DocumentPostingServiceImpl
             config.getAttachmentsLocation());
         for(AttachmentData attData : docData.getAttachments())
         {
-            String[] pathSegments = attData.getOriginalURI().getPath().split("/");
-            String attName = pathSegments[pathSegments.length - 1];
+            String attName = attData.getOriginalName();
             String mimeType;
             mimeType = filesService.detectMimeType(new ByteArrayInputStream(attData.getContents()),
                 attName);
