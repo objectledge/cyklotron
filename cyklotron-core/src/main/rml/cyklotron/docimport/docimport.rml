@@ -37,3 +37,15 @@ ATTRIBUTES (
 	date            lastNewDocumentsCheck,
 	date            lastUpdatedDocumentsCheck
 );
+
+CREATE RESOURCE CLASS 'docimport.trace'
+JAVA CLASS 'net.cyklotron.cms.docimport.ImportTraceResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+	REQUIRED string originalURL,
+	REQUIRED date   sourceModificationTime,
+	REQUIRED date	targetUpdateTime,
+	resource        navigationNode          # structure.navigation_node
+	# inverse mapping is maintained in relation docimport.ImportTracing
+);

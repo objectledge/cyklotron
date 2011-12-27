@@ -50,3 +50,6 @@ src/main/rml/cyklotron/common/components-init.rml
 src/main/rml/cyklotron/common/simple-portal-en.rml
 src/main/rml/cyklotron/aggregation/aggregation-init.rml
 src/main/rml/cyklotron/periodicals/periodicals-init.rml
+rml/cyklotron/catalogue/catalogue-init.rml
+rml/cyklotron/docimport/docimport-init.rml
+
