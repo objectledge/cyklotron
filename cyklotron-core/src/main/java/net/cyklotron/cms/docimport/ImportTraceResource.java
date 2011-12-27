@@ -56,22 +56,17 @@ public interface ImportTraceResource
      * @return the value of the the <code>navigationNode</code> attribute.
      */
     public Resource getNavigationNode();
-
+ 
     /**
      * Sets the value of the <code>navigationNode</code> attribute.
      *
-     * @param value the value of the <code>navigationNode</code> attribute,
-     *        or <code>null</code> to remove value.
+     * @param value the value of the <code>navigationNode</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
      */
-    public void setNavigationNode(Resource value);   
-   
-	/**
-	 * Checks if the value of the <code>navigationNode</code> attribute is defined.
-	 *
-	 * @return <code>true</code> if the value of the <code>navigationNode</code> attribute is defined.
-	 */
-    public boolean isNavigationNodeDefined();
- 
+    public void setNavigationNode(Resource value)
+        throws ValueRequiredException;
+    
     /**
      * Returns the value of the <code>originalURL</code> attribute.
      *

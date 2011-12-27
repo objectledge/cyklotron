@@ -58,9 +58,6 @@ public class ImportTraceResourceImpl
     /** Class variables initialization status. */
     private static boolean definitionsInitialized;
 	
-    /** The AttributeDefinition object for the <code>navigationNode</code> attribute. */
-    private static AttributeDefinition navigationNodeDef;
-
     /** The AttributeDefinition object for the <code>originalURL</code> attribute. */
     private static AttributeDefinition originalURLDef;
 
@@ -69,6 +66,9 @@ public class ImportTraceResourceImpl
 
     /** The AttributeDefinition object for the <code>targetUpdateTime</code> attribute. */
     private static AttributeDefinition targetUpdateTimeDef;
+
+    /** The AttributeDefinition object for the <code>navigationNode</code> attribute. */
+    private static AttributeDefinition navigationNodeDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -119,13 +119,14 @@ public class ImportTraceResourceImpl
      * @param originalURL the originalURL attribute
      * @param sourceModificationTime the sourceModificationTime attribute
      * @param targetUpdateTime the targetUpdateTime attribute
+     * @param navigationNode the navigationNode attribute
      * @return a new ImportTraceResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static ImportTraceResource createImportTraceResource(CoralSession session, String
         name, Resource parent, String originalURL, Date sourceModificationTime, Date
-        targetUpdateTime)
+        targetUpdateTime, Resource navigationNode)
         throws ValueRequiredException, InvalidResourceNameException
     {
         try
@@ -135,6 +136,7 @@ public class ImportTraceResourceImpl
             attrs.put(rc.getAttribute("originalURL"), originalURL);
             attrs.put(rc.getAttribute("sourceModificationTime"), sourceModificationTime);
             attrs.put(rc.getAttribute("targetUpdateTime"), targetUpdateTime);
+            attrs.put(rc.getAttribute("navigationNode"), navigationNode);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ImportTraceResource))
             {
@@ -150,66 +152,6 @@ public class ImportTraceResourceImpl
     }
 
     // public interface //////////////////////////////////////////////////////
- 
-    /**
-     * Returns the value of the <code>navigationNode</code> attribute.
-     *
-     * @return the value of the <code>navigationNode</code> attribute.
-     */
-    public Resource getNavigationNode()
-    {
-        return (Resource)getInternal(navigationNodeDef, null);
-    }
-    
-    /**
-     * Returns the value of the <code>navigationNode</code> attribute.
-     *
-     * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>navigationNode</code> attribute.
-     */
-    public Resource getNavigationNode(Resource defaultValue)
-    {
-        return (Resource)getInternal(navigationNodeDef, defaultValue);
-    }    
-
-    /**
-     * Sets the value of the <code>navigationNode</code> attribute.
-     *
-     * @param value the value of the <code>navigationNode</code> attribute,
-     *        or <code>null</code> to remove value.
-     */
-    public void setNavigationNode(Resource value)
-    {
-        try
-        {
-            if(value != null)
-            {
-                set(navigationNodeDef, value);
-            }
-            else
-            {
-                unset(navigationNodeDef);
-            }
-        }
-        catch(ModificationNotPermitedException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-        catch(ValueRequiredException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-    }
-   
-	/**
-	 * Checks if the value of the <code>navigationNode</code> attribute is defined.
-	 *
-	 * @return <code>true</code> if the value of the <code>navigationNode</code> attribute is defined.
-	 */
-    public boolean isNavigationNodeDefined()
-	{
-	    return isDefined(navigationNodeDef);
-	}
  
     /**
      * Returns the value of the <code>originalURL</code> attribute.
@@ -324,6 +266,46 @@ public class ImportTraceResourceImpl
             throw new BackendException("incompatible schema change",e);
         }
     }
+    
+    /**
+     * Returns the value of the <code>navigationNode</code> attribute.
+     *
+     * @return the value of the <code>navigationNode</code> attribute.
+     */
+    public Resource getNavigationNode()
+    {
+        return (Resource)getInternal(navigationNodeDef, null);
+    }
+ 
+    /**
+     * Sets the value of the <code>navigationNode</code> attribute.
+     *
+     * @param value the value of the <code>navigationNode</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
+     */
+    public void setNavigationNode(Resource value)
+        throws ValueRequiredException
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(navigationNodeDef, value);
+            }
+            else
+            {
+                throw new ValueRequiredException("attribute navigationNode "+
+                                                 "is declared as REQUIRED");
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
      
     // @custom methods ///////////////////////////////////////////////////////
+
+    // @order originalURL, sourceModificationTime, targetUpdateTime, navigationNode
 }
