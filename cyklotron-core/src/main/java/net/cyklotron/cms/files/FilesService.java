@@ -165,6 +165,15 @@ public interface FilesService
 	 * @return the converted name.
 	 */
 	public String convertName(String name);
+
+    /**
+     * Detect MIME type of a piece of content.
+     * 
+     * @param is stream for reading the content.
+     * @param name content file name, if known. May be {@code null}.
+     * @return detected content MIME type.
+     */
+    public String detectMimeType(InputStream is, String name);
     
     /**
      * Extracts text content from the file for the purpose of indexing (search).
