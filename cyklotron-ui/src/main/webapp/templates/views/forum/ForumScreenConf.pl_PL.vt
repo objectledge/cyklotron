@@ -1,0 +1,107 @@
+$viewEnclosureTool.override('popup.Default')
+
+#genericScreenHeader('Konfiguracja forum')
+#set($from_component = true)
+#set($save_action = "$link.unsetView().action('structure.UpdateScreenPreferences').set('x',$node.id)")
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+    <!--
+    var fieldNames = new Array("did", "level_expanded", "page_size", "captcha_verification");
+    function sendConfig()
+    {
+    document.form1.action = "$save_action";
+    document.form1.target = "cyklotron_forum_config_${cms_data.node.id}";
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+    }
+    //-->
+</script>
+
+#macro(listTable $table $headerMessage $emptyMessage)
+$table.getColumn('name').set('label', 'Name')
+$table.getColumn('select').set('label', 'Select')
+$table.getColumn('select').set('width','10px')
+<table width="100%" class="genericItemTree" cellspacing="0">
+  <tr>
+    <th colspan="2">$headerMessage</th>
+  </tr>
+  <tr>
+    #tableView_header($table $tableLink $columnOrder)
+  </tr>
+
+#if($table.pageRowCount == 0)
+  <tr class="row1">
+    <td colspan="$tableColumnOrder.size()">$emptyMessage</td>
+  </tr>
+#else
+
+#foreach($row in $table.rows)
+#set($object = $row.object)
+<tr>
+<td style="width: 10px; text-align: center;">
+<input type="radio" name="did" value="$object.id" id="pool-$object.id" ##
+  #if($object.id == $selected.id) checked="checked" #end />
+</td>
+<td>
+<label for="pool-$object.id">
+#tableView_linesAndFoldersBase($table $row $link)
+$object.name
+<small>$!object.description</small>
+</label>
+</td>
+</tr>
+#end
+<tr>
+  <th colspan="2" align="center" class="bottomLine">
+  #tableView_pager($table $tableLink)
+  #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+  </th>
+</tr>
+#end
+</table>
+#end
+
+<form name="form1" method="post" action="">
+  <input type="hidden" name="node_id" value="$node.id">
+  <input type="hidden" name="config" value="" />
+  
+#set($columnOrder = ['select','name'])
+#set($tableLink = $link.set('tableId',$discussions_table.getId()))
+#listTable($discussions_table "Wybierz dyskusje pokazywaną w aplikacji" "Brak dyskusji")
+<br/>
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tr>
+<td><label>Wybierz poziom rozwinięcia listy wiadomości:</label></td>
+#set($opts = [["0", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5]])
+<td><select size="1" name="level_expanded" >
+#options($opts $config.getInt('level_expanded',0))
+</select></td>
+</tr>
+<tr>
+<td><label>Wybierz liczbę pokazywanych wyników:</label></td>
+#set($opts = [["10", 10], ["20", 20], ["50", 50], ["100", 100], ["Wszystkie", 0]])
+<td><select size="1" name="page_size" >
+#options($opts $config.getInt('page_size', 10))
+</select></td>
+</tr>
+<tr>
+    <td>Weryfikacja Captcha</td>
+    #set($opts = [["Dla wszystkich",'all'], ["Dla niezalogowanych",'anonymous'], ["Wyłącz",'']])
+    <td><select size="1" name="captcha_verification" >
+    #options($opts $componentConfig.get('captcha_verification', ''))
+    </select></td>
+</tr>
+</table>
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+  <a href="javascript:sendConfig();">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+#genericScreenTrailer()

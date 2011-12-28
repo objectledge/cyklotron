@@ -1,0 +1,36 @@
+
+##
+#set($nodeLink = $link.set('doc_id',$doc.id))
+#set($nodeLink = $nodeLink.set('removal_requested','true'))
+#set($nodeLink = $nodeLink.set('x',$parametersTool.get('x','-1')))
+#set($formAction = $nodeLink.action('structure.UpdateRemovalRequest'))
+##
+##
+#genericScreenHeader('Zgłoszenie o usunięcie dokumentu')
+
+#result_inline_message('results.structure')
+
+<form name="propose_document" method="post" enctype="multipart/form-data" action="$formAction">
+<table border="0" class="genericScreen" width="100%" cellspacing="0">
+  <tr>
+    <td width="30%">Uwagi dotyczące prośby o usunięcie dokumentu:</td>
+    <td width="70%"><textarea rows="" cols="" style="width: 100%; height:6em;" 
+	name="editorial_note"></textarea></td>
+  </tr>
+</table>
+</form>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+#if($cms_data.userData.hasPermission($doc, "cms.structure.modify") || $cms_data.userData.hasPermission($doc, "cms.structure.modify_own"))
+    <a href="javascript:document.propose_document.submit();">Wyślij zgłoszenie</a>
+#end
+  </div>
+</div>
+
+
+#genericScreenTrailer()

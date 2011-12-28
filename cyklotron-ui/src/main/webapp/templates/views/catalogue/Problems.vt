@@ -1,0 +1,115 @@
+#set($vi18n = $i18n.usePrefix('cms.catalogue.Problems'))
+#set($strings = $vi18n.usePrefix('strings'))
+#set($propertyNames = $i18n.usePrefix('cms.catalogue.Common.properties'))
+#genericScreenHeader("${strings.title} ${config.name}")
+
+#if(!$applicationConfigured)
+<table class="messageInlineTable">
+<tr><td><b>$strings.notConfigured</b></td></tr>
+</table>
+#elseif($table.rows.empty)
+<table class="messageInlineTable">
+<tr><td><b>$strings.noProblemsFound</b></td></tr>
+</table>	
+#else
+<form name="form1" method="POST">
+<input type="hidden" name="cid" value="$config.id"/>
+<script type="text/javascript">
+  function send(action)
+  {
+    document.form1.action = action;
+    document.form1.submit();
+  }
+</script>
+
+<table  width="100%" class="genericItemList" cellspacing="0">
+<tr><th>$strings.filtersHeading</th></tr>
+<tr><td>
+<input type="hidden" name="filterDefined" value="true" />
+#foreach($problemType in $problemTypes)
+<input type="checkbox" name="filter" id="filter-${problemType}" value="$problemType" #if(!$filter || $filter.contains($problemType))checked #end/>  
+<label for="filter-${problemType}">$vi18n.get("problems.${problemType}")</label> <br/>
+#end
+<a href="javascript:send('$link')">$strings.filtersButton</a>
+</td></tr>
+</table>
+
+<br/>
+
+#set($columnOrder = ['resource','documents','files','problems','missingProperties'])
+#foreach($column in $columnOrder)
+$table.getColumn($column).set('label', $vi18n.get("columns.${column}"))
+#end
+#set($tableLink = $link.set('tableId',$table.id))
+
+<table width="100%" class="genericItemList" cellspacing="0">
+<tr>
+ #tableView_header_Submit($table $tableLink $columnOrder 'send')
+</tr>
+ #foreach($row in $table.rows)
+  #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+    <td>
+	  #set($resource = $row.object.resource)
+	  #if($resource.resourceClass.name == 'documents.document_node')
+	  #resource_title_link($resource $link.view('structure.NaviInfo').set('node_id',$resource.id))
+	  #else
+	  #resource_link($resource $link.view('files.ListDirectory').set('dir_id',$resource.id))
+	  #end
+	</td>
+    <td>
+      #if($row.object.descriptionDocCandidates && !$row.object.descriptionDocCandidates.empty)
+      #foreach($doc in $row.object.descriptionDocCandidates)
+      #resource_title_link($doc $link.view('structure.NaviInfo').set('node_id',$doc.id)) <br/>
+	  #end    
+	  #else
+	  &nbsp;
+	  #end
+	</td>
+    <td>
+      #if($row.object.downloads && !$row.object.downloads.empty)
+      #foreach($file in $row.object.downloads)
+      #resource_link($file $link.view('files.ListDirectory').set('dir_id',$file.parent.id)) <br/>
+	  #end    
+	  #else
+	  &nbsp;
+	  #end
+    </td>
+    <td>    
+      #set($other = false)
+      #foreach($problemType in $problemTypes)
+      #if($row.object.problems.contains($problemType))
+      #if(!$filter || $filter.contains($problemType))
+      $vi18n.get("problems.${problemType}") <br/>
+      #else
+      #set($other = true)
+      #end    
+      #end
+      #end
+      #if($other == true)
+      &hellip;
+      #end    
+    </td>
+	<td>
+	  #if($row.object.missingProperties && !$row.object.missingProperties.empty)
+	    #foreach($property in $propertyOrder)
+	      #if($row.object.missingProperties.contains($property))
+	        $propertyNames.get("$property") <br/>
+	      #end 
+	    #end 	
+      #else
+	    &nbsp;
+	  #end
+	</td>
+    </tr>
+ #end   
+ <tr>
+    <td colspan="5" align="center" class="bottomLine">
+       #tableView_pager_Submit($table $tableLink 'send')
+       #tableView_pageSizeChooser_Submit($table $tableLink [50,100] 'send')
+    </td>
+  </tr>
+</table>
+</form>
+#end
+#genericScreenTrailer()

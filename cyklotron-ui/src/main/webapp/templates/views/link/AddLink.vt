@@ -1,0 +1,121 @@
+##
+## Link application: link adding screen
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: AddLink.vt,v 1.6 2005-05-16 09:40:07 pablo Exp $
+##
+##
+##
+  $pageTool.addScriptLink('script/CMSPopups.js')
+  $pageTool.addScriptLink('script/Forms.js')
+
+  #set($lsid = $parametersTool.get('lsid','-1'))
+  #set($linkLink = $link.set('lsid',$lsid))
+  #set($monthNames = $i18n.usePrefix('calendar').usePrefix("ofmonths"))
+
+  #set($pid = $parametersTool.get('pid',''))
+
+
+  #genericScreenHeader("ADD LINK #if(!$pid == '') TO FOLDER #end")
+
+  #result_inline_message('results.link')
+
+  #if($pid == '')
+  <form name="add_link" method="post" action="$linkLink.view("link.LinkList").action("link.AddLink")" class="defaultForm">
+  #else
+  <form name="add_link" method="post" action="$linkLink.view("link.EditPool").set('pid',$pid).action("link.AddLink")" class="defaultForm">
+  #end
+
+  <input type="hidden" name="transition" value="accept" size="30">
+    <table class="genericItemList" width="100%" cellspacing="0">
+      <tr>
+        <td align="left">
+          <b>Link title:</b>
+        </td>
+        <td colspan="3">
+          <input type="text" name="title" value="$parametersTool.get("title","")" size="30" style="width:100%;" maxlength="255">
+        </td>
+      </tr>
+
+      <tr>
+        <td align="left">
+          <b>Short description:</b>
+        </td>
+  <td colspan="3">
+          <input type="text" name="description" value="$parametersTool.get("description","")" size="50" style="width:100%;" maxlength="255">
+        </td>
+      </tr>
+      <tr>
+  <td align="left"><b>Active since:</b></td>
+        <td nowrap colspan="3">
+          #dateSelectorTS("start_time" $parametersTool.getLong('start_time',$calendar.getTime().getTime()))
+        </td>
+      </tr>
+
+      <tr>
+  <td align="left"><b>Active until:</b></td>
+  <td nowrap colspan="3">
+          #dateSelectorOptionalTS("end_time" $parametersTool.getLong('end_time',$two_weeks_later.getTime().getTime()) "bezterminowo")
+        </td>
+      </tr>
+
+      <tr>
+  <td align="left" rowspan="2" nowrap valign="center">
+    <b>Target address:</b>
+  </td>
+  <td nowrap>
+    <input type=radio name="src_type" value="cms"><b>internal</b>
+  </td>
+            <td width="60%">
+          <input type=hidden name="structure_path" value="$data_site.getPath()/structure">
+          <input type=text name="int_target" value="$parametersTool.get('int_target',"")" style="width:100%;"  onclick="Forms.setValue('add_link', 'src_type', 'cms');">
+  </td>
+        <td class="actionlink">
+          <script language="javascript">
+          function selectLinkTarget()
+          {
+              Forms.setValue('add_link', 'src_type', 'cms')
+              selectNode('relative_path', 'add_link', 'int_target', '$link.view('popup.NodeList').set('root',$data_site_root.id)')
+          }
+          </script>
+          <a href="javascript:selectLinkTarget();">choose</a>
+        </td>
+      </tr>
+
+      <tr>
+  <td>
+    <input type=radio name="src_type" value="external" checked><b>external:</b>
+    </td>
+    <td colspan="2">
+    <input type=text name="ext_target" value="http://" size="50" style="width:100%;" onfocus="Form.setValue('add_link', 'src_type', 'external');">
+  </td>
+      </tr>
+
+    </table>
+
+    <div align="right">
+      <table class="layoutTable" align="right" border="0">
+  <tr>
+    <td NOWRAP class="usualbutton">
+      <a href="javascript:document.add_link.submit();">Add</a>
+    </td>
+    <td>
+      <table height="22" class="buttonTable">
+        <tr>
+    <td>
+      #if($pid == '')
+      <a href="$linkLink.view("link.LinkList")">Cancel</a>
+      #else
+      <a href="$linkLink.view("link.EditPool").set('pid',$pid)">Cancel</a>
+      #end
+    </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+      </table>
+    </div>
+
+  </form>
+

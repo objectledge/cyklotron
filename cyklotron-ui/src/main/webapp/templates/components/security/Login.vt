@@ -1,0 +1,127 @@
+#if(!$ssoTool.loggedIn)  
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+#if($ssoTool.active)
+$pageTool.addScriptLink('script/SingleSignOn.js')##
+#end
+
+<!-- login form -->
+<script type="text/javascript">
+var J = jQuery;
+
+#if($ssoTool.active)
+function enableLoadingForm(enable) {
+    if(enable) {
+        J('#loading').hide();
+	    J('#submitbutton').show();
+		J('#login').attr('disabled', false);
+        J('#password').attr('disabled', false);
+    } else {
+	    J('#loading').show();
+		J('#submitbutton').hide();
+        J('#login').attr('disabled', true);
+        J('#password').attr('disabled', true);
+    }  
+}
+
+#end
+J(document).ready(function() {
+#if($ssoTool.active)
+    J('#loading').ajaxStart(function() {
+        enableLoadingForm(false);
+    });
+    J('#loading').ajaxStop(function() {
+        enableLoadingForm(true);
+    });
+
+    var sso = new SSO('$ssoTool.baseUrl');
+    sso.migrateSession(function(status) {
+        if(status == 'success') {
+            J("#loginform").submit();
+        }
+    });
+
+    J('#submitbutton').click(function() {
+        sso.login(J('#login').val(), J('#password').val(), function(status) {
+            if(status == 'success') {
+                J("#loginform").submit();
+            } else {
+                alert('invalid login name or passowrd');
+            }
+        });
+    });
+
+#else
+    J('#submitbutton').click(function() {
+        J("#loginform").submit();
+    });
+
+#end        
+    J('#loading').hide();
+    J('#login').focus();
+});
+</script>
+#if($ssoTool.active)
+#set($loginLink = $link.set('x', $cmsData.node.id))
+#else
+#set($loginLink = $link.set('x', $cmsData.node.id).action("authentication.CMSLogin"))
+#end
+##
+#foreach($key in $parametersTool.parameterNames)
+#if($parametersTool.isQueryStringParameter($key) && $key != 'action' && $key != 'view')
+#set($loginLink = $loginLink.set($key, $parametersTool.get($key)))
+#end
+#end
+##
+<form name="loginform"##
+    id="loginform"## 
+    action="$loginLink"##
+    method="post" class="defaultForm">
+##
+#foreach($key in $parametersTool.parameterNames)
+#if($parametersTool.isPOSTParameter($key))
+#set($values = $parametersTool.getStrings($key))
+#foreach($value in $values)
+<input type="hidden" name="$key" value="$stringTool.wrap($htmlEncoder.encodeAttribute($value,true),2048)"/>
+#end
+#end
+#end
+##
+<table width="100%" class="genericComponent" cellspacing="0">
+#if($result == 'login_failed')
+  <tr><td colspan="2" align="center">invalid login name or passowrd</td></tr>	
+#end	
+  <tr>
+    <td>Login name:</td><td><input id="login" type="text" name="login" class="login-input" /></td>
+  </tr>
+  <tr>
+    <td>Password:</td><td><input type="password" id="password" name="password" class="login-input" /></td>
+  </tr>
+  <tr>
+     <td align="center" colspan="2">
+       <input type="button" id="submitbutton" class="submitbutton" value="Log in" class="login-button" />
+       <div id="loading">
+         <img src="$link.content('images/loading.gif')"/>
+         <div class="info">Logging in ...</div>
+       </div>
+    </td>
+  </tr>
+</table>
+</form>
+#else
+<form name="loginform"##
+    id="loginform"## 
+    action="$link.action("authentication.Logout")"##
+    method="post" class="defaultForm">	
+<table width="100%" class="genericComponent" cellspacing="0">
+  <tr>
+    <td colspan="2" align="center">You are logged in as #cms_personal_credentials($cms_tool.subject)</td>
+  </tr>
+  <tr>
+	<td colspan="2" align="center">
+       <input type="button" id="submitbutton" class="submitbutton" value="Log out" class="login-button" />
+    </td>
+ </tr>
+</table>
+</form>
+#end
+<!-- /login form -->
