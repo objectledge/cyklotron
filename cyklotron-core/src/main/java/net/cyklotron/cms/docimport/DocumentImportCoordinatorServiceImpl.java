@@ -23,7 +23,7 @@ import net.cyklotron.cms.structure.StructureException;
 public class DocumentImportCoordinatorServiceImpl
     implements DocumentImportCoordinatorService
 {
-    private static final int DEFAULT_FETCH_MONTHS = 3;
+    private static final int DEFAULT_FETCH_MONTHS = 1;
 
     private static final String RELATION_NAME = "docimport.ImportTracing";
 
