@@ -98,6 +98,8 @@ public class DocumentPostingServiceImpl
 
                 assignCategories(docNode, config, coralSession);
 
+                structureService.enterState(coralSession, docNode, "new", ownerSubject);
+
                 Collection<FileResource> atts = storeAttachments(docData, docName, config,
                     coralSession);
 
@@ -134,7 +136,7 @@ public class DocumentPostingServiceImpl
     private void fillDocument(DocumentData docData, DocumentNodeResource docNode)
     {
         docNode.setAbstract(docData.getAbstract());
-        docNode.setContent(docNode.getContent());
+        docNode.setContent(docData.getContent());
         docNode.setCustomModificationTime(docData.getModificationDate());
         // @formatter:off
         Document meta = doc(
