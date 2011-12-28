@@ -532,7 +532,16 @@
   <component class="net.cyklotron.cms.CmsDataFactory"/>
   
   <component class-key="net.cyklotron.cms.poll.PollService"
-             class="net.cyklotron.cms.poll.internal.PollServiceImpl"/>  
+             class="net.cyklotron.cms.poll.internal.PollServiceImpl"/>
+             
+  <component class-key="net.cyklotron.cms.docimport.DocumentImportService"
+             class="net.cyklotron.cms.docimport.DocumentImportServiceImpl"/>   
+             
+  <component class-key="net.cyklotron.cms.docimport.DocumentPostingService"
+             class="net.cyklotron.cms.docimport.DocumentPostingServiceImpl"/>
+             
+  <component class-key="net.cyklotron.cms.docimport.DocumentImportCoordinatorService"
+             class="net.cyklotron.cms.docimport.DocumentImportCoordinatorServiceImpl"/>                     
              
   <!-- remote management -->           
              

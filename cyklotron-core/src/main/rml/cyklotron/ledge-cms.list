@@ -23,4 +23,5 @@ rml/cyklotron/common/simple-portal-en.rml
 rml/cyklotron/aggregation/aggregation-init.rml
 rml/cyklotron/periodicals/periodicals-init.rml
 rml/cyklotron/catalogue/catalogue-init.rml
+rml/cyklotron/docimport/docimport-init.rml
 

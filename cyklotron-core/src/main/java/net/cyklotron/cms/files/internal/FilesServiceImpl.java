@@ -44,6 +44,8 @@ public class FilesServiceImpl
 {
     // instance variables ////////////////////////////////////////////////////
 
+    private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
+
     /** logging facility */
     private Logger log;
 
@@ -255,7 +257,7 @@ public class FilesServiceImpl
             FileResource file = FileResourceImpl.createFileResource(coralSession, name, parent);
             file.setSize(fileSystem.length(path));
             if(mimetype == null || mimetype.equals("")
-                || mimetype.equals("application/octet-stream"))
+                || mimetype.equals(DEFAULT_MIME_TYPE))
             {
                 mimetype = mailSystem.getContentType(name);
             }
@@ -523,6 +525,28 @@ public class FilesServiceImpl
         return name;
     }
     
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String detectMimeType(InputStream is, String name)
+    {
+        Metadata metadata = new Metadata();
+        if(name != null)
+        {
+            metadata.set(Metadata.RESOURCE_NAME_KEY, name);
+        }
+        try
+        {
+            return tika.detect(is, metadata);
+        }
+        catch(IOException e)
+        {
+            log.error("failed to detect MIME type", e);
+            return DEFAULT_MIME_TYPE;
+        }
+    }
+
     /**
      * Extracts text content from the file for the purpose of indexing (search). The implemenation
      * uses <a href="http://lucene.apache.org/tika/">Apache Tika</a> to perform file type
