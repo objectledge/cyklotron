@@ -133,7 +133,7 @@ public class DocumentImportCoordinatorServiceImpl
         {
             coralSession = coralSessionFactory.getRootSession();
             QueryResults results = coralSession.getQuery().executeQuery(
-                "FIND FROM docimport.import");
+                "FIND RESOURCE FROM docimport.import");
             for(Resource res : results.getList(1))
             {
                 processImport((ImportResource)res, coralSession);
