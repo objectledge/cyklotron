@@ -89,4 +89,9 @@ public class DocumentData
     {
         return attachments;
     }
+
+    public String toString()
+    {
+        return originalURI.toASCIIString();
+    }
 }
