@@ -17,7 +17,9 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -60,7 +62,7 @@ public class DocumentImportServiceImpl
             Date newest = findNewest(batch);
             batch = loadBatch(config, nextMinute(newest), end, dateFormat);
         }
-        return documents;
+        return makeUniqueByUri(documents);
     }
 
     private Date findNewest(Collection<DocumentData> documents)
@@ -160,6 +162,20 @@ public class DocumentImportServiceImpl
         return documents;
     }
 
+    private Collection<DocumentData> makeUniqueByUri(Collection<DocumentData> in)
+    {
+        Collection<DocumentData> out = new ArrayList<DocumentData>();
+        Set<URI> uniqueURIs = new HashSet<URI>();
+        for(DocumentData doc : in)
+        {
+            if(uniqueURIs.add(doc.getOriginalURI()))
+            {
+                out.add(doc);
+            }
+        }
+        return out;
+    }
+
     private AttachmentData loadAttachment(String attachmentURL, Node attachmentNode,
         ImportSourceConfiguration config)
         throws DocumentException, IOException
@@ -219,7 +235,7 @@ public class DocumentImportServiceImpl
         }
         try
         {
-            Document doc = htmlService.textToDom4j(text, errorWriter, "profile");
+            Document doc = htmlService.textToDom4j(text, errorWriter, cleanupProfile);
             Writer textWriter = new StringWriter();
             htmlService.dom4jToText(doc, textWriter, true);
             return textWriter.toString();
