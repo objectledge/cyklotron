@@ -174,16 +174,19 @@ public class DocumentPostingServiceImpl
         throws FilesException
     {
         Collection<FileResource> files = new ArrayList<FileResource>();
-        DirectoryResource docDirectory = filesService.createDirectory(coralSession, docName,
-            config.getAttachmentsLocation());
-        for(AttachmentData attData : docData.getAttachments())
+        if(docData.getAttachments().size() > 0)
         {
-            String attName = attData.getOriginalName();
-            String mimeType;
-            mimeType = filesService.detectMimeType(new ByteArrayInputStream(attData.getContents()),
-                attName);
-            files.add(filesService.createFile(coralSession, attName, new ByteArrayInputStream(
-                attData.getContents()), mimeType, null, docDirectory));
+            DirectoryResource docDirectory = filesService.createDirectory(coralSession, docName,
+                config.getAttachmentsLocation());
+            for(AttachmentData attData : docData.getAttachments())
+            {
+                String attName = attData.getOriginalName();
+                String mimeType;
+                mimeType = filesService.detectMimeType(
+                    new ByteArrayInputStream(attData.getContents()), attName);
+                files.add(filesService.createFile(coralSession, attName, new ByteArrayInputStream(
+                    attData.getContents()), mimeType, null, docDirectory));
+            }
         }
         return files;
     }
