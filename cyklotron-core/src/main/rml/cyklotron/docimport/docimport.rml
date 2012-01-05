@@ -24,13 +24,16 @@ ATTRIBUTES (
 	string          attachentURLXPath,
 	boolean         attachmentURLComposite,
 	string          attachmentURLSeparator,
-	string          htmlCleanupProfile,
+	string          contentCleanupProfile,
+	string          abstractCleanupProfile,
+	string          titleCleanupProfile,
 	
 	# target configuration
 	REQUIRED string   ownerLogin,
 	REQUIRED resource targetLocation,        # structure.navigation_node
 	string            calendarStructureType, # {D,M,Y,N}
 	resource_list     categories,            # category.category
+	string     		  footer,                # footer name
 	REQUIRED resource attachmentsLocation,   # files.directory
 	
 	# coordination

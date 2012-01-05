@@ -46,7 +46,7 @@ public class PersistentImportSourceConfiguration
 
     private static final String DEFAULT_ATTACHMENT_URL_SEPARATOR = "\\s+";
 
-    private static final String DEFAULT_HTML_CLEANUP_PROFILE = null;
+    private static final String DEFAULT_CLEANUP_PROFILE = null;
 
     private final ImportResource res;
 
@@ -173,14 +173,28 @@ public class PersistentImportSourceConfiguration
             .getAttachmentURLSeparator() : DEFAULT_ATTACHMENT_URL_SEPARATOR;
         return Pattern.compile(pattern);
     }
-
+    
     @Override
-    public String getHTMLCleanupProfile()
+    public String getAbstractCleanupProfile()
     {
-        return res.isHtmlCleanupProfileDefined() ? res.getHtmlCleanupProfile()
-            : DEFAULT_HTML_CLEANUP_PROFILE;
+        return res.isAbstractCleanupProfileDefined() ? res.getAbstractCleanupProfile()
+            : DEFAULT_CLEANUP_PROFILE;
+    }
+    
+    @Override
+    public String getContentCleanupProfile()
+    {
+        return res.isContentCleanupProfileDefined() ? res.getContentCleanupProfile()
+            : DEFAULT_CLEANUP_PROFILE;
     }
 
+    @Override
+    public String getTitleCleanupProfile()
+    {
+        return res.isTitleCleanupProfileDefined() ? res.getTitleCleanupProfile()
+            : DEFAULT_CLEANUP_PROFILE;
+    }
+    
     @Override
     public URL transformAttachmentURL(String url)
         throws MalformedURLException

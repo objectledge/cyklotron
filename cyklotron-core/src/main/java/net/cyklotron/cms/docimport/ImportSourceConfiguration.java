@@ -85,7 +85,17 @@ public interface ImportSourceConfiguration
         throws MalformedURLException;
 
     /**
-     * The name of the HTML cleanup profile configured with HTMLService.
+     * The name of the Content cleanup profile configured with HTMLService.
      */
-    String getHTMLCleanupProfile();
+    String getContentCleanupProfile();
+    
+    /**
+     * The name of the Abstract cleanup profile configured with HTMLService.
+     */
+    String getAbstractCleanupProfile();
+    
+    /**
+     * The name of the Title profile configured with HTMLService.
+     */
+    String getTitleCleanupProfile();
 }

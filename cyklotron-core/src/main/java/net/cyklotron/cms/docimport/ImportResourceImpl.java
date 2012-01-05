@@ -59,6 +59,9 @@ public class ImportResourceImpl
     /** Class variables initialization status. */
     private static boolean definitionsInitialized;
 	
+    /** The AttributeDefinition object for the <code>abstractCleanupProfile</code> attribute. */
+    private static AttributeDefinition abstractCleanupProfileDef;
+
     /** The AttributeDefinition object for the <code>abstractEntityEncoded</code> attribute. */
     private static AttributeDefinition abstractEntityEncodedDef;
 
@@ -83,6 +86,9 @@ public class ImportResourceImpl
     /** The AttributeDefinition object for the <code>categories</code> attribute. */
     private static AttributeDefinition categoriesDef;
 
+    /** The AttributeDefinition object for the <code>contentCleanupProfile</code> attribute. */
+    private static AttributeDefinition contentCleanupProfileDef;
+
     /** The AttributeDefinition object for the <code>contentEntitytEncoded</code> attribute. */
     private static AttributeDefinition contentEntitytEncodedDef;
 
@@ -104,8 +110,8 @@ public class ImportResourceImpl
     /** The AttributeDefinition object for the <code>documentXPath</code> attribute. */
     private static AttributeDefinition documentXPathDef;
 
-    /** The AttributeDefinition object for the <code>htmlCleanupProfile</code> attribute. */
-    private static AttributeDefinition htmlCleanupProfileDef;
+    /** The AttributeDefinition object for the <code>footer</code> attribute. */
+    private static AttributeDefinition footerDef;
 
     /** The AttributeDefinition object for the <code>lastNewDocumentsCheck</code> attribute. */
     private static AttributeDefinition lastNewDocumentsCheckDef;
@@ -130,6 +136,9 @@ public class ImportResourceImpl
 
     /** The AttributeDefinition object for the <code>targetLocation</code> attribute. */
     private static AttributeDefinition targetLocationDef;
+
+    /** The AttributeDefinition object for the <code>titleCleanupProfile</code> attribute. */
+    private static AttributeDefinition titleCleanupProfileDef;
 
     /** The AttributeDefinition object for the <code>titleEntityEncoded</code> attribute. */
     private static AttributeDefinition titleEntityEncodedDef;
@@ -221,6 +230,66 @@ public class ImportResourceImpl
     }
 
     // public interface //////////////////////////////////////////////////////
+ 
+    /**
+     * Returns the value of the <code>abstractCleanupProfile</code> attribute.
+     *
+     * @return the value of the <code>abstractCleanupProfile</code> attribute.
+     */
+    public String getAbstractCleanupProfile()
+    {
+        return (String)getInternal(abstractCleanupProfileDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>abstractCleanupProfile</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>abstractCleanupProfile</code> attribute.
+     */
+    public String getAbstractCleanupProfile(String defaultValue)
+    {
+        return (String)getInternal(abstractCleanupProfileDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>abstractCleanupProfile</code> attribute.
+     *
+     * @param value the value of the <code>abstractCleanupProfile</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setAbstractCleanupProfile(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(abstractCleanupProfileDef, value);
+            }
+            else
+            {
+                unset(abstractCleanupProfileDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>abstractCleanupProfile</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>abstractCleanupProfile</code> attribute is defined.
+	 */
+    public boolean isAbstractCleanupProfileDefined()
+	{
+	    return isDefined(abstractCleanupProfileDef);
+	}
 
     /**
      * Returns the value of the <code>abstractEntityEncoded</code> attribute.
@@ -717,6 +786,66 @@ public class ImportResourceImpl
 	{
 	    return isDefined(categoriesDef);
 	}
+ 
+    /**
+     * Returns the value of the <code>contentCleanupProfile</code> attribute.
+     *
+     * @return the value of the <code>contentCleanupProfile</code> attribute.
+     */
+    public String getContentCleanupProfile()
+    {
+        return (String)getInternal(contentCleanupProfileDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>contentCleanupProfile</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>contentCleanupProfile</code> attribute.
+     */
+    public String getContentCleanupProfile(String defaultValue)
+    {
+        return (String)getInternal(contentCleanupProfileDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>contentCleanupProfile</code> attribute.
+     *
+     * @param value the value of the <code>contentCleanupProfile</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setContentCleanupProfile(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(contentCleanupProfileDef, value);
+            }
+            else
+            {
+                unset(contentCleanupProfileDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>contentCleanupProfile</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>contentCleanupProfile</code> attribute is defined.
+	 */
+    public boolean isContentCleanupProfileDefined()
+	{
+	    return isDefined(contentCleanupProfileDef);
+	}
 
     /**
      * Returns the value of the <code>contentEntitytEncoded</code> attribute.
@@ -1158,43 +1287,43 @@ public class ImportResourceImpl
 	}
  
     /**
-     * Returns the value of the <code>htmlCleanupProfile</code> attribute.
+     * Returns the value of the <code>footer</code> attribute.
      *
-     * @return the value of the <code>htmlCleanupProfile</code> attribute.
+     * @return the value of the <code>footer</code> attribute.
      */
-    public String getHtmlCleanupProfile()
+    public String getFooter()
     {
-        return (String)getInternal(htmlCleanupProfileDef, null);
+        return (String)getInternal(footerDef, null);
     }
     
     /**
-     * Returns the value of the <code>htmlCleanupProfile</code> attribute.
+     * Returns the value of the <code>footer</code> attribute.
      *
      * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>htmlCleanupProfile</code> attribute.
+     * @return the value of the <code>footer</code> attribute.
      */
-    public String getHtmlCleanupProfile(String defaultValue)
+    public String getFooter(String defaultValue)
     {
-        return (String)getInternal(htmlCleanupProfileDef, defaultValue);
+        return (String)getInternal(footerDef, defaultValue);
     }    
 
     /**
-     * Sets the value of the <code>htmlCleanupProfile</code> attribute.
+     * Sets the value of the <code>footer</code> attribute.
      *
-     * @param value the value of the <code>htmlCleanupProfile</code> attribute,
+     * @param value the value of the <code>footer</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setHtmlCleanupProfile(String value)
+    public void setFooter(String value)
     {
         try
         {
             if(value != null)
             {
-                set(htmlCleanupProfileDef, value);
+                set(footerDef, value);
             }
             else
             {
-                unset(htmlCleanupProfileDef);
+                unset(footerDef);
             }
         }
         catch(ModificationNotPermitedException e)
@@ -1208,13 +1337,13 @@ public class ImportResourceImpl
     }
    
 	/**
-	 * Checks if the value of the <code>htmlCleanupProfile</code> attribute is defined.
+	 * Checks if the value of the <code>footer</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>htmlCleanupProfile</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>footer</code> attribute is defined.
 	 */
-    public boolean isHtmlCleanupProfileDefined()
+    public boolean isFooterDefined()
 	{
-	    return isDefined(htmlCleanupProfileDef);
+	    return isDefined(footerDef);
 	}
  
     /**
@@ -1608,7 +1737,67 @@ public class ImportResourceImpl
             throw new BackendException("incompatible schema change",e);
         }
     }
+    
+    /**
+     * Returns the value of the <code>titleCleanupProfile</code> attribute.
+     *
+     * @return the value of the <code>titleCleanupProfile</code> attribute.
+     */
+    public String getTitleCleanupProfile()
+    {
+        return (String)getInternal(titleCleanupProfileDef, null);
+    }
+    
+    /**
+     * Returns the value of the <code>titleCleanupProfile</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>titleCleanupProfile</code> attribute.
+     */
+    public String getTitleCleanupProfile(String defaultValue)
+    {
+        return (String)getInternal(titleCleanupProfileDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>titleCleanupProfile</code> attribute.
+     *
+     * @param value the value of the <code>titleCleanupProfile</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setTitleCleanupProfile(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(titleCleanupProfileDef, value);
+            }
+            else
+            {
+                unset(titleCleanupProfileDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
    
+	/**
+	 * Checks if the value of the <code>titleCleanupProfile</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>titleCleanupProfile</code> attribute is defined.
+	 */
+    public boolean isTitleCleanupProfileDefined()
+	{
+	    return isDefined(titleCleanupProfileDef);
+	}
+
     /**
      * Returns the value of the <code>titleEntityEncoded</code> attribute.
      *
