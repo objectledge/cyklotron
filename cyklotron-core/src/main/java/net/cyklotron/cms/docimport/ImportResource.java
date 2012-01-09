@@ -50,6 +50,28 @@ public interface ImportResource
     public static final String CLASS_NAME = "docimport.import";
 
     // public interface //////////////////////////////////////////////////////
+ 
+    /**
+     * Returns the value of the <code>abstractCleanupProfile</code> attribute.
+     *
+     * @return the value of the the <code>abstractCleanupProfile</code> attribute.
+     */
+    public String getAbstractCleanupProfile();
+
+    /**
+     * Sets the value of the <code>abstractCleanupProfile</code> attribute.
+     *
+     * @param value the value of the <code>abstractCleanupProfile</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setAbstractCleanupProfile(String value);   
+   
+	/**
+	 * Checks if the value of the <code>abstractCleanupProfile</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>abstractCleanupProfile</code> attribute is defined.
+	 */
+    public boolean isAbstractCleanupProfileDefined();
 	
     /**
      * Returns the value of the <code>abstractEntityEncoded</code> attribute.
@@ -251,6 +273,28 @@ public interface ImportResource
 	 * @return <code>true</code> if the value of the <code>categories</code> attribute is defined.
 	 */
     public boolean isCategoriesDefined();
+ 
+    /**
+     * Returns the value of the <code>contentCleanupProfile</code> attribute.
+     *
+     * @return the value of the the <code>contentCleanupProfile</code> attribute.
+     */
+    public String getContentCleanupProfile();
+
+    /**
+     * Sets the value of the <code>contentCleanupProfile</code> attribute.
+     *
+     * @param value the value of the <code>contentCleanupProfile</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setContentCleanupProfile(String value);   
+   
+	/**
+	 * Checks if the value of the <code>contentCleanupProfile</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>contentCleanupProfile</code> attribute is defined.
+	 */
+    public boolean isContentCleanupProfileDefined();
 	
     /**
      * Returns the value of the <code>contentEntitytEncoded</code> attribute.
@@ -422,26 +466,26 @@ public interface ImportResource
     public boolean isDocumentXPathDefined();
  
     /**
-     * Returns the value of the <code>htmlCleanupProfile</code> attribute.
+     * Returns the value of the <code>footer</code> attribute.
      *
-     * @return the value of the the <code>htmlCleanupProfile</code> attribute.
+     * @return the value of the the <code>footer</code> attribute.
      */
-    public String getHtmlCleanupProfile();
+    public String getFooter();
 
     /**
-     * Sets the value of the <code>htmlCleanupProfile</code> attribute.
+     * Sets the value of the <code>footer</code> attribute.
      *
-     * @param value the value of the <code>htmlCleanupProfile</code> attribute,
+     * @param value the value of the <code>footer</code> attribute,
      *        or <code>null</code> to remove value.
      */
-    public void setHtmlCleanupProfile(String value);   
+    public void setFooter(String value);   
    
 	/**
-	 * Checks if the value of the <code>htmlCleanupProfile</code> attribute is defined.
+	 * Checks if the value of the <code>footer</code> attribute is defined.
 	 *
-	 * @return <code>true</code> if the value of the <code>htmlCleanupProfile</code> attribute is defined.
+	 * @return <code>true</code> if the value of the <code>footer</code> attribute is defined.
 	 */
-    public boolean isHtmlCleanupProfileDefined();
+    public boolean isFooterDefined();
  
     /**
      * Returns the value of the <code>lastNewDocumentsCheck</code> attribute.
@@ -598,7 +642,29 @@ public interface ImportResource
      */
     public void setTargetLocation(Resource value)
         throws ValueRequiredException;
-   	
+    
+    /**
+     * Returns the value of the <code>titleCleanupProfile</code> attribute.
+     *
+     * @return the value of the the <code>titleCleanupProfile</code> attribute.
+     */
+    public String getTitleCleanupProfile();
+
+    /**
+     * Sets the value of the <code>titleCleanupProfile</code> attribute.
+     *
+     * @param value the value of the <code>titleCleanupProfile</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setTitleCleanupProfile(String value);   
+   
+	/**
+	 * Checks if the value of the <code>titleCleanupProfile</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>titleCleanupProfile</code> attribute is defined.
+	 */
+    public boolean isTitleCleanupProfileDefined();
+	
     /**
      * Returns the value of the <code>titleEntityEncoded</code> attribute.
      *

@@ -97,6 +97,7 @@ public class DocumentPostingServiceImpl
                 fillDocument(docData, docNode);
 
                 assignCategories(docNode, config, coralSession);
+                assignFooter(docNode, config);
 
                 structureService.enterState(coralSession, docNode, "new", ownerSubject);
 
@@ -169,6 +170,12 @@ public class DocumentPostingServiceImpl
             mod.add(cat, docNode);
         }
         coralSession.getRelationManager().updateRelation(catRes, mod);
+    }
+    
+    private void assignFooter(DocumentNodeResource docNode, ImportTargetConfiguration config)
+    {
+        /* TODO check if footer exists in FooterRoot */
+        docNode.setFooter(config.getFooter());
     }
 
     private Collection<FileResource> storeAttachments(DocumentData docData, String docName,

@@ -59,6 +59,12 @@ public class PersistentImportTargetConfiguration
             return Collections.emptySet();
         }
     }
+    
+    @Override
+    public String getFooter()
+    {
+        return res.getFooter();
+    }
 
     @Override
     public DirectoryResource getAttachmentsLocation()

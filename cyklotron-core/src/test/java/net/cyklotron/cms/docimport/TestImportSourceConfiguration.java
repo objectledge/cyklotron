@@ -162,7 +162,19 @@ public class TestImportSourceConfiguration
     }
 
     @Override
-    public String getHTMLCleanupProfile()
+    public String getTitleCleanupProfile()
+    {
+        return "passthrough";
+    }
+    
+    @Override
+    public String getAbstractCleanupProfile()
+    {
+        return "passthrough";
+    }
+    
+    @Override
+    public String getContentCleanupProfile()
     {
         return "passthrough";
     }

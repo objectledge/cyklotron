@@ -116,12 +116,12 @@ public class DocumentImportServiceImpl
         for(Node documentNode : documentNodes)
         {
             String title = convertText(documentNode.selectSingleNode(config.getTitleXPath()),
-                config.isTitleEntityEncoded(), config.getHTMLCleanupProfile());
+                config.isTitleEntityEncoded(), config.getTitleCleanupProfile());
             String _abstract = convertText(
                 documentNode.selectSingleNode(config.getAbstractXPath()),
-                config.isAbstractEntityEncoded(), config.getHTMLCleanupProfile());
+                config.isAbstractEntityEncoded(), config.getAbstractCleanupProfile());
             String content = convertText(documentNode.selectSingleNode(config.getContentXPath()),
-                config.isContentEntityEncoded(), config.getHTMLCleanupProfile());
+                config.isContentEntityEncoded(), config.getContentCleanupProfile());
 
             URI originalURI = parseURI(documentNode.selectSingleNode(config.getOriginalURLXPath()));
 

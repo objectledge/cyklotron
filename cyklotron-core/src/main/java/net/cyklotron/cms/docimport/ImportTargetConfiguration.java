@@ -41,6 +41,13 @@ public interface ImportTargetConfiguration
      * @return a set of Category resources.
      */
     Set<CategoryResource> getCategories();
+    
+    /**
+     * Footer to be assigned to the imported documents.
+     * 
+     * @return footer name.
+     */
+    String getFooter();
 
     /**
      * Target location of document attachments.
