@@ -1,0 +1,128 @@
+##
+## Poll application: poll components' main state
+##
+## author: <a href="mailto:pablo@caltha.pl">Paweł Potempski</a>
+## author: <a href="mailto:rafal@caltha.pl">Rafał Krzewski</a>
+##
+## $Id: Poll.pl_PL.vt,v 1.3 2005-04-14 06:53:28 rafal Exp $
+##
+##
+
+$pageTool.addScriptLink('script/poll/Poll.js')##
+<script type="text/javascript">
+ var poll = new Poll("$poll.id", "$component_instance", "${voteBaseUrl}/view/poll.ajax.Poll?action=poll.RespondPoll","${voteBaseUrl}/view/poll.ajax.Poll");
+ jQuery(document).ready(function(){ poll.fetch(); });
+</script>
+
+#set($component_instance = $cms_data.component.instanceName)
+#if($result_scope == "poll_$component_instance")
+#result_inline_message('results.poll')
+#end
+
+#if($poll)
+
+#set($x = $parametersTool.get('x',""))
+#if($x.length() == 0)
+ #set($cmsLink = $link)
+#else
+ #set($cmsLink = $link.set('x',$x))
+#end
+
+<div id="voting">
+  <form name="form_$component_instance" method="post" action="$cmsLink.action("poll.RespondPoll")" class="defaultForm">
+  <input type="hidden" name="pid" value="$poll.id">
+  <input type="hidden" name="poll_instance" value="$component_instance">
+  <table class="defaultTable">
+    <tr>
+      <td align="left">
+        <b>Tytuł ankiety:</b><i>$poll.getName()</i>
+      </td>
+    </tr>
+        
+    #foreach($questionKey in $questionKeys)
+    <tr>
+      <td>
+      Pytanie: $questions.get($questionKey).getTitle() <br>
+        #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
+            #set($answer = $questions.get($questionKey).getAnswers().get($answerKey))
+          <tr><td>
+            <input type="radio" id="answer-${answer.id}" name="question_$questionKey" value="$answer.getId()">
+            <label for="answer-${answer.id}">$answer.getTitle()</label>
+          </td></tr>
+        #end
+      </td>
+    </tr>
+    #end
+
+    <tr>
+      <td NOWRAP class="usualbutton">
+      <a id="sendVote" href="#vote">Głosuj</a>
+      </td>
+    </tr>
+    <tr>
+     <td>
+       <a id="showResults" href="#vote">Obejrzyj wyniki</a>
+     </td>
+    </tr>
+
+   </table>
+  </form>
+</div>
+<div id="results" style="display:none;"> 
+ <table class="titleTable">
+    <tr>
+      <td>
+        Wyniki ankiety - liczba odpowiedzi: <b id="totalVotes">$!count</b>
+      </td>
+    </tr>
+  </table>
+
+  <table class="defaultTable">
+    <tr>
+      <th align="left">
+        <b>Tytuł ankiety:</b>
+      </th>
+      <td>
+        $poll.getName()
+      </td>
+    </tr>
+
+    <tr>
+      <td align="left">
+        <b>Opis:</b>
+      </td>
+      <td>
+       $!poll.getDescription()
+      </td>
+    </tr>
+
+    #foreach($questionKey in $questionKeys)
+    <tr>
+      <td>
+      Pytanie: $questions.get($questionKey).getTitle() <br>
+        #foreach($answerKey in $questions.get($questionKey).getAnswerKeys())
+          #set($answer = $questions.get($questionKey).getAnswers().get($answerKey))
+          <tr><td>
+              $answer.getTitle() - <span id="votes_for_answer-${answer.id}"></span> 
+         </td></tr>
+        #end
+      </td>
+    </tr>
+    <tr>
+      <td align="left">
+        <hr>
+      </td>
+    </tr>
+    #end
+   </table>
+</div>
+
+#else
+  <table class="defaultTable">
+    <tr>
+      <th>
+        <b>Brak ankiety</b>
+      </th>
+    </tr>
+  </table>
+#end

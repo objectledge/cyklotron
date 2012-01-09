@@ -1,0 +1,62 @@
+$pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addStyleLink("style/cms-popupmenu.css")
+
+#set($psid = $parametersTool.get('psid','-1'))
+#set ($voteLink = $link.set('psid',$psid))
+
+#genericScreenHeader("ANKIETY")
+#result_inline_message("results.vote") 
+
+$table.getColumn('name').set('label', 'Nazwa ankiety')
+$table.getColumn('creator.name').set('label', 'Twórca')
+$table.getColumn('creation.time').set('label', 'Data powstania')
+$table.getColumn('delete').set('label', 'Usuń')
+
+#set($columnOrder = ['name','creator.name','creation.time','delete'])
+#set($tableLink = $voteLink.set('tableId',$table.getId()))
+
+<form name="form1" method="post" action="$voteLink.view("poll.VoteList").action("poll.UpdateVote")" class="defaultForm">
+  <table class="genericItemList" width="100%" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $columnOrder)
+    </tr>
+    #if($table.getPageRowCount() == 0)
+    <tr>
+      <td nowrap colspan="4">Nie ma żadnych ankiet.</td>
+    </tr>
+    #else
+    #foreach($row in $table.rows)
+    #set($vote = $row.object) 
+    #set($odd = $velocityCount % 2)
+    <tr class="row$odd">
+      <td>
+        <span class="cms-popupmenubutton"><span>$vote.getName()</span>
+        <div class="cms-popupmenu">
+           <a href="$voteLink.view("poll.EditVote").set('vid',$vote.getId()).set('reset','true')">edycja</a>
+           <a href="$voteLink.view("poll.ViewVote").set('vid',$vote.getId())">podgląd</a>
+           <a href="$voteLink.view("poll.ViewVoteBallots").set('vid',$vote.getId())">szegóły głosowania</a>
+           <a href="$voteLink.view("poll.EditVoteTemplate").set('vid',$vote.getId())">edycja szablonu powiadomienia</a>
+        </div>
+        </span><br>
+        - <i>$vote.getDescription()</i>
+      </td>
+      <td nowrap align="center">#cms_personal_credentials($vote.createdBy)</td>
+      <td nowrap align="center">$format_date.format($vote.creationTime)</td>
+      <td class="actionlink"><a href="$voteLink.view("poll.VoteList").action('poll.DeleteVote').set('vid',$vote.getId())">usuń</a></td>
+    </tr>
+    #end
+    #end
+    <tr>	  
+      <td nowrap colspan="4" align="center" class="bottomLine">
+        #tableView_pager($table $tableLink)
+        #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td>
+    </tr>
+    <tr>
+      <td nowrap colspan="4" class="commandbar">
+        <a href="$voteLink.view("poll.AddVote").set('reset', 'true')">Dodaj ankietę</a>
+      </td>
+    </tr>
+  </table>
+  #genericScreenTrailer()
+</form>

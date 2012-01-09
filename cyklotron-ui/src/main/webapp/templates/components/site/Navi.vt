@@ -1,0 +1,30 @@
+
+
+  #genericNaviHeader('MY SITES')
+    #foreach($siteVar in $sites)
+      #if($cms_tool.subject.hasRole($siteVar.teamMember))
+        #if($cms_tool.subject.hasRole($siteVar.administrator))
+          #linkCell('' "(ADMIN) $siteVar.name" $link.view('site.EditSite').set('site_id',$siteVar.id))
+        #else 
+          #linkCell('' "$siteVar.name" $link.view('site.EditSite').set('site_id',$siteVar.id))   
+        #end
+      #end
+    #end
+  #genericNaviTrailer()
+
+  #if($cms_tool.hasRole($cms_tool.subject, 'cms.administrator'))
+    <br/>
+    #genericNaviHeader('ADMINISTRATION')
+      #linkCell('' 'SITE LIST' $link.view('site.SiteList'))
+      #linkCell('' 'ADD SITE' $link.view('site.AddSite'))
+      #linkCell('' 'SITE TEMPLATES' $link.view('site.TemplateList'))
+      ###linkCell('' 'ADD SITE TEMPLATE' $link.view('site.AddTemplate'))
+      #linkCell('' 'VIRTUAL SERVERS' $link.view('site.VirtualSiteList'))
+      #if($site)
+        #linkCell('' 'ADD VIRTUAL SERVER' $link.view('site.AddVirtualSite'))
+      #end
+    #genericNaviTrailer()
+  
+
+  <br/>
+  #end
