@@ -23,12 +23,6 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
-
-import cpdetector.io.ASCIIDetector;
-import cpdetector.io.CodepageDetectorProxy;
-import cpdetector.io.JChardetFacade;
-import cpdetector.io.ParsingDetector;
 
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.syndication.CannotCreateFeedsRootException;
@@ -49,6 +43,11 @@ import net.cyklotron.cms.syndication.TooManySyndicationRootsException;
 import net.cyklotron.cms.syndication.UnsupportedTemplateTypeException;
 import net.cyklotron.cms.util.URI.MalformedURIException;
 
+import cpdetector.io.ASCIIDetector;
+import cpdetector.io.CodepageDetectorProxy;
+import cpdetector.io.JChardetFacade;
+import cpdetector.io.ParsingDetector;
+
 /**
  * Implementation of IncomingFeedsManager.
  *
@@ -59,6 +58,12 @@ public class DefaultIncomingFeedsManager
 extends BaseFeedsManager
 implements IncomingFeedsManager
 {
+    private static final int RETRY_COUNT = 5;
+
+    private static final int SOCKET_TIMEOUT = 5 * 60;
+
+    private static final int CONNECTION_TIMEOUT = 10;
+
     private static final String BASE_TEMPLATES_DIR = "incoming-feeds-templates";
     private static final String TEMPLATES_APP = "cms";
     private static final String TEMPLATES_DIR =
@@ -283,30 +288,35 @@ implements IncomingFeedsManager
         HttpClient client = new HttpClient();
 
         //establish a connection within 10 seconds
-        client.getHttpConnectionManager().getParams().setConnectionTimeout(10000);
+        client.getHttpConnectionManager().getParams()
+            .setConnectionTimeout(CONNECTION_TIMEOUT * 1000);
+        client.getHttpConnectionManager().getParams().setSoTimeout(SOCKET_TIMEOUT * 1000);
 
-        HttpMethodRetryHandler retryHandler = new HttpMethodRetryHandler() {
-            public boolean retryMethod(
-                final HttpMethod method, 
-                final IOException exception, 
-                int executionCount) {
-                if (executionCount >= 5) {
-                    // Do not retry if over max retry count
+        HttpMethodRetryHandler retryHandler = new HttpMethodRetryHandler()
+            {
+                public boolean retryMethod(final HttpMethod method, final IOException exception,
+                    int executionCount)
+                {
+                    if(executionCount >= RETRY_COUNT)
+                    {
+                        // Do not retry if over max retry count
+                        return false;
+                    }
+                    if(exception instanceof NoHttpResponseException)
+                    {
+                        // Retry if the server dropped connection on us
+                        return true;
+                    }
+                    if(!method.isRequestSent())
+                    {
+                        // Retry if the request has not been sent fully or
+                        // if it's OK to retry methods that have been sent
+                        return true;
+                    }
+                    // otherwise do not retry
                     return false;
                 }
-                if (exception instanceof NoHttpResponseException) {
-                    // Retry if the server dropped connection on us
-                    return true;
-                }
-                if (!method.isRequestSent()) {
-                    // Retry if the request has not been sent fully or
-                    // if it's OK to retry methods that have been sent
-                    return true;
-                }
-                // otherwise do not retry
-                return false;
-            }
-        };
+            };
         
         //create a method object
         HttpMethod method = new GetMethod(url);
