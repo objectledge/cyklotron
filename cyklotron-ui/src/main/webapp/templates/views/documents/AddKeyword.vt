@@ -1,0 +1,105 @@
+##
+## author: <a href="mailto:pablo@caltha.pl">Paweł Potempski</a>
+##
+## $Id: AddFooter.vt,v 1.1 2006-05-08 12:51:43 pablo Exp $
+##
+$pageTool.addScriptLink('script/CMSPopups.js')
+$pageTool.addScriptLink('script/Forms.js')
+
+#set($ui_strings = $i18n.usePrefix("cms.documents.AddKeyword.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.documents.AddKeyword.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.documents.AddKeyword.buttons"))
+#genericScreenHeader($ui_strings.get('title'))
+
+
+#result_inline_message('results.documents')
+
+<form name="add_keyword" method="post" action="$link.view("documents.KeywordsList").action("documents.AddKeyword")" class="defaultForm">
+  <input type="hidden" name="name" value="$format_date.pattern("yyyyMMddHHmmssSSSS").format($format_date.now())" >
+  <table width="100%" class="genericScreen" cellspacing="0">
+    <tr>
+      <td align="left" rowspan="2" nowrap><b>$ui_labels.get('pattern'):</b></td>
+      <td align="left" colspan="3" width="95%">
+          <input type="text" name="pattern" value="$parametersTool.get('pattern','')" style="width:100%;">
+      </td>
+    </tr>
+    <tr>
+      <td align="left" nowrap><b>$ui_labels.get('reg_exp'):</b></td>
+      <td align="left" colspan="2" width="95%">
+          <input type="checkbox" name="reg_exp" value="true" #if($parametersTool.getBoolean('reg_exp',false)) checked #end>
+      </td>
+    </tr>
+    <tr>
+       <td align="left" rowspan="3" nowrap valign="center"><b>$ui_labels.get('link_type'):</b></td>
+       <td align="left" nowrap>
+           <input type=radio name="link_type" value="internal"><b>$ui_labels.get('internal'):</b>
+       </td>
+       <td align="left" width="75%">
+         <input type=hidden name="relative_path" value="$cms_data.site.getPath()/structure">
+         <input type=text name="href_internal" value="$!parametersTool.get('href_internal',"")" readonly style="width:100%;" onclick="Forms.setValue('add_keyword', 'link_type', 'internal');" >
+       </td>
+       <td align="left" class="actionlink">
+          <script language="javascript">
+          function selectLinkTarget()
+          {
+              Forms.setValue('add_keyword', 'link_type', 'internal');
+              selectNode('relative_path', 'add_keyword', 'href_internal', '$link.view('popup.NodeList').set('root',$cms_data.getHomePage().id)');
+          }
+          function removeCategory()
+          {
+				Forms.setValue('add_keyword', 'categories', '');
+				Forms.setValue('add_keyword', 'category_name', '');
+          }
+          </script>
+          <a href="javascript:selectLinkTarget();">$ui_labels.get('choose')</a>
+       </td>
+    </tr>
+    <tr>
+      <td align="left" >
+        <input type=radio name="link_type" value="external" checked><b>$ui_labels.get('external'):</b>
+      </td>
+      <td align="left" colspan="2">
+        <input type=text name="href_external" value="http://" size="50" style="width:100%;" onfocus="Forms.setValue('add_keyword', 'link_type', 'external');">
+      </td>
+    </tr>
+    <tr>
+      <td align="left" nowrap><b>$ui_labels.get('new_window'):</b></td>
+      <td align="left" colspan="2"><input type="checkbox" name="new_window" value="true" #if($parametersTool.getBoolean('new_window',true)) checked #end></td>
+    </tr>    
+    <tr>
+    	<td align="left" nowrap valign="center"><b>$ui_labels.get('category'):</b></td>
+    	<td colspan="2">
+    	  <input id="categories" name="categories" value="" type="hidden"/>
+    	  <input type="text" name="category_name" value="" readonly style="width:100%;">
+    	</td>
+    	<td align="left" class="actionlink">
+    		<a href="javascript:#select_categories('categories' 'id name' 'add_keyword' 'categories category_name')">$ui_labels.get('choose')</a>
+    		<a href="javascript:removeCategory();">$ui_labels.get('remove')</a>
+    	</td>
+    </tr>
+    <tr>
+      <td align="left" nowrap><b>$ui_labels.get('title'):</b></td>
+      <td colspan="3"><input type="text" name="title" value="$!parametersTool.get('title','')" style="width:100%;"></td>
+    </tr>    
+    <tr>
+      <td align="left" nowrap><b>$ui_labels.get('style'):</b></td>
+      <td align="left" colspan="3"><input type="text" name="link_class" value="$!parametersTool.get('link_class','')" style="width:100%;"></td>
+    </tr>
+    
+  </table>
+
+  <div align="right">
+    <table align="right" border="0">
+      <tr>
+        <td NOWRAP class="usualbutton">
+          <a href="javascript:document.add_keyword.submit();">$ui_buttons.get('add')</a>
+        </td>
+        <td NOWRAP class="usualbutton">
+          <a href="$link.view("documents.KeywordsList")">$ui_buttons.get('cancel')</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+</form>
+
+#genericScreenTrailer()

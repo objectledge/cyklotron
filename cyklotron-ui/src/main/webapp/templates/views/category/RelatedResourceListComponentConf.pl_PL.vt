@@ -1,0 +1,193 @@
+##
+
+#set($link = $link.set('component_instance', $instance))
+
+#macro(category_tree $table $root_row_title)
+#if($table)
+#set($tableLink = $link.set('tableId',$table.id))
+#set($toggleExpandLink = $tableLink.action('table.ToggleExpanded'))
+##
+#foreach($row in $table.rows)
+#if($table.rootRow != $row)## WARN: rootRow is not a category
+<input type="hidden" name="category-visible" value="$row.id" />
+#end
+#end
+##
+<table width="100%" class="genericItemTree" cellspacing="0">
+#foreach($row in $table.rows)
+    <tr>
+
+#if($table.rootRow == $row)
+<td>&nbsp;</td>
+#else
+<td style="width: 80px;">
+<select size="1" name="category-$row.id">
+#options($category_sel_opts $list_conf.categorySelectionState.getValue($row.object))
+</select>
+</td>
+#end
+
+<td>
+#set($toggleExpandLink2 = $toggleExpandLink.set('rowId',$row.id))
+#set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink2')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
+#if($table.rootRow == $row) $root_row_title #else $row.object.name #end
+</td>
+
+</tr>
+#end
+</table>
+#end
+#end
+
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#set($from_component = true)
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+#genericScreenHeader('Konfiguracja listy zasobów wybieranych przez kategorie przypisane dokumentowi')
+#set($save_action = $link.unsetView().action('category.UpdateRelatedResourceListConfiguration'))
+
+#if($cms_data.isNodeDefined())
+#set($save_action = $save_action.set('x',$cms_data.node.id))
+#end
+
+#result_inline_message('results.category')
+
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "header", "maxResNumber", "listSortColumn", "listSortDir",
+                            "resourceClasses", "cacheInterval");
+function sendConfig()
+{
+    document.form1.action = "$save_action";
+#if($cms_data.node)
+    document.form1.target = "cyklotron_resource_list_config_${cms_data.node.id}";
+#else
+    document.form1.target = "cyklotron_resource_list_config";
+#end
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+//-->
+</script>
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<form name="form1" method="post" action="">
+#if($cms_data.node)
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+#end
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tbody>
+
+<tr>
+<td>
+Podaj tytuł nawigacji:
+</td>
+<td><input type="text" name="header" style="width: 100%;" value="$list_conf.header" /></td>
+</tr>
+
+<tr>
+<td>
+Wybierz liczbę zasobów pokazywanych przez nawigację:
+</td>
+<td><select size="1" name="maxResNumber">
+#set($opts = [["nieograniczona", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7], ["8", 8], ["9", 9], ["10", 10], ["11", 11], ["12", 12], ["13", 13], ["14", 14], ["15", 15]])
+#options($opts $list_conf.maxResNumber)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Wybierz sposób sortowania:
+</td>
+<td><select size="1" name="listSortColumn">
+#set($opts = [["tytuł/nazwa", "index.title"], ["czas utworzenia", "creation.time"], ["czas modyfikacji", "modification.time"], ["priorytet", "priority"]])
+#options($opts $list_conf.sortColumn)
+  </select>
+  <select size="1" name="listSortDir">
+#set($opts = [["rosnąco", true], ["malejąco", false]])
+#options($opts $list_conf.sortDir)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Wybierz czas utrzymywania wyników zapytania w pamięci &quot;cache&quot;:
+</td>
+<td>
+<select size="1" name="cacheInterval">
+#set($opts = [["30 min", 1800], ["5 min", 300], ["10 min", 600], ["2 min", 120], ["1 minuta", 60]])
+#options($opts $list_conf.cacheInterval)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Ogranicz zbiór dokumentów do serwisu lokalnego
+</td>
+<td>
+<input type="checkbox" name="siteFilter" value="true"#if($list_conf.isSiteFilterEnabled()) checked#end>
+</td>
+</tr>
+
+<tr>
+<td>
+Wybierz klasy zasobów jakie mają być wybierane przez listę:
+</td>
+<td>
+#set($appinfos = $category_tool.getResourceClassesInfo())
+#foreach($appinfo in $appinfos)
+
+<p>Aplikacja $appinfo.application.name</p>
+#foreach($resclassinfo in $appinfo.resourceClassesInfos)
+<p>
+<input type="checkbox" name="resourceClasses" ##
+#if($list_conf.hasResourceClass($resclassinfo.resourceClass)) checked="checked" #end##
+id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.name" />
+<label for="res-class-$resclassinfo.resourceClass.id" >$resclassinfo.resourceClass.name</label>
+</p>
+#end
+
+#end
+</td>
+
+#set($category_sel_opts = [["---", "unselected"], ["aktywna ta i potomne", "active"]])
+<tr>
+<td colspan="2">
+Wybierz z listy kategorie, które wykorzystywane będą przy wybieraniu zasobów o tych samych kategoriach
+co oglądany dokument (podkategorie wybranych kategorii również będą wykorzystane):
+</td>
+</tr>
+
+</tbody>
+</table>
+
+#category_tree($globaltable 'kategorie globalne')
+<br />
+#category_tree($sitetable 'kategorie serwisu')
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  <a href="$link.set('from_component_wrapper',true)">Usuń zmiany konfiguracji</a>
+  </div>
+
+  <div class="modification">
+  <a href="javascript:sendConfig()">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

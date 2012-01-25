@@ -1,0 +1,63 @@
+#if($result)
+$result
+#end
+
+<h2>1. Convert http feed resources to syndication incoming feed resources.</h2>
+
+#if($failedFeeds)
+<h3>!!! Feeds for which the convertion failes, site $cms_data.site.name</h3>
+<ol>
+#foreach($feed in $failedFeeds)
+	<li>$feed.name</li>
+#end
+</ol>
+#end
+
+<p>You need to perform this operation for all sites in which You want to convert http feeds.</p>
+
+<form name="form1" method="post" action="$link.action('fixes.HttpFeedsToSyndicationIncomingFeeds')">
+<p>Select the site:</p>
+<select size="1" name="site_id">
+#foreach($cmsData.site in $sites)
+<option value="$cmsData.site.id" #if($cms_data.site.id == $cmsData.site.id) selected="selected"#end>$cmsData.site.name</option>
+#end
+</select>
+<p>And execute the action: <button name="go" type="submit">Go</button></p>
+</form>
+
+
+<h2>2. Convert http feed view component configurations to syndication incoming feed view component
+	configurations.</h2>
+
+<p>You need to perform this operation for all sites in which You want to convert http feed configurations.</p>
+
+<form name="form1" method="post" action="$link.action('fixes.HttpFeed2SyndicationPreferences')">
+<p>Select the site:</p>
+<select size="1" name="site_id">
+#foreach($cmsData.site in $sites)
+<option value="$cmsData.site.id" #if($cms_data.site.id == $cmsData.site.id) selected="selected"#end>$cmsData.site.name</option>
+#end
+</select>
+<p>And execute the action: <button name="go" type="submit">Go</button></p>
+</form>
+
+<h2>3. Delete all the http feed application data.</h2>
+
+<form name="form1" method="post" action="$link.action('fixes.HttpFeedRemoveApplication')">
+<p>Execute the action: <button name="go" type="submit">Go</button></p>
+</form>
+
+<h2>4. Set up the syndication application roles.</h2>
+
+#if($failedSites)
+<h3>!!! Sites for which the roles setup failed</h3>
+<ol>
+#foreach($cmsData.site in $failedSites)
+	<li>$cmsData.site.name</li>
+#end
+</ol>
+#end
+
+<form name="form1" method="post" action="$link.action('fixes.HttpFeedSetSyndicationRoles')">
+<p>Execute the action: <button name="go" type="submit">Go</button></p>
+</form>

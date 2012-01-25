@@ -1,0 +1,114 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="discussion_in_use">
+      <value>.</value>
+    </prefix>
+    <prefix name="hidden_discussion">
+      <value>.</value>
+    </prefix>
+    <prefix name="answer_not_found">
+      <value>.</value>
+    </prefix>
+    <prefix name="commentary_already_exists">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="illegal_message_name">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_description">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_title">
+      <value>.</value>
+    </prefix>
+    <prefix name="name_invalid">
+      <value>Nazwa nie może zawierać znaku /</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="parent_message_locked">
+      <value>Wiadomość nadrzędna została zablokowana.</value>
+    </prefix>
+    <prefix name="responded_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+  <prefix name="changed_successfully">
+      <value>Zmiana stanu przebiegła bez zakłóceń</value>
+    </prefix>
+    <prefix name="added_for_moderation_successfully">
+      <value>Dodano pomyślnie. Forum jest moderowane. Komentarze są publikowane w godzinach pracy redakcji. Nie zatwierdzamy komentarzy łamiących prawo i zasady obyczajowości.</value>
+    </prefix>
+    <prefix name="discussion_in_use">
+      <value>Nie można usunąć dyskusji - dyskusja zawiera wiadomości</value>
+    </prefix>
+    <prefix name="added_successfully">
+      <value>Dodano pomyślnie.</value>
+    </prefix>
+    <prefix name="hidden_discussion">
+      <value>Dyskusja ukryta - nie można dodawać wiadomości.</value>
+    </prefix>
+    <prefix name="answer_not_found">
+      <value>Brak odpowiedzi na pytanie.</value>
+    </prefix>
+    <prefix name="commentary_already_exists">
+      <value>Komentarz do wybranego dokumentu już istnieje.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Usunięto pomyślnie.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Wystąpił błąd.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Nieprawidłowy parameter</value>
+    </prefix>
+    <prefix name="illegal_message_name">
+      <value>Brak tytułu wiadomości.</value>
+    </prefix>
+    <prefix name="invalid_description">
+      <value>Operacja nieudana - nieprawidłowy opis.</value>
+    </prefix>
+    <prefix name="invalid_title">
+      <value>Operacja nieudana - nieprawidłowy tytuł.</value>
+    </prefix>
+    <prefix name="name_invalid">
+      <value>Wprowadzona nazwa jest nieprawidłowa.</value>
+    </prefix>
+    <prefix name="invalid_captcha_verification">
+      <value>Podano niepoprawny kod Captcha</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Nie wypełniono wymagenego pola w formularzu.</value>
+    </prefix>
+    <prefix name="parent_message_locked">
+      <value>Wiadomość nadrzędna została zablokowana.</value>
+    </prefix>
+    <prefix name="responded_successfully">
+      <value>Udzielenie odpowiedzi przebiegło pomyślnie.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Zapisano pomyślnie.</value>
+    </prefix>
+  </prefix>
+</strings>

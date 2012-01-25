@@ -1,0 +1,27 @@
+##
+## Banner application: banner component
+##
+## author: <a href="mailto:pablo@ngo.pl">Paweł Potempski</a>
+##
+## $Id: Banner.pl_PL.vt,v 1.2 2005-02-03 22:36:21 pablo Exp $
+##
+##
+#if($banner)
+  #if($banner.getResourceClass().getName().equals('cms.banner.external_banner'))
+  <a href="$link.view('banner.FollowBanner').action('banner.FollowBanner').set('bid',$banner.getId())">
+    <img border="0" src="$banner.getImage()" alt="$banner.getAltText()" target="$banner.getTarget()" border="no">
+  </a>
+  #else
+  <a href="$link.view('banner.FollowBanner').action('banner.FollowBanner').set('bid',$banner.getId())">
+    <img src="$files.getLink($banner.getMedia())" alt="$banner.getAltText()" target="$banner.getTarget()" border="no">
+  </a>
+  #end
+#else
+  <table class="defaultTable" border="0" cellspacing="0">
+    <tr>
+      <th>
+        <b>Nie zdefiniowano banera</b>
+      </th>
+    </tr>
+  </table>
+#end

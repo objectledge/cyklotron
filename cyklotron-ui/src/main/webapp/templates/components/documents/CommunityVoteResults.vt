@@ -1,0 +1,63 @@
+<div id="vote_results">
+<div id="votes_header">Vote results</div>
+
+#set($name_map = {'POSITIVE' : 'Most liked', 'POSITIVE_RATIO' : 'Most liked, relative', 'NEGATIVE' : 'Least liked', 'NEGATIVE_RATIO' : 'Least liked, relative', 'TOTAL' : 'Most voted on'})
+<select id="votes_switch">
+#foreach($tname in $tables)
+    <option value="$tname"#if($tname == 'POSITIVE') selected="true"#end>$name_map.get($tname)</option>
+#end	
+</select>
+
+#foreach($tname in $tables)
+<div id="votes_${tname}">
+<table>
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Like</th>
+			<th>Dislike</th>
+		</tr>
+	</thead>
+	<tbody>
+#set($table = $templatingContext.get("table_${tname}"))
+#foreach($row in $table.rows)
+		<tr>
+			<td><a href="$link.setNode($row.object)">$row.object.title</a></td>
+#if($tname.endsWith('RATIO'))
+#set($posRatio = $row.object.getVotesPositive(0) * 100 / ($row.object.getVotesPositive(0) + $row.object.getVotesNegative(0)))	
+#set($negRatio = $row.object.getVotesNegative(0) * 100 / ($row.object.getVotesPositive(0) + $row.object.getVotesNegative(0)))	
+			<td>${posRatio}%</td>
+			<td>${negRatio}%</td
+#else	
+			<td>$row.object.getVotesPositive(0)</td>
+			<td>$row.object.getVotesNegative(0)</td
+#end				
+		</tr>
+#end
+	</tbody>
+</table>
+</div> <!-- #vote_${tname} -->
+#end	
+
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+<script>
+    var voteTables = [
+#foreach($tname in $tables)
+        '$tname',
+#end	
+    ];
+	function switchVoteTables() {
+        for(var i in voteTables) {
+		    if(voteTables[i] == jQuery('#votes_switch').val()) {
+		        jQuery('#votes_' + voteTables[i]).show();
+			} else {
+		        jQuery('#votes_' + voteTables[i]).hide();
+			}
+		}
+	};
+    jQuery(document).ready(function() {
+	    switchVoteTables();
+		jQuery('#votes_switch').change(switchVoteTables);
+    });
+</script>
+</div> <!-- #vote_results -->
