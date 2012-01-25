@@ -89,6 +89,20 @@ public abstract class BaseCMSComponent
         }
     }
 
+    public SiteResource getComponentDataSite()
+        throws ProcessingException
+    {
+        CmsData cmsData = getCmsData();
+        if(cmsData.getSite() != null && cmsData.getComponent().isGlobal() == false)
+        {
+            return cmsData.getSite();
+        }
+        else
+        {
+            return cmsData.getGlobalComponentsDataSite();
+        }
+    }
+
     /** TODO: Remove after CmsData is widely used */
     public NavigationNodeResource getHomePage(org.objectledge.context.Context context)
         throws ProcessingException
