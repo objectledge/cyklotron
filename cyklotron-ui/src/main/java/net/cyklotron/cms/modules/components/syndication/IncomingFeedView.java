@@ -11,9 +11,9 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
-import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.syndication.IncomingFeedResource;
 import net.cyklotron.cms.syndication.SyndicationService;
@@ -44,9 +44,9 @@ public class IncomingFeedView extends SkinableCMSComponent
         CoralSession coralSession)
     throws org.objectledge.pipeline.ProcessingException
     {
-        CmsData cmsData = cmsDataFactory.getCmsData(context);
+        SiteResource site = getComponentDataSite();
         
-        if(cmsData.getSite() == null)
+        if(site == null)
         {
             componentError(context, "No site selected");
             return;
@@ -57,7 +57,7 @@ public class IncomingFeedView extends SkinableCMSComponent
         try
         {
             parent = syndicationService.getIncomingFeedsManager().getFeedsParent(
-                coralSession, cmsData.getSite());
+                coralSession, site);
         }
         catch(Exception e)
         {
