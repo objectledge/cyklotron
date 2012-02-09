@@ -10,6 +10,7 @@ import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.relation.MalformedRelationQueryException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Permission;
@@ -22,14 +23,16 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.DocumentAliasResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.security.RoleResource;
 import net.cyklotron.cms.security.SecurityService;
-import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
@@ -70,17 +73,25 @@ public class CmsTool
     
     private final RelatedService relatedService;
 
+    private final CategoryService categoryService;
+
+    private final CategoryQueryService categoryQueryService;
+
     // initialization ////////////////////////////////////////////////////////
     
     public CmsTool(Context context, Logger logger, PreferencesService preferencesService,
-        UserManager userManager, IntegrationService integrationService,RelatedService relatedService,
-        SecurityService securityService, CmsDataFactory cmsDataFactory)
+        UserManager userManager, IntegrationService integrationService,
+        RelatedService relatedService, CategoryService categoryService,
+        CategoryQueryService categoryQueryService, SecurityService securityService,
+        CmsDataFactory cmsDataFactory)
     {
         this.context = context;
         this.log = logger;
         this.preferencesService = preferencesService;
         this.userManager = userManager;
         this.integrationService = integrationService;
+        this.categoryService = categoryService;
+        this.categoryQueryService = categoryQueryService;
         this.securityService = securityService;
         this.relatedService = relatedService;
         this.cmsDataFactory = cmsDataFactory;
@@ -577,6 +588,31 @@ public class CmsTool
         return Arrays.asList(relatedTo);
     }
     
+    public List<Resource> categoryQuery(String query)
+        throws MalformedRelationQueryException, EntityDoesNotExistException
+    {
+        CoralSession coralSession = getCoralSession();
+        return Arrays.asList(coralSession.getRelationQuery().query(query.toString(),
+            categoryQueryService.getCategoryResolver()));
+    }
+
+    public List<Resource> categoryQueryById(String[] categoryIds)
+        throws MalformedRelationQueryException, EntityDoesNotExistException
+    {
+        CoralSession coralSession = getCoralSession();
+        String catRelName = categoryService.getResourcesRelation(coralSession).getName();
+        StringBuilder query = new StringBuilder();
+        for(String categoryId : categoryIds)
+        {
+            query.append(query.length() == 0 ? "" : "*");
+            query.append("MAP('").append(catRelName).append("')");
+            query.append("{RES(").append(categoryId).append(")}");
+        }
+        query.append(";");
+        return Arrays.asList(coralSession.getRelationQuery().query(query.toString(),
+            categoryQueryService.getCategoryResolver()));
+    }
+
     public boolean isAppEnabled(String appName) 
         throws ProcessingException
     {

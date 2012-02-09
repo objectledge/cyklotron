@@ -33,6 +33,8 @@ import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.templating.tools.ContextToolFactory;
 
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
@@ -65,18 +67,26 @@ public class CmsToolFactory implements ContextToolFactory
     private final SecurityService securityService;
     
     private final RelatedService relatedService;
+
+    private final CategoryService categoryService;
+
+    private final CategoryQueryService categoryQueryService;
     
     /**
      */
     public CmsToolFactory(Context context, Logger logger, PreferencesService preferencesService,
-        UserManager userManager, IntegrationService integrationService,RelatedService relatedService,
-        SecurityService securityService, CmsDataFactory cmsDataFactory)
+        UserManager userManager, IntegrationService integrationService,
+        RelatedService relatedService, CategoryService categoryService,
+        CategoryQueryService categoryQueryService, SecurityService securityService,
+        CmsDataFactory cmsDataFactory)
     {
         this.context = context;
         this.log = logger;
         this.preferencesService = preferencesService;
         this.userManager = userManager;
         this.integrationService = integrationService;
+        this.categoryService = categoryService;
+        this.categoryQueryService = categoryQueryService;
         this.securityService = securityService;
         this.relatedService = relatedService;
         this.cmsDataFactory = cmsDataFactory;
@@ -87,8 +97,8 @@ public class CmsToolFactory implements ContextToolFactory
      */
     public Object getTool()
     {
-        return new CmsTool(context, log, preferencesService, userManager, integrationService, relatedService,
-            securityService, cmsDataFactory);
+        return new CmsTool(context, log, preferencesService, userManager, integrationService,
+            relatedService, categoryService, categoryQueryService, securityService, cmsDataFactory);
     }
     
     /**
