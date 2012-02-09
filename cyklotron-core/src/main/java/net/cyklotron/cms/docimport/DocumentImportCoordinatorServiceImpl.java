@@ -16,16 +16,20 @@ import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.NodeDeletionListener;
 import net.cyklotron.cms.structure.StructureException;
+import net.cyklotron.cms.structure.StructureService;
 
 public class DocumentImportCoordinatorServiceImpl
-    implements DocumentImportCoordinatorService
+    implements DocumentImportCoordinatorService, Startable
 {
     private static final int DEFAULT_FETCH_MONTHS = 1;
 
-    private static final String RELATION_NAME = "docimport.ImportTracing";
+    private static final String TRACING_RELATION_NAME = "docimport.ImportTracing";
 
     private final DocumentImportService documentImportService;
 
@@ -35,13 +39,16 @@ public class DocumentImportCoordinatorServiceImpl
 
     private final Logger log;
 
+    private final StructureService structureService;
+
     public DocumentImportCoordinatorServiceImpl(DocumentImportService documentImportService,
         DocumentPostingService documentPostingService, CoralSessionFactory coralSessionFactory,
-        Logger log)
+        StructureService structureService, Logger log)
     {
         this.documentImportService = documentImportService;
         this.documentPostingService = documentPostingService;
         this.coralSessionFactory = coralSessionFactory;
+        this.structureService = structureService;
         this.log = log;
     }
 
@@ -116,7 +123,7 @@ public class DocumentImportCoordinatorServiceImpl
                 mod.add(trace, entry.getValue());
             }
             final CoralRelationManager relationManager = coralSession.getRelationManager();
-            Relation rel = relationManager.getRelation(RELATION_NAME);
+            Relation rel = relationManager.getRelation(TRACING_RELATION_NAME);
             relationManager.updateRelation(rel, mod);
         }
         catch(Exception e)
@@ -146,6 +153,44 @@ public class DocumentImportCoordinatorServiceImpl
         finally
         {
             coralSession.close();
+        }
+    }
+
+    @Override
+    public void start()
+    {
+        structureService.addNodeDeletionListener(new ImportTrackingCleanupListener());
+    }
+
+    @Override
+    public void stop()
+    {
+        // do nothing
+    }
+
+    private class ImportTrackingCleanupListener
+        implements NodeDeletionListener
+    {
+        @Override
+        public void beforeDeletion(NavigationNodeResource resource, CoralSession coralSession)
+            throws Exception
+        {
+            CoralRelationManager relationManager = coralSession.getRelationManager();
+            Relation rel = relationManager.getRelation(TRACING_RELATION_NAME);
+            Resource[] traces = rel.getInverted().get(resource);
+            RelationModification mod = new RelationModification();
+            mod.removeInv(resource);
+            relationManager.updateRelation(rel, mod);
+            for(Resource trace : traces)
+            {
+                coralSession.getStore().deleteResource(trace);
+            }
+        }
+
+        @Override
+        public void afterDeletion(NavigationNodeResource node, CoralSession coralSession)
+        {
+            // do nothing
         }
     }
 }
