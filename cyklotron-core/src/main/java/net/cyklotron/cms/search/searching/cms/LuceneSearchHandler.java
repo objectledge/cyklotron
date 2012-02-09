@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Searcher;
@@ -22,7 +21,6 @@ import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
-import org.objectledge.table.TableTool;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.mvc.tools.LinkTool;
 
@@ -158,20 +156,15 @@ public class LuceneSearchHandler implements SearchHandler<LuceneSearchHit>
             searcher.search(query, topFieldCollector);
             hits = topFieldCollector.topDocs();
         }
-        ScoreDoc[] scoreDoc = hits.scoreDocs;
+        ScoreDoc[] scoreDocs = hits.scoreDocs;
         float percent = 1/hits.getMaxScore();
-        List<LuceneSearchHit> uniqueHits = new ArrayList<LuceneSearchHit>(scoreDoc.length);
-        for (int i = 0; i < scoreDoc.length; i++)
+        List<LuceneSearchHit> searchHits = new ArrayList<LuceneSearchHit>(scoreDocs.length);
+        for(int i = 0; i < scoreDocs.length; i++)
         {
-            float score = scoreDoc[i].score*percent;
-            Document doc = searcher.doc(scoreDoc[i].doc);
-            LuceneSearchHit hit = new LuceneSearchHit(doc, score);
-            if(!uniqueHits.contains(hit))
-            {
-                uniqueHits.add(hit);
-            }
+            final ScoreDoc sDoc = scoreDocs[i];
+            searchHits.add(new LuceneSearchHit(searcher.doc(sDoc.doc), sDoc.score * percent));
         }
-        return uniqueHits;
+        return searchHits;
     }
 
     ResourceClassResource getHitResourceClassResource(CoralSession coralSession, LuceneSearchHit hit)
