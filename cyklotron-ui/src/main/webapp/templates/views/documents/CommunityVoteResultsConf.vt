@@ -1,0 +1,102 @@
+## option settings
+#set($cuttoffDateOffsetOptions = ['7', '14', '30'])
+#set($defaultCutoffDateOffset = '7')
+#set($defaultSecondarySortOrder = 'priority.validity.start')
+#set($sortDirectionOptions = ['ASC','DESC'])
+#set($defaultSecondarySortDirection = 'ASC')
+#set($resultPageSizeOptions = ['5', '10', '20'])
+#set($defaultResultPageSize = '5')
+## i18n
+#set($strings = $i18n.usePrefix('cms.documents.CommunityVoteResultsConf.strings'))
+#set($primarySortOrderNames = $i18n.usePrefix('cms.documents.CommunityVoteResultsConf.primarySortOrderNames'))
+#set($secondarySortOrderNames = $i18n.usePrefix('cms.documents.CommunityVoteResultsConf.secondarySortOrderNames'))
+#set($sortDirectionNames = $i18n.usePrefix('cms.documents.CommunityVoteResultsConf.sortDirections'))
+## setup
+#set($from_component = true)
+#set($save_action = "$link.unsetView().action('structure.UpdatePreferences').set('x',$node.id)")
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+var fieldNames = [ "cutoffDateOffset", "singleSite", "categoryQuery", "primarySortOrders", "secondarySortOrder", "secondarySortDirection", "resultPageSize" ];
+
+function sendConfig()
+{
+    document.form1.target = "cyklotron_${cms_data.node.id}";
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+</script>
+## 
+#genericScreenHeader($strings.title)
+<form name="form1" method="POST" action="$save_action">
+	<input type="hidden" name="node_id" value="$node.id" />
+	<input type="hidden" name="scope" value="$parameters.get('component_instance')" /> 
+	<input type="hidden" name="config" value="" />
+	<table border="0" class="genericScreen" width="100%">
+		<tr>
+			<td>$strings.cutoffDateOffset</td>
+			<td>
+				<select name="cutoffDateOffset">
+#foreach($option in $cuttoffDateOffsetOptions)
+                    <option value="$option"#selected($option.equals($config.get('cutoffDateOffset', $defaultCutoffDateOffset)))>$option</option>
+#end
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>$strings.singleSite</td>
+			<td><input type="checkbox" name="singleSite" value="true"#checked($config.get('singleSite', 'false').equals('true'))/></td>
+		</tr>
+		<tr>
+			<td>$strings.categoryQuery</td>
+			<td>
+				<select name="categoryQuery">
+					<option value="-1"#selected($config.get('categoryQuery', '-1').equals('-1'))>[ $strings.noRestriction ]</option>
+				#foreach($query in $availableCategoryQueries)
+					<option value="$query.id"#selected($config.get('categoryQuery', '-1').equals($query.idString))>$query.name</option>
+				#end
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>$strings.primarySortOrders</td>
+			<td>
+#foreach($option in $availablePrimarySortOrders)
+	            <input type="checkbox" name="primarySortOrders" value="$option" id="primary_sort_$option"#checked($currentPrimarySortOrders.contains($option))/>
+				<label for="primary_sort_$option">$primarySortOrderNames.get($option)</label>
+				<br/>
+#end	
+			</td>
+		</tr>
+		<tr>
+			<td>$strings.secondarySortOrder</td>
+			<td>
+				<select name="secondarySortOrder">
+#foreach($option in $availableSecondarySortOrders)
+	                <option value="$option"#selected($option.equals($config.get('secondarySortOrder',$defaultSecondarySortOrder)))>$secondarySortOrderNames.get($option)</option>
+#end	
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>$strings.secondarySortDirection</td>
+			<td>
+				<select name="secondarySortDirection">
+#foreach($option in $sortDirectionOptions)
+	                <option value="$option"#selected($option.equals($config.get('secondarySortDirection', $defaultSecondarySortDirection)))>$sortDirectionNames.get($option)</option>
+#end	
+                </select>
+			</td>
+		</tr>
+		<tr>
+			<td>$strings.resultPageSize</td>
+			<td>
+				<select name="resultPageSize">
+#foreach($option in $resultPageSizeOptions)
+	                <option value="$option"#selected($option.equals($config.get('resultPageSize', $defaultResultPageSize)))>$option</option>
+#end				
+				</select>
+			</td>
+		</tr>
+	</table>	
+</form>
+#command_bar([['javascript:sendConfig();',$strings.save],['javascript:window.close();',$strings.cancel]])
+#genericScreenTrailer()
