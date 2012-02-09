@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -51,6 +54,7 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.NodeDeletionListener;
 import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.workflow.StateResource;
@@ -115,6 +119,10 @@ public class StructureServiceImpl
     private static final String PROPOSE_DOCUMENT_NODE_KEY = "stucture.proposeDocumentNode";
 
     private final Database database;
+
+    /** Registered {@link NodeDeletionListener} instances. */
+    private final List<NodeDeletionListener> deletionListeners = Collections
+        .synchronizedList(new ArrayList<NodeDeletionListener>());
      
     /**
      * Initializes the service.
@@ -385,6 +393,18 @@ public class StructureServiceImpl
             throw new StructureException("can't access " + DOCUMENT_ALIAS_RELATION, e);
         }
 
+        for(NodeDeletionListener listener : deletionListeners)
+        {
+            try
+            {
+                listener.beforeDeletion(node, coralSession);
+            }
+            catch(Exception e)
+            {
+                log.error("NodeDeletionListener invocation failed", e);
+            }
+        }
+
         try
         {
             cmsSecurityService.deleteRole(coralSession, "cms.structure.administrator", node, false);
@@ -402,6 +422,18 @@ public class StructureServiceImpl
         catch(EntityInUseException e)
         {
             throw new StructureException("Node is in use or does not exist",e);
+        }
+
+        for(NodeDeletionListener listener : deletionListeners)
+        {
+            try
+            {
+                listener.afterDeletion(node, coralSession);
+            }
+            catch(Exception e)
+            {
+                log.error("NodeDeletionListener invocation failed", e);
+            }
         }
     }
     
@@ -1064,6 +1096,12 @@ public class StructureServiceImpl
     {
         NavigationNodeResource homePage = getRootNode(coralSession, site);
         homePage.getPreferences().set(PROPOSE_DOCUMENT_NODE_KEY, node.getId());
+    }
+
+    @Override
+    public void addNodeDeletionListener(NodeDeletionListener listener)
+    {
+        deletionListeners.add(listener);
     }
 }
 
