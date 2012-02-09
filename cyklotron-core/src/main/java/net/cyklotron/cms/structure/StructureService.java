@@ -333,4 +333,12 @@ public interface StructureService
      */
     public LongSet getDocumentsValidAtOrAfter(Date date, CoralSession coralSession)
         throws StructureException;
+
+    /**
+     * Register a listener that will be notified that a navigation node is about to be / has been
+     * deleted.
+     * 
+     * @param listener the listener.
+     */
+    public void addNodeDeletionListener(NodeDeletionListener listener);
 }
