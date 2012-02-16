@@ -270,9 +270,9 @@
         <version>2.5.1</version>
       </dependency>      
       <dependency>
-        <groupId>javax.mail</groupId>
+        <groupId>com.sun.mail</groupId>
         <artifactId>smtp</artifactId>
-        <version>1.3.2</version>
+        <version>1.4.4</version>
       </dependency>
       <dependency>
         <groupId>net.sourceforge.nekohtml</groupId>
