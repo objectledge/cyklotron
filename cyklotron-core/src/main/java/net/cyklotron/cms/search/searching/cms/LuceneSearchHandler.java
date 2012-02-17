@@ -24,6 +24,7 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.templating.TemplatingContext;
+import org.objectledge.utils.Timer;
 import org.objectledge.web.mvc.tools.LinkTool;
 
 import net.cyklotron.cms.CmsDataFactory;
@@ -102,9 +103,11 @@ public class LuceneSearchHandler implements SearchHandler<LuceneSearchHit>
         Searcher searcher = null;
         List<LuceneSearchHit> hits;
         try
-        {
+        {	
+        	Timer timer = new Timer();
             searcher = searchService.getSearchingFacility().getSearcher(pools, coralSession.getUserSubject());
             hits = getLuceneSearchHits(searcher, query, sort);
+            searchService.logQueryExecution(query.toString(), timer.getElapsedMillis(), hits.size());
         }
         catch(SearchException e)
         {

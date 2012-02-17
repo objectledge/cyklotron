@@ -33,6 +33,9 @@ import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.coral.table.filter.PathFilter;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.statistics.AbstractMuninGraph;
+import org.objectledge.statistics.MuninGraph;
+import org.objectledge.statistics.StatisticsProvider;
 import org.objectledge.table.TableFilter;
 import org.picocontainer.Startable;
 
@@ -122,6 +125,12 @@ public class SearchServiceImpl
     private Relation branchesRelation;
     
     private Relation nodesRelation;
+    
+    private long totalQueryCount;
+    
+    private long totalQueryResultsCount;
+    
+    private long totalQueryExcutionTime;
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -664,6 +673,148 @@ public class SearchServiceImpl
             {
                 branchesRelation = coralSession.getRelationManager().
                     createRelation(BRANCHES_RELATION_NAME);
+            }
+        }
+    }
+
+	@Override
+	public void logQueryExecution(String query, long timeMillis, int resultsCount) {
+		totalQueryCount++;
+		totalQueryExcutionTime += timeMillis;
+		totalQueryResultsCount += resultsCount;
+	} 
+	
+    public static class Statistics
+        implements StatisticsProvider
+    {
+        private final MuninGraph[] graphs;
+
+        private long queryCount;
+
+        private long queryExecutionTime;
+
+        private long queryResultsCount;
+
+        public Statistics(FileSystem fs)
+        {
+            graphs = new MuninGraph[] { new QueryCount(fs), new QueryExecutionTime(fs),
+                            new QueryResultsCount(fs), new AverageQueryExecutionTime(fs),
+                            new AverageQueryResultsCount(fs) };
+        }
+
+        public void update(long timeMillis, int resultsCount)
+        {
+            queryCount++;
+            queryExecutionTime += timeMillis;
+            queryResultsCount += resultsCount;
+        }
+
+        @Override
+        public MuninGraph[] getGraphs()
+        {
+            return graphs;
+        }
+
+        public class QueryCount
+            extends AbstractMuninGraph
+        {
+            public QueryCount(FileSystem fs)
+            {
+                super(fs);
+            }
+
+            @Override
+            public String getId()
+            {
+                return "searchQueryCount";
+            }
+
+            public long getQueryCount()
+            {
+                return queryCount;
+            }
+        }
+
+        public class QueryExecutionTime
+            extends AbstractMuninGraph
+        {
+            public QueryExecutionTime(FileSystem fs)
+            {
+                super(fs);
+            }
+
+            @Override
+            public String getId()
+            {
+                return "searchQueryExecutionTime";
+            }
+
+            public long getQueryExecutionTime()
+            {
+                return queryExecutionTime;
+            }
+        }
+
+        public class QueryResultsCount
+            extends AbstractMuninGraph
+        {
+
+            public QueryResultsCount(FileSystem fs)
+            {
+                super(fs);
+            }
+
+            @Override
+            public String getId()
+            {
+                return "searchQueryResultsCount";
+            }
+
+            public long getQueryResultsCount()
+            {
+                return queryResultsCount;
+            }
+        }
+
+        public class AverageQueryExecutionTime
+            extends AbstractMuninGraph
+        {
+
+            public AverageQueryExecutionTime(FileSystem fs)
+            {
+                super(fs);
+            }
+
+            @Override
+            public String getId()
+            {
+                return "searchAverageQueryExecutionTime";
+            }
+
+            public float getAverageQueryExecutionTime()
+            {
+                return queryCount > 0 ? ((float)queryExecutionTime / queryCount) : 0f;
+            }
+        }
+
+        public class AverageQueryResultsCount
+            extends AbstractMuninGraph
+        {
+
+            public AverageQueryResultsCount(FileSystem fs)
+            {
+                super(fs);
+            }
+
+            @Override
+            public String getId()
+            {
+                return "searchAverageQueryExecutionTime";
+            }
+
+            public float geAverageQueryResultsCount()
+            {
+                return queryCount > 0 ? ((float)queryResultsCount / queryCount) : 0f;
             }
         }
     }
