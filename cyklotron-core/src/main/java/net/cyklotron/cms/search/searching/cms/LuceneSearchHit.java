@@ -23,6 +23,7 @@ implements SearchHit
     private String url;
     private String editUrl;
     private long id = -1L;
+    private int hashCode;
     
     private SH sh;
 
@@ -46,7 +47,8 @@ implements SearchHit
     
     public int hashCode()
     {
-        return (int)getId();
+    	getId(); // computes hashCode
+        return hashCode;
     }
 
     public String getTitle()
@@ -192,6 +194,7 @@ implements SearchHit
         if(id == -1L)
         {
             id = Long.parseLong(doc.get(SearchConstants.FIELD_ID));
+            hashCode = 23 + 37 * (int)( id ^ (id >>> 32) );
         }
         return id;
     }
