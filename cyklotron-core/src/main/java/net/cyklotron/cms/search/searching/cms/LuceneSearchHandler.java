@@ -2,7 +2,9 @@ package net.cyklotron.cms.search.searching.cms;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -158,13 +160,14 @@ public class LuceneSearchHandler implements SearchHandler<LuceneSearchHit>
         }
         ScoreDoc[] scoreDocs = hits.scoreDocs;
         float percent = 1/hits.getMaxScore();
-        List<LuceneSearchHit> searchHits = new ArrayList<LuceneSearchHit>(scoreDocs.length);
+        Set<LuceneSearchHit> searchHits = new HashSet<LuceneSearchHit>(scoreDocs.length);
         for(int i = 0; i < scoreDocs.length; i++)
         {
             final ScoreDoc sDoc = scoreDocs[i];
             searchHits.add(new LuceneSearchHit(searcher.doc(sDoc.doc), sDoc.score * percent));
         }
-        return searchHits;
+        List<LuceneSearchHit> uniqueHits = new ArrayList<LuceneSearchHit>(searchHits);
+        return uniqueHits;
     }
 
     ResourceClassResource getHitResourceClassResource(CoralSession coralSession, LuceneSearchHit hit)
