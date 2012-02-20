@@ -32,6 +32,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.coral.table.filter.PathFilter;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.statistics.AbstractMuninGraph;
 import org.objectledge.statistics.MuninGraph;
@@ -127,6 +128,8 @@ public class SearchServiceImpl
     private Relation nodesRelation;    
 
     private final Statistics statistics;
+    
+    private final PerformanceMonitor performanceMonitor;
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -134,10 +137,11 @@ public class SearchServiceImpl
      * Starts the service - the search service must be started on broker start in order to listen
      * to resource tree changes.
      */
-    public SearchServiceImpl(Configuration config, Logger logger, Context context, 
-        CoralSessionFactory sessionFactory, FileSystem fileSystem,
-        SiteService siteService, CategoryService categoryService,CategoryQueryService categoryQueryService, UserManager userManager,
-        PreferencesService preferencesService, IntegrationService integrationService,
+    public SearchServiceImpl(Configuration config, Logger logger, Context context,
+        CoralSessionFactory sessionFactory, FileSystem fileSystem, SiteService siteService,
+        CategoryService categoryService, CategoryQueryService categoryQueryService,
+        UserManager userManager, PreferencesService preferencesService,
+        IntegrationService integrationService, LoggingConfigurator loggingConfigurator,
         SearchServiceImpl.Statistics statistics)
         throws ConfigurationException
     {
@@ -152,6 +156,14 @@ public class SearchServiceImpl
         this.userManager = userManager;
         this.integrationService = integrationService;
         this.statistics = statistics;
+        if(config.getChild("performance", false) != null)
+        {
+            this.performanceMonitor = new PerformanceMonitor(config, loggingConfigurator);
+        }
+        else
+        {
+            this.performanceMonitor = null;
+        }
         Configuration[] paths = config.getChildren("accepted_path");
         acceptedPaths = new String[paths.length];
         for(int i = 0; i < paths.length; i++)
@@ -678,6 +690,10 @@ public class SearchServiceImpl
 	@Override
 	public void logQueryExecution(String query, long timeMillis, int resultsCount) {
 		statistics.update(timeMillis, resultsCount);
+		if(performanceMonitor != null)
+		{
+		    performanceMonitor.update(query, timeMillis, resultsCount);
+		}
 	} 
 	
     public static class Statistics
@@ -811,6 +827,33 @@ public class SearchServiceImpl
             public float geAverageQueryResultsCount()
             {
                 return queryCount > 0 ? ((float)queryResultsCount / queryCount) : 0f;
+            }
+        }
+    }
+    
+    private static class PerformanceMonitor
+    {
+        private final Logger logger;
+
+        private final int executionTimeThreshold;
+
+        private final int resultsCountThreshold;
+
+        public PerformanceMonitor(Configuration config, LoggingConfigurator loggingConfigurator)
+            throws ConfigurationException
+        {
+            logger = loggingConfigurator.createLogger(config.getChild("performance")
+                .getChild("logger").getValue());
+            Configuration thresholds = config.getChild("performance").getChild("thresholds");
+            executionTimeThreshold = thresholds.getChild("executionTime").getValueAsInteger();
+            resultsCountThreshold = thresholds.getChild("resultsCount").getValueAsInteger();
+        }
+
+        public void update(String query, long timeMillis, int resultsCount)
+        {
+            if((int)timeMillis > executionTimeThreshold || resultsCount > resultsCountThreshold)
+            {
+                logger.info(query + " time: " + timeMillis+ "ms, results: " + resultsCount);
             }
         }
     }
