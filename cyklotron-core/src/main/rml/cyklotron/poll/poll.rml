@@ -1,0 +1,85 @@
+#
+# A sketch of data for the poll application
+#
+# author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+# version $Id: poll.rml,v 1.5 2005-01-16 11:36:21 pablo Exp $
+#
+
+ECHO ' - poll';
+
+CREATE RESOURCE CLASS 'cms.poll.polls'
+JAVA CLASS 'net.cyklotron.cms.poll.PollsResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+## cross_reference bindings,
+role administrator
+);
+
+CREATE RESOURCE CLASS 'cms.poll.poll'
+JAVA CLASS 'net.cyklotron.cms.poll.PollResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node', 'workflow.stateful' , 'protected', 'search.indexable')
+ATTRIBUTES (
+role moderator,
+date startDate,
+date endDate
+);
+
+CREATE RESOURCE CLASS 'cms.poll.pool'
+JAVA CLASS 'net.cyklotron.cms.poll.PoolResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ('node');
+
+CREATE RESOURCE CLASS 'cms.poll.question'
+JAVA CLASS 'net.cyklotron.cms.poll.QuestionResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+integer sequence,
+integer votesCount
+);
+
+CREATE RESOURCE CLASS 'cms.poll.answer'
+JAVA CLASS 'net.cyklotron.cms.poll.AnswerResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+integer sequence,
+integer votesCount
+);
+
+CREATE RESOURCE CLASS 'cms.poll.vote'
+JAVA CLASS 'net.cyklotron.cms.poll.VoteResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node', 'protected')
+ATTRIBUTES (
+role moderator,
+string senderAddress
+);
+
+CREATE RESOURCE CLASS 'cms.poll.ballot'
+JAVA CLASS 'net.cyklotron.cms.poll.BallotResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED string email,
+long answerId
+);
+    
+# // security ////////////////////////////////////////////////////////////////
+
+CREATE PERMISSION 'cms.poll.polls.administer';
+CREATE PERMISSION 'cms.poll.polls.system';
+CREATE PERMISSION 'cms.poll.poll.moderate';
+
+ALTER RESOURCE CLASS 'cms.poll.polls'
+ADD PERMISSIONS (
+  'cms.poll.polls.administer',
+  'cms.poll.polls.system'
+);
+
+ALTER RESOURCE CLASS 'cms.poll.poll'
+ADD PERMISSIONS (
+  'cms.poll.poll.moderate'
+);

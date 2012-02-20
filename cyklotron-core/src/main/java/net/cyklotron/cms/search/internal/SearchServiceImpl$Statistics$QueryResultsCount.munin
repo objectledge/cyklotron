@@ -1,0 +1,8 @@
+graph_title Query results retrieval rate
+graph_order queryResultsCount
+graph_vlabel query results / ${graph_period}
+graph_category search
+queryResultsCount.label query results
+queryResultsCount.type DERIVE
+queryResultsCount.draw LINE1
+queryResultsCount.min 0
