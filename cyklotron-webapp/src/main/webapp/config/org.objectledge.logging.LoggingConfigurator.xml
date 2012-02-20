@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <!-- main log -->
+  <appender name="File" class="org.objectledge.logging.LedgeFileAppender">
+    <param name="File" value="logs/ledge.log"/>
+    <param name="Append" value="false"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %x %5p [%t] (%F:%L) - %m%n"/>
+    </layout>
+  </appender>
+  
+  <!-- SQL log -->
+  <appender name="SQL" class="org.objectledge.logging.LedgeFileAppender">
+    <param name="File" value="logs/sql.log"/>
+    <param name="Append" value="false"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %x [%t] %m%n"/>
+    </layout>
+  </appender>
+
+  <!-- Search performance log -->
+  <appender name="SearchPerformance" class="org.objectledge.logging.LedgeFileAppender">
+    <param name="File" value="logs/search.log"/>
+    <param name="Append" value="false"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %x [%t] %m%n"/>
+    </layout>
+  </appender>
+  
+  <logger name="org.objectledge.database.SQL" additivity="false">
+    <level value="OFF"/>
+    <appender-ref ref="SQL"/>
+  </logger>
+    
+  <logger name="net.cyklotron.cms.search.Performance" additivity="false">
+    <level value="INFO"/>
+    <appender-ref ref="SearchPerformance"/>
+  </logger>
+
+  <!-- customized loggers -->
+  <logger name="org.objectledge.database.ThreadDataSource"><level value="INFO"/></logger>
+  <logger name="org.objectledge.web.RequestTrackingValve"><level value="INFO"/></logger>  
+  <logger name="org.objectledge.templating.Templating"><level value="OFF"/></logger>  
+
+  <!-- root logger (default settings) -->
+  <root>
+    <level value="ERROR"/>
+    <appender-ref ref="File"/>
+  </root>
+  
+</log4j:configuration>
