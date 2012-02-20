@@ -821,10 +821,10 @@ public class SearchServiceImpl
             @Override
             public String getId()
             {
-                return "searchAverageQueryExecutionTime";
+                return "searchAverageQueryResultsCount";
             }
 
-            public float geAverageQueryResultsCount()
+            public float getAverageQueryResultsCount()
             {
                 return queryCount > 0 ? ((float)queryResultsCount / queryCount) : 0f;
             }

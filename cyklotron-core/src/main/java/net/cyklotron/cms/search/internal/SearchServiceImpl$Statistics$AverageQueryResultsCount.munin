@@ -1,5 +1,5 @@
 graph_title Average query results count
-graph_order queryResultsCount
+graph_order averageQueryResultsCount
 graph_vlabel query results
 graph_category search
 averageQueryResultsCount.label query results
