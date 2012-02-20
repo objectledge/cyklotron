@@ -1,0 +1,48 @@
+  #genericScreenHeader('PRZENIEŚ DO ARCHIWUM')
+  #result_inline_message('results.structure')
+
+  #set($srcLink = $link.set('node_id', $node.id).set('src_node_id', $src_node_id))
+  
+  #if($confirmation)
+  
+  Czy jesteś pewien że chcesz przenieść <b>$sourceNode.title</b> z serwisu: <b>$sourceNode.site.name</b><br/>
+  do sekcji: <b>$destinationNode.name</b>? w serwisue: <b>$destinationNode.site.name</b><br/>
+  <br/>
+  Nie będzie można cofnąć tej akcji!!!.
+  
+  <a href="$link.action('structure.MoveToArchive').set('node_id',$sourceNode.parent.id).set('src_node_id',$src_node_id).set('dst_node_id',$destinationNode.id)">Tak przenieś!</a>
+  <a href="$srcLink.set('reset',true)">Wybierz inną sekcje docelową</a>
+  <a href="$link.view('structure.NaviInfo').set('node_id',$src_node_id)">Anuluj</a>
+  #else
+   
+  $table.getColumn('name').set('label', 'Nazwa')
+  #set($tableLink = $srcLink.set('tableId',$table.getId()))
+  #set($tableColumnOrder = ['name'])
+  
+    <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $tableColumnOrder)
+    </tr>
+
+    #foreach ($row in $table.rows)
+    #set($zeroIfEven = $velocityCount%2)
+    <tr class="row$zeroIfEven">
+    #set($rowObject = $row.object)
+      <td>
+      #tableView_linesAndFolders($table $row $tableLink)
+      #if($rowObject.resourceClass.name == 'structure.navigation_node' || $rowObject.resourceClass.name == 'documents.document_node')
+	  <a href="$srcLink.set('dst_node_id',$rowObject.id)">$rowObject.name</a>
+	  #else
+      $rowObject.name
+      #end
+      </td>
+    </tr>
+    #end
+    </table>  
+  #end
+
+
+#genericScreenTrailer()
+
+
+

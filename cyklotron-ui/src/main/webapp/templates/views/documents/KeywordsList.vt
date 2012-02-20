@@ -1,0 +1,60 @@
+#set($ui_strings = $i18n.usePrefix("cms.documents.KeywordsList.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.documents.KeywordsList.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.documents.KeywordsList.buttons"))
+
+#set($nodeLink = $link)
+#genericScreenHeader($ui_strings.get('title'))
+
+<br/>
+
+<form name="form1" method="post" action="">
+<table width="100%" cellspacing="0" class="genericItemList">
+<tr>
+  <th width="20%">$ui_labels.get('pattern')</th>
+  <th width="20%">$ui_labels.get('title')</th>
+  <th width="20%">$ui_labels.get('link_type')</th>
+  <th width="10%">$ui_labels.get('new_window')</th>
+  <th width="10%">$ui_labels.get('category')</th>
+  <th width="10%">$ui_labels.get('style')</th>
+  <th> - </th>
+</tr>
+
+#set($size = $keywords.size())
+#foreach($keyword in $keywords)
+<tr>
+  <td>$!keyword.getPattern() #if($keyword.getRegexp())<br/><i>($ui_labels.get('reg_exp'))</i>#end</td>
+  <td>$!keyword.getTitle() &nbsp</td>
+  <td>#if($keyword.getExternal()) <a href="$!keyword.getHrefExternal()" target="_blank">$!keyword.getHrefExternal()</a> ($ui_labels.get('external'))#else <a href="$link.unsetView().unset('site_id').set('x',$!keyword.getHrefInternal().id).action('SetBrowseMode').set('mode','preview')" target="_blank">$!keyword.getHrefInternal().getTitle()</a> ($ui_labels.get('internal'))#end
+  <td>#if($keyword.getNewWindow()) $ui_labels.get('yes') #else $ui_labels.get('no') #end</td>
+  <td>#if($keyword.isCategoriesDefined() && $keyword.getCategories().size() > 0) 
+      #set($categories = $keyword.getCategories())
+      #set($categories_names = "")
+      #foreach($cat in $categories)
+         #if($velocityCount < $categories.size())
+           #set($categories_names = $categories_names + $cat.name + ", ")
+         #else
+           #set($categories_names = $categories_names + $cat.name) 
+         #end
+      #end
+      $categories_names #else $ui_labels.get('no_defined') #end
+  </td> 
+  <td>#if($keyword.isLinkClassDefined() && !$keyword.getLinkClass().isEmpty()) $!keyword.getLinkClass() #else $ui_labels.get('no_defined') #end</td>
+  <td align="right">
+    <a href="$link.view('documents.EditKeyword').set('keywordId',$keyword.id)">$ui_buttons.get('edit')</a>
+    <a href="$link.action('documents.DeleteKeyword').set('keywordId',$keyword.id)">$ui_buttons.get('delete')</a>
+  </td>
+</tr>
+#end
+</table>
+</form>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional" style="float:right;">
+     <a href="$nodeLink.view('documents.KeywordsList').action('documents.FlushRenderingCache')">$ui_buttons.get('flush_cache')</a>
+     <a href="$nodeLink.view('documents.AddKeyword')">$ui_buttons.get('add')</a>
+  </div>
+</div>
+
+#genericScreenTrailer()

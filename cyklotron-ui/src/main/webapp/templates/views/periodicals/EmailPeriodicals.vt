@@ -1,0 +1,46 @@
+#genericScreenHeader("EMAIL PERIODICALS")
+
+#result_inline_message("results.periodicals")
+
+$periodicals.getColumn('source').set('label', 'name')
+$periodicals.getColumn('modification.time').set('label', 'last modified')
+$periodicals.getColumn('publication.time').set('label', 'last published')
+$periodicals.getColumn('preview').set('label','preview')
+$periodicals.getColumn('publish').set('label','publish now')
+$periodicals.getColumn('delete').set('label', 'remove')
+#set($columnOrder = ['source','modification.time','publication.time','preview','publish','delete'])
+#set($periodicalsLink = $link.set('tableId',$periodicals.getId()))
+
+#if($periodicals.getPageRowCount() > 0)
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    #tableView_header($periodicals $periodicalsLink $columnOrder)
+  </tr>
+  #foreach($row in $periodicals.rows)
+  #set($odd = $velocityCount % 2)
+  <tr class="row$odd">
+    <td width="100%"><a href="$link.view('periodicals.EditPeriodical').set('periodical_id',$row.object.id).set('from_list','true').set('email_periodical','true')">$row.object.name</a></td>
+    <td>$format_date.format($row.object.modificationTime)</td>
+    #if($row.object.lastPublished)
+    <td>$format_date.format($row.object.lastPublished)</td>
+    #else
+    <td>not published</td>
+    #end
+	<td>
+		<a href="$link.action('periodicals.PreviewPeriodical').set('periodical_id',$row.object.id)">preview</a>
+	</td>
+    <td>
+		<a href="#confirm("Czy napewno chcesz opublikować $row.object.name?" "$link.action('periodicals.PublishPeriodical').set('periodical_id',$row.object.id)")">publish now</a>
+	</td>
+    <td><a href="$link.action('periodicals.DeletePeriodical').set('periodical_id',$row.object.id)">remove</a></td>
+  </tr>
+  #end
+  <tr>
+    <td colspan="7" align="center" class="bottomLine">
+	#tableView_pager($periodicals $periodicalsLink)
+	#tableView_pageSizeChooser($periodicals $periodicalsLink [10,20,50,100])
+    </td>
+  </tr>
+</table>
+#end
+#genericScreenTrailer()

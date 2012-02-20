@@ -1,0 +1,62 @@
+#set($strings = $i18n.usePrefix('cms.catalogue.IndexConf.strings'))
+#set($columnStrings = $i18n.usePrefix('cms.catalogue.IndexConf.columns'))
+#set($propertyNames = $i18n.usePrefix('cms.catalogue.Common.properties'))
+#genericScreenHeader($strings.title)
+#set($from_component = true)
+#set($save_action = "$link.unsetView().action('structure.UpdateScreenPreferences').set('x',$node.id)")
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+    <!--
+    var fieldNames = new Array( "cid", "sortColumn", "sortAsc", "pageSize" );
+    function sendConfig()
+    {
+    document.form1.action = "$save_action";
+    document.form1.target = "cyklotron_catalogue_index_config_${cms_data.node.id}";
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+    }
+    //-->
+</script>
+<form name="form1" method="POST" action="">
+    <input type="hidden" name="node_id" value="$node.id" />
+    <input type="hidden" name="config" value="" />
+    <table border="0" class="genericScreen" width="100%">
+        <tr>
+			<td>$strings.catalogue</td>
+			<td>
+				<select name="cid">
+				#option('' $strings.notSelected $!selectedCatalogue.id)
+				#foreach($catalogue in $availableCatalogues)
+					#option($catalogue.id $catalogue.name $selectedCatalogue.id)
+				#end
+				</select>
+			</td>
+		</tr>
+		<tr>
+            <td>$strings.sortColumn</td>
+            <td>
+				<select name="sortColumn">
+					#foreach($property in $propertyOrder)
+					#option("$property" $propertyNames.get("$property") $sortColumn)	
+					#end
+			    </select>
+            </td>
+		</tr>
+		<tr>
+            <td>$strings.sortDirection</td>
+            <td>
+				<select name="sortAsc">
+					#option('true' $strings.asc $sortAsc)
+					#option('false' $strings.desc $sortAsc)
+				</select>
+            </td>
+        </tr>
+		<tr>
+            <td>$strings.pageSize</td>
+            <td>
+				<input type="text" name="pageSize" value="$!pageSize"/>
+            </td>
+        </tr>
+    </table>
+</form>
+#command_bar([['javascript:sendConfig();',$strings.save],['javascript:window.close();',$strings.cancel]])
+#genericScreenTrailer()

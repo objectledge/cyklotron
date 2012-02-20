@@ -1,0 +1,74 @@
+
+#genericScreenHeader('Konfiguracja ekranu wyszukiwania')
+
+##
+#set($from_component = true)
+
+<form name="configSend" method="post" target="cyklotron_$node.id"
+    action="$link.unsetView().action('structure.UpdateScreenPreferences').set('x',$node.id)">
+  <input type="hidden" name="node_id" value="$node.id">
+  <input type="hidden" name="config" value="" />
+</form>
+
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "poolNames" );
+// -->
+</script>
+
+
+<form name="searchConf">
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+<tr>
+<th colspan="2">Wybierz zestawy indeksów do wyboru na ekranie</th>
+</tr>
+#if($table.pageRowCount == 0)
+<tr class="row1">
+<td colspan="$tableColumnOrder.size()">
+Nie ma żadnych zestawów.
+</td>
+</tr>
+#else
+
+#foreach($row in $table.rows)
+#set($object = $row.object)
+<tr>
+<td style="width: 10px;">
+#if($selected_pools.contains($object.name))
+<input type="checkbox" name="poolNames" value="$object.name" id="pool$object.id" checked="checked" />
+#else
+<input type="checkbox" name="poolNames" value="$object.name" id="pool$object.id" />
+#end
+</td>
+<td>
+<label for="pool$object.id">
+#tableView_linesAndFoldersBase($table $row $link)
+$object.name
+<small>$!object.description</small>
+</label>
+
+</td>
+</tr>
+#end
+#end
+</table>
+
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:submitConfig('cyklotron_$node.id', 'searchConf', 'configSend', fieldNames)">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+#genericScreenTrailer()
+
