@@ -27,4 +27,8 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 <config>
+    <slowRequestLog>
+        <path>logs/slowRequests.log</path>
+        <threshold>1000</threshold> <!-- 1s -->
+    </slowRequestLog>
 </config>

@@ -28,7 +28,14 @@
 --> 
 
 <config>
-<accepted_path>structure/</accepted_path>
-<accepted_path>applications/</accepted_path>
-<accepted_path>files/</accepted_path>
+  <accepted_path>structure/</accepted_path>
+  <accepted_path>applications/</accepted_path>
+  <accepted_path>files/</accepted_path>
+  <performance>
+    <logger>net.cyklotron.cms.search.Performance</logger>
+    <thresholds>
+      <executionTime>1000</executionTime>
+      <resultsCount>10000</resultsCount>
+    </thresholds>
+  </performance>
 </config>

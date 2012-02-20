@@ -32,7 +32,11 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.coral.table.filter.PathFilter;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.parameters.DefaultParameters;
+import org.objectledge.statistics.AbstractMuninGraph;
+import org.objectledge.statistics.MuninGraph;
+import org.objectledge.statistics.StatisticsProvider;
 import org.objectledge.table.TableFilter;
 import org.picocontainer.Startable;
 
@@ -121,7 +125,11 @@ public class SearchServiceImpl
     
     private Relation branchesRelation;
     
-    private Relation nodesRelation;
+    private Relation nodesRelation;    
+
+    private final Statistics statistics;
+    
+    private final PerformanceMonitor performanceMonitor;
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -129,10 +137,12 @@ public class SearchServiceImpl
      * Starts the service - the search service must be started on broker start in order to listen
      * to resource tree changes.
      */
-    public SearchServiceImpl(Configuration config, Logger logger, Context context, 
-        CoralSessionFactory sessionFactory, FileSystem fileSystem,
-        SiteService siteService, CategoryService categoryService,CategoryQueryService categoryQueryService, UserManager userManager,
-        PreferencesService preferencesService, IntegrationService integrationService)
+    public SearchServiceImpl(Configuration config, Logger logger, Context context,
+        CoralSessionFactory sessionFactory, FileSystem fileSystem, SiteService siteService,
+        CategoryService categoryService, CategoryQueryService categoryQueryService,
+        UserManager userManager, PreferencesService preferencesService,
+        IntegrationService integrationService, LoggingConfigurator loggingConfigurator,
+        SearchServiceImpl.Statistics statistics)
         throws ConfigurationException
     {
         this.config = config;
@@ -145,6 +155,15 @@ public class SearchServiceImpl
         this.categoryService = categoryService;
         this.userManager = userManager;
         this.integrationService = integrationService;
+        this.statistics = statistics;
+        if(config.getChild("performance", false) != null)
+        {
+            this.performanceMonitor = new PerformanceMonitor(config, loggingConfigurator);
+        }
+        else
+        {
+            this.performanceMonitor = null;
+        }
         Configuration[] paths = config.getChildren("accepted_path");
         acceptedPaths = new String[paths.length];
         for(int i = 0; i < paths.length; i++)
@@ -664,6 +683,177 @@ public class SearchServiceImpl
             {
                 branchesRelation = coralSession.getRelationManager().
                     createRelation(BRANCHES_RELATION_NAME);
+            }
+        }
+    }
+
+	@Override
+	public void logQueryExecution(String query, long timeMillis, int resultsCount) {
+		statistics.update(timeMillis, resultsCount);
+		if(performanceMonitor != null)
+		{
+		    performanceMonitor.update(query, timeMillis, resultsCount);
+		}
+	} 
+	
+    public static class Statistics
+        implements StatisticsProvider
+    {
+        private final MuninGraph[] graphs;
+
+        private long queryCount;
+
+        private long queryExecutionTime;
+
+        private long queryResultsCount;
+
+        public Statistics(FileSystem fs)
+        {
+            graphs = new MuninGraph[] { new QueryCount(fs), new QueryExecutionTime(fs),
+                            new QueryResultsCount(fs), new AverageQueryExecutionTime(fs),
+                            new AverageQueryResultsCount(fs) };
+        }
+
+        public void update(long timeMillis, int resultsCount)
+        {
+            queryCount++;
+            queryExecutionTime += timeMillis;
+            queryResultsCount += resultsCount;
+        }
+
+        @Override
+        public MuninGraph[] getGraphs()
+        {
+            return graphs;
+        }
+
+        public class QueryCount
+            extends AbstractMuninGraph
+        {
+            public QueryCount(FileSystem fs)
+            {
+                super(fs);
+            }
+
+            @Override
+            public String getId()
+            {
+                return "searchQueryCount";
+            }
+
+            public long getQueryCount()
+            {
+                return queryCount;
+            }
+        }
+
+        public class QueryExecutionTime
+            extends AbstractMuninGraph
+        {
+            public QueryExecutionTime(FileSystem fs)
+            {
+                super(fs);
+            }
+
+            @Override
+            public String getId()
+            {
+                return "searchQueryExecutionTime";
+            }
+
+            public long getQueryExecutionTime()
+            {
+                return queryExecutionTime;
+            }
+        }
+
+        public class QueryResultsCount
+            extends AbstractMuninGraph
+        {
+
+            public QueryResultsCount(FileSystem fs)
+            {
+                super(fs);
+            }
+
+            @Override
+            public String getId()
+            {
+                return "searchQueryResultsCount";
+            }
+
+            public long getQueryResultsCount()
+            {
+                return queryResultsCount;
+            }
+        }
+
+        public class AverageQueryExecutionTime
+            extends AbstractMuninGraph
+        {
+
+            public AverageQueryExecutionTime(FileSystem fs)
+            {
+                super(fs);
+            }
+
+            @Override
+            public String getId()
+            {
+                return "searchAverageQueryExecutionTime";
+            }
+
+            public float getAverageQueryExecutionTime()
+            {
+                return queryCount > 0 ? ((float)queryExecutionTime / queryCount) : 0f;
+            }
+        }
+
+        public class AverageQueryResultsCount
+            extends AbstractMuninGraph
+        {
+
+            public AverageQueryResultsCount(FileSystem fs)
+            {
+                super(fs);
+            }
+
+            @Override
+            public String getId()
+            {
+                return "searchAverageQueryResultsCount";
+            }
+
+            public float getAverageQueryResultsCount()
+            {
+                return queryCount > 0 ? ((float)queryResultsCount / queryCount) : 0f;
+            }
+        }
+    }
+    
+    private static class PerformanceMonitor
+    {
+        private final Logger logger;
+
+        private final int executionTimeThreshold;
+
+        private final int resultsCountThreshold;
+
+        public PerformanceMonitor(Configuration config, LoggingConfigurator loggingConfigurator)
+            throws ConfigurationException
+        {
+            logger = loggingConfigurator.createLogger(config.getChild("performance")
+                .getChild("logger").getValue());
+            Configuration thresholds = config.getChild("performance").getChild("thresholds");
+            executionTimeThreshold = thresholds.getChild("executionTime").getValueAsInteger();
+            resultsCountThreshold = thresholds.getChild("resultsCount").getValueAsInteger();
+        }
+
+        public void update(String query, long timeMillis, int resultsCount)
+        {
+            if((int)timeMillis > executionTimeThreshold || resultsCount > resultsCountThreshold)
+            {
+                logger.info(query + " time: " + timeMillis+ "ms, results: " + resultsCount);
             }
         }
     }

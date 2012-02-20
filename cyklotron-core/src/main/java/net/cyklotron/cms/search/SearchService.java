@@ -182,4 +182,15 @@ public interface SearchService
      * Returns a filter for filtering the branch tree while editing an index.
      */
     public TableFilter getBranchFilter(SiteResource site);
+    
+    // profiling /////////////////////////////////////////////////////////////////////////////////
+    
+    /**
+     * Notify search service about executed query. This updates performance counters (query count,
+     * result count) and slow queries log.
+     * 
+     * @param query
+     * @param count
+     */
+    public void logQueryExecution(String query, long timeMillis, int count);
 }

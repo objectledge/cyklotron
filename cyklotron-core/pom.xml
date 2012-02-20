@@ -148,6 +148,7 @@
           <include>**/*.rng</include>
           <include>**/*.sql</include>
           <include>**/*.txt</include>
+          <include>**/*.munin</include>
         </includes>
       </resource>
       <resource>
