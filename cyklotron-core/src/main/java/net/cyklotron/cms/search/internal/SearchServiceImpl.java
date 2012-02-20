@@ -124,13 +124,9 @@ public class SearchServiceImpl
     
     private Relation branchesRelation;
     
-    private Relation nodesRelation;
-    
-    private long totalQueryCount;
-    
-    private long totalQueryResultsCount;
-    
-    private long totalQueryExcutionTime;
+    private Relation nodesRelation;    
+
+    private final Statistics statistics;
 
     // initialization ////////////////////////////////////////////////////////
 
@@ -141,7 +137,8 @@ public class SearchServiceImpl
     public SearchServiceImpl(Configuration config, Logger logger, Context context, 
         CoralSessionFactory sessionFactory, FileSystem fileSystem,
         SiteService siteService, CategoryService categoryService,CategoryQueryService categoryQueryService, UserManager userManager,
-        PreferencesService preferencesService, IntegrationService integrationService)
+        PreferencesService preferencesService, IntegrationService integrationService,
+        SearchServiceImpl.Statistics statistics)
         throws ConfigurationException
     {
         this.config = config;
@@ -154,6 +151,7 @@ public class SearchServiceImpl
         this.categoryService = categoryService;
         this.userManager = userManager;
         this.integrationService = integrationService;
+        this.statistics = statistics;
         Configuration[] paths = config.getChildren("accepted_path");
         acceptedPaths = new String[paths.length];
         for(int i = 0; i < paths.length; i++)
@@ -679,9 +677,7 @@ public class SearchServiceImpl
 
 	@Override
 	public void logQueryExecution(String query, long timeMillis, int resultsCount) {
-		totalQueryCount++;
-		totalQueryExcutionTime += timeMillis;
-		totalQueryResultsCount += resultsCount;
+		statistics.update(timeMillis, resultsCount);
 	} 
 	
     public static class Statistics

@@ -431,6 +431,7 @@
   <component class-key="net.cyklotron.cms.related.RelatedService"
              class="net.cyklotron.cms.related.internal.RelatedServiceImpl"/>
 
+  <component class="net.cyklotron.cms.search.internal.SearchServiceImpl$Statistics"/>
   <component class-key="net.cyklotron.cms.search.SearchService"
              class="net.cyklotron.cms.search.internal.SearchServiceImpl"/>
 
@@ -563,6 +564,7 @@
       <parameter class-key="org.objectledge.database.ThreadDataSource$Statistics"/>
       <parameter class-key="org.objectledge.web.RequestTrackingValve"/>
       <parameter class-key="org.objectledge.cache.CacheFactory"/>
+      <parameter class-key="net.cyklotron.cms.search.internal.SearchServiceImpl$Statistics"/>
     </sequence>
   </component>
   <component class="org.objectledge.statistics.StatisticsWriter"/>
