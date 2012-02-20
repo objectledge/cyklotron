@@ -1,0 +1,8 @@
+graph_title Average query results count
+graph_order queryResultsCount
+graph_vlabel query results
+graph_category search
+averageQueryResultsCount.label query results
+averageQueryResultsCount.type GAUVE
+averageQueryResultsCount.draw LINE1
+averageQueryResultsCount.min 0

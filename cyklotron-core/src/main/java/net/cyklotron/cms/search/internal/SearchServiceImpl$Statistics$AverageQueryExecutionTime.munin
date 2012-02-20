@@ -1,0 +1,8 @@
+graph_title Average query execution time
+graph_order averageQueryExecutionTime
+graph_vlabel milliseconds
+graph_category search
+averageQueryExecutionTime.label query execution time
+averageQueryExecutionTime.type GAUGE
+averageQueryExecutionTime.draw LINE1
+averageQueryExecutionTime.min 0
