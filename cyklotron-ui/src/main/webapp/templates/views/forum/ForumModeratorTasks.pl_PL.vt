@@ -1,0 +1,76 @@
+#set($cms_link = $link.set('x',$parametersTool.getLong('x')))
+#set($cms_link = $cms_link.set('state',$parametersTool.get('state','Discussions')))
+
+## COMMAND BAR PREPROCESSING
+#macro(commandbar)
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td NOWRAP class="usualbutton">
+        <a href="$cms_link.set('state','Discussions')">Powrót</a>
+      </td>
+    </tr>
+  </table>
+#end
+
+  #result_inline_message('results.forum')
+      	          
+      	          
+  ## COLUMNS IN THIS TABLE
+  $table.getColumn('name').set('label', 'Wiadomości do moderacji')
+  $table.getColumn('discussion').set('label', 'Temat dyskusji/dokumentu').set('width', '40%')
+  $table.getColumn('creator.name').set('label', 'Autor').set('width', '10%')
+  $table.getColumn('creation.time').set('label', 'Data utworzenia').set('width', '10%')
+  #set($tableColumnOrder = ['name', 'discussion', 'creator.name', 'creation.time'] )
+  #set($tableLink = $cms_link.set('tableId',$table.getId()))
+      	            
+  <form name="form1" method="post" action="#" class="defaultForm">
+  <table width="100%" cellspacing="0">
+  <tr align="left">
+      #tableView_header($table $tableLink $tableColumnOrder)
+  </tr>
+  #if($table.rows.size()==0)
+   <tr align="left">
+     <td colspan="4">Brak wiadomości do moderacji.</td>
+   </tr>
+  #else
+   #foreach($message in $table.rows)
+    #if($message.object.discussion.resourceClass.name == 'cms.forum.discussion')
+      #set($discussion_name = "$message.object.discussion.name")
+    #else
+      #if($message.discussion.resource)
+        #set($discussion_name = "#resource_label($message.object.discussion.resource)")
+      #else
+        #set($discussion_name = 'Deleted resource')
+      #end
+    #end
+
+   #if($message.object.id == $mid)  
+     <tr style="background-color: #EEEEEE;">
+       <td><b><a href="$cms_link.set('mid',$message.object.id)">$message.object.getName()</a></b></td>
+       <td width="40%">$discussion_name</td>
+       <td width="10%">#cms_personal_credentials($message.object.createdBy)</td>
+       <td width="10%"><nobr>$format_date.format($message.object.creationTime) </nobr></td>
+     </tr>
+     <tr style="background-color: #EEEEEE; margin:3px;">
+       <td colspan="4">$!message.object.getContent()</td>
+     </tr>
+     <tr style="background-color: #EEEEEE; margin:3px;">
+       <td colspan="4"><span><b>akcje:</b></span>#fireTransition($message.object $cms_link.set('mid',$message.object.id))</td>
+     </tr>
+   #else
+     <tr>
+       <td><a href="$cms_link.set('mid',$message.object.id)">$message.object.getName()</a></td>
+       <td width="40%">$discussion_name</td>
+       <td width="10%">#cms_personal_credentials($message.object.createdBy)</td>
+       <td width="10%"><nobr>$format_date.format($message.object.creationTime) </nobr></td>
+     </tr>
+   #end
+  #end
+ #end
+ </table>
+ </form>
+
+  #genericScreenTrailer()
+
+ #commandbar()
+

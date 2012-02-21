@@ -1,0 +1,138 @@
+$pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addStyleLink("style/cms-popupmenu.css")
+
+#####
+## TYPE: S
+## NAME: Post list screen
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: MessageList.pl_PL.vt,v 1.3 2005/06/02 13:51:11 pablo Exp $
+## DESCR: Displays posts for forum.
+## STATUS: almost final
+## TODO: create pre-template for internationalization
+## TODO: permissions checking
+#####
+## COMMAND BAR PREPROCESSING
+
+<script>
+function deleteAction(val, url)
+{
+  if(val > 0)
+  {
+    if(confirm("Czy napewno chesz usunąć tą wiadomość wraz z "+val+" odpowiedziami?"))
+    {
+        document.location.href = url;
+    }
+  }
+  else
+  {
+    if(confirm("Czy napewno chesz usunąć tą wiadomość?"))
+    {
+        document.location.href = url;
+    }
+  }
+}
+</script>
+
+#macro(commandbar)
+<a href="$forumLink.view("forum.EditDiscussion").set("did",$discussion.getId())">edytuj</a> - 
+
+#if($cms_tool.getUserData().hasPermission($discussion, "cms.category.categorize"))                                                                   
+        <a href="#categorize($discussion)">kategorie</a>                                                                                                     
+        #else                                                                                                                                                
+        -                                                                                                                                                    
+        #end 
+ <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      <td nowrap="nowrap" class="usualbutton">
+        <a href="$tableLink.action('table.ToggleView')">##
+        #if($table.getViewAsTree()) widok listy #else widok drzewa #end##
+        </a>##
+      </td>
+##if($thread.hasPermission($subject.getName(), 'post_add'))
+      <td nowrap="nowrap" class="usualbutton">
+        <a href="$link.view('forum.AddMessage').set('did', $discussion.getId())">Nowa wiadomość</a>
+      </td>
+##end
+    </tr>
+  </table>
+#end
+## END COMMAND BAR PREPROCESSING
+
+  #genericScreenHeader('LISTA WIADOMOŚCI W DYSKUSJI')
+
+  #result_inline_message('results.forum')
+
+  #set($forumLink = $link.set('fid',$discussion.forum.id))
+
+  #set($tableLink = $forumLink.set('did', $discussion.getId()).set('tableId',$table.getId()))
+
+  #if($table.getPageCount() > 0)
+  #tableView_pager($table $tableLink)
+  #end
+
+  ## COLUMNS IN THIS TABLE
+  $table.getColumn('name').set('label', 'Temat').set('width', '70%')
+  $table.getColumn('creator.name').set('label', 'Autor')
+  $table.getColumn('creation.time').set('label', 'Data')
+  $table.getColumn('state').set('label', 'Stan')
+  $table.getColumn('actions').set('label', 'Akcje')
+  #set($tableColumnOrder = ['name', 'creator.name', 'creation.time', 'state', 'actions'] )
+  #set($MessageState = {'new' : 'nowy', 'visible' : 'widoczny', 'rejected' : 'wycofany', 'deleted': 'usunięty', 'locked': 'zablokowany', 'sticky' : 'przyklejony'} )
+
+  ## ------------ TABLE START
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $tableColumnOrder)
+    </tr>
+
+    ## ------------ HEADERS
+    #set($rowLink = $tableLink.view('forum.Message'))
+
+    #if ($table.getPageRowCount() == 0)
+    <tr class="row1"><td colspan="$tableColumnOrder.size()">Nie ma żadnych wiadomości.</td></tr>
+    #else
+     #foreach ($row in $table.rows)
+     #set($zeroIfEven = $velocityCount%2)
+     ## ------------ ROW START -  tableView_row
+    <tr class="row$zeroIfEven">
+      <td width="70%">
+        #tableView_linesAndFolders($table $row $tableLink)
+        <span class="cms-popupmenubutton"><span>$row.getObject().getName()</span>
+        <div class="cms-popupmenu">
+           <a href="$rowLink.set('mid', $row.getObject().getId())">podgląd</a>
+           <a href="$rowLink.view('forum.EditMessage').set('mid', $row.getObject().getId())">edycja</a>
+           <a href="$rowLink.view('forum.MessageList').action('forum.ToggleMessageStick').set('mid', $row.getObject().getId())">#if($row.object.getSticky(false))odklej#{else}przyklej#end</a>
+        </div>
+        </span>
+      </td>
+      <td nowrap="nowrap">
+       #cms_personal_credentials($row.object.createdBy)<br>
+      </td>
+      <td align="right" nowrap="nowrap">
+       $format_date.format($row.getObject().getCreationTime())
+      </td>
+      <td nowrap="nowrap">
+        #if($row.object.getSticky(false))przyklejony, #end $MessageState.get($row.object.state.name)
+      </td>
+      <td align="right" nowrap="nowrap">
+         #fireTransition($row.object $tableLink.set('mid', $row.object.id)) | <a href="javascript:deleteAction($row.childCount,'$tableLink.set('mid', $row.object.id).action('forum.DeleteMessage')')">Usuń</a> &nbsp;
+      </td>
+    </tr>
+## ------------ ROW END -  tableView_row
+  #end
+#end
+## ------------ ROWS END
+    <tr>	  
+      <td nowrap colspan="5" align="center" class="bottomLine">
+        #tableView_pager($table $tableLink)
+        #tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td>
+    </tr>
+</table>
+
+
+
+## ------------ TABLE END
+#commandbar()

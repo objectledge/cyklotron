@@ -1,0 +1,53 @@
+
+#genericScreenHeader('Konfiguracja komponentu ostatnie dodane wiadomości')
+
+
+#set($from_component = true)
+#set($save_action = "$link.unsetView().action('forum.UpdateLastAddedConf').set('x',$node.id)")
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "forum_scope" );
+
+function sendConfig()
+{
+    document.form1.action = "$save_action";
+    document.form1.target = "cyklotron_forum_lastadded_config_${cms_data.node.id}";
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+//-->
+</script>
+
+<form name="form1" method="post" action="">
+  <input type="hidden" name="node_id" value="$node.id">
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+<table border="0" class="genericScreen" width="100%">
+  <tr>
+    <td align="right">Węzeł forum:</td>
+    <td>
+       <input type=radio name="forum_node" value="forum" #if($forum_node == 'forum') checked #end><b>całe forum</b>
+    </td>
+    <td>
+       <input type=radio name="forum_node" value="discussions" #if($forum_node == 'discussions') checked #end><b>dyskusje</b>
+    </td>
+    <td>
+       <input type=radio name="forum_node" value="comments" #if($forum_node == 'comments') checked #end><b>wiadomości</b>
+    </td>
+  </tr>
+</table>
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+  <a href="javascript:sendConfig()">Zapisz</a>
+  <a href="javascript:window.close();">Anuluj</a>
+  </div>
+</div>
+
+#genericScreenTrailer()
