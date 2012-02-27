@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <item name="visual_challenge">Pobierz kod graficzny</item>
+  <item name="audio_challenge">Pobierz kod dźwiękowy</item>
+  <item name="refresh_btn">Pobierz nowy kod</item>
+  <item name="instructions_visual">Wpisz oba słowa:</item>
+  <item name="instructions_context">Wpisz słowa w ramce:</item>
+  <item name="instructions_audio">Wpisz osiem cyfr:</item>
+  <item name="help_btn">Pomoc</item>
+  <item name="play_again">Odtwórz dźwięk ponownie</item>
+  <item name="cant_hear_this">Pobierz dźwięk jako MP3</item>
+  <item name="incorrect_try_again">Nieprawidłowo. Spróbuj ponownie.</item>
+</strings>

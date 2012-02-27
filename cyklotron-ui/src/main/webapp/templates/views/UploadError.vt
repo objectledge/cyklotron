@@ -1,0 +1,9 @@
+  <div align="center">
+    <table class="genericLayout" cellspacing="0" cellpadding="0">
+	  <tr>
+  	    <td align="center">
+	      <h2>Failed to upload file - the size limit <i>$files.getUploadLimit()</i> was exceeded.</h2>
+	    </td>
+      </tr>
+    </table>
+  </div>

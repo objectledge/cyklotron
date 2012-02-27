@@ -1,0 +1,115 @@
+
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="changed_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="discussion_in_use">
+      <value>.</value>
+    </prefix>
+    <prefix name="hidden_discussion">
+      <value>Hidden discussion - cannot add message.</value>
+    </prefix>
+    <prefix name="answer_not_found">
+      <value>.</value>
+    </prefix>
+    <prefix name="commentary_already_exists">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="illegal_message_name">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_description">
+      <value>.</value>
+    </prefix>
+    <prefix name="invalid_title">
+      <value>.</value>
+    </prefix>
+    <prefix name="name_invalid">
+      <value>Name may not contain / character.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Contact system administrator to submit the problem.</value>
+    </prefix>
+    <prefix name="parent_message_locked">
+      <value>Parent message has been locked.</value>
+    </prefix>
+    <prefix name="responded_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="changed_successfully">
+      <value>State changed successfully</value>
+    </prefix>
+    <prefix name="added_for_moderation_successfully">
+      <value>Added successfully. This is a moderated forum. Messages violating legal or decency standards will not be published.</value>
+    </prefix>
+    <prefix name="discussion_in_use">
+      <value>Failed to delete discussion - discussion not empty</value>
+    </prefix>
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="hidden_discussion">
+      <value>.</value>
+    </prefix>
+    <prefix name="answer_not_found">
+      <value>Answer not found.</value>
+    </prefix>
+    <prefix name="commentary_already_exists">
+      <value>Commentary for given document already exists.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Deleted successfully.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>Exception occured.</value>
+    </prefix>
+    <prefix name="illegal_transition_name">
+      <value>Illegal parameter</value>
+    </prefix>
+    <prefix name="illegal_message_name">
+      <value>No message title.</value>
+    </prefix>
+    <prefix name="invalid_description">
+      <value>Illegal description - action canceled.</value>
+    </prefix>
+    <prefix name="invalid_title">
+      <value>Illegal title - action canceled.</value>
+    </prefix>
+    <prefix name="name_invalid">
+      <value>The entered name is invalid</value>
+    </prefix>
+    <prefix name="invalid_captcha_verification">
+      <value>incorrect Captcha string.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Parameter not found.</value>
+    </prefix>
+    <prefix name="parent_message_locked">
+      <value>Parent message has been locked.</value>
+    </prefix>
+    <prefix name="responded_successfully">
+      <value>Responded successfully.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Updated successfully.</value>
+    </prefix>
+  </prefix>
+</strings>

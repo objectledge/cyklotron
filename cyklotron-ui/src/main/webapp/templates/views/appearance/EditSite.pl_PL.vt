@@ -1,0 +1,103 @@
+
+
+$pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addStyleLink("style/cms-popupmenu.css")
+
+#set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
+#set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
+#set($ui_commands = $i18n.usePrefix("cms.${parametersTool.view}.commands"))
+#set($site_link = $link.set('site_id',$cmsData.site.id))
+
+#macro(readable_name $element)
+#if($element.type.equals("label") || $element.type.equals("layouts") || $element.type.equals("styles") || $element.type.equals("skins"))
+$ui_labels.get($element.name)##
+#else
+$element.name##
+#end
+#end
+
+#macro(context_menu $element)
+#set($label = "#readable_name($element)")
+#if($element.type.equals("layouts"))
+  <span class="cms-popupmenubutton"><span>$label</span>
+  <div class="cms-popupmenu">
+    <a href="$site_link.view('appearance.layout.AddLayout')">$ui_commands.get("create")</a>
+  </div>
+  </span>
+#elseif($element.type.equals("layout"))
+  #set($layout_link = $site_link.set('layout_id',$element.id))
+  <span class="cms-popupmenubutton"><span>$label</span>
+  <div class="cms-popupmenu">
+    <a href="$layout_link.view('appearance.layout.EditLayout')">$ui_commands.get("edit")</a>
+    <a href="$layout_link.view('appearance.layout.DeleteLayout')">$ui_commands.get("delete")</a>
+  </div>
+  </span>
+#elseif($element.type.equals("styles"))
+  <span class="cms-popupmenubutton"><span>$label</span>
+  <div class="cms-popupmenu">
+    <a href="$site_link.view('appearance.style.AddStyle')">$ui_commands.get("create")</a>
+  </div>
+  </span>
+#elseif($element.type.equals("style"))
+  #set($style_link = $site_link.set('style_id',$element.id))
+  <span class="cms-popupmenubutton"><span>$label</span>
+  <div class="cms-popupmenu">
+    <a href="$style_link.view('appearance.style.EditStyle')">$ui_commands.get("edit")</a>
+    <a href="$style_link.view('appearance.style.DeleteStyle')">$ui_commands.get("delete")</a>
+  </div>
+  </span>
+#elseif($element.type.equals("skins"))
+  <span class="cms-popupmenubutton"><span>$label</span>
+  <div class="cms-popupmenu">
+    <a href="$site_link.view('appearance.skin.CreateSkin')">$ui_commands.get("create")</a>
+  </div>
+  </span>
+#elseif($element.type.equals("skin"))
+  #set($skin_link = $site_link.set('skin',$element.name))
+  <span class="cms-popupmenubutton"><span>$label</span>
+  #if($current_skin.equals($element.name))
+  ($ui_strings.get('current'))
+  #end
+  #if($preview_skin.equals($element.name))
+  ($ui_strings.get('preview'))
+  #end
+  <div class="cms-popupmenu">
+    <a href="$skin_link.view('appearance.skin.RenameSkin')">$ui_commands.get('rename')</a>
+#if(!$current_skin.equals($element.name))
+    <a href="$site_link.action('appearance.skin.SelectSkin').set('selected',$element.name)">$ui_commands.get('select')</a>
+#end
+#if($preview_skin.equals($element.name))
+    <a href="$site_link.action('appearance.skin.PreviewSkin')">$ui_commands.get('disable_preview')</a>
+#else
+    <a href="$site_link.action('appearance.skin.PreviewSkin').set('selected',$element.name)">$ui_commands.get('preview')</a>
+#end
+    <a href="$skin_link.view('appearance.skin.EditSkin')">$ui_commands.get("edit")</a>
+#if(!$current_skin.equals($element.name) && !$preview_skin.equals($element.name))
+    <a href="$skin_link.view('appearance.skin.DeleteSkin')">$ui_commands.get("delete")</a>
+#end
+  </div>
+  </span>
+#else
+<span>$label</span>
+#end
+#end
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.appearance")
+
+#set($tableLink = $link.set('tableId', $table.id).set('site_id',$cmsData.site.id))
+<table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th>$ui_strings.get("subtitle", [$cmsData.site.name])</th>
+#foreach($row in $table.rows)
+#set($rowLink = $tableLink.view('appearance.skin.EditSite').action('table.ToggleSelected').set('rowId', $row.id))
+  <tr>
+    <td>
+      #tableView_linesAndFolders($table $row $tableLink) #context_menu($row.object)
+    </td>
+  </tr>
+#end
+</table>
+
+#genericScreenTrailer()
