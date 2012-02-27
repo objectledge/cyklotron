@@ -1,5 +1,6 @@
 package net.cyklotron.cms.banner.internal;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -10,6 +11,7 @@ import java.util.Random;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.query.QueryResults;
@@ -268,66 +270,47 @@ public class BannerServiceImpl
     {
 		try
 		{
+            Date nowDate = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
+            String now = df.format(nowDate);
+            
 			Resource readyState = coralSession.getStore()
 				.getUniqueResourceByPath("/cms/workflow/automata/banner.banner/states/ready");
 			Resource activeState = coralSession.getStore()
 				.getUniqueResourceByPath("/cms/workflow/automata/banner.banner/states/active");				
-			QueryResults results = coralSession.getQuery().
-				executeQuery("FIND RESOURCE FROM cms.banner.banner WHERE state = "+readyState.getIdString());
+            QueryResults results = coralSession.getQuery().executeQuery(
+                "FIND RESOURCE FROM cms.banner.banner WHERE state = " + readyState.getIdString()
+                    + " AND ( startDate < '" + now + "' OR endDate < '" + now + "' )");
 			Resource[] nodes = results.getArray(1);
 			log.debug("CheckBannerState "+nodes.length+" ready banners found");
 			for(int i = 0; i < nodes.length; i++)
 			{
-				checkBannerState(coralSession, (BannerResource)nodes[i]);
+				checkBannerState(coralSession, (BannerResource)nodes[i], nowDate);
 			}
-			results = coralSession.getQuery()
-				.executeQuery("FIND RESOURCE FROM cms.banner.banner WHERE state = "+activeState.getIdString());
+            results = coralSession.getQuery().executeQuery(
+                "FIND RESOURCE FROM cms.banner.banner WHERE state = " + activeState.getIdString()
+                    + " AND endDate < '" + now + "'");
 			nodes = results.getArray(1);
 			log.debug("CheckBannerState "+nodes.length+" active banners found");
 			for(int i = 0; i < nodes.length; i++)
 			{
-				checkBannerState(coralSession, (BannerResource)nodes[i]);
+				checkBannerState(coralSession, (BannerResource)nodes[i], nowDate);
 			}
 		}
 		catch(Exception e)
 		{
 			log.error("CheckBannerState exception ",e);
 		}
-    	
-    	/*
-        SiteResource[] sites = siteService.getSites();
-        for(int i=0; i < sites.length; i++)
-        {
-            try
-            {
-                BannersResource bannersRoot = getBannersRoot(sites[i]);
-                Resource[] banners = coralSession.getStore().getResource(bannersRoot);
-                for(int j = 0; j < banners.length; j++)
-                {
-                    if(banners[j] instanceof BannerResource)
-                    {
-                        checkBannerState((BannerResource)banners[j]);
-                    }
-                }
-            }
-            catch(BannerException e)
-            {
-                //simple the site has no banner application
-                //do nothing.
-            }
-        }
-        */
     }
 
 
     /**
      * check state of the poll and expire it if the end date was reached.
      */
-    private void checkBannerState(CoralSession coralSession, BannerResource bannerResource)
+    private void checkBannerState(CoralSession coralSession, BannerResource bannerResource, Date today)
     {
         try
         {
-            Date today = Calendar.getInstance().getTime();
             ProtectedTransitionResource[] transitions = 
                 workflowService.getAllowedTransitions(coralSession, bannerResource, coralSession.getUserSubject());
             String state = bannerResource.getState().getName();

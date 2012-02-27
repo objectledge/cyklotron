@@ -1,5 +1,6 @@
 package net.cyklotron.cms.link.internal;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,6 +8,7 @@ import java.util.List;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
+import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
@@ -281,25 +283,31 @@ public class LinkServiceImpl
     {
     	try
     	{
+            Date nowDate = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
+            String now = df.format(nowDate);
+    	    
     		Resource readyState = coralSession.getStore()
 				.getUniqueResourceByPath("/cms/workflow/automata/link.link/states/ready");
 			Resource activeState = coralSession.getStore()
 				.getUniqueResourceByPath("/cms/workflow/automata/link.link/states/active");				
-			QueryResults results = coralSession.getQuery().
-				executeQuery("FIND RESOURCE FROM cms.link.base_link WHERE state = "+readyState.getIdString());
+            QueryResults results = coralSession.getQuery().executeQuery(
+                "FIND RESOURCE FROM cms.link.base_link WHERE state = " + readyState.getIdString()
+                    + " AND ( startDate < '" + now + "' OR endDate < '" + now + "' )");
 			Resource[] nodes = results.getArray(1);
 			log.debug("CheckLinkState "+nodes.length+" ready links found");
 			for(int i = 0; i < nodes.length; i++)
 			{
-				checkLinkState(coralSession, (BaseLinkResource)nodes[i]);
+				checkLinkState(coralSession, (BaseLinkResource)nodes[i], nowDate);
 			}
-			results = coralSession.getQuery()
-				.executeQuery("FIND RESOURCE FROM cms.link.base_link WHERE state = "+activeState.getIdString());
+            results = coralSession.getQuery().executeQuery(
+                "FIND RESOURCE FROM cms.link.base_link WHERE state = " + activeState.getIdString()
+                    + " AND endDate < '" + now + "'");
 			nodes = results.getArray(1);
 			log.debug("CheckLinkState "+nodes.length+" active links found");
 			for(int i = 0; i < nodes.length; i++)
 			{
-				checkLinkState(coralSession, (BaseLinkResource)nodes[i]);
+				checkLinkState(coralSession, (BaseLinkResource)nodes[i], nowDate);
 			}
     	}
     	catch(Exception e)
@@ -336,11 +344,10 @@ public class LinkServiceImpl
     /**
      * check state of the link and expire it if the end date was reached.
      */
-    private void checkLinkState(CoralSession coralSession,BaseLinkResource linkResource)
+    private void checkLinkState(CoralSession coralSession,BaseLinkResource linkResource, Date today)
     {
         try
         {
-            Date today = Calendar.getInstance().getTime();
             ProtectedTransitionResource[] transitions = workflowService.getAllowedTransitions(coralSession, linkResource, coralSession.getUserSubject());
             String state = linkResource.getState().getName();
             ProtectedTransitionResource transition = null;

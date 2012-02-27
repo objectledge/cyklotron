@@ -2,6 +2,7 @@ package net.cyklotron.cms.poll.internal;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -14,6 +15,7 @@ import java.util.Set;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityExistsException;
@@ -312,25 +314,31 @@ public class PollServiceImpl
     {
         try
         {
+            Date nowDate = Calendar.getInstance().getTime();
+            SimpleDateFormat df = new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
+            String now = df.format(nowDate);
+            
             Resource readyState = coralSession.getStore().getUniqueResourceByPath(
                 "/cms/workflow/automata/poll.poll/states/ready");
             Resource activeState = coralSession.getStore().getUniqueResourceByPath(
                 "/cms/workflow/automata/poll.poll/states/active");
             QueryResults results = coralSession.getQuery().executeQuery(
-                "FIND RESOURCE FROM cms.poll.poll WHERE state = " + readyState.getIdString());
+                "FIND RESOURCE FROM cms.poll.poll WHERE state = " + readyState.getIdString()
+                    + " AND ( startDate < '" + now + "' OR endDate < '" + now + "' )");
             Resource[] nodes = results.getArray(1);
             log.debug("CheckPollState " + nodes.length + " ready polls found");
             for(int i = 0; i < nodes.length; i++)
             {
-                checkPollState(coralSession, (PollResource)nodes[i]);
+                checkPollState(coralSession, (PollResource)nodes[i], nowDate);
             }
             results = coralSession.getQuery().executeQuery(
-                "FIND RESOURCE FROM cms.poll.poll WHERE state = " + activeState.getIdString());
+                "FIND RESOURCE FROM cms.poll.poll WHERE state = " + activeState.getIdString()
+                    + " AND endDate < '" + now + "'");
             nodes = results.getArray(1);
             log.debug("CheckPollState " + nodes.length + " active polls found");
             for(int i = 0; i < nodes.length; i++)
             {
-                checkPollState(coralSession, (PollResource)nodes[i]);
+                checkPollState(coralSession, (PollResource)nodes[i], nowDate);
             }
         }
         catch(Exception e)
@@ -583,11 +591,10 @@ public class PollServiceImpl
     /**
      * check state of the poll and expire it if the end date was reached.
      */
-    private void checkPollState(CoralSession coralSession, PollResource pollResource)
+    private void checkPollState(CoralSession coralSession, PollResource pollResource, Date today)
     {
         try
         {
-            Date today = Calendar.getInstance().getTime();
             ProtectedTransitionResource[] transitions = workflowService.getAllowedTransitions(
                 coralSession, pollResource, coralSession.getUserSubject());
             String state = pollResource.getState().getName();
