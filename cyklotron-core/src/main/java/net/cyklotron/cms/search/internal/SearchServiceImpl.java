@@ -36,6 +36,7 @@ import org.objectledge.logging.LoggingConfigurator;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.statistics.AbstractMuninGraph;
 import org.objectledge.statistics.MuninGraph;
+import org.objectledge.statistics.RoundRobinAverage;
 import org.objectledge.statistics.StatisticsProvider;
 import org.objectledge.table.TableFilter;
 import org.picocontainer.Startable;
@@ -699,6 +700,8 @@ public class SearchServiceImpl
     public static class Statistics
         implements StatisticsProvider
     {
+        private final static int AVG_WINDOW = 300;
+        
         private final MuninGraph[] graphs;
 
         private long queryCount;
@@ -706,6 +709,10 @@ public class SearchServiceImpl
         private long queryExecutionTime;
 
         private long queryResultsCount;
+
+        private RoundRobinAverage avgQueryExecutionTime = new RoundRobinAverage(AVG_WINDOW);
+
+        private RoundRobinAverage avgQueryResultsCount = new RoundRobinAverage(AVG_WINDOW);
 
         public Statistics(FileSystem fs)
         {
@@ -718,7 +725,9 @@ public class SearchServiceImpl
         {
             queryCount++;
             queryExecutionTime += timeMillis;
+            avgQueryExecutionTime.addSample(timeMillis);
             queryResultsCount += resultsCount;
+            avgQueryResultsCount.addSample(resultsCount);
         }
 
         @Override
@@ -803,9 +812,9 @@ public class SearchServiceImpl
                 return "searchAverageQueryExecutionTime";
             }
 
-            public float getAverageQueryExecutionTime()
+            public double getAverageQueryExecutionTime()
             {
-                return queryCount > 0 ? ((float)queryExecutionTime / queryCount) : 0f;
+                return avgQueryExecutionTime.getAverage();
             }
         }
 
@@ -824,9 +833,9 @@ public class SearchServiceImpl
                 return "searchAverageQueryResultsCount";
             }
 
-            public float getAverageQueryResultsCount()
+            public double getAverageQueryResultsCount()
             {
-                return queryCount > 0 ? ((float)queryResultsCount / queryCount) : 0f;
+                return avgQueryResultsCount.getAverage();
             }
         }
     }
