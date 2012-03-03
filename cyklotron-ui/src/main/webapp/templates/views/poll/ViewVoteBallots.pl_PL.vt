@@ -1,0 +1,57 @@
+#set($psid = $parametersTool.get('psid','-1'))
+#set ($voteLink = $link.set('psid',$psid))
+
+#genericScreenHeader("LISTA ODDANYCH GŁOSÓW ANKIETY")
+
+  <form name="form1" method="post" action="" class="defaultForm">
+  <input type="hidden" name="psid" value="$psid" size="30">
+  <input type="hidden" name="pid" value="$vote.id" size="30">
+    <table class="genericItemList" width="100%" cellspacing="0">
+    <tr>
+     <th colspan="2">Szczególy ankiety</th>
+    </tr>
+    <tr>
+      <td width="15%">Tytuł ankiety: </td><td><i>$vote.getName()</i></td>         
+    </tr>
+    <tr>
+      <td>Opis: </td><td><i>$!vote.getDescription()</i></td>
+    </tr>    
+    </table>
+    <br/><br/>
+    <table class="genericItemList" width="100%" cellspacing="0">
+    <tr>
+      <th width=30%>Email głosującego:</th>
+      <th width=50%>Opcja:</th>
+      <th width=20%>Data:</th>
+    </tr>
+    #foreach($answerKey in $answerKeys)
+        #set($answerTitle = $answers.get($answerKey).getTitle())
+        #set($ballotsForAnswer = $ballots.get($answers.get($answerKey).getId()))##
+        #foreach($ballotForAnswer in $ballotsForAnswer)
+         <tr>
+          <td >$ballotForAnswer.email</td>
+          <td ><i>$answerTitle</i></td>
+          <td >$format_date.format($ballotForAnswer.creationTime)</td>
+         </tr>
+        #end
+     #end
+    </table>
+  </form>
+  
+  <div>
+    <table class="layoutTable" align="right" border="0">
+      <tr>
+        <td>
+          <table height="22" class="buttonTable">
+            <tr>
+              <td>
+                <a href="$voteLink.view("poll.VoteList")">Powrót</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+#genericScreenTrailer()	

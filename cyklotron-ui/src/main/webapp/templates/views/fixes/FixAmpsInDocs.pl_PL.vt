@@ -1,0 +1,5 @@
+
+<form name="form1" method="post" action='$link.action('fixes.FixAmpsInDocs')'>
+<textarea name="doc_ids" cols="" rows="" style="height: 5em; width: 90%">
+</textarea>
+</form>
