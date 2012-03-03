@@ -1,0 +1,8 @@
+graph_title Query execution rate
+graph_order queryCount
+graph_vlabel queries / ${graph_period}
+graph_category search
+queryCount.label queries
+queryCount.type DERIVE
+queryCount.draw LINE1
+queryCount.min 0
