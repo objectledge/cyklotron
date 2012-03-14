@@ -32,9 +32,10 @@ import org.jcontainer.dna.ConfigurationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.query.FilteredQueryResults;
 import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.security.Permission;
-import org.objectledge.coral.security.Role;
+import org.objectledge.coral.schema.AttributeHandler;
+import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.CreationTimeComparator;
@@ -78,6 +79,10 @@ import net.cyklotron.cms.structure.table.TitleComparator;
 import net.cyklotron.cms.structure.table.ValidityStartComparator;
 import net.cyklotron.cms.util.PriorityComparator;
 import net.cyklotron.cms.util.SiteFilter;
+
+import bak.pcj.LongIterator;
+import bak.pcj.set.LongOpenHashSet;
+import bak.pcj.set.LongSet;
 
 /**
  * A generic implementation of the periodicals service.
@@ -135,7 +140,7 @@ public class PeriodicalsServiceImpl
     private Logger log;
     
     /** renderer classes */
-    private Map rendererFactories = new HashMap();
+    private Map<String, PeriodicalRendererFactory> rendererFactories = new HashMap<String, PeriodicalRendererFactory>();
 
     /** default server name used when no site alias is selected. */
     private String serverName;
@@ -151,9 +156,6 @@ public class PeriodicalsServiceImpl
     
     /** messages from address. */
     private String messagesFrom;
-
-    /** i18n */
-    private I18n i18n;
     
     private final LinkRenderer linkRenderer;
 
@@ -172,7 +174,6 @@ public class PeriodicalsServiceImpl
         this.mailSystem = mailSystem;
         this.siteService = siteService;
         this.log = logger;
-        this.i18n = i18n;
         this.subscriptionService = subscriptionService;
         for (int i = 0; i < renderers.length; i++)
         {
@@ -297,11 +298,11 @@ public class PeriodicalsServiceImpl
     public void processPeriodicals(CoralSession coralSession,Date time)
         throws PeriodicalsException
     {
-        Set toProcess = findPeriodicalsToProcess(coralSession,time);
-        Iterator i = toProcess.iterator();
+        Set<PeriodicalResource> toProcess = findPeriodicalsToProcess(coralSession,time);
+        Iterator<PeriodicalResource> i = toProcess.iterator();
         while(i.hasNext() && !Thread.interrupted())
         {
-            PeriodicalResource p = (PeriodicalResource)i.next();
+            PeriodicalResource p = i.next();
             try
             {
                 List<FileResource> results = generate(coralSession,p, time, true);
@@ -321,17 +322,17 @@ public class PeriodicalsServiceImpl
     
     // implementation ///////////////////////////////////////////////////////
     
-    private Set findPeriodicalsToProcess(CoralSession coralSession,Date time)
+    private Set<PeriodicalResource> findPeriodicalsToProcess(CoralSession coralSession,Date time)
     {
-        Set set = new HashSet();
+        Set<PeriodicalResource> set = new HashSet<PeriodicalResource>();
         try
         {
             QueryResults results = coralSession.getQuery().executeQuery(
                 "FIND RESOURCE FROM cms.periodicals.periodical");
-            Iterator rows = results.iterator();
+            Iterator<QueryResults.Row> rows = results.iterator();
             while(rows.hasNext())
             {
-                QueryResults.Row row = (QueryResults.Row)rows.next();
+                QueryResults.Row row = rows.next();
                 PeriodicalResource r = (PeriodicalResource)row.get();
                 if(shouldProcess(coralSession,r, time))
                 {
@@ -426,7 +427,7 @@ public class PeriodicalsServiceImpl
     {
         List<FileResource> results = new LinkedList<FileResource>();
         String timestamp = timestamp(time);
-        Map<CategoryQueryResource, Resource> queryResults = performQueries(coralSession, r, time);
+        Map<CategoryQueryResource, List<DocumentNodeResource>> queryResults = performQueries(coralSession, r, time);
         
         if(!(r instanceof EmailPeriodicalResource)
             || (!isQuerySetEmpty(queryResults) || ((EmailPeriodicalResource)r).getSendEmpty()))
@@ -454,7 +455,7 @@ public class PeriodicalsServiceImpl
     }
     
     private FileResource generate(CoralSession coralSession, PeriodicalResource r,
-        Map<CategoryQueryResource, Resource> queryResults, String rendererName, Date time,
+        Map<CategoryQueryResource, List<DocumentNodeResource>> queryResults, String rendererName, Date time,
         String timestamp, String templateName, FileResource contentFile)
         throws PeriodicalsException, FilesException, ProcessingException, MergingException,
         TemplateNotFoundException, IOException, MessagingException, AmbigousEntityNameException
@@ -488,15 +489,16 @@ public class PeriodicalsServiceImpl
         }
     }
     
-    private Map performQueries(CoralSession coralSession, PeriodicalResource periodical, Date time)
+    private Map<CategoryQueryResource, List<DocumentNodeResource>> performQueries(
+        CoralSession coralSession, PeriodicalResource periodical, Date time)
         throws Exception
     {
-        Map results = new HashMap();
-        Role anonymous = coralSession.getSecurity().getUniqueRole("cms.anonymous");
-        Permission viewPermission = coralSession.getSecurity().getUniquePermission(
-            "cms.structure.view");
+        Map<CategoryQueryResource, List<DocumentNodeResource>> results = new HashMap<CategoryQueryResource, List<DocumentNodeResource>>();
+        Subject anonSub = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
+        @SuppressWarnings("unchecked")
         List<CategoryQueryResource> queries = (List<CategoryQueryResource>)periodical
             .getCategoryQuerySet().getQueries();
+        LongSet newIdSet = getNewDocuments(coralSession, periodical);
         for(CategoryQueryResource cq : queries)
         {
             String[] siteNames = cq.getAcceptedSiteNames();
@@ -505,40 +507,28 @@ public class PeriodicalsServiceImpl
             {
                 siteFilter = new SiteFilter(coralSession, siteNames, siteService);
             }
-            Resource[] docs = categoryQueryService.forwardQuery(coralSession, cq.getQuery());
-            ArrayList temp = new ArrayList();
-            for(int j = 0; j < docs.length; j++)
+            LongSet queryIdSet = categoryQueryService.forwardQueryIds(coralSession, cq.getQuery(),
+                newIdSet);
+            LongIterator i = queryIdSet.iterator();
+            Date now = new Date();
+            List<DocumentNodeResource> temp = new ArrayList<DocumentNodeResource>();
+            while(i.hasNext())
             {
-                if(docs[j] instanceof DocumentNodeResource)
+                Resource r = coralSession.getStore().getResource(i.next());
+                if(r instanceof DocumentNodeResource)
                 {
-                    DocumentNodeResource doc = (DocumentNodeResource)docs[j];
-                    if(periodical.getLastPublished() == null
-                        || (doc.getValidityStart() == null && doc.getCreationTime().compareTo(
-                            periodical.getLastPublished()) > 0)
-                        || (doc.getValidityStart() != null && doc.getValidityStart().compareTo(
-                            periodical.getLastPublished()) > 0))
+                    DocumentNodeResource doc = (DocumentNodeResource)r;
+                    if(!periodical.isLastPublishedDefined() || !doc.isValidityStartDefined()
+                        || doc.getValidityStart().compareTo(periodical.getLastPublished()) > 0)
                     {
-                        if(doc.getValidityStart() == null || doc.getValidityStart().compareTo(time) < 0)
+                        if(doc.canView(coralSession, anonSub, now))
                         {
-                            if(doc.getState() == null || doc.getState().getName().equals("published"))
+                            if(siteFilter == null || siteFilter.accept(doc))
                             {
-                                if(anonymous.hasPermission(doc, viewPermission))
-                                {
-                                    if(siteFilter != null)
-                                    {
-                                        if(siteFilter.accept(doc))
-                                        {
-                                            temp.add(doc);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        temp.add(doc);
-                                    }
-                                }
+                                temp.add(doc);
                             }
                         }
-                    }                    
+                    }
                 }
             }
             Collections.sort(temp, getComparator(periodical));
@@ -547,12 +537,45 @@ public class PeriodicalsServiceImpl
         return results;
     }
     
-    private boolean isQuerySetEmpty(Map queryResults)
+    private LongSet getNewDocuments(CoralSession coralSession, PeriodicalResource periodical)
+        throws Exception
     {
-        Map <CategoryQueryResource, ArrayList> queries = queryResults;
-        for(CategoryQueryResource cq : queries.keySet())
+        if(periodical.getLastPublished() != null)
         {
-            if(!queries.get(cq).isEmpty())
+            @SuppressWarnings("unchecked")
+            String date = ((AttributeHandler<Date>)coralSession.getSchema()
+                .getAttributeClass("date").getHandler()).toExternalString(periodical
+                .getLastPublished());
+            QueryResults docs = coralSession.getQuery().executeQuery(
+                "FIND RESOURCE FROM structure.navigation_node WHERE creation_time > " + date
+                    + " SELECT id");
+            LongSet ids = new LongOpenHashSet();
+            Iterator<FilteredQueryResults.Row> i = docs.getFiltered().iterator();
+            while(i.hasNext())
+            {
+                ids.add((Long)i.next().get());
+            }
+            docs = coralSession.getQuery().executeQuery(
+                "FIND RESOURCE FROM structure.navigation_node WHERE  validityStart > " + date
+                    + " SELECT id");
+            i = docs.getFiltered().iterator();
+            while(i.hasNext())
+            {
+                ids.add((Long)i.next().get());
+            }            
+            return ids;
+        }
+        else
+        {
+            return null;
+        }
+    }
+    
+    private boolean isQuerySetEmpty(Map<CategoryQueryResource, List<DocumentNodeResource>> queryResults)
+    {
+        for(CategoryQueryResource cq : queryResults.keySet())
+        {
+            if(!queryResults.get(cq).isEmpty())
             {
                 return false;
             }
@@ -560,35 +583,35 @@ public class PeriodicalsServiceImpl
         return true;
     }
     
-    private Comparator getComparator(PeriodicalResource periodical)
+    private Comparator<DocumentNodeResource> getComparator(PeriodicalResource periodical)
     {
         String sortOrder = periodical.isSortOrderDefined() ? periodical.getSortOrder() : "priority.validity.start";
         boolean sortDirectionAsc = periodical.isSortDirectionDefined() ? "asc".equals(periodical.getSortDirection()) : true;
-        Comparator comp = new PriorityAndValidityStartComparator(
+        Comparator<DocumentNodeResource> comp = new PriorityAndValidityStartComparator<DocumentNodeResource>(
             sortDirectionAsc ? TimeComparator.Direction.ASC : TimeComparator.Direction.DESC);
         if("sequence".equals(sortOrder)) 
         {
-            comp = new SequenceComparator();
+            comp = new SequenceComparator<DocumentNodeResource>();
         }
         else if("title".equals(sortOrder)) 
         {
-            comp = new TitleComparator(StringUtils.getLocale(periodical.getLocale()));
+            comp = new TitleComparator<DocumentNodeResource>(StringUtils.getLocale(periodical.getLocale()));
         }
         else if("name".equals(sortOrder)) 
         {
-            comp = new NameComparator(StringUtils.getLocale(periodical.getLocale()));
+            comp = new NameComparator<DocumentNodeResource>(StringUtils.getLocale(periodical.getLocale()));
         }       
         else if("creation.time".equals(sortOrder)) 
         {
-            comp = new CreationTimeComparator();
+            comp = new CreationTimeComparator<DocumentNodeResource>();
         }
         else if("modification.time".equals(sortOrder)) 
         {
-            comp = new ModificationTimeComparator();
+            comp = new ModificationTimeComparator<DocumentNodeResource>();
         }        
         else if("validity.start".equals(sortOrder)) 
         {
-            comp = new ValidityStartComparator(sortDirectionAsc ? TimeComparator.Direction.ASC
+            comp = new ValidityStartComparator<DocumentNodeResource>(sortDirectionAsc ? TimeComparator.Direction.ASC
                 : TimeComparator.Direction.DESC);
         }
         else if("event.start".equals(sortOrder)) 
@@ -603,7 +626,7 @@ public class PeriodicalsServiceImpl
         }        
         else if("priority".equals(sortOrder)) 
         {
-            comp = new PriorityComparator();
+            comp = new PriorityComparator<DocumentNodeResource>();
         }
         if(!sortDirectionAsc) {
             comp = Collections.reverseOrder(comp);
@@ -714,6 +737,7 @@ public class PeriodicalsServiceImpl
     {
         LedgeMessage newMessage = mailSystem.newMessage();
         Message customized = newMessage.getMessage();
+        @SuppressWarnings("unchecked")
         Enumeration<Header> headers = orig.getNonMatchingHeaders(new String[] { "Message-Id" });
         while(headers.hasMoreElements())
         {
