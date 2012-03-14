@@ -8,17 +8,18 @@ package net.cyklotron.cms.periodicals;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
 
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.MergingException;
 import org.objectledge.templating.TemplateNotFoundException;
 
 import net.cyklotron.cms.category.query.CategoryQueryResource;
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.FileResource;
 
 /**
@@ -55,7 +56,7 @@ public interface PeriodicalRenderer
      * @throws IOException 
      */
     public void render(CoralSession coralSession, PeriodicalResource periodical,
-        Map<CategoryQueryResource, Resource> queryResults, Date time, String templateName,
+        Map<CategoryQueryResource, List<DocumentNodeResource>> queryResults, Date time, String templateName,
         FileResource file, FileResource contentFile)
         throws ProcessingException, MergingException, TemplateNotFoundException,
         PeriodicalsException, IOException, MessagingException;

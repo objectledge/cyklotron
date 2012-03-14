@@ -18,7 +18,6 @@ import javax.mail.internet.MimeUtility;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
 import org.objectledge.html.DiscardImagesHTMLContentFilter;
 import org.objectledge.i18n.DateFormatTool;
 import org.objectledge.i18n.DateFormatter;
@@ -35,6 +34,7 @@ import org.objectledge.web.mvc.tools.StringTool;
 
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -114,7 +114,7 @@ public abstract class AbstractRenderer
     public abstract String getName();     
     
     public void render(CoralSession coralSession, PeriodicalResource periodical,
-        Map<CategoryQueryResource, Resource> queryResults, Date time, String templateName,
+        Map<CategoryQueryResource, List<DocumentNodeResource>> queryResults, Date time, String templateName,
         FileResource file, FileResource contentFile)
         throws ProcessingException, MergingException, TemplateNotFoundException,
         PeriodicalsException, IOException, MessagingException
@@ -240,7 +240,7 @@ public abstract class AbstractRenderer
      * @return the context.
      */
     protected TemplatingContext setupContext(CoralSession coralSession,
-        PeriodicalResource periodical, Map<CategoryQueryResource, Resource> queryResults,
+        PeriodicalResource periodical, Map<CategoryQueryResource, List<DocumentNodeResource>> queryResults,
         Date time, FileResource file, FileResource contentFile)
     {
         TemplatingContext context = templating.createContext();
@@ -258,7 +258,8 @@ public abstract class AbstractRenderer
         context.put("html_content_filter", new DiscardImagesHTMLContentFilter());
         context.put("string", new StringTool());
         context.put("queryResults", queryResults);
-        List queries = periodical.getCategoryQuerySet().getQueries();
+        @SuppressWarnings("unchecked")
+        List<CategoryQueryResource> queries = periodical.getCategoryQuerySet().getQueries();
         context.put("queryList", queries);
         context.put("unsubscribeNode", "@@UNSUBSCRIBE_NODE@@");
         context.put("unsubscribe", "@@UNSUBSCRIBE@@");
