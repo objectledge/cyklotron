@@ -12,7 +12,7 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @version $Id: ValidityStartComparator.java,v 1.3 2005-02-09 22:21:01 rafal Exp $
  */
-public class ValidityStartComparator extends TimeComparator<NavigationNodeResource>
+public class ValidityStartComparator<T extends NavigationNodeResource> extends TimeComparator<T>
 {
     public ValidityStartComparator(TimeComparator.Direction direction)
     {
@@ -20,7 +20,7 @@ public class ValidityStartComparator extends TimeComparator<NavigationNodeResour
     }
 
     @Override
-    protected Date getDate(NavigationNodeResource resource)
+    protected Date getDate(T resource)
     {
         return resource.getValidityStart();
     }    

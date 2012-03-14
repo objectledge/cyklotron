@@ -10,16 +10,10 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
  * @version $Id: SequenceComparator.java,v 1.3 2005-04-11 10:34:23 rafal Exp $
  */
-public class SequenceComparator implements Comparator
+public class SequenceComparator<T extends NavigationNodeResource> implements Comparator<T>
 {
-    public int compare(Object o1, Object o2)
+    public int compare(T n1, T n2)
     {
-        if(!((o1 instanceof NavigationNodeResource && o2 instanceof NavigationNodeResource )))
-        {
-            return 0;
-        }
-        NavigationNodeResource n1 = (NavigationNodeResource) o1;
-        NavigationNodeResource n2 = (NavigationNodeResource) o2;
         int r = n1.getSequence(-1) - n2.getSequence(-1);
         // same sequence value? - strive for stable ordering anyway
         if(r == 0)

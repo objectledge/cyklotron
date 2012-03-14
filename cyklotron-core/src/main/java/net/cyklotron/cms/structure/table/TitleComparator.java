@@ -12,24 +12,16 @@ import net.cyklotron.cms.structure.NavigationNodeResource;
  * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
  * @version $Id: TitleComparator.java,v 1.4 2005-02-15 17:31:58 rafal Exp $
  */
-public class TitleComparator
-    extends BaseStringComparator
+public class TitleComparator<T extends NavigationNodeResource>
+    extends BaseStringComparator<T>
 {
     public TitleComparator(Locale locale)
     {
         super(locale);
     }
 
-    public int compare(Object o1, Object o2)
+    public int compare(T r1, T r2)
     {
-        if(!((o1 instanceof NavigationNodeResource && o2 instanceof NavigationNodeResource )))
-        {
-            return 0;
-        }
-
-        NavigationNodeResource r1 = (NavigationNodeResource)o1;
-        NavigationNodeResource r2 = (NavigationNodeResource)o2;
-
         return compareStrings(r1.getTitle(), r2.getTitle());
     }
 }
