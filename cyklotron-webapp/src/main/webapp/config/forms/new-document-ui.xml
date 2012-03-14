@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="iso-8859-2"?>
+<!--
+  User interface file for Cyklotron CMS document editing app.
+
+  @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
+  @version $Id: new-document-ui.xml,v 1.3 2006-05-08 12:55:38 pablo Exp $
+-->
+<form xmlns="http://www.cyklotron.net/2001/11/formtool-ui">
+  <page id="page1" ref="/document">
+
+    <group>
+      <caption>document.info</caption>
+
+      <selectOne ref="lang" selectUI="pulldown">
+        <caption>document.language</caption>
+        <help>document.language.help</help>
+        <choices>
+          <item value="pl_PL">
+            <caption>polish</caption>
+          </item>
+          <item value="en_US">
+            <caption>english</caption>
+          </item>
+          <item value="other">
+            <caption>other</caption>
+          </item>
+        </choices>
+      </selectOne>
+
+      <input ref="title" bind="req" style="width: 100%; font-size:140%; font-weight:bold;">
+        <caption>title</caption>
+        <help>title.help</help>
+      </input>
+
+      <input ref="subtitle" maxLength="255" style="width: 100%;">
+        <caption>subtitle</caption>
+      </input>
+
+      <input ref="caltitle" maxLength="255" style="width: 100%;">
+        <caption>caltitle</caption>
+      </input>
+
+      <input ref="keywords" style="width: 100%;">
+        <caption>keywords</caption>
+        <help>keywords.help</help>
+        <hint>keywords.hint</hint>
+      </input>
+
+      <textarea ref="abstract" style="width: 100%; height:4em;">
+        <caption>abstract</caption>
+        <hint>abstract.hint</hint>
+      </textarea>
+    </group>
+
+    <htmlarea ref="content" id="content" style="height:300px;">
+      <caption>document.content</caption>
+      <alert>document.content.alert</alert>
+      <help>document.content.help</help>
+    </htmlarea>
+
+    <group>
+      <caption>cleanup.content.caption</caption>
+      <button>
+        <caption>cleanup.content.button</caption>
+        <help>cleanup.content.help</help>
+        <dispatch name="cleanupContent" target="content" />
+      </button>
+    </group>
+
+    <group>
+      <caption>footnote</caption>
+      <dynamicSelectOne ref="footnote" selectUI="pulldown" key="footerList">
+        <caption>footnote</caption>
+      </dynamicSelectOne>
+    </group>
+
+    <group ref="meta/organizations">
+      <caption>organizations</caption>
+
+      <button bind="organizationadd">
+        <caption>add.organization</caption>
+        <insert repeat="organization" at="1" position="before" />
+        <help>add.organization.help</help>
+      </button>
+
+      <repeat nodeset="organization" id="organization" number="5">
+        <group>
+          <caption>organization</caption>
+
+          <input ref="name" style="width: 100%;">
+            <caption>name</caption>
+          </input>
+
+          <group ref="address">
+            <input ref="street" style="width: 100%;">
+              <caption>street</caption>
+            </input>
+
+            <input ref="postcode" style="width: 100%;">
+              <caption>postcode</caption>
+              <alert>postcode.alert</alert>
+            </input>
+
+            <input ref="city" style="width: 100%;">
+              <caption>city</caption>
+            </input>
+
+            <input ref="province" style="width: 100%;">
+              <caption>province</caption>
+            </input>
+          </group>
+
+          <input ref="tel" style="width: 100%;">
+            <caption>tel</caption>
+            <alert>tel.alert</alert>
+          </input>
+
+          <input ref="fax" style="width: 100%;">
+            <caption>fax</caption>
+            <alert>tel.alert</alert>
+          </input>
+
+          <input ref="e-mail" style="width: 100%;">
+            <caption>e-mails</caption>
+            <alert>e-mails.alert</alert>
+          </input>
+
+          <input ref="url" style="width: 100%;">
+            <caption>www</caption>
+            <alert>url.address.alert</alert>
+          </input>
+
+          <hidden ref="id" style="width: 100%;">
+            <caption>id</caption>
+            <alert>id.alert</alert>
+          </hidden>
+
+          <button>
+            <caption>delete.organization</caption>
+            <delete repeat="organization" at="count(../organization)-count(./following-sibling::organization)" />
+          </button>
+        </group>
+      </repeat>
+    </group>
+
+    <group ref="event">
+      <caption>event</caption>
+
+      <input ref="place" maxLength="255" style="width: 100%;">
+        <caption>place</caption>
+      </input>
+
+      <group ref="../meta/event">
+        <group ref="address">
+          <input ref="street" style="width: 100%;">
+            <caption>street</caption>
+          </input>
+
+          <input ref="postcode" style="width: 100%;">
+            <caption>postcode</caption>
+            <alert>postcode.alert</alert>
+          </input>
+
+          <input ref="city" style="width: 100%;">
+            <caption>city</caption>
+          </input>
+
+          <input ref="province" style="width: 100%;">
+            <caption>province</caption>
+          </input>
+        </group>
+      </group>
+
+      <date ref="start" optionalSelection="true">
+        <caption>start</caption>
+      </date>
+      <date ref="end" optionalSelection="true">
+        <caption>end</caption>
+      </date>
+    </group>
+
+    <group ref="meta/authors">
+      <caption>authors</caption>
+
+      <button bind="authoradd">
+        <caption>add.author</caption>
+        <insert repeat="author" at="1" position="before" />
+        <help>add.author.help</help>
+      </button>
+
+      <repeat nodeset="author" id="author" number="10">
+        <input ref="name" style="width: 100%;">
+          <caption>author</caption>
+          <hint>author.hint</hint>
+        </input>
+
+        <input ref="e-mail" style="width: 100%;">
+          <caption>e-mails</caption>
+          <alert>e-mails.alert</alert>
+        </input>
+
+        <button>
+          <caption>delete.author</caption>
+          <delete repeat="author" at="count(../author)-count(./following-sibling::author)" />
+        </button>
+      </repeat>
+    </group>
+
+    <group ref="meta/sources">
+      <caption>document.sources.info</caption>
+
+      <button>
+        <caption>add.source</caption>
+        <insert repeat="source" at="1" position="before" />
+      </button>
+
+      <repeat nodeset="source" id="source" number="5">
+        <group>
+          <caption>source</caption>
+
+          <input ref="name" style="width: 100%;">
+            <caption>source.title</caption>
+          </input>
+
+          <input ref="url" style="width: 100%;">
+            <caption>www</caption>
+            <alert>url.address.alert</alert>
+          </input>
+
+          <button>
+            <caption>delete.source</caption>
+            <delete repeat="source" at="count(../source)-count(./following-sibling::source)" />
+          </button>
+        </group>
+      </repeat>
+    </group>
+
+  </page>
+</form>
+
