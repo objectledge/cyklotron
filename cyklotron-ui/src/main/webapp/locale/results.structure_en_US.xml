@@ -1,0 +1,155 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="help">
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="cannot_copy_to_descendant">
+      <value>.</value>
+    </prefix>
+    <prefix name="cannot_move_to_descendant">
+      <value>.</value>
+    </prefix>
+    <prefix name="clipboard_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>You need to contact site staff to fix this problem.</value>
+    </prefix>
+    <prefix name="field_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="illegal_from_param">
+      <value>.</value>
+    </prefix>
+    <prefix name="illegal_to_param">
+      <value>.</value>
+    </prefix>
+    <prefix name="link_target_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="navi_name_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="navi_title_empty">
+      <value>.</value>
+    </prefix>
+    <prefix name="parent_not_found">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="updated_successfully_and_taken">
+      <value>.</value>
+    </prefix>
+    <prefix name="attachment_size_exceeded">
+      <value>Choose another file or try making the file smaller, for example by reducing image size and / or quality.</value>
+    </prefix>
+    <prefix name="attachment_type_not_allowed">
+      <value>Please check extensions that are permitted by the administrator.</value>
+    </prefix>    
+    <prefix name="attachment_dir_misconfigured">
+      <value>Please inform the administrator about this problem</value>
+    </prefix>
+    <prefix name="parent_node_misconfigured">
+      <value>Please inform the administrator about this problem</value>
+    </prefix>
+    <item name="login_parameters_missing">Please inform the administrator about this problem</item>
+  </prefix>
+  <prefix name="msg">
+    <item name="changed_successfully">Document state has been successfully changed.</item>
+    <prefix name="added_successfully">
+      <value>Added successfully.</value>
+    </prefix>
+    <prefix name="cannot_copy_to_descendant">
+      <value>Cannot copy document tree below it's own descendant.</value>
+    </prefix>
+    <prefix name="cannot_move_to_descendant">
+      <value>Cannot move document tree below it's own descendant.</value>
+    </prefix>
+    <prefix name="clipboard_empty">
+      <value>The clipboard is empty.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Deleted successfully.</value>
+    </prefix>
+    <prefix name="exception">
+      <value>An error has occured.</value>
+    </prefix>
+    <prefix name="field_empty">
+      <value>Required field is empty.</value>
+    </prefix>
+    <prefix name="illegal_from_param">
+      <value>Incorrect sender address.</value>
+    </prefix>
+    <prefix name="illegal_to_param">
+      <value>Incorrect recipient address.</value>
+    </prefix>
+    <prefix name="invalid_desitnation">
+      <value>Cannot paste document below itself.</value>
+    </prefix>
+    <prefix name="link_target_empty">
+      <value>Link target may not be empty.</value>
+    </prefix>
+    <prefix name="navi_name_empty">
+      <value>'System name' field may not be empty.</value>
+    </prefix>
+    <prefix name="navi_name_invalid">
+      <value>'System name' field may not contain / character.</value>
+    </prefix>
+    <prefix name="navi_title_empty">
+      <value>'Title' field may not be empty.</value>
+    </prefix>
+    <prefix name="navi_name_repeated">
+      <value>This message was already added.</value>
+    </prefix>
+    <prefix name="parent_not_found">
+      <value>Parent node not found.</value>
+    </prefix>
+    <prefix name="proposer_credentials_empty">
+      <value>'Submitter's name and surname' field may not be empty.</value>
+    </prefix>
+    <prefix name="subject_is_not_the_redactor">
+      <value>Selected user does not have redactor privileges.</value>
+    </prefix>
+    <prefix name="subject_not_chosen">
+      <value>No user was selected.</value>
+    </prefix>
+    <prefix name="subject_not_found">
+      <value>No user with that name exists.</value>
+    </prefix>
+    <prefix name="invalid_html">
+      <value>'Content' field contains unwanted chars.</value>
+    </prefix>
+    <prefix name="invalid_captcha_verification">
+      <value>incorrect Captcha string.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Updated successfully.</value>
+    </prefix>
+    <prefix name="updated_successfully_and_taken">
+      <value>Updated successfully. Document taken for further processing.</value>
+    </prefix>
+    <item name="update_request_submitted">Document update request was submitted.</item>
+    <item name="removal_request_submitted">Document removal request was submitted.</item>
+    <item name="removal_request_withdrawn">Document removal request was withdrawn.</item>    
+    <prefix name="attachment_size_exceeded">
+      <value>Maximum attachment file size exceeded</value>
+    </prefix>
+    <prefix name="attachment_type_not_allowed">
+      <value>Attachment file type is not allowed</value>
+    </prefix>
+    <prefix name="attachment_dir_misconfigured">
+      <value>Attachment upload directory not configured on server</value>
+    </prefix>
+    <prefix name="parent_node_misconfigured">
+      <value>Document target location is not configured correctly on the server</value>
+    </prefix>
+    <item name="login_parameters_missing">An error occured while processing login form</item>
+    <item name="login_failed">Invalid username or password</item>
+    <item name="login_successful">Login sucessful</item> 
+  </prefix>
+</strings>

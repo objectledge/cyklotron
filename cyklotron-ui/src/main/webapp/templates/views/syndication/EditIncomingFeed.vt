@@ -1,0 +1,85 @@
+
+
+#if($feed)
+#set($form_action = $link.action('syndication.UpdateIncomingFeed'))
+#set($screen_title = 'Edit incoming web feed')
+#else
+#set($form_action = $link.action('syndication.AddIncomingFeed'))
+#set($screen_title = 'Add incoming web feed')
+#end
+
+#genericScreenHeader($screen_title)
+
+#result_inline_message('results.syndication')
+
+<form name="form1" method="post" action="$form_action">
+#if($feed)
+<input type="hidden" name="feedId" value="$feed.id" />
+#end
+
+<table border="0" class="genericScreen" width="100%">
+
+<tr>
+<td align="right">Name:</td>
+<td width="90%"><input type="text" name="name" style="width:100%;" value="$!feed_data.name" maxlength="150" /></td>
+</tr>
+
+<tr>
+<td align="right">URL:</td>
+<td><input type="text" name="url" style="width:100%;" value="$!feed_data.url" /></td>
+</tr>
+
+<tr>
+<td align="right">Transformation template:</td>
+<td>
+<select size="1" name="template">
+#foreach($value in $templates)
+#if($value.equals(''))
+<option value="">- no transformation -</option>
+#else
+<option value="$value"#if($value.equals($!feed_data.template)) selected="selected"#end>${value}</option>
+#end
+#end
+</select>
+<p>
+"No transformation" means that feed contents will not be changed in any way.
+BEWARE: Do not use it on XML feeds!!!
+</p>
+</td>
+</tr>
+
+<tr>
+<td align="right">Update interval:</td>
+<td>
+<select size="1" name="interval">
+#set($opts = [["15 minutes", 15], ["30 minutes", 30], ["1 hour", 60], ["2 hours", 120], ["6 hours", 360], ["12 hours", 720], ["1 day", 1440]])
+#options($opts $!feed_data.interval)
+</select>
+</td>
+</tr>
+
+<tr>
+<td align="right" valign="top"><b>Description:</b></td>
+<td width="90%">
+<textarea rows="5" style="width:100%;" name="description">$!feed_data.description</textarea>
+</td>
+</tr>
+
+</table>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+    <a href="javascript:document.form1.submit();">Save</a>
+    <a href="$link.view('syndication.IncomingFeedList')">Cancel</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

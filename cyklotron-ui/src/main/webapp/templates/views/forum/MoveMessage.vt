@@ -1,0 +1,80 @@
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#set($resLink = $link.set('res_id',$resource.id))
+#set($from_component = true)
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<script type="text/javascript">
+<!--
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+
+function fSetParent(action)
+{
+  if(document.form1.parent_id.value)
+  {
+  	document.form1.action = action;
+  	document.form1.submit();
+  }
+  else{
+    alert('No message parent node defined.');
+  }
+}
+
+function setParentNodeId(id)
+{
+   document.form1.parent_id.value = id;
+}
+
+//-->
+</script>
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+#genericScreenHeader('CHOOSE MESSAGE PARENT NODE')
+
+#result_inline_message('results.forum')
+
+#set($tableLink = $link.set('tableId',$table.id).unset('site_id'))
+
+<form name="form1" method="post" action="">
+<input type="hidden" value="$message.id" name="mid"/>
+<input type="hidden" value="$discussion.id" name="did"/>
+<input type="hidden" name="parent_id"/>
+
+<table width="100%" class="genericItemTree" cellspacing="0">
+
+#foreach($row in $table.rows)
+#set($definition = $cms_tool.getClassDefinition($row.object))##
+<tr>
+<td width="20" valign="top">
+#if($row.object.id != $message.id && $row.object.id != $message.parent.id)
+ <input type="radio" name="resource-node" id="resource-$row.id" value="selected" onChange="setParentNodeId($row.id)" />
+#else
+ &nbsp
+#end
+</td>
+<td>
+#set($toggleExpandLink = $tableLink.set('rowId',$row.id).action('table.ToggleExpanded'))
+#set($toggleExpandLink = "javascript:fSub('$toggleExpandLink')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink)
+
+<label for="resource-$row.id" id="res-$row.id"$!row_css_class>$row.object.name</label>
+</td>
+
+</tr>
+#end
+</table>
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="modification">
+  <a href="javascript:fSetParent('$resLink.view('popup.ClosePopup').action('forum.MoveMessage')');">Move</a>
+  <a href="javascript:window.close();">Cancle</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

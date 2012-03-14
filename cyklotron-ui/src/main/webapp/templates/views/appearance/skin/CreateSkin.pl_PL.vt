@@ -1,0 +1,53 @@
+
+
+#set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.${parametersTool.view}.buttons"))
+#set($skin_link = $link.set("site_id",$cmsData.site.id).set("skin",$skin))
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.appearance")
+
+<form name="form1" method="post" action='$skin_link.view('appearance.EditSite').action('appearance.skin.CreateSkin')'>
+  <input type="hidden" name="layout" value="$layout">
+  <table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <th colspan="3">$ui_strings.get("subtitle", $cmsData.site.name)</th>
+    </tr>
+    <tr>
+      <td colspan="2" align="right"><b>$ui_labels.get("name")</b></td>
+      <td widht="95%"><input type="text" name="name" style="width:100%;"></td>
+    </tr>
+    <tr>      
+      <td>
+        <input type="radio" name="source" id="source_empty" value="empty" checked>
+      </td>
+      <td nowrap align="right">
+        <label for="source_empty"><b>$ui_labels.get("empty"):</b></label>
+      </td>
+      <td>
+        &nbsp;
+      </td>
+    </tr>
+    <tr>      
+      <td>
+        <input type="radio" name="source" id="source_copy" value="copy">
+      </td>
+      <td nowrap align="right">
+        <label for="source_copy"><b>$ui_labels.get("copy"):</b></label>
+      </td>
+      <td width="90%">
+        <select name="source_skin">
+#foreach($skin in $skins)
+          <option value="$skin.name">$skin.name</option>
+#end        
+        </select>
+      </td>
+    </tr>
+  </table>
+</form>
+
+#command_bar([['javascript:document.form1.submit()',$ui_buttons.get('create')],[$skin_link.view('appearance.EditSite'),$ui_buttons.get('cancel')]])
+
+#genericScreenTrailer()
