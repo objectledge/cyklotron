@@ -380,18 +380,19 @@ public class PeriodicalsServiceImpl
         for(int i = 0; i < publicationTimes.length; i++)
         {
             PublicationTimeResource pt = publicationTimes[i];
-            recentScheduledPublicationTime = getScheduledPublicationTimeBefore(pt.getDayOfMonth(-1), pt.getHour(-1), pt.getDayOfWeek(-1), time);
+            recentScheduledPublicationTime = getScheduledPublicationTimeBefore(
+                pt.getDayOfMonth(-1), pt.getHour(-1), pt.getDayOfWeek(-1), time);
             
             buff.append("most recent publication time for {");
-            if(pt.isDayOfMonthDefined())
+            if(pt.getDayOfMonth(-1) != -1)
             {
                 buff.append("dom:").append(pt.getDayOfMonth()).append(", ");
             }
-            if(pt.isDayOfWeekDefined())
+            if(pt.getDayOfWeek(-1) != -1)
             {
                 buff.append("dow:").append(pt.getDayOfWeek()).append(", ");
             }
-            if(pt.isHourDefined())
+            if(pt.getHour(-1) != -1)
             {
                 buff.append("h:").append(pt.getHour());
             }
@@ -521,7 +522,8 @@ public class PeriodicalsServiceImpl
         }
         else
         {
-            log.info("suppressed publication of " + CmsTool.getSite(r).getName() + "/" + r.getName() + " because the queries returned no documents");
+            log.info("suppressed publication of " + CmsTool.getSite(r).getName() + "/"
+                + r.getName() + " because the queries returned no documents");
         }
         if(update)
         {
@@ -576,7 +578,7 @@ public class PeriodicalsServiceImpl
         List<CategoryQueryResource> queries = (List<CategoryQueryResource>)periodical
             .getCategoryQuerySet().getQueries();
         LongSet newIdSet = getNewDocuments(coralSession, periodical);
-        log.info("processing " + CmsTool.getSite(periodical).getName() + " " + periodical.getName()
+        log.info("processing " + CmsTool.getSite(periodical).getName() + "/" + periodical.getName()
             + " considering " + newIdSet.size() + " new documents");
         for(CategoryQueryResource cq : queries)
         {
