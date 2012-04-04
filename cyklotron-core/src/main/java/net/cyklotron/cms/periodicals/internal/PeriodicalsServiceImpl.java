@@ -1,9 +1,11 @@
 package net.cyklotron.cms.periodicals.internal;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -51,6 +53,7 @@ import org.objectledge.templating.MergingException;
 import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.utils.StringUtils;
 
+import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -349,6 +352,21 @@ public class PeriodicalsServiceImpl
     
     private boolean shouldProcess(CoralSession coralSession, PeriodicalResource r, Date time)
     {
+        StringBuilder buff = new StringBuilder();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        buff.append("considering ").append(CmsTool.getSite(r).getName()).append("/").append(r.getName());
+        buff.append(", created on ").append(df.format(r.getCreationTime()));
+        if(r.getLastPublished() == null) 
+        {
+            buff.append(", never published");
+        }
+        else
+        {
+            buff.append(", last published on ").append(df.format(r.getLastPublished()));
+        }
+        log.info(buff.toString());
+        buff.setLength(0);
+        
         boolean scheduledTimePassedSinceLastPublish = false;
         Date lastPublished = r.getLastPublished();
         // CYKLO-478: if periodical has not been published before, check if a scheduled publication time falls between the moment
@@ -358,10 +376,30 @@ public class PeriodicalsServiceImpl
             lastPublished = r.getCreationTime();    
         }
         PublicationTimeResource[] publicationTimes = r.getPublicationTimes(coralSession);
+        long recentScheduledPublicationTime = 0;
         for(int i = 0; i < publicationTimes.length; i++)
         {
             PublicationTimeResource pt = publicationTimes[i];
-            if(lastPublished.getTime() <= getScheduledPublicationTimeBefore(pt.getDayOfMonth(-1), pt.getHour(-1), pt.getDayOfWeek(-1), time))
+            recentScheduledPublicationTime = getScheduledPublicationTimeBefore(pt.getDayOfMonth(-1), pt.getHour(-1), pt.getDayOfWeek(-1), time);
+            
+            buff.append("most recent publication time for {");
+            if(pt.isDayOfMonthDefined())
+            {
+                buff.append("dom:").append(pt.getDayOfMonth()).append(", ");
+            }
+            if(pt.isDayOfWeekDefined())
+            {
+                buff.append("dow:").append(pt.getDayOfWeek()).append(", ");
+            }
+            if(pt.isHourDefined())
+            {
+                buff.append("h:").append(pt.getHour());
+            }
+            buff.append("} is ").append(df.format(new Date(recentScheduledPublicationTime)));
+            log.info(buff.toString());
+            buff.setLength(0);
+            
+            if(lastPublished.getTime() <= recentScheduledPublicationTime)
             {
                 scheduledTimePassedSinceLastPublish = true;
             }
@@ -374,6 +412,41 @@ public class PeriodicalsServiceImpl
         }
         boolean afterMinimalPublicationDate = time.getTime() > publishAfter.getTime();
 
+        if(scheduledTimePassedSinceLastPublish)
+        {
+            buff.append("sheduled publication time passed on ").append(df.format(new Date(recentScheduledPublicationTime)));
+        }
+        else
+        {
+            buff.append("sheduled publication time has not passed yet");
+        }
+        if(r.getPublishAfter() != null)
+        {
+            if(afterMinimalPublicationDate)
+            {
+                buff.append(", minimal publication date passed on ").append(df.format(r.getPublishAfter()));
+            }
+            else
+            {
+                buff.append(", minimal publication date, ").append(df.format(r.getPublishAfter())).append(" has not passed yet");
+            }
+        }
+        else
+        {
+            buff.append(", minimal publication date is not set");
+        }
+        buff.append(", periodical ");
+        if(scheduledTimePassedSinceLastPublish && afterMinimalPublicationDate)
+        {
+            buff.append("WILL BE");
+        }
+        else
+        {
+            buff.append("WILL NOT BE");
+        }
+        buff.append(" published");
+        log.info(buff.toString());
+        
         return scheduledTimePassedSinceLastPublish && afterMinimalPublicationDate;
     }
     
@@ -445,11 +518,15 @@ public class PeriodicalsServiceImpl
                     results.add(contentFile);
                 }
             }
-            if(update)
-            {
-                r.setLastPublished(time);
-                r.update();
-            }
+        }
+        else
+        {
+            log.info("suppressed publication of " + CmsTool.getSite(r).getName() + "/" + r.getName() + " because the queries returned no documents");
+        }
+        if(update)
+        {
+            r.setLastPublished(time);
+            r.update();
         }
         return results;
     }
@@ -499,6 +576,8 @@ public class PeriodicalsServiceImpl
         List<CategoryQueryResource> queries = (List<CategoryQueryResource>)periodical
             .getCategoryQuerySet().getQueries();
         LongSet newIdSet = getNewDocuments(coralSession, periodical);
+        log.info("processing " + CmsTool.getSite(periodical).getName() + " " + periodical.getName()
+            + " considering " + newIdSet.size() + " new documents");
         for(CategoryQueryResource cq : queries)
         {
             String[] siteNames = cq.getAcceptedSiteNames();
@@ -533,6 +612,7 @@ public class PeriodicalsServiceImpl
             }
             Collections.sort(temp, getComparator(periodical));
             results.put(cq, temp);
+            log.info("query " + cq.getName() + " matched " + temp.size() + " documents");
         }
         return results;
     }
