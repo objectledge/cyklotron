@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--  
+ Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
+ All rights reserved. 
+ 
+ Redistribution and use in source and binary forms, with or without modification,  
+ are permitted provided that the following conditions are met: 
+ 
+ * Redistributions of source code must retain the above copyright notice,  
+   this list of conditions and the following disclaimer. 
+ * Redistributions in binary form must reproduce the above copyright notice,  
+   this list of conditions and the following disclaimer in the documentation  
+   and/or other materials provided with the distribution. 
+ * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
+   nor the names of its contributors may be used to endorse or promote products  
+   derived from this software without specific prior written permission. 
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+ AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
+ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+ IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
+ INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
+ BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
+ OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
+ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
+ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
+ POSSIBILITY OF SUCH DAMAGE. 
+-->
+
+<config>
+  <forms>
+    <definitionUri>ledge:config/forms/new-document-form.xml</definitionUri>
+    <attributeMapping>
+      <attribute name="title" resourcePath="text()" formPath="/document/title" />
+      <attribute name="lang" resourcePath="text()" formPath="/document/lang" />
+      <attribute name="subTitle" resourcePath="text()" formPath="/document/subtitle" />
+      <attribute name="titleCalendar" resourcePath="text()" formPath="/document/caltitle" />
+      <attribute name="keywords" resourcePath="text()" formPath="/document/keywords" />
+      <attribute name="abstract" resourcePath="text()" formPath="/document/abstract" />
+      <attribute name="content" resourcePath="text()" formPath="/document/content" />
+      <attribute name="footer" resourcePath="text()" formPath="/document/footnote" />
+      <attribute name="meta" resourcePath="/" formPath="/document/meta" />
+      <attribute name="eventPlace" resourcePath="text()" formPath="/document/event/place" />
+      <attribute name="eventStart" resourcePath="text()" formPath="/document/event/start" />
+      <attribute name="eventEnd" resourcePath="text()" formPath="/document/event/end" />
+    </attributeMapping>
+  </forms>
+  <keywords>
+    <excludedElements>SCRIPT PRE A</excludedElements>
+    <excludedClasses>no-keywords</excludedClasses>
+    <defaultLinkClass>keyword</defaultLinkClass>
+  </keywords>
+  <htmlCleanupProfile>proposeDocument</htmlCleanupProfile>
+</config>
