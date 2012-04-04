@@ -1,0 +1,45 @@
+$viewEnclosureTool.override('popup.Default')
+
+  #genericScreenHeader('Choose aggregating site')
+
+  #result_inline_message('results.aggregation')
+
+  $table.getColumn('name').set('label', 'Site name')
+  $table.getColumn('choose').set('label', '&nbsp;')
+
+  #set($columnOrder = ['name','choose'])
+  #set($tableLink = $link.set('tableId',$table.getId()))
+
+  #set($definition = $cms_tool.getClassDefinition($resource))##
+  
+  <table width="100%" class="genericItemList" cellspacing="0">
+    <tr>
+      #tableView_header($table $tableLink $columnOrder)
+    </tr>
+    #if ($table.getPageRowCount() == 0)
+    <tr class="row1"><td colspan="$columnOrder.size()">
+    None of the sites can import chosen resource.
+    </td></tr>
+    #else
+
+    #foreach($row in $table.rows)
+    #set($odd = $velocityCount % 2)
+    #set($index = $velocityCount - 1)
+    <tr class="row$odd">
+      <td width="35%">
+	$row.object.getName()<br/>
+	<i>$!row.object.getDescription()</i>
+      </td>
+      <td nowrap>
+	<a href="$link.self().view('aggregation.ImportTarget').set('site_id',$row.object.id)">choose</a>
+      </td>
+    </tr>
+    #end
+    #end
+    <tr><td colspan="6" align="center" class="bottomLine">
+	#tableView_pager($table $tableLink)
+	#tableView_pageSizeChooser($table $tableLink [10,20,50,100])
+      </td></tr>
+  </table>
+
+  #genericScreenTrailer()

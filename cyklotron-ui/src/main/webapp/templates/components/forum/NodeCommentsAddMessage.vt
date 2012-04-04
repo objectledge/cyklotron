@@ -1,0 +1,149 @@
+#####
+## TYPE: S
+## NAME: Information adding screen
+## AUTHOR: <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
+## AUTHOR: <a href="mailto:mmach@ngo.pl">Michal Mach</a>
+## VER: $Id: NodeCommentsAddMessage.vt,v 1.3 2005-04-14 06:53:14 rafal Exp $
+## DESCR: Allows adding new information to notes board
+## DESCR:
+## STATUS: final
+## TODO: create pre-template for internationalization
+## TODO: permissions checking
+#####
+
+$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink("script/captcha/verify.js")##
+
+#set($x = $parametersTool.get('x',""))
+#if($x.length() == 0)
+  #set($cmsLink = $link)
+#else
+  #set($cmsLink = $link.set('x',$x))
+#end
+#set($state = $parameters.get('state',""))
+#if($state.length() > 0)
+  #set($cmsLink = $cmsLink.set('state',$state))
+#end
+#set($component_instance = $cms_data.component.instanceName)
+#set($cmsLink = $cmsLink.set('ci',$component_instance))
+
+## SET LOCAL VARS
+  #set($priorities_list = [['high','1'], ['normal','2'], ['low', '3']])
+
+## current user (whole DN), default user if no principal in 
+  #if ($authenticationContext.getUserPrincipal())
+  #set ($current_user = $authenticationContext.getUserPrincipal().getName())
+  #else
+  #set ($current_user = $default_user)
+  #end
+
+## current users's username
+  #set ($current_user_username = $cms_tool.userData.login)
+
+## END SET LOCAL VARS
+
+#if(!$discussion || $discussion.state.name != 'hidden')
+
+NEW MESSAGE
+<form name="${instance}_forum_add_message" method="post" action="$cmsLink.set('state','ml').action('forum.AddMessage')" class="defaultForm">
+#if($discussion)
+  <input type="hidden" name="did" value="$discussion.id">
+#else
+  <input type="hidden" name="resid" value="$cms_data.node.id">
+#end
+#if($parent)
+  <input type="hidden" name="parent" value="$parent.id">
+#end
+
+  <table width="100%" class="genericScreen" cellspacing="0">
+  #if($parent && ($parent.getId() != $discussion.getId()))
+    <tr>
+      <td width="50%"><b>In reply to:</b></td>
+      <td>$parent.getName()</td>
+    </tr>
+  #end
+
+    <tr>
+      <td><b>Sender:</b></td>
+      <td>#cms_personal_credentials($cms_tool.subject)</td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Subject:</b></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="text" name="name" size="43" value="" maxlength="150"></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Body:</b></td>
+    </tr>
+    <tr>
+      <td colspan="2"><textarea rows="5" cols="33" name="content">#if($parent && ($parent.getId() != $discussion.getId()))>On $format_date.format($parent.getCreationTime()) #cms_personal_credentials($parent.createdBy) wrote:
+$parent_content #end</textarea></td>
+    </tr>
+
+    <tr>
+      <td><b>Priorytet:</b></td>
+      <td>
+        <select name="priority">
+  #options($priorities_list '2')
+  </select>
+      </td>
+    </tr>
+    #if($add_captcha)
+    <tr>
+    <td><b>Captcha verification</b></td>
+    <td>
+       $captcha.createCaptchaWidget()
+    </td>
+    </tr>
+  #end
+</table>
+
+#if($discussion && $discussion.state.name == 'moderated')
+<p>
+Be warned that this message will appear after moderator accepts it.
+</p>
+#end
+
+## COMMAND BAR
+
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      <td NOWRAP class="usualbutton">
+       <script language="javascript">
+        function sendaddpost(captcha, form)
+        {
+          if(form.name.value=="")
+          {
+            alert("Field 'Title' is empty.");
+          }
+          else{
+           if(captcha)
+           {
+             captchaVerify('$link.view('captcha.Verify')', form, 'Invalid captcha.');
+           }else{
+             form.submit();
+           }
+          }
+        }
+        </script>
+        <a href="javascript:sendaddpost($add_captcha, document.${instance}_forum_add_message);">Send</a>      
+      </td>
+      <td NOWRAP class="usualbutton">
+      #if ($parent && $parent.getId() != $discussion.getId())
+        <a href="$cmsLink.set('state','m').set('mid',$parent.getId())">Zaniechaj</a>
+      #else
+        <a href="$cmsLink.set('state','ml').set('did',$discussion.getId())">Zaniechaj</a>
+      #end
+      </td>
+    </tr>
+  </table>
+</form>
+
+## END COMMAND BAR
+
+#else
+Dyskusja została zablokowana przez administratora.
+#end
+

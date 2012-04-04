@@ -1,0 +1,59 @@
+
+
+$pageTool.addScriptLink("script/PopupMenu.js")
+$pageTool.addStyleLink("style/cms-popupmenu.css")
+
+#set($ui_labels = $i18n.usePrefix("cms.${parametersTool.view}.labels"))
+#set($ui_strings = $i18n.usePrefix("cms.${parametersTool.view}.strings"))
+#set($ui_commands = $i18n.usePrefix("cms.${parametersTool.view}.commands"))
+#set($site_link = $link.set('site_id',$cmsData.site.id))
+
+#macro(readable_name $element)
+#if($element.type.equals("label"))
+$ui_labels.get($element.name)##
+#else
+$element.name##
+#end
+#end
+
+#macro(context_menu $element)
+#set($label = "#readable_name($element)")
+#if($element.type.equals("renderer"))
+  #set($renderer_link = $site_link.set('renderer',$element.name))
+  <span class="cms-popupmenubutton"><span>$label</span>
+  <div class="cms-popupmenu">
+    <a href="$renderer_link.view('periodicals.CreateTemplate')">$ui_commands.get("create")</a>
+  </div>
+  </span>
+#elseif($element.type.equals("variant"))
+  #set($variant_link = $site_link.set('renderer',$element.renderer).set('name',$element.name))
+  <span class="cms-popupmenubutton"><span>$label</span>
+  <div class="cms-popupmenu">
+    <a href="$variant_link.view('periodicals.EditTemplate')">$ui_commands.get("edit")</a>
+    <a href="$variant_link.view('periodicals.DeleteTemplate')">$ui_commands.get("delete")</a>
+  </div>
+  </span>
+#else
+<span>$label</span>
+#end
+#end
+
+#genericScreenHeader($ui_strings.get("title"))
+
+#result_inline_message("results.periodicals")
+
+#set($tableLink = $link.set('tableId', $table.id).set('site_id',$cmsData.site.id))
+<table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <th>$ui_strings.get("subtitle", [$cmsData.site.name])</th>
+#foreach($row in $table.rows)
+#set($rowLink = $tableLink.view('appearance.skin.EditSite').action('table.ToggleSelected').set('rowId', $row.id))
+  <tr>
+    <td>
+      #tableView_linesAndFolders($table $row $tableLink) #context_menu($row.object)
+    </td>
+  </tr>
+#end
+</table>
+
+#genericScreenTrailer()
