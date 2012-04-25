@@ -451,10 +451,11 @@ public class CachingUpdatedDocumentsProvider
         @Override
         public void resourceChanged(Resource resource, Subject subject)
         {
-            if(resource instanceof DocumentNodeResource)
+            // casting to implementation because of CORAL-108
+            if(resource instanceof DocumentNodeResourceImpl)
             {
-                DocumentNodeResource doc = (DocumentNodeResource)resource;
-                updateCache(doc.getId(), doc.getOrganizationIds(),
+                DocumentNodeResourceImpl doc = (DocumentNodeResourceImpl)resource;
+                updateCache(doc.getId(), doc.getOrganizationIds(""),
                     doc.getCustomModificationTime(), doc.getSite().getId());
             }
         }
