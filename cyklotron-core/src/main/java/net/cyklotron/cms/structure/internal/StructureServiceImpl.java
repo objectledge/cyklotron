@@ -916,7 +916,14 @@ public class StructureServiceImpl
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
             long dateKey = cal.getTimeInMillis();
-            LongSet result = new LongOpenHashSet();
+            // compute required result set size to avoid growing the set incrementally
+            int resultsCount = 0;
+            for(Map.Entry<Long, LongSet> entry : validityStartToDocument.tailMap(dateKey)
+                            .entrySet())
+            {
+                resultsCount += entry.getValue().size();
+            }            
+            LongSet result = new LongOpenHashSet(resultsCount);
             for(Map.Entry<Long, LongSet> entry : validityStartToDocument.tailMap(dateKey)
                 .entrySet())
             {
