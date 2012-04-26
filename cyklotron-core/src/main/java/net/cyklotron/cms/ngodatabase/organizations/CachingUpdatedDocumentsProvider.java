@@ -26,6 +26,7 @@ import org.objectledge.database.Database;
 import org.objectledge.database.DatabaseUtils;
 
 import bak.pcj.LongIterator;
+import bak.pcj.list.LongArrayList;
 import bak.pcj.map.LongKeyLongMap;
 import bak.pcj.map.LongKeyLongOpenHashMap;
 import bak.pcj.map.LongKeyMap;
@@ -115,19 +116,24 @@ public class CachingUpdatedDocumentsProvider
             {
                 preloadCache();
             }
-            LongSet result = new LongOpenHashSet();
+            LongSet result;
             
             if(org > 0L)
             {
                 LongSet orgDocs = (LongSet)organizationToDocument.get(org);
                 if(orgDocs != null)
                 {
-                    result.addAll(orgDocs);
+                    result = new LongOpenHashSet(orgDocs);
+                }
+                else
+                {
+                    // no documents for selected organization - nothing to do
+                    return new LongOpenHashSet();
                 }
             }
             else
             {
-                result.addAll(documentToOrganization.keySet());
+                result = new LongOpenHashSet(documentToOrganization.keySet());
             }
             
             Calendar startCal = new GregorianCalendar();
@@ -148,12 +154,34 @@ public class CachingUpdatedDocumentsProvider
                 slice = slice.headMap(endDateKey);
             }
             
-            LongSet temp = new LongOpenHashSet();
+            // compute slice size to avoid expanding temp list incrementally
+            int sliceEntries = 0;
+            for(SortedMap.Entry<Long, LongSet> entry : slice.entrySet())
+            {
+                sliceEntries += entry.getValue().size();
+            }
+            LongArrayList temp = new LongArrayList(sliceEntries);
+            
             for(SortedMap.Entry<Long, LongSet> entry : slice.entrySet())
             {
                 temp.addAll(entry.getValue());
             }
             result.retainAll(temp);
+            
+            if(result.isEmpty())
+            {
+                // all documents eliminated - we are done
+                return result;
+            }
+            
+            // compute new slice size
+            sliceEntries = 0;
+            for(SiteResource site : sites)
+            {
+                LongSet docs = (LongSet)siteToDocument.get(site.getId());
+                sliceEntries += docs != null ? docs.size() : 0;
+            }
+            temp.ensureCapacity(sliceEntries);
             
             temp.clear();
             for(SiteResource site : sites)
