@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.dom4j.Document;
+import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -31,6 +32,7 @@ import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.related.RelatedService;
+import net.cyklotron.cms.structure.NavigationNodeAlreadyExistException;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
@@ -54,10 +56,12 @@ public class DocumentPostingServiceImpl
     private final UserManager userManager;
 
     private final RelatedService relatedService;
+    
+    private final Logger logger;
 
     public DocumentPostingServiceImpl(StructureService structureService,
         CategoryService categoryService, FilesService filesService, RelatedService relatedService,
-        CoralSessionFactory coralSessionFactory, UserManager userManager)
+        CoralSessionFactory coralSessionFactory, UserManager userManager, Logger logger)
     {
         this.structureService = structureService;
         this.categoryService = categoryService;
@@ -65,6 +69,7 @@ public class DocumentPostingServiceImpl
         this.relatedService = relatedService;
         this.coralSessionFactory = coralSessionFactory;
         this.userManager = userManager;
+        this.logger = logger;
     }
 
     /**
@@ -84,15 +89,24 @@ public class DocumentPostingServiceImpl
             coralSession = coralSessionFactory.getSession(ownerPrincipal);
             Subject ownerSubject = coralSession.getUserSubject();
             Map<DocumentData, DocumentNodeResource> docMap = new HashMap<DocumentData, DocumentNodeResource>();
-            for(DocumentData docData : documents)
+            docLoop: for(DocumentData docData : documents)
             {
                 NavigationNodeResource docParent = structureService.getParent(coralSession,
                     config.getTargetLocation(), docData.getCreationDate(),
                     config.getCalendarStructureType(), ownerSubject);
 
                 docName = docData.getOriginalName();
-                DocumentNodeResource docNode = structureService.addDocumentNode(coralSession,
-                    docName, docData.getTitle(), docParent, ownerSubject);
+                DocumentNodeResource docNode = null;
+                try
+                {
+                    docNode = structureService.addDocumentNode(coralSession,
+                        docName, docData.getTitle(), docParent, ownerSubject);
+                }
+                catch(NavigationNodeAlreadyExistException e)
+                {
+                    logger.warn("document node already exists", e);
+                    continue docLoop;
+                }
 
                 fillDocument(docData, docNode);
 
