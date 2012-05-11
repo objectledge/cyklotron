@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com" xsi:schemaLocation="http://www.zeroturnaround.com http://www.zeroturnaround.com/alderaan/rebel-2_0.xsd">
+
+	<classpath>
+		<dir name="${workspace.root}/coral-api/target/classes">
+		</dir>
+		<dir name="${workspace.root}/coral-browser/target/classes">
+		</dir>
+		<dir name="${workspace.root}/coral-datatypes/target/classes">
+		</dir>
+		<dir name="${workspace.root}/coral-ri/target/classes">
+		</dir>
+		<dir name="${workspace.root}/coral-tools/target/classes">
+		</dir>
+		<dir name="${workspace.root}/coral-web/target/classes">
+		</dir>
+		<dir name="${workspace.root}/cyklotron-core/target/classes">
+		</dir>
+		<dir name="${workspace.root}/cyklotron-ui/target/classes">
+		</dir>
+		<dir name="${workspace.root}/cyklotron-ui-fckeditor/target/classes">
+		</dir>
+		<dir name="${workspace.root}/cyklotron-webapp/target/classes">
+		</dir>
+		<dir name="${workspace.root}/ledge-components/target/classes">
+		</dir>
+		<dir name="${workspace.root}/ledge-container/target/classes">
+		</dir>
+		<dir name="${workspace.root}/ledge-forms/target/classes">
+		</dir>
+		<dir name="${workspace.root}/ledge-forms-fckeditor/target/classes">
+		</dir>
+		<dir name="${workspace.root}/ledge-gpl/target/classes">
+		</dir>
+		<dir name="${workspace.root}/ledge-lgpl/target/classes">
+		</dir>
+		<dir name="${workspace.root}/ledge-web/target/classes">
+		</dir>
+	</classpath>
+
+</application>
