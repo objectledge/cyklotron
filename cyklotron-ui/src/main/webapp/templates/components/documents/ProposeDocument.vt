@@ -1,0 +1,9 @@
+
+
+#if($cms_data.userData.hasPermission($node, "cms.structure.submit"))
+<a href="$link.set('x', $propose_document_node.id)">Recommend document</a>
+#end
+
+
+
+

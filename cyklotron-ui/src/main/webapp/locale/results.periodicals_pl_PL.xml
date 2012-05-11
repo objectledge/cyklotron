@@ -1,0 +1,42 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="help">
+    <prefix name="exception">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="added_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Skontaktuj się z administratorem w celu usunięcia tego problemu.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>.</value>
+    </prefix>
+  </prefix>
+  <prefix name="msg">
+    <prefix name="exception">
+      <value>Wystapił błąd.</value>
+    </prefix>
+    <prefix name="added_successfully">
+      <value>Dodano pomyślnie.</value>
+    </prefix>
+    <prefix name="deleted_successfully">
+      <value>Usunięto pomyślnie.</value>
+    </prefix>
+    <prefix name="parameter_not_found">
+      <value>Brak wymaganego parametru.</value>
+    </prefix>
+    <prefix name="updated_successfully">
+      <value>Zmiany w prenumeracie zapisano pomyślnie.</value>
+    </prefix>
+    <prefix name="address_missing">
+      <value>Wpisz adres e-mail.</value>
+    </prefix>
+    <prefix name="no_periodicals_selected">
+      <value>Wybierz co najmniej jedną prenumeratę.</value>
+    </prefix>
+  </prefix>
+</strings>

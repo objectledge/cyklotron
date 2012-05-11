@@ -1,0 +1,113 @@
+$pageTool.addScriptLink("script/WinPopup.js")
+## SET LOCAL VARS
+#set($cms_link = $link.set('x',$parametersTool.getLong('x')))
+#set($cms_link = $cms_link.set('state',$parametersTool.get('state','Messages')))
+
+## COMMAND BAR PREPROCESSING
+#macro(commandbar)
+  <table class="commandBarTable" border="0" width="100%" height="22">
+    <tr align="right">
+      <td width="90%"></td>
+      #if($cms_tool.getUserData().hasPermission($message.getDiscussion(), 'cms.forum.add'))
+      #if($message.state.name!='locked')
+      <td NOWRAP class="usualbutton">
+	    <a href="$cms_link.set('state','NewMessage').set('mid', $message.getId())">Odpowiedź</a>
+      </td>
+      #end
+      <td NOWRAP class="usualbutton">
+        <a href="$cms_link.set('state','NewMessage').set('did',$message.getDiscussion().getId())">Nowa wiadomość</a>
+      </td>
+      #end
+      #if($cms_tool.getUserData().hasPermission($message.getDiscussion(), 'cms.forum.modify'))
+      <td NOWRAP class="usualbutton">
+	    <a href="$cms_link.set('state','EditMessage').set('mid', $message.getId())">Edycja</a>
+      </td>
+      #end
+      #if($cms_tool.getUserData().hasPermission($message.getDiscussion(), 'cms.forum.moderate'))
+      <td NOWRAP class="usualbutton">
+        <span><b>akcje:</b></span>#fireTransition($message $cms_link.set('mid',$message.id))
+      </td>
+      <td NOWRAP class="usualbutton">
+        <a href="$cms_link.action('forum.ToggleMessageStick').set('mid', $message.id)">#if($message.getSticky(false))odklej#{else}przyklej#end</a>
+      </td>
+      <td NOWRAP class="usualbutton">
+        <a href="javascript:getWinPopup('move message').open('$link.view('forum.MoveMessage').set('did', $message.getDiscussion().getId()).set('mid',$message.getId())',  500, 550); void(0);">Przenieś</a>
+      </td>
+      #end
+      <td NOWRAP class="usualbutton">
+        <a href="$cms_link.set('state','Messages').set('did', $message.getDiscussion().getId())">Powrót do listy wiadomości</a>
+      </td>
+    </tr>
+  </table>
+#end
+## END COMMAND BAR PREPROCESSING
+
+
+## END SET LOCAL VARS
+
+  #genericScreenHeader('WIADOMOŚĆ')
+
+#if($message.discussion.state.name != 'hidden')
+
+  <table border="0" class="postHeaderTable">
+    <tr>
+      <td width="10%">
+    <b>Nadawca:</b>
+      </td>
+      <td>
+        #cms_personal_credentials($message.createdBy)<br>
+      </td>
+    </tr>
+    <tr>
+      <td>
+    <b>Data:</b>
+      </td>
+      <td>
+    $format_date.format($message.getCreationTime())<br>
+      </td>
+    </tr>
+    <tr>
+      <td>
+    <b>Tytuł:</b>
+      </td>
+      <td>
+    $message.getName()<br>
+      </td>
+    </tr>
+  </table>
+
+
+  <table border="0" class="postContentTable">
+    <tr>
+      <td>
+	<pre>$message.getPublicContent()</pre> 
+      </td>
+    </tr>
+  </table>
+
+  #genericScreenHeader('ODPOWIEDZI')
+
+  <table border="0" class="postContentTable">
+    #foreach ($reply in $children)
+    <tr>
+        <td>
+        <b>Tytuł: </b>
+        <a href="$cms_link.set('state','Message').set('mid',$reply.getId() )">
+            $reply.getName()
+        </a>,
+        <b>Nadawca:</b> #cms_personal_credentials($reply.createdBy) ,
+        <b>Data:</b> $format_date.format($reply.getCreationTime())
+        </td>
+    </tr>
+    #end
+  </table>
+
+  #commandbar()
+  
+#else
+  Dyskusja została zablokowana przez administratora.
+#end
+
+#genericScreenTrailer()
+
+

@@ -1,0 +1,137 @@
+#set($ui_strings = $i18n.usePrefix("cms.documents.ProposeDocumentConf.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.documents.ProposeDocumentConf.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.documents.ProposeDocumentConf.buttons"))
+
+#genericScreenHeader($ui_strings.get('title'))
+
+#set($from_component = true)
+#set($save_action = "$link.unsetView().action('structure.UpdateScreenPreferences').set('x',$node.id)")
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+$pageTool.addScriptLink('script/CMSPopups.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "parent_id", "category_id_1", "category_id_2", "inherit_categories", "calendar_tree", "attachments_enabled", 
+                            "attachments_dir_id", "attachments_max_count", "attachments_max_size", "attachments_allowed_formats", "owner_login",
+                            "editing_enabled", "category_depth", "add_document_visual_editor", "clear_org_if_not_match", "add_captcha" );
+
+function sendConfig()
+{
+    document.form1.action = "$save_action";
+    document.form1.target = "cyklotron_document_calendar_config_${cms_data.node.id}";
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+//-->
+</script>
+
+<form name="form1" method="post" action="">
+  <input type="hidden" name="node_id" value="$node.id">
+  <input type="hidden" name="config" value="" />
+<table border="0" class="genericScreen" width="100%">
+  <tr>
+    <td align="right">$ui_labels.get('parent'):</td>
+    <td>
+      <input type="hidden" name="parent_id" value="$!parent_id" />
+      <input type="text" style="width: 100%;" readonly="readonly" name="parent_path" value="$!htmlEncoder.encodeAttribute($!parent_path)"/>
+      <a href="#select_node('id relative_path' $parent_id 'form1' 'parent_id parent_path')">$ui_labels.get('choose')</a>
+      $ui_strings.get('no_parent')
+	</td>
+  </tr>
+
+  <tr>
+    <td align="right">$ui_labels.get('category1'):</td>
+    <td>
+     <a href="#select_category('name id' 'form1' 'category_name_1 category_id_1')">$ui_labels.get('choose')</a>
+     <input type="text" name="category_name_1" style="width:100%;" value="$!category_1.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="category_id_1" value="$!category_1.id"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('category2'):</td>
+    <td>
+     <a href="#select_category('name id' 'form1' 'category_name_2 category_id_2')">$ui_labels.get('choose')</a>
+     <input type="text" name="category_name_2" style="width:100%;" value="$!category_2.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="category_id_2" value="$!category_2.id"/>
+    </td>
+  </tr>
+  <tr>
+	<td align="right">$ui_labels.get('category_depth'):</td>
+	<td><input type="text" name="category_depth" value="$!category_depth"/></td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('inherit_categories')</td>
+    <td><input type="checkbox" name="inherit_categories" value="true"#if($inherit_categories) checked#end></td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('calendar_tree')</td>
+    <td><input type="checkbox" name="calendar_tree" value="true"#if($calendar_tree) checked#end></td>
+  </tr>
+  <tr>
+	<td align="right">$ui_labels.get('attachments_enabled')</td>
+	<td><input type="checkbox" name="attachments_enabled" value="true"#if($attachments_enabled) checked#end></td>
+  </tr>
+  <tr>
+	<td align="right">$ui_labels.get('attachments_dir')</td>
+	<td>
+	  <a href="#select_directory('local_path id' 'form1' 'attachments_dir attachments_dir_id')">$ui_labels.get('choose')</a>
+      <input type="text" name="attachments_dir" style="width:100%;" value="$!attachments_dir" maxlength="150" readonly= "readonly" />
+	  <input type="hidden" name="attachments_dir_id" value="$!attachments_dir_id"/>
+	</td>
+  </tr>
+  <tr>
+	<td align="right">$ui_labels.get('attachments_max_count')</td>
+	<td><input type="text" name="attachments_max_count" value="$!attachments_max_count"/></td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('attachments_max_size')</td>
+    <td><input type="text" name="attachments_max_size" value="$!attachments_max_size"/></td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('attachments_allowed_formats')</td>
+    <td><input type="text" name="attachments_allowed_formats" value="$!attachments_allowed_formats"/></td>
+  </tr>    
+  <tr>
+    <td align="right">$ui_labels.get('owner_login')</td>
+    <td>
+    <a href="javascript:selectUser('login', 'form1', 'owner_login', '$link.view('popup.UserList').set('perm','cms.structure.modify_own').set('res_id',$node.id).set('permission_filter','true')')">$ui_labels.get('choose')</a>
+    <input type="text" name="owner_login" style="width:100%;" value="$!owner_login" readonly="readonly"></td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('editing_enabled')</td>
+    <td><input type="checkbox" name="editing_enabled" value="true"#if($editing_enabled) checked#end></td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('add_document_visual_editor')</td>
+    <td><input type="checkbox" name="add_document_visual_editor" value="true"#if($add_document_visual_editor) checked#end></td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('clear_org_if_not_match')</td>
+    <td><input type="checkbox" name="clear_org_if_not_match" value="true"#if($clear_org_if_not_match) checked#end></td>
+  </tr>
+  <tr>
+    <td align="right">$ui_labels.get('add_captcha')</td>
+    <td><input type="checkbox" name="add_captcha" value="true"#if($add_captcha) checked#end></td>
+  </tr>
+  <tr>
+	<td align="right">$ui_labels.get('cleanup_profile')</td>
+	<td><select name="cleanup_profile">
+    #foreach($profile in $available_cleanup_profiles)
+	  <option name="$availableProfile"#if($cleanup_profile == $profile or $cleanup_profile == '' and $profile == 'proposeDocument') selected#end>$profile</option>
+    #end		
+	</select></td>
+  </tr>
+</table>
+</form>
+
+##
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+  <a href="javascript:sendConfig()">$ui_buttons.get('save')</a>
+  <a href="javascript:window.close();">$ui_buttons.get('cancel')</a>
+  </div>
+</div>
+
+#genericScreenTrailer()
