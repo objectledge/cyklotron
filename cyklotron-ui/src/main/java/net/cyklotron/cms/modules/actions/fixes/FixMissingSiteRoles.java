@@ -40,7 +40,7 @@ public class FixMissingSiteRoles
         {
             final CoralSession coralSession = context.getAttribute(CoralSession.class);
             Resource[] sites = coralSession.getStore().getResourceByPath("/cms/sites/*");
-            ResourceClass<SiteResource> resourceClass = coralSession.getSchema().getResourceClass(
+            ResourceClass<?> resourceClass = coralSession.getSchema().getResourceClass(
                 "site.site");
             Resource schemaRoleRoot = integrationService.getSchemaRoleRoot(coralSession,
                 resourceClass);

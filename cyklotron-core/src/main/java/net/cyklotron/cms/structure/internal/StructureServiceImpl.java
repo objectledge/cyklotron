@@ -953,8 +953,7 @@ public class StructureServiceImpl
                 {
                     log.info("preloading validity start cache");
                     Timer timer = new Timer();
-                    @SuppressWarnings("unchecked")
-                    AttributeDefinition<Date> def = coralSession.getSchema().getResourceClass(
+                    AttributeDefinition<?> def = coralSession.getSchema().getResourceClass(
                         NavigationNodeResource.CLASS_NAME).getAttribute("validityStart");
                     
                     conn = database.getConnection();

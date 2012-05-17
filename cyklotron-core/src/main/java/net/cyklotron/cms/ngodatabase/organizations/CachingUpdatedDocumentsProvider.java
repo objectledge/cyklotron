@@ -220,8 +220,7 @@ public class CachingUpdatedDocumentsProvider
                 {
                     coralSession = coralSessionFactory.getAnonymousSession();
     
-                    @SuppressWarnings("unchecked")
-                    ResourceClass<DocumentNodeResource> documentNodeClass = coralSession
+                    ResourceClass<?> documentNodeClass = coralSession
                         .getSchema().getResourceClass(DocumentNodeResource.CLASS_NAME);
                     @SuppressWarnings("unchecked")
                     AttributeDefinition<String> organizationIdsAttr = (AttributeDefinition<String>)documentNodeClass
