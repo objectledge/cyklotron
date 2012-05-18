@@ -1,0 +1,27 @@
+<div align="center">
+  <table class="alertTitleTable" width="40%">
+    <tr>
+      <td>
+	    <b>Strona nie występuje w systemie</b>
+      </td>
+    </tr>
+  </table>
+
+  <table class="defaultTable" width="40%">
+    <tr>
+      <td>
+	<b>Uwaga!</b><p>
+	  System <i>Cyklotron</i> nie pozwala na ręczne modyfikacjie odsyłaczy do innych stron w systemie.
+	  Jeżeli powyższy błąd wystąpił bez ingerencji użytkownika w odsyłaczu - błąd ten należy sgłosić pod adres <a href="mailto:cyklotron-errors@ngo.pl">cyklotron-errors@ngo.pl</a> załączając krótki opis działań, które doprowadziły do jego wystąpienia. Postaramy się usunąć go jak najszybciej.
+      </td>
+    </tr>
+</table>
+</div>
+
+<!--
+<br> To co ponizej bedzie skasowane:
+<br>
+<pre>
+$stackTrace
+</pre>
+-->

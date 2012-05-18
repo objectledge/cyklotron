@@ -1,0 +1,8 @@
+##
+#set($xlink = $link.set('x',$parametersTool.get('x')))
+<div class="periodicals-subscriptions-screen">
+<p>
+Głos w ankiecie można oddać tylko raz. Prosimy o przejście
+<a href="$xlink">tutaj</a>.
+</p>
+</div>

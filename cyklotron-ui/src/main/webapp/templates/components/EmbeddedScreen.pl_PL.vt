@@ -1,0 +1,8 @@
+##ConvertTemplates:IMMUTABLE
+#if($application_enabled)##
+$!embeddedPlaceholder##
+#else##
+#if($cms_tool.getSubject() != $cms_tool.getAnonymousSubject())##
+Aplikacja zablokowana!##
+#end##
+#end##

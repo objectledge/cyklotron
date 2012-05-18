@@ -1,0 +1,90 @@
+#set($psid = $parametersTool.get('psid','-1'))
+#set($voteLink = $link.set('type','vote').set('psid', $psid))
+
+#genericScreenHeader("EDIT POLL")
+
+#result_inline_message('results.poll')
+
+
+<form name="form1" method="post" action="$voteLink.view("poll.VoteList").action("poll.UpdateVote")" class="defaultForm">
+  <input type="hidden" name="vid" value="$vote.id" />
+
+  <table class="genericItemList" width="100%" cellspacing="0">
+    <tr>
+      <td><b>Poll title:</b></td>
+      <td colspan="2"><input type="text" style="width:100%" name="title" value="$!htmlEncoder.encodeAttribute($parametersTool.get('title',$vote.name))" size="30"></td>
+    </tr>
+    <tr>
+      <td align="left"><b>Short description:</b></td>
+      <td colspan="2"><input type="text" style="width:100%" name="description" value="$!htmlEncoder.encodeAttribute($parametersTool.get('description',$vote.description))" size="50"></td>
+    </tr>
+    <tr>
+      <td align="left"><b>Sender email:</b></td>
+      <td colspan="2"><input type="text" style="width:100%" name="sender_address" value="$!htmlEncoder.encodeAttribute($parametersTool.get("sender_address",$vote.senderAddress))" size="70"></td>
+    </tr>
+  </table>
+  <br>
+  #set($answerKeys = $answers.keySet())
+  <table class="genericItemList" width="100%" cellspacing="0">
+<input type="hidden" name="answer_size" value="$answerKeys.size()">
+    #set($maxAnswerKey = $answerKeys.size() - 1)
+    #foreach($answerKey in $answerKeys)
+    <tr>
+      <td align="center">
+        #if($answerKey < $maxAnswerKey)
+        <a href="javascript:browserUtil.submitForm('form1','$voteLink.action('poll.ChangeSequence').set('offset','2').set('aid',$answerKey)')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
+        #else
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+        #end
+        #if($answerKey < $maxAnswerKey)
+        <a href="javascript:browserUtil.submitForm('form1','$voteLink.action('poll.ChangeSequence').set('offset','1').set('aid',$answerKey)')"><img src="$link.content('images/tree/down.gif')" border="0"></a>
+        #else
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+        #end
+        #if($answerKey > 0)
+        <a href="javascript:browserUtil.submitForm('form1','$voteLink.action('poll.ChangeSequence').set('offset','-1').set('aid',$answerKey)')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
+        #else
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+        #end
+        #if($answerKey > 0)
+        <a href="javascript:browserUtil.submitForm('form1','$voteLink.action('poll.ChangeSequence').set('offset','-2').set('aid',$answerKey)')"><img src="$link.content('images/tree/up.gif')" border="0"></a>
+        #else
+        <img src="$link.content('images/spacer.gif')" border="0" height="1" width="10">
+        #end
+      </td>
+      <td>
+        Answer $velocityCount  :
+        <input type="text" style="width:100%" name="answer_${answerKey}" value="$!htmlEncoder.encodeAttribute($answers.get($answerKey).getTitle())">
+      </td>
+      <td align="center" valign="middle">
+        <a href="javascript:browserUtil.submitForm('form1','$voteLink.action('poll.RemoveAnswer').set('aid',$answerKey)')"><img border="no" src="$link.content('images/action/cancel.gif')"/></a>
+      </td>
+    </tr>
+    #end
+    <tr>
+      <td colspan="3" class="actionlink">
+        <a href="javascript:browserUtil.submitForm('form1','$voteLink.action('poll.AddAnswer').set('aid',$answerKey)')">Add answer</a>
+      </td>
+    </tr>
+  </table>
+
+  <div>
+    <table class="layoutTable" align="right" border="0">
+      <tr>
+        <td NOWRAP class="usualbutton">
+          <a href="javascript:document.form1.submit();">Save vote</a>
+        </td>
+        <td>
+          <table height="22" class="buttonTable">
+            <tr>
+              <td>
+                <a href="$voteLink.view("poll.VoteList")">Cancel</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+</form>
+

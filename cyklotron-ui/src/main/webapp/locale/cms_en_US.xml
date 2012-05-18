@@ -1,0 +1,5 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="anonymous_name">
+    <value>Guest</value>
+  </prefix>
+</strings>

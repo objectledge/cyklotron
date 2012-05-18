@@ -1,0 +1,50 @@
+#set($psid = $parametersTool.get('psid','-1'))
+#set ($voteLink = $link.set('psid',$psid))
+
+#genericScreenHeader("VOTE")
+
+  <form name="form1" method="post" action="" class="defaultForm">
+  <input type="hidden" name="psid" value="$psid" size="30">
+  <input type="hidden" name="pid" value="$vote.id" size="30">
+    <table class="genericItemList" width="100%" cellspacing="0">
+    <tr>
+     <th colspan="2">Vote details</th>
+    </tr>
+    <tr>
+      <td width="15%">Title: </td><td><i>$vote.getName()</i></td>         
+    </tr>
+    <tr>
+      <td>Description: </td><td><i>$!vote.getDescription()</i></td>
+    </tr>    
+    #set($totalVotes = 0)
+    #foreach($answerKey in $answerKeys)
+      #set($totalVotes = ($totalVotes + $results.get($answers.get($answerKey).getId())))##
+    <tr>
+      #set($option = $answerKey+1)
+      <td>Option $option:</td>
+      <td>($stringTool.shortenString($percent.get($answers.get($answerKey).getId()).toString(), 4, "")%) - $results.get($answers.get($answerKey).getId()): <i>$answers.get($answerKey).getTitle()</i></td>
+    </tr> 
+    #end
+    <tr>
+      <td>Total ballots: </td><td>$totalVotes</td>
+    </tr>
+    </table>
+  </form>
+  
+  <div>
+    <table class="layoutTable" align="right" border="0">
+      <tr>
+        <td>
+          <table height="22" class="buttonTable">
+            <tr>
+              <td>
+                <a href="$voteLink.view("poll.VoteList")">Cancle</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+#genericScreenTrailer()	

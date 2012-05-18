@@ -1,0 +1,80 @@
+## marker for ledge cyklo
+$viewEnclosureTool.override('popup.Default')
+
+##
+#genericScreenHeader('Publish imported resource')
+
+#result_inline_message('results.aggregation')
+
+#set($form_action = $link.view('popup.ClosePopup').set('close_popup_reload',true))
+#if(!$parametersTool.isDefined('from_component_wrapper'))
+#set($form_action = $form_action.set('close_popup_reload',true))
+#end
+#if($recursive_enabled)
+#set($form_recursive_action = $form_action.action($recursive_action))
+#end
+#set($form_action = $form_action.action($copy_action))
+
+<form name="importResource" method="POST" action="$form_action">
+  <input type="hidden" name="res_id" value="$resource.id" />
+  <input type="hidden" name="mode" value="$parametersTool.get('mode','')" />
+  <input type="hidden" name="parent_id" value="" />
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tr>
+<td nowrap="nowrap" align="right">Name of the new #resource_of_type($resource):</td>
+<td width="100%">
+#if($parametersTool.isDefined('target_name'))
+<input type="text" style="width:100%" name="target_name" value="$!htmlEncoder.encodeAttribute($parametersTool.get('target_name'))" />
+#else
+<input type="text" style="width:100%" name="target_name" value="$!htmlEncoder.encodeAttribute($resource.name)" />
+#end
+</td>
+</tr>
+</table>
+
+</form>
+
+$pageTool.addScriptLink('script/Forms.js')##
+<script type="text/javascript">
+<!--
+function sendParent(parentId)
+{
+    Forms.setValue("importResource", "parent_id", parentId);
+    document.forms.importResource.submit();
+}
+
+function sendParentRecursive(parentId, action)
+{
+    Forms.setValue("importResource", "parent_id", parentId);
+    document.forms.importResource.action = action;
+    document.forms.importResource.submit();
+}
+
+// -->
+</script>
+
+#set($tableLink = $link.self().set('tableId', $table.id))
+<table class="genericItemTree" width="100%" cellpadding="0" cellspacing="0">
+#foreach($row in $table.rows)
+<tr>
+<td>
+#tableView_linesAndFolders($table $row $tableLink)
+
+#set($definition = $cms_tool.getClassDefinition($row.object))##
+$cms_tool.resourceAttribute($row.object, $definition.indexTitle)##
+
+#if($resclass_filter.accept($row.object) && $cms_tool.isInstance($row.object, 'protected') && $row.object.canAddChild($cms_tool.coralSession,$cms_tool.subject))
+<a href="javascript:sendParent($row.object.id);">Publish below</a>
+  #if($recursive_enabled)
+  | <a href="javascript:sendParentRecursive($row.object.id, '$form_recursive_action');">Publish recurive below</a>
+  #end
+#end
+
+</td>
+</tr>
+#end
+</table>
+
+#genericScreenTrailer()
+
