@@ -152,7 +152,10 @@ public class MemberList
         Set<Subject> subjects = new HashSet<Subject>();
         for(Role role : roles)
         {
-            subjects.addAll(Arrays.asList(role.getSubjects()));
+            for(RoleAssignment ra : role.getRoleAssignments())
+            {
+                subjects.add(ra.getSubject());
+            }            
         }
         return subjects;
     }
