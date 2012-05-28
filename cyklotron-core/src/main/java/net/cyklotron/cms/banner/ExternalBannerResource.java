@@ -51,6 +51,14 @@ public interface ExternalBannerResource
      * @return the value of the the <code>image</code> attribute.
      */
     public String getImage();
+    
+    /**
+     * Returns the value of the <code>image</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>image</code> attribute.
+     */
+    public String getImage(String defaultValue);
 
     /**
      * Sets the value of the <code>image</code> attribute.

@@ -54,6 +54,14 @@ public interface PreferenceGroupResource
      * @return the value of the the <code>modifyPermission</code> attribute.
      */
     public Permission getModifyPermission();
+    
+    /**
+     * Returns the value of the <code>modifyPermission</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>modifyPermission</code> attribute.
+     */
+    public Permission getModifyPermission(Permission defaultValue);
 
     /**
      * Sets the value of the <code>modifyPermission</code> attribute.

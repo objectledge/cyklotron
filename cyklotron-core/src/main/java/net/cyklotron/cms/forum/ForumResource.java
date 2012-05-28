@@ -56,6 +56,14 @@ public interface ForumResource
      * @return the value of the the <code>forumNode</code> attribute.
      */
     public NavigationNodeResource getForumNode();
+    
+    /**
+     * Returns the value of the <code>forumNode</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>forumNode</code> attribute.
+     */
+    public NavigationNodeResource getForumNode(NavigationNodeResource defaultValue);
 
     /**
      * Sets the value of the <code>forumNode</code> attribute.
@@ -78,6 +86,14 @@ public interface ForumResource
      * @return the value of the the <code>initialCommentaryState</code> attribute.
      */
     public StateResource getInitialCommentaryState();
+    
+    /**
+     * Returns the value of the <code>initialCommentaryState</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>initialCommentaryState</code> attribute.
+     */
+    public StateResource getInitialCommentaryState(StateResource defaultValue);
 
     /**
      * Sets the value of the <code>initialCommentaryState</code> attribute.
@@ -100,6 +116,14 @@ public interface ForumResource
      * @return the value of the the <code>rejectMessage</code> attribute.
      */
     public String getRejectMessage();
+    
+    /**
+     * Returns the value of the <code>rejectMessage</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>rejectMessage</code> attribute.
+     */
+    public String getRejectMessage(String defaultValue);
 
     /**
      * Sets the value of the <code>rejectMessage</code> attribute.
@@ -122,6 +146,14 @@ public interface ForumResource
      * @return the value of the the <code>replyTo</code> attribute.
      */
     public String getReplyTo();
+    
+    /**
+     * Returns the value of the <code>replyTo</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>replyTo</code> attribute.
+     */
+    public String getReplyTo(String defaultValue);
 
     /**
      * Sets the value of the <code>replyTo</code> attribute.

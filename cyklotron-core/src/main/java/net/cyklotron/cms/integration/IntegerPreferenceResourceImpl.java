@@ -56,10 +56,10 @@ public class IntegerPreferenceResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>rangeMax</code> attribute. */
-    private static AttributeDefinition rangeMaxDef;
+	private static AttributeDefinition<Number> rangeMaxDef;
 
     /** The AttributeDefinition object for the <code>rangeMin</code> attribute. */
-    private static AttributeDefinition rangeMinDef;
+	private static AttributeDefinition<Number> rangeMinDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -119,9 +119,9 @@ public class IntegerPreferenceResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.integer_preference");
-            Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("required"), new Boolean(required));
+            ResourceClass<IntegerPreferenceResource> rc = session.getSchema().getResourceClass("integration.integer_preference", IntegerPreferenceResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
+            attrs.put(rc.getAttribute("required"), Boolean.valueOf(required));
             attrs.put(rc.getAttribute("scope"), scope);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof IntegerPreferenceResource))
@@ -146,7 +146,7 @@ public class IntegerPreferenceResourceImpl
      */
     public Number getRangeMax()
     {
-        return (Number)getInternal(rangeMaxDef, null);
+        return get(rangeMaxDef);
     }
     
     /**
@@ -157,7 +157,7 @@ public class IntegerPreferenceResourceImpl
      */
     public Number getRangeMax(Number defaultValue)
     {
-        return (Number)getInternal(rangeMaxDef, defaultValue);
+        return get(rangeMaxDef, defaultValue);
     }    
 
     /**
@@ -206,7 +206,7 @@ public class IntegerPreferenceResourceImpl
      */
     public Number getRangeMin()
     {
-        return (Number)getInternal(rangeMinDef, null);
+        return get(rangeMinDef);
     }
     
     /**
@@ -217,7 +217,7 @@ public class IntegerPreferenceResourceImpl
      */
     public Number getRangeMin(Number defaultValue)
     {
-        return (Number)getInternal(rangeMinDef, defaultValue);
+        return get(rangeMinDef, defaultValue);
     }    
 
     /**

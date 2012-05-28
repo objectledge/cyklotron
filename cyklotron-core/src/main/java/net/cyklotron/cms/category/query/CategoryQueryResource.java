@@ -53,6 +53,14 @@ public interface CategoryQueryResource
      * @return the value of the the <code>acceptedResourceClasses</code> attribute.
      */
     public String getAcceptedResourceClasses();
+    
+    /**
+     * Returns the value of the <code>acceptedResourceClasses</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>acceptedResourceClasses</code> attribute.
+     */
+    public String getAcceptedResourceClasses(String defaultValue);
 
     /**
      * Sets the value of the <code>acceptedResourceClasses</code> attribute.
@@ -75,6 +83,14 @@ public interface CategoryQueryResource
      * @return the value of the the <code>acceptedSites</code> attribute.
      */
     public String getAcceptedSites();
+    
+    /**
+     * Returns the value of the <code>acceptedSites</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>acceptedSites</code> attribute.
+     */
+    public String getAcceptedSites(String defaultValue);
 
     /**
      * Sets the value of the <code>acceptedSites</code> attribute.
@@ -97,6 +113,14 @@ public interface CategoryQueryResource
      * @return the value of the the <code>longQuery</code> attribute.
      */
     public String getLongQuery();
+    
+    /**
+     * Returns the value of the <code>longQuery</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>longQuery</code> attribute.
+     */
+    public String getLongQuery(String defaultValue);
 
     /**
      * Sets the value of the <code>longQuery</code> attribute.
@@ -119,6 +143,14 @@ public interface CategoryQueryResource
      * @return the value of the the <code>optionalCategoryIdentifiers</code> attribute.
      */
     public String getOptionalCategoryIdentifiers();
+    
+    /**
+     * Returns the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     */
+    public String getOptionalCategoryIdentifiers(String defaultValue);
 
     /**
      * Sets the value of the <code>optionalCategoryIdentifiers</code> attribute.
@@ -141,6 +173,14 @@ public interface CategoryQueryResource
      * @return the value of the the <code>optionalCategoryPaths</code> attribute.
      */
     public String getOptionalCategoryPaths();
+    
+    /**
+     * Returns the value of the <code>optionalCategoryPaths</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>optionalCategoryPaths</code> attribute.
+     */
+    public String getOptionalCategoryPaths(String defaultValue);
 
     /**
      * Sets the value of the <code>optionalCategoryPaths</code> attribute.
@@ -163,6 +203,14 @@ public interface CategoryQueryResource
      * @return the value of the the <code>query</code> attribute.
      */
     public String getQuery();
+    
+    /**
+     * Returns the value of the <code>query</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>query</code> attribute.
+     */
+    public String getQuery(String defaultValue);
 
     /**
      * Sets the value of the <code>query</code> attribute.
@@ -185,6 +233,14 @@ public interface CategoryQueryResource
      * @return the value of the the <code>requiredCategoryIdentifiers</code> attribute.
      */
     public String getRequiredCategoryIdentifiers();
+    
+    /**
+     * Returns the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     */
+    public String getRequiredCategoryIdentifiers(String defaultValue);
 
     /**
      * Sets the value of the <code>requiredCategoryIdentifiers</code> attribute.
@@ -207,6 +263,14 @@ public interface CategoryQueryResource
      * @return the value of the the <code>requiredCategoryPaths</code> attribute.
      */
     public String getRequiredCategoryPaths();
+    
+    /**
+     * Returns the value of the <code>requiredCategoryPaths</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>requiredCategoryPaths</code> attribute.
+     */
+    public String getRequiredCategoryPaths(String defaultValue);
 
     /**
      * Sets the value of the <code>requiredCategoryPaths</code> attribute.

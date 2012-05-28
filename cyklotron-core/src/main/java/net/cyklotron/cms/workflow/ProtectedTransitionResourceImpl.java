@@ -57,7 +57,7 @@ public class ProtectedTransitionResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>performPermission</code> attribute. */
-    private static AttributeDefinition performPermissionDef;
+	private static AttributeDefinition<Permission> performPermissionDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -119,8 +119,8 @@ public class ProtectedTransitionResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("workflow.protected_transition");
-            Map attrs = new HashMap();
+            ResourceClass<ProtectedTransitionResource> rc = session.getSchema().getResourceClass("workflow.protected_transition", ProtectedTransitionResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("from"), from);
             attrs.put(rc.getAttribute("performPermission"), performPermission);
             attrs.put(rc.getAttribute("to"), to);
@@ -147,7 +147,7 @@ public class ProtectedTransitionResourceImpl
      */
     public Permission getPerformPermission()
     {
-        return (Permission)getInternal(performPermissionDef, null);
+        return get(performPermissionDef);
     }
  
     /**

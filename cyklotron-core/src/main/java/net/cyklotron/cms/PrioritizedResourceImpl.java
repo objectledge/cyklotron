@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.GenericResource;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -57,7 +54,7 @@ public class PrioritizedResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
-    private static AttributeDefinition priorityDef;
+    private static AttributeDefinition<Integer> priorityDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -114,9 +111,9 @@ public class PrioritizedResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("prioritized");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<PrioritizedResource> rc = session.getSchema().getResourceClass("prioritized", PrioritizedResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof PrioritizedResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -146,7 +143,7 @@ public class PrioritizedResourceImpl
     public int getPriority()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(priorityDef, null);
+	    Integer value = get(priorityDef);
         if(value != null)
         {
             return value.intValue();
@@ -166,7 +163,7 @@ public class PrioritizedResourceImpl
      */
     public int getPriority(int defaultValue)
     {
-		return ((Integer)getInternal(priorityDef, new Integer(defaultValue))).intValue();
+		return get(priorityDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -178,7 +175,7 @@ public class PrioritizedResourceImpl
     {
         try
         {
-            set(priorityDef, new Integer(value));
+            set(priorityDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

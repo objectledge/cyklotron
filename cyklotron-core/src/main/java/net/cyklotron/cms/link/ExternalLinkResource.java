@@ -51,6 +51,14 @@ public interface ExternalLinkResource
      * @return the value of the the <code>target</code> attribute.
      */
     public String getTarget();
+    
+    /**
+     * Returns the value of the <code>target</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>target</code> attribute.
+     */
+    public String getTarget(String defaultValue);
 
     /**
      * Sets the value of the <code>target</code> attribute.

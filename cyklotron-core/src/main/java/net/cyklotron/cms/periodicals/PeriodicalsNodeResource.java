@@ -55,6 +55,14 @@ public interface PeriodicalsNodeResource
      * @return the value of the the <code>administrator</code> attribute.
      */
     public Role getAdministrator();
+    
+    /**
+     * Returns the value of the <code>administrator</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>administrator</code> attribute.
+     */
+    public Role getAdministrator(Role defaultValue);
 
     /**
      * Sets the value of the <code>administrator</code> attribute.
@@ -77,6 +85,14 @@ public interface PeriodicalsNodeResource
      * @return the value of the the <code>visitor</code> attribute.
      */
     public Role getVisitor();
+    
+    /**
+     * Returns the value of the <code>visitor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>visitor</code> attribute.
+     */
+    public Role getVisitor(Role defaultValue);
 
     /**
      * Sets the value of the <code>visitor</code> attribute.

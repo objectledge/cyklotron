@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.integration;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -58,7 +55,7 @@ public class SchemaPermissionResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>recursive</code> attribute. */
-    private static AttributeDefinition recursiveDef;
+    private static AttributeDefinition<Boolean> recursiveDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -115,9 +112,9 @@ public class SchemaPermissionResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.schema_permission");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<SchemaPermissionResource> rc = session.getSchema().getResourceClass("integration.schema_permission", SchemaPermissionResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof SchemaPermissionResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -147,7 +144,7 @@ public class SchemaPermissionResourceImpl
     public boolean getRecursive()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(recursiveDef, null);
+	    Boolean value = get(recursiveDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -167,7 +164,7 @@ public class SchemaPermissionResourceImpl
      */
     public boolean getRecursive(boolean defaultValue)
     {
-		return ((Boolean)getInternal(recursiveDef, new Boolean(defaultValue))).booleanValue();
+		return get(recursiveDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -179,7 +176,7 @@ public class SchemaPermissionResourceImpl
     {
         try
         {
-            set(recursiveDef, new Boolean(value));
+            set(recursiveDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

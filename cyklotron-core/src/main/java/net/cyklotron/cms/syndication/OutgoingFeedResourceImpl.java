@@ -29,8 +29,6 @@
 package net.cyklotron.cms.syndication;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -60,49 +58,49 @@ public class OutgoingFeedResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>category</code> attribute. */
-    private static AttributeDefinition categoryDef;
+	private static AttributeDefinition<String> categoryDef;
 
     /** The AttributeDefinition object for the <code>categoryQuery</code> attribute. */
-    private static AttributeDefinition categoryQueryDef;
+	private static AttributeDefinition<CategoryQueryResource> categoryQueryDef;
 
     /** The AttributeDefinition object for the <code>contents</code> attribute. */
-    private static AttributeDefinition contentsDef;
+	private static AttributeDefinition<String> contentsDef;
 
     /** The AttributeDefinition object for the <code>copyright</code> attribute. */
-    private static AttributeDefinition copyrightDef;
+	private static AttributeDefinition<String> copyrightDef;
 
     /** The AttributeDefinition object for the <code>generationTemplate</code> attribute. */
-    private static AttributeDefinition generationTemplateDef;
+	private static AttributeDefinition<String> generationTemplateDef;
 
     /** The AttributeDefinition object for the <code>interval</code> attribute. */
-    private static AttributeDefinition intervalDef;
+    private static AttributeDefinition<Integer> intervalDef;
 
     /** The AttributeDefinition object for the <code>language</code> attribute. */
-    private static AttributeDefinition languageDef;
+	private static AttributeDefinition<String> languageDef;
 
     /** The AttributeDefinition object for the <code>lastUpdate</code> attribute. */
-    private static AttributeDefinition lastUpdateDef;
+	private static AttributeDefinition<Date> lastUpdateDef;
 
     /** The AttributeDefinition object for the <code>limit</code> attribute. */
-    private static AttributeDefinition limitDef;
+    private static AttributeDefinition<Integer> limitDef;
 
     /** The AttributeDefinition object for the <code>managingEditor</code> attribute. */
-    private static AttributeDefinition managingEditorDef;
+	private static AttributeDefinition<String> managingEditorDef;
 
     /** The AttributeDefinition object for the <code>offset</code> attribute. */
-    private static AttributeDefinition offsetDef;
+    private static AttributeDefinition<Integer> offsetDef;
 
     /** The AttributeDefinition object for the <code>public</code> attribute. */
-    private static AttributeDefinition publicDef;
+    private static AttributeDefinition<Boolean> publicDef;
 
     /** The AttributeDefinition object for the <code>sortColumn</code> attribute. */
-    private static AttributeDefinition sortColumnDef;
+	private static AttributeDefinition<String> sortColumnDef;
 
     /** The AttributeDefinition object for the <code>sortOrder</code> attribute. */
-    private static AttributeDefinition sortOrderDef;
+    private static AttributeDefinition<Boolean> sortOrderDef;
 
     /** The AttributeDefinition object for the <code>webMaster</code> attribute. */
-    private static AttributeDefinition webMasterDef;
+	private static AttributeDefinition<String> webMasterDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -159,9 +157,9 @@ public class OutgoingFeedResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.syndication.outgoingfeed");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<OutgoingFeedResource> rc = session.getSchema().getResourceClass("cms.syndication.outgoingfeed", OutgoingFeedResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof OutgoingFeedResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -188,7 +186,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getCategory()
     {
-        return (String)getInternal(categoryDef, null);
+        return get(categoryDef);
     }
     
     /**
@@ -199,7 +197,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getCategory(String defaultValue)
     {
-        return (String)getInternal(categoryDef, defaultValue);
+        return get(categoryDef, defaultValue);
     }    
 
     /**
@@ -248,7 +246,7 @@ public class OutgoingFeedResourceImpl
      */
     public CategoryQueryResource getCategoryQuery()
     {
-        return (CategoryQueryResource)getInternal(categoryQueryDef, null);
+        return get(categoryQueryDef);
     }
     
     /**
@@ -259,7 +257,7 @@ public class OutgoingFeedResourceImpl
      */
     public CategoryQueryResource getCategoryQuery(CategoryQueryResource defaultValue)
     {
-        return (CategoryQueryResource)getInternal(categoryQueryDef, defaultValue);
+        return get(categoryQueryDef, defaultValue);
     }    
 
     /**
@@ -308,7 +306,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getContents()
     {
-        return (String)getInternal(contentsDef, null);
+        return get(contentsDef);
     }
     
     /**
@@ -319,7 +317,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getContents(String defaultValue)
     {
-        return (String)getInternal(contentsDef, defaultValue);
+        return get(contentsDef, defaultValue);
     }    
 
     /**
@@ -368,7 +366,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getCopyright()
     {
-        return (String)getInternal(copyrightDef, null);
+        return get(copyrightDef);
     }
     
     /**
@@ -379,7 +377,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getCopyright(String defaultValue)
     {
-        return (String)getInternal(copyrightDef, defaultValue);
+        return get(copyrightDef, defaultValue);
     }    
 
     /**
@@ -428,7 +426,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getGenerationTemplate()
     {
-        return (String)getInternal(generationTemplateDef, null);
+        return get(generationTemplateDef);
     }
     
     /**
@@ -439,7 +437,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getGenerationTemplate(String defaultValue)
     {
-        return (String)getInternal(generationTemplateDef, defaultValue);
+        return get(generationTemplateDef, defaultValue);
     }    
 
     /**
@@ -491,7 +489,7 @@ public class OutgoingFeedResourceImpl
     public int getInterval()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(intervalDef, null);
+	    Integer value = get(intervalDef);
         if(value != null)
         {
             return value.intValue();
@@ -511,7 +509,7 @@ public class OutgoingFeedResourceImpl
      */
     public int getInterval(int defaultValue)
     {
-		return ((Integer)getInternal(intervalDef, new Integer(defaultValue))).intValue();
+		return get(intervalDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -523,7 +521,7 @@ public class OutgoingFeedResourceImpl
     {
         try
         {
-            set(intervalDef, new Integer(value));
+            set(intervalDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -567,7 +565,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getLanguage()
     {
-        return (String)getInternal(languageDef, null);
+        return get(languageDef);
     }
     
     /**
@@ -578,7 +576,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getLanguage(String defaultValue)
     {
-        return (String)getInternal(languageDef, defaultValue);
+        return get(languageDef, defaultValue);
     }    
 
     /**
@@ -627,7 +625,7 @@ public class OutgoingFeedResourceImpl
      */
     public Date getLastUpdate()
     {
-        return (Date)getInternal(lastUpdateDef, null);
+        return get(lastUpdateDef);
     }
     
     /**
@@ -638,7 +636,7 @@ public class OutgoingFeedResourceImpl
      */
     public Date getLastUpdate(Date defaultValue)
     {
-        return (Date)getInternal(lastUpdateDef, defaultValue);
+        return get(lastUpdateDef, defaultValue);
     }    
 
     /**
@@ -690,7 +688,7 @@ public class OutgoingFeedResourceImpl
     public int getLimit()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(limitDef, null);
+	    Integer value = get(limitDef);
         if(value != null)
         {
             return value.intValue();
@@ -710,7 +708,7 @@ public class OutgoingFeedResourceImpl
      */
     public int getLimit(int defaultValue)
     {
-		return ((Integer)getInternal(limitDef, new Integer(defaultValue))).intValue();
+		return get(limitDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -722,7 +720,7 @@ public class OutgoingFeedResourceImpl
     {
         try
         {
-            set(limitDef, new Integer(value));
+            set(limitDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -766,7 +764,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getManagingEditor()
     {
-        return (String)getInternal(managingEditorDef, null);
+        return get(managingEditorDef);
     }
     
     /**
@@ -777,7 +775,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getManagingEditor(String defaultValue)
     {
-        return (String)getInternal(managingEditorDef, defaultValue);
+        return get(managingEditorDef, defaultValue);
     }    
 
     /**
@@ -829,7 +827,7 @@ public class OutgoingFeedResourceImpl
     public int getOffset()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(offsetDef, null);
+	    Integer value = get(offsetDef);
         if(value != null)
         {
             return value.intValue();
@@ -849,7 +847,7 @@ public class OutgoingFeedResourceImpl
      */
     public int getOffset(int defaultValue)
     {
-		return ((Integer)getInternal(offsetDef, new Integer(defaultValue))).intValue();
+		return get(offsetDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -861,7 +859,7 @@ public class OutgoingFeedResourceImpl
     {
         try
         {
-            set(offsetDef, new Integer(value));
+            set(offsetDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -908,7 +906,7 @@ public class OutgoingFeedResourceImpl
     public boolean getPublic()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(publicDef, null);
+	    Boolean value = get(publicDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -928,7 +926,7 @@ public class OutgoingFeedResourceImpl
      */
     public boolean getPublic(boolean defaultValue)
     {
-		return ((Boolean)getInternal(publicDef, new Boolean(defaultValue))).booleanValue();
+		return get(publicDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -940,7 +938,7 @@ public class OutgoingFeedResourceImpl
     {
         try
         {
-            set(publicDef, new Boolean(value));
+            set(publicDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -984,7 +982,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getSortColumn()
     {
-        return (String)getInternal(sortColumnDef, null);
+        return get(sortColumnDef);
     }
     
     /**
@@ -995,7 +993,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getSortColumn(String defaultValue)
     {
-        return (String)getInternal(sortColumnDef, defaultValue);
+        return get(sortColumnDef, defaultValue);
     }    
 
     /**
@@ -1047,7 +1045,7 @@ public class OutgoingFeedResourceImpl
     public boolean getSortOrder()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(sortOrderDef, null);
+	    Boolean value = get(sortOrderDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -1067,7 +1065,7 @@ public class OutgoingFeedResourceImpl
      */
     public boolean getSortOrder(boolean defaultValue)
     {
-		return ((Boolean)getInternal(sortOrderDef, new Boolean(defaultValue))).booleanValue();
+		return get(sortOrderDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -1079,7 +1077,7 @@ public class OutgoingFeedResourceImpl
     {
         try
         {
-            set(sortOrderDef, new Boolean(value));
+            set(sortOrderDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -1123,7 +1121,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getWebMaster()
     {
-        return (String)getInternal(webMasterDef, null);
+        return get(webMasterDef);
     }
     
     /**
@@ -1134,7 +1132,7 @@ public class OutgoingFeedResourceImpl
      */
     public String getWebMaster(String defaultValue)
     {
-        return (String)getInternal(webMasterDef, defaultValue);
+        return get(webMasterDef, defaultValue);
     }    
 
     /**

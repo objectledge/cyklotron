@@ -58,19 +58,19 @@ public class IndexResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>filesLocation</code> attribute. */
-    private static AttributeDefinition filesLocationDef;
+	private static AttributeDefinition<String> filesLocationDef;
 
     /** The AttributeDefinition object for the <code>optimise</code> attribute. */
-    private static AttributeDefinition optimiseDef;
+    private static AttributeDefinition<Boolean> optimiseDef;
 
     /** The AttributeDefinition object for the <code>optionalCategoryIdentifiers</code> attribute. */
-    private static AttributeDefinition optionalCategoryIdentifiersDef;
+	private static AttributeDefinition<String> optionalCategoryIdentifiersDef;
 
     /** The AttributeDefinition object for the <code>public</code> attribute. */
-    private static AttributeDefinition publicDef;
+    private static AttributeDefinition<Boolean> publicDef;
 
     /** The AttributeDefinition object for the <code>requiredCategoryIdentifiers</code> attribute. */
-    private static AttributeDefinition requiredCategoryIdentifiersDef;
+	private static AttributeDefinition<String> requiredCategoryIdentifiersDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -129,8 +129,8 @@ public class IndexResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("search.index");
-            Map attrs = new HashMap();
+            ResourceClass<IndexResource> rc = session.getSchema().getResourceClass("search.index", IndexResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("filesLocation"), filesLocation);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof IndexResource))
@@ -155,7 +155,7 @@ public class IndexResourceImpl
      */
     public String getFilesLocation()
     {
-        return (String)getInternal(filesLocationDef, null);
+        return get(filesLocationDef);
     }
  
     /**
@@ -196,7 +196,7 @@ public class IndexResourceImpl
     public boolean getOptimise()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(optimiseDef, null);
+	    Boolean value = get(optimiseDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -216,7 +216,7 @@ public class IndexResourceImpl
      */
     public boolean getOptimise(boolean defaultValue)
     {
-		return ((Boolean)getInternal(optimiseDef, new Boolean(defaultValue))).booleanValue();
+		return get(optimiseDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -228,7 +228,7 @@ public class IndexResourceImpl
     {
         try
         {
-            set(optimiseDef, new Boolean(value));
+            set(optimiseDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -272,7 +272,7 @@ public class IndexResourceImpl
      */
     public String getOptionalCategoryIdentifiers()
     {
-        return (String)getInternal(optionalCategoryIdentifiersDef, null);
+        return get(optionalCategoryIdentifiersDef);
     }
     
     /**
@@ -283,7 +283,7 @@ public class IndexResourceImpl
      */
     public String getOptionalCategoryIdentifiers(String defaultValue)
     {
-        return (String)getInternal(optionalCategoryIdentifiersDef, defaultValue);
+        return get(optionalCategoryIdentifiersDef, defaultValue);
     }    
 
     /**
@@ -335,7 +335,7 @@ public class IndexResourceImpl
     public boolean getPublic()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(publicDef, null);
+	    Boolean value = get(publicDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -355,7 +355,7 @@ public class IndexResourceImpl
      */
     public boolean getPublic(boolean defaultValue)
     {
-		return ((Boolean)getInternal(publicDef, new Boolean(defaultValue))).booleanValue();
+		return get(publicDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -367,7 +367,7 @@ public class IndexResourceImpl
     {
         try
         {
-            set(publicDef, new Boolean(value));
+            set(publicDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -411,7 +411,7 @@ public class IndexResourceImpl
      */
     public String getRequiredCategoryIdentifiers()
     {
-        return (String)getInternal(requiredCategoryIdentifiersDef, null);
+        return get(requiredCategoryIdentifiersDef);
     }
     
     /**
@@ -422,7 +422,7 @@ public class IndexResourceImpl
      */
     public String getRequiredCategoryIdentifiers(String defaultValue)
     {
-        return (String)getInternal(requiredCategoryIdentifiersDef, defaultValue);
+        return get(requiredCategoryIdentifiersDef, defaultValue);
     }    
 
     /**

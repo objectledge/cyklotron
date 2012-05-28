@@ -59,10 +59,10 @@ public class StateResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>assignee</code> attribute. */
-    private static AttributeDefinition assigneeDef;
+	private static AttributeDefinition<Role> assigneeDef;
 
     /** The AttributeDefinition object for the <code>initial</code> attribute. */
-    private static AttributeDefinition initialDef;
+    private static AttributeDefinition<Boolean> initialDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -121,9 +121,9 @@ public class StateResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("workflow.state");
-            Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("initial"), new Boolean(initial));
+            ResourceClass<StateResource> rc = session.getSchema().getResourceClass("workflow.state", StateResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
+            attrs.put(rc.getAttribute("initial"), Boolean.valueOf(initial));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof StateResource))
             {
@@ -147,7 +147,7 @@ public class StateResourceImpl
      */
     public Role getAssignee()
     {
-        return (Role)getInternal(assigneeDef, null);
+        return get(assigneeDef);
     }
     
     /**
@@ -158,7 +158,7 @@ public class StateResourceImpl
      */
     public Role getAssignee(Role defaultValue)
     {
-        return (Role)getInternal(assigneeDef, defaultValue);
+        return get(assigneeDef, defaultValue);
     }    
 
     /**
@@ -207,7 +207,7 @@ public class StateResourceImpl
      */
     public boolean getInitial()
     {
-		return ((Boolean)getInternal(initialDef, null)).booleanValue();
+		return get(initialDef).booleanValue();
     }    
 
     /**
@@ -219,7 +219,7 @@ public class StateResourceImpl
     {
         try
         {
-            set(initialDef, new Boolean(value));
+            set(initialDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

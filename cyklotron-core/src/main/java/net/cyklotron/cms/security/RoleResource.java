@@ -69,6 +69,14 @@ public interface RoleResource
      * @return the value of the the <code>descriptionKey</code> attribute.
      */
     public String getDescriptionKey();
+    
+    /**
+     * Returns the value of the <code>descriptionKey</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>descriptionKey</code> attribute.
+     */
+    public String getDescriptionKey(String defaultValue);
 
     /**
      * Sets the value of the <code>descriptionKey</code> attribute.

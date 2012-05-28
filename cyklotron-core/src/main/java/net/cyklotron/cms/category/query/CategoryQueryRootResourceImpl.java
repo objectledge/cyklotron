@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.category.query;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -59,10 +56,10 @@ public class CategoryQueryRootResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>defaultQuery</code> attribute. */
-    private static AttributeDefinition defaultQueryDef;
+	private static AttributeDefinition<CategoryQueryResource> defaultQueryDef;
 
     /** The AttributeDefinition object for the <code>resultsNode</code> attribute. */
-    private static AttributeDefinition resultsNodeDef;
+	private static AttributeDefinition<NavigationNodeResource> resultsNodeDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -119,9 +116,9 @@ public class CategoryQueryRootResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("category.query.root");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<CategoryQueryRootResource> rc = session.getSchema().getResourceClass("category.query.root", CategoryQueryRootResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof CategoryQueryRootResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -148,7 +145,7 @@ public class CategoryQueryRootResourceImpl
      */
     public CategoryQueryResource getDefaultQuery()
     {
-        return (CategoryQueryResource)getInternal(defaultQueryDef, null);
+        return get(defaultQueryDef);
     }
     
     /**
@@ -159,7 +156,7 @@ public class CategoryQueryRootResourceImpl
      */
     public CategoryQueryResource getDefaultQuery(CategoryQueryResource defaultValue)
     {
-        return (CategoryQueryResource)getInternal(defaultQueryDef, defaultValue);
+        return get(defaultQueryDef, defaultValue);
     }    
 
     /**
@@ -208,7 +205,7 @@ public class CategoryQueryRootResourceImpl
      */
     public NavigationNodeResource getResultsNode()
     {
-        return (NavigationNodeResource)getInternal(resultsNodeDef, null);
+        return get(resultsNodeDef);
     }
     
     /**
@@ -219,7 +216,7 @@ public class CategoryQueryRootResourceImpl
      */
     public NavigationNodeResource getResultsNode(NavigationNodeResource defaultValue)
     {
-        return (NavigationNodeResource)getInternal(resultsNodeDef, defaultValue);
+        return get(resultsNodeDef, defaultValue);
     }    
 
     /**

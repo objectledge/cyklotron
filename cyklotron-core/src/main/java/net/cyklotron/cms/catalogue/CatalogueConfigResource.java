@@ -57,6 +57,14 @@ public interface CatalogueConfigResource
      * @return the value of the the <code>category</code> attribute.
      */
     public CategoryResource getCategory();
+    
+    /**
+     * Returns the value of the <code>category</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>category</code> attribute.
+     */
+    public CategoryResource getCategory(CategoryResource defaultValue);
 
     /**
      * Sets the value of the <code>category</code> attribute.
@@ -79,6 +87,14 @@ public interface CatalogueConfigResource
      * @return the value of the the <code>requiredPropertyNames</code> attribute.
      */
     public String getRequiredPropertyNames();
+    
+    /**
+     * Returns the value of the <code>requiredPropertyNames</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>requiredPropertyNames</code> attribute.
+     */
+    public String getRequiredPropertyNames(String defaultValue);
 
     /**
      * Sets the value of the <code>requiredPropertyNames</code> attribute.
@@ -101,6 +117,14 @@ public interface CatalogueConfigResource
      * @return the value of the the <code>searchPool</code> attribute.
      */
     public PoolResource getSearchPool();
+    
+    /**
+     * Returns the value of the <code>searchPool</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>searchPool</code> attribute.
+     */
+    public PoolResource getSearchPool(PoolResource defaultValue);
 
     /**
      * Sets the value of the <code>searchPool</code> attribute.

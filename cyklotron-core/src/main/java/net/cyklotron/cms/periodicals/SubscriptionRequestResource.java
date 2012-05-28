@@ -71,6 +71,14 @@ public interface SubscriptionRequestResource
      * @return the value of the the <code>items</code> attribute.
      */
     public String getItems();
+    
+    /**
+     * Returns the value of the <code>items</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>items</code> attribute.
+     */
+    public String getItems(String defaultValue);
 
     /**
      * Sets the value of the <code>items</code> attribute.

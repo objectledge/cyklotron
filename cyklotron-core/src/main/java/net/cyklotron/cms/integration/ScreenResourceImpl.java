@@ -58,10 +58,10 @@ public class ScreenResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>configurationView</code> attribute. */
-    private static AttributeDefinition configurationViewDef;
+	private static AttributeDefinition<String> configurationViewDef;
 
     /** The AttributeDefinition object for the <code>screenName</code> attribute. */
-    private static AttributeDefinition screenNameDef;
+	private static AttributeDefinition<String> screenNameDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -120,8 +120,8 @@ public class ScreenResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.screen");
-            Map attrs = new HashMap();
+            ResourceClass<ScreenResource> rc = session.getSchema().getResourceClass("integration.screen", ScreenResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("screenName"), screenName);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ScreenResource))
@@ -146,7 +146,7 @@ public class ScreenResourceImpl
      */
     public String getConfigurationView()
     {
-        return (String)getInternal(configurationViewDef, null);
+        return get(configurationViewDef);
     }
     
     /**
@@ -157,7 +157,7 @@ public class ScreenResourceImpl
      */
     public String getConfigurationView(String defaultValue)
     {
-        return (String)getInternal(configurationViewDef, defaultValue);
+        return get(configurationViewDef, defaultValue);
     }    
 
     /**
@@ -206,7 +206,7 @@ public class ScreenResourceImpl
      */
     public String getScreenName()
     {
-        return (String)getInternal(screenNameDef, null);
+        return get(screenNameDef);
     }
  
     /**

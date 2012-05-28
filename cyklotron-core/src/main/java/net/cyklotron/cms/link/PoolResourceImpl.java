@@ -29,8 +29,6 @@
 package net.cyklotron.cms.link;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -62,7 +60,7 @@ public class PoolResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>links</code> attribute. */
-    private static AttributeDefinition linksDef;
+	private static AttributeDefinition<ResourceList> linksDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -119,9 +117,9 @@ public class PoolResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.link.pool");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<PoolResource> rc = session.getSchema().getResourceClass("cms.link.pool", PoolResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof PoolResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -148,7 +146,7 @@ public class PoolResourceImpl
      */
     public ResourceList getLinks()
     {
-        return (ResourceList)getInternal(linksDef, null);
+        return get(linksDef);
     }
     
     /**
@@ -159,7 +157,7 @@ public class PoolResourceImpl
      */
     public ResourceList getLinks(ResourceList defaultValue)
     {
-        return (ResourceList)getInternal(linksDef, defaultValue);
+        return get(linksDef, defaultValue);
     }    
 
     /**

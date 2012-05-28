@@ -108,6 +108,14 @@ public interface IndexResource
      * @return the value of the the <code>optionalCategoryIdentifiers</code> attribute.
      */
     public String getOptionalCategoryIdentifiers();
+    
+    /**
+     * Returns the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>optionalCategoryIdentifiers</code> attribute.
+     */
+    public String getOptionalCategoryIdentifiers(String defaultValue);
 
     /**
      * Sets the value of the <code>optionalCategoryIdentifiers</code> attribute.
@@ -167,6 +175,14 @@ public interface IndexResource
      * @return the value of the the <code>requiredCategoryIdentifiers</code> attribute.
      */
     public String getRequiredCategoryIdentifiers();
+    
+    /**
+     * Returns the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>requiredCategoryIdentifiers</code> attribute.
+     */
+    public String getRequiredCategoryIdentifiers(String defaultValue);
 
     /**
      * Sets the value of the <code>requiredCategoryIdentifiers</code> attribute.

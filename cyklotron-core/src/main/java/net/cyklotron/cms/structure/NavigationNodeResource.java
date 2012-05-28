@@ -67,6 +67,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>administrator</code> attribute.
      */
     public Role getAdministrator();
+    
+    /**
+     * Returns the value of the <code>administrator</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>administrator</code> attribute.
+     */
+    public Role getAdministrator(Role defaultValue);
 
     /**
      * Sets the value of the <code>administrator</code> attribute.
@@ -89,6 +97,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>customModificationTime</code> attribute.
      */
     public Date getCustomModificationTime();
+    
+    /**
+     * Returns the value of the <code>customModificationTime</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>customModificationTime</code> attribute.
+     */
+    public Date getCustomModificationTime(Date defaultValue);
 
     /**
      * Sets the value of the <code>customModificationTime</code> attribute.
@@ -111,6 +127,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>editor</code> attribute.
      */
     public Role getEditor();
+    
+    /**
+     * Returns the value of the <code>editor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>editor</code> attribute.
+     */
+    public Role getEditor(Role defaultValue);
 
     /**
      * Sets the value of the <code>editor</code> attribute.
@@ -170,6 +194,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>lastAcceptor</code> attribute.
      */
     public Subject getLastAcceptor();
+    
+    /**
+     * Returns the value of the <code>lastAcceptor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>lastAcceptor</code> attribute.
+     */
+    public Subject getLastAcceptor(Subject defaultValue);
 
     /**
      * Sets the value of the <code>lastAcceptor</code> attribute.
@@ -192,6 +224,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>lastEditor</code> attribute.
      */
     public Subject getLastEditor();
+    
+    /**
+     * Returns the value of the <code>lastEditor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>lastEditor</code> attribute.
+     */
+    public Subject getLastEditor(Subject defaultValue);
 
     /**
      * Sets the value of the <code>lastEditor</code> attribute.
@@ -214,6 +254,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>lastRedactor</code> attribute.
      */
     public Subject getLastRedactor();
+    
+    /**
+     * Returns the value of the <code>lastRedactor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>lastRedactor</code> attribute.
+     */
+    public Subject getLastRedactor(Subject defaultValue);
 
     /**
      * Sets the value of the <code>lastRedactor</code> attribute.
@@ -236,6 +284,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>localVisitor</code> attribute.
      */
     public Role getLocalVisitor();
+    
+    /**
+     * Returns the value of the <code>localVisitor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>localVisitor</code> attribute.
+     */
+    public Role getLocalVisitor(Role defaultValue);
 
     /**
      * Sets the value of the <code>localVisitor</code> attribute.
@@ -258,6 +314,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>lockedBy</code> attribute.
      */
     public Subject getLockedBy();
+    
+    /**
+     * Returns the value of the <code>lockedBy</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>lockedBy</code> attribute.
+     */
+    public Subject getLockedBy(Subject defaultValue);
 
     /**
      * Sets the value of the <code>lockedBy</code> attribute.
@@ -287,6 +351,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>redactor</code> attribute.
      */
     public Role getRedactor();
+    
+    /**
+     * Returns the value of the <code>redactor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>redactor</code> attribute.
+     */
+    public Role getRedactor(Role defaultValue);
 
     /**
      * Sets the value of the <code>redactor</code> attribute.
@@ -309,6 +381,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>reporter</code> attribute.
      */
     public Role getReporter();
+    
+    /**
+     * Returns the value of the <code>reporter</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>reporter</code> attribute.
+     */
+    public Role getReporter(Role defaultValue);
 
     /**
      * Sets the value of the <code>reporter</code> attribute.
@@ -385,6 +465,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>style</code> attribute.
      */
     public StyleResource getStyle();
+    
+    /**
+     * Returns the value of the <code>style</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>style</code> attribute.
+     */
+    public StyleResource getStyle(StyleResource defaultValue);
 
     /**
      * Sets the value of the <code>style</code> attribute.
@@ -407,6 +495,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>thumbnail</code> attribute.
      */
     public FileResource getThumbnail();
+    
+    /**
+     * Returns the value of the <code>thumbnail</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>thumbnail</code> attribute.
+     */
+    public FileResource getThumbnail(FileResource defaultValue);
 
     /**
      * Sets the value of the <code>thumbnail</code> attribute.
@@ -446,6 +542,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>validityEnd</code> attribute.
      */
     public Date getValidityEnd();
+    
+    /**
+     * Returns the value of the <code>validityEnd</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>validityEnd</code> attribute.
+     */
+    public Date getValidityEnd(Date defaultValue);
 
     /**
      * Sets the value of the <code>validityEnd</code> attribute.
@@ -468,6 +572,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>validityStart</code> attribute.
      */
     public Date getValidityStart();
+    
+    /**
+     * Returns the value of the <code>validityStart</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>validityStart</code> attribute.
+     */
+    public Date getValidityStart(Date defaultValue);
 
     /**
      * Sets the value of the <code>validityStart</code> attribute.
@@ -490,6 +602,14 @@ public interface NavigationNodeResource
      * @return the value of the the <code>visitor</code> attribute.
      */
     public Role getVisitor();
+    
+    /**
+     * Returns the value of the <code>visitor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>visitor</code> attribute.
+     */
+    public Role getVisitor(Role defaultValue);
 
     /**
      * Sets the value of the <code>visitor</code> attribute.

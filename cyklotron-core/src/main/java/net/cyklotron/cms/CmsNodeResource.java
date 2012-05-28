@@ -54,6 +54,14 @@ public interface CmsNodeResource
      * @return the value of the the <code>description</code> attribute.
      */
     public String getDescription();
+    
+    /**
+     * Returns the value of the <code>description</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>description</code> attribute.
+     */
+    public String getDescription(String defaultValue);
 
     /**
      * Sets the value of the <code>description</code> attribute.

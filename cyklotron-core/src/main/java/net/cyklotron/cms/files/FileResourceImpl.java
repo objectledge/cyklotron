@@ -30,8 +30,6 @@ package net.cyklotron.cms.files;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -58,16 +56,16 @@ public class FileResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>encoding</code> attribute. */
-    private static AttributeDefinition encodingDef;
+	private static AttributeDefinition<String> encodingDef;
 
     /** The AttributeDefinition object for the <code>locale</code> attribute. */
-    private static AttributeDefinition localeDef;
+	private static AttributeDefinition<String> localeDef;
 
     /** The AttributeDefinition object for the <code>mimetype</code> attribute. */
-    private static AttributeDefinition mimetypeDef;
+	private static AttributeDefinition<String> mimetypeDef;
 
     /** The AttributeDefinition object for the <code>size</code> attribute. */
-    private static AttributeDefinition sizeDef;
+    private static AttributeDefinition<Long> sizeDef;
 
 	// custom injected fields /////////////////////////////////////////////////
 	
@@ -131,9 +129,9 @@ public class FileResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.files.file");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<FileResource> rc = session.getSchema().getResourceClass("cms.files.file", FileResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof FileResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -160,7 +158,7 @@ public class FileResourceImpl
      */
     public String getEncoding()
     {
-        return (String)getInternal(encodingDef, null);
+        return get(encodingDef);
     }
     
     /**
@@ -171,7 +169,7 @@ public class FileResourceImpl
      */
     public String getEncoding(String defaultValue)
     {
-        return (String)getInternal(encodingDef, defaultValue);
+        return get(encodingDef, defaultValue);
     }    
 
     /**
@@ -220,7 +218,7 @@ public class FileResourceImpl
      */
     public String getLocale()
     {
-        return (String)getInternal(localeDef, null);
+        return get(localeDef);
     }
     
     /**
@@ -231,7 +229,7 @@ public class FileResourceImpl
      */
     public String getLocale(String defaultValue)
     {
-        return (String)getInternal(localeDef, defaultValue);
+        return get(localeDef, defaultValue);
     }    
 
     /**
@@ -280,7 +278,7 @@ public class FileResourceImpl
      */
     public String getMimetype()
     {
-        return (String)getInternal(mimetypeDef, null);
+        return get(mimetypeDef);
     }
     
     /**
@@ -291,7 +289,7 @@ public class FileResourceImpl
      */
     public String getMimetype(String defaultValue)
     {
-        return (String)getInternal(mimetypeDef, defaultValue);
+        return get(mimetypeDef, defaultValue);
     }    
 
     /**
@@ -343,7 +341,7 @@ public class FileResourceImpl
     public long getSize()
         throws IllegalStateException
     {
-	    Long value = (Long)getInternal(sizeDef, null);
+	    Long value = get(sizeDef);
         if(value != null)
         {
             return value.longValue();
@@ -363,7 +361,7 @@ public class FileResourceImpl
      */
     public long getSize(long defaultValue)
     {
-		return ((Long)getInternal(sizeDef, new Long(defaultValue))).longValue();
+		return get(sizeDef, Long.valueOf(defaultValue)).longValue();
 	}
 
     /**
@@ -375,7 +373,7 @@ public class FileResourceImpl
     {
         try
         {
-            set(sizeDef, new Long(value));
+            set(sizeDef, Long.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

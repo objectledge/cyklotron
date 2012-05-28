@@ -58,10 +58,10 @@ public class ExternalPoolResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>searchHandler</code> attribute. */
-    private static AttributeDefinition searchHandlerDef;
+	private static AttributeDefinition<String> searchHandlerDef;
 
     /** The AttributeDefinition object for the <code>urlTemplate</code> attribute. */
-    private static AttributeDefinition urlTemplateDef;
+	private static AttributeDefinition<String> urlTemplateDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -120,8 +120,8 @@ public class ExternalPoolResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("search.external.pool");
-            Map attrs = new HashMap();
+            ResourceClass<ExternalPoolResource> rc = session.getSchema().getResourceClass("search.external.pool", ExternalPoolResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("searchHandler"), searchHandler);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ExternalPoolResource))
@@ -146,7 +146,7 @@ public class ExternalPoolResourceImpl
      */
     public String getSearchHandler()
     {
-        return (String)getInternal(searchHandlerDef, null);
+        return get(searchHandlerDef);
     }
    
     /**
@@ -156,7 +156,7 @@ public class ExternalPoolResourceImpl
      */
     public String getUrlTemplate()
     {
-        return (String)getInternal(urlTemplateDef, null);
+        return get(urlTemplateDef);
     }
     
     /**
@@ -167,7 +167,7 @@ public class ExternalPoolResourceImpl
      */
     public String getUrlTemplate(String defaultValue)
     {
-        return (String)getInternal(urlTemplateDef, defaultValue);
+        return get(urlTemplateDef, defaultValue);
     }    
 
     /**

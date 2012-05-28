@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.files;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -57,10 +54,10 @@ public class FilesMapResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
-    private static AttributeDefinition administratorDef;
+	private static AttributeDefinition<Role> administratorDef;
 
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
-    private static AttributeDefinition visitorDef;
+	private static AttributeDefinition<Role> visitorDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -117,9 +114,9 @@ public class FilesMapResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.files.files_map");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<FilesMapResource> rc = session.getSchema().getResourceClass("cms.files.files_map", FilesMapResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof FilesMapResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -146,7 +143,7 @@ public class FilesMapResourceImpl
      */
     public Role getAdministrator()
     {
-        return (Role)getInternal(administratorDef, null);
+        return get(administratorDef);
     }
     
     /**
@@ -157,7 +154,7 @@ public class FilesMapResourceImpl
      */
     public Role getAdministrator(Role defaultValue)
     {
-        return (Role)getInternal(administratorDef, defaultValue);
+        return get(administratorDef, defaultValue);
     }    
 
     /**
@@ -206,7 +203,7 @@ public class FilesMapResourceImpl
      */
     public Role getVisitor()
     {
-        return (Role)getInternal(visitorDef, null);
+        return get(visitorDef);
     }
     
     /**
@@ -217,7 +214,7 @@ public class FilesMapResourceImpl
      */
     public Role getVisitor(Role defaultValue)
     {
-        return (Role)getInternal(visitorDef, defaultValue);
+        return get(visitorDef, defaultValue);
     }    
 
     /**

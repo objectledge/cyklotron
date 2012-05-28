@@ -56,7 +56,7 @@ public class HeuristicTransitionResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>probability</code> attribute. */
-    private static AttributeDefinition probabilityDef;
+	private static AttributeDefinition<Number> probabilityDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -118,8 +118,8 @@ public class HeuristicTransitionResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("workflow.heuristic_transition");
-            Map attrs = new HashMap();
+            ResourceClass<HeuristicTransitionResource> rc = session.getSchema().getResourceClass("workflow.heuristic_transition", HeuristicTransitionResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("from"), from);
             attrs.put(rc.getAttribute("probability"), probability);
             attrs.put(rc.getAttribute("to"), to);
@@ -146,7 +146,7 @@ public class HeuristicTransitionResourceImpl
      */
     public Number getProbability()
     {
-        return (Number)getInternal(probabilityDef, null);
+        return get(probabilityDef);
     }
  
     /**

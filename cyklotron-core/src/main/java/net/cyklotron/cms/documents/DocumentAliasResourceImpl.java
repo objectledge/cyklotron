@@ -62,7 +62,7 @@ public class DocumentAliasResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>originalDocument</code> attribute. */
-    private static AttributeDefinition originalDocumentDef;
+	private static AttributeDefinition<DocumentNodeResource> originalDocumentDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -140,8 +140,8 @@ public class DocumentAliasResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("documents.document_alias");
-            Map attrs = new HashMap();
+            ResourceClass<DocumentAliasResource> rc = session.getSchema().getResourceClass("documents.document_alias", DocumentAliasResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("originalDocument"), originalDocument);
             attrs.put(rc.getAttribute("preferences"), preferences);
             attrs.put(rc.getAttribute("site"), site);
@@ -169,7 +169,7 @@ public class DocumentAliasResourceImpl
      */
     public DocumentNodeResource getOriginalDocument()
     {
-        return (DocumentNodeResource)getInternal(originalDocumentDef, null);
+        return get(originalDocumentDef);
     }
  
     /**

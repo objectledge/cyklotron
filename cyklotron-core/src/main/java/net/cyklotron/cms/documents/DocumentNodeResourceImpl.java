@@ -79,49 +79,49 @@ public class DocumentNodeResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>abstract</code> attribute. */
-    private static AttributeDefinition abstractDef;
+	private static AttributeDefinition<String> abstractDef;
 
     /** The AttributeDefinition object for the <code>content</code> attribute. */
-    private static AttributeDefinition contentDef;
+	private static AttributeDefinition<String> contentDef;
 
     /** The AttributeDefinition object for the <code>eventEnd</code> attribute. */
-    private static AttributeDefinition eventEndDef;
+	private static AttributeDefinition<Date> eventEndDef;
 
     /** The AttributeDefinition object for the <code>eventPlace</code> attribute. */
-    private static AttributeDefinition eventPlaceDef;
+	private static AttributeDefinition<String> eventPlaceDef;
 
     /** The AttributeDefinition object for the <code>eventStart</code> attribute. */
-    private static AttributeDefinition eventStartDef;
+	private static AttributeDefinition<Date> eventStartDef;
 
     /** The AttributeDefinition object for the <code>footer</code> attribute. */
-    private static AttributeDefinition footerDef;
+	private static AttributeDefinition<String> footerDef;
 
     /** The AttributeDefinition object for the <code>keywords</code> attribute. */
-    private static AttributeDefinition keywordsDef;
+	private static AttributeDefinition<String> keywordsDef;
 
     /** The AttributeDefinition object for the <code>lang</code> attribute. */
-    private static AttributeDefinition langDef;
+	private static AttributeDefinition<String> langDef;
 
     /** The AttributeDefinition object for the <code>meta</code> attribute. */
-    private static AttributeDefinition metaDef;
+	private static AttributeDefinition<String> metaDef;
 
     /** The AttributeDefinition object for the <code>organizationIds</code> attribute. */
-    private static AttributeDefinition organizationIdsDef;
+	private static AttributeDefinition<String> organizationIdsDef;
 
     /** The AttributeDefinition object for the <code>proposedContent</code> attribute. */
-    private static AttributeDefinition proposedContentDef;
+	private static AttributeDefinition<String> proposedContentDef;
 
     /** The AttributeDefinition object for the <code>redactorsNote</code> attribute. */
-    private static AttributeDefinition redactorsNoteDef;
+	private static AttributeDefinition<String> redactorsNoteDef;
 
     /** The AttributeDefinition object for the <code>relatedResourcesSequence</code> attribute. */
-    private static AttributeDefinition relatedResourcesSequenceDef;
+	private static AttributeDefinition<ResourceList> relatedResourcesSequenceDef;
 
     /** The AttributeDefinition object for the <code>subTitle</code> attribute. */
-    private static AttributeDefinition subTitleDef;
+	private static AttributeDefinition<String> subTitleDef;
 
     /** The AttributeDefinition object for the <code>titleCalendar</code> attribute. */
-    private static AttributeDefinition titleCalendarDef;
+	private static AttributeDefinition<String> titleCalendarDef;
 
 	// custom injected fields /////////////////////////////////////////////////
 	
@@ -227,8 +227,8 @@ public class DocumentNodeResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("documents.document_node");
-            Map attrs = new HashMap();
+            ResourceClass<DocumentNodeResource> rc = session.getSchema().getResourceClass("documents.document_node", DocumentNodeResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("title"), title);
             attrs.put(rc.getAttribute("site"), site);
             attrs.put(rc.getAttribute("preferences"), preferences);
@@ -255,7 +255,7 @@ public class DocumentNodeResourceImpl
      */
     public String getAbstract()
     {
-        return (String)getInternal(abstractDef, null);
+        return get(abstractDef);
     }
     
     /**
@@ -266,7 +266,7 @@ public class DocumentNodeResourceImpl
      */
     public String getAbstract(String defaultValue)
     {
-        return (String)getInternal(abstractDef, defaultValue);
+        return get(abstractDef, defaultValue);
     }    
 
     /**
@@ -315,7 +315,7 @@ public class DocumentNodeResourceImpl
      */
     public String getContent()
     {
-        return (String)getInternal(contentDef, null);
+        return get(contentDef);
     }
     
     /**
@@ -326,7 +326,7 @@ public class DocumentNodeResourceImpl
      */
     public String getContent(String defaultValue)
     {
-        return (String)getInternal(contentDef, defaultValue);
+        return get(contentDef, defaultValue);
     }    
 
     /**
@@ -375,7 +375,7 @@ public class DocumentNodeResourceImpl
      */
     public Date getEventEnd()
     {
-        return (Date)getInternal(eventEndDef, null);
+        return get(eventEndDef);
     }
     
     /**
@@ -386,7 +386,7 @@ public class DocumentNodeResourceImpl
      */
     public Date getEventEnd(Date defaultValue)
     {
-        return (Date)getInternal(eventEndDef, defaultValue);
+        return get(eventEndDef, defaultValue);
     }    
 
     /**
@@ -435,7 +435,7 @@ public class DocumentNodeResourceImpl
      */
     public String getEventPlace()
     {
-        return (String)getInternal(eventPlaceDef, null);
+        return get(eventPlaceDef);
     }
     
     /**
@@ -446,7 +446,7 @@ public class DocumentNodeResourceImpl
      */
     public String getEventPlace(String defaultValue)
     {
-        return (String)getInternal(eventPlaceDef, defaultValue);
+        return get(eventPlaceDef, defaultValue);
     }    
 
     /**
@@ -495,7 +495,7 @@ public class DocumentNodeResourceImpl
      */
     public Date getEventStart()
     {
-        return (Date)getInternal(eventStartDef, null);
+        return get(eventStartDef);
     }
     
     /**
@@ -506,7 +506,7 @@ public class DocumentNodeResourceImpl
      */
     public Date getEventStart(Date defaultValue)
     {
-        return (Date)getInternal(eventStartDef, defaultValue);
+        return get(eventStartDef, defaultValue);
     }    
 
     /**
@@ -555,7 +555,7 @@ public class DocumentNodeResourceImpl
      */
     public String getFooter()
     {
-        return (String)getInternal(footerDef, null);
+        return get(footerDef);
     }
     
     /**
@@ -566,7 +566,7 @@ public class DocumentNodeResourceImpl
      */
     public String getFooter(String defaultValue)
     {
-        return (String)getInternal(footerDef, defaultValue);
+        return get(footerDef, defaultValue);
     }    
 
     /**
@@ -615,7 +615,7 @@ public class DocumentNodeResourceImpl
      */
     public String getKeywords()
     {
-        return (String)getInternal(keywordsDef, null);
+        return get(keywordsDef);
     }
     
     /**
@@ -626,7 +626,7 @@ public class DocumentNodeResourceImpl
      */
     public String getKeywords(String defaultValue)
     {
-        return (String)getInternal(keywordsDef, defaultValue);
+        return get(keywordsDef, defaultValue);
     }    
 
     /**
@@ -675,7 +675,7 @@ public class DocumentNodeResourceImpl
      */
     public String getLang()
     {
-        return (String)getInternal(langDef, null);
+        return get(langDef);
     }
     
     /**
@@ -686,7 +686,7 @@ public class DocumentNodeResourceImpl
      */
     public String getLang(String defaultValue)
     {
-        return (String)getInternal(langDef, defaultValue);
+        return get(langDef, defaultValue);
     }    
 
     /**
@@ -735,7 +735,7 @@ public class DocumentNodeResourceImpl
      */
     public String getMeta()
     {
-        return (String)getInternal(metaDef, null);
+        return get(metaDef);
     }
     
     /**
@@ -746,7 +746,7 @@ public class DocumentNodeResourceImpl
      */
     public String getMeta(String defaultValue)
     {
-        return (String)getInternal(metaDef, defaultValue);
+        return get(metaDef, defaultValue);
     }    
 
     /**
@@ -795,7 +795,7 @@ public class DocumentNodeResourceImpl
      */
     public String getOrganizationIds()
     {
-        return (String)getInternal(organizationIdsDef, null);
+        return get(organizationIdsDef);
     }
     
     /**
@@ -806,7 +806,7 @@ public class DocumentNodeResourceImpl
      */
     public String getOrganizationIds(String defaultValue)
     {
-        return (String)getInternal(organizationIdsDef, defaultValue);
+        return get(organizationIdsDef, defaultValue);
     }    
 
     /**
@@ -855,7 +855,7 @@ public class DocumentNodeResourceImpl
      */
     public String getProposedContent()
     {
-        return (String)getInternal(proposedContentDef, null);
+        return get(proposedContentDef);
     }
     
     /**
@@ -866,7 +866,7 @@ public class DocumentNodeResourceImpl
      */
     public String getProposedContent(String defaultValue)
     {
-        return (String)getInternal(proposedContentDef, defaultValue);
+        return get(proposedContentDef, defaultValue);
     }    
 
     /**
@@ -915,7 +915,7 @@ public class DocumentNodeResourceImpl
      */
     public String getRedactorsNote()
     {
-        return (String)getInternal(redactorsNoteDef, null);
+        return get(redactorsNoteDef);
     }
     
     /**
@@ -926,7 +926,7 @@ public class DocumentNodeResourceImpl
      */
     public String getRedactorsNote(String defaultValue)
     {
-        return (String)getInternal(redactorsNoteDef, defaultValue);
+        return get(redactorsNoteDef, defaultValue);
     }    
 
     /**
@@ -975,7 +975,7 @@ public class DocumentNodeResourceImpl
      */
     public ResourceList getRelatedResourcesSequence()
     {
-        return (ResourceList)getInternal(relatedResourcesSequenceDef, null);
+        return get(relatedResourcesSequenceDef);
     }
     
     /**
@@ -986,7 +986,7 @@ public class DocumentNodeResourceImpl
      */
     public ResourceList getRelatedResourcesSequence(ResourceList defaultValue)
     {
-        return (ResourceList)getInternal(relatedResourcesSequenceDef, defaultValue);
+        return get(relatedResourcesSequenceDef, defaultValue);
     }    
 
     /**
@@ -1035,7 +1035,7 @@ public class DocumentNodeResourceImpl
      */
     public String getSubTitle()
     {
-        return (String)getInternal(subTitleDef, null);
+        return get(subTitleDef);
     }
     
     /**
@@ -1046,7 +1046,7 @@ public class DocumentNodeResourceImpl
      */
     public String getSubTitle(String defaultValue)
     {
-        return (String)getInternal(subTitleDef, defaultValue);
+        return get(subTitleDef, defaultValue);
     }    
 
     /**
@@ -1095,7 +1095,7 @@ public class DocumentNodeResourceImpl
      */
     public String getTitleCalendar()
     {
-        return (String)getInternal(titleCalendarDef, null);
+        return get(titleCalendarDef);
     }
     
     /**
@@ -1106,7 +1106,7 @@ public class DocumentNodeResourceImpl
      */
     public String getTitleCalendar(String defaultValue)
     {
-        return (String)getInternal(titleCalendarDef, defaultValue);
+        return get(titleCalendarDef, defaultValue);
     }    
 
     /**

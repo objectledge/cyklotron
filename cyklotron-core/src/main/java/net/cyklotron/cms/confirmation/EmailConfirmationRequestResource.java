@@ -71,6 +71,14 @@ public interface EmailConfirmationRequestResource
      * @return the value of the the <code>data</code> attribute.
      */
     public String getData();
+    
+    /**
+     * Returns the value of the <code>data</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>data</code> attribute.
+     */
+    public String getData(String defaultValue);
 
     /**
      * Sets the value of the <code>data</code> attribute.

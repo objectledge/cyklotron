@@ -52,6 +52,14 @@ public interface CommentaryResource
      * @return the value of the the <code>documentTitle</code> attribute.
      */
     public String getDocumentTitle();
+    
+    /**
+     * Returns the value of the <code>documentTitle</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>documentTitle</code> attribute.
+     */
+    public String getDocumentTitle(String defaultValue);
 
     /**
      * Sets the value of the <code>documentTitle</code> attribute.

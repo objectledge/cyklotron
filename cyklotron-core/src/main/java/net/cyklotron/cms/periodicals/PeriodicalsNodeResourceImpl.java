@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.periodicals;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -59,13 +56,13 @@ public class PeriodicalsNodeResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
-    private static AttributeDefinition administratorDef;
+	private static AttributeDefinition<Role> administratorDef;
 
     /** The AttributeDefinition object for the <code>description</code> attribute. */
-    private static AttributeDefinition descriptionDef;
+	private static AttributeDefinition<String> descriptionDef;
 
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
-    private static AttributeDefinition visitorDef;
+	private static AttributeDefinition<Role> visitorDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -122,9 +119,9 @@ public class PeriodicalsNodeResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.periodicals.node");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<PeriodicalsNodeResource> rc = session.getSchema().getResourceClass("cms.periodicals.node", PeriodicalsNodeResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof PeriodicalsNodeResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -151,7 +148,7 @@ public class PeriodicalsNodeResourceImpl
      */
     public Role getAdministrator()
     {
-        return (Role)getInternal(administratorDef, null);
+        return get(administratorDef);
     }
     
     /**
@@ -162,7 +159,7 @@ public class PeriodicalsNodeResourceImpl
      */
     public Role getAdministrator(Role defaultValue)
     {
-        return (Role)getInternal(administratorDef, defaultValue);
+        return get(administratorDef, defaultValue);
     }    
 
     /**
@@ -211,7 +208,7 @@ public class PeriodicalsNodeResourceImpl
      */
     public String getDescription()
     {
-        return (String)getInternal(descriptionDef, null);
+        return get(descriptionDef);
     }
     
     /**
@@ -222,7 +219,7 @@ public class PeriodicalsNodeResourceImpl
      */
     public String getDescription(String defaultValue)
     {
-        return (String)getInternal(descriptionDef, defaultValue);
+        return get(descriptionDef, defaultValue);
     }    
 
     /**
@@ -271,7 +268,7 @@ public class PeriodicalsNodeResourceImpl
      */
     public Role getVisitor()
     {
-        return (Role)getInternal(visitorDef, null);
+        return get(visitorDef);
     }
     
     /**
@@ -282,7 +279,7 @@ public class PeriodicalsNodeResourceImpl
      */
     public Role getVisitor(Role defaultValue)
     {
-        return (Role)getInternal(visitorDef, defaultValue);
+        return get(visitorDef, defaultValue);
     }    
 
     /**

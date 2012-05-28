@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.periodicals;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -58,10 +55,10 @@ public class EmailPeriodicalsRootResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>previewRecipient</code> attribute. */
-    private static AttributeDefinition previewRecipientDef;
+	private static AttributeDefinition<String> previewRecipientDef;
 
     /** The AttributeDefinition object for the <code>subscriptionNode</code> attribute. */
-    private static AttributeDefinition subscriptionNodeDef;
+	private static AttributeDefinition<NavigationNodeResource> subscriptionNodeDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -118,9 +115,9 @@ public class EmailPeriodicalsRootResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.periodicals.email.root");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<EmailPeriodicalsRootResource> rc = session.getSchema().getResourceClass("cms.periodicals.email.root", EmailPeriodicalsRootResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof EmailPeriodicalsRootResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -147,7 +144,7 @@ public class EmailPeriodicalsRootResourceImpl
      */
     public String getPreviewRecipient()
     {
-        return (String)getInternal(previewRecipientDef, null);
+        return get(previewRecipientDef);
     }
     
     /**
@@ -158,7 +155,7 @@ public class EmailPeriodicalsRootResourceImpl
      */
     public String getPreviewRecipient(String defaultValue)
     {
-        return (String)getInternal(previewRecipientDef, defaultValue);
+        return get(previewRecipientDef, defaultValue);
     }    
 
     /**
@@ -207,7 +204,7 @@ public class EmailPeriodicalsRootResourceImpl
      */
     public NavigationNodeResource getSubscriptionNode()
     {
-        return (NavigationNodeResource)getInternal(subscriptionNodeDef, null);
+        return get(subscriptionNodeDef);
     }
     
     /**
@@ -218,7 +215,7 @@ public class EmailPeriodicalsRootResourceImpl
      */
     public NavigationNodeResource getSubscriptionNode(NavigationNodeResource defaultValue)
     {
-        return (NavigationNodeResource)getInternal(subscriptionNodeDef, defaultValue);
+        return get(subscriptionNodeDef, defaultValue);
     }    
 
     /**

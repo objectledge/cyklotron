@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.search;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -59,7 +56,7 @@ public class PoolResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>indexes</code> attribute. */
-    private static AttributeDefinition indexesDef;
+	private static AttributeDefinition<ResourceList> indexesDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -116,9 +113,9 @@ public class PoolResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("search.pool");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<PoolResource> rc = session.getSchema().getResourceClass("search.pool", PoolResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof PoolResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -145,7 +142,7 @@ public class PoolResourceImpl
      */
     public ResourceList getIndexes()
     {
-        return (ResourceList)getInternal(indexesDef, null);
+        return get(indexesDef);
     }
     
     /**
@@ -156,7 +153,7 @@ public class PoolResourceImpl
      */
     public ResourceList getIndexes(ResourceList defaultValue)
     {
-        return (ResourceList)getInternal(indexesDef, defaultValue);
+        return get(indexesDef, defaultValue);
     }    
 
     /**

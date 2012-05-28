@@ -29,8 +29,6 @@
 package net.cyklotron.cms.banner;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -63,25 +61,25 @@ public class BannerResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>altText</code> attribute. */
-    private static AttributeDefinition altTextDef;
+	private static AttributeDefinition<String> altTextDef;
 
     /** The AttributeDefinition object for the <code>endDate</code> attribute. */
-    private static AttributeDefinition endDateDef;
+	private static AttributeDefinition<Date> endDateDef;
 
     /** The AttributeDefinition object for the <code>expositionCounter</code> attribute. */
-    private static AttributeDefinition expositionCounterDef;
+    private static AttributeDefinition<Integer> expositionCounterDef;
 
     /** The AttributeDefinition object for the <code>followedCounter</code> attribute. */
-    private static AttributeDefinition followedCounterDef;
+    private static AttributeDefinition<Integer> followedCounterDef;
 
     /** The AttributeDefinition object for the <code>startDate</code> attribute. */
-    private static AttributeDefinition startDateDef;
+	private static AttributeDefinition<Date> startDateDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
-    private static AttributeDefinition stateDef;
+	private static AttributeDefinition<StateResource> stateDef;
 
     /** The AttributeDefinition object for the <code>target</code> attribute. */
-    private static AttributeDefinition targetDef;
+	private static AttributeDefinition<String> targetDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -138,9 +136,9 @@ public class BannerResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.banner.banner");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<BannerResource> rc = session.getSchema().getResourceClass("cms.banner.banner", BannerResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof BannerResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -167,7 +165,7 @@ public class BannerResourceImpl
      */
     public String getAltText()
     {
-        return (String)getInternal(altTextDef, null);
+        return get(altTextDef);
     }
     
     /**
@@ -178,7 +176,7 @@ public class BannerResourceImpl
      */
     public String getAltText(String defaultValue)
     {
-        return (String)getInternal(altTextDef, defaultValue);
+        return get(altTextDef, defaultValue);
     }    
 
     /**
@@ -227,7 +225,7 @@ public class BannerResourceImpl
      */
     public Date getEndDate()
     {
-        return (Date)getInternal(endDateDef, null);
+        return get(endDateDef);
     }
     
     /**
@@ -238,7 +236,7 @@ public class BannerResourceImpl
      */
     public Date getEndDate(Date defaultValue)
     {
-        return (Date)getInternal(endDateDef, defaultValue);
+        return get(endDateDef, defaultValue);
     }    
 
     /**
@@ -290,7 +288,7 @@ public class BannerResourceImpl
     public int getExpositionCounter()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(expositionCounterDef, null);
+	    Integer value = get(expositionCounterDef);
         if(value != null)
         {
             return value.intValue();
@@ -310,7 +308,7 @@ public class BannerResourceImpl
      */
     public int getExpositionCounter(int defaultValue)
     {
-		return ((Integer)getInternal(expositionCounterDef, new Integer(defaultValue))).intValue();
+		return get(expositionCounterDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -322,7 +320,7 @@ public class BannerResourceImpl
     {
         try
         {
-            set(expositionCounterDef, new Integer(value));
+            set(expositionCounterDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -369,7 +367,7 @@ public class BannerResourceImpl
     public int getFollowedCounter()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(followedCounterDef, null);
+	    Integer value = get(followedCounterDef);
         if(value != null)
         {
             return value.intValue();
@@ -389,7 +387,7 @@ public class BannerResourceImpl
      */
     public int getFollowedCounter(int defaultValue)
     {
-		return ((Integer)getInternal(followedCounterDef, new Integer(defaultValue))).intValue();
+		return get(followedCounterDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -401,7 +399,7 @@ public class BannerResourceImpl
     {
         try
         {
-            set(followedCounterDef, new Integer(value));
+            set(followedCounterDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -445,7 +443,7 @@ public class BannerResourceImpl
      */
     public Date getStartDate()
     {
-        return (Date)getInternal(startDateDef, null);
+        return get(startDateDef);
     }
     
     /**
@@ -456,7 +454,7 @@ public class BannerResourceImpl
      */
     public Date getStartDate(Date defaultValue)
     {
-        return (Date)getInternal(startDateDef, defaultValue);
+        return get(startDateDef, defaultValue);
     }    
 
     /**
@@ -505,7 +503,7 @@ public class BannerResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)getInternal(stateDef, null);
+        return get(stateDef);
     }
     
     /**
@@ -516,7 +514,7 @@ public class BannerResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        return (StateResource)getInternal(stateDef, defaultValue);
+        return get(stateDef, defaultValue);
     }    
 
     /**
@@ -565,7 +563,7 @@ public class BannerResourceImpl
      */
     public String getTarget()
     {
-        return (String)getInternal(targetDef, null);
+        return get(targetDef);
     }
     
     /**
@@ -576,7 +574,7 @@ public class BannerResourceImpl
      */
     public String getTarget(String defaultValue)
     {
-        return (String)getInternal(targetDef, defaultValue);
+        return get(targetDef, defaultValue);
     }    
 
     /**

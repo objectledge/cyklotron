@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.category;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -59,13 +56,13 @@ public class CategoryResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>hidden</code> attribute. */
-    private static AttributeDefinition hiddenDef;
+    private static AttributeDefinition<Boolean> hiddenDef;
 
     /** The AttributeDefinition object for the <code>link</code> attribute. */
-    private static AttributeDefinition linkDef;
+	private static AttributeDefinition<BaseLinkResource> linkDef;
 
     /** The AttributeDefinition object for the <code>uiStyle</code> attribute. */
-    private static AttributeDefinition uiStyleDef;
+	private static AttributeDefinition<String> uiStyleDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -122,9 +119,9 @@ public class CategoryResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("category.category");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<CategoryResource> rc = session.getSchema().getResourceClass("category.category", CategoryResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof CategoryResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -154,7 +151,7 @@ public class CategoryResourceImpl
     public boolean getHidden()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(hiddenDef, null);
+	    Boolean value = get(hiddenDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -174,7 +171,7 @@ public class CategoryResourceImpl
      */
     public boolean getHidden(boolean defaultValue)
     {
-		return ((Boolean)getInternal(hiddenDef, new Boolean(defaultValue))).booleanValue();
+		return get(hiddenDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -186,7 +183,7 @@ public class CategoryResourceImpl
     {
         try
         {
-            set(hiddenDef, new Boolean(value));
+            set(hiddenDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -230,7 +227,7 @@ public class CategoryResourceImpl
      */
     public BaseLinkResource getLink()
     {
-        return (BaseLinkResource)getInternal(linkDef, null);
+        return get(linkDef);
     }
     
     /**
@@ -241,7 +238,7 @@ public class CategoryResourceImpl
      */
     public BaseLinkResource getLink(BaseLinkResource defaultValue)
     {
-        return (BaseLinkResource)getInternal(linkDef, defaultValue);
+        return get(linkDef, defaultValue);
     }    
 
     /**
@@ -290,7 +287,7 @@ public class CategoryResourceImpl
      */
     public String getUiStyle()
     {
-        return (String)getInternal(uiStyleDef, null);
+        return get(uiStyleDef);
     }
     
     /**
@@ -301,7 +298,7 @@ public class CategoryResourceImpl
      */
     public String getUiStyle(String defaultValue)
     {
-        return (String)getInternal(uiStyleDef, defaultValue);
+        return get(uiStyleDef, defaultValue);
     }    
 
     /**

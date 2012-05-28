@@ -56,6 +56,14 @@ public interface KeywordResource
      * @return the value of the the <code>categories</code> attribute.
      */
     public ResourceList getCategories();
+    
+    /**
+     * Returns the value of the <code>categories</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>categories</code> attribute.
+     */
+    public ResourceList getCategories(ResourceList defaultValue);
 
     /**
      * Sets the value of the <code>categories</code> attribute.
@@ -92,6 +100,14 @@ public interface KeywordResource
      * @return the value of the the <code>hrefExternal</code> attribute.
      */
     public String getHrefExternal();
+    
+    /**
+     * Returns the value of the <code>hrefExternal</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>hrefExternal</code> attribute.
+     */
+    public String getHrefExternal(String defaultValue);
 
     /**
      * Sets the value of the <code>hrefExternal</code> attribute.
@@ -114,6 +130,14 @@ public interface KeywordResource
      * @return the value of the the <code>hrefInternal</code> attribute.
      */
     public NavigationNodeResource getHrefInternal();
+    
+    /**
+     * Returns the value of the <code>hrefInternal</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>hrefInternal</code> attribute.
+     */
+    public NavigationNodeResource getHrefInternal(NavigationNodeResource defaultValue);
 
     /**
      * Sets the value of the <code>hrefInternal</code> attribute.
@@ -136,6 +160,14 @@ public interface KeywordResource
      * @return the value of the the <code>linkClass</code> attribute.
      */
     public String getLinkClass();
+    
+    /**
+     * Returns the value of the <code>linkClass</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>linkClass</code> attribute.
+     */
+    public String getLinkClass(String defaultValue);
 
     /**
      * Sets the value of the <code>linkClass</code> attribute.
@@ -203,6 +235,14 @@ public interface KeywordResource
      * @return the value of the the <code>title</code> attribute.
      */
     public String getTitle();
+    
+    /**
+     * Returns the value of the <code>title</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>title</code> attribute.
+     */
+    public String getTitle(String defaultValue);
 
     /**
      * Sets the value of the <code>title</code> attribute.

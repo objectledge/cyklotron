@@ -59,16 +59,16 @@ public class RoleResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>role</code> attribute. */
-    private static AttributeDefinition roleDef;
+	private static AttributeDefinition<Role> roleDef;
 
     /** The AttributeDefinition object for the <code>deletable</code> attribute. */
-    private static AttributeDefinition deletableDef;
+    private static AttributeDefinition<Boolean> deletableDef;
 
     /** The AttributeDefinition object for the <code>descriptionKey</code> attribute. */
-    private static AttributeDefinition descriptionKeyDef;
+	private static AttributeDefinition<String> descriptionKeyDef;
 
     /** The AttributeDefinition object for the <code>sharingWorkgroup</code> attribute. */
-    private static AttributeDefinition sharingWorkgroupDef;
+    private static AttributeDefinition<Boolean> sharingWorkgroupDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -129,11 +129,11 @@ public class RoleResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.security.role");
-            Map attrs = new HashMap();
+            ResourceClass<RoleResource> rc = session.getSchema().getResourceClass("cms.security.role", RoleResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("role"), role);
-            attrs.put(rc.getAttribute("deletable"), new Boolean(deletable));
-            attrs.put(rc.getAttribute("sharingWorkgroup"), new Boolean(sharingWorkgroup));
+            attrs.put(rc.getAttribute("deletable"), Boolean.valueOf(deletable));
+            attrs.put(rc.getAttribute("sharingWorkgroup"), Boolean.valueOf(sharingWorkgroup));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof RoleResource))
             {
@@ -157,7 +157,7 @@ public class RoleResourceImpl
      */
     public Role getRole()
     {
-        return (Role)getInternal(roleDef, null);
+        return get(roleDef);
     }
  
     /**
@@ -195,7 +195,7 @@ public class RoleResourceImpl
      */
     public boolean getDeletable()
     {
-		return ((Boolean)getInternal(deletableDef, null)).booleanValue();
+		return get(deletableDef).booleanValue();
     }    
 
     /**
@@ -207,7 +207,7 @@ public class RoleResourceImpl
     {
         try
         {
-            set(deletableDef, new Boolean(value));
+            set(deletableDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -226,7 +226,7 @@ public class RoleResourceImpl
      */
     public String getDescriptionKey()
     {
-        return (String)getInternal(descriptionKeyDef, null);
+        return get(descriptionKeyDef);
     }
     
     /**
@@ -237,7 +237,7 @@ public class RoleResourceImpl
      */
     public String getDescriptionKey(String defaultValue)
     {
-        return (String)getInternal(descriptionKeyDef, defaultValue);
+        return get(descriptionKeyDef, defaultValue);
     }    
 
     /**
@@ -286,7 +286,7 @@ public class RoleResourceImpl
      */
     public boolean getSharingWorkgroup()
     {
-		return ((Boolean)getInternal(sharingWorkgroupDef, null)).booleanValue();
+		return get(sharingWorkgroupDef).booleanValue();
     }    
 
     /**
@@ -298,7 +298,7 @@ public class RoleResourceImpl
     {
         try
         {
-            set(sharingWorkgroupDef, new Boolean(value));
+            set(sharingWorkgroupDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

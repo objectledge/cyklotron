@@ -60,6 +60,14 @@ public interface ExternalPoolResource
      * @return the value of the the <code>urlTemplate</code> attribute.
      */
     public String getUrlTemplate();
+    
+    /**
+     * Returns the value of the <code>urlTemplate</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>urlTemplate</code> attribute.
+     */
+    public String getUrlTemplate(String defaultValue);
 
     /**
      * Sets the value of the <code>urlTemplate</code> attribute.

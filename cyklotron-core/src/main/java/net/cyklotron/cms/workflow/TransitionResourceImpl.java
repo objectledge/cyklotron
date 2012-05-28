@@ -58,10 +58,10 @@ public class TransitionResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>from</code> attribute. */
-    private static AttributeDefinition fromDef;
+	private static AttributeDefinition<StateResource> fromDef;
 
     /** The AttributeDefinition object for the <code>to</code> attribute. */
-    private static AttributeDefinition toDef;
+	private static AttributeDefinition<StateResource> toDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -121,8 +121,8 @@ public class TransitionResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("workflow.transition");
-            Map attrs = new HashMap();
+            ResourceClass<TransitionResource> rc = session.getSchema().getResourceClass("workflow.transition", TransitionResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("from"), from);
             attrs.put(rc.getAttribute("to"), to);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
@@ -148,7 +148,7 @@ public class TransitionResourceImpl
      */
     public StateResource getFrom()
     {
-        return (StateResource)getInternal(fromDef, null);
+        return get(fromDef);
     }
  
     /**
@@ -186,7 +186,7 @@ public class TransitionResourceImpl
      */
     public StateResource getTo()
     {
-        return (StateResource)getInternal(toDef, null);
+        return get(toDef);
     }
  
     /**

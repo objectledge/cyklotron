@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.NodeImpl;
@@ -59,7 +56,7 @@ public class CmsNodeResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>description</code> attribute. */
-    private static AttributeDefinition descriptionDef;
+	private static AttributeDefinition<String> descriptionDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -116,9 +113,9 @@ public class CmsNodeResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("node");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<CmsNodeResource> rc = session.getSchema().getResourceClass("node", CmsNodeResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof CmsNodeResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -145,7 +142,7 @@ public class CmsNodeResourceImpl
      */
     public String getDescription()
     {
-        return (String)getInternal(descriptionDef, null);
+        return get(descriptionDef);
     }
     
     /**
@@ -156,7 +153,7 @@ public class CmsNodeResourceImpl
      */
     public String getDescription(String defaultValue)
     {
-        return (String)getInternal(descriptionDef, defaultValue);
+        return get(descriptionDef, defaultValue);
     }    
 
     /**

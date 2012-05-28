@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.integration;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -58,22 +55,22 @@ public class SchemaRoleResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>deletable</code> attribute. */
-    private static AttributeDefinition deletableDef;
+    private static AttributeDefinition<Boolean> deletableDef;
 
     /** The AttributeDefinition object for the <code>recursive</code> attribute. */
-    private static AttributeDefinition recursiveDef;
+    private static AttributeDefinition<Boolean> recursiveDef;
 
     /** The AttributeDefinition object for the <code>roleAttributeName</code> attribute. */
-    private static AttributeDefinition roleAttributeNameDef;
+	private static AttributeDefinition<String> roleAttributeNameDef;
 
     /** The AttributeDefinition object for the <code>subtreeRole</code> attribute. */
-    private static AttributeDefinition subtreeRoleDef;
+    private static AttributeDefinition<Boolean> subtreeRoleDef;
 
     /** The AttributeDefinition object for the <code>suffixAttributeName</code> attribute. */
-    private static AttributeDefinition suffixAttributeNameDef;
+	private static AttributeDefinition<String> suffixAttributeNameDef;
 
     /** The AttributeDefinition object for the <code>superRole</code> attribute. */
-    private static AttributeDefinition superRoleDef;
+	private static AttributeDefinition<Resource> superRoleDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -130,9 +127,9 @@ public class SchemaRoleResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.schema_role");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<SchemaRoleResource> rc = session.getSchema().getResourceClass("integration.schema_role", SchemaRoleResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof SchemaRoleResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -162,7 +159,7 @@ public class SchemaRoleResourceImpl
     public boolean getDeletable()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(deletableDef, null);
+	    Boolean value = get(deletableDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -182,7 +179,7 @@ public class SchemaRoleResourceImpl
      */
     public boolean getDeletable(boolean defaultValue)
     {
-		return ((Boolean)getInternal(deletableDef, new Boolean(defaultValue))).booleanValue();
+		return get(deletableDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -194,7 +191,7 @@ public class SchemaRoleResourceImpl
     {
         try
         {
-            set(deletableDef, new Boolean(value));
+            set(deletableDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -241,7 +238,7 @@ public class SchemaRoleResourceImpl
     public boolean getRecursive()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(recursiveDef, null);
+	    Boolean value = get(recursiveDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -261,7 +258,7 @@ public class SchemaRoleResourceImpl
      */
     public boolean getRecursive(boolean defaultValue)
     {
-		return ((Boolean)getInternal(recursiveDef, new Boolean(defaultValue))).booleanValue();
+		return get(recursiveDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -273,7 +270,7 @@ public class SchemaRoleResourceImpl
     {
         try
         {
-            set(recursiveDef, new Boolean(value));
+            set(recursiveDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -317,7 +314,7 @@ public class SchemaRoleResourceImpl
      */
     public String getRoleAttributeName()
     {
-        return (String)getInternal(roleAttributeNameDef, null);
+        return get(roleAttributeNameDef);
     }
     
     /**
@@ -328,7 +325,7 @@ public class SchemaRoleResourceImpl
      */
     public String getRoleAttributeName(String defaultValue)
     {
-        return (String)getInternal(roleAttributeNameDef, defaultValue);
+        return get(roleAttributeNameDef, defaultValue);
     }    
 
     /**
@@ -380,7 +377,7 @@ public class SchemaRoleResourceImpl
     public boolean getSubtreeRole()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(subtreeRoleDef, null);
+	    Boolean value = get(subtreeRoleDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -400,7 +397,7 @@ public class SchemaRoleResourceImpl
      */
     public boolean getSubtreeRole(boolean defaultValue)
     {
-		return ((Boolean)getInternal(subtreeRoleDef, new Boolean(defaultValue))).booleanValue();
+		return get(subtreeRoleDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -412,7 +409,7 @@ public class SchemaRoleResourceImpl
     {
         try
         {
-            set(subtreeRoleDef, new Boolean(value));
+            set(subtreeRoleDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -456,7 +453,7 @@ public class SchemaRoleResourceImpl
      */
     public String getSuffixAttributeName()
     {
-        return (String)getInternal(suffixAttributeNameDef, null);
+        return get(suffixAttributeNameDef);
     }
     
     /**
@@ -467,7 +464,7 @@ public class SchemaRoleResourceImpl
      */
     public String getSuffixAttributeName(String defaultValue)
     {
-        return (String)getInternal(suffixAttributeNameDef, defaultValue);
+        return get(suffixAttributeNameDef, defaultValue);
     }    
 
     /**
@@ -516,7 +513,7 @@ public class SchemaRoleResourceImpl
      */
     public Resource getSuperRole()
     {
-        return (Resource)getInternal(superRoleDef, null);
+        return get(superRoleDef);
     }
     
     /**
@@ -527,7 +524,7 @@ public class SchemaRoleResourceImpl
      */
     public Resource getSuperRole(Resource defaultValue)
     {
-        return (Resource)getInternal(superRoleDef, defaultValue);
+        return get(superRoleDef, defaultValue);
     }    
 
     /**

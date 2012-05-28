@@ -60,19 +60,19 @@ public class ForumResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>forumNode</code> attribute. */
-    private static AttributeDefinition forumNodeDef;
+	private static AttributeDefinition<NavigationNodeResource> forumNodeDef;
 
     /** The AttributeDefinition object for the <code>initialCommentaryState</code> attribute. */
-    private static AttributeDefinition initialCommentaryStateDef;
+	private static AttributeDefinition<StateResource> initialCommentaryStateDef;
 
     /** The AttributeDefinition object for the <code>rejectMessage</code> attribute. */
-    private static AttributeDefinition rejectMessageDef;
+	private static AttributeDefinition<String> rejectMessageDef;
 
     /** The AttributeDefinition object for the <code>replyTo</code> attribute. */
-    private static AttributeDefinition replyToDef;
+	private static AttributeDefinition<String> replyToDef;
 
     /** The AttributeDefinition object for the <code>site</code> attribute. */
-    private static AttributeDefinition siteDef;
+	private static AttributeDefinition<SiteResource> siteDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -131,8 +131,8 @@ public class ForumResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.forum.forum");
-            Map attrs = new HashMap();
+            ResourceClass<ForumResource> rc = session.getSchema().getResourceClass("cms.forum.forum", ForumResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("site"), site);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ForumResource))
@@ -157,7 +157,7 @@ public class ForumResourceImpl
      */
     public NavigationNodeResource getForumNode()
     {
-        return (NavigationNodeResource)getInternal(forumNodeDef, null);
+        return get(forumNodeDef);
     }
     
     /**
@@ -168,7 +168,7 @@ public class ForumResourceImpl
      */
     public NavigationNodeResource getForumNode(NavigationNodeResource defaultValue)
     {
-        return (NavigationNodeResource)getInternal(forumNodeDef, defaultValue);
+        return get(forumNodeDef, defaultValue);
     }    
 
     /**
@@ -217,7 +217,7 @@ public class ForumResourceImpl
      */
     public StateResource getInitialCommentaryState()
     {
-        return (StateResource)getInternal(initialCommentaryStateDef, null);
+        return get(initialCommentaryStateDef);
     }
     
     /**
@@ -228,7 +228,7 @@ public class ForumResourceImpl
      */
     public StateResource getInitialCommentaryState(StateResource defaultValue)
     {
-        return (StateResource)getInternal(initialCommentaryStateDef, defaultValue);
+        return get(initialCommentaryStateDef, defaultValue);
     }    
 
     /**
@@ -277,7 +277,7 @@ public class ForumResourceImpl
      */
     public String getRejectMessage()
     {
-        return (String)getInternal(rejectMessageDef, null);
+        return get(rejectMessageDef);
     }
     
     /**
@@ -288,7 +288,7 @@ public class ForumResourceImpl
      */
     public String getRejectMessage(String defaultValue)
     {
-        return (String)getInternal(rejectMessageDef, defaultValue);
+        return get(rejectMessageDef, defaultValue);
     }    
 
     /**
@@ -337,7 +337,7 @@ public class ForumResourceImpl
      */
     public String getReplyTo()
     {
-        return (String)getInternal(replyToDef, null);
+        return get(replyToDef);
     }
     
     /**
@@ -348,7 +348,7 @@ public class ForumResourceImpl
      */
     public String getReplyTo(String defaultValue)
     {
-        return (String)getInternal(replyToDef, defaultValue);
+        return get(replyToDef, defaultValue);
     }    
 
     /**
@@ -397,7 +397,7 @@ public class ForumResourceImpl
      */
     public SiteResource getSite()
     {
-        return (SiteResource)getInternal(siteDef, null);
+        return get(siteDef);
     }
  
     /**

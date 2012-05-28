@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.periodicals;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -58,13 +55,13 @@ public class PublicationTimeResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>dayOfMonth</code> attribute. */
-    private static AttributeDefinition dayOfMonthDef;
+    private static AttributeDefinition<Integer> dayOfMonthDef;
 
     /** The AttributeDefinition object for the <code>dayOfWeek</code> attribute. */
-    private static AttributeDefinition dayOfWeekDef;
+    private static AttributeDefinition<Integer> dayOfWeekDef;
 
     /** The AttributeDefinition object for the <code>hour</code> attribute. */
-    private static AttributeDefinition hourDef;
+    private static AttributeDefinition<Integer> hourDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -121,9 +118,9 @@ public class PublicationTimeResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.periodicals.publication_time");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<PublicationTimeResource> rc = session.getSchema().getResourceClass("cms.periodicals.publication_time", PublicationTimeResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof PublicationTimeResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -153,7 +150,7 @@ public class PublicationTimeResourceImpl
     public int getDayOfMonth()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(dayOfMonthDef, null);
+	    Integer value = get(dayOfMonthDef);
         if(value != null)
         {
             return value.intValue();
@@ -173,7 +170,7 @@ public class PublicationTimeResourceImpl
      */
     public int getDayOfMonth(int defaultValue)
     {
-		return ((Integer)getInternal(dayOfMonthDef, new Integer(defaultValue))).intValue();
+		return get(dayOfMonthDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -185,7 +182,7 @@ public class PublicationTimeResourceImpl
     {
         try
         {
-            set(dayOfMonthDef, new Integer(value));
+            set(dayOfMonthDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -232,7 +229,7 @@ public class PublicationTimeResourceImpl
     public int getDayOfWeek()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(dayOfWeekDef, null);
+	    Integer value = get(dayOfWeekDef);
         if(value != null)
         {
             return value.intValue();
@@ -252,7 +249,7 @@ public class PublicationTimeResourceImpl
      */
     public int getDayOfWeek(int defaultValue)
     {
-		return ((Integer)getInternal(dayOfWeekDef, new Integer(defaultValue))).intValue();
+		return get(dayOfWeekDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -264,7 +261,7 @@ public class PublicationTimeResourceImpl
     {
         try
         {
-            set(dayOfWeekDef, new Integer(value));
+            set(dayOfWeekDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -311,7 +308,7 @@ public class PublicationTimeResourceImpl
     public int getHour()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(hourDef, null);
+	    Integer value = get(hourDef);
         if(value != null)
         {
             return value.intValue();
@@ -331,7 +328,7 @@ public class PublicationTimeResourceImpl
      */
     public int getHour(int defaultValue)
     {
-		return ((Integer)getInternal(hourDef, new Integer(defaultValue))).intValue();
+		return get(hourDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -343,7 +340,7 @@ public class PublicationTimeResourceImpl
     {
         try
         {
-            set(hourDef, new Integer(value));
+            set(hourDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

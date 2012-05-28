@@ -54,6 +54,14 @@ public interface PoolResource
      * @return the value of the the <code>banners</code> attribute.
      */
     public ResourceList getBanners();
+    
+    /**
+     * Returns the value of the <code>banners</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>banners</code> attribute.
+     */
+    public ResourceList getBanners(ResourceList defaultValue);
 
     /**
      * Sets the value of the <code>banners</code> attribute.

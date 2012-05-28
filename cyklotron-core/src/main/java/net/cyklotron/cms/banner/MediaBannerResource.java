@@ -51,6 +51,14 @@ public interface MediaBannerResource
      * @return the value of the the <code>media</code> attribute.
      */
     public Resource getMedia();
+    
+    /**
+     * Returns the value of the <code>media</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>media</code> attribute.
+     */
+    public Resource getMedia(Resource defaultValue);
 
     /**
      * Sets the value of the <code>media</code> attribute.

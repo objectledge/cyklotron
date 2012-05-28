@@ -58,10 +58,10 @@ public class AutomatonResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>assignedClass</code> attribute. */
-    private static AttributeDefinition assignedClassDef;
+	private static AttributeDefinition<ResourceClass> assignedClassDef;
 
     /** The AttributeDefinition object for the <code>primary</code> attribute. */
-    private static AttributeDefinition primaryDef;
+    private static AttributeDefinition<Boolean> primaryDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -121,10 +121,10 @@ public class AutomatonResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("workflow.automaton");
-            Map attrs = new HashMap();
+            ResourceClass<AutomatonResource> rc = session.getSchema().getResourceClass("workflow.automaton", AutomatonResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("assignedClass"), assignedClass);
-            attrs.put(rc.getAttribute("primary"), new Boolean(primary));
+            attrs.put(rc.getAttribute("primary"), Boolean.valueOf(primary));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof AutomatonResource))
             {
@@ -148,7 +148,7 @@ public class AutomatonResourceImpl
      */
     public ResourceClass getAssignedClass()
     {
-        return (ResourceClass)getInternal(assignedClassDef, null);
+        return get(assignedClassDef);
     }
  
     /**
@@ -186,7 +186,7 @@ public class AutomatonResourceImpl
      */
     public boolean getPrimary()
     {
-		return ((Boolean)getInternal(primaryDef, null)).booleanValue();
+		return get(primaryDef).booleanValue();
     }    
 
     /**
@@ -198,7 +198,7 @@ public class AutomatonResourceImpl
     {
         try
         {
-            set(primaryDef, new Boolean(value));
+            set(primaryDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

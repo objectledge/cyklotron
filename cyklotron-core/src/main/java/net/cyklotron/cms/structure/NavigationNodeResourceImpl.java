@@ -71,76 +71,76 @@ public class NavigationNodeResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>title</code> attribute. */
-    private static AttributeDefinition titleDef;
+	private static AttributeDefinition<String> titleDef;
 
     /** The AttributeDefinition object for the <code>site</code> attribute. */
-    private static AttributeDefinition siteDef;
+	private static AttributeDefinition<SiteResource> siteDef;
 
     /** The AttributeDefinition object for the <code>preferences</code> attribute. */
-    private static AttributeDefinition preferencesDef;
+	private static AttributeDefinition<Parameters> preferencesDef;
 
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
-    private static AttributeDefinition administratorDef;
+	private static AttributeDefinition<Role> administratorDef;
 
     /** The AttributeDefinition object for the <code>customModificationTime</code> attribute. */
-    private static AttributeDefinition customModificationTimeDef;
+	private static AttributeDefinition<Date> customModificationTimeDef;
 
     /** The AttributeDefinition object for the <code>editor</code> attribute. */
-    private static AttributeDefinition editorDef;
+	private static AttributeDefinition<Role> editorDef;
 
     /** The AttributeDefinition object for the <code>editorialPriority</code> attribute. */
-    private static AttributeDefinition editorialPriorityDef;
+    private static AttributeDefinition<Integer> editorialPriorityDef;
 
     /** The AttributeDefinition object for the <code>lastAcceptor</code> attribute. */
-    private static AttributeDefinition lastAcceptorDef;
+	private static AttributeDefinition<Subject> lastAcceptorDef;
 
     /** The AttributeDefinition object for the <code>lastEditor</code> attribute. */
-    private static AttributeDefinition lastEditorDef;
+	private static AttributeDefinition<Subject> lastEditorDef;
 
     /** The AttributeDefinition object for the <code>lastRedactor</code> attribute. */
-    private static AttributeDefinition lastRedactorDef;
+	private static AttributeDefinition<Subject> lastRedactorDef;
 
     /** The AttributeDefinition object for the <code>localVisitor</code> attribute. */
-    private static AttributeDefinition localVisitorDef;
+	private static AttributeDefinition<Role> localVisitorDef;
 
     /** The AttributeDefinition object for the <code>lockedBy</code> attribute. */
-    private static AttributeDefinition lockedByDef;
+	private static AttributeDefinition<Subject> lockedByDef;
 
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
-    private static AttributeDefinition priorityDef;
+    private static AttributeDefinition<Integer> priorityDef;
 
     /** The AttributeDefinition object for the <code>redactor</code> attribute. */
-    private static AttributeDefinition redactorDef;
+	private static AttributeDefinition<Role> redactorDef;
 
     /** The AttributeDefinition object for the <code>reporter</code> attribute. */
-    private static AttributeDefinition reporterDef;
+	private static AttributeDefinition<Role> reporterDef;
 
     /** The AttributeDefinition object for the <code>sequence</code> attribute. */
-    private static AttributeDefinition sequenceDef;
+    private static AttributeDefinition<Integer> sequenceDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
-    private static AttributeDefinition stateDef;
+	private static AttributeDefinition<StateResource> stateDef;
 
     /** The AttributeDefinition object for the <code>style</code> attribute. */
-    private static AttributeDefinition styleDef;
+	private static AttributeDefinition<StyleResource> styleDef;
 
     /** The AttributeDefinition object for the <code>thumbnail</code> attribute. */
-    private static AttributeDefinition thumbnailDef;
+	private static AttributeDefinition<FileResource> thumbnailDef;
 
     /** The AttributeDefinition object for the <code>validityEnd</code> attribute. */
-    private static AttributeDefinition validityEndDef;
+	private static AttributeDefinition<Date> validityEndDef;
 
     /** The AttributeDefinition object for the <code>validityStart</code> attribute. */
-    private static AttributeDefinition validityStartDef;
+	private static AttributeDefinition<Date> validityStartDef;
 
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
-    private static AttributeDefinition visitorDef;
+	private static AttributeDefinition<Role> visitorDef;
 
     /** The AttributeDefinition object for the <code>votesNegative</code> attribute. */
-    private static AttributeDefinition votesNegativeDef;
+    private static AttributeDefinition<Integer> votesNegativeDef;
 
     /** The AttributeDefinition object for the <code>votesPositive</code> attribute. */
-    private static AttributeDefinition votesPositiveDef;
+    private static AttributeDefinition<Integer> votesPositiveDef;
 
 	// custom injected fields /////////////////////////////////////////////////
 	
@@ -209,8 +209,8 @@ public class NavigationNodeResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("structure.navigation_node");
-            Map attrs = new HashMap();
+            ResourceClass<NavigationNodeResource> rc = session.getSchema().getResourceClass("structure.navigation_node", NavigationNodeResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("title"), title);
             attrs.put(rc.getAttribute("site"), site);
             attrs.put(rc.getAttribute("preferences"), preferences);
@@ -237,7 +237,7 @@ public class NavigationNodeResourceImpl
      */
     public String getTitle()
     {
-        return (String)getInternal(titleDef, null);
+        return get(titleDef);
     }
  
     /**
@@ -275,7 +275,7 @@ public class NavigationNodeResourceImpl
      */
     public SiteResource getSite()
     {
-        return (SiteResource)getInternal(siteDef, null);
+        return get(siteDef);
     }
  
     /**
@@ -313,7 +313,7 @@ public class NavigationNodeResourceImpl
      */
     public Parameters getPreferences()
     {
-        return (Parameters)getInternal(preferencesDef, null);
+        return get(preferencesDef);
     }
    
     /**
@@ -323,7 +323,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getAdministrator()
     {
-        return (Role)getInternal(administratorDef, null);
+        return get(administratorDef);
     }
     
     /**
@@ -334,7 +334,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getAdministrator(Role defaultValue)
     {
-        return (Role)getInternal(administratorDef, defaultValue);
+        return get(administratorDef, defaultValue);
     }    
 
     /**
@@ -383,7 +383,7 @@ public class NavigationNodeResourceImpl
      */
     public Date getCustomModificationTime()
     {
-        return (Date)getInternal(customModificationTimeDef, null);
+        return get(customModificationTimeDef);
     }
     
     /**
@@ -394,7 +394,7 @@ public class NavigationNodeResourceImpl
      */
     public Date getCustomModificationTime(Date defaultValue)
     {
-        return (Date)getInternal(customModificationTimeDef, defaultValue);
+        return get(customModificationTimeDef, defaultValue);
     }    
 
     /**
@@ -443,7 +443,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getEditor()
     {
-        return (Role)getInternal(editorDef, null);
+        return get(editorDef);
     }
     
     /**
@@ -454,7 +454,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getEditor(Role defaultValue)
     {
-        return (Role)getInternal(editorDef, defaultValue);
+        return get(editorDef, defaultValue);
     }    
 
     /**
@@ -506,7 +506,7 @@ public class NavigationNodeResourceImpl
     public int getEditorialPriority()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(editorialPriorityDef, null);
+	    Integer value = get(editorialPriorityDef);
         if(value != null)
         {
             return value.intValue();
@@ -526,7 +526,7 @@ public class NavigationNodeResourceImpl
      */
     public int getEditorialPriority(int defaultValue)
     {
-		return ((Integer)getInternal(editorialPriorityDef, new Integer(defaultValue))).intValue();
+		return get(editorialPriorityDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -538,7 +538,7 @@ public class NavigationNodeResourceImpl
     {
         try
         {
-            set(editorialPriorityDef, new Integer(value));
+            set(editorialPriorityDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -582,7 +582,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLastAcceptor()
     {
-        return (Subject)getInternal(lastAcceptorDef, null);
+        return get(lastAcceptorDef);
     }
     
     /**
@@ -593,7 +593,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLastAcceptor(Subject defaultValue)
     {
-        return (Subject)getInternal(lastAcceptorDef, defaultValue);
+        return get(lastAcceptorDef, defaultValue);
     }    
 
     /**
@@ -642,7 +642,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLastEditor()
     {
-        return (Subject)getInternal(lastEditorDef, null);
+        return get(lastEditorDef);
     }
     
     /**
@@ -653,7 +653,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLastEditor(Subject defaultValue)
     {
-        return (Subject)getInternal(lastEditorDef, defaultValue);
+        return get(lastEditorDef, defaultValue);
     }    
 
     /**
@@ -702,7 +702,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLastRedactor()
     {
-        return (Subject)getInternal(lastRedactorDef, null);
+        return get(lastRedactorDef);
     }
     
     /**
@@ -713,7 +713,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLastRedactor(Subject defaultValue)
     {
-        return (Subject)getInternal(lastRedactorDef, defaultValue);
+        return get(lastRedactorDef, defaultValue);
     }    
 
     /**
@@ -762,7 +762,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getLocalVisitor()
     {
-        return (Role)getInternal(localVisitorDef, null);
+        return get(localVisitorDef);
     }
     
     /**
@@ -773,7 +773,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getLocalVisitor(Role defaultValue)
     {
-        return (Role)getInternal(localVisitorDef, defaultValue);
+        return get(localVisitorDef, defaultValue);
     }    
 
     /**
@@ -822,7 +822,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLockedBy()
     {
-        return (Subject)getInternal(lockedByDef, null);
+        return get(lockedByDef);
     }
     
     /**
@@ -833,7 +833,7 @@ public class NavigationNodeResourceImpl
      */
     public Subject getLockedBy(Subject defaultValue)
     {
-        return (Subject)getInternal(lockedByDef, defaultValue);
+        return get(lockedByDef, defaultValue);
     }    
 
     /**
@@ -885,7 +885,7 @@ public class NavigationNodeResourceImpl
     public int getPriority()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(priorityDef, null);
+	    Integer value = get(priorityDef);
         if(value != null)
         {
             return value.intValue();
@@ -905,7 +905,7 @@ public class NavigationNodeResourceImpl
      */
     public int getPriority(int defaultValue)
     {
-		return ((Integer)getInternal(priorityDef, new Integer(defaultValue))).intValue();
+		return get(priorityDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -917,7 +917,7 @@ public class NavigationNodeResourceImpl
     {
         try
         {
-            set(priorityDef, new Integer(value));
+            set(priorityDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -961,7 +961,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getRedactor()
     {
-        return (Role)getInternal(redactorDef, null);
+        return get(redactorDef);
     }
     
     /**
@@ -972,7 +972,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getRedactor(Role defaultValue)
     {
-        return (Role)getInternal(redactorDef, defaultValue);
+        return get(redactorDef, defaultValue);
     }    
 
     /**
@@ -1021,7 +1021,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getReporter()
     {
-        return (Role)getInternal(reporterDef, null);
+        return get(reporterDef);
     }
     
     /**
@@ -1032,7 +1032,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getReporter(Role defaultValue)
     {
-        return (Role)getInternal(reporterDef, defaultValue);
+        return get(reporterDef, defaultValue);
     }    
 
     /**
@@ -1084,7 +1084,7 @@ public class NavigationNodeResourceImpl
     public int getSequence()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(sequenceDef, null);
+	    Integer value = get(sequenceDef);
         if(value != null)
         {
             return value.intValue();
@@ -1104,7 +1104,7 @@ public class NavigationNodeResourceImpl
      */
     public int getSequence(int defaultValue)
     {
-		return ((Integer)getInternal(sequenceDef, new Integer(defaultValue))).intValue();
+		return get(sequenceDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -1116,7 +1116,7 @@ public class NavigationNodeResourceImpl
     {
         try
         {
-            set(sequenceDef, new Integer(value));
+            set(sequenceDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -1160,7 +1160,7 @@ public class NavigationNodeResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)getInternal(stateDef, null);
+        return get(stateDef);
     }
     
     /**
@@ -1171,7 +1171,7 @@ public class NavigationNodeResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        return (StateResource)getInternal(stateDef, defaultValue);
+        return get(stateDef, defaultValue);
     }    
 
     /**
@@ -1220,7 +1220,7 @@ public class NavigationNodeResourceImpl
      */
     public StyleResource getStyle()
     {
-        return (StyleResource)getInternal(styleDef, null);
+        return get(styleDef);
     }
     
     /**
@@ -1231,7 +1231,7 @@ public class NavigationNodeResourceImpl
      */
     public StyleResource getStyle(StyleResource defaultValue)
     {
-        return (StyleResource)getInternal(styleDef, defaultValue);
+        return get(styleDef, defaultValue);
     }    
 
     /**
@@ -1280,7 +1280,7 @@ public class NavigationNodeResourceImpl
      */
     public FileResource getThumbnail()
     {
-        return (FileResource)getInternal(thumbnailDef, null);
+        return get(thumbnailDef);
     }
     
     /**
@@ -1291,7 +1291,7 @@ public class NavigationNodeResourceImpl
      */
     public FileResource getThumbnail(FileResource defaultValue)
     {
-        return (FileResource)getInternal(thumbnailDef, defaultValue);
+        return get(thumbnailDef, defaultValue);
     }    
 
     /**
@@ -1340,7 +1340,7 @@ public class NavigationNodeResourceImpl
      */
     public Date getValidityEnd()
     {
-        return (Date)getInternal(validityEndDef, null);
+        return get(validityEndDef);
     }
     
     /**
@@ -1351,7 +1351,7 @@ public class NavigationNodeResourceImpl
      */
     public Date getValidityEnd(Date defaultValue)
     {
-        return (Date)getInternal(validityEndDef, defaultValue);
+        return get(validityEndDef, defaultValue);
     }    
 
     /**
@@ -1400,7 +1400,7 @@ public class NavigationNodeResourceImpl
      */
     public Date getValidityStart()
     {
-        return (Date)getInternal(validityStartDef, null);
+        return get(validityStartDef);
     }
     
     /**
@@ -1411,7 +1411,7 @@ public class NavigationNodeResourceImpl
      */
     public Date getValidityStart(Date defaultValue)
     {
-        return (Date)getInternal(validityStartDef, defaultValue);
+        return get(validityStartDef, defaultValue);
     }    
 
     /**
@@ -1460,7 +1460,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getVisitor()
     {
-        return (Role)getInternal(visitorDef, null);
+        return get(visitorDef);
     }
     
     /**
@@ -1471,7 +1471,7 @@ public class NavigationNodeResourceImpl
      */
     public Role getVisitor(Role defaultValue)
     {
-        return (Role)getInternal(visitorDef, defaultValue);
+        return get(visitorDef, defaultValue);
     }    
 
     /**
@@ -1523,7 +1523,7 @@ public class NavigationNodeResourceImpl
     public int getVotesNegative()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(votesNegativeDef, null);
+	    Integer value = get(votesNegativeDef);
         if(value != null)
         {
             return value.intValue();
@@ -1543,7 +1543,7 @@ public class NavigationNodeResourceImpl
      */
     public int getVotesNegative(int defaultValue)
     {
-		return ((Integer)getInternal(votesNegativeDef, new Integer(defaultValue))).intValue();
+		return get(votesNegativeDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -1555,7 +1555,7 @@ public class NavigationNodeResourceImpl
     {
         try
         {
-            set(votesNegativeDef, new Integer(value));
+            set(votesNegativeDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -1602,7 +1602,7 @@ public class NavigationNodeResourceImpl
     public int getVotesPositive()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(votesPositiveDef, null);
+	    Integer value = get(votesPositiveDef);
         if(value != null)
         {
             return value.intValue();
@@ -1622,7 +1622,7 @@ public class NavigationNodeResourceImpl
      */
     public int getVotesPositive(int defaultValue)
     {
-		return ((Integer)getInternal(votesPositiveDef, new Integer(defaultValue))).intValue();
+		return get(votesPositiveDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -1634,7 +1634,7 @@ public class NavigationNodeResourceImpl
     {
         try
         {
-            set(votesPositiveDef, new Integer(value));
+            set(votesPositiveDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

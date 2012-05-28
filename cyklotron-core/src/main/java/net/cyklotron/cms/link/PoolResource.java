@@ -55,6 +55,14 @@ public interface PoolResource
      * @return the value of the the <code>links</code> attribute.
      */
     public ResourceList getLinks();
+    
+    /**
+     * Returns the value of the <code>links</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>links</code> attribute.
+     */
+    public ResourceList getLinks(ResourceList defaultValue);
 
     /**
      * Sets the value of the <code>links</code> attribute.

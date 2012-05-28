@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.style;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -58,7 +55,7 @@ public class LevelResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>layout</code> attribute. */
-    private static AttributeDefinition layoutDef;
+	private static AttributeDefinition<LayoutResource> layoutDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -115,9 +112,9 @@ public class LevelResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.style.level");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<LevelResource> rc = session.getSchema().getResourceClass("cms.style.level", LevelResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof LevelResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -144,7 +141,7 @@ public class LevelResourceImpl
      */
     public LayoutResource getLayout()
     {
-        return (LayoutResource)getInternal(layoutDef, null);
+        return get(layoutDef);
     }
     
     /**
@@ -155,7 +152,7 @@ public class LevelResourceImpl
      */
     public LayoutResource getLayout(LayoutResource defaultValue)
     {
-        return (LayoutResource)getInternal(layoutDef, defaultValue);
+        return get(layoutDef, defaultValue);
     }    
 
     /**

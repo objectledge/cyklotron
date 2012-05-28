@@ -56,10 +56,10 @@ public class EnumerationPreferenceResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>multi</code> attribute. */
-    private static AttributeDefinition multiDef;
+    private static AttributeDefinition<Boolean> multiDef;
 
     /** The AttributeDefinition object for the <code>values</code> attribute. */
-    private static AttributeDefinition valuesDef;
+	private static AttributeDefinition<String> valuesDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -122,10 +122,10 @@ public class EnumerationPreferenceResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.enumeration_preference");
-            Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("multi"), new Boolean(multi));
-            attrs.put(rc.getAttribute("required"), new Boolean(required));
+            ResourceClass<EnumerationPreferenceResource> rc = session.getSchema().getResourceClass("integration.enumeration_preference", EnumerationPreferenceResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
+            attrs.put(rc.getAttribute("multi"), Boolean.valueOf(multi));
+            attrs.put(rc.getAttribute("required"), Boolean.valueOf(required));
             attrs.put(rc.getAttribute("scope"), scope);
             attrs.put(rc.getAttribute("values"), values);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
@@ -151,7 +151,7 @@ public class EnumerationPreferenceResourceImpl
      */
     public boolean getMulti()
     {
-		return ((Boolean)getInternal(multiDef, null)).booleanValue();
+		return get(multiDef).booleanValue();
     }    
 
     /**
@@ -163,7 +163,7 @@ public class EnumerationPreferenceResourceImpl
     {
         try
         {
-            set(multiDef, new Boolean(value));
+            set(multiDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -182,7 +182,7 @@ public class EnumerationPreferenceResourceImpl
      */
     public String getValues()
     {
-        return (String)getInternal(valuesDef, null);
+        return get(valuesDef);
     }
  
     /**

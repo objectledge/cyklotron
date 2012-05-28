@@ -63,6 +63,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>abstract</code> attribute.
      */
     public String getAbstract();
+    
+    /**
+     * Returns the value of the <code>abstract</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>abstract</code> attribute.
+     */
+    public String getAbstract(String defaultValue);
 
     /**
      * Sets the value of the <code>abstract</code> attribute.
@@ -85,6 +93,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>content</code> attribute.
      */
     public String getContent();
+    
+    /**
+     * Returns the value of the <code>content</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>content</code> attribute.
+     */
+    public String getContent(String defaultValue);
 
     /**
      * Sets the value of the <code>content</code> attribute.
@@ -107,6 +123,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>eventEnd</code> attribute.
      */
     public Date getEventEnd();
+    
+    /**
+     * Returns the value of the <code>eventEnd</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>eventEnd</code> attribute.
+     */
+    public Date getEventEnd(Date defaultValue);
 
     /**
      * Sets the value of the <code>eventEnd</code> attribute.
@@ -129,6 +153,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>eventPlace</code> attribute.
      */
     public String getEventPlace();
+    
+    /**
+     * Returns the value of the <code>eventPlace</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>eventPlace</code> attribute.
+     */
+    public String getEventPlace(String defaultValue);
 
     /**
      * Sets the value of the <code>eventPlace</code> attribute.
@@ -151,6 +183,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>eventStart</code> attribute.
      */
     public Date getEventStart();
+    
+    /**
+     * Returns the value of the <code>eventStart</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>eventStart</code> attribute.
+     */
+    public Date getEventStart(Date defaultValue);
 
     /**
      * Sets the value of the <code>eventStart</code> attribute.
@@ -173,6 +213,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>footer</code> attribute.
      */
     public String getFooter();
+    
+    /**
+     * Returns the value of the <code>footer</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>footer</code> attribute.
+     */
+    public String getFooter(String defaultValue);
 
     /**
      * Sets the value of the <code>footer</code> attribute.
@@ -195,6 +243,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>keywords</code> attribute.
      */
     public String getKeywords();
+    
+    /**
+     * Returns the value of the <code>keywords</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>keywords</code> attribute.
+     */
+    public String getKeywords(String defaultValue);
 
     /**
      * Sets the value of the <code>keywords</code> attribute.
@@ -217,6 +273,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>lang</code> attribute.
      */
     public String getLang();
+    
+    /**
+     * Returns the value of the <code>lang</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>lang</code> attribute.
+     */
+    public String getLang(String defaultValue);
 
     /**
      * Sets the value of the <code>lang</code> attribute.
@@ -239,6 +303,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>meta</code> attribute.
      */
     public String getMeta();
+    
+    /**
+     * Returns the value of the <code>meta</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>meta</code> attribute.
+     */
+    public String getMeta(String defaultValue);
 
     /**
      * Sets the value of the <code>meta</code> attribute.
@@ -261,6 +333,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>organizationIds</code> attribute.
      */
     public String getOrganizationIds();
+    
+    /**
+     * Returns the value of the <code>organizationIds</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>organizationIds</code> attribute.
+     */
+    public String getOrganizationIds(String defaultValue);
 
     /**
      * Sets the value of the <code>organizationIds</code> attribute.
@@ -283,6 +363,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>proposedContent</code> attribute.
      */
     public String getProposedContent();
+    
+    /**
+     * Returns the value of the <code>proposedContent</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>proposedContent</code> attribute.
+     */
+    public String getProposedContent(String defaultValue);
 
     /**
      * Sets the value of the <code>proposedContent</code> attribute.
@@ -305,6 +393,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>redactorsNote</code> attribute.
      */
     public String getRedactorsNote();
+    
+    /**
+     * Returns the value of the <code>redactorsNote</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>redactorsNote</code> attribute.
+     */
+    public String getRedactorsNote(String defaultValue);
 
     /**
      * Sets the value of the <code>redactorsNote</code> attribute.
@@ -327,6 +423,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>relatedResourcesSequence</code> attribute.
      */
     public ResourceList getRelatedResourcesSequence();
+    
+    /**
+     * Returns the value of the <code>relatedResourcesSequence</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>relatedResourcesSequence</code> attribute.
+     */
+    public ResourceList getRelatedResourcesSequence(ResourceList defaultValue);
 
     /**
      * Sets the value of the <code>relatedResourcesSequence</code> attribute.
@@ -349,6 +453,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>subTitle</code> attribute.
      */
     public String getSubTitle();
+    
+    /**
+     * Returns the value of the <code>subTitle</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>subTitle</code> attribute.
+     */
+    public String getSubTitle(String defaultValue);
 
     /**
      * Sets the value of the <code>subTitle</code> attribute.
@@ -371,6 +483,14 @@ public interface DocumentNodeResource
      * @return the value of the the <code>titleCalendar</code> attribute.
      */
     public String getTitleCalendar();
+    
+    /**
+     * Returns the value of the <code>titleCalendar</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>titleCalendar</code> attribute.
+     */
+    public String getTitleCalendar(String defaultValue);
 
     /**
      * Sets the value of the <code>titleCalendar</code> attribute.

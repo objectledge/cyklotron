@@ -54,6 +54,14 @@ public interface PoolResource
      * @return the value of the the <code>indexes</code> attribute.
      */
     public ResourceList getIndexes();
+    
+    /**
+     * Returns the value of the <code>indexes</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>indexes</code> attribute.
+     */
+    public ResourceList getIndexes(ResourceList defaultValue);
 
     /**
      * Sets the value of the <code>indexes</code> attribute.

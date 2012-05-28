@@ -61,37 +61,37 @@ public class MessageResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>author</code> attribute. */
-    private static AttributeDefinition authorDef;
+	private static AttributeDefinition<String> authorDef;
 
     /** The AttributeDefinition object for the <code>characterEncoding</code> attribute. */
-    private static AttributeDefinition characterEncodingDef;
+	private static AttributeDefinition<String> characterEncodingDef;
 
     /** The AttributeDefinition object for the <code>content</code> attribute. */
-    private static AttributeDefinition contentDef;
+	private static AttributeDefinition<String> contentDef;
 
     /** The AttributeDefinition object for the <code>discussion</code> attribute. */
-    private static AttributeDefinition discussionDef;
+	private static AttributeDefinition<DiscussionResource> discussionDef;
 
     /** The AttributeDefinition object for the <code>email</code> attribute. */
-    private static AttributeDefinition emailDef;
+	private static AttributeDefinition<String> emailDef;
 
     /** The AttributeDefinition object for the <code>messageId</code> attribute. */
-    private static AttributeDefinition messageIdDef;
+	private static AttributeDefinition<String> messageIdDef;
 
     /** The AttributeDefinition object for the <code>moderationCookie</code> attribute. */
-    private static AttributeDefinition moderationCookieDef;
+	private static AttributeDefinition<String> moderationCookieDef;
 
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
-    private static AttributeDefinition priorityDef;
+    private static AttributeDefinition<Integer> priorityDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
-    private static AttributeDefinition stateDef;
+	private static AttributeDefinition<StateResource> stateDef;
 
     /** The AttributeDefinition object for the <code>sticky</code> attribute. */
-    private static AttributeDefinition stickyDef;
+    private static AttributeDefinition<Boolean> stickyDef;
 
     /** The AttributeDefinition object for the <code>title</code> attribute. */
-    private static AttributeDefinition titleDef;
+	private static AttributeDefinition<String> titleDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -155,12 +155,12 @@ public class MessageResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.forum.message");
-            Map attrs = new HashMap();
+            ResourceClass<MessageResource> rc = session.getSchema().getResourceClass("cms.forum.message", MessageResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("characterEncoding"), characterEncoding);
             attrs.put(rc.getAttribute("content"), content);
             attrs.put(rc.getAttribute("discussion"), discussion);
-            attrs.put(rc.getAttribute("priority"), new Integer(priority));
+            attrs.put(rc.getAttribute("priority"), Integer.valueOf(priority));
             attrs.put(rc.getAttribute("title"), title);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof MessageResource))
@@ -185,7 +185,7 @@ public class MessageResourceImpl
      */
     public String getAuthor()
     {
-        return (String)getInternal(authorDef, null);
+        return get(authorDef);
     }
     
     /**
@@ -196,7 +196,7 @@ public class MessageResourceImpl
      */
     public String getAuthor(String defaultValue)
     {
-        return (String)getInternal(authorDef, defaultValue);
+        return get(authorDef, defaultValue);
     }    
 
     /**
@@ -245,7 +245,7 @@ public class MessageResourceImpl
      */
     public String getCharacterEncoding()
     {
-        return (String)getInternal(characterEncodingDef, null);
+        return get(characterEncodingDef);
     }
  
     /**
@@ -283,7 +283,7 @@ public class MessageResourceImpl
      */
     public String getContent()
     {
-        return (String)getInternal(contentDef, null);
+        return get(contentDef);
     }
  
     /**
@@ -321,7 +321,7 @@ public class MessageResourceImpl
      */
     public DiscussionResource getDiscussion()
     {
-        return (DiscussionResource)getInternal(discussionDef, null);
+        return get(discussionDef);
     }
  
     /**
@@ -359,7 +359,7 @@ public class MessageResourceImpl
      */
     public String getEmail()
     {
-        return (String)getInternal(emailDef, null);
+        return get(emailDef);
     }
     
     /**
@@ -370,7 +370,7 @@ public class MessageResourceImpl
      */
     public String getEmail(String defaultValue)
     {
-        return (String)getInternal(emailDef, defaultValue);
+        return get(emailDef, defaultValue);
     }    
 
     /**
@@ -419,7 +419,7 @@ public class MessageResourceImpl
      */
     public String getMessageId()
     {
-        return (String)getInternal(messageIdDef, null);
+        return get(messageIdDef);
     }
     
     /**
@@ -430,7 +430,7 @@ public class MessageResourceImpl
      */
     public String getMessageId(String defaultValue)
     {
-        return (String)getInternal(messageIdDef, defaultValue);
+        return get(messageIdDef, defaultValue);
     }    
 
     /**
@@ -479,7 +479,7 @@ public class MessageResourceImpl
      */
     public String getModerationCookie()
     {
-        return (String)getInternal(moderationCookieDef, null);
+        return get(moderationCookieDef);
     }
     
     /**
@@ -490,7 +490,7 @@ public class MessageResourceImpl
      */
     public String getModerationCookie(String defaultValue)
     {
-        return (String)getInternal(moderationCookieDef, defaultValue);
+        return get(moderationCookieDef, defaultValue);
     }    
 
     /**
@@ -539,7 +539,7 @@ public class MessageResourceImpl
      */
     public int getPriority()
     {
-		return ((Integer)getInternal(priorityDef, null)).intValue();
+		return get(priorityDef).intValue();
     }    
 
     /**
@@ -551,7 +551,7 @@ public class MessageResourceImpl
     {
         try
         {
-            set(priorityDef, new Integer(value));
+            set(priorityDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -570,7 +570,7 @@ public class MessageResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)getInternal(stateDef, null);
+        return get(stateDef);
     }
     
     /**
@@ -581,7 +581,7 @@ public class MessageResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        return (StateResource)getInternal(stateDef, defaultValue);
+        return get(stateDef, defaultValue);
     }    
 
     /**
@@ -633,7 +633,7 @@ public class MessageResourceImpl
     public boolean getSticky()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(stickyDef, null);
+	    Boolean value = get(stickyDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -653,7 +653,7 @@ public class MessageResourceImpl
      */
     public boolean getSticky(boolean defaultValue)
     {
-		return ((Boolean)getInternal(stickyDef, new Boolean(defaultValue))).booleanValue();
+		return get(stickyDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -665,7 +665,7 @@ public class MessageResourceImpl
     {
         try
         {
-            set(stickyDef, new Boolean(value));
+            set(stickyDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -709,7 +709,7 @@ public class MessageResourceImpl
      */
     public String getTitle()
     {
-        return (String)getInternal(titleDef, null);
+        return get(titleDef);
     }
  
     /**

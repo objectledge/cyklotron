@@ -56,10 +56,10 @@ public class StringPreferenceResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>maxLength</code> attribute. */
-    private static AttributeDefinition maxLengthDef;
+    private static AttributeDefinition<Integer> maxLengthDef;
 
     /** The AttributeDefinition object for the <code>minLength</code> attribute. */
-    private static AttributeDefinition minLengthDef;
+    private static AttributeDefinition<Integer> minLengthDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -119,9 +119,9 @@ public class StringPreferenceResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.string_preference");
-            Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("required"), new Boolean(required));
+            ResourceClass<StringPreferenceResource> rc = session.getSchema().getResourceClass("integration.string_preference", StringPreferenceResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
+            attrs.put(rc.getAttribute("required"), Boolean.valueOf(required));
             attrs.put(rc.getAttribute("scope"), scope);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof StringPreferenceResource))
@@ -149,7 +149,7 @@ public class StringPreferenceResourceImpl
     public int getMaxLength()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(maxLengthDef, null);
+	    Integer value = get(maxLengthDef);
         if(value != null)
         {
             return value.intValue();
@@ -169,7 +169,7 @@ public class StringPreferenceResourceImpl
      */
     public int getMaxLength(int defaultValue)
     {
-		return ((Integer)getInternal(maxLengthDef, new Integer(defaultValue))).intValue();
+		return get(maxLengthDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -181,7 +181,7 @@ public class StringPreferenceResourceImpl
     {
         try
         {
-            set(maxLengthDef, new Integer(value));
+            set(maxLengthDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -228,7 +228,7 @@ public class StringPreferenceResourceImpl
     public int getMinLength()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(minLengthDef, null);
+	    Integer value = get(minLengthDef);
         if(value != null)
         {
             return value.intValue();
@@ -248,7 +248,7 @@ public class StringPreferenceResourceImpl
      */
     public int getMinLength(int defaultValue)
     {
-		return ((Integer)getInternal(minLengthDef, new Integer(defaultValue))).intValue();
+		return get(minLengthDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -260,7 +260,7 @@ public class StringPreferenceResourceImpl
     {
         try
         {
-            set(minLengthDef, new Integer(value));
+            set(minLengthDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

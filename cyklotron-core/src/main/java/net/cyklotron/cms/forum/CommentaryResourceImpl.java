@@ -57,10 +57,10 @@ public class CommentaryResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>documentTitle</code> attribute. */
-    private static AttributeDefinition documentTitleDef;
+	private static AttributeDefinition<String> documentTitleDef;
 
     /** The AttributeDefinition object for the <code>resourceId</code> attribute. */
-    private static AttributeDefinition resourceIdDef;
+    private static AttributeDefinition<Long> resourceIdDef;
 
 	// custom injected fields /////////////////////////////////////////////////
 	
@@ -126,8 +126,8 @@ public class CommentaryResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.forum.commentary");
-            Map attrs = new HashMap();
+            ResourceClass<CommentaryResource> rc = session.getSchema().getResourceClass("cms.forum.commentary", CommentaryResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("forum"), forum);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof CommentaryResource))
@@ -152,7 +152,7 @@ public class CommentaryResourceImpl
      */
     public String getDocumentTitle()
     {
-        return (String)getInternal(documentTitleDef, null);
+        return get(documentTitleDef);
     }
     
     /**
@@ -163,7 +163,7 @@ public class CommentaryResourceImpl
      */
     public String getDocumentTitle(String defaultValue)
     {
-        return (String)getInternal(documentTitleDef, defaultValue);
+        return get(documentTitleDef, defaultValue);
     }    
 
     /**
@@ -215,7 +215,7 @@ public class CommentaryResourceImpl
     public long getResourceId()
         throws IllegalStateException
     {
-	    Long value = (Long)getInternal(resourceIdDef, null);
+	    Long value = get(resourceIdDef);
         if(value != null)
         {
             return value.longValue();
@@ -235,7 +235,7 @@ public class CommentaryResourceImpl
      */
     public long getResourceId(long defaultValue)
     {
-		return ((Long)getInternal(resourceIdDef, new Long(defaultValue))).longValue();
+		return get(resourceIdDef, Long.valueOf(defaultValue)).longValue();
 	}
 
     /**
@@ -247,7 +247,7 @@ public class CommentaryResourceImpl
     {
         try
         {
-            set(resourceIdDef, new Long(value));
+            set(resourceIdDef, Long.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

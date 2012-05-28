@@ -57,6 +57,14 @@ public interface MessageResource
      * @return the value of the the <code>author</code> attribute.
      */
     public String getAuthor();
+    
+    /**
+     * Returns the value of the <code>author</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>author</code> attribute.
+     */
+    public String getAuthor(String defaultValue);
 
     /**
      * Sets the value of the <code>author</code> attribute.
@@ -130,6 +138,14 @@ public interface MessageResource
      * @return the value of the the <code>email</code> attribute.
      */
     public String getEmail();
+    
+    /**
+     * Returns the value of the <code>email</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>email</code> attribute.
+     */
+    public String getEmail(String defaultValue);
 
     /**
      * Sets the value of the <code>email</code> attribute.
@@ -152,6 +168,14 @@ public interface MessageResource
      * @return the value of the the <code>messageId</code> attribute.
      */
     public String getMessageId();
+    
+    /**
+     * Returns the value of the <code>messageId</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>messageId</code> attribute.
+     */
+    public String getMessageId(String defaultValue);
 
     /**
      * Sets the value of the <code>messageId</code> attribute.
@@ -174,6 +198,14 @@ public interface MessageResource
      * @return the value of the the <code>moderationCookie</code> attribute.
      */
     public String getModerationCookie();
+    
+    /**
+     * Returns the value of the <code>moderationCookie</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>moderationCookie</code> attribute.
+     */
+    public String getModerationCookie(String defaultValue);
 
     /**
      * Sets the value of the <code>moderationCookie</code> attribute.

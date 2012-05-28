@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.category.query;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -59,7 +56,7 @@ public class CategoryQueryPoolResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>queries</code> attribute. */
-    private static AttributeDefinition queriesDef;
+	private static AttributeDefinition<ResourceList> queriesDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -116,9 +113,9 @@ public class CategoryQueryPoolResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("category.query.pool");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<CategoryQueryPoolResource> rc = session.getSchema().getResourceClass("category.query.pool", CategoryQueryPoolResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof CategoryQueryPoolResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -145,7 +142,7 @@ public class CategoryQueryPoolResourceImpl
      */
     public ResourceList getQueries()
     {
-        return (ResourceList)getInternal(queriesDef, null);
+        return get(queriesDef);
     }
     
     /**
@@ -156,7 +153,7 @@ public class CategoryQueryPoolResourceImpl
      */
     public ResourceList getQueries(ResourceList defaultValue)
     {
-        return (ResourceList)getInternal(queriesDef, defaultValue);
+        return get(queriesDef, defaultValue);
     }    
 
     /**

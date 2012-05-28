@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.banner;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -56,7 +53,7 @@ public class ExternalBannerResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>image</code> attribute. */
-    private static AttributeDefinition imageDef;
+	private static AttributeDefinition<String> imageDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -113,9 +110,9 @@ public class ExternalBannerResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.banner.external_banner");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<ExternalBannerResource> rc = session.getSchema().getResourceClass("cms.banner.external_banner", ExternalBannerResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof ExternalBannerResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -142,7 +139,7 @@ public class ExternalBannerResourceImpl
      */
     public String getImage()
     {
-        return (String)getInternal(imageDef, null);
+        return get(imageDef);
     }
     
     /**
@@ -153,7 +150,7 @@ public class ExternalBannerResourceImpl
      */
     public String getImage(String defaultValue)
     {
-        return (String)getInternal(imageDef, defaultValue);
+        return get(imageDef, defaultValue);
     }    
 
     /**

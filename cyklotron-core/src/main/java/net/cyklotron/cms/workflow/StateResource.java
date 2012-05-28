@@ -54,6 +54,14 @@ public interface StateResource
      * @return the value of the the <code>assignee</code> attribute.
      */
     public Role getAssignee();
+    
+    /**
+     * Returns the value of the <code>assignee</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>assignee</code> attribute.
+     */
+    public Role getAssignee(Role defaultValue);
 
     /**
      * Sets the value of the <code>assignee</code> attribute.

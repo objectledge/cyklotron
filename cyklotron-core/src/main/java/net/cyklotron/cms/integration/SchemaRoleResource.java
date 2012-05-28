@@ -127,6 +127,14 @@ public interface SchemaRoleResource
      * @return the value of the the <code>roleAttributeName</code> attribute.
      */
     public String getRoleAttributeName();
+    
+    /**
+     * Returns the value of the <code>roleAttributeName</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>roleAttributeName</code> attribute.
+     */
+    public String getRoleAttributeName(String defaultValue);
 
     /**
      * Sets the value of the <code>roleAttributeName</code> attribute.
@@ -186,6 +194,14 @@ public interface SchemaRoleResource
      * @return the value of the the <code>suffixAttributeName</code> attribute.
      */
     public String getSuffixAttributeName();
+    
+    /**
+     * Returns the value of the <code>suffixAttributeName</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>suffixAttributeName</code> attribute.
+     */
+    public String getSuffixAttributeName(String defaultValue);
 
     /**
      * Sets the value of the <code>suffixAttributeName</code> attribute.
@@ -208,6 +224,14 @@ public interface SchemaRoleResource
      * @return the value of the the <code>superRole</code> attribute.
      */
     public Resource getSuperRole();
+    
+    /**
+     * Returns the value of the <code>superRole</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>superRole</code> attribute.
+     */
+    public Resource getSuperRole(Resource defaultValue);
 
     /**
      * Sets the value of the <code>superRole</code> attribute.

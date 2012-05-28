@@ -56,10 +56,10 @@ public class ResourcePreferenceResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>multi</code> attribute. */
-    private static AttributeDefinition multiDef;
+    private static AttributeDefinition<Boolean> multiDef;
 
     /** The AttributeDefinition object for the <code>relatedClass</code> attribute. */
-    private static AttributeDefinition relatedClassDef;
+	private static AttributeDefinition<ResourceClass> relatedClassDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -122,11 +122,11 @@ public class ResourcePreferenceResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.resource_preference");
-            Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("multi"), new Boolean(multi));
+            ResourceClass<ResourcePreferenceResource> rc = session.getSchema().getResourceClass("integration.resource_preference", ResourcePreferenceResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
+            attrs.put(rc.getAttribute("multi"), Boolean.valueOf(multi));
             attrs.put(rc.getAttribute("relatedClass"), relatedClass);
-            attrs.put(rc.getAttribute("required"), new Boolean(required));
+            attrs.put(rc.getAttribute("required"), Boolean.valueOf(required));
             attrs.put(rc.getAttribute("scope"), scope);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ResourcePreferenceResource))
@@ -151,7 +151,7 @@ public class ResourcePreferenceResourceImpl
      */
     public boolean getMulti()
     {
-		return ((Boolean)getInternal(multiDef, null)).booleanValue();
+		return get(multiDef).booleanValue();
     }    
 
     /**
@@ -163,7 +163,7 @@ public class ResourcePreferenceResourceImpl
     {
         try
         {
-            set(multiDef, new Boolean(value));
+            set(multiDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -182,7 +182,7 @@ public class ResourcePreferenceResourceImpl
      */
     public ResourceClass getRelatedClass()
     {
-        return (ResourceClass)getInternal(relatedClassDef, null);
+        return get(relatedClassDef);
     }
  
     /**

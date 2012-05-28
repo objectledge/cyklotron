@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.link;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -59,7 +56,7 @@ public class CmsLinkResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>node</code> attribute. */
-    private static AttributeDefinition nodeDef;
+	private static AttributeDefinition<Resource> nodeDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -116,9 +113,9 @@ public class CmsLinkResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.link.cms_link");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<CmsLinkResource> rc = session.getSchema().getResourceClass("cms.link.cms_link", CmsLinkResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof CmsLinkResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -145,7 +142,7 @@ public class CmsLinkResourceImpl
      */
     public Resource getNode()
     {
-        return (Resource)getInternal(nodeDef, null);
+        return get(nodeDef);
     }
     
     /**
@@ -156,7 +153,7 @@ public class CmsLinkResourceImpl
      */
     public Resource getNode(Resource defaultValue)
     {
-        return (Resource)getInternal(nodeDef, defaultValue);
+        return get(nodeDef, defaultValue);
     }    
 
     /**

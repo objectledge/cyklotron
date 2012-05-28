@@ -29,8 +29,6 @@
 package net.cyklotron.cms.syndication;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -59,25 +57,25 @@ public class IncomingFeedResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>contents</code> attribute. */
-    private static AttributeDefinition contentsDef;
+	private static AttributeDefinition<String> contentsDef;
 
     /** The AttributeDefinition object for the <code>failedUpdates</code> attribute. */
-    private static AttributeDefinition failedUpdatesDef;
+    private static AttributeDefinition<Integer> failedUpdatesDef;
 
     /** The AttributeDefinition object for the <code>interval</code> attribute. */
-    private static AttributeDefinition intervalDef;
+    private static AttributeDefinition<Integer> intervalDef;
 
     /** The AttributeDefinition object for the <code>lastUpdate</code> attribute. */
-    private static AttributeDefinition lastUpdateDef;
+	private static AttributeDefinition<Date> lastUpdateDef;
 
     /** The AttributeDefinition object for the <code>transformationTemplate</code> attribute. */
-    private static AttributeDefinition transformationTemplateDef;
+	private static AttributeDefinition<String> transformationTemplateDef;
 
     /** The AttributeDefinition object for the <code>updateErrorKey</code> attribute. */
-    private static AttributeDefinition updateErrorKeyDef;
+	private static AttributeDefinition<String> updateErrorKeyDef;
 
     /** The AttributeDefinition object for the <code>url</code> attribute. */
-    private static AttributeDefinition urlDef;
+	private static AttributeDefinition<String> urlDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -134,9 +132,9 @@ public class IncomingFeedResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.syndication.incomingfeed");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<IncomingFeedResource> rc = session.getSchema().getResourceClass("cms.syndication.incomingfeed", IncomingFeedResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof IncomingFeedResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -163,7 +161,7 @@ public class IncomingFeedResourceImpl
      */
     public String getContents()
     {
-        return (String)getInternal(contentsDef, null);
+        return get(contentsDef);
     }
     
     /**
@@ -174,7 +172,7 @@ public class IncomingFeedResourceImpl
      */
     public String getContents(String defaultValue)
     {
-        return (String)getInternal(contentsDef, defaultValue);
+        return get(contentsDef, defaultValue);
     }    
 
     /**
@@ -226,7 +224,7 @@ public class IncomingFeedResourceImpl
     public int getFailedUpdates()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(failedUpdatesDef, null);
+	    Integer value = get(failedUpdatesDef);
         if(value != null)
         {
             return value.intValue();
@@ -246,7 +244,7 @@ public class IncomingFeedResourceImpl
      */
     public int getFailedUpdates(int defaultValue)
     {
-		return ((Integer)getInternal(failedUpdatesDef, new Integer(defaultValue))).intValue();
+		return get(failedUpdatesDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -258,7 +256,7 @@ public class IncomingFeedResourceImpl
     {
         try
         {
-            set(failedUpdatesDef, new Integer(value));
+            set(failedUpdatesDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -305,7 +303,7 @@ public class IncomingFeedResourceImpl
     public int getInterval()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(intervalDef, null);
+	    Integer value = get(intervalDef);
         if(value != null)
         {
             return value.intValue();
@@ -325,7 +323,7 @@ public class IncomingFeedResourceImpl
      */
     public int getInterval(int defaultValue)
     {
-		return ((Integer)getInternal(intervalDef, new Integer(defaultValue))).intValue();
+		return get(intervalDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -337,7 +335,7 @@ public class IncomingFeedResourceImpl
     {
         try
         {
-            set(intervalDef, new Integer(value));
+            set(intervalDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -381,7 +379,7 @@ public class IncomingFeedResourceImpl
      */
     public Date getLastUpdate()
     {
-        return (Date)getInternal(lastUpdateDef, null);
+        return get(lastUpdateDef);
     }
     
     /**
@@ -392,7 +390,7 @@ public class IncomingFeedResourceImpl
      */
     public Date getLastUpdate(Date defaultValue)
     {
-        return (Date)getInternal(lastUpdateDef, defaultValue);
+        return get(lastUpdateDef, defaultValue);
     }    
 
     /**
@@ -441,7 +439,7 @@ public class IncomingFeedResourceImpl
      */
     public String getTransformationTemplate()
     {
-        return (String)getInternal(transformationTemplateDef, null);
+        return get(transformationTemplateDef);
     }
     
     /**
@@ -452,7 +450,7 @@ public class IncomingFeedResourceImpl
      */
     public String getTransformationTemplate(String defaultValue)
     {
-        return (String)getInternal(transformationTemplateDef, defaultValue);
+        return get(transformationTemplateDef, defaultValue);
     }    
 
     /**
@@ -501,7 +499,7 @@ public class IncomingFeedResourceImpl
      */
     public String getUpdateErrorKey()
     {
-        return (String)getInternal(updateErrorKeyDef, null);
+        return get(updateErrorKeyDef);
     }
     
     /**
@@ -512,7 +510,7 @@ public class IncomingFeedResourceImpl
      */
     public String getUpdateErrorKey(String defaultValue)
     {
-        return (String)getInternal(updateErrorKeyDef, defaultValue);
+        return get(updateErrorKeyDef, defaultValue);
     }    
 
     /**
@@ -561,7 +559,7 @@ public class IncomingFeedResourceImpl
      */
     public String getUrl()
     {
-        return (String)getInternal(urlDef, null);
+        return get(urlDef);
     }
     
     /**
@@ -572,7 +570,7 @@ public class IncomingFeedResourceImpl
      */
     public String getUrl(String defaultValue)
     {
-        return (String)getInternal(urlDef, defaultValue);
+        return get(urlDef, defaultValue);
     }    
 
     /**

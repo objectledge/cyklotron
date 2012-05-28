@@ -58,10 +58,10 @@ public class BallotResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>answerId</code> attribute. */
-    private static AttributeDefinition answerIdDef;
+    private static AttributeDefinition<Long> answerIdDef;
 
     /** The AttributeDefinition object for the <code>email</code> attribute. */
-    private static AttributeDefinition emailDef;
+	private static AttributeDefinition<String> emailDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -120,8 +120,8 @@ public class BallotResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.poll.ballot");
-            Map attrs = new HashMap();
+            ResourceClass<BallotResource> rc = session.getSchema().getResourceClass("cms.poll.ballot", BallotResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("email"), email);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof BallotResource))
@@ -149,7 +149,7 @@ public class BallotResourceImpl
     public long getAnswerId()
         throws IllegalStateException
     {
-	    Long value = (Long)getInternal(answerIdDef, null);
+	    Long value = get(answerIdDef);
         if(value != null)
         {
             return value.longValue();
@@ -169,7 +169,7 @@ public class BallotResourceImpl
      */
     public long getAnswerId(long defaultValue)
     {
-		return ((Long)getInternal(answerIdDef, new Long(defaultValue))).longValue();
+		return get(answerIdDef, Long.valueOf(defaultValue)).longValue();
 	}
 
     /**
@@ -181,7 +181,7 @@ public class BallotResourceImpl
     {
         try
         {
-            set(answerIdDef, new Long(value));
+            set(answerIdDef, Long.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -225,7 +225,7 @@ public class BallotResourceImpl
      */
     public String getEmail()
     {
-        return (String)getInternal(emailDef, null);
+        return get(emailDef);
     }
  
     /**

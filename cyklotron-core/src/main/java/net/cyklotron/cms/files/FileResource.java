@@ -51,6 +51,14 @@ public interface FileResource
      * @return the value of the the <code>encoding</code> attribute.
      */
     public String getEncoding();
+    
+    /**
+     * Returns the value of the <code>encoding</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>encoding</code> attribute.
+     */
+    public String getEncoding(String defaultValue);
 
     /**
      * Sets the value of the <code>encoding</code> attribute.
@@ -73,6 +81,14 @@ public interface FileResource
      * @return the value of the the <code>locale</code> attribute.
      */
     public String getLocale();
+    
+    /**
+     * Returns the value of the <code>locale</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>locale</code> attribute.
+     */
+    public String getLocale(String defaultValue);
 
     /**
      * Sets the value of the <code>locale</code> attribute.
@@ -95,6 +111,14 @@ public interface FileResource
      * @return the value of the the <code>mimetype</code> attribute.
      */
     public String getMimetype();
+    
+    /**
+     * Returns the value of the <code>mimetype</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>mimetype</code> attribute.
+     */
+    public String getMimetype(String defaultValue);
 
     /**
      * Sets the value of the <code>mimetype</code> attribute.

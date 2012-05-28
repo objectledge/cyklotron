@@ -58,22 +58,22 @@ public class ApplicationResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>applicationName</code> attribute. */
-    private static AttributeDefinition applicationNameDef;
+	private static AttributeDefinition<String> applicationNameDef;
 
     /** The AttributeDefinition object for the <code>enabled</code> attribute. */
-    private static AttributeDefinition enabledDef;
+    private static AttributeDefinition<Boolean> enabledDef;
 
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
-    private static AttributeDefinition priorityDef;
+    private static AttributeDefinition<Integer> priorityDef;
 
     /** The AttributeDefinition object for the <code>required</code> attribute. */
-    private static AttributeDefinition requiredDef;
+    private static AttributeDefinition<Boolean> requiredDef;
 
     /** The AttributeDefinition object for the <code>vendor</code> attribute. */
-    private static AttributeDefinition vendorDef;
+	private static AttributeDefinition<String> vendorDef;
 
     /** The AttributeDefinition object for the <code>version</code> attribute. */
-    private static AttributeDefinition versionDef;
+	private static AttributeDefinition<String> versionDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -138,12 +138,12 @@ public class ApplicationResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.application");
-            Map attrs = new HashMap();
+            ResourceClass<ApplicationResource> rc = session.getSchema().getResourceClass("integration.application", ApplicationResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("applicationName"), applicationName);
-            attrs.put(rc.getAttribute("enabled"), new Boolean(enabled));
-            attrs.put(rc.getAttribute("priority"), new Integer(priority));
-            attrs.put(rc.getAttribute("required"), new Boolean(required));
+            attrs.put(rc.getAttribute("enabled"), Boolean.valueOf(enabled));
+            attrs.put(rc.getAttribute("priority"), Integer.valueOf(priority));
+            attrs.put(rc.getAttribute("required"), Boolean.valueOf(required));
             attrs.put(rc.getAttribute("vendor"), vendor);
             attrs.put(rc.getAttribute("version"), version);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
@@ -169,7 +169,7 @@ public class ApplicationResourceImpl
      */
     public String getApplicationName()
     {
-        return (String)getInternal(applicationNameDef, null);
+        return get(applicationNameDef);
     }
  
     /**
@@ -207,7 +207,7 @@ public class ApplicationResourceImpl
      */
     public boolean getEnabled()
     {
-		return ((Boolean)getInternal(enabledDef, null)).booleanValue();
+		return get(enabledDef).booleanValue();
     }    
 
     /**
@@ -219,7 +219,7 @@ public class ApplicationResourceImpl
     {
         try
         {
-            set(enabledDef, new Boolean(value));
+            set(enabledDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -238,7 +238,7 @@ public class ApplicationResourceImpl
      */
     public int getPriority()
     {
-		return ((Integer)getInternal(priorityDef, null)).intValue();
+		return get(priorityDef).intValue();
     }    
 
     /**
@@ -250,7 +250,7 @@ public class ApplicationResourceImpl
     {
         try
         {
-            set(priorityDef, new Integer(value));
+            set(priorityDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -269,7 +269,7 @@ public class ApplicationResourceImpl
      */
     public boolean getRequired()
     {
-		return ((Boolean)getInternal(requiredDef, null)).booleanValue();
+		return get(requiredDef).booleanValue();
     }    
 
     /**
@@ -281,7 +281,7 @@ public class ApplicationResourceImpl
     {
         try
         {
-            set(requiredDef, new Boolean(value));
+            set(requiredDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -300,7 +300,7 @@ public class ApplicationResourceImpl
      */
     public String getVendor()
     {
-        return (String)getInternal(vendorDef, null);
+        return get(vendorDef);
     }
  
     /**
@@ -338,7 +338,7 @@ public class ApplicationResourceImpl
      */
     public String getVersion()
     {
-        return (String)getInternal(versionDef, null);
+        return get(versionDef);
     }
  
     /**

@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.aggregation;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -58,7 +55,7 @@ public class AggregationNodeImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>replyTo</code> attribute. */
-    private static AttributeDefinition replyToDef;
+	private static AttributeDefinition<String> replyToDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -115,9 +112,9 @@ public class AggregationNodeImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.aggregation.root");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<AggregationNode> rc = session.getSchema().getResourceClass("cms.aggregation.root", AggregationNode.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof AggregationNode))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -144,7 +141,7 @@ public class AggregationNodeImpl
      */
     public String getReplyTo()
     {
-        return (String)getInternal(replyToDef, null);
+        return get(replyToDef);
     }
     
     /**
@@ -155,7 +152,7 @@ public class AggregationNodeImpl
      */
     public String getReplyTo(String defaultValue)
     {
-        return (String)getInternal(replyToDef, defaultValue);
+        return get(replyToDef, defaultValue);
     }    
 
     /**

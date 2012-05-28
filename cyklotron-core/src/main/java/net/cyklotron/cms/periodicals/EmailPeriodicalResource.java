@@ -51,6 +51,14 @@ public interface EmailPeriodicalResource
      * @return the value of the the <code>addresses</code> attribute.
      */
     public String getAddresses();
+    
+    /**
+     * Returns the value of the <code>addresses</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>addresses</code> attribute.
+     */
+    public String getAddresses(String defaultValue);
 
     /**
      * Sets the value of the <code>addresses</code> attribute.
@@ -73,6 +81,14 @@ public interface EmailPeriodicalResource
      * @return the value of the the <code>fromHeader</code> attribute.
      */
     public String getFromHeader();
+    
+    /**
+     * Returns the value of the <code>fromHeader</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>fromHeader</code> attribute.
+     */
+    public String getFromHeader(String defaultValue);
 
     /**
      * Sets the value of the <code>fromHeader</code> attribute.
@@ -132,6 +148,14 @@ public interface EmailPeriodicalResource
      * @return the value of the the <code>notificationRenderer</code> attribute.
      */
     public String getNotificationRenderer();
+    
+    /**
+     * Returns the value of the <code>notificationRenderer</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>notificationRenderer</code> attribute.
+     */
+    public String getNotificationRenderer(String defaultValue);
 
     /**
      * Sets the value of the <code>notificationRenderer</code> attribute.
@@ -154,6 +178,14 @@ public interface EmailPeriodicalResource
      * @return the value of the the <code>notificationTemplate</code> attribute.
      */
     public String getNotificationTemplate();
+    
+    /**
+     * Returns the value of the <code>notificationTemplate</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>notificationTemplate</code> attribute.
+     */
+    public String getNotificationTemplate(String defaultValue);
 
     /**
      * Sets the value of the <code>notificationTemplate</code> attribute.
@@ -176,6 +208,14 @@ public interface EmailPeriodicalResource
      * @return the value of the the <code>replyToHeader</code> attribute.
      */
     public String getReplyToHeader();
+    
+    /**
+     * Returns the value of the <code>replyToHeader</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>replyToHeader</code> attribute.
+     */
+    public String getReplyToHeader(String defaultValue);
 
     /**
      * Sets the value of the <code>replyToHeader</code> attribute.
@@ -235,6 +275,14 @@ public interface EmailPeriodicalResource
      * @return the value of the the <code>subject</code> attribute.
      */
     public String getSubject();
+    
+    /**
+     * Returns the value of the <code>subject</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>subject</code> attribute.
+     */
+    public String getSubject(String defaultValue);
 
     /**
      * Sets the value of the <code>subject</code> attribute.
