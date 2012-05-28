@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.banner;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -56,7 +53,7 @@ public class MediaBannerResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>media</code> attribute. */
-    private static AttributeDefinition mediaDef;
+	private static AttributeDefinition<Resource> mediaDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -113,9 +110,9 @@ public class MediaBannerResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.banner.media_banner");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<MediaBannerResource> rc = session.getSchema().getResourceClass("cms.banner.media_banner", MediaBannerResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof MediaBannerResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -142,7 +139,7 @@ public class MediaBannerResourceImpl
      */
     public Resource getMedia()
     {
-        return (Resource)getInternal(mediaDef, null);
+        return get(mediaDef);
     }
     
     /**
@@ -153,7 +150,7 @@ public class MediaBannerResourceImpl
      */
     public Resource getMedia(Resource defaultValue)
     {
-        return (Resource)getInternal(mediaDef, defaultValue);
+        return get(mediaDef, defaultValue);
     }    
 
     /**

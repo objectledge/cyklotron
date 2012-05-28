@@ -58,7 +58,7 @@ public class RecommendationCommentResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>content</code> attribute. */
-    private static AttributeDefinition contentDef;
+	private static AttributeDefinition<String> contentDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -117,8 +117,8 @@ public class RecommendationCommentResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.aggregation.recommendation_comment");
-            Map attrs = new HashMap();
+            ResourceClass<RecommendationCommentResource> rc = session.getSchema().getResourceClass("cms.aggregation.recommendation_comment", RecommendationCommentResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("content"), content);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof RecommendationCommentResource))
@@ -143,7 +143,7 @@ public class RecommendationCommentResourceImpl
      */
     public String getContent()
     {
-        return (String)getInternal(contentDef, null);
+        return get(contentDef);
     }
  
     /**

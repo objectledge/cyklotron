@@ -29,12 +29,11 @@
 package net.cyklotron.cms;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.GenericResource;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -111,9 +110,9 @@ public class ProtectedResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("protected");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<ProtectedResource> rc = session.getSchema().getResourceClass("protected", ProtectedResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof ProtectedResource))
             {
                 throw new BackendException("incosistent schema: created object is "+

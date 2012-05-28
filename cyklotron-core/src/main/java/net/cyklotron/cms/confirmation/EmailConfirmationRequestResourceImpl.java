@@ -58,10 +58,10 @@ public class EmailConfirmationRequestResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>email</code> attribute. */
-    private static AttributeDefinition emailDef;
+	private static AttributeDefinition<String> emailDef;
 
     /** The AttributeDefinition object for the <code>data</code> attribute. */
-    private static AttributeDefinition dataDef;
+	private static AttributeDefinition<String> dataDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -110,18 +110,19 @@ public class EmailConfirmationRequestResourceImpl
      * @param name the name of the new resource
      * @param parent the parent resource.
      * @param email the email attribute
-     * @return a new EmailConfirmationRequest instance.
+     * @return a new EmailConfirmationRequestResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
-    public static EmailConfirmationRequestResource createEmailConfirmationRequestResource(CoralSession
-        session, String name, Resource parent, String email)
+    public static EmailConfirmationRequestResource
+        createEmailConfirmationRequestResource(CoralSession session, String name, Resource parent,
+        String email)
         throws ValueRequiredException, InvalidResourceNameException
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.confirmation.email_confirmation_request");
-            Map attrs = new HashMap();
+            ResourceClass<EmailConfirmationRequestResource> rc = session.getSchema().getResourceClass("cms.confirmation.email_confirmation_request", EmailConfirmationRequestResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("email"), email);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof EmailConfirmationRequestResource))
@@ -146,7 +147,7 @@ public class EmailConfirmationRequestResourceImpl
      */
     public String getEmail()
     {
-        return (String)getInternal(emailDef, null);
+        return get(emailDef);
     }
  
     /**
@@ -184,7 +185,7 @@ public class EmailConfirmationRequestResourceImpl
      */
     public String getData()
     {
-        return (String)getInternal(dataDef, null);
+        return get(dataDef);
     }
     
     /**
@@ -195,7 +196,7 @@ public class EmailConfirmationRequestResourceImpl
      */
     public String getData(String defaultValue)
     {
-        return (String)getInternal(dataDef, defaultValue);
+        return get(dataDef, defaultValue);
     }    
 
     /**

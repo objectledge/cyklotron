@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.GenericResource;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -57,7 +54,7 @@ public class SeeableResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>hidden</code> attribute. */
-    private static AttributeDefinition hiddenDef;
+    private static AttributeDefinition<Boolean> hiddenDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -114,9 +111,9 @@ public class SeeableResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("seeable");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<SeeableResource> rc = session.getSchema().getResourceClass("seeable", SeeableResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof SeeableResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -146,7 +143,7 @@ public class SeeableResourceImpl
     public boolean getHidden()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(hiddenDef, null);
+	    Boolean value = get(hiddenDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -166,7 +163,7 @@ public class SeeableResourceImpl
      */
     public boolean getHidden(boolean defaultValue)
     {
-		return ((Boolean)getInternal(hiddenDef, new Boolean(defaultValue))).booleanValue();
+		return get(hiddenDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -178,7 +175,7 @@ public class SeeableResourceImpl
     {
         try
         {
-            set(hiddenDef, new Boolean(value));
+            set(hiddenDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

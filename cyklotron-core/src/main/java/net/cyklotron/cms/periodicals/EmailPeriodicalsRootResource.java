@@ -53,6 +53,14 @@ public interface EmailPeriodicalsRootResource
      * @return the value of the the <code>previewRecipient</code> attribute.
      */
     public String getPreviewRecipient();
+    
+    /**
+     * Returns the value of the <code>previewRecipient</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>previewRecipient</code> attribute.
+     */
+    public String getPreviewRecipient(String defaultValue);
 
     /**
      * Sets the value of the <code>previewRecipient</code> attribute.
@@ -75,6 +83,14 @@ public interface EmailPeriodicalsRootResource
      * @return the value of the the <code>subscriptionNode</code> attribute.
      */
     public NavigationNodeResource getSubscriptionNode();
+    
+    /**
+     * Returns the value of the <code>subscriptionNode</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>subscriptionNode</code> attribute.
+     */
+    public NavigationNodeResource getSubscriptionNode(NavigationNodeResource defaultValue);
 
     /**
      * Sets the value of the <code>subscriptionNode</code> attribute.

@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.poll;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -58,10 +55,10 @@ public class AnswerResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>sequence</code> attribute. */
-    private static AttributeDefinition sequenceDef;
+    private static AttributeDefinition<Integer> sequenceDef;
 
     /** The AttributeDefinition object for the <code>votesCount</code> attribute. */
-    private static AttributeDefinition votesCountDef;
+    private static AttributeDefinition<Integer> votesCountDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -118,9 +115,9 @@ public class AnswerResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.poll.answer");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<AnswerResource> rc = session.getSchema().getResourceClass("cms.poll.answer", AnswerResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof AnswerResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -150,7 +147,7 @@ public class AnswerResourceImpl
     public int getSequence()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(sequenceDef, null);
+	    Integer value = get(sequenceDef);
         if(value != null)
         {
             return value.intValue();
@@ -170,7 +167,7 @@ public class AnswerResourceImpl
      */
     public int getSequence(int defaultValue)
     {
-		return ((Integer)getInternal(sequenceDef, new Integer(defaultValue))).intValue();
+		return get(sequenceDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -182,7 +179,7 @@ public class AnswerResourceImpl
     {
         try
         {
-            set(sequenceDef, new Integer(value));
+            set(sequenceDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -229,7 +226,7 @@ public class AnswerResourceImpl
     public int getVotesCount()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(votesCountDef, null);
+	    Integer value = get(votesCountDef);
         if(value != null)
         {
             return value.intValue();
@@ -249,7 +246,7 @@ public class AnswerResourceImpl
      */
     public int getVotesCount(int defaultValue)
     {
-		return ((Integer)getInternal(votesCountDef, new Integer(defaultValue))).intValue();
+		return get(votesCountDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -261,7 +258,7 @@ public class AnswerResourceImpl
     {
         try
         {
-            set(votesCountDef, new Integer(value));
+            set(votesCountDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

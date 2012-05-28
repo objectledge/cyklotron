@@ -29,8 +29,6 @@
 package net.cyklotron.cms.forum;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.WeakResourceList;
@@ -65,22 +63,22 @@ public class ForumNodeResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
-    private static AttributeDefinition administratorDef;
+	private static AttributeDefinition<Role> administratorDef;
 
     /** The AttributeDefinition object for the <code>lastlyAdded</code> attribute. */
-    private static AttributeDefinition lastlyAddedDef;
+	private static AttributeDefinition<WeakResourceList> lastlyAddedDef;
 
     /** The AttributeDefinition object for the <code>lastlyAddedSize</code> attribute. */
-    private static AttributeDefinition lastlyAddedSizeDef;
+    private static AttributeDefinition<Integer> lastlyAddedSizeDef;
 
     /** The AttributeDefinition object for the <code>moderator</code> attribute. */
-    private static AttributeDefinition moderatorDef;
+	private static AttributeDefinition<Role> moderatorDef;
 
     /** The AttributeDefinition object for the <code>participant</code> attribute. */
-    private static AttributeDefinition participantDef;
+	private static AttributeDefinition<Role> participantDef;
 
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
-    private static AttributeDefinition visitorDef;
+	private static AttributeDefinition<Role> visitorDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -137,9 +135,9 @@ public class ForumNodeResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.forum.node");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<ForumNodeResource> rc = session.getSchema().getResourceClass("cms.forum.node", ForumNodeResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof ForumNodeResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -166,7 +164,7 @@ public class ForumNodeResourceImpl
      */
     public Role getAdministrator()
     {
-        return (Role)getInternal(administratorDef, null);
+        return get(administratorDef);
     }
     
     /**
@@ -177,7 +175,7 @@ public class ForumNodeResourceImpl
      */
     public Role getAdministrator(Role defaultValue)
     {
-        return (Role)getInternal(administratorDef, defaultValue);
+        return get(administratorDef, defaultValue);
     }    
 
     /**
@@ -226,7 +224,7 @@ public class ForumNodeResourceImpl
      */
     public WeakResourceList getLastlyAdded()
     {
-        return (WeakResourceList)getInternal(lastlyAddedDef, null);
+        return get(lastlyAddedDef);
     }
     
     /**
@@ -237,7 +235,7 @@ public class ForumNodeResourceImpl
      */
     public WeakResourceList getLastlyAdded(WeakResourceList defaultValue)
     {
-        return (WeakResourceList)getInternal(lastlyAddedDef, defaultValue);
+        return get(lastlyAddedDef, defaultValue);
     }    
 
     /**
@@ -289,7 +287,7 @@ public class ForumNodeResourceImpl
     public int getLastlyAddedSize()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(lastlyAddedSizeDef, null);
+	    Integer value = get(lastlyAddedSizeDef);
         if(value != null)
         {
             return value.intValue();
@@ -309,7 +307,7 @@ public class ForumNodeResourceImpl
      */
     public int getLastlyAddedSize(int defaultValue)
     {
-		return ((Integer)getInternal(lastlyAddedSizeDef, new Integer(defaultValue))).intValue();
+		return get(lastlyAddedSizeDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -321,7 +319,7 @@ public class ForumNodeResourceImpl
     {
         try
         {
-            set(lastlyAddedSizeDef, new Integer(value));
+            set(lastlyAddedSizeDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -365,7 +363,7 @@ public class ForumNodeResourceImpl
      */
     public Role getModerator()
     {
-        return (Role)getInternal(moderatorDef, null);
+        return get(moderatorDef);
     }
     
     /**
@@ -376,7 +374,7 @@ public class ForumNodeResourceImpl
      */
     public Role getModerator(Role defaultValue)
     {
-        return (Role)getInternal(moderatorDef, defaultValue);
+        return get(moderatorDef, defaultValue);
     }    
 
     /**
@@ -425,7 +423,7 @@ public class ForumNodeResourceImpl
      */
     public Role getParticipant()
     {
-        return (Role)getInternal(participantDef, null);
+        return get(participantDef);
     }
     
     /**
@@ -436,7 +434,7 @@ public class ForumNodeResourceImpl
      */
     public Role getParticipant(Role defaultValue)
     {
-        return (Role)getInternal(participantDef, defaultValue);
+        return get(participantDef, defaultValue);
     }    
 
     /**
@@ -485,7 +483,7 @@ public class ForumNodeResourceImpl
      */
     public Role getVisitor()
     {
-        return (Role)getInternal(visitorDef, null);
+        return get(visitorDef);
     }
     
     /**
@@ -496,7 +494,7 @@ public class ForumNodeResourceImpl
      */
     public Role getVisitor(Role defaultValue)
     {
-        return (Role)getInternal(visitorDef, defaultValue);
+        return get(visitorDef, defaultValue);
     }    
 
     /**

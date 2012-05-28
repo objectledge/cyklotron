@@ -54,6 +54,14 @@ public interface SiteResource
      * @return the value of the the <code>administrator</code> attribute.
      */
     public Role getAdministrator();
+    
+    /**
+     * Returns the value of the <code>administrator</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>administrator</code> attribute.
+     */
+    public Role getAdministrator(Role defaultValue);
 
     /**
      * Sets the value of the <code>administrator</code> attribute.
@@ -76,6 +84,14 @@ public interface SiteResource
      * @return the value of the the <code>editor</code> attribute.
      */
     public Role getEditor();
+    
+    /**
+     * Returns the value of the <code>editor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>editor</code> attribute.
+     */
+    public Role getEditor(Role defaultValue);
 
     /**
      * Sets the value of the <code>editor</code> attribute.
@@ -98,6 +114,14 @@ public interface SiteResource
      * @return the value of the the <code>layoutAdministrator</code> attribute.
      */
     public Role getLayoutAdministrator();
+    
+    /**
+     * Returns the value of the <code>layoutAdministrator</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>layoutAdministrator</code> attribute.
+     */
+    public Role getLayoutAdministrator(Role defaultValue);
 
     /**
      * Sets the value of the <code>layoutAdministrator</code> attribute.
@@ -134,6 +158,14 @@ public interface SiteResource
      * @return the value of the the <code>seniorEditor</code> attribute.
      */
     public Role getSeniorEditor();
+    
+    /**
+     * Returns the value of the <code>seniorEditor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>seniorEditor</code> attribute.
+     */
+    public Role getSeniorEditor(Role defaultValue);
 
     /**
      * Sets the value of the <code>seniorEditor</code> attribute.
@@ -156,6 +188,14 @@ public interface SiteResource
      * @return the value of the the <code>siteRole</code> attribute.
      */
     public Role getSiteRole();
+    
+    /**
+     * Returns the value of the <code>siteRole</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>siteRole</code> attribute.
+     */
+    public Role getSiteRole(Role defaultValue);
 
     /**
      * Sets the value of the <code>siteRole</code> attribute.
@@ -178,6 +218,14 @@ public interface SiteResource
      * @return the value of the the <code>teamMember</code> attribute.
      */
     public Role getTeamMember();
+    
+    /**
+     * Returns the value of the <code>teamMember</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>teamMember</code> attribute.
+     */
+    public Role getTeamMember(Role defaultValue);
 
     /**
      * Sets the value of the <code>teamMember</code> attribute.

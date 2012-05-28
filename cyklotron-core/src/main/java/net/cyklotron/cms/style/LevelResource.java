@@ -53,6 +53,14 @@ public interface LevelResource
      * @return the value of the the <code>layout</code> attribute.
      */
     public LayoutResource getLayout();
+    
+    /**
+     * Returns the value of the <code>layout</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>layout</code> attribute.
+     */
+    public LayoutResource getLayout(LayoutResource defaultValue);
 
     /**
      * Sets the value of the <code>layout</code> attribute.

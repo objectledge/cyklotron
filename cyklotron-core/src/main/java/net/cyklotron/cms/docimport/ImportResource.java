@@ -57,6 +57,14 @@ public interface ImportResource
      * @return the value of the the <code>abstractCleanupProfile</code> attribute.
      */
     public String getAbstractCleanupProfile();
+    
+    /**
+     * Returns the value of the <code>abstractCleanupProfile</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>abstractCleanupProfile</code> attribute.
+     */
+    public String getAbstractCleanupProfile(String defaultValue);
 
     /**
      * Sets the value of the <code>abstractCleanupProfile</code> attribute.
@@ -116,6 +124,14 @@ public interface ImportResource
      * @return the value of the the <code>abstractXPath</code> attribute.
      */
     public String getAbstractXPath();
+    
+    /**
+     * Returns the value of the <code>abstractXPath</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>abstractXPath</code> attribute.
+     */
+    public String getAbstractXPath(String defaultValue);
 
     /**
      * Sets the value of the <code>abstractXPath</code> attribute.
@@ -138,6 +154,14 @@ public interface ImportResource
      * @return the value of the the <code>attachentURLXPath</code> attribute.
      */
     public String getAttachentURLXPath();
+    
+    /**
+     * Returns the value of the <code>attachentURLXPath</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>attachentURLXPath</code> attribute.
+     */
+    public String getAttachentURLXPath(String defaultValue);
 
     /**
      * Sets the value of the <code>attachentURLXPath</code> attribute.
@@ -197,6 +221,14 @@ public interface ImportResource
      * @return the value of the the <code>attachmentURLSeparator</code> attribute.
      */
     public String getAttachmentURLSeparator();
+    
+    /**
+     * Returns the value of the <code>attachmentURLSeparator</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>attachmentURLSeparator</code> attribute.
+     */
+    public String getAttachmentURLSeparator(String defaultValue);
 
     /**
      * Sets the value of the <code>attachmentURLSeparator</code> attribute.
@@ -236,6 +268,14 @@ public interface ImportResource
      * @return the value of the the <code>calendarStructureType</code> attribute.
      */
     public String getCalendarStructureType();
+    
+    /**
+     * Returns the value of the <code>calendarStructureType</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>calendarStructureType</code> attribute.
+     */
+    public String getCalendarStructureType(String defaultValue);
 
     /**
      * Sets the value of the <code>calendarStructureType</code> attribute.
@@ -258,6 +298,14 @@ public interface ImportResource
      * @return the value of the the <code>categories</code> attribute.
      */
     public ResourceList getCategories();
+    
+    /**
+     * Returns the value of the <code>categories</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>categories</code> attribute.
+     */
+    public ResourceList getCategories(ResourceList defaultValue);
 
     /**
      * Sets the value of the <code>categories</code> attribute.
@@ -280,6 +328,14 @@ public interface ImportResource
      * @return the value of the the <code>contentCleanupProfile</code> attribute.
      */
     public String getContentCleanupProfile();
+    
+    /**
+     * Returns the value of the <code>contentCleanupProfile</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>contentCleanupProfile</code> attribute.
+     */
+    public String getContentCleanupProfile(String defaultValue);
 
     /**
      * Sets the value of the <code>contentCleanupProfile</code> attribute.
@@ -339,6 +395,14 @@ public interface ImportResource
      * @return the value of the the <code>contentXPath</code> attribute.
      */
     public String getContentXPath();
+    
+    /**
+     * Returns the value of the <code>contentXPath</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>contentXPath</code> attribute.
+     */
+    public String getContentXPath(String defaultValue);
 
     /**
      * Sets the value of the <code>contentXPath</code> attribute.
@@ -361,6 +425,14 @@ public interface ImportResource
      * @return the value of the the <code>creationDateXPath</code> attribute.
      */
     public String getCreationDateXPath();
+    
+    /**
+     * Returns the value of the <code>creationDateXPath</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>creationDateXPath</code> attribute.
+     */
+    public String getCreationDateXPath(String defaultValue);
 
     /**
      * Sets the value of the <code>creationDateXPath</code> attribute.
@@ -383,6 +455,14 @@ public interface ImportResource
      * @return the value of the the <code>dateFormat</code> attribute.
      */
     public String getDateFormat();
+    
+    /**
+     * Returns the value of the <code>dateFormat</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>dateFormat</code> attribute.
+     */
+    public String getDateFormat(String defaultValue);
 
     /**
      * Sets the value of the <code>dateFormat</code> attribute.
@@ -405,6 +485,14 @@ public interface ImportResource
      * @return the value of the the <code>dateRangeEndParameter</code> attribute.
      */
     public String getDateRangeEndParameter();
+    
+    /**
+     * Returns the value of the <code>dateRangeEndParameter</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>dateRangeEndParameter</code> attribute.
+     */
+    public String getDateRangeEndParameter(String defaultValue);
 
     /**
      * Sets the value of the <code>dateRangeEndParameter</code> attribute.
@@ -427,6 +515,14 @@ public interface ImportResource
      * @return the value of the the <code>dateRangeStartParameter</code> attribute.
      */
     public String getDateRangeStartParameter();
+    
+    /**
+     * Returns the value of the <code>dateRangeStartParameter</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>dateRangeStartParameter</code> attribute.
+     */
+    public String getDateRangeStartParameter(String defaultValue);
 
     /**
      * Sets the value of the <code>dateRangeStartParameter</code> attribute.
@@ -449,6 +545,14 @@ public interface ImportResource
      * @return the value of the the <code>documentXPath</code> attribute.
      */
     public String getDocumentXPath();
+    
+    /**
+     * Returns the value of the <code>documentXPath</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>documentXPath</code> attribute.
+     */
+    public String getDocumentXPath(String defaultValue);
 
     /**
      * Sets the value of the <code>documentXPath</code> attribute.
@@ -471,6 +575,14 @@ public interface ImportResource
      * @return the value of the the <code>footer</code> attribute.
      */
     public String getFooter();
+    
+    /**
+     * Returns the value of the <code>footer</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>footer</code> attribute.
+     */
+    public String getFooter(String defaultValue);
 
     /**
      * Sets the value of the <code>footer</code> attribute.
@@ -493,6 +605,14 @@ public interface ImportResource
      * @return the value of the the <code>lastNewDocumentsCheck</code> attribute.
      */
     public Date getLastNewDocumentsCheck();
+    
+    /**
+     * Returns the value of the <code>lastNewDocumentsCheck</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>lastNewDocumentsCheck</code> attribute.
+     */
+    public Date getLastNewDocumentsCheck(Date defaultValue);
 
     /**
      * Sets the value of the <code>lastNewDocumentsCheck</code> attribute.
@@ -515,6 +635,14 @@ public interface ImportResource
      * @return the value of the the <code>lastUpdatedDocumentsCheck</code> attribute.
      */
     public Date getLastUpdatedDocumentsCheck();
+    
+    /**
+     * Returns the value of the <code>lastUpdatedDocumentsCheck</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>lastUpdatedDocumentsCheck</code> attribute.
+     */
+    public Date getLastUpdatedDocumentsCheck(Date defaultValue);
 
     /**
      * Sets the value of the <code>lastUpdatedDocumentsCheck</code> attribute.
@@ -554,6 +682,14 @@ public interface ImportResource
      * @return the value of the the <code>modificationDateXPath</code> attribute.
      */
     public String getModificationDateXPath();
+    
+    /**
+     * Returns the value of the <code>modificationDateXPath</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>modificationDateXPath</code> attribute.
+     */
+    public String getModificationDateXPath(String defaultValue);
 
     /**
      * Sets the value of the <code>modificationDateXPath</code> attribute.
@@ -576,6 +712,14 @@ public interface ImportResource
      * @return the value of the the <code>originalURLXPath</code> attribute.
      */
     public String getOriginalURLXPath();
+    
+    /**
+     * Returns the value of the <code>originalURLXPath</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>originalURLXPath</code> attribute.
+     */
+    public String getOriginalURLXPath(String defaultValue);
 
     /**
      * Sets the value of the <code>originalURLXPath</code> attribute.
@@ -649,6 +793,14 @@ public interface ImportResource
      * @return the value of the the <code>titleCleanupProfile</code> attribute.
      */
     public String getTitleCleanupProfile();
+    
+    /**
+     * Returns the value of the <code>titleCleanupProfile</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>titleCleanupProfile</code> attribute.
+     */
+    public String getTitleCleanupProfile(String defaultValue);
 
     /**
      * Sets the value of the <code>titleCleanupProfile</code> attribute.
@@ -708,6 +860,14 @@ public interface ImportResource
      * @return the value of the the <code>titleXPath</code> attribute.
      */
     public String getTitleXPath();
+    
+    /**
+     * Returns the value of the <code>titleXPath</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>titleXPath</code> attribute.
+     */
+    public String getTitleXPath(String defaultValue);
 
     /**
      * Sets the value of the <code>titleXPath</code> attribute.

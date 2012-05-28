@@ -59,19 +59,19 @@ public class PreferenceResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>scope</code> attribute. */
-    private static AttributeDefinition scopeDef;
+	private static AttributeDefinition<String> scopeDef;
 
     /** The AttributeDefinition object for the <code>required</code> attribute. */
-    private static AttributeDefinition requiredDef;
+    private static AttributeDefinition<Boolean> requiredDef;
 
     /** The AttributeDefinition object for the <code>default</code> attribute. */
-    private static AttributeDefinition defaultDef;
+	private static AttributeDefinition<String> defaultDef;
 
     /** The AttributeDefinition object for the <code>modifyPermission</code> attribute. */
-    private static AttributeDefinition modifyPermissionDef;
+	private static AttributeDefinition<Permission> modifyPermissionDef;
 
     /** The AttributeDefinition object for the <code>uiHint</code> attribute. */
-    private static AttributeDefinition uiHintDef;
+	private static AttributeDefinition<String> uiHintDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -131,10 +131,10 @@ public class PreferenceResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.preference");
-            Map attrs = new HashMap();
+            ResourceClass<PreferenceResource> rc = session.getSchema().getResourceClass("integration.preference", PreferenceResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("scope"), scope);
-            attrs.put(rc.getAttribute("required"), new Boolean(required));
+            attrs.put(rc.getAttribute("required"), Boolean.valueOf(required));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof PreferenceResource))
             {
@@ -158,7 +158,7 @@ public class PreferenceResourceImpl
      */
     public String getScope()
     {
-        return (String)getInternal(scopeDef, null);
+        return get(scopeDef);
     }
  
     /**
@@ -196,7 +196,7 @@ public class PreferenceResourceImpl
      */
     public boolean getRequired()
     {
-		return ((Boolean)getInternal(requiredDef, null)).booleanValue();
+		return get(requiredDef).booleanValue();
     }    
 
     /**
@@ -208,7 +208,7 @@ public class PreferenceResourceImpl
     {
         try
         {
-            set(requiredDef, new Boolean(value));
+            set(requiredDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -227,7 +227,7 @@ public class PreferenceResourceImpl
      */
     public String getDefault()
     {
-        return (String)getInternal(defaultDef, null);
+        return get(defaultDef);
     }
     
     /**
@@ -238,7 +238,7 @@ public class PreferenceResourceImpl
      */
     public String getDefault(String defaultValue)
     {
-        return (String)getInternal(defaultDef, defaultValue);
+        return get(defaultDef, defaultValue);
     }    
 
     /**
@@ -287,7 +287,7 @@ public class PreferenceResourceImpl
      */
     public Permission getModifyPermission()
     {
-        return (Permission)getInternal(modifyPermissionDef, null);
+        return get(modifyPermissionDef);
     }
     
     /**
@@ -298,7 +298,7 @@ public class PreferenceResourceImpl
      */
     public Permission getModifyPermission(Permission defaultValue)
     {
-        return (Permission)getInternal(modifyPermissionDef, defaultValue);
+        return get(modifyPermissionDef, defaultValue);
     }    
 
     /**
@@ -347,7 +347,7 @@ public class PreferenceResourceImpl
      */
     public String getUiHint()
     {
-        return (String)getInternal(uiHintDef, null);
+        return get(uiHintDef);
     }
     
     /**
@@ -358,7 +358,7 @@ public class PreferenceResourceImpl
      */
     public String getUiHint(String defaultValue)
     {
-        return (String)getInternal(uiHintDef, defaultValue);
+        return get(uiHintDef, defaultValue);
     }    
 
     /**

@@ -53,6 +53,14 @@ public interface FooterResource
      * @return the value of the the <code>content</code> attribute.
      */
     public String getContent();
+    
+    /**
+     * Returns the value of the <code>content</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>content</code> attribute.
+     */
+    public String getContent(String defaultValue);
 
     /**
      * Sets the value of the <code>content</code> attribute.

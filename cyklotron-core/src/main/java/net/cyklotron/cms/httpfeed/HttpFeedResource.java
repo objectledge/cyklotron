@@ -55,6 +55,14 @@ public interface HttpFeedResource
      * @return the value of the the <code>contents</code> attribute.
      */
     public String getContents();
+    
+    /**
+     * Returns the value of the <code>contents</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>contents</code> attribute.
+     */
+    public String getContents(String defaultValue);
 
     /**
      * Sets the value of the <code>contents</code> attribute.
@@ -151,6 +159,14 @@ public interface HttpFeedResource
      * @return the value of the the <code>lastUpdate</code> attribute.
      */
     public Date getLastUpdate();
+    
+    /**
+     * Returns the value of the <code>lastUpdate</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>lastUpdate</code> attribute.
+     */
+    public Date getLastUpdate(Date defaultValue);
 
     /**
      * Sets the value of the <code>lastUpdate</code> attribute.
@@ -173,6 +189,14 @@ public interface HttpFeedResource
      * @return the value of the the <code>url</code> attribute.
      */
     public String getUrl();
+    
+    /**
+     * Returns the value of the <code>url</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>url</code> attribute.
+     */
+    public String getUrl(String defaultValue);
 
     /**
      * Sets the value of the <code>url</code> attribute.

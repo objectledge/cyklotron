@@ -56,7 +56,7 @@ public class TemporalTransitionResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>delay</code> attribute. */
-    private static AttributeDefinition delayDef;
+    private static AttributeDefinition<Long> delayDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -117,9 +117,9 @@ public class TemporalTransitionResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("workflow.temporal_transition");
-            Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("delay"), new Long(delay));
+            ResourceClass<TemporalTransitionResource> rc = session.getSchema().getResourceClass("workflow.temporal_transition", TemporalTransitionResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
+            attrs.put(rc.getAttribute("delay"), Long.valueOf(delay));
             attrs.put(rc.getAttribute("from"), from);
             attrs.put(rc.getAttribute("to"), to);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
@@ -145,7 +145,7 @@ public class TemporalTransitionResourceImpl
      */
     public long getDelay()
     {
-		return ((Long)getInternal(delayDef, null)).longValue();
+		return get(delayDef).longValue();
     }    
 
     /**
@@ -157,7 +157,7 @@ public class TemporalTransitionResourceImpl
     {
         try
         {
-            set(delayDef, new Long(value));
+            set(delayDef, Long.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

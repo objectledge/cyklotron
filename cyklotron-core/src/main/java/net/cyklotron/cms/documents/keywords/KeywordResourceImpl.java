@@ -60,31 +60,31 @@ public class KeywordResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>categories</code> attribute. */
-    private static AttributeDefinition categoriesDef;
+	private static AttributeDefinition<ResourceList> categoriesDef;
 
     /** The AttributeDefinition object for the <code>external</code> attribute. */
-    private static AttributeDefinition externalDef;
+    private static AttributeDefinition<Boolean> externalDef;
 
     /** The AttributeDefinition object for the <code>hrefExternal</code> attribute. */
-    private static AttributeDefinition hrefExternalDef;
+	private static AttributeDefinition<String> hrefExternalDef;
 
     /** The AttributeDefinition object for the <code>hrefInternal</code> attribute. */
-    private static AttributeDefinition hrefInternalDef;
+	private static AttributeDefinition<NavigationNodeResource> hrefInternalDef;
 
     /** The AttributeDefinition object for the <code>linkClass</code> attribute. */
-    private static AttributeDefinition linkClassDef;
+	private static AttributeDefinition<String> linkClassDef;
 
     /** The AttributeDefinition object for the <code>newWindow</code> attribute. */
-    private static AttributeDefinition newWindowDef;
+    private static AttributeDefinition<Boolean> newWindowDef;
 
     /** The AttributeDefinition object for the <code>pattern</code> attribute. */
-    private static AttributeDefinition patternDef;
+	private static AttributeDefinition<String> patternDef;
 
     /** The AttributeDefinition object for the <code>regexp</code> attribute. */
-    private static AttributeDefinition regexpDef;
+    private static AttributeDefinition<Boolean> regexpDef;
 
     /** The AttributeDefinition object for the <code>title</code> attribute. */
-    private static AttributeDefinition titleDef;
+	private static AttributeDefinition<String> titleDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -146,12 +146,12 @@ public class KeywordResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("documents.keyword");
-            Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("external"), new Boolean(external));
-            attrs.put(rc.getAttribute("newWindow"), new Boolean(newWindow));
+            ResourceClass<KeywordResource> rc = session.getSchema().getResourceClass("documents.keyword", KeywordResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
+            attrs.put(rc.getAttribute("external"), Boolean.valueOf(external));
+            attrs.put(rc.getAttribute("newWindow"), Boolean.valueOf(newWindow));
             attrs.put(rc.getAttribute("pattern"), pattern);
-            attrs.put(rc.getAttribute("regexp"), new Boolean(regexp));
+            attrs.put(rc.getAttribute("regexp"), Boolean.valueOf(regexp));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof KeywordResource))
             {
@@ -175,7 +175,7 @@ public class KeywordResourceImpl
      */
     public ResourceList getCategories()
     {
-        return (ResourceList)getInternal(categoriesDef, null);
+        return get(categoriesDef);
     }
     
     /**
@@ -186,7 +186,7 @@ public class KeywordResourceImpl
      */
     public ResourceList getCategories(ResourceList defaultValue)
     {
-        return (ResourceList)getInternal(categoriesDef, defaultValue);
+        return get(categoriesDef, defaultValue);
     }    
 
     /**
@@ -235,7 +235,7 @@ public class KeywordResourceImpl
      */
     public boolean getExternal()
     {
-		return ((Boolean)getInternal(externalDef, null)).booleanValue();
+		return get(externalDef).booleanValue();
     }    
 
     /**
@@ -247,7 +247,7 @@ public class KeywordResourceImpl
     {
         try
         {
-            set(externalDef, new Boolean(value));
+            set(externalDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -266,7 +266,7 @@ public class KeywordResourceImpl
      */
     public String getHrefExternal()
     {
-        return (String)getInternal(hrefExternalDef, null);
+        return get(hrefExternalDef);
     }
     
     /**
@@ -277,7 +277,7 @@ public class KeywordResourceImpl
      */
     public String getHrefExternal(String defaultValue)
     {
-        return (String)getInternal(hrefExternalDef, defaultValue);
+        return get(hrefExternalDef, defaultValue);
     }    
 
     /**
@@ -326,7 +326,7 @@ public class KeywordResourceImpl
      */
     public NavigationNodeResource getHrefInternal()
     {
-        return (NavigationNodeResource)getInternal(hrefInternalDef, null);
+        return get(hrefInternalDef);
     }
     
     /**
@@ -337,7 +337,7 @@ public class KeywordResourceImpl
      */
     public NavigationNodeResource getHrefInternal(NavigationNodeResource defaultValue)
     {
-        return (NavigationNodeResource)getInternal(hrefInternalDef, defaultValue);
+        return get(hrefInternalDef, defaultValue);
     }    
 
     /**
@@ -386,7 +386,7 @@ public class KeywordResourceImpl
      */
     public String getLinkClass()
     {
-        return (String)getInternal(linkClassDef, null);
+        return get(linkClassDef);
     }
     
     /**
@@ -397,7 +397,7 @@ public class KeywordResourceImpl
      */
     public String getLinkClass(String defaultValue)
     {
-        return (String)getInternal(linkClassDef, defaultValue);
+        return get(linkClassDef, defaultValue);
     }    
 
     /**
@@ -446,7 +446,7 @@ public class KeywordResourceImpl
      */
     public boolean getNewWindow()
     {
-		return ((Boolean)getInternal(newWindowDef, null)).booleanValue();
+		return get(newWindowDef).booleanValue();
     }    
 
     /**
@@ -458,7 +458,7 @@ public class KeywordResourceImpl
     {
         try
         {
-            set(newWindowDef, new Boolean(value));
+            set(newWindowDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -477,7 +477,7 @@ public class KeywordResourceImpl
      */
     public String getPattern()
     {
-        return (String)getInternal(patternDef, null);
+        return get(patternDef);
     }
  
     /**
@@ -515,7 +515,7 @@ public class KeywordResourceImpl
      */
     public boolean getRegexp()
     {
-		return ((Boolean)getInternal(regexpDef, null)).booleanValue();
+		return get(regexpDef).booleanValue();
     }    
 
     /**
@@ -527,7 +527,7 @@ public class KeywordResourceImpl
     {
         try
         {
-            set(regexpDef, new Boolean(value));
+            set(regexpDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -546,7 +546,7 @@ public class KeywordResourceImpl
      */
     public String getTitle()
     {
-        return (String)getInternal(titleDef, null);
+        return get(titleDef);
     }
     
     /**
@@ -557,7 +557,7 @@ public class KeywordResourceImpl
      */
     public String getTitle(String defaultValue)
     {
-        return (String)getInternal(titleDef, defaultValue);
+        return get(titleDef, defaultValue);
     }    
 
     /**

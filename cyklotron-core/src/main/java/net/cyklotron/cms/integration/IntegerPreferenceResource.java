@@ -51,6 +51,14 @@ public interface IntegerPreferenceResource
      * @return the value of the the <code>rangeMax</code> attribute.
      */
     public Number getRangeMax();
+    
+    /**
+     * Returns the value of the <code>rangeMax</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>rangeMax</code> attribute.
+     */
+    public Number getRangeMax(Number defaultValue);
 
     /**
      * Sets the value of the <code>rangeMax</code> attribute.
@@ -73,6 +81,14 @@ public interface IntegerPreferenceResource
      * @return the value of the the <code>rangeMin</code> attribute.
      */
     public Number getRangeMin();
+    
+    /**
+     * Returns the value of the <code>rangeMin</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>rangeMin</code> attribute.
+     */
+    public Number getRangeMin(Number defaultValue);
 
     /**
      * Sets the value of the <code>rangeMin</code> attribute.

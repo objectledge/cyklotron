@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.documents;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -58,13 +55,13 @@ public class FooterResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>content</code> attribute. */
-    private static AttributeDefinition contentDef;
+	private static AttributeDefinition<String> contentDef;
 
     /** The AttributeDefinition object for the <code>enabled</code> attribute. */
-    private static AttributeDefinition enabledDef;
+    private static AttributeDefinition<Boolean> enabledDef;
 
     /** The AttributeDefinition object for the <code>sequence</code> attribute. */
-    private static AttributeDefinition sequenceDef;
+    private static AttributeDefinition<Integer> sequenceDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -121,9 +118,9 @@ public class FooterResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("documents.footer");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<FooterResource> rc = session.getSchema().getResourceClass("documents.footer", FooterResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof FooterResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -150,7 +147,7 @@ public class FooterResourceImpl
      */
     public String getContent()
     {
-        return (String)getInternal(contentDef, null);
+        return get(contentDef);
     }
     
     /**
@@ -161,7 +158,7 @@ public class FooterResourceImpl
      */
     public String getContent(String defaultValue)
     {
-        return (String)getInternal(contentDef, defaultValue);
+        return get(contentDef, defaultValue);
     }    
 
     /**
@@ -213,7 +210,7 @@ public class FooterResourceImpl
     public boolean getEnabled()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(enabledDef, null);
+	    Boolean value = get(enabledDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -233,7 +230,7 @@ public class FooterResourceImpl
      */
     public boolean getEnabled(boolean defaultValue)
     {
-		return ((Boolean)getInternal(enabledDef, new Boolean(defaultValue))).booleanValue();
+		return get(enabledDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -245,7 +242,7 @@ public class FooterResourceImpl
     {
         try
         {
-            set(enabledDef, new Boolean(value));
+            set(enabledDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -292,7 +289,7 @@ public class FooterResourceImpl
     public int getSequence()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(sequenceDef, null);
+	    Integer value = get(sequenceDef);
         if(value != null)
         {
             return value.intValue();
@@ -312,7 +309,7 @@ public class FooterResourceImpl
      */
     public int getSequence(int defaultValue)
     {
-		return ((Integer)getInternal(sequenceDef, new Integer(defaultValue))).intValue();
+		return get(sequenceDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -324,7 +321,7 @@ public class FooterResourceImpl
     {
         try
         {
-            set(sequenceDef, new Integer(value));
+            set(sequenceDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

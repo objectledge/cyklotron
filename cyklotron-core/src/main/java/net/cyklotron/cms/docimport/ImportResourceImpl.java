@@ -60,91 +60,91 @@ public class ImportResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>abstractCleanupProfile</code> attribute. */
-    private static AttributeDefinition abstractCleanupProfileDef;
+	private static AttributeDefinition<String> abstractCleanupProfileDef;
 
     /** The AttributeDefinition object for the <code>abstractEntityEncoded</code> attribute. */
-    private static AttributeDefinition abstractEntityEncodedDef;
+    private static AttributeDefinition<Boolean> abstractEntityEncodedDef;
 
     /** The AttributeDefinition object for the <code>abstractXPath</code> attribute. */
-    private static AttributeDefinition abstractXPathDef;
+	private static AttributeDefinition<String> abstractXPathDef;
 
     /** The AttributeDefinition object for the <code>attachentURLXPath</code> attribute. */
-    private static AttributeDefinition attachentURLXPathDef;
+	private static AttributeDefinition<String> attachentURLXPathDef;
 
     /** The AttributeDefinition object for the <code>attachmentURLComposite</code> attribute. */
-    private static AttributeDefinition attachmentURLCompositeDef;
+    private static AttributeDefinition<Boolean> attachmentURLCompositeDef;
 
     /** The AttributeDefinition object for the <code>attachmentURLSeparator</code> attribute. */
-    private static AttributeDefinition attachmentURLSeparatorDef;
+	private static AttributeDefinition<String> attachmentURLSeparatorDef;
 
     /** The AttributeDefinition object for the <code>attachmentsLocation</code> attribute. */
-    private static AttributeDefinition attachmentsLocationDef;
+	private static AttributeDefinition<Resource> attachmentsLocationDef;
 
     /** The AttributeDefinition object for the <code>calendarStructureType</code> attribute. */
-    private static AttributeDefinition calendarStructureTypeDef;
+	private static AttributeDefinition<String> calendarStructureTypeDef;
 
     /** The AttributeDefinition object for the <code>categories</code> attribute. */
-    private static AttributeDefinition categoriesDef;
+	private static AttributeDefinition<ResourceList> categoriesDef;
 
     /** The AttributeDefinition object for the <code>contentCleanupProfile</code> attribute. */
-    private static AttributeDefinition contentCleanupProfileDef;
+	private static AttributeDefinition<String> contentCleanupProfileDef;
 
     /** The AttributeDefinition object for the <code>contentEntitytEncoded</code> attribute. */
-    private static AttributeDefinition contentEntitytEncodedDef;
+    private static AttributeDefinition<Boolean> contentEntitytEncodedDef;
 
     /** The AttributeDefinition object for the <code>contentXPath</code> attribute. */
-    private static AttributeDefinition contentXPathDef;
+	private static AttributeDefinition<String> contentXPathDef;
 
     /** The AttributeDefinition object for the <code>creationDateXPath</code> attribute. */
-    private static AttributeDefinition creationDateXPathDef;
+	private static AttributeDefinition<String> creationDateXPathDef;
 
     /** The AttributeDefinition object for the <code>dateFormat</code> attribute. */
-    private static AttributeDefinition dateFormatDef;
+	private static AttributeDefinition<String> dateFormatDef;
 
     /** The AttributeDefinition object for the <code>dateRangeEndParameter</code> attribute. */
-    private static AttributeDefinition dateRangeEndParameterDef;
+	private static AttributeDefinition<String> dateRangeEndParameterDef;
 
     /** The AttributeDefinition object for the <code>dateRangeStartParameter</code> attribute. */
-    private static AttributeDefinition dateRangeStartParameterDef;
+	private static AttributeDefinition<String> dateRangeStartParameterDef;
 
     /** The AttributeDefinition object for the <code>documentXPath</code> attribute. */
-    private static AttributeDefinition documentXPathDef;
+	private static AttributeDefinition<String> documentXPathDef;
 
     /** The AttributeDefinition object for the <code>footer</code> attribute. */
-    private static AttributeDefinition footerDef;
+	private static AttributeDefinition<String> footerDef;
 
     /** The AttributeDefinition object for the <code>lastNewDocumentsCheck</code> attribute. */
-    private static AttributeDefinition lastNewDocumentsCheckDef;
+	private static AttributeDefinition<Date> lastNewDocumentsCheckDef;
 
     /** The AttributeDefinition object for the <code>lastUpdatedDocumentsCheck</code> attribute. */
-    private static AttributeDefinition lastUpdatedDocumentsCheckDef;
+	private static AttributeDefinition<Date> lastUpdatedDocumentsCheckDef;
 
     /** The AttributeDefinition object for the <code>location</code> attribute. */
-    private static AttributeDefinition locationDef;
+	private static AttributeDefinition<String> locationDef;
 
     /** The AttributeDefinition object for the <code>modificationDateXPath</code> attribute. */
-    private static AttributeDefinition modificationDateXPathDef;
+	private static AttributeDefinition<String> modificationDateXPathDef;
 
     /** The AttributeDefinition object for the <code>originalURLXPath</code> attribute. */
-    private static AttributeDefinition originalURLXPathDef;
+	private static AttributeDefinition<String> originalURLXPathDef;
 
     /** The AttributeDefinition object for the <code>ownerLogin</code> attribute. */
-    private static AttributeDefinition ownerLoginDef;
+	private static AttributeDefinition<String> ownerLoginDef;
 
     /** The AttributeDefinition object for the <code>sourceName</code> attribute. */
-    private static AttributeDefinition sourceNameDef;
+	private static AttributeDefinition<String> sourceNameDef;
 
     /** The AttributeDefinition object for the <code>targetLocation</code> attribute. */
-    private static AttributeDefinition targetLocationDef;
+	private static AttributeDefinition<Resource> targetLocationDef;
 
     /** The AttributeDefinition object for the <code>titleCleanupProfile</code> attribute. */
-    private static AttributeDefinition titleCleanupProfileDef;
+	private static AttributeDefinition<String> titleCleanupProfileDef;
 
     /** The AttributeDefinition object for the <code>titleEntityEncoded</code> attribute. */
-    private static AttributeDefinition titleEntityEncodedDef;
+    private static AttributeDefinition<Boolean> titleEntityEncodedDef;
 
     /** The AttributeDefinition object for the <code>titleXPath</code> attribute. */
-    private static AttributeDefinition titleXPathDef;
+	private static AttributeDefinition<String> titleXPathDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -208,8 +208,8 @@ public class ImportResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("docimport.import");
-            Map attrs = new HashMap();
+            ResourceClass<ImportResource> rc = session.getSchema().getResourceClass("docimport.import", ImportResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("attachmentsLocation"), attachmentsLocation);
             attrs.put(rc.getAttribute("location"), location);
             attrs.put(rc.getAttribute("ownerLogin"), ownerLogin);
@@ -238,7 +238,7 @@ public class ImportResourceImpl
      */
     public String getAbstractCleanupProfile()
     {
-        return (String)getInternal(abstractCleanupProfileDef, null);
+        return get(abstractCleanupProfileDef);
     }
     
     /**
@@ -249,7 +249,7 @@ public class ImportResourceImpl
      */
     public String getAbstractCleanupProfile(String defaultValue)
     {
-        return (String)getInternal(abstractCleanupProfileDef, defaultValue);
+        return get(abstractCleanupProfileDef, defaultValue);
     }    
 
     /**
@@ -301,7 +301,7 @@ public class ImportResourceImpl
     public boolean getAbstractEntityEncoded()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(abstractEntityEncodedDef, null);
+	    Boolean value = get(abstractEntityEncodedDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -321,7 +321,7 @@ public class ImportResourceImpl
      */
     public boolean getAbstractEntityEncoded(boolean defaultValue)
     {
-		return ((Boolean)getInternal(abstractEntityEncodedDef, new Boolean(defaultValue))).booleanValue();
+		return get(abstractEntityEncodedDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -333,7 +333,7 @@ public class ImportResourceImpl
     {
         try
         {
-            set(abstractEntityEncodedDef, new Boolean(value));
+            set(abstractEntityEncodedDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -377,7 +377,7 @@ public class ImportResourceImpl
      */
     public String getAbstractXPath()
     {
-        return (String)getInternal(abstractXPathDef, null);
+        return get(abstractXPathDef);
     }
     
     /**
@@ -388,7 +388,7 @@ public class ImportResourceImpl
      */
     public String getAbstractXPath(String defaultValue)
     {
-        return (String)getInternal(abstractXPathDef, defaultValue);
+        return get(abstractXPathDef, defaultValue);
     }    
 
     /**
@@ -437,7 +437,7 @@ public class ImportResourceImpl
      */
     public String getAttachentURLXPath()
     {
-        return (String)getInternal(attachentURLXPathDef, null);
+        return get(attachentURLXPathDef);
     }
     
     /**
@@ -448,7 +448,7 @@ public class ImportResourceImpl
      */
     public String getAttachentURLXPath(String defaultValue)
     {
-        return (String)getInternal(attachentURLXPathDef, defaultValue);
+        return get(attachentURLXPathDef, defaultValue);
     }    
 
     /**
@@ -500,7 +500,7 @@ public class ImportResourceImpl
     public boolean getAttachmentURLComposite()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(attachmentURLCompositeDef, null);
+	    Boolean value = get(attachmentURLCompositeDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -520,7 +520,7 @@ public class ImportResourceImpl
      */
     public boolean getAttachmentURLComposite(boolean defaultValue)
     {
-		return ((Boolean)getInternal(attachmentURLCompositeDef, new Boolean(defaultValue))).booleanValue();
+		return get(attachmentURLCompositeDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -532,7 +532,7 @@ public class ImportResourceImpl
     {
         try
         {
-            set(attachmentURLCompositeDef, new Boolean(value));
+            set(attachmentURLCompositeDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -576,7 +576,7 @@ public class ImportResourceImpl
      */
     public String getAttachmentURLSeparator()
     {
-        return (String)getInternal(attachmentURLSeparatorDef, null);
+        return get(attachmentURLSeparatorDef);
     }
     
     /**
@@ -587,7 +587,7 @@ public class ImportResourceImpl
      */
     public String getAttachmentURLSeparator(String defaultValue)
     {
-        return (String)getInternal(attachmentURLSeparatorDef, defaultValue);
+        return get(attachmentURLSeparatorDef, defaultValue);
     }    
 
     /**
@@ -636,7 +636,7 @@ public class ImportResourceImpl
      */
     public Resource getAttachmentsLocation()
     {
-        return (Resource)getInternal(attachmentsLocationDef, null);
+        return get(attachmentsLocationDef);
     }
  
     /**
@@ -674,7 +674,7 @@ public class ImportResourceImpl
      */
     public String getCalendarStructureType()
     {
-        return (String)getInternal(calendarStructureTypeDef, null);
+        return get(calendarStructureTypeDef);
     }
     
     /**
@@ -685,7 +685,7 @@ public class ImportResourceImpl
      */
     public String getCalendarStructureType(String defaultValue)
     {
-        return (String)getInternal(calendarStructureTypeDef, defaultValue);
+        return get(calendarStructureTypeDef, defaultValue);
     }    
 
     /**
@@ -734,7 +734,7 @@ public class ImportResourceImpl
      */
     public ResourceList getCategories()
     {
-        return (ResourceList)getInternal(categoriesDef, null);
+        return get(categoriesDef);
     }
     
     /**
@@ -745,7 +745,7 @@ public class ImportResourceImpl
      */
     public ResourceList getCategories(ResourceList defaultValue)
     {
-        return (ResourceList)getInternal(categoriesDef, defaultValue);
+        return get(categoriesDef, defaultValue);
     }    
 
     /**
@@ -794,7 +794,7 @@ public class ImportResourceImpl
      */
     public String getContentCleanupProfile()
     {
-        return (String)getInternal(contentCleanupProfileDef, null);
+        return get(contentCleanupProfileDef);
     }
     
     /**
@@ -805,7 +805,7 @@ public class ImportResourceImpl
      */
     public String getContentCleanupProfile(String defaultValue)
     {
-        return (String)getInternal(contentCleanupProfileDef, defaultValue);
+        return get(contentCleanupProfileDef, defaultValue);
     }    
 
     /**
@@ -857,7 +857,7 @@ public class ImportResourceImpl
     public boolean getContentEntitytEncoded()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(contentEntitytEncodedDef, null);
+	    Boolean value = get(contentEntitytEncodedDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -877,7 +877,7 @@ public class ImportResourceImpl
      */
     public boolean getContentEntitytEncoded(boolean defaultValue)
     {
-		return ((Boolean)getInternal(contentEntitytEncodedDef, new Boolean(defaultValue))).booleanValue();
+		return get(contentEntitytEncodedDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -889,7 +889,7 @@ public class ImportResourceImpl
     {
         try
         {
-            set(contentEntitytEncodedDef, new Boolean(value));
+            set(contentEntitytEncodedDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -933,7 +933,7 @@ public class ImportResourceImpl
      */
     public String getContentXPath()
     {
-        return (String)getInternal(contentXPathDef, null);
+        return get(contentXPathDef);
     }
     
     /**
@@ -944,7 +944,7 @@ public class ImportResourceImpl
      */
     public String getContentXPath(String defaultValue)
     {
-        return (String)getInternal(contentXPathDef, defaultValue);
+        return get(contentXPathDef, defaultValue);
     }    
 
     /**
@@ -993,7 +993,7 @@ public class ImportResourceImpl
      */
     public String getCreationDateXPath()
     {
-        return (String)getInternal(creationDateXPathDef, null);
+        return get(creationDateXPathDef);
     }
     
     /**
@@ -1004,7 +1004,7 @@ public class ImportResourceImpl
      */
     public String getCreationDateXPath(String defaultValue)
     {
-        return (String)getInternal(creationDateXPathDef, defaultValue);
+        return get(creationDateXPathDef, defaultValue);
     }    
 
     /**
@@ -1053,7 +1053,7 @@ public class ImportResourceImpl
      */
     public String getDateFormat()
     {
-        return (String)getInternal(dateFormatDef, null);
+        return get(dateFormatDef);
     }
     
     /**
@@ -1064,7 +1064,7 @@ public class ImportResourceImpl
      */
     public String getDateFormat(String defaultValue)
     {
-        return (String)getInternal(dateFormatDef, defaultValue);
+        return get(dateFormatDef, defaultValue);
     }    
 
     /**
@@ -1113,7 +1113,7 @@ public class ImportResourceImpl
      */
     public String getDateRangeEndParameter()
     {
-        return (String)getInternal(dateRangeEndParameterDef, null);
+        return get(dateRangeEndParameterDef);
     }
     
     /**
@@ -1124,7 +1124,7 @@ public class ImportResourceImpl
      */
     public String getDateRangeEndParameter(String defaultValue)
     {
-        return (String)getInternal(dateRangeEndParameterDef, defaultValue);
+        return get(dateRangeEndParameterDef, defaultValue);
     }    
 
     /**
@@ -1173,7 +1173,7 @@ public class ImportResourceImpl
      */
     public String getDateRangeStartParameter()
     {
-        return (String)getInternal(dateRangeStartParameterDef, null);
+        return get(dateRangeStartParameterDef);
     }
     
     /**
@@ -1184,7 +1184,7 @@ public class ImportResourceImpl
      */
     public String getDateRangeStartParameter(String defaultValue)
     {
-        return (String)getInternal(dateRangeStartParameterDef, defaultValue);
+        return get(dateRangeStartParameterDef, defaultValue);
     }    
 
     /**
@@ -1233,7 +1233,7 @@ public class ImportResourceImpl
      */
     public String getDocumentXPath()
     {
-        return (String)getInternal(documentXPathDef, null);
+        return get(documentXPathDef);
     }
     
     /**
@@ -1244,7 +1244,7 @@ public class ImportResourceImpl
      */
     public String getDocumentXPath(String defaultValue)
     {
-        return (String)getInternal(documentXPathDef, defaultValue);
+        return get(documentXPathDef, defaultValue);
     }    
 
     /**
@@ -1293,7 +1293,7 @@ public class ImportResourceImpl
      */
     public String getFooter()
     {
-        return (String)getInternal(footerDef, null);
+        return get(footerDef);
     }
     
     /**
@@ -1304,7 +1304,7 @@ public class ImportResourceImpl
      */
     public String getFooter(String defaultValue)
     {
-        return (String)getInternal(footerDef, defaultValue);
+        return get(footerDef, defaultValue);
     }    
 
     /**
@@ -1353,7 +1353,7 @@ public class ImportResourceImpl
      */
     public Date getLastNewDocumentsCheck()
     {
-        return (Date)getInternal(lastNewDocumentsCheckDef, null);
+        return get(lastNewDocumentsCheckDef);
     }
     
     /**
@@ -1364,7 +1364,7 @@ public class ImportResourceImpl
      */
     public Date getLastNewDocumentsCheck(Date defaultValue)
     {
-        return (Date)getInternal(lastNewDocumentsCheckDef, defaultValue);
+        return get(lastNewDocumentsCheckDef, defaultValue);
     }    
 
     /**
@@ -1413,7 +1413,7 @@ public class ImportResourceImpl
      */
     public Date getLastUpdatedDocumentsCheck()
     {
-        return (Date)getInternal(lastUpdatedDocumentsCheckDef, null);
+        return get(lastUpdatedDocumentsCheckDef);
     }
     
     /**
@@ -1424,7 +1424,7 @@ public class ImportResourceImpl
      */
     public Date getLastUpdatedDocumentsCheck(Date defaultValue)
     {
-        return (Date)getInternal(lastUpdatedDocumentsCheckDef, defaultValue);
+        return get(lastUpdatedDocumentsCheckDef, defaultValue);
     }    
 
     /**
@@ -1473,7 +1473,7 @@ public class ImportResourceImpl
      */
     public String getLocation()
     {
-        return (String)getInternal(locationDef, null);
+        return get(locationDef);
     }
  
     /**
@@ -1511,7 +1511,7 @@ public class ImportResourceImpl
      */
     public String getModificationDateXPath()
     {
-        return (String)getInternal(modificationDateXPathDef, null);
+        return get(modificationDateXPathDef);
     }
     
     /**
@@ -1522,7 +1522,7 @@ public class ImportResourceImpl
      */
     public String getModificationDateXPath(String defaultValue)
     {
-        return (String)getInternal(modificationDateXPathDef, defaultValue);
+        return get(modificationDateXPathDef, defaultValue);
     }    
 
     /**
@@ -1571,7 +1571,7 @@ public class ImportResourceImpl
      */
     public String getOriginalURLXPath()
     {
-        return (String)getInternal(originalURLXPathDef, null);
+        return get(originalURLXPathDef);
     }
     
     /**
@@ -1582,7 +1582,7 @@ public class ImportResourceImpl
      */
     public String getOriginalURLXPath(String defaultValue)
     {
-        return (String)getInternal(originalURLXPathDef, defaultValue);
+        return get(originalURLXPathDef, defaultValue);
     }    
 
     /**
@@ -1631,7 +1631,7 @@ public class ImportResourceImpl
      */
     public String getOwnerLogin()
     {
-        return (String)getInternal(ownerLoginDef, null);
+        return get(ownerLoginDef);
     }
  
     /**
@@ -1669,7 +1669,7 @@ public class ImportResourceImpl
      */
     public String getSourceName()
     {
-        return (String)getInternal(sourceNameDef, null);
+        return get(sourceNameDef);
     }
  
     /**
@@ -1707,7 +1707,7 @@ public class ImportResourceImpl
      */
     public Resource getTargetLocation()
     {
-        return (Resource)getInternal(targetLocationDef, null);
+        return get(targetLocationDef);
     }
  
     /**
@@ -1745,7 +1745,7 @@ public class ImportResourceImpl
      */
     public String getTitleCleanupProfile()
     {
-        return (String)getInternal(titleCleanupProfileDef, null);
+        return get(titleCleanupProfileDef);
     }
     
     /**
@@ -1756,7 +1756,7 @@ public class ImportResourceImpl
      */
     public String getTitleCleanupProfile(String defaultValue)
     {
-        return (String)getInternal(titleCleanupProfileDef, defaultValue);
+        return get(titleCleanupProfileDef, defaultValue);
     }    
 
     /**
@@ -1808,7 +1808,7 @@ public class ImportResourceImpl
     public boolean getTitleEntityEncoded()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(titleEntityEncodedDef, null);
+	    Boolean value = get(titleEntityEncodedDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -1828,7 +1828,7 @@ public class ImportResourceImpl
      */
     public boolean getTitleEntityEncoded(boolean defaultValue)
     {
-		return ((Boolean)getInternal(titleEntityEncodedDef, new Boolean(defaultValue))).booleanValue();
+		return get(titleEntityEncodedDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -1840,7 +1840,7 @@ public class ImportResourceImpl
     {
         try
         {
-            set(titleEntityEncodedDef, new Boolean(value));
+            set(titleEntityEncodedDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -1884,7 +1884,7 @@ public class ImportResourceImpl
      */
     public String getTitleXPath()
     {
-        return (String)getInternal(titleXPathDef, null);
+        return get(titleXPathDef);
     }
     
     /**
@@ -1895,7 +1895,7 @@ public class ImportResourceImpl
      */
     public String getTitleXPath(String defaultValue)
     {
-        return (String)getInternal(titleXPathDef, defaultValue);
+        return get(titleXPathDef, defaultValue);
     }    
 
     /**

@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.workflow;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.GenericResource;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -57,7 +54,7 @@ public class StatefulResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>state</code> attribute. */
-    private static AttributeDefinition stateDef;
+	private static AttributeDefinition<StateResource> stateDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -114,9 +111,9 @@ public class StatefulResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("workflow.stateful");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<StatefulResource> rc = session.getSchema().getResourceClass("workflow.stateful", StatefulResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof StatefulResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -143,7 +140,7 @@ public class StatefulResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)getInternal(stateDef, null);
+        return get(stateDef);
     }
     
     /**
@@ -154,7 +151,7 @@ public class StatefulResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        return (StateResource)getInternal(stateDef, defaultValue);
+        return get(stateDef, defaultValue);
     }    
 
     /**

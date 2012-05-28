@@ -60,13 +60,13 @@ public class ImportResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>sourceSite</code> attribute. */
-    private static AttributeDefinition sourceSiteDef;
+	private static AttributeDefinition<SiteResource> sourceSiteDef;
 
     /** The AttributeDefinition object for the <code>sourceId</code> attribute. */
-    private static AttributeDefinition sourceIdDef;
+    private static AttributeDefinition<Long> sourceIdDef;
 
     /** The AttributeDefinition object for the <code>destination</code> attribute. */
-    private static AttributeDefinition destinationDef;
+	private static AttributeDefinition<Resource> destinationDef;
 
 	// custom injected fields /////////////////////////////////////////////////
 	
@@ -134,10 +134,10 @@ public class ImportResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.aggregation.import");
-            Map attrs = new HashMap();
+            ResourceClass<ImportResource> rc = session.getSchema().getResourceClass("cms.aggregation.import", ImportResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("sourceSite"), sourceSite);
-            attrs.put(rc.getAttribute("sourceId"), new Long(sourceId));
+            attrs.put(rc.getAttribute("sourceId"), Long.valueOf(sourceId));
             attrs.put(rc.getAttribute("destination"), destination);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ImportResource))
@@ -162,7 +162,7 @@ public class ImportResourceImpl
      */
     public SiteResource getSourceSite()
     {
-        return (SiteResource)getInternal(sourceSiteDef, null);
+        return get(sourceSiteDef);
     }
  
     /**
@@ -200,7 +200,7 @@ public class ImportResourceImpl
      */
     public long getSourceId()
     {
-		return ((Long)getInternal(sourceIdDef, null)).longValue();
+		return get(sourceIdDef).longValue();
     }    
 
     /**
@@ -212,7 +212,7 @@ public class ImportResourceImpl
     {
         try
         {
-            set(sourceIdDef, new Long(value));
+            set(sourceIdDef, Long.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -231,7 +231,7 @@ public class ImportResourceImpl
      */
     public Resource getDestination()
     {
-        return (Resource)getInternal(destinationDef, null);
+        return get(destinationDef);
     }
  
     /**

@@ -29,8 +29,6 @@
 package net.cyklotron.cms.category.query;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.objectledge.coral.BackendException;
@@ -60,34 +58,34 @@ public class CategoryQueryResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>acceptedResourceClasses</code> attribute. */
-    private static AttributeDefinition acceptedResourceClassesDef;
+	private static AttributeDefinition<String> acceptedResourceClassesDef;
 
     /** The AttributeDefinition object for the <code>acceptedSites</code> attribute. */
-    private static AttributeDefinition acceptedSitesDef;
+	private static AttributeDefinition<String> acceptedSitesDef;
 
     /** The AttributeDefinition object for the <code>longQuery</code> attribute. */
-    private static AttributeDefinition longQueryDef;
+	private static AttributeDefinition<String> longQueryDef;
 
     /** The AttributeDefinition object for the <code>optionalCategoryIdentifiers</code> attribute. */
-    private static AttributeDefinition optionalCategoryIdentifiersDef;
+	private static AttributeDefinition<String> optionalCategoryIdentifiersDef;
 
     /** The AttributeDefinition object for the <code>optionalCategoryPaths</code> attribute. */
-    private static AttributeDefinition optionalCategoryPathsDef;
+	private static AttributeDefinition<String> optionalCategoryPathsDef;
 
     /** The AttributeDefinition object for the <code>query</code> attribute. */
-    private static AttributeDefinition queryDef;
+	private static AttributeDefinition<String> queryDef;
 
     /** The AttributeDefinition object for the <code>requiredCategoryIdentifiers</code> attribute. */
-    private static AttributeDefinition requiredCategoryIdentifiersDef;
+	private static AttributeDefinition<String> requiredCategoryIdentifiersDef;
 
     /** The AttributeDefinition object for the <code>requiredCategoryPaths</code> attribute. */
-    private static AttributeDefinition requiredCategoryPathsDef;
+	private static AttributeDefinition<String> requiredCategoryPathsDef;
 
     /** The AttributeDefinition object for the <code>simpleQuery</code> attribute. */
-    private static AttributeDefinition simpleQueryDef;
+    private static AttributeDefinition<Boolean> simpleQueryDef;
 
     /** The AttributeDefinition object for the <code>useIdsAsIdentifiers</code> attribute. */
-    private static AttributeDefinition useIdsAsIdentifiersDef;
+    private static AttributeDefinition<Boolean> useIdsAsIdentifiersDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -144,9 +142,9 @@ public class CategoryQueryResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("category.query");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<CategoryQueryResource> rc = session.getSchema().getResourceClass("category.query", CategoryQueryResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof CategoryQueryResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -173,7 +171,7 @@ public class CategoryQueryResourceImpl
      */
     public String getAcceptedResourceClasses()
     {
-        return (String)getInternal(acceptedResourceClassesDef, null);
+        return get(acceptedResourceClassesDef);
     }
     
     /**
@@ -184,7 +182,7 @@ public class CategoryQueryResourceImpl
      */
     public String getAcceptedResourceClasses(String defaultValue)
     {
-        return (String)getInternal(acceptedResourceClassesDef, defaultValue);
+        return get(acceptedResourceClassesDef, defaultValue);
     }    
 
     /**
@@ -233,7 +231,7 @@ public class CategoryQueryResourceImpl
      */
     public String getAcceptedSites()
     {
-        return (String)getInternal(acceptedSitesDef, null);
+        return get(acceptedSitesDef);
     }
     
     /**
@@ -244,7 +242,7 @@ public class CategoryQueryResourceImpl
      */
     public String getAcceptedSites(String defaultValue)
     {
-        return (String)getInternal(acceptedSitesDef, defaultValue);
+        return get(acceptedSitesDef, defaultValue);
     }    
 
     /**
@@ -293,7 +291,7 @@ public class CategoryQueryResourceImpl
      */
     public String getLongQuery()
     {
-        return (String)getInternal(longQueryDef, null);
+        return get(longQueryDef);
     }
     
     /**
@@ -304,7 +302,7 @@ public class CategoryQueryResourceImpl
      */
     public String getLongQuery(String defaultValue)
     {
-        return (String)getInternal(longQueryDef, defaultValue);
+        return get(longQueryDef, defaultValue);
     }    
 
     /**
@@ -353,7 +351,7 @@ public class CategoryQueryResourceImpl
      */
     public String getOptionalCategoryIdentifiers()
     {
-        return (String)getInternal(optionalCategoryIdentifiersDef, null);
+        return get(optionalCategoryIdentifiersDef);
     }
     
     /**
@@ -364,7 +362,7 @@ public class CategoryQueryResourceImpl
      */
     public String getOptionalCategoryIdentifiers(String defaultValue)
     {
-        return (String)getInternal(optionalCategoryIdentifiersDef, defaultValue);
+        return get(optionalCategoryIdentifiersDef, defaultValue);
     }    
 
     /**
@@ -413,7 +411,7 @@ public class CategoryQueryResourceImpl
      */
     public String getOptionalCategoryPaths()
     {
-        return (String)getInternal(optionalCategoryPathsDef, null);
+        return get(optionalCategoryPathsDef);
     }
     
     /**
@@ -424,7 +422,7 @@ public class CategoryQueryResourceImpl
      */
     public String getOptionalCategoryPaths(String defaultValue)
     {
-        return (String)getInternal(optionalCategoryPathsDef, defaultValue);
+        return get(optionalCategoryPathsDef, defaultValue);
     }    
 
     /**
@@ -473,7 +471,7 @@ public class CategoryQueryResourceImpl
      */
     public String getQuery()
     {
-        return (String)getInternal(queryDef, null);
+        return get(queryDef);
     }
     
     /**
@@ -484,7 +482,7 @@ public class CategoryQueryResourceImpl
      */
     public String getQuery(String defaultValue)
     {
-        return (String)getInternal(queryDef, defaultValue);
+        return get(queryDef, defaultValue);
     }    
 
     /**
@@ -533,7 +531,7 @@ public class CategoryQueryResourceImpl
      */
     public String getRequiredCategoryIdentifiers()
     {
-        return (String)getInternal(requiredCategoryIdentifiersDef, null);
+        return get(requiredCategoryIdentifiersDef);
     }
     
     /**
@@ -544,7 +542,7 @@ public class CategoryQueryResourceImpl
      */
     public String getRequiredCategoryIdentifiers(String defaultValue)
     {
-        return (String)getInternal(requiredCategoryIdentifiersDef, defaultValue);
+        return get(requiredCategoryIdentifiersDef, defaultValue);
     }    
 
     /**
@@ -593,7 +591,7 @@ public class CategoryQueryResourceImpl
      */
     public String getRequiredCategoryPaths()
     {
-        return (String)getInternal(requiredCategoryPathsDef, null);
+        return get(requiredCategoryPathsDef);
     }
     
     /**
@@ -604,7 +602,7 @@ public class CategoryQueryResourceImpl
      */
     public String getRequiredCategoryPaths(String defaultValue)
     {
-        return (String)getInternal(requiredCategoryPathsDef, defaultValue);
+        return get(requiredCategoryPathsDef, defaultValue);
     }    
 
     /**
@@ -656,7 +654,7 @@ public class CategoryQueryResourceImpl
     public boolean getSimpleQuery()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(simpleQueryDef, null);
+	    Boolean value = get(simpleQueryDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -676,7 +674,7 @@ public class CategoryQueryResourceImpl
      */
     public boolean getSimpleQuery(boolean defaultValue)
     {
-		return ((Boolean)getInternal(simpleQueryDef, new Boolean(defaultValue))).booleanValue();
+		return get(simpleQueryDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -688,7 +686,7 @@ public class CategoryQueryResourceImpl
     {
         try
         {
-            set(simpleQueryDef, new Boolean(value));
+            set(simpleQueryDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -735,7 +733,7 @@ public class CategoryQueryResourceImpl
     public boolean getUseIdsAsIdentifiers()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(useIdsAsIdentifiersDef, null);
+	    Boolean value = get(useIdsAsIdentifiersDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -755,7 +753,7 @@ public class CategoryQueryResourceImpl
      */
     public boolean getUseIdsAsIdentifiers(boolean defaultValue)
     {
-		return ((Boolean)getInternal(useIdsAsIdentifiersDef, new Boolean(defaultValue))).booleanValue();
+		return get(useIdsAsIdentifiersDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -767,7 +765,7 @@ public class CategoryQueryResourceImpl
     {
         try
         {
-            set(useIdsAsIdentifiersDef, new Boolean(value));
+            set(useIdsAsIdentifiersDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

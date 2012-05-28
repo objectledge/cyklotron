@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.link;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -59,7 +56,7 @@ public class LinkRootResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
-    private static AttributeDefinition administratorDef;
+	private static AttributeDefinition<Role> administratorDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -116,9 +113,9 @@ public class LinkRootResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.link.link_root");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<LinkRootResource> rc = session.getSchema().getResourceClass("cms.link.link_root", LinkRootResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof LinkRootResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -145,7 +142,7 @@ public class LinkRootResourceImpl
      */
     public Role getAdministrator()
     {
-        return (Role)getInternal(administratorDef, null);
+        return get(administratorDef);
     }
     
     /**
@@ -156,7 +153,7 @@ public class LinkRootResourceImpl
      */
     public Role getAdministrator(Role defaultValue)
     {
-        return (Role)getInternal(administratorDef, defaultValue);
+        return get(administratorDef, defaultValue);
     }    
 
     /**

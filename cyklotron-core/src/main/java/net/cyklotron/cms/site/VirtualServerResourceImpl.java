@@ -59,13 +59,13 @@ public class VirtualServerResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>site</code> attribute. */
-    private static AttributeDefinition siteDef;
+	private static AttributeDefinition<SiteResource> siteDef;
 
     /** The AttributeDefinition object for the <code>node</code> attribute. */
-    private static AttributeDefinition nodeDef;
+	private static AttributeDefinition<NavigationNodeResource> nodeDef;
 
     /** The AttributeDefinition object for the <code>primary</code> attribute. */
-    private static AttributeDefinition primaryDef;
+    private static AttributeDefinition<Boolean> primaryDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -126,11 +126,11 @@ public class VirtualServerResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("site.virtual_server");
-            Map attrs = new HashMap();
+            ResourceClass<VirtualServerResource> rc = session.getSchema().getResourceClass("site.virtual_server", VirtualServerResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("site"), site);
             attrs.put(rc.getAttribute("node"), node);
-            attrs.put(rc.getAttribute("primary"), new Boolean(primary));
+            attrs.put(rc.getAttribute("primary"), Boolean.valueOf(primary));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof VirtualServerResource))
             {
@@ -154,7 +154,7 @@ public class VirtualServerResourceImpl
      */
     public SiteResource getSite()
     {
-        return (SiteResource)getInternal(siteDef, null);
+        return get(siteDef);
     }
  
     /**
@@ -192,7 +192,7 @@ public class VirtualServerResourceImpl
      */
     public NavigationNodeResource getNode()
     {
-        return (NavigationNodeResource)getInternal(nodeDef, null);
+        return get(nodeDef);
     }
  
     /**
@@ -230,7 +230,7 @@ public class VirtualServerResourceImpl
      */
     public boolean getPrimary()
     {
-		return ((Boolean)getInternal(primaryDef, null)).booleanValue();
+		return get(primaryDef).booleanValue();
     }    
 
     /**
@@ -242,7 +242,7 @@ public class VirtualServerResourceImpl
     {
         try
         {
-            set(primaryDef, new Boolean(value));
+            set(primaryDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

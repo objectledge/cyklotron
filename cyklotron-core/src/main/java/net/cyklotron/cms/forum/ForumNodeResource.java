@@ -56,6 +56,14 @@ public interface ForumNodeResource
      * @return the value of the the <code>administrator</code> attribute.
      */
     public Role getAdministrator();
+    
+    /**
+     * Returns the value of the <code>administrator</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>administrator</code> attribute.
+     */
+    public Role getAdministrator(Role defaultValue);
 
     /**
      * Sets the value of the <code>administrator</code> attribute.
@@ -78,6 +86,14 @@ public interface ForumNodeResource
      * @return the value of the the <code>lastlyAdded</code> attribute.
      */
     public WeakResourceList getLastlyAdded();
+    
+    /**
+     * Returns the value of the <code>lastlyAdded</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>lastlyAdded</code> attribute.
+     */
+    public WeakResourceList getLastlyAdded(WeakResourceList defaultValue);
 
     /**
      * Sets the value of the <code>lastlyAdded</code> attribute.
@@ -137,6 +153,14 @@ public interface ForumNodeResource
      * @return the value of the the <code>moderator</code> attribute.
      */
     public Role getModerator();
+    
+    /**
+     * Returns the value of the <code>moderator</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>moderator</code> attribute.
+     */
+    public Role getModerator(Role defaultValue);
 
     /**
      * Sets the value of the <code>moderator</code> attribute.
@@ -159,6 +183,14 @@ public interface ForumNodeResource
      * @return the value of the the <code>participant</code> attribute.
      */
     public Role getParticipant();
+    
+    /**
+     * Returns the value of the <code>participant</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>participant</code> attribute.
+     */
+    public Role getParticipant(Role defaultValue);
 
     /**
      * Sets the value of the <code>participant</code> attribute.
@@ -181,6 +213,14 @@ public interface ForumNodeResource
      * @return the value of the the <code>visitor</code> attribute.
      */
     public Role getVisitor();
+    
+    /**
+     * Returns the value of the <code>visitor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>visitor</code> attribute.
+     */
+    public Role getVisitor(Role defaultValue);
 
     /**
      * Sets the value of the <code>visitor</code> attribute.

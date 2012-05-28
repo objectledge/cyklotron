@@ -58,10 +58,10 @@ public class SubscriptionRequestResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>email</code> attribute. */
-    private static AttributeDefinition emailDef;
+	private static AttributeDefinition<String> emailDef;
 
     /** The AttributeDefinition object for the <code>items</code> attribute. */
-    private static AttributeDefinition itemsDef;
+	private static AttributeDefinition<String> itemsDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -120,8 +120,8 @@ public class SubscriptionRequestResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.periodicals.subscription_request");
-            Map attrs = new HashMap();
+            ResourceClass<SubscriptionRequestResource> rc = session.getSchema().getResourceClass("cms.periodicals.subscription_request", SubscriptionRequestResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("email"), email);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof SubscriptionRequestResource))
@@ -146,7 +146,7 @@ public class SubscriptionRequestResourceImpl
      */
     public String getEmail()
     {
-        return (String)getInternal(emailDef, null);
+        return get(emailDef);
     }
  
     /**
@@ -184,7 +184,7 @@ public class SubscriptionRequestResourceImpl
      */
     public String getItems()
     {
-        return (String)getInternal(itemsDef, null);
+        return get(itemsDef);
     }
     
     /**
@@ -195,7 +195,7 @@ public class SubscriptionRequestResourceImpl
      */
     public String getItems(String defaultValue)
     {
-        return (String)getInternal(itemsDef, defaultValue);
+        return get(itemsDef, defaultValue);
     }    
 
     /**

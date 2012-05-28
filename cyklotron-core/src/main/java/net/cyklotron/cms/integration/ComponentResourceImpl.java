@@ -58,13 +58,13 @@ public class ComponentResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>aggregationSourceView</code> attribute. */
-    private static AttributeDefinition aggregationSourceViewDef;
+	private static AttributeDefinition<String> aggregationSourceViewDef;
 
     /** The AttributeDefinition object for the <code>componentName</code> attribute. */
-    private static AttributeDefinition componentNameDef;
+	private static AttributeDefinition<String> componentNameDef;
 
     /** The AttributeDefinition object for the <code>configurationView</code> attribute. */
-    private static AttributeDefinition configurationViewDef;
+	private static AttributeDefinition<String> configurationViewDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -123,8 +123,8 @@ public class ComponentResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.component");
-            Map attrs = new HashMap();
+            ResourceClass<ComponentResource> rc = session.getSchema().getResourceClass("integration.component", ComponentResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("componentName"), componentName);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ComponentResource))
@@ -149,7 +149,7 @@ public class ComponentResourceImpl
      */
     public String getAggregationSourceView()
     {
-        return (String)getInternal(aggregationSourceViewDef, null);
+        return get(aggregationSourceViewDef);
     }
     
     /**
@@ -160,7 +160,7 @@ public class ComponentResourceImpl
      */
     public String getAggregationSourceView(String defaultValue)
     {
-        return (String)getInternal(aggregationSourceViewDef, defaultValue);
+        return get(aggregationSourceViewDef, defaultValue);
     }    
 
     /**
@@ -209,7 +209,7 @@ public class ComponentResourceImpl
      */
     public String getComponentName()
     {
-        return (String)getInternal(componentNameDef, null);
+        return get(componentNameDef);
     }
  
     /**
@@ -247,7 +247,7 @@ public class ComponentResourceImpl
      */
     public String getConfigurationView()
     {
-        return (String)getInternal(configurationViewDef, null);
+        return get(configurationViewDef);
     }
     
     /**
@@ -258,7 +258,7 @@ public class ComponentResourceImpl
      */
     public String getConfigurationView(String defaultValue)
     {
-        return (String)getInternal(configurationViewDef, defaultValue);
+        return get(configurationViewDef, defaultValue);
     }    
 
     /**

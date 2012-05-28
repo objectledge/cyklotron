@@ -55,6 +55,14 @@ public interface PreferenceResource
      * @return the value of the the <code>default</code> attribute.
      */
     public String getDefault();
+    
+    /**
+     * Returns the value of the <code>default</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>default</code> attribute.
+     */
+    public String getDefault(String defaultValue);
 
     /**
      * Sets the value of the <code>default</code> attribute.
@@ -77,6 +85,14 @@ public interface PreferenceResource
      * @return the value of the the <code>modifyPermission</code> attribute.
      */
     public Permission getModifyPermission();
+    
+    /**
+     * Returns the value of the <code>modifyPermission</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>modifyPermission</code> attribute.
+     */
+    public Permission getModifyPermission(Permission defaultValue);
 
     /**
      * Sets the value of the <code>modifyPermission</code> attribute.
@@ -130,6 +146,14 @@ public interface PreferenceResource
      * @return the value of the the <code>uiHint</code> attribute.
      */
     public String getUiHint();
+    
+    /**
+     * Returns the value of the <code>uiHint</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>uiHint</code> attribute.
+     */
+    public String getUiHint(String defaultValue);
 
     /**
      * Sets the value of the <code>uiHint</code> attribute.

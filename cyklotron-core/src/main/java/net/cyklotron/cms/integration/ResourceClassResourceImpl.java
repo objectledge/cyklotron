@@ -28,8 +28,6 @@
  
 package net.cyklotron.cms.integration;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.objectledge.coral.BackendException;
@@ -59,55 +57,55 @@ public class ResourceClassResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>aggregationCopyAction</code> attribute. */
-    private static AttributeDefinition aggregationCopyActionDef;
+	private static AttributeDefinition<String> aggregationCopyActionDef;
 
     /** The AttributeDefinition object for the <code>aggregationParentClasses</code> attribute. */
-    private static AttributeDefinition aggregationParentClassesDef;
+	private static AttributeDefinition<String> aggregationParentClassesDef;
 
     /** The AttributeDefinition object for the <code>aggregationRecursiveCopyAction</code> attribute. */
-    private static AttributeDefinition aggregationRecursiveCopyActionDef;
+	private static AttributeDefinition<String> aggregationRecursiveCopyActionDef;
 
     /** The AttributeDefinition object for the <code>aggregationRecursiveUpdateAction</code> attribute. */
-    private static AttributeDefinition aggregationRecursiveUpdateActionDef;
+	private static AttributeDefinition<String> aggregationRecursiveUpdateActionDef;
 
     /** The AttributeDefinition object for the <code>aggregationTargetPaths</code> attribute. */
-    private static AttributeDefinition aggregationTargetPathsDef;
+	private static AttributeDefinition<String> aggregationTargetPathsDef;
 
     /** The AttributeDefinition object for the <code>aggregationUpdateAction</code> attribute. */
-    private static AttributeDefinition aggregationUpdateActionDef;
+	private static AttributeDefinition<String> aggregationUpdateActionDef;
 
     /** The AttributeDefinition object for the <code>categorizable</code> attribute. */
-    private static AttributeDefinition categorizableDef;
+    private static AttributeDefinition<Boolean> categorizableDef;
 
     /** The AttributeDefinition object for the <code>editView</code> attribute. */
-    private static AttributeDefinition editViewDef;
+	private static AttributeDefinition<String> editViewDef;
 
     /** The AttributeDefinition object for the <code>image</code> attribute. */
-    private static AttributeDefinition imageDef;
+	private static AttributeDefinition<String> imageDef;
 
     /** The AttributeDefinition object for the <code>indexDescription</code> attribute. */
-    private static AttributeDefinition indexDescriptionDef;
+	private static AttributeDefinition<String> indexDescriptionDef;
 
     /** The AttributeDefinition object for the <code>indexTitle</code> attribute. */
-    private static AttributeDefinition indexTitleDef;
+	private static AttributeDefinition<String> indexTitleDef;
 
     /** The AttributeDefinition object for the <code>indexableFields</code> attribute. */
-    private static AttributeDefinition indexableFieldsDef;
+	private static AttributeDefinition<String> indexableFieldsDef;
 
     /** The AttributeDefinition object for the <code>pickerSupported</code> attribute. */
-    private static AttributeDefinition pickerSupportedDef;
+    private static AttributeDefinition<Boolean> pickerSupportedDef;
 
     /** The AttributeDefinition object for the <code>relatedQuickAddView</code> attribute. */
-    private static AttributeDefinition relatedQuickAddViewDef;
+	private static AttributeDefinition<String> relatedQuickAddViewDef;
 
     /** The AttributeDefinition object for the <code>relatedQuickEditView</code> attribute. */
-    private static AttributeDefinition relatedQuickEditViewDef;
+	private static AttributeDefinition<String> relatedQuickEditViewDef;
 
     /** The AttributeDefinition object for the <code>relatedSupported</code> attribute. */
-    private static AttributeDefinition relatedSupportedDef;
+    private static AttributeDefinition<Boolean> relatedSupportedDef;
 
     /** The AttributeDefinition object for the <code>view</code> attribute. */
-    private static AttributeDefinition viewDef;
+	private static AttributeDefinition<String> viewDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -164,9 +162,9 @@ public class ResourceClassResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.resource_class");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<ResourceClassResource> rc = session.getSchema().getResourceClass("integration.resource_class", ResourceClassResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof ResourceClassResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -193,7 +191,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationCopyAction()
     {
-        return (String)getInternal(aggregationCopyActionDef, null);
+        return get(aggregationCopyActionDef);
     }
     
     /**
@@ -204,7 +202,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationCopyAction(String defaultValue)
     {
-        return (String)getInternal(aggregationCopyActionDef, defaultValue);
+        return get(aggregationCopyActionDef, defaultValue);
     }    
 
     /**
@@ -253,7 +251,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationParentClasses()
     {
-        return (String)getInternal(aggregationParentClassesDef, null);
+        return get(aggregationParentClassesDef);
     }
     
     /**
@@ -264,7 +262,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationParentClasses(String defaultValue)
     {
-        return (String)getInternal(aggregationParentClassesDef, defaultValue);
+        return get(aggregationParentClassesDef, defaultValue);
     }    
 
     /**
@@ -313,7 +311,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationRecursiveCopyAction()
     {
-        return (String)getInternal(aggregationRecursiveCopyActionDef, null);
+        return get(aggregationRecursiveCopyActionDef);
     }
     
     /**
@@ -324,7 +322,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationRecursiveCopyAction(String defaultValue)
     {
-        return (String)getInternal(aggregationRecursiveCopyActionDef, defaultValue);
+        return get(aggregationRecursiveCopyActionDef, defaultValue);
     }    
 
     /**
@@ -373,7 +371,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationRecursiveUpdateAction()
     {
-        return (String)getInternal(aggregationRecursiveUpdateActionDef, null);
+        return get(aggregationRecursiveUpdateActionDef);
     }
     
     /**
@@ -384,7 +382,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationRecursiveUpdateAction(String defaultValue)
     {
-        return (String)getInternal(aggregationRecursiveUpdateActionDef, defaultValue);
+        return get(aggregationRecursiveUpdateActionDef, defaultValue);
     }    
 
     /**
@@ -433,7 +431,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationTargetPaths()
     {
-        return (String)getInternal(aggregationTargetPathsDef, null);
+        return get(aggregationTargetPathsDef);
     }
     
     /**
@@ -444,7 +442,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationTargetPaths(String defaultValue)
     {
-        return (String)getInternal(aggregationTargetPathsDef, defaultValue);
+        return get(aggregationTargetPathsDef, defaultValue);
     }    
 
     /**
@@ -493,7 +491,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationUpdateAction()
     {
-        return (String)getInternal(aggregationUpdateActionDef, null);
+        return get(aggregationUpdateActionDef);
     }
     
     /**
@@ -504,7 +502,7 @@ public class ResourceClassResourceImpl
      */
     public String getAggregationUpdateAction(String defaultValue)
     {
-        return (String)getInternal(aggregationUpdateActionDef, defaultValue);
+        return get(aggregationUpdateActionDef, defaultValue);
     }    
 
     /**
@@ -556,7 +554,7 @@ public class ResourceClassResourceImpl
     public boolean getCategorizable()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(categorizableDef, null);
+	    Boolean value = get(categorizableDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -576,7 +574,7 @@ public class ResourceClassResourceImpl
      */
     public boolean getCategorizable(boolean defaultValue)
     {
-		return ((Boolean)getInternal(categorizableDef, new Boolean(defaultValue))).booleanValue();
+		return get(categorizableDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -588,7 +586,7 @@ public class ResourceClassResourceImpl
     {
         try
         {
-            set(categorizableDef, new Boolean(value));
+            set(categorizableDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -632,7 +630,7 @@ public class ResourceClassResourceImpl
      */
     public String getEditView()
     {
-        return (String)getInternal(editViewDef, null);
+        return get(editViewDef);
     }
     
     /**
@@ -643,7 +641,7 @@ public class ResourceClassResourceImpl
      */
     public String getEditView(String defaultValue)
     {
-        return (String)getInternal(editViewDef, defaultValue);
+        return get(editViewDef, defaultValue);
     }    
 
     /**
@@ -692,7 +690,7 @@ public class ResourceClassResourceImpl
      */
     public String getImage()
     {
-        return (String)getInternal(imageDef, null);
+        return get(imageDef);
     }
     
     /**
@@ -703,7 +701,7 @@ public class ResourceClassResourceImpl
      */
     public String getImage(String defaultValue)
     {
-        return (String)getInternal(imageDef, defaultValue);
+        return get(imageDef, defaultValue);
     }    
 
     /**
@@ -752,7 +750,7 @@ public class ResourceClassResourceImpl
      */
     public String getIndexDescription()
     {
-        return (String)getInternal(indexDescriptionDef, null);
+        return get(indexDescriptionDef);
     }
     
     /**
@@ -763,7 +761,7 @@ public class ResourceClassResourceImpl
      */
     public String getIndexDescription(String defaultValue)
     {
-        return (String)getInternal(indexDescriptionDef, defaultValue);
+        return get(indexDescriptionDef, defaultValue);
     }    
 
     /**
@@ -812,7 +810,7 @@ public class ResourceClassResourceImpl
      */
     public String getIndexTitle()
     {
-        return (String)getInternal(indexTitleDef, null);
+        return get(indexTitleDef);
     }
     
     /**
@@ -823,7 +821,7 @@ public class ResourceClassResourceImpl
      */
     public String getIndexTitle(String defaultValue)
     {
-        return (String)getInternal(indexTitleDef, defaultValue);
+        return get(indexTitleDef, defaultValue);
     }    
 
     /**
@@ -872,7 +870,7 @@ public class ResourceClassResourceImpl
      */
     public String getIndexableFields()
     {
-        return (String)getInternal(indexableFieldsDef, null);
+        return get(indexableFieldsDef);
     }
     
     /**
@@ -883,7 +881,7 @@ public class ResourceClassResourceImpl
      */
     public String getIndexableFields(String defaultValue)
     {
-        return (String)getInternal(indexableFieldsDef, defaultValue);
+        return get(indexableFieldsDef, defaultValue);
     }    
 
     /**
@@ -935,7 +933,7 @@ public class ResourceClassResourceImpl
     public boolean getPickerSupported()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(pickerSupportedDef, null);
+	    Boolean value = get(pickerSupportedDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -955,7 +953,7 @@ public class ResourceClassResourceImpl
      */
     public boolean getPickerSupported(boolean defaultValue)
     {
-		return ((Boolean)getInternal(pickerSupportedDef, new Boolean(defaultValue))).booleanValue();
+		return get(pickerSupportedDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -967,7 +965,7 @@ public class ResourceClassResourceImpl
     {
         try
         {
-            set(pickerSupportedDef, new Boolean(value));
+            set(pickerSupportedDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -1011,7 +1009,7 @@ public class ResourceClassResourceImpl
      */
     public String getRelatedQuickAddView()
     {
-        return (String)getInternal(relatedQuickAddViewDef, null);
+        return get(relatedQuickAddViewDef);
     }
     
     /**
@@ -1022,7 +1020,7 @@ public class ResourceClassResourceImpl
      */
     public String getRelatedQuickAddView(String defaultValue)
     {
-        return (String)getInternal(relatedQuickAddViewDef, defaultValue);
+        return get(relatedQuickAddViewDef, defaultValue);
     }    
 
     /**
@@ -1071,7 +1069,7 @@ public class ResourceClassResourceImpl
      */
     public String getRelatedQuickEditView()
     {
-        return (String)getInternal(relatedQuickEditViewDef, null);
+        return get(relatedQuickEditViewDef);
     }
     
     /**
@@ -1082,7 +1080,7 @@ public class ResourceClassResourceImpl
      */
     public String getRelatedQuickEditView(String defaultValue)
     {
-        return (String)getInternal(relatedQuickEditViewDef, defaultValue);
+        return get(relatedQuickEditViewDef, defaultValue);
     }    
 
     /**
@@ -1134,7 +1132,7 @@ public class ResourceClassResourceImpl
     public boolean getRelatedSupported()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(relatedSupportedDef, null);
+	    Boolean value = get(relatedSupportedDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -1154,7 +1152,7 @@ public class ResourceClassResourceImpl
      */
     public boolean getRelatedSupported(boolean defaultValue)
     {
-		return ((Boolean)getInternal(relatedSupportedDef, new Boolean(defaultValue))).booleanValue();
+		return get(relatedSupportedDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -1166,7 +1164,7 @@ public class ResourceClassResourceImpl
     {
         try
         {
-            set(relatedSupportedDef, new Boolean(value));
+            set(relatedSupportedDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -1210,7 +1208,7 @@ public class ResourceClassResourceImpl
      */
     public String getView()
     {
-        return (String)getInternal(viewDef, null);
+        return get(viewDef);
     }
     
     /**
@@ -1221,7 +1219,7 @@ public class ResourceClassResourceImpl
      */
     public String getView(String defaultValue)
     {
-        return (String)getInternal(viewDef, defaultValue);
+        return get(viewDef, defaultValue);
     }    
 
     /**

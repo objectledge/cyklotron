@@ -58,7 +58,7 @@ public class PreferencesResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>preferences</code> attribute. */
-    private static AttributeDefinition preferencesDef;
+	private static AttributeDefinition<Parameters> preferencesDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -117,8 +117,8 @@ public class PreferencesResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("preferences.preferences");
-            Map attrs = new HashMap();
+            ResourceClass<PreferencesResource> rc = session.getSchema().getResourceClass("preferences.preferences", PreferencesResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("preferences"), preferences);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof PreferencesResource))
@@ -143,7 +143,7 @@ public class PreferencesResourceImpl
      */
     public Parameters getPreferences()
     {
-        return (Parameters)getInternal(preferencesDef, null);
+        return get(preferencesDef);
     }
     
     // @custom methods ///////////////////////////////////////////////////////

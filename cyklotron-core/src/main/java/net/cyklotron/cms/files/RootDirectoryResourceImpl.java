@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.files;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -56,10 +53,10 @@ public class RootDirectoryResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>external</code> attribute. */
-    private static AttributeDefinition externalDef;
+    private static AttributeDefinition<Boolean> externalDef;
 
     /** The AttributeDefinition object for the <code>rootPath</code> attribute. */
-    private static AttributeDefinition rootPathDef;
+	private static AttributeDefinition<String> rootPathDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -116,9 +113,9 @@ public class RootDirectoryResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.files.root_directory");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<RootDirectoryResource> rc = session.getSchema().getResourceClass("cms.files.root_directory", RootDirectoryResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof RootDirectoryResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -148,7 +145,7 @@ public class RootDirectoryResourceImpl
     public boolean getExternal()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(externalDef, null);
+	    Boolean value = get(externalDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -168,7 +165,7 @@ public class RootDirectoryResourceImpl
      */
     public boolean getExternal(boolean defaultValue)
     {
-		return ((Boolean)getInternal(externalDef, new Boolean(defaultValue))).booleanValue();
+		return get(externalDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -180,7 +177,7 @@ public class RootDirectoryResourceImpl
     {
         try
         {
-            set(externalDef, new Boolean(value));
+            set(externalDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -224,7 +221,7 @@ public class RootDirectoryResourceImpl
      */
     public String getRootPath()
     {
-        return (String)getInternal(rootPathDef, null);
+        return get(rootPathDef);
     }
     
     /**
@@ -235,7 +232,7 @@ public class RootDirectoryResourceImpl
      */
     public String getRootPath(String defaultValue)
     {
-        return (String)getInternal(rootPathDef, defaultValue);
+        return get(rootPathDef, defaultValue);
     }    
 
     /**

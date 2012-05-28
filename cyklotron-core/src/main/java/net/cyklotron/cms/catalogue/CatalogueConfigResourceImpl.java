@@ -29,9 +29,7 @@
 package net.cyklotron.cms.catalogue;
 
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 
 import org.objectledge.coral.BackendException;
@@ -63,13 +61,13 @@ public class CatalogueConfigResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>category</code> attribute. */
-    private static AttributeDefinition categoryDef;
+	private static AttributeDefinition<CategoryResource> categoryDef;
 
     /** The AttributeDefinition object for the <code>requiredPropertyNames</code> attribute. */
-    private static AttributeDefinition requiredPropertyNamesDef;
+	private static AttributeDefinition<String> requiredPropertyNamesDef;
 
     /** The AttributeDefinition object for the <code>searchPool</code> attribute. */
-    private static AttributeDefinition searchPoolDef;
+	private static AttributeDefinition<PoolResource> searchPoolDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -126,9 +124,9 @@ public class CatalogueConfigResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.catalogue.config");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<CatalogueConfigResource> rc = session.getSchema().getResourceClass("cms.catalogue.config", CatalogueConfigResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof CatalogueConfigResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -155,7 +153,7 @@ public class CatalogueConfigResourceImpl
      */
     public CategoryResource getCategory()
     {
-        return (CategoryResource)getInternal(categoryDef, null);
+        return get(categoryDef);
     }
     
     /**
@@ -166,7 +164,7 @@ public class CatalogueConfigResourceImpl
      */
     public CategoryResource getCategory(CategoryResource defaultValue)
     {
-        return (CategoryResource)getInternal(categoryDef, defaultValue);
+        return get(categoryDef, defaultValue);
     }    
 
     /**
@@ -215,7 +213,7 @@ public class CatalogueConfigResourceImpl
      */
     public String getRequiredPropertyNames()
     {
-        return (String)getInternal(requiredPropertyNamesDef, null);
+        return get(requiredPropertyNamesDef);
     }
     
     /**
@@ -226,7 +224,7 @@ public class CatalogueConfigResourceImpl
      */
     public String getRequiredPropertyNames(String defaultValue)
     {
-        return (String)getInternal(requiredPropertyNamesDef, defaultValue);
+        return get(requiredPropertyNamesDef, defaultValue);
     }    
 
     /**
@@ -275,7 +273,7 @@ public class CatalogueConfigResourceImpl
      */
     public PoolResource getSearchPool()
     {
-        return (PoolResource)getInternal(searchPoolDef, null);
+        return get(searchPoolDef);
     }
     
     /**
@@ -286,7 +284,7 @@ public class CatalogueConfigResourceImpl
      */
     public PoolResource getSearchPool(PoolResource defaultValue)
     {
-        return (PoolResource)getInternal(searchPoolDef, defaultValue);
+        return get(searchPoolDef, defaultValue);
     }    
 
     /**

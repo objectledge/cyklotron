@@ -29,8 +29,6 @@
 package net.cyklotron.cms.link;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -63,16 +61,16 @@ public class BaseLinkResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>endDate</code> attribute. */
-    private static AttributeDefinition endDateDef;
+	private static AttributeDefinition<Date> endDateDef;
 
     /** The AttributeDefinition object for the <code>eternal</code> attribute. */
-    private static AttributeDefinition eternalDef;
+    private static AttributeDefinition<Boolean> eternalDef;
 
     /** The AttributeDefinition object for the <code>startDate</code> attribute. */
-    private static AttributeDefinition startDateDef;
+	private static AttributeDefinition<Date> startDateDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
-    private static AttributeDefinition stateDef;
+	private static AttributeDefinition<StateResource> stateDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -129,9 +127,9 @@ public class BaseLinkResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.link.base_link");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<BaseLinkResource> rc = session.getSchema().getResourceClass("cms.link.base_link", BaseLinkResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof BaseLinkResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -158,7 +156,7 @@ public class BaseLinkResourceImpl
      */
     public Date getEndDate()
     {
-        return (Date)getInternal(endDateDef, null);
+        return get(endDateDef);
     }
     
     /**
@@ -169,7 +167,7 @@ public class BaseLinkResourceImpl
      */
     public Date getEndDate(Date defaultValue)
     {
-        return (Date)getInternal(endDateDef, defaultValue);
+        return get(endDateDef, defaultValue);
     }    
 
     /**
@@ -221,7 +219,7 @@ public class BaseLinkResourceImpl
     public boolean getEternal()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(eternalDef, null);
+	    Boolean value = get(eternalDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -241,7 +239,7 @@ public class BaseLinkResourceImpl
      */
     public boolean getEternal(boolean defaultValue)
     {
-		return ((Boolean)getInternal(eternalDef, new Boolean(defaultValue))).booleanValue();
+		return get(eternalDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -253,7 +251,7 @@ public class BaseLinkResourceImpl
     {
         try
         {
-            set(eternalDef, new Boolean(value));
+            set(eternalDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -297,7 +295,7 @@ public class BaseLinkResourceImpl
      */
     public Date getStartDate()
     {
-        return (Date)getInternal(startDateDef, null);
+        return get(startDateDef);
     }
     
     /**
@@ -308,7 +306,7 @@ public class BaseLinkResourceImpl
      */
     public Date getStartDate(Date defaultValue)
     {
-        return (Date)getInternal(startDateDef, defaultValue);
+        return get(startDateDef, defaultValue);
     }    
 
     /**
@@ -357,7 +355,7 @@ public class BaseLinkResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)getInternal(stateDef, null);
+        return get(stateDef);
     }
     
     /**
@@ -368,7 +366,7 @@ public class BaseLinkResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        return (StateResource)getInternal(stateDef, defaultValue);
+        return get(stateDef, defaultValue);
     }    
 
     /**

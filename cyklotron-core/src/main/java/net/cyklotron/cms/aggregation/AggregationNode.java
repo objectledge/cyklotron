@@ -53,6 +53,14 @@ public interface AggregationNode
      * @return the value of the the <code>replyTo</code> attribute.
      */
     public String getReplyTo();
+    
+    /**
+     * Returns the value of the <code>replyTo</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>replyTo</code> attribute.
+     */
+    public String getReplyTo(String defaultValue);
 
     /**
      * Sets the value of the <code>replyTo</code> attribute.

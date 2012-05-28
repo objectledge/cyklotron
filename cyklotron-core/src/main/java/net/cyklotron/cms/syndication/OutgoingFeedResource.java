@@ -56,6 +56,14 @@ public interface OutgoingFeedResource
      * @return the value of the the <code>category</code> attribute.
      */
     public String getCategory();
+    
+    /**
+     * Returns the value of the <code>category</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>category</code> attribute.
+     */
+    public String getCategory(String defaultValue);
 
     /**
      * Sets the value of the <code>category</code> attribute.
@@ -78,6 +86,14 @@ public interface OutgoingFeedResource
      * @return the value of the the <code>categoryQuery</code> attribute.
      */
     public CategoryQueryResource getCategoryQuery();
+    
+    /**
+     * Returns the value of the <code>categoryQuery</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>categoryQuery</code> attribute.
+     */
+    public CategoryQueryResource getCategoryQuery(CategoryQueryResource defaultValue);
 
     /**
      * Sets the value of the <code>categoryQuery</code> attribute.
@@ -100,6 +116,14 @@ public interface OutgoingFeedResource
      * @return the value of the the <code>contents</code> attribute.
      */
     public String getContents();
+    
+    /**
+     * Returns the value of the <code>contents</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>contents</code> attribute.
+     */
+    public String getContents(String defaultValue);
 
     /**
      * Sets the value of the <code>contents</code> attribute.
@@ -122,6 +146,14 @@ public interface OutgoingFeedResource
      * @return the value of the the <code>copyright</code> attribute.
      */
     public String getCopyright();
+    
+    /**
+     * Returns the value of the <code>copyright</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>copyright</code> attribute.
+     */
+    public String getCopyright(String defaultValue);
 
     /**
      * Sets the value of the <code>copyright</code> attribute.
@@ -144,6 +176,14 @@ public interface OutgoingFeedResource
      * @return the value of the the <code>generationTemplate</code> attribute.
      */
     public String getGenerationTemplate();
+    
+    /**
+     * Returns the value of the <code>generationTemplate</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>generationTemplate</code> attribute.
+     */
+    public String getGenerationTemplate(String defaultValue);
 
     /**
      * Sets the value of the <code>generationTemplate</code> attribute.
@@ -203,6 +243,14 @@ public interface OutgoingFeedResource
      * @return the value of the the <code>language</code> attribute.
      */
     public String getLanguage();
+    
+    /**
+     * Returns the value of the <code>language</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>language</code> attribute.
+     */
+    public String getLanguage(String defaultValue);
 
     /**
      * Sets the value of the <code>language</code> attribute.
@@ -225,6 +273,14 @@ public interface OutgoingFeedResource
      * @return the value of the the <code>lastUpdate</code> attribute.
      */
     public Date getLastUpdate();
+    
+    /**
+     * Returns the value of the <code>lastUpdate</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>lastUpdate</code> attribute.
+     */
+    public Date getLastUpdate(Date defaultValue);
 
     /**
      * Sets the value of the <code>lastUpdate</code> attribute.
@@ -284,6 +340,14 @@ public interface OutgoingFeedResource
      * @return the value of the the <code>managingEditor</code> attribute.
      */
     public String getManagingEditor();
+    
+    /**
+     * Returns the value of the <code>managingEditor</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>managingEditor</code> attribute.
+     */
+    public String getManagingEditor(String defaultValue);
 
     /**
      * Sets the value of the <code>managingEditor</code> attribute.
@@ -380,6 +444,14 @@ public interface OutgoingFeedResource
      * @return the value of the the <code>sortColumn</code> attribute.
      */
     public String getSortColumn();
+    
+    /**
+     * Returns the value of the <code>sortColumn</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>sortColumn</code> attribute.
+     */
+    public String getSortColumn(String defaultValue);
 
     /**
      * Sets the value of the <code>sortColumn</code> attribute.
@@ -439,6 +511,14 @@ public interface OutgoingFeedResource
      * @return the value of the the <code>webMaster</code> attribute.
      */
     public String getWebMaster();
+    
+    /**
+     * Returns the value of the <code>webMaster</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>webMaster</code> attribute.
+     */
+    public String getWebMaster(String defaultValue);
 
     /**
      * Sets the value of the <code>webMaster</code> attribute.

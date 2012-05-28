@@ -60,6 +60,14 @@ public interface PollResource
      * @return the value of the the <code>endDate</code> attribute.
      */
     public Date getEndDate();
+    
+    /**
+     * Returns the value of the <code>endDate</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>endDate</code> attribute.
+     */
+    public Date getEndDate(Date defaultValue);
 
     /**
      * Sets the value of the <code>endDate</code> attribute.
@@ -82,6 +90,14 @@ public interface PollResource
      * @return the value of the the <code>moderator</code> attribute.
      */
     public Role getModerator();
+    
+    /**
+     * Returns the value of the <code>moderator</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>moderator</code> attribute.
+     */
+    public Role getModerator(Role defaultValue);
 
     /**
      * Sets the value of the <code>moderator</code> attribute.
@@ -104,6 +120,14 @@ public interface PollResource
      * @return the value of the the <code>startDate</code> attribute.
      */
     public Date getStartDate();
+    
+    /**
+     * Returns the value of the <code>startDate</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>startDate</code> attribute.
+     */
+    public Date getStartDate(Date defaultValue);
 
     /**
      * Sets the value of the <code>startDate</code> attribute.

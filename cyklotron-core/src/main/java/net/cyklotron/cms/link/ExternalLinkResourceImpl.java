@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.link;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -56,7 +53,7 @@ public class ExternalLinkResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>target</code> attribute. */
-    private static AttributeDefinition targetDef;
+	private static AttributeDefinition<String> targetDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -113,9 +110,9 @@ public class ExternalLinkResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.link.external_link");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<ExternalLinkResource> rc = session.getSchema().getResourceClass("cms.link.external_link", ExternalLinkResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof ExternalLinkResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -142,7 +139,7 @@ public class ExternalLinkResourceImpl
      */
     public String getTarget()
     {
-        return (String)getInternal(targetDef, null);
+        return get(targetDef);
     }
     
     /**
@@ -153,7 +150,7 @@ public class ExternalLinkResourceImpl
      */
     public String getTarget(String defaultValue)
     {
-        return (String)getInternal(targetDef, defaultValue);
+        return get(targetDef, defaultValue);
     }    
 
     /**

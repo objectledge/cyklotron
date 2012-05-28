@@ -29,8 +29,6 @@
 package net.cyklotron.cms.httpfeed;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -59,22 +57,22 @@ public class HttpFeedResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>contents</code> attribute. */
-    private static AttributeDefinition contentsDef;
+	private static AttributeDefinition<String> contentsDef;
 
     /** The AttributeDefinition object for the <code>failedUpdates</code> attribute. */
-    private static AttributeDefinition failedUpdatesDef;
+    private static AttributeDefinition<Integer> failedUpdatesDef;
 
     /** The AttributeDefinition object for the <code>interval</code> attribute. */
-    private static AttributeDefinition intervalDef;
+    private static AttributeDefinition<Integer> intervalDef;
 
     /** The AttributeDefinition object for the <code>lastUpdate</code> attribute. */
-    private static AttributeDefinition lastUpdateDef;
+	private static AttributeDefinition<Date> lastUpdateDef;
 
     /** The AttributeDefinition object for the <code>url</code> attribute. */
-    private static AttributeDefinition urlDef;
+	private static AttributeDefinition<String> urlDef;
 
     /** The AttributeDefinition object for the <code>validity</code> attribute. */
-    private static AttributeDefinition validityDef;
+    private static AttributeDefinition<Boolean> validityDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -131,9 +129,9 @@ public class HttpFeedResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.httpfeed.feed");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<HttpFeedResource> rc = session.getSchema().getResourceClass("cms.httpfeed.feed", HttpFeedResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof HttpFeedResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -160,7 +158,7 @@ public class HttpFeedResourceImpl
      */
     public String getContents()
     {
-        return (String)getInternal(contentsDef, null);
+        return get(contentsDef);
     }
     
     /**
@@ -171,7 +169,7 @@ public class HttpFeedResourceImpl
      */
     public String getContents(String defaultValue)
     {
-        return (String)getInternal(contentsDef, defaultValue);
+        return get(contentsDef, defaultValue);
     }    
 
     /**
@@ -223,7 +221,7 @@ public class HttpFeedResourceImpl
     public int getFailedUpdates()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(failedUpdatesDef, null);
+	    Integer value = get(failedUpdatesDef);
         if(value != null)
         {
             return value.intValue();
@@ -243,7 +241,7 @@ public class HttpFeedResourceImpl
      */
     public int getFailedUpdates(int defaultValue)
     {
-		return ((Integer)getInternal(failedUpdatesDef, new Integer(defaultValue))).intValue();
+		return get(failedUpdatesDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -255,7 +253,7 @@ public class HttpFeedResourceImpl
     {
         try
         {
-            set(failedUpdatesDef, new Integer(value));
+            set(failedUpdatesDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -302,7 +300,7 @@ public class HttpFeedResourceImpl
     public int getInterval()
         throws IllegalStateException
     {
-	    Integer value = (Integer)getInternal(intervalDef, null);
+	    Integer value = get(intervalDef);
         if(value != null)
         {
             return value.intValue();
@@ -322,7 +320,7 @@ public class HttpFeedResourceImpl
      */
     public int getInterval(int defaultValue)
     {
-		return ((Integer)getInternal(intervalDef, new Integer(defaultValue))).intValue();
+		return get(intervalDef, Integer.valueOf(defaultValue)).intValue();
 	}
 
     /**
@@ -334,7 +332,7 @@ public class HttpFeedResourceImpl
     {
         try
         {
-            set(intervalDef, new Integer(value));
+            set(intervalDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -378,7 +376,7 @@ public class HttpFeedResourceImpl
      */
     public Date getLastUpdate()
     {
-        return (Date)getInternal(lastUpdateDef, null);
+        return get(lastUpdateDef);
     }
     
     /**
@@ -389,7 +387,7 @@ public class HttpFeedResourceImpl
      */
     public Date getLastUpdate(Date defaultValue)
     {
-        return (Date)getInternal(lastUpdateDef, defaultValue);
+        return get(lastUpdateDef, defaultValue);
     }    
 
     /**
@@ -438,7 +436,7 @@ public class HttpFeedResourceImpl
      */
     public String getUrl()
     {
-        return (String)getInternal(urlDef, null);
+        return get(urlDef);
     }
     
     /**
@@ -449,7 +447,7 @@ public class HttpFeedResourceImpl
      */
     public String getUrl(String defaultValue)
     {
-        return (String)getInternal(urlDef, defaultValue);
+        return get(urlDef, defaultValue);
     }    
 
     /**
@@ -501,7 +499,7 @@ public class HttpFeedResourceImpl
     public boolean getValidity()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(validityDef, null);
+	    Boolean value = get(validityDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -521,7 +519,7 @@ public class HttpFeedResourceImpl
      */
     public boolean getValidity(boolean defaultValue)
     {
-		return ((Boolean)getInternal(validityDef, new Boolean(defaultValue))).booleanValue();
+		return get(validityDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -533,7 +531,7 @@ public class HttpFeedResourceImpl
     {
         try
         {
-            set(validityDef, new Boolean(value));
+            set(validityDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

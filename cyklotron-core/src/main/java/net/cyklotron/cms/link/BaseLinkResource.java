@@ -58,6 +58,14 @@ public interface BaseLinkResource
      * @return the value of the the <code>endDate</code> attribute.
      */
     public Date getEndDate();
+    
+    /**
+     * Returns the value of the <code>endDate</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>endDate</code> attribute.
+     */
+    public Date getEndDate(Date defaultValue);
 
     /**
      * Sets the value of the <code>endDate</code> attribute.
@@ -117,6 +125,14 @@ public interface BaseLinkResource
      * @return the value of the the <code>startDate</code> attribute.
      */
     public Date getStartDate();
+    
+    /**
+     * Returns the value of the <code>startDate</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>startDate</code> attribute.
+     */
+    public Date getStartDate(Date defaultValue);
 
     /**
      * Sets the value of the <code>startDate</code> attribute.

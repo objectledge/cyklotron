@@ -62,6 +62,14 @@ public interface RootResource
      * @return the value of the the <code>searchNode</code> attribute.
      */
     public NavigationNodeResource getSearchNode();
+    
+    /**
+     * Returns the value of the <code>searchNode</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>searchNode</code> attribute.
+     */
+    public NavigationNodeResource getSearchNode(NavigationNodeResource defaultValue);
 
     /**
      * Sets the value of the <code>searchNode</code> attribute.

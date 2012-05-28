@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.poll;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -63,10 +60,10 @@ public class VoteResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>moderator</code> attribute. */
-    private static AttributeDefinition moderatorDef;
+	private static AttributeDefinition<Role> moderatorDef;
 
     /** The AttributeDefinition object for the <code>senderAddress</code> attribute. */
-    private static AttributeDefinition senderAddressDef;
+	private static AttributeDefinition<String> senderAddressDef;
 
 	// custom injected fields /////////////////////////////////////////////////
 	
@@ -130,9 +127,9 @@ public class VoteResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.poll.vote");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<VoteResource> rc = session.getSchema().getResourceClass("cms.poll.vote", VoteResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof VoteResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -159,7 +156,7 @@ public class VoteResourceImpl
      */
     public Role getModerator()
     {
-        return (Role)getInternal(moderatorDef, null);
+        return get(moderatorDef);
     }
     
     /**
@@ -170,7 +167,7 @@ public class VoteResourceImpl
      */
     public Role getModerator(Role defaultValue)
     {
-        return (Role)getInternal(moderatorDef, defaultValue);
+        return get(moderatorDef, defaultValue);
     }    
 
     /**
@@ -219,7 +216,7 @@ public class VoteResourceImpl
      */
     public String getSenderAddress()
     {
-        return (String)getInternal(senderAddressDef, null);
+        return get(senderAddressDef);
     }
     
     /**
@@ -230,7 +227,7 @@ public class VoteResourceImpl
      */
     public String getSenderAddress(String defaultValue)
     {
-        return (String)getInternal(senderAddressDef, defaultValue);
+        return get(senderAddressDef, defaultValue);
     }    
 
     /**

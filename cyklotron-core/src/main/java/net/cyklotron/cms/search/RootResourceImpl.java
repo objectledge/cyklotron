@@ -60,10 +60,10 @@ public class RootResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>preferences</code> attribute. */
-    private static AttributeDefinition preferencesDef;
+	private static AttributeDefinition<Parameters> preferencesDef;
 
     /** The AttributeDefinition object for the <code>searchNode</code> attribute. */
-    private static AttributeDefinition searchNodeDef;
+	private static AttributeDefinition<NavigationNodeResource> searchNodeDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -122,8 +122,8 @@ public class RootResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("search.root");
-            Map attrs = new HashMap();
+            ResourceClass<RootResource> rc = session.getSchema().getResourceClass("search.root", RootResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("preferences"), preferences);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof RootResource))
@@ -148,7 +148,7 @@ public class RootResourceImpl
      */
     public Parameters getPreferences()
     {
-        return (Parameters)getInternal(preferencesDef, null);
+        return get(preferencesDef);
     }
    
     /**
@@ -158,7 +158,7 @@ public class RootResourceImpl
      */
     public NavigationNodeResource getSearchNode()
     {
-        return (NavigationNodeResource)getInternal(searchNodeDef, null);
+        return get(searchNodeDef);
     }
     
     /**
@@ -169,7 +169,7 @@ public class RootResourceImpl
      */
     public NavigationNodeResource getSearchNode(NavigationNodeResource defaultValue)
     {
-        return (NavigationNodeResource)getInternal(searchNodeDef, defaultValue);
+        return get(searchNodeDef, defaultValue);
     }    
 
     /**

@@ -28,11 +28,9 @@
  
 package net.cyklotron.cms;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
@@ -108,9 +106,9 @@ public class RootResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.root");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<RootResource> rc = session.getSchema().getResourceClass("cms.root", RootResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof RootResource))
             {
                 throw new BackendException("incosistent schema: created object is "+

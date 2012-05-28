@@ -58,7 +58,7 @@ public class PreferenceGroupMemberResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>preference</code> attribute. */
-    private static AttributeDefinition preferenceDef;
+	private static AttributeDefinition<PreferenceResource> preferenceDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -117,8 +117,8 @@ public class PreferenceGroupMemberResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.preference_group_member");
-            Map attrs = new HashMap();
+            ResourceClass<PreferenceGroupMemberResource> rc = session.getSchema().getResourceClass("integration.preference_group_member", PreferenceGroupMemberResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("preference"), preference);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof PreferenceGroupMemberResource))
@@ -143,7 +143,7 @@ public class PreferenceGroupMemberResourceImpl
      */
     public PreferenceResource getPreference()
     {
-        return (PreferenceResource)getInternal(preferenceDef, null);
+        return get(preferenceDef);
     }
  
     /**

@@ -53,6 +53,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>aggregationCopyAction</code> attribute.
      */
     public String getAggregationCopyAction();
+    
+    /**
+     * Returns the value of the <code>aggregationCopyAction</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>aggregationCopyAction</code> attribute.
+     */
+    public String getAggregationCopyAction(String defaultValue);
 
     /**
      * Sets the value of the <code>aggregationCopyAction</code> attribute.
@@ -75,6 +83,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>aggregationParentClasses</code> attribute.
      */
     public String getAggregationParentClasses();
+    
+    /**
+     * Returns the value of the <code>aggregationParentClasses</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>aggregationParentClasses</code> attribute.
+     */
+    public String getAggregationParentClasses(String defaultValue);
 
     /**
      * Sets the value of the <code>aggregationParentClasses</code> attribute.
@@ -97,6 +113,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>aggregationRecursiveCopyAction</code> attribute.
      */
     public String getAggregationRecursiveCopyAction();
+    
+    /**
+     * Returns the value of the <code>aggregationRecursiveCopyAction</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>aggregationRecursiveCopyAction</code> attribute.
+     */
+    public String getAggregationRecursiveCopyAction(String defaultValue);
 
     /**
      * Sets the value of the <code>aggregationRecursiveCopyAction</code> attribute.
@@ -119,6 +143,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>aggregationRecursiveUpdateAction</code> attribute.
      */
     public String getAggregationRecursiveUpdateAction();
+    
+    /**
+     * Returns the value of the <code>aggregationRecursiveUpdateAction</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>aggregationRecursiveUpdateAction</code> attribute.
+     */
+    public String getAggregationRecursiveUpdateAction(String defaultValue);
 
     /**
      * Sets the value of the <code>aggregationRecursiveUpdateAction</code> attribute.
@@ -141,6 +173,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>aggregationTargetPaths</code> attribute.
      */
     public String getAggregationTargetPaths();
+    
+    /**
+     * Returns the value of the <code>aggregationTargetPaths</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>aggregationTargetPaths</code> attribute.
+     */
+    public String getAggregationTargetPaths(String defaultValue);
 
     /**
      * Sets the value of the <code>aggregationTargetPaths</code> attribute.
@@ -163,6 +203,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>aggregationUpdateAction</code> attribute.
      */
     public String getAggregationUpdateAction();
+    
+    /**
+     * Returns the value of the <code>aggregationUpdateAction</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>aggregationUpdateAction</code> attribute.
+     */
+    public String getAggregationUpdateAction(String defaultValue);
 
     /**
      * Sets the value of the <code>aggregationUpdateAction</code> attribute.
@@ -222,6 +270,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>editView</code> attribute.
      */
     public String getEditView();
+    
+    /**
+     * Returns the value of the <code>editView</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>editView</code> attribute.
+     */
+    public String getEditView(String defaultValue);
 
     /**
      * Sets the value of the <code>editView</code> attribute.
@@ -244,6 +300,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>image</code> attribute.
      */
     public String getImage();
+    
+    /**
+     * Returns the value of the <code>image</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>image</code> attribute.
+     */
+    public String getImage(String defaultValue);
 
     /**
      * Sets the value of the <code>image</code> attribute.
@@ -266,6 +330,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>indexDescription</code> attribute.
      */
     public String getIndexDescription();
+    
+    /**
+     * Returns the value of the <code>indexDescription</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>indexDescription</code> attribute.
+     */
+    public String getIndexDescription(String defaultValue);
 
     /**
      * Sets the value of the <code>indexDescription</code> attribute.
@@ -288,6 +360,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>indexTitle</code> attribute.
      */
     public String getIndexTitle();
+    
+    /**
+     * Returns the value of the <code>indexTitle</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>indexTitle</code> attribute.
+     */
+    public String getIndexTitle(String defaultValue);
 
     /**
      * Sets the value of the <code>indexTitle</code> attribute.
@@ -310,6 +390,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>indexableFields</code> attribute.
      */
     public String getIndexableFields();
+    
+    /**
+     * Returns the value of the <code>indexableFields</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>indexableFields</code> attribute.
+     */
+    public String getIndexableFields(String defaultValue);
 
     /**
      * Sets the value of the <code>indexableFields</code> attribute.
@@ -369,6 +457,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>relatedQuickAddView</code> attribute.
      */
     public String getRelatedQuickAddView();
+    
+    /**
+     * Returns the value of the <code>relatedQuickAddView</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>relatedQuickAddView</code> attribute.
+     */
+    public String getRelatedQuickAddView(String defaultValue);
 
     /**
      * Sets the value of the <code>relatedQuickAddView</code> attribute.
@@ -391,6 +487,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>relatedQuickEditView</code> attribute.
      */
     public String getRelatedQuickEditView();
+    
+    /**
+     * Returns the value of the <code>relatedQuickEditView</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>relatedQuickEditView</code> attribute.
+     */
+    public String getRelatedQuickEditView(String defaultValue);
 
     /**
      * Sets the value of the <code>relatedQuickEditView</code> attribute.
@@ -450,6 +554,14 @@ public interface ResourceClassResource
      * @return the value of the the <code>view</code> attribute.
      */
     public String getView();
+    
+    /**
+     * Returns the value of the <code>view</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>view</code> attribute.
+     */
+    public String getView(String defaultValue);
 
     /**
      * Sets the value of the <code>view</code> attribute.

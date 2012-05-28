@@ -57,10 +57,10 @@ public class SubtreeRoleResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>subtreeRoot</code> attribute. */
-    private static AttributeDefinition subtreeRootDef;
+	private static AttributeDefinition<Resource> subtreeRootDef;
 
     /** The AttributeDefinition object for the <code>recursive</code> attribute. */
-    private static AttributeDefinition recursiveDef;
+    private static AttributeDefinition<Boolean> recursiveDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -124,13 +124,13 @@ public class SubtreeRoleResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.security.subtree_role");
-            Map attrs = new HashMap();
+            ResourceClass<SubtreeRoleResource> rc = session.getSchema().getResourceClass("cms.security.subtree_role", SubtreeRoleResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("role"), role);
-            attrs.put(rc.getAttribute("deletable"), new Boolean(deletable));
+            attrs.put(rc.getAttribute("deletable"), Boolean.valueOf(deletable));
             attrs.put(rc.getAttribute("subtreeRoot"), subtreeRoot);
-            attrs.put(rc.getAttribute("recursive"), new Boolean(recursive));
-            attrs.put(rc.getAttribute("sharingWorkgroup"), new Boolean(sharingWorkgroup));
+            attrs.put(rc.getAttribute("recursive"), Boolean.valueOf(recursive));
+            attrs.put(rc.getAttribute("sharingWorkgroup"), Boolean.valueOf(sharingWorkgroup));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof SubtreeRoleResource))
             {
@@ -154,7 +154,7 @@ public class SubtreeRoleResourceImpl
      */
     public Resource getSubtreeRoot()
     {
-        return (Resource)getInternal(subtreeRootDef, null);
+        return get(subtreeRootDef);
     }
  
     /**
@@ -192,7 +192,7 @@ public class SubtreeRoleResourceImpl
      */
     public boolean getRecursive()
     {
-		return ((Boolean)getInternal(recursiveDef, null)).booleanValue();
+		return get(recursiveDef).booleanValue();
     }    
 
     /**
@@ -204,7 +204,7 @@ public class SubtreeRoleResourceImpl
     {
         try
         {
-            set(recursiveDef, new Boolean(value));
+            set(recursiveDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

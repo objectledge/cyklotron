@@ -61,13 +61,13 @@ public class DiscussionResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>forum</code> attribute. */
-    private static AttributeDefinition forumDef;
+	private static AttributeDefinition<ForumResource> forumDef;
 
     /** The AttributeDefinition object for the <code>replyTo</code> attribute. */
-    private static AttributeDefinition replyToDef;
+	private static AttributeDefinition<String> replyToDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
-    private static AttributeDefinition stateDef;
+	private static AttributeDefinition<StateResource> stateDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -126,8 +126,8 @@ public class DiscussionResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.forum.discussion");
-            Map attrs = new HashMap();
+            ResourceClass<DiscussionResource> rc = session.getSchema().getResourceClass("cms.forum.discussion", DiscussionResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("forum"), forum);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof DiscussionResource))
@@ -152,7 +152,7 @@ public class DiscussionResourceImpl
      */
     public ForumResource getForum()
     {
-        return (ForumResource)getInternal(forumDef, null);
+        return get(forumDef);
     }
  
     /**
@@ -190,7 +190,7 @@ public class DiscussionResourceImpl
      */
     public String getReplyTo()
     {
-        return (String)getInternal(replyToDef, null);
+        return get(replyToDef);
     }
     
     /**
@@ -201,7 +201,7 @@ public class DiscussionResourceImpl
      */
     public String getReplyTo(String defaultValue)
     {
-        return (String)getInternal(replyToDef, defaultValue);
+        return get(replyToDef, defaultValue);
     }    
 
     /**
@@ -250,7 +250,7 @@ public class DiscussionResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)getInternal(stateDef, null);
+        return get(stateDef);
     }
     
     /**
@@ -261,7 +261,7 @@ public class DiscussionResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        return (StateResource)getInternal(stateDef, defaultValue);
+        return get(stateDef, defaultValue);
     }    
 
     /**

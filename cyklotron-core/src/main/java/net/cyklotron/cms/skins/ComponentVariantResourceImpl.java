@@ -28,11 +28,9 @@
  
 package net.cyklotron.cms.skins;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
@@ -110,9 +108,9 @@ public class ComponentVariantResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.skins.component_variant");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<ComponentVariantResource> rc = session.getSchema().getResourceClass("cms.skins.component_variant", ComponentVariantResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof ComponentVariantResource))
             {
                 throw new BackendException("incosistent schema: created object is "+

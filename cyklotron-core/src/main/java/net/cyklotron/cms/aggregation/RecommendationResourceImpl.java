@@ -59,13 +59,13 @@ public class RecommendationResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>source</code> attribute. */
-    private static AttributeDefinition sourceDef;
+	private static AttributeDefinition<Resource> sourceDef;
 
     /** The AttributeDefinition object for the <code>sourceSite</code> attribute. */
-    private static AttributeDefinition sourceSiteDef;
+	private static AttributeDefinition<SiteResource> sourceSiteDef;
 
     /** The AttributeDefinition object for the <code>status</code> attribute. */
-    private static AttributeDefinition statusDef;
+    private static AttributeDefinition<Integer> statusDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -126,11 +126,11 @@ public class RecommendationResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.aggregation.recommendation");
-            Map attrs = new HashMap();
+            ResourceClass<RecommendationResource> rc = session.getSchema().getResourceClass("cms.aggregation.recommendation", RecommendationResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("source"), source);
             attrs.put(rc.getAttribute("sourceSite"), sourceSite);
-            attrs.put(rc.getAttribute("status"), new Integer(status));
+            attrs.put(rc.getAttribute("status"), Integer.valueOf(status));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof RecommendationResource))
             {
@@ -154,7 +154,7 @@ public class RecommendationResourceImpl
      */
     public Resource getSource()
     {
-        return (Resource)getInternal(sourceDef, null);
+        return get(sourceDef);
     }
  
     /**
@@ -192,7 +192,7 @@ public class RecommendationResourceImpl
      */
     public SiteResource getSourceSite()
     {
-        return (SiteResource)getInternal(sourceSiteDef, null);
+        return get(sourceSiteDef);
     }
  
     /**
@@ -230,7 +230,7 @@ public class RecommendationResourceImpl
      */
     public int getStatus()
     {
-		return ((Integer)getInternal(statusDef, null)).intValue();
+		return get(statusDef).intValue();
     }    
 
     /**
@@ -242,7 +242,7 @@ public class RecommendationResourceImpl
     {
         try
         {
-            set(statusDef, new Integer(value));
+            set(statusDef, Integer.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

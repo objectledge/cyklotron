@@ -30,8 +30,6 @@ package net.cyklotron.cms.periodicals;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -62,34 +60,34 @@ public class PeriodicalResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>categoryQuerySet</code> attribute. */
-    private static AttributeDefinition categoryQuerySetDef;
+	private static AttributeDefinition<CategoryQueryPoolResource> categoryQuerySetDef;
 
     /** The AttributeDefinition object for the <code>encoding</code> attribute. */
-    private static AttributeDefinition encodingDef;
+	private static AttributeDefinition<String> encodingDef;
 
     /** The AttributeDefinition object for the <code>lastPublished</code> attribute. */
-    private static AttributeDefinition lastPublishedDef;
+	private static AttributeDefinition<Date> lastPublishedDef;
 
     /** The AttributeDefinition object for the <code>locale</code> attribute. */
-    private static AttributeDefinition localeDef;
+	private static AttributeDefinition<String> localeDef;
 
     /** The AttributeDefinition object for the <code>publishAfter</code> attribute. */
-    private static AttributeDefinition publishAfterDef;
+	private static AttributeDefinition<Date> publishAfterDef;
 
     /** The AttributeDefinition object for the <code>renderer</code> attribute. */
-    private static AttributeDefinition rendererDef;
+	private static AttributeDefinition<String> rendererDef;
 
     /** The AttributeDefinition object for the <code>sortDirection</code> attribute. */
-    private static AttributeDefinition sortDirectionDef;
+	private static AttributeDefinition<String> sortDirectionDef;
 
     /** The AttributeDefinition object for the <code>sortOrder</code> attribute. */
-    private static AttributeDefinition sortOrderDef;
+	private static AttributeDefinition<String> sortOrderDef;
 
     /** The AttributeDefinition object for the <code>storePlace</code> attribute. */
-    private static AttributeDefinition storePlaceDef;
+	private static AttributeDefinition<DirectoryResource> storePlaceDef;
 
     /** The AttributeDefinition object for the <code>template</code> attribute. */
-    private static AttributeDefinition templateDef;
+	private static AttributeDefinition<String> templateDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -146,9 +144,9 @@ public class PeriodicalResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.periodicals.periodical");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<PeriodicalResource> rc = session.getSchema().getResourceClass("cms.periodicals.periodical", PeriodicalResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof PeriodicalResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -175,7 +173,7 @@ public class PeriodicalResourceImpl
      */
     public CategoryQueryPoolResource getCategoryQuerySet()
     {
-        return (CategoryQueryPoolResource)getInternal(categoryQuerySetDef, null);
+        return get(categoryQuerySetDef);
     }
     
     /**
@@ -186,7 +184,7 @@ public class PeriodicalResourceImpl
      */
     public CategoryQueryPoolResource getCategoryQuerySet(CategoryQueryPoolResource defaultValue)
     {
-        return (CategoryQueryPoolResource)getInternal(categoryQuerySetDef, defaultValue);
+        return get(categoryQuerySetDef, defaultValue);
     }    
 
     /**
@@ -235,7 +233,7 @@ public class PeriodicalResourceImpl
      */
     public String getEncoding()
     {
-        return (String)getInternal(encodingDef, null);
+        return get(encodingDef);
     }
     
     /**
@@ -246,7 +244,7 @@ public class PeriodicalResourceImpl
      */
     public String getEncoding(String defaultValue)
     {
-        return (String)getInternal(encodingDef, defaultValue);
+        return get(encodingDef, defaultValue);
     }    
 
     /**
@@ -295,7 +293,7 @@ public class PeriodicalResourceImpl
      */
     public Date getLastPublished()
     {
-        return (Date)getInternal(lastPublishedDef, null);
+        return get(lastPublishedDef);
     }
     
     /**
@@ -306,7 +304,7 @@ public class PeriodicalResourceImpl
      */
     public Date getLastPublished(Date defaultValue)
     {
-        return (Date)getInternal(lastPublishedDef, defaultValue);
+        return get(lastPublishedDef, defaultValue);
     }    
 
     /**
@@ -355,7 +353,7 @@ public class PeriodicalResourceImpl
      */
     public String getLocale()
     {
-        return (String)getInternal(localeDef, null);
+        return get(localeDef);
     }
     
     /**
@@ -366,7 +364,7 @@ public class PeriodicalResourceImpl
      */
     public String getLocale(String defaultValue)
     {
-        return (String)getInternal(localeDef, defaultValue);
+        return get(localeDef, defaultValue);
     }    
 
     /**
@@ -415,7 +413,7 @@ public class PeriodicalResourceImpl
      */
     public Date getPublishAfter()
     {
-        return (Date)getInternal(publishAfterDef, null);
+        return get(publishAfterDef);
     }
     
     /**
@@ -426,7 +424,7 @@ public class PeriodicalResourceImpl
      */
     public Date getPublishAfter(Date defaultValue)
     {
-        return (Date)getInternal(publishAfterDef, defaultValue);
+        return get(publishAfterDef, defaultValue);
     }    
 
     /**
@@ -475,7 +473,7 @@ public class PeriodicalResourceImpl
      */
     public String getRenderer()
     {
-        return (String)getInternal(rendererDef, null);
+        return get(rendererDef);
     }
     
     /**
@@ -486,7 +484,7 @@ public class PeriodicalResourceImpl
      */
     public String getRenderer(String defaultValue)
     {
-        return (String)getInternal(rendererDef, defaultValue);
+        return get(rendererDef, defaultValue);
     }    
 
     /**
@@ -535,7 +533,7 @@ public class PeriodicalResourceImpl
      */
     public String getSortDirection()
     {
-        return (String)getInternal(sortDirectionDef, null);
+        return get(sortDirectionDef);
     }
     
     /**
@@ -546,7 +544,7 @@ public class PeriodicalResourceImpl
      */
     public String getSortDirection(String defaultValue)
     {
-        return (String)getInternal(sortDirectionDef, defaultValue);
+        return get(sortDirectionDef, defaultValue);
     }    
 
     /**
@@ -595,7 +593,7 @@ public class PeriodicalResourceImpl
      */
     public String getSortOrder()
     {
-        return (String)getInternal(sortOrderDef, null);
+        return get(sortOrderDef);
     }
     
     /**
@@ -606,7 +604,7 @@ public class PeriodicalResourceImpl
      */
     public String getSortOrder(String defaultValue)
     {
-        return (String)getInternal(sortOrderDef, defaultValue);
+        return get(sortOrderDef, defaultValue);
     }    
 
     /**
@@ -655,7 +653,7 @@ public class PeriodicalResourceImpl
      */
     public DirectoryResource getStorePlace()
     {
-        return (DirectoryResource)getInternal(storePlaceDef, null);
+        return get(storePlaceDef);
     }
     
     /**
@@ -666,7 +664,7 @@ public class PeriodicalResourceImpl
      */
     public DirectoryResource getStorePlace(DirectoryResource defaultValue)
     {
-        return (DirectoryResource)getInternal(storePlaceDef, defaultValue);
+        return get(storePlaceDef, defaultValue);
     }    
 
     /**
@@ -715,7 +713,7 @@ public class PeriodicalResourceImpl
      */
     public String getTemplate()
     {
-        return (String)getInternal(templateDef, null);
+        return get(templateDef);
     }
     
     /**
@@ -726,7 +724,7 @@ public class PeriodicalResourceImpl
      */
     public String getTemplate(String defaultValue)
     {
-        return (String)getInternal(templateDef, defaultValue);
+        return get(templateDef, defaultValue);
     }    
 
     /**

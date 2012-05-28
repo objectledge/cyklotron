@@ -56,6 +56,14 @@ public interface VoteResource
      * @return the value of the the <code>moderator</code> attribute.
      */
     public Role getModerator();
+    
+    /**
+     * Returns the value of the <code>moderator</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>moderator</code> attribute.
+     */
+    public Role getModerator(Role defaultValue);
 
     /**
      * Sets the value of the <code>moderator</code> attribute.
@@ -78,6 +86,14 @@ public interface VoteResource
      * @return the value of the the <code>senderAddress</code> attribute.
      */
     public String getSenderAddress();
+    
+    /**
+     * Returns the value of the <code>senderAddress</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>senderAddress</code> attribute.
+     */
+    public String getSenderAddress(String defaultValue);
 
     /**
      * Sets the value of the <code>senderAddress</code> attribute.

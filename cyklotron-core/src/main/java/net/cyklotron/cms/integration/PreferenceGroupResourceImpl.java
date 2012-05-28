@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.integration;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -59,7 +56,7 @@ public class PreferenceGroupResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>modifyPermission</code> attribute. */
-    private static AttributeDefinition modifyPermissionDef;
+	private static AttributeDefinition<Permission> modifyPermissionDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -116,9 +113,9 @@ public class PreferenceGroupResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.preference_group");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<PreferenceGroupResource> rc = session.getSchema().getResourceClass("integration.preference_group", PreferenceGroupResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof PreferenceGroupResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -145,7 +142,7 @@ public class PreferenceGroupResourceImpl
      */
     public Permission getModifyPermission()
     {
-        return (Permission)getInternal(modifyPermissionDef, null);
+        return get(modifyPermissionDef);
     }
     
     /**
@@ -156,7 +153,7 @@ public class PreferenceGroupResourceImpl
      */
     public Permission getModifyPermission(Permission defaultValue)
     {
-        return (Permission)getInternal(modifyPermissionDef, defaultValue);
+        return get(modifyPermissionDef, defaultValue);
     }    
 
     /**

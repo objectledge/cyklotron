@@ -88,6 +88,14 @@ public interface RootDirectoryResource
      * @return the value of the the <code>rootPath</code> attribute.
      */
     public String getRootPath();
+    
+    /**
+     * Returns the value of the <code>rootPath</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>rootPath</code> attribute.
+     */
+    public String getRootPath(String defaultValue);
 
     /**
      * Sets the value of the <code>rootPath</code> attribute.

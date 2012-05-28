@@ -59,16 +59,16 @@ public class ImportTraceResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>originalURL</code> attribute. */
-    private static AttributeDefinition originalURLDef;
+	private static AttributeDefinition<String> originalURLDef;
 
     /** The AttributeDefinition object for the <code>sourceModificationTime</code> attribute. */
-    private static AttributeDefinition sourceModificationTimeDef;
+	private static AttributeDefinition<Date> sourceModificationTimeDef;
 
     /** The AttributeDefinition object for the <code>targetUpdateTime</code> attribute. */
-    private static AttributeDefinition targetUpdateTimeDef;
+	private static AttributeDefinition<Date> targetUpdateTimeDef;
 
     /** The AttributeDefinition object for the <code>navigationNode</code> attribute. */
-    private static AttributeDefinition navigationNodeDef;
+	private static AttributeDefinition<Resource> navigationNodeDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -131,8 +131,8 @@ public class ImportTraceResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("docimport.trace");
-            Map attrs = new HashMap();
+            ResourceClass<ImportTraceResource> rc = session.getSchema().getResourceClass("docimport.trace", ImportTraceResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("originalURL"), originalURL);
             attrs.put(rc.getAttribute("sourceModificationTime"), sourceModificationTime);
             attrs.put(rc.getAttribute("targetUpdateTime"), targetUpdateTime);
@@ -160,7 +160,7 @@ public class ImportTraceResourceImpl
      */
     public String getOriginalURL()
     {
-        return (String)getInternal(originalURLDef, null);
+        return get(originalURLDef);
     }
  
     /**
@@ -198,7 +198,7 @@ public class ImportTraceResourceImpl
      */
     public Date getSourceModificationTime()
     {
-        return (Date)getInternal(sourceModificationTimeDef, null);
+        return get(sourceModificationTimeDef);
     }
  
     /**
@@ -236,7 +236,7 @@ public class ImportTraceResourceImpl
      */
     public Date getTargetUpdateTime()
     {
-        return (Date)getInternal(targetUpdateTimeDef, null);
+        return get(targetUpdateTimeDef);
     }
  
     /**
@@ -274,7 +274,7 @@ public class ImportTraceResourceImpl
      */
     public Resource getNavigationNode()
     {
-        return (Resource)getInternal(navigationNodeDef, null);
+        return get(navigationNodeDef);
     }
  
     /**

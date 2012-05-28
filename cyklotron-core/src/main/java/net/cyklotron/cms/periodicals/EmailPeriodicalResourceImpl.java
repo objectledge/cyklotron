@@ -28,9 +28,6 @@
  
 package net.cyklotron.cms.periodicals;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -56,28 +53,28 @@ public class EmailPeriodicalResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>addresses</code> attribute. */
-    private static AttributeDefinition addressesDef;
+	private static AttributeDefinition<String> addressesDef;
 
     /** The AttributeDefinition object for the <code>fromHeader</code> attribute. */
-    private static AttributeDefinition fromHeaderDef;
+	private static AttributeDefinition<String> fromHeaderDef;
 
     /** The AttributeDefinition object for the <code>fullContent</code> attribute. */
-    private static AttributeDefinition fullContentDef;
+    private static AttributeDefinition<Boolean> fullContentDef;
 
     /** The AttributeDefinition object for the <code>notificationRenderer</code> attribute. */
-    private static AttributeDefinition notificationRendererDef;
+	private static AttributeDefinition<String> notificationRendererDef;
 
     /** The AttributeDefinition object for the <code>notificationTemplate</code> attribute. */
-    private static AttributeDefinition notificationTemplateDef;
+	private static AttributeDefinition<String> notificationTemplateDef;
 
     /** The AttributeDefinition object for the <code>replyToHeader</code> attribute. */
-    private static AttributeDefinition replyToHeaderDef;
+	private static AttributeDefinition<String> replyToHeaderDef;
 
     /** The AttributeDefinition object for the <code>sendEmpty</code> attribute. */
-    private static AttributeDefinition sendEmptyDef;
+    private static AttributeDefinition<Boolean> sendEmptyDef;
 
     /** The AttributeDefinition object for the <code>subject</code> attribute. */
-    private static AttributeDefinition subjectDef;
+	private static AttributeDefinition<String> subjectDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -134,9 +131,9 @@ public class EmailPeriodicalResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.periodicals.email_periodical");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<EmailPeriodicalResource> rc = session.getSchema().getResourceClass("cms.periodicals.email_periodical", EmailPeriodicalResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof EmailPeriodicalResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -163,7 +160,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getAddresses()
     {
-        return (String)getInternal(addressesDef, null);
+        return get(addressesDef);
     }
     
     /**
@@ -174,7 +171,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getAddresses(String defaultValue)
     {
-        return (String)getInternal(addressesDef, defaultValue);
+        return get(addressesDef, defaultValue);
     }    
 
     /**
@@ -223,7 +220,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getFromHeader()
     {
-        return (String)getInternal(fromHeaderDef, null);
+        return get(fromHeaderDef);
     }
     
     /**
@@ -234,7 +231,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getFromHeader(String defaultValue)
     {
-        return (String)getInternal(fromHeaderDef, defaultValue);
+        return get(fromHeaderDef, defaultValue);
     }    
 
     /**
@@ -286,7 +283,7 @@ public class EmailPeriodicalResourceImpl
     public boolean getFullContent()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(fullContentDef, null);
+	    Boolean value = get(fullContentDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -306,7 +303,7 @@ public class EmailPeriodicalResourceImpl
      */
     public boolean getFullContent(boolean defaultValue)
     {
-		return ((Boolean)getInternal(fullContentDef, new Boolean(defaultValue))).booleanValue();
+		return get(fullContentDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -318,7 +315,7 @@ public class EmailPeriodicalResourceImpl
     {
         try
         {
-            set(fullContentDef, new Boolean(value));
+            set(fullContentDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -362,7 +359,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getNotificationRenderer()
     {
-        return (String)getInternal(notificationRendererDef, null);
+        return get(notificationRendererDef);
     }
     
     /**
@@ -373,7 +370,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getNotificationRenderer(String defaultValue)
     {
-        return (String)getInternal(notificationRendererDef, defaultValue);
+        return get(notificationRendererDef, defaultValue);
     }    
 
     /**
@@ -422,7 +419,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getNotificationTemplate()
     {
-        return (String)getInternal(notificationTemplateDef, null);
+        return get(notificationTemplateDef);
     }
     
     /**
@@ -433,7 +430,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getNotificationTemplate(String defaultValue)
     {
-        return (String)getInternal(notificationTemplateDef, defaultValue);
+        return get(notificationTemplateDef, defaultValue);
     }    
 
     /**
@@ -482,7 +479,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getReplyToHeader()
     {
-        return (String)getInternal(replyToHeaderDef, null);
+        return get(replyToHeaderDef);
     }
     
     /**
@@ -493,7 +490,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getReplyToHeader(String defaultValue)
     {
-        return (String)getInternal(replyToHeaderDef, defaultValue);
+        return get(replyToHeaderDef, defaultValue);
     }    
 
     /**
@@ -545,7 +542,7 @@ public class EmailPeriodicalResourceImpl
     public boolean getSendEmpty()
         throws IllegalStateException
     {
-	    Boolean value = (Boolean)getInternal(sendEmptyDef, null);
+	    Boolean value = get(sendEmptyDef);
         if(value != null)
         {
             return value.booleanValue();
@@ -565,7 +562,7 @@ public class EmailPeriodicalResourceImpl
      */
     public boolean getSendEmpty(boolean defaultValue)
     {
-		return ((Boolean)getInternal(sendEmptyDef, new Boolean(defaultValue))).booleanValue();
+		return get(sendEmptyDef, Boolean.valueOf(defaultValue)).booleanValue();
 	}
 
     /**
@@ -577,7 +574,7 @@ public class EmailPeriodicalResourceImpl
     {
         try
         {
-            set(sendEmptyDef, new Boolean(value));
+            set(sendEmptyDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -621,7 +618,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getSubject()
     {
-        return (String)getInternal(subjectDef, null);
+        return get(subjectDef);
     }
     
     /**
@@ -632,7 +629,7 @@ public class EmailPeriodicalResourceImpl
      */
     public String getSubject(String defaultValue)
     {
-        return (String)getInternal(subjectDef, defaultValue);
+        return get(subjectDef, defaultValue);
     }    
 
     /**

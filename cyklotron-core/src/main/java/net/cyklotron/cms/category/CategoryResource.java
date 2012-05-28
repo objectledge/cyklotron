@@ -55,6 +55,14 @@ public interface CategoryResource
      * @return the value of the the <code>link</code> attribute.
      */
     public BaseLinkResource getLink();
+    
+    /**
+     * Returns the value of the <code>link</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>link</code> attribute.
+     */
+    public BaseLinkResource getLink(BaseLinkResource defaultValue);
 
     /**
      * Sets the value of the <code>link</code> attribute.
@@ -77,6 +85,14 @@ public interface CategoryResource
      * @return the value of the the <code>uiStyle</code> attribute.
      */
     public String getUiStyle();
+    
+    /**
+     * Returns the value of the <code>uiStyle</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>uiStyle</code> attribute.
+     */
+    public String getUiStyle(String defaultValue);
 
     /**
      * Sets the value of the <code>uiStyle</code> attribute.

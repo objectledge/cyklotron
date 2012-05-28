@@ -54,6 +54,14 @@ public interface ScreenResource
      * @return the value of the the <code>configurationView</code> attribute.
      */
     public String getConfigurationView();
+    
+    /**
+     * Returns the value of the <code>configurationView</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>configurationView</code> attribute.
+     */
+    public String getConfigurationView(String defaultValue);
 
     /**
      * Sets the value of the <code>configurationView</code> attribute.

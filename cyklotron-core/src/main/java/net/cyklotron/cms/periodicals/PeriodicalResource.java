@@ -58,6 +58,14 @@ public interface PeriodicalResource
      * @return the value of the the <code>categoryQuerySet</code> attribute.
      */
     public CategoryQueryPoolResource getCategoryQuerySet();
+    
+    /**
+     * Returns the value of the <code>categoryQuerySet</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>categoryQuerySet</code> attribute.
+     */
+    public CategoryQueryPoolResource getCategoryQuerySet(CategoryQueryPoolResource defaultValue);
 
     /**
      * Sets the value of the <code>categoryQuerySet</code> attribute.
@@ -80,6 +88,14 @@ public interface PeriodicalResource
      * @return the value of the the <code>encoding</code> attribute.
      */
     public String getEncoding();
+    
+    /**
+     * Returns the value of the <code>encoding</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>encoding</code> attribute.
+     */
+    public String getEncoding(String defaultValue);
 
     /**
      * Sets the value of the <code>encoding</code> attribute.
@@ -102,6 +118,14 @@ public interface PeriodicalResource
      * @return the value of the the <code>lastPublished</code> attribute.
      */
     public Date getLastPublished();
+    
+    /**
+     * Returns the value of the <code>lastPublished</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>lastPublished</code> attribute.
+     */
+    public Date getLastPublished(Date defaultValue);
 
     /**
      * Sets the value of the <code>lastPublished</code> attribute.
@@ -124,6 +148,14 @@ public interface PeriodicalResource
      * @return the value of the the <code>locale</code> attribute.
      */
     public String getLocale();
+    
+    /**
+     * Returns the value of the <code>locale</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>locale</code> attribute.
+     */
+    public String getLocale(String defaultValue);
 
     /**
      * Sets the value of the <code>locale</code> attribute.
@@ -146,6 +178,14 @@ public interface PeriodicalResource
      * @return the value of the the <code>publishAfter</code> attribute.
      */
     public Date getPublishAfter();
+    
+    /**
+     * Returns the value of the <code>publishAfter</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>publishAfter</code> attribute.
+     */
+    public Date getPublishAfter(Date defaultValue);
 
     /**
      * Sets the value of the <code>publishAfter</code> attribute.
@@ -168,6 +208,14 @@ public interface PeriodicalResource
      * @return the value of the the <code>renderer</code> attribute.
      */
     public String getRenderer();
+    
+    /**
+     * Returns the value of the <code>renderer</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>renderer</code> attribute.
+     */
+    public String getRenderer(String defaultValue);
 
     /**
      * Sets the value of the <code>renderer</code> attribute.
@@ -190,6 +238,14 @@ public interface PeriodicalResource
      * @return the value of the the <code>sortDirection</code> attribute.
      */
     public String getSortDirection();
+    
+    /**
+     * Returns the value of the <code>sortDirection</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>sortDirection</code> attribute.
+     */
+    public String getSortDirection(String defaultValue);
 
     /**
      * Sets the value of the <code>sortDirection</code> attribute.
@@ -212,6 +268,14 @@ public interface PeriodicalResource
      * @return the value of the the <code>sortOrder</code> attribute.
      */
     public String getSortOrder();
+    
+    /**
+     * Returns the value of the <code>sortOrder</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>sortOrder</code> attribute.
+     */
+    public String getSortOrder(String defaultValue);
 
     /**
      * Sets the value of the <code>sortOrder</code> attribute.
@@ -234,6 +298,14 @@ public interface PeriodicalResource
      * @return the value of the the <code>storePlace</code> attribute.
      */
     public DirectoryResource getStorePlace();
+    
+    /**
+     * Returns the value of the <code>storePlace</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>storePlace</code> attribute.
+     */
+    public DirectoryResource getStorePlace(DirectoryResource defaultValue);
 
     /**
      * Sets the value of the <code>storePlace</code> attribute.
@@ -256,6 +328,14 @@ public interface PeriodicalResource
      * @return the value of the the <code>template</code> attribute.
      */
     public String getTemplate();
+    
+    /**
+     * Returns the value of the <code>template</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>template</code> attribute.
+     */
+    public String getTemplate(String defaultValue);
 
     /**
      * Sets the value of the <code>template</code> attribute.

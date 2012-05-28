@@ -57,6 +57,14 @@ public interface BannerResource
      * @return the value of the the <code>altText</code> attribute.
      */
     public String getAltText();
+    
+    /**
+     * Returns the value of the <code>altText</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>altText</code> attribute.
+     */
+    public String getAltText(String defaultValue);
 
     /**
      * Sets the value of the <code>altText</code> attribute.
@@ -79,6 +87,14 @@ public interface BannerResource
      * @return the value of the the <code>endDate</code> attribute.
      */
     public Date getEndDate();
+    
+    /**
+     * Returns the value of the <code>endDate</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>endDate</code> attribute.
+     */
+    public Date getEndDate(Date defaultValue);
 
     /**
      * Sets the value of the <code>endDate</code> attribute.
@@ -175,6 +191,14 @@ public interface BannerResource
      * @return the value of the the <code>startDate</code> attribute.
      */
     public Date getStartDate();
+    
+    /**
+     * Returns the value of the <code>startDate</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>startDate</code> attribute.
+     */
+    public Date getStartDate(Date defaultValue);
 
     /**
      * Sets the value of the <code>startDate</code> attribute.
@@ -197,6 +221,14 @@ public interface BannerResource
      * @return the value of the the <code>target</code> attribute.
      */
     public String getTarget();
+    
+    /**
+     * Returns the value of the <code>target</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>target</code> attribute.
+     */
+    public String getTarget(String defaultValue);
 
     /**
      * Sets the value of the <code>target</code> attribute.

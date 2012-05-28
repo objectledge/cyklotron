@@ -54,6 +54,14 @@ public interface CategoryQueryRootResource
      * @return the value of the the <code>defaultQuery</code> attribute.
      */
     public CategoryQueryResource getDefaultQuery();
+    
+    /**
+     * Returns the value of the <code>defaultQuery</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>defaultQuery</code> attribute.
+     */
+    public CategoryQueryResource getDefaultQuery(CategoryQueryResource defaultValue);
 
     /**
      * Sets the value of the <code>defaultQuery</code> attribute.
@@ -76,6 +84,14 @@ public interface CategoryQueryRootResource
      * @return the value of the the <code>resultsNode</code> attribute.
      */
     public NavigationNodeResource getResultsNode();
+    
+    /**
+     * Returns the value of the <code>resultsNode</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>resultsNode</code> attribute.
+     */
+    public NavigationNodeResource getResultsNode(NavigationNodeResource defaultValue);
 
     /**
      * Sets the value of the <code>resultsNode</code> attribute.

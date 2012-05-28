@@ -29,8 +29,6 @@
 package net.cyklotron.cms.poll;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -64,16 +62,16 @@ public class PollResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>endDate</code> attribute. */
-    private static AttributeDefinition endDateDef;
+	private static AttributeDefinition<Date> endDateDef;
 
     /** The AttributeDefinition object for the <code>moderator</code> attribute. */
-    private static AttributeDefinition moderatorDef;
+	private static AttributeDefinition<Role> moderatorDef;
 
     /** The AttributeDefinition object for the <code>startDate</code> attribute. */
-    private static AttributeDefinition startDateDef;
+	private static AttributeDefinition<Date> startDateDef;
 
     /** The AttributeDefinition object for the <code>state</code> attribute. */
-    private static AttributeDefinition stateDef;
+	private static AttributeDefinition<StateResource> stateDef;
 
 	// custom injected fields /////////////////////////////////////////////////
 	
@@ -137,9 +135,9 @@ public class PollResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("cms.poll.poll");
-            Map attrs = new HashMap();
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            ResourceClass<PollResource> rc = session.getSchema().getResourceClass("cms.poll.poll", PollResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof PollResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -166,7 +164,7 @@ public class PollResourceImpl
      */
     public Date getEndDate()
     {
-        return (Date)getInternal(endDateDef, null);
+        return get(endDateDef);
     }
     
     /**
@@ -177,7 +175,7 @@ public class PollResourceImpl
      */
     public Date getEndDate(Date defaultValue)
     {
-        return (Date)getInternal(endDateDef, defaultValue);
+        return get(endDateDef, defaultValue);
     }    
 
     /**
@@ -226,7 +224,7 @@ public class PollResourceImpl
      */
     public Role getModerator()
     {
-        return (Role)getInternal(moderatorDef, null);
+        return get(moderatorDef);
     }
     
     /**
@@ -237,7 +235,7 @@ public class PollResourceImpl
      */
     public Role getModerator(Role defaultValue)
     {
-        return (Role)getInternal(moderatorDef, defaultValue);
+        return get(moderatorDef, defaultValue);
     }    
 
     /**
@@ -286,7 +284,7 @@ public class PollResourceImpl
      */
     public Date getStartDate()
     {
-        return (Date)getInternal(startDateDef, null);
+        return get(startDateDef);
     }
     
     /**
@@ -297,7 +295,7 @@ public class PollResourceImpl
      */
     public Date getStartDate(Date defaultValue)
     {
-        return (Date)getInternal(startDateDef, defaultValue);
+        return get(startDateDef, defaultValue);
     }    
 
     /**
@@ -346,7 +344,7 @@ public class PollResourceImpl
      */
     public StateResource getState()
     {
-        return (StateResource)getInternal(stateDef, null);
+        return get(stateDef);
     }
     
     /**
@@ -357,7 +355,7 @@ public class PollResourceImpl
      */
     public StateResource getState(StateResource defaultValue)
     {
-        return (StateResource)getInternal(stateDef, defaultValue);
+        return get(stateDef, defaultValue);
     }    
 
     /**

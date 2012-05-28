@@ -59,28 +59,28 @@ public class SiteResourceImpl
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
-    private static AttributeDefinition administratorDef;
+	private static AttributeDefinition<Role> administratorDef;
 
     /** The AttributeDefinition object for the <code>editor</code> attribute. */
-    private static AttributeDefinition editorDef;
+	private static AttributeDefinition<Role> editorDef;
 
     /** The AttributeDefinition object for the <code>layoutAdministrator</code> attribute. */
-    private static AttributeDefinition layoutAdministratorDef;
+	private static AttributeDefinition<Role> layoutAdministratorDef;
 
     /** The AttributeDefinition object for the <code>requiresSecureChannel</code> attribute. */
-    private static AttributeDefinition requiresSecureChannelDef;
+    private static AttributeDefinition<Boolean> requiresSecureChannelDef;
 
     /** The AttributeDefinition object for the <code>seniorEditor</code> attribute. */
-    private static AttributeDefinition seniorEditorDef;
+	private static AttributeDefinition<Role> seniorEditorDef;
 
     /** The AttributeDefinition object for the <code>siteRole</code> attribute. */
-    private static AttributeDefinition siteRoleDef;
+	private static AttributeDefinition<Role> siteRoleDef;
 
     /** The AttributeDefinition object for the <code>teamMember</code> attribute. */
-    private static AttributeDefinition teamMemberDef;
+	private static AttributeDefinition<Role> teamMemberDef;
 
     /** The AttributeDefinition object for the <code>template</code> attribute. */
-    private static AttributeDefinition templateDef;
+    private static AttributeDefinition<Boolean> templateDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -140,10 +140,10 @@ public class SiteResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("site.site");
-            Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("requiresSecureChannel"), new Boolean(requiresSecureChannel));
-            attrs.put(rc.getAttribute("template"), new Boolean(template));
+            ResourceClass<SiteResource> rc = session.getSchema().getResourceClass("site.site", SiteResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
+            attrs.put(rc.getAttribute("requiresSecureChannel"), Boolean.valueOf(requiresSecureChannel));
+            attrs.put(rc.getAttribute("template"), Boolean.valueOf(template));
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof SiteResource))
             {
@@ -167,7 +167,7 @@ public class SiteResourceImpl
      */
     public Role getAdministrator()
     {
-        return (Role)getInternal(administratorDef, null);
+        return get(administratorDef);
     }
     
     /**
@@ -178,7 +178,7 @@ public class SiteResourceImpl
      */
     public Role getAdministrator(Role defaultValue)
     {
-        return (Role)getInternal(administratorDef, defaultValue);
+        return get(administratorDef, defaultValue);
     }    
 
     /**
@@ -227,7 +227,7 @@ public class SiteResourceImpl
      */
     public Role getEditor()
     {
-        return (Role)getInternal(editorDef, null);
+        return get(editorDef);
     }
     
     /**
@@ -238,7 +238,7 @@ public class SiteResourceImpl
      */
     public Role getEditor(Role defaultValue)
     {
-        return (Role)getInternal(editorDef, defaultValue);
+        return get(editorDef, defaultValue);
     }    
 
     /**
@@ -287,7 +287,7 @@ public class SiteResourceImpl
      */
     public Role getLayoutAdministrator()
     {
-        return (Role)getInternal(layoutAdministratorDef, null);
+        return get(layoutAdministratorDef);
     }
     
     /**
@@ -298,7 +298,7 @@ public class SiteResourceImpl
      */
     public Role getLayoutAdministrator(Role defaultValue)
     {
-        return (Role)getInternal(layoutAdministratorDef, defaultValue);
+        return get(layoutAdministratorDef, defaultValue);
     }    
 
     /**
@@ -347,7 +347,7 @@ public class SiteResourceImpl
      */
     public boolean getRequiresSecureChannel()
     {
-		return ((Boolean)getInternal(requiresSecureChannelDef, null)).booleanValue();
+		return get(requiresSecureChannelDef).booleanValue();
     }    
 
     /**
@@ -359,7 +359,7 @@ public class SiteResourceImpl
     {
         try
         {
-            set(requiresSecureChannelDef, new Boolean(value));
+            set(requiresSecureChannelDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {
@@ -378,7 +378,7 @@ public class SiteResourceImpl
      */
     public Role getSeniorEditor()
     {
-        return (Role)getInternal(seniorEditorDef, null);
+        return get(seniorEditorDef);
     }
     
     /**
@@ -389,7 +389,7 @@ public class SiteResourceImpl
      */
     public Role getSeniorEditor(Role defaultValue)
     {
-        return (Role)getInternal(seniorEditorDef, defaultValue);
+        return get(seniorEditorDef, defaultValue);
     }    
 
     /**
@@ -438,7 +438,7 @@ public class SiteResourceImpl
      */
     public Role getSiteRole()
     {
-        return (Role)getInternal(siteRoleDef, null);
+        return get(siteRoleDef);
     }
     
     /**
@@ -449,7 +449,7 @@ public class SiteResourceImpl
      */
     public Role getSiteRole(Role defaultValue)
     {
-        return (Role)getInternal(siteRoleDef, defaultValue);
+        return get(siteRoleDef, defaultValue);
     }    
 
     /**
@@ -498,7 +498,7 @@ public class SiteResourceImpl
      */
     public Role getTeamMember()
     {
-        return (Role)getInternal(teamMemberDef, null);
+        return get(teamMemberDef);
     }
     
     /**
@@ -509,7 +509,7 @@ public class SiteResourceImpl
      */
     public Role getTeamMember(Role defaultValue)
     {
-        return (Role)getInternal(teamMemberDef, defaultValue);
+        return get(teamMemberDef, defaultValue);
     }    
 
     /**
@@ -558,7 +558,7 @@ public class SiteResourceImpl
      */
     public boolean getTemplate()
     {
-		return ((Boolean)getInternal(templateDef, null)).booleanValue();
+		return get(templateDef).booleanValue();
     }    
 
     /**
@@ -570,7 +570,7 @@ public class SiteResourceImpl
     {
         try
         {
-            set(templateDef, new Boolean(value));
+            set(templateDef, Boolean.valueOf(value));
         }
         catch(ModificationNotPermitedException e)
         {

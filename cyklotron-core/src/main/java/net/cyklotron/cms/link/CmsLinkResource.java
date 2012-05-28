@@ -51,6 +51,14 @@ public interface CmsLinkResource
      * @return the value of the the <code>node</code> attribute.
      */
     public Resource getNode();
+    
+    /**
+     * Returns the value of the <code>node</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>node</code> attribute.
+     */
+    public Resource getNode(Resource defaultValue);
 
     /**
      * Sets the value of the <code>node</code> attribute.

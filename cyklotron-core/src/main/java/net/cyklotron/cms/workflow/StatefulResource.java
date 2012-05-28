@@ -55,6 +55,14 @@ public interface StatefulResource
      * @return the value of the the <code>state</code> attribute.
      */
     public StateResource getState();
+    
+    /**
+     * Returns the value of the <code>state</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>state</code> attribute.
+     */
+    public StateResource getState(StateResource defaultValue);
 
     /**
      * Sets the value of the <code>state</code> attribute.

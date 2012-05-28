@@ -33,6 +33,7 @@ import java.util.Map;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
@@ -111,9 +112,9 @@ public class BooleanPreferenceResourceImpl
     {
         try
         {
-            ResourceClass rc = session.getSchema().getResourceClass("integration.boolean_preference");
-            Map attrs = new HashMap();
-            attrs.put(rc.getAttribute("required"), new Boolean(required));
+            ResourceClass<BooleanPreferenceResource> rc = session.getSchema().getResourceClass("integration.boolean_preference", BooleanPreferenceResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
+            attrs.put(rc.getAttribute("required"), Boolean.valueOf(required));
             attrs.put(rc.getAttribute("scope"), scope);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof BooleanPreferenceResource))
