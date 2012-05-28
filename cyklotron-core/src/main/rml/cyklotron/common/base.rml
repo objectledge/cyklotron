@@ -21,6 +21,15 @@ JAVA CLASS 'net.cyklotron.cms.RootResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node' );
 
+CREATE RESOURCE CLASS 'cms.confirmation.email_confirmation_request'
+JAVA CLASS 'net.cyklotron.cms.confirmation.EmailConfirmationRequestResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+REQUIRED string email,
+string data
+);
+
 # // security ////////////////////////////////////////////////////////////////
 
 CREATE PERMISSION 'cms.administer';
