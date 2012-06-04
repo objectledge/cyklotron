@@ -185,26 +185,12 @@ public abstract class BasePeriodicalsComponent
             ":"+componentData.getInstanceName();
         String ci = parameters.get("ci","");
         long periodicalId = -1;
+        
         if(ci.equals(componentData.getInstanceName()))
         {
             periodicalId = parameters.getLong("periodical", -1);
-            if(periodicalId > 0)
-            {
-                httpContext.setSessionAttribute(key, new Long(periodicalId));
-            }
-            else
-            {
-                httpContext.removeSessionAttribute(key);
-            }
         }
-        else
-        {
-            Long stored = (Long)httpContext.getSessionAttribute(key);
-            if(stored != null)
-            {
-                periodicalId = stored.longValue();
-            }
-        }
+        
         if(periodicalId > 0)
         {
             try
@@ -216,6 +202,7 @@ public abstract class BasePeriodicalsComponent
                 throw new ProcessingException("invalid peridical id", e);
             }
         }
+        
         else
         {
 			try

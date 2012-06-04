@@ -23,7 +23,7 @@ $i18n.get("calendar.months.${element.name}")
 #if($latest)
 <p class="latest"><a href="$files.getLink($latest)">Najnowsze wydanie</a></p>
 #end
-#set($tableLink = $link.set('tableId', $table.id))
+#set($tableLink = $link.set('periodical', $periodical.id).set('tableId', $table.id))
 #if($parametersTool.isDefined('x'))
 #set($tableLink = $tableLink.set('x',$parametersTool.get('x')))
 #end
