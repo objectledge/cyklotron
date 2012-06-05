@@ -181,8 +181,6 @@ public abstract class BasePeriodicalsComponent
     	CmsData cmsData = cmsDataFactory.getCmsData(context);
     	
         CmsComponentData componentData = cmsData.getComponent();
-        String key = getSessionKey()+":"+getNode().getIdString()+
-            ":"+componentData.getInstanceName();
         String ci = parameters.get("ci","");
         long periodicalId = -1;
         
