@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.URL;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64InputStream;
 import org.apache.commons.codec.binary.Base64OutputStream;
@@ -36,56 +35,55 @@ public class VoteTracking
 
     public boolean hasVoted(HttpContext httpContext, Resource item)       
     {
-        HttpSession session = httpContext.getRequest().getSession();
         LongDeque history;
-        synchronized(session)
+        history = (LongDeque)httpContext.getSessionAttribute(STATE_ID);
+        if(history == null)
         {
-            history = (LongDeque)session.getAttribute(STATE_ID);
-            if(history == null)
+            Cookie[] cookies = httpContext.getRequest().getCookies();
+            if(cookies != null)
             {
-                Cookie[] cookies = httpContext.getRequest().getCookies();
-                if(cookies != null)
+                for(Cookie cookie : cookies)
                 {
-                    for(Cookie cookie : cookies)
+                    if(cookie.getName().equals(STATE_ID))
                     {
-                        if(cookie.getName().equals(STATE_ID))
-                        {
-                            history = decode(cookie.getValue());
-                            session.setAttribute(STATE_ID, history);
-                            break;
-                        }
+                        history = decode(cookie.getValue());
+                        httpContext.setSessionAttribute(STATE_ID, history);
+                        break;
                     }
                 }
             }
-            if(history != null)
-            {
-                return history.contains(item.getId());
-            }
-            else
-            {
-                return false;
-            }
+        }
+        if(history != null)
+        {
+            return history.contains(item.getId());
+        }
+        else
+        {
+            return false;
         }
     }
 
     public void trackVote(HttpContext httpContext, Resource item)
     {
-        HttpSession session = httpContext.getRequest().getSession();
         LongDeque history;
-        synchronized(session)
+
+        // copy on write pattern to avoid synchronization
+        history = (LongDeque)httpContext.getSessionAttribute(STATE_ID);
+        if(history == null)
         {
-            history = (LongDeque)session.getAttribute(STATE_ID);
-            if(history == null)
-            {
-                history = new LongArrayDeque();
-                session.setAttribute(STATE_ID, history);
-            }
-            history.addLast(item.getId());
-            if(history.size() > LIMIT)
-            {
-                history.removeFirst();
-            }
+            history = new LongArrayDeque();
         }
+        else
+        {
+            history = new LongArrayDeque(history);
+        }
+        history.addLast(item.getId());
+        if(history.size() > LIMIT)
+        {
+            history.removeFirst();
+        }
+        httpContext.setSessionAttribute(STATE_ID, history);
+
         Cookie cookie = new Cookie(STATE_ID, encode(history));
         if(cookiePath != null && cookiePath.length() > 0)
         {
