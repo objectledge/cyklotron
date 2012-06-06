@@ -558,7 +558,7 @@ public class CmsData
         HttpContext httpContext = HttpContext.getHttpContext(context);
         Map<String, String> modes = (Map<String, String>)(httpContext
             .getSessionAttribute(BROWSE_MODES_KEY));
-        if(modes == null)
+        if(modes == null && create)
         {
             modes = new HashMap<String, String>();
             httpContext.setSessionAttribute(BROWSE_MODES_KEY, modes);
