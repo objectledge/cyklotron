@@ -73,7 +73,9 @@ public class Unlock extends BaseWorkflowAction
             node.setState(transitions[i].getTo());
             node.update();
             workflowService.enterState(coralSession, node, transitions[i].getTo());
-            httpContext.getRequest().getSession().removeAttribute("net.cyklotron.cms.modules.actions.structure.workflow." + node.getIdString());
+            httpContext
+                .removeSessionAttribute("net.cyklotron.cms.modules.actions.structure.workflow."
+                    + node.getIdString());
         }
         catch (EntityDoesNotExistException e)
         {
