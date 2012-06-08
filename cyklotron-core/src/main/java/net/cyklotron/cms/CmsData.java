@@ -366,14 +366,16 @@ public class CmsData
      */
     public String getBrowseMode()
     {
-        Map<String, String> modes = getBrowseModes(false);
-        String mode = BROWSE_MODE_BROWSE;
-        if(modes != null && site != null)
+        Map modes = getBrowseModes();
+        String mode = BROWSE_MODE_ADMINISTER;
+        if(site != null)
         {
             String siteName = site.getName();
-            if(modes.containsKey(siteName))
+            mode = (String)(modes.get(siteName));
+            if(mode == null)
             {
-                mode = modes.get(siteName);
+                mode = BROWSE_MODE_BROWSE;
+                modes.put(siteName, mode);
             }
         }
         if(adminMode)
@@ -392,7 +394,7 @@ public class CmsData
      */
     public void setBrowseMode(String mode)
     {
-        Map<String, String> modes = getBrowseModes(true);
+        Map modes = getBrowseModes();
         modes.put(site.getName(), mode);
     }
     
@@ -553,14 +555,13 @@ public class CmsData
         }
     }
 
-    private Map<String, String> getBrowseModes(boolean create)
+    private Map getBrowseModes()
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        Map<String, String> modes = (Map<String, String>)(httpContext
-            .getSessionAttribute(BROWSE_MODES_KEY));
-        if(modes == null && create)
+        Map modes = (Map)(httpContext.getSessionAttribute(BROWSE_MODES_KEY));
+        if(modes == null)
         {
-            modes = new HashMap<String, String>();
+            modes = new HashMap();
             httpContext.setSessionAttribute(BROWSE_MODES_KEY, modes);
         }
         return modes;

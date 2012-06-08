@@ -6,6 +6,18 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.confirmation.EmailConfirmationService;
+import net.cyklotron.cms.documents.LinkRenderer;
+import net.cyklotron.cms.poll.AnswerResource;
+import net.cyklotron.cms.poll.PollService;
+import net.cyklotron.cms.poll.VoteResource;
+import net.cyklotron.cms.poll.VoteResourceImpl;
+import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.util.OfflineLinkRenderingService;
+import net.cyklotron.cms.workflow.WorkflowService;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
@@ -20,18 +32,6 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.captcha.CaptchaService;
 import org.objectledge.web.mvc.MVCContext;
-
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.confirmation.EmailConfirmationService;
-import net.cyklotron.cms.documents.LinkRenderer;
-import net.cyklotron.cms.poll.AnswerResource;
-import net.cyklotron.cms.poll.PollService;
-import net.cyklotron.cms.poll.VoteResource;
-import net.cyklotron.cms.poll.VoteResourceImpl;
-import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.util.OfflineLinkRenderingService;
-import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * @author <a href="mailo:pablo@caltha.pl">Pawel Potempski</a>
@@ -65,7 +65,7 @@ public class SendVote
         TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        HttpSession session = httpContext.getRequest().getSession(false);
+        HttpSession session = httpContext.getRequest().getSession();
         CmsData cmsData = cmsDataFactory.getCmsData(context);
         Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
 

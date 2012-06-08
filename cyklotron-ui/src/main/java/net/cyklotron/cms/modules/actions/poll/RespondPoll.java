@@ -1,5 +1,6 @@
 package net.cyklotron.cms.modules.actions.poll;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
 import org.jcontainer.dna.Logger;
@@ -47,7 +48,7 @@ public class RespondPoll
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
-        HttpSession session = httpContext.getRequest().getSession(false);
+        HttpSession session = httpContext.getRequest().getSession();
         if(session == null || session.isNew())
         {
             templatingContext.put("result", "new_session");

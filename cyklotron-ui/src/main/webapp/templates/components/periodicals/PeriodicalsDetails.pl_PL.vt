@@ -1,5 +1,5 @@
 
-#set($periodicalsLink = $link.set('ci',$cms_data.component.instanceName).set('periodical', $periodical.id))
+#set($periodicalsLink = $link.set('ci',$cms_data.component.instanceName))
 #if($parametersTool.isDefined('x'))
 #set($periodicalsLink = $periodicalsLink.set('x',$parametersTool.get('x')))
 #end
@@ -23,7 +23,7 @@ $i18n.get("calendar.months.${element.name}")
 #if($latest)
 <p class="latest"><a href="$files.getLink($latest)">Najnowsze wydanie</a></p>
 #end
-#set($tableLink = $periodicalsLink.set('tableId', $table.id))
+#set($tableLink = $link.set('periodical', $periodical.id).set('tableId', $table.id))
 #if($parametersTool.isDefined('x'))
 #set($tableLink = $tableLink.set('x',$parametersTool.get('x')))
 #end
@@ -38,6 +38,6 @@ $i18n.get("calendar.months.${element.name}")
 </table>
 
 #if(!$cms_data.component.configuration.isDefined('periodical'))
-<p><a href="$periodicalsLink.unset('periodical')">Powrót do listy</a></p>
+<p><a href="$periodicalsLink">Powrót do listy</p>
 #end
 </div>
