@@ -45,7 +45,7 @@ $pageTool.appendTitleSuffix($cms_data.node.title)##
 
   <meta http-equiv="pragma" content="no-cache">
   <meta http-equiv="Cache-Control" content="no-cache">
-  <meta http-equiv="expires" content="Mon, 12 May 1998 00:00:00 GMT">
+  <meta http-equiv="expires" content="$pageTool.getDefaultCacheExpires()">
 #if($node.keywords)
 $pageTool.addNameMeta('keywords', $node.keywords)##
 #end

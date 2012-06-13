@@ -6,6 +6,8 @@
  */
 package net.cyklotron.cms;
 
+import org.jcontainer.dna.Configuration;
+import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
@@ -21,9 +23,10 @@ import org.objectledge.web.mvc.tools.PageToolFactory;
  */
 public class CmsPageToolFactory extends PageToolFactory
 {
-    public CmsPageToolFactory(LinkToolFactory linkToolFactory, Context context)
+    public CmsPageToolFactory(Configuration config, LinkToolFactory linkToolFactory, Context context)
+        throws ConfigurationException
     {
-        super(linkToolFactory, context);
+        super(config, linkToolFactory, context);
         
     }
     
@@ -33,8 +36,7 @@ public class CmsPageToolFactory extends PageToolFactory
     public Object getTool()
         throws ProcessingException
     {
-        return new CmsPageTool((CmsLinkTool) linkToolFactory.getTool(),
-            HttpContext.getHttpContext(context));
+        return new CmsPageTool((CmsLinkTool) linkToolFactory.getTool(), HttpContext.getHttpContext(context), pageToolConfiguration);
     }
     
     /**

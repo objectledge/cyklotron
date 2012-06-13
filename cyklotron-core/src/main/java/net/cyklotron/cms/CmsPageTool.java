@@ -17,9 +17,9 @@ public class CmsPageTool extends PageTool
      * Component constructor.
      * @param parentLinkTool the link tool used to generate links to page content resources.
      */
-    public CmsPageTool(CmsLinkTool parentLinkTool, HttpContext httpContext)
+    public CmsPageTool(CmsLinkTool parentLinkTool, HttpContext httpContext, PageTool.Configuration config)
     {
-        super(parentLinkTool, httpContext);
+        super(parentLinkTool, httpContext, config);
     }
 
     //-------------------------------
