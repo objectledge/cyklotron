@@ -41,14 +41,13 @@ $pageTool.appendTitleSuffix($cms_data.node.title)##
 <head>
   <title>$pageTool.title</title>
   <meta http-equiv="Content-Type" content="$pageTool.getContentType()">
-#if($pageTool.isCacheDisable())
-  <meta http-equiv="pragma" content="no-cache">
-  <meta http-equiv="Cache-Control" content="no-cache">
- #else
+#if($pageTool.isCacheEnabled())
   <meta http-equiv="Cache-Control" content="max-age=$pageTool.getMaxAge()">
+  <meta http-equiv="Expires" content="$pageTool.getHttpExpires()">
+#else
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta http-equiv="Pragma" content="no-cache">
 #end
-  <meta http-equiv="expires" content="$pageTool.getHttpExpires()">
-
 #if($node.keywords && $node.keywords != "")
 $pageTool.addNameMeta('keywords', $node.keywords)##
 #end
