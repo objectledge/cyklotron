@@ -39,13 +39,13 @@ $viewEnclosureTool.top()
 <head>
 <title>$pageTool.title</title>
 <meta http-equiv="Content-Type" content="$pageContentType" />
-#*
-TODO Add caching support
-<meta http-equiv="Cache-Control" content="post-check=0, pre-check=0" />
-<meta http-equiv="pragma" content="no-cache" />
-<meta http-equiv="Cache-Control" content="no-cache" />
-<meta http-equiv="expires" content="Mon, 12 May 1998 00:00:00 GMT" />
-*###
+#if($pageTool.isCacheEnabled())
+<meta http-equiv="Cache-Control" content="max-age=$pageTool.getMaxAge()">
+<meta http-equiv="Expires" content="$pageTool.getHttpExpires()">
+#else
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Pragma" content="no-cache">
+#end
 ## page tool http equiv meta tags
 #foreach($meta in $pageTool.httpEquivMetas)
 <meta http-equiv="$meta.httpEquiv" content="$meta.content" />

@@ -31,13 +31,10 @@
  *###
 ## ConvertTemplates:IMMUTABLE
 $pageTool.insertTitlePrefix('Ledge Cyklotron : ')##
-$pageTool.addStyleLink('style/cms-admin.css')
+$pageTool.addStyleLink('style/cms-admin.css')##
 ##$pageTool.addStyleLink('style/cms-layout.css')
 ##$pageTool.addStyleLink('style/cms-all.css')
-
-$pageTool.addHttpEquivMeta("Pragma","no-cache")
-$pageTool.addHttpEquivMeta("Cache-Control","no-cache, no-store, must-revalidate, max_age=0, post-check=0, pre-check=0")
-$pageTool.addHttpEquivMeta("Expires","Mon, 12 May 1998 00:00:00 GMT")
+$pageTool.setCacheInterval(0)## disable cache
 
 #set($noNaviModuleList = ['Error', 'structure', 'appearance', 'documents', 'httpfeed', 'related', 'fixes', 'ConfirmMassOperation'])
 #set($view = $mvcContext.view)
