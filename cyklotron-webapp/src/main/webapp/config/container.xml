@@ -90,9 +90,7 @@
   <component class="org.objectledge.authentication.NamingPolicy"/>
   <component class="org.objectledge.authentication.LoginVerifier"/>
   <component class="org.objectledge.authentication.PasswordGenerator"/>
-  <component class="org.objectledge.authentication.PasswordDigester">
-    <parameter value="MD5"/>
-  </component>
+  <component class="org.objectledge.authentication.PasswordDigester"/>
   <container key="contextFactoryHelperContainer"/>
   <component class="org.objectledge.naming.ContextFactory">
     <parameter key="contextFactoryHelperContainer"/>
