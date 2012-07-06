@@ -255,14 +255,4 @@ public class RecommendationResourceImpl
     }
      
     // @custom methods ///////////////////////////////////////////////////////
-    
-    /**
-     * Returns the site where the recommendation was submitted.
-     *
-     * @return the site where the recommendation was submitted.
-     */
-    public SiteResource getTargetSite()
-    {
-        return (SiteResource)getParent().getParent().getParent().getParent();
-    }
 }

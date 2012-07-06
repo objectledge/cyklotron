@@ -49,36 +49,6 @@ public interface ComponentResource
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>aggregationSourceView</code> attribute.
-     *
-     * @return the value of the the <code>aggregationSourceView</code> attribute.
-     */
-    public String getAggregationSourceView();
-    
-    /**
-     * Returns the value of the <code>aggregationSourceView</code> attribute.
-     *
-     * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>aggregationSourceView</code> attribute.
-     */
-    public String getAggregationSourceView(String defaultValue);
-
-    /**
-     * Sets the value of the <code>aggregationSourceView</code> attribute.
-     *
-     * @param value the value of the <code>aggregationSourceView</code> attribute,
-     *        or <code>null</code> to remove value.
-     */
-    public void setAggregationSourceView(String value);   
-   
-	/**
-	 * Checks if the value of the <code>aggregationSourceView</code> attribute is defined.
-	 *
-	 * @return <code>true</code> if the value of the <code>aggregationSourceView</code> attribute is defined.
-	 */
-    public boolean isAggregationSourceViewDefined();
- 
-    /**
      * Returns the value of the <code>componentName</code> attribute.
      *
      * @return the value of the the <code>componentName</code> attribute.

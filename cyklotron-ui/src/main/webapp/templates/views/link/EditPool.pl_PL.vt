@@ -43,16 +43,12 @@
 	  <th nowrap>
 	    Skasuj
 	  </th>
-	  <th nowrap>
-	    Udostępnianie
-	  </th>
-	  
 	</tr>
 
 	
 	#if($links.size() == 0)
 	<tr>	  
-	  <td nowrap colspan="7">
+	  <td nowrap colspan="6">
 	Nie ma jeszcze żadnych odsyłaczy w tym folderze.
 	  </td>
 	</tr>
@@ -109,18 +105,11 @@
 	  <td class="actionlink">
 	    <a href="$linkLink.view("link.EditPool").action('link.DeleteFromPool').set('pid',$pool.getId()).set('lid',$linkResource.getId())">usuń z tego folderu</a>
 	  </td>
-	  <td>
-	  #if($cms_tool.getUserData().hasPermission($linkResource, "cms.aggregation.export"))
-		<a href="#share($linkResource)">Udostępnianie</a></div>
-		<a href="#recommend($linkResource)">Zarekomenduj</a></div>
-	  #end
-	  &nbsp;
-	  </td>
 	</tr>
         #end
 	#end
 	<tr>	  
-	  <td nowrap colspan="7" class="commandbar">
+	  <td nowrap colspan="6" class="commandbar">
 	    <a href="$linkLink.view("link.AddLink").set('pid',$pool.getId())">Dodaj odsyłacz</a> &nbsp;	&nbsp;	
 	    <a href="$linkLink.view("link.PoolList")">Wróć do listy folderów</a> &nbsp;	
 	  </td>

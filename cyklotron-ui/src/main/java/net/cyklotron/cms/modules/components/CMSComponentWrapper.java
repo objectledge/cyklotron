@@ -69,14 +69,6 @@ public class CMSComponentWrapper
         {
             prepareEditMode(templatingContext, cmsData, componentData, coralSession);
         }
-        else if(mode.equals("import"))
-        {
-            prepareImportExportMode(templatingContext, cmsData, componentData, coralSession);
-        }
-        else if(mode.equals("export"))
-        {
-            prepareImportExportMode(templatingContext, cmsData, componentData, coralSession);
-        }
         else 
         {
             ComponentResource componentRes =
@@ -135,40 +127,6 @@ public class CMSComponentWrapper
             }
             templatingContext.put("component_config_app", componentConfigApp);
             templatingContext.put("component_config_view", componentConfigView);
-            templatingContext.put("application_system_name", componentRes.getApplicationResourceName());
-        }
-    }
-
-    private void prepareImportExportMode(TemplatingContext templatingContext, CmsData cmsData, CmsComponentData componentData,
-        CoralSession coralSession)
-    throws ProcessingException
-    {
-        String SOURCE_VIEW_KEY = "component_has_source_view";
-        
-        
-        // Get a wrapped component's configurator class name
-        ComponentResource componentRes =
-            integrationService.getComponent(coralSession, componentData.getApp(), componentData.getClazz());
-
-        if(componentRes == null)
-        {
-            templatingContext.put(SOURCE_VIEW_KEY, new Boolean(false));
-        }
-        else
-        {
-            String componentImportApp = componentData.getApp();
-            String componentImportView = componentRes.getAggregationSourceView();
-            if(componentImportView == null || componentImportView.length() == 0)
-            {
-                templatingContext.put(SOURCE_VIEW_KEY, new Boolean(false));
-            }
-            else
-            {
-                templatingContext.put(SOURCE_VIEW_KEY, new Boolean(true));
-                
-                templatingContext.put("component_source_app", componentImportApp);
-                templatingContext.put("component_source_view", componentImportView);
-            }
             templatingContext.put("application_system_name", componentRes.getApplicationResourceName());
         }
     }

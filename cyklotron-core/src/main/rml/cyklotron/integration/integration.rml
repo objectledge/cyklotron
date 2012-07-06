@@ -27,9 +27,7 @@ HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node' )
 ATTRIBUTES (
 REQUIRED string componentName, # resource name component identifier
-string configurationView, # the name of the view to be used for configuration
-string aggregationSourceView # the name of the view to for choosing resource for export
-				 # the contract for screen naming is <ComponentName>AggregationSource
+string configurationView # the name of the view to be used for configuration
 );
 
 # component state does not have any attributes except name
