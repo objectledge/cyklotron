@@ -357,9 +357,6 @@
   </component>
     
   <!-- // cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
-
-  <component class-key="net.cyklotron.cms.aggregation.AggregationService"
-             class="net.cyklotron.cms.aggregation.internal.AggregationServiceImpl"/>
   
   <component class-key="net.cyklotron.cms.banner.BannerService"
              class="net.cyklotron.cms.banner.internal.BannerServiceImpl"/>
@@ -454,7 +451,6 @@
     <parameter/>
     <sequence>
       <parameter class-key="net.cyklotron.cms.security.SecurityDestructionListener"/> 
-      <parameter class-key="net.cyklotron.cms.aggregation.AggregationListener"/>
       <parameter class-key="net.cyklotron.cms.search.SearchListener"/>
       <parameter class-key="net.cyklotron.cms.structure.StructureSiteDestructionListener"/>            
       <parameter class-key="net.cyklotron.cms.files.FilesListener"/>
@@ -471,7 +467,6 @@
   </component>             
 
   <component class="net.cyklotron.cms.security.SecurityDestructionListener"/> 
-  <component class="net.cyklotron.cms.aggregation.AggregationListener"/>
   <component class="net.cyklotron.cms.search.SearchListener"/>
   <component class="net.cyklotron.cms.files.FilesListener"/>
   <component class="net.cyklotron.cms.forum.ForumListener"/>

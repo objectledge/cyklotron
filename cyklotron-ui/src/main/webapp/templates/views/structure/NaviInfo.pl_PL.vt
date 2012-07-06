@@ -176,10 +176,6 @@ $i18n.usePrefix('workflow.structure.navigation_node.states').get($row_node.state
 #if($cms_tool.isAppEnabled('related') && !$isAlias)
 <div>&raquo;<a href="#related($row_node)">Powiązania</a></div>
 #end
-#if($cms_tool.getUserData().hasPermission($row.object, "cms.aggregation.export") && !$isAlias)
-<div>&raquo;<a href="#share($row_node)">Udostępnianie</a></div>
-<div>&raquo;<a href="#recommend($row_node)">Zarekomenduj</a></div>
-#end
 #if($cms_tool.userData.hasPermission($row_node, 'cms.structure.modify') || ($cms_tool.userData.hasPermission($row_node, 'cms.structure.accept') && $cms_tool.sharingWorkgroupPeers.contains($row_node.owner)))
 <div>&raquo;<a href="$link.set('node_id',$row_node.id).action('structure.workflow.ForcePublication')">Wymuś publikacje</a></div>
 #end

@@ -57,9 +57,6 @@ public class ComponentResourceImpl
     /** Class variables initialization status. */
     private static boolean definitionsInitialized;
 	
-    /** The AttributeDefinition object for the <code>aggregationSourceView</code> attribute. */
-	private static AttributeDefinition<String> aggregationSourceViewDef;
-
     /** The AttributeDefinition object for the <code>componentName</code> attribute. */
 	private static AttributeDefinition<String> componentNameDef;
 
@@ -141,66 +138,6 @@ public class ComponentResourceImpl
     }
 
     // public interface //////////////////////////////////////////////////////
- 
-    /**
-     * Returns the value of the <code>aggregationSourceView</code> attribute.
-     *
-     * @return the value of the <code>aggregationSourceView</code> attribute.
-     */
-    public String getAggregationSourceView()
-    {
-        return get(aggregationSourceViewDef);
-    }
-    
-    /**
-     * Returns the value of the <code>aggregationSourceView</code> attribute.
-     *
-     * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>aggregationSourceView</code> attribute.
-     */
-    public String getAggregationSourceView(String defaultValue)
-    {
-        return get(aggregationSourceViewDef, defaultValue);
-    }    
-
-    /**
-     * Sets the value of the <code>aggregationSourceView</code> attribute.
-     *
-     * @param value the value of the <code>aggregationSourceView</code> attribute,
-     *        or <code>null</code> to remove value.
-     */
-    public void setAggregationSourceView(String value)
-    {
-        try
-        {
-            if(value != null)
-            {
-                set(aggregationSourceViewDef, value);
-            }
-            else
-            {
-                unset(aggregationSourceViewDef);
-            }
-        }
-        catch(ModificationNotPermitedException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-        catch(ValueRequiredException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-    }
-   
-	/**
-	 * Checks if the value of the <code>aggregationSourceView</code> attribute is defined.
-	 *
-	 * @return <code>true</code> if the value of the <code>aggregationSourceView</code> attribute is defined.
-	 */
-    public boolean isAggregationSourceViewDefined()
-	{
-	    return isDefined(aggregationSourceViewDef);
-	}
  
     /**
      * Returns the value of the <code>componentName</code> attribute.

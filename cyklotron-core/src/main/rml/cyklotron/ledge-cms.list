@@ -20,7 +20,6 @@ rml/cyklotron/httpfeed/httpfeed-init.rml
 rml/cyklotron/syndication/syndication-init.rml
 rml/cyklotron/common/components-init.rml
 rml/cyklotron/common/simple-portal-en.rml
-rml/cyklotron/aggregation/aggregation-init.rml
 rml/cyklotron/periodicals/periodicals-init.rml
 rml/cyklotron/catalogue/catalogue-init.rml
 rml/cyklotron/docimport/docimport-init.rml

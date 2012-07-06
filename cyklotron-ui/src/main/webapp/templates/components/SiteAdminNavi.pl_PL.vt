@@ -17,8 +17,6 @@
       <td class="separator">|</td>
       #linkCell('admin' 'SERWISY' $link.view("site.SiteList").unset('site_id'))
       <td class="separator">|</td>
-      #linkCell('admin' 'AGREGACJA' $link.view("aggregation.ImporterList").unset('site_id'))
-      <td class="separator">|</td>
       #linkCell('admin' 'KATEGORIE GLOBALNE' $link.view("category.CategoryList").unset('site_id'))
       <td class="separator">|</td>
       #linkCell('admin' 'STATYSTYKI GLOBALNE' $link.view("statistics.Statistics").unset('site_id'))
@@ -37,7 +35,7 @@
   #if($cmsData.site && !$cms_tool.subject.equals($cms_tool.anonymousSubject))
   #set($siteLink = $link.set("site_id",$cmsData.site.id))
   
-  #if($cms_tool.isAppEnabled('search') || $cms_tool.isAppEnabled('forum') || $cms_tool.isAppEnabled('banner') || $cms_tool.isAppEnabled('poll') || $cms_tool.isAppEnabled('link') || $cms_tool.isAppEnabled('syndication') || $cms_tool.isAppEnabled('periodicals') || $cms_tool.isAppEnabled('statistics') || $cms_tool.isAppEnabled('aggregation') || $block)      
+  #if($cms_tool.isAppEnabled('search') || $cms_tool.isAppEnabled('forum') || $cms_tool.isAppEnabled('banner') || $cms_tool.isAppEnabled('poll') || $cms_tool.isAppEnabled('link') || $cms_tool.isAppEnabled('syndication') || $cms_tool.isAppEnabled('periodicals') || $cms_tool.isAppEnabled('statistics') || $block)      
   
   <table width="100%" class="adminNavi" cellspacing="0">
     <tr>
@@ -75,10 +73,6 @@
       #linkCell('' 'STATYSTYKI' $siteLink.view('statistics.Statistics'))
       <td class="separator">|</td>
     #end      
-    #if($cms_tool.isAppEnabled('aggregation') || $block)
-      #linkCell('' 'AGREGACJA' $siteLink.view('aggregation.Exported'))
-      <td class="separator">|</td>
-	#end
 	#if($cms_tool.isAppEnabled('catalogue') || $block)
       #linkCell('' 'KATALOGI' $siteLink.view('catalogue.List'))
       <td class="separator">|</td>

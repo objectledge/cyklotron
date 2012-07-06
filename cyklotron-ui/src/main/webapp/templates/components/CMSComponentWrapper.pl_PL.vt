@@ -68,36 +68,6 @@ $pageTool.addScriptLink('script/ComponentWrapper.js')##
 ##
 ##
 ##
-##
-#macro(cms_component_import_menu)
-#if($component_has_source_view)##
-$pageTool.addScriptLink('script/ComponentWrapper.js')##
-<div class="cms-component-wrapper-popupmenubutton">
-#if($cms_tool.isAppEnabled($application_system_name))
-#if($cms_data.component.errorMessages)
-  <acronym title="Import danych z niepoprawnie skonfigurowanego komponentu nie jest możliwy">
-  Import niemożliwy
-  </acronym>
-#elseif($cms_data.component.app == 'cms' && $cms_data.component.clazz == 'EmbeddedScreen')
-  <acronym title="Import danych ekranu osadzonego nie jest możliwy">
-  Import niemożliwy
-  </acronym>
-#else  
-  #set($edit_link = $link.self().unset('x').set('node_id', $node.id).set('component_instance', $cms_data.component.instanceName).set('from_component_wrapper',true))
-  <a href="javascript:openWinPopup('component_import','$edit_link.set('mode','import').view($component_source_view)');">
-    Importuj dane</a>##
-#end
-#else
-  <acronym title="Import danych z zablokowanej aplikacji">
-  Import niemożliwy
-  </acronym>
-#end
-</div>
-#end##
-#end
-##
-##
-##
 ## END MACROS
 ##
 ##
@@ -135,10 +105,6 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
     #cms_component_edit_menu()
 #elseif($cms_data.browseMode == "emergency")
     ## do not render menus
-#elseif($cms_data.browseMode == "export")
-    #cms_component_export_menu()
-#elseif($cms_data.browseMode == "import")
-    #cms_component_import_menu()
 #end
 ## display component
 ##
@@ -161,14 +127,9 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 ##
 ## ELSE has role == not a team member
 ##
-## show menu
-#if($cms_data.browseMode == "import")
-    $pageTool.addStyleLink('style/cms-component-wrapper.css')##
-    #cms_component_import_menu()
-#end
-  ## display component
-  ##
-  ## guard from component's errors
+## display component
+##
+## guard from component's errors
 #if($cms_data.component.errorMessages)
 	$pageTool.addStyleLink('style/cms-component-wrapper.css')##
     <div class="cms-component-wrapper-errors">Błąd</div><!--

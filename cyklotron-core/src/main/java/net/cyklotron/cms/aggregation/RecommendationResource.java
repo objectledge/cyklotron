@@ -98,11 +98,4 @@ public interface RecommendationResource
     public void setStatus(int value);
      
     // @custom methods ///////////////////////////////////////////////////////
-    
-    /**
-     * Returns the site where the recommendation was submitted.
-     *
-     * @return the site where the recommendation was submitted.
-     */
-    public SiteResource getTargetSite();
 }

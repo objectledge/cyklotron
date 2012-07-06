@@ -43,10 +43,6 @@
 	  <th nowrap>
 	    Remove
 	  </th>
-	  <th nowrap>
-	    Sharing
-	  </th>
-	  
 	</tr>
 
 	
@@ -109,18 +105,11 @@
 	  <td class="actionlink">
 	    <a href="$linkLink.view("link.EditPool").action('link.DeleteFromPool').set('pid',$pool.getId()).set('lid',$linkResource.getId())">remove from this folder</a>
 	  </td>
-	  <td>
-	  #if($cms_tool.getUserData().hasPermission($linkResource, "cms.aggregation.export"))
-		<a href="#share($linkResource)">Sharing</a></div>
-		<a href="#recommend($linkResource)">Recommend</a></div>
-	  #end
-	  &nbsp;
-	  </td>
 	</tr>
         #end
 	#end
 	<tr>	  
-	  <td nowrap colspan="7" class="commandbar">
+	  <td nowrap colspan="6" class="commandbar">
 	    <a href="$linkLink.view("link.AddLink").set('pid',$pool.getId())">Add link</a> &nbsp;	&nbsp;	
 	    <a href="$linkLink.view("link.PoolList")">Back to folder list</a> &nbsp;	
 	  </td>

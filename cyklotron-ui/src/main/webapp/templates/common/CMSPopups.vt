@@ -78,16 +78,6 @@ javascript:getWinPopup('security').open('$link.view('security.ResourceRoles')', 
 #end
 
 
-#macro(share $resource)
-$pageTool.addScriptLink('script/WinPopup.js')##
-javascript:getWinPopup('aggregation').open('$link.view('aggregation.ShareResource').set('res_id',$resource.id)',  650, 550); void(0);##
-#end
-
-#macro(recommend $resource)
-$pageTool.addScriptLink('script/WinPopup.js')##
-javascript:getWinPopup('aggregation').open('$link.view('aggregation.RecommendResource').set('res_id',$resource.id)',  650, 550); void(0);##
-#end
-
 #macro(related $resource)
 $pageTool.addScriptLink('script/WinPopup.js')##
 javascript:getWinPopup('related').open('$link.view('related.ChooseRelatedResources').set('res_id',$resource.id).set('reset', 'true')',  650, 550); void(0);##

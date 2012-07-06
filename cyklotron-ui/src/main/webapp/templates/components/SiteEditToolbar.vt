@@ -1,7 +1,7 @@
 
 ##
 ## TODO: make it use a forthcoming UserInfo
-#if($cms_tool.userData.subject.hasRole($cmsData.site.teamMember) || $cms_tool.userData.hasRole('cms.aggregation.importer'))
+#if($cms_tool.userData.subject.hasRole($cmsData.site.teamMember))
 ##
 $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 ##
@@ -60,12 +60,6 @@ Mode:
 #option('preview' 'preview' $cms_data.browseMode)
 #option('edit' 'editing' $cms_data.browseMode)
 #option('emergency' 'emergency' $cms_data.browseMode)
-#if($cms_tool.userData.hasPermission($site,'cms.aggregation.export'))
-#option('export' 'export' $cms_data.browseMode)
-#end
-#end
-#if($cms_tool.userData.hasRole('cms.aggregation.importer'))
-#option('import' 'importing' $cms_data.browseMode)
 #end
 #option('time_travel' 'time travel' $cms_data.browseMode)
 </select>
