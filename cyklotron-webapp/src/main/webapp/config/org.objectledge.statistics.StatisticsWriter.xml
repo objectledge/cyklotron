@@ -29,4 +29,5 @@
 <config>
   <path>logs/statitics.log</path>
   <interval>60</interval>
+  <keep/>
 </config>
