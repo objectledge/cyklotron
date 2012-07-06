@@ -9,6 +9,7 @@
 <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="cyklotron-webapp"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.sonatype.m2e.webby.sourcepathProvider"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx1g&#10;-Djava.library.path=/usr/local/lib"/>
 <stringAttribute key="org.sonatype.m2e.webby.containerHome" value="${env_var:TOMCAT_HOME}"/>
 <stringAttribute key="org.sonatype.m2e.webby.containerId" value="tomcat7x"/>
 <intAttribute key="org.sonatype.m2e.webby.containerPort" value="8080"/>
