@@ -41,6 +41,7 @@
   <!-- customized loggers -->
   <logger name="org.objectledge.database.ThreadDataSource"><level value="INFO"/></logger>
   <logger name="org.objectledge.web.RequestTrackingValve"><level value="INFO"/></logger>  
+  <logger name="org.objectledge.pipeline.ConcurrencyControlValve"><level value="INFO"/></logger>
   <logger name="org.objectledge.templating.Templating"><level value="OFF"/></logger>  
 
   <!-- root logger (default settings) -->
