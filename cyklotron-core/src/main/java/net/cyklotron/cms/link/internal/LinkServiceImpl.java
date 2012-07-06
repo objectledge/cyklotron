@@ -408,45 +408,50 @@ public class LinkServiceImpl
 	
     public void resourceDeleted(Resource resource)
     {
-        CoralSession coralSession = sessionFactory.getRootSession();
-        try
+        if(resource instanceof NavigationNodeResource)
         {
-            String query = "FIND RESOURCE FROM cms.link.pool";
-            QueryResults results = coralSession.getQuery().executeQuery(query);
-            Resource[] pools = results.getArray(1);
-            if(resource instanceof NavigationNodeResource)
+            CoralSession coralSession = sessionFactory.getRootSession();
+            try
             {
-                query = "FIND RESOURCE FROM cms.link.cms_link WHERE node = " + resource.getId();
-                results = coralSession.getQuery().executeQuery(query);
+                String query = "FIND RESOURCE FROM cms.link.cms_link WHERE node = "
+                    + resource.getId();
+                QueryResults results = coralSession.getQuery().executeQuery(query);
                 Resource[] links = results.getArray(1);
-                for(int i = 0; i < links.length; i++)
+                if(links.length > 0)
                 {
-                    BaseLinkResource link = (BaseLinkResource)links[i];
-                    for(int j = 0; j < pools.length; j++)
+                    query = "FIND RESOURCE FROM cms.link.pool";
+                    results = coralSession.getQuery().executeQuery(query);
+                    Resource[] pools = results.getArray(1);
+
+                    for(int i = 0; i < links.length; i++)
                     {
-                        PoolResource pool = (PoolResource)pools[j];
-                        // make sure different object is set to force update
-                        ResourceList l = new ResourceList(sessionFactory, pool.getLinks());
-                        if(l != null && l.size() > 0)
+                        BaseLinkResource link = (BaseLinkResource)links[i];
+                        for(int j = 0; j < pools.length; j++)
                         {
-                            if(l.remove(link))
+                            PoolResource pool = (PoolResource)pools[j];
+                            // make sure different object is set to force update
+                            ResourceList l = new ResourceList(sessionFactory, pool.getLinks());
+                            if(l != null && l.size() > 0)
                             {
-                                pool.setLinks(l);
-                                pool.update();
+                                if(l.remove(link))
+                                {
+                                    pool.setLinks(l);
+                                    pool.update();
+                                }
                             }
                         }
+                        deleteLink(coralSession, link);
                     }
-                    deleteLink(coralSession, link);
                 }
             }
-        }
-        catch(Exception e)
-        {
-            log.error("Exception occured in LinkService listener ", e);
-        }
-        finally
-        {
-            coralSession.close();
+            catch(Exception e)
+            {
+                log.error("Exception occured in LinkService listener ", e);
+            }
+            finally
+            {
+                coralSession.close();
+            }
         }
     }
 
