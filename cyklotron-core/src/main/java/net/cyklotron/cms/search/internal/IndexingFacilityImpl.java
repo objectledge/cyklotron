@@ -1,8 +1,6 @@
 package net.cyklotron.cms.search.internal;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,7 +22,6 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 
 import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.category.CategoryService;
@@ -146,15 +143,17 @@ public class IndexingFacilityImpl implements IndexingFacility
         Directory tempDir = new LedgeFSDirectory(fileSystem, tempDirectoryPath);
         IndexWriter indexWriter = 
             utility.openIndexWriter(tempDir, index, true, "reindexing the index");
+        Set<Resource> querySet = utility.getQueryIndexResourceIds(coralSession, index);
         try
         {
+            ReindexStats stats = new ReindexStats();
             // go recursive on all branches
             List resources = searchService.getIndexedBranches(coralSession, index);
              
             for (Iterator i = resources.iterator(); i.hasNext();)
             {
                 Resource branch = (Resource) (i.next());
-                index(coralSession, branch, branch,indexWriter, index, true);
+                index(coralSession, branch, branch, indexWriter, index, querySet, true, stats);
             }
 
             // go locally on nodes
@@ -162,7 +161,24 @@ public class IndexingFacilityImpl implements IndexingFacility
             for (Iterator i = resources.iterator(); i.hasNext();)
             {
                 Resource branch = (Resource) (i.next());
-                index(coralSession, branch, branch, indexWriter, index, false);
+                index(coralSession, branch, branch, indexWriter, index, querySet, false, stats);
+            }
+            indexWriter.commit(IndexingFacilityUtil.resetChangeCounter());
+            if(stats.documentsAdded == 0)
+            {
+                StringBuilder buff = new StringBuilder();
+                buff.append(index.toString());
+                buff.append(" is misconfigured: checked ");
+                buff.append(stats.documentsChecked);
+                buff.append(" resources ");
+                if(querySet != null)
+                {
+                    buff.append(" against ");
+                    buff.append(querySet.size());
+                    buff.append(" category query results ");
+                }
+                buff.append("and added 0 resources to index");
+                log.error(buff.toString());
             }
         }
         catch (IOException e)
@@ -252,6 +268,7 @@ public class IndexingFacilityImpl implements IndexingFacility
             try
             {
                 indexWriter.optimize();
+                indexWriter.commit(IndexingFacilityUtil.resetChangeCounter());
             }
             catch (IOException e)
             {
@@ -267,19 +284,18 @@ public class IndexingFacilityImpl implements IndexingFacility
     
     /**
      * Chcecks if a given resource may be put in the given index.
-     * 
      * @param node resource to be checked
      * @param index index to be checked
+     * @param querySet TODO
+     * 
      * @return <code>true</code> if given resource may be indexed by a given index
      * @throws SearchException 
      */
     private boolean liableForIndexing(CoralSession coralSession, IndexableResource node,
-        IndexResource index)
+        IndexResource index, Set<Resource> querySet)
         throws SearchException
     {
-        // get resources returned by query defined in index
-        Set resources = utility.getQueryIndexResourceIds(coralSession, index);
-        if(resources == null || resources.contains(node))
+        if(querySet == null || querySet.contains(node))
         {
             if(!index.getPublic())
             {
@@ -380,21 +396,23 @@ public class IndexingFacilityImpl implements IndexingFacility
     public void addToIndex(CoralSession coralSession, IndexResource index, IndexableResource[] res)
         throws SearchException
     {
+        final String action = "adding resources to the index";
         synchronized(index)
         {
             // get index data directory
             Directory dir = getIndexDirectory(index);
     
-            IndexWriter indexWriter = 
-                utility.openIndexWriter(dir, index, false, "adding resources to the index");
+            IndexWriter indexWriter = utility.openIndexWriter(dir, index, false, action);
+            Set<Resource> querySet = utility.getQueryIndexResourceIds(coralSession, index);
             
+            int updateCount = 0;
             for (int i = 0; i < res.length; i++)
             {
                 IndexableResource resource = res[i];
                 Resource branch = utility.getBranch(coralSession, index, resource);
                 
                 // add to index
-                if(branch != null && liableForIndexing(coralSession, resource, index))
+                if(branch != null && liableForIndexing(coralSession, resource, index, querySet))
                 {
                     // cache the document maybe
                     // - need a kind of temporary cache while adding resources to many indexes
@@ -409,6 +427,7 @@ public class IndexingFacilityImpl implements IndexingFacility
                         try
                         {
                             indexWriter.addDocument(doc);
+                            updateCount++;
                         }
                         catch(IOException e)
                         {
@@ -420,8 +439,12 @@ public class IndexingFacilityImpl implements IndexingFacility
                     }
                 }
             }
-            
-            utility.closeIndexWriter(indexWriter, index, "adding resources to the index");
+
+            Map<String, String> userData = utility
+                .getLastCommitUserData(index, indexWriter, action);
+            utility.commitIndexWriter(indexWriter, index,
+                IndexingFacilityUtil.incrementChangeCounter(userData, updateCount), action);
+            utility.closeIndexWriter(indexWriter, index, action);
         }
     }
 
@@ -502,22 +525,25 @@ public class IndexingFacilityImpl implements IndexingFacility
 
     /**
      * index the resource tree.
-     *
      * @param node the resource tree node.
-     * @param branch branch under which current node is indexed 
+     * @param branch branch under which current node is indexed
      * @param indexWriter the opened index writer.
      * @param index the index resource representing the lucene index.
+     * @param querySet TODO
      * @param recursive <code>true</code> if indexing should be recursive.
+     * @param stats TODO
      */
-    private void index(CoralSession coralSession, Resource node, Resource branch, IndexWriter indexWriter,
-        IndexResource index, boolean recursive)
+    private void index(CoralSession coralSession, Resource node, Resource branch,
+        IndexWriter indexWriter, IndexResource index, Set<Resource> querySet, boolean recursive,
+        ReindexStats stats)
     throws IOException, SearchException
     {
+        stats.documentsChecked++;
         if (node instanceof IndexableResource)
         {
         	IndexableResource res = (IndexableResource)node;
             // add to index
-        	if(liableForIndexing(coralSession, res, index))
+            if(liableForIndexing(coralSession, res, index, querySet))
         	{
 	            Document doc = docConstructor.createDocument(coralSession, res, branch);
                 if(doc == null)
@@ -527,6 +553,7 @@ public class IndexingFacilityImpl implements IndexingFacility
                 }
 	            else
 	            {
+                    stats.documentsAdded++;
 	                indexWriter.addDocument(doc);
 	            }
 			}
@@ -537,8 +564,15 @@ public class IndexingFacilityImpl implements IndexingFacility
             Resource[] children = coralSession.getStore().getResource(node);
             for (int i = 0; i < children.length; i++)
             {
-                index(coralSession, children[i], branch, indexWriter, index,recursive);
+                index(coralSession, children[i], branch, indexWriter, index, querySet, recursive, stats);
             }
         }
+    }
+
+    public static class ReindexStats
+    {
+        public int documentsChecked;
+
+        public int documentsAdded;
     }
 }

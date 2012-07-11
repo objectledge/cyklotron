@@ -428,11 +428,11 @@ public class PollResourceImpl
      */
     public boolean isValid(Date time)
     {
-        if(time.before(getStartDate()))
+        if(isStartDateDefined() && time.before(getStartDate()))
         {
             return false;
         }
-        return time.before(getEndDate());
+        return !isEndDateDefined() || time.before(getEndDate());
     }
 
     public boolean canView(CoralSession coralSession, Subject subject)

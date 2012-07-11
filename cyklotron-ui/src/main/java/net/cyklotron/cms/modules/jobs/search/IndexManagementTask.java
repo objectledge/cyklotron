@@ -13,6 +13,7 @@ import net.cyklotron.cms.search.IndexResource;
 import net.cyklotron.cms.search.IndexableResource;
 import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
+import net.cyklotron.cms.search.internal.IndexingFacilityUtil;
 
 /**
  * Performs added and modfied resources indexing and index optimisation on a given index.
@@ -146,10 +147,10 @@ public class IndexManagementTask
             reindex = !IndexReader.indexExists(luceneDirectory);
             if(!reindex)
             {
-                numChanges = IndexReader.getCurrentVersion(luceneDirectory);
                 reader = IndexReader.open(luceneDirectory, false);
+                numChanges = IndexingFacilityUtil.getChangeCounter(reader.getCommitUserData());
                 numDocs = reader.numDocs();
-                reindex = (numDocs == 0);
+                reindex = numDocs == 0;
             }
         }
         catch(IOException e)
