@@ -563,7 +563,11 @@ public class FilesServiceImpl
         metadata.set(Metadata.RESOURCE_NAME_KEY, file.getName());
         try
         {
-            return tika.parseToString(getInputStream(file), metadata);
+            final InputStream inputStream = getInputStream(file);
+            if(inputStream != null)
+            {
+                return tika.parseToString(inputStream, metadata);
+            }
         }
         catch(Exception e)
         {

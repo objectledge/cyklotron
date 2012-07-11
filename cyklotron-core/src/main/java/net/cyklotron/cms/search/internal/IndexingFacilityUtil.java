@@ -2,10 +2,12 @@ package net.cyklotron.cms.search.internal;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -40,6 +42,8 @@ import net.cyklotron.cms.site.SiteResource;
 public class IndexingFacilityUtil 
 {
     // deps ----------------------------------------------------------------------------------------
+
+    private static final String NUM_CHANGES = "numChanges";
 
     /** search service - for managing index resources */
     private SearchService searchService;
@@ -191,6 +195,21 @@ public class IndexingFacilityUtil
         }
     }
 
+    public Map<String, String> getLastCommitUserData(IndexResource index, IndexWriter indexWriter,
+        String whileMsg)
+        throws SearchException
+    {
+        try
+        {
+            return indexWriter.getReader().getCommitUserData();
+        }
+        catch(IOException e)
+        {
+            throw new SearchException("IndexingFacility: Could not create IndexWriter for "
+                + "index '" + index.getPath() + "' while " + whileMsg, e);
+        }
+    }
+
     /**
      * Closes a given index writer.
      * 
@@ -211,6 +230,76 @@ public class IndexingFacilityUtil
             throw new SearchException("IndexingFacility: Could not close IndexWriter for " +
                     "index '"+index.getPath()+"' while "+whileMsg, e);
         }
+    }
+
+    public void commitIndexWriter(IndexWriter indexWriter, IndexResource index,
+        Map<String, String> userData, String whileMsg)
+        throws SearchException
+    {
+        try
+        {
+            if(userData != null)
+            {
+                indexWriter.commit(userData);
+            }
+            else
+            {
+                indexWriter.commit();
+            }
+        }
+        catch(IOException e)
+        {
+            throw new SearchException("IndexingFacility: Could not commit IndexWriter for "
+                + "index '" + index.getPath() + "' while " + whileMsg, e);
+        }
+    }
+
+    public static Map<String, String> resetChangeCounter()
+    {
+        Map<String, String> out = new HashMap<String, String>();
+        out.put(NUM_CHANGES, "0");
+        return out;
+    }
+
+    public static Map<String, String> incrementChangeCounter(Map<String, String> in, int count)
+    {
+        Map<String, String> out = new HashMap<String, String>();
+        String prev = in.get(NUM_CHANGES);
+        if(prev != null)
+        {
+            try
+            {
+                out.put(NUM_CHANGES, Integer.toString(Integer.parseInt(prev) + count));
+            }
+            catch(NumberFormatException e)
+            {
+                throw new IllegalStateException("invalid commit user data in index: numChanges "
+                    + prev);
+            }
+        }
+        else
+        {
+            out.put(NUM_CHANGES, "0");
+        }
+        return out;
+    }
+
+    public static int getChangeCounter(Map<String, String> in)
+    {
+        String prev = in.get(NUM_CHANGES);
+        if(prev != null)
+        {
+            try
+            {
+                return Integer.parseInt(prev);
+            }
+            catch(NumberFormatException e)
+            {
+                throw new IllegalStateException("invalid commit user data in index: numChanges "
+                    + prev);
+            }
+        }
+        return 0;
     }
 
     // IndexReader management ---------------------------------------------------------------------------------------------
