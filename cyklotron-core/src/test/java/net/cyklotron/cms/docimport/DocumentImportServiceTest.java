@@ -67,7 +67,7 @@ public class DocumentImportServiceTest
         Date end = cal.getTime();
         
         Collection<DocumentData> documents = service.importDocuments(config, start, end);
-        assertEquals(21, documents.size());
+        assertEquals(19, documents.size());
     }
 
     public void testMockHTMLService()
