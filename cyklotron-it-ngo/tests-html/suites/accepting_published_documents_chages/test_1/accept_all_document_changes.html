@@ -4,12 +4,12 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://wiadomosci.ngo.pl/" />
-<title>document_asign_to_me</title>
+<title>Obsługa dokumentów opublikowanych ze zmianami</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">document_asign_to_me</td></tr>
+<tr><td rowspan="1" colspan="3">Obsługa dokumentów opublikowanych ze zmianami</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
@@ -23,28 +23,33 @@
 </tr>
 <tr>
 	<td>waitForText</td>
-	<td>//table[2]/tbody/tr[3]/td/span/span/b</td>
-	<td>Selenium test - wiadomość testowa</td>
+	<td>//a[contains(@href, '/view/structure.ReviewProposedChanges?doc_id=${docId}&amp;remove_request=0&amp;site_id=8439')]</td>
+	<td>Pokaż różnice</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@href, '/view/structure.ReviewProposedChanges?doc_id=${docId}&amp;remove_request=0&amp;site_id=8439')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Dokumenty z zapropowanymi zmianami</td>
+	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//table[2]/tbody/tr[3]/td/input</td>
+	<td>xpath=(//a[contains(text(),'Zaznacz wszystkie jako zaakceptowane')])[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Przydziel mi zaznaczone</td>
+	<td>xpath=(//a[contains(text(),'Zapisz')])[4]</td>
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>link=Przydziel</td>
+	<td>verifyTextPresent</td>
+	<td>Zadania redaktorskie</td>
 	<td></td>
-</tr>
-<tr>
-	<td>waitForText</td>
-	<td>css=b</td>
-	<td>Stan dokumentu zmieniono poprawnie</td>
 </tr>
 </tbody></table>
 </body>
