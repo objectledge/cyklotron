@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://wiadomosci.ngo.pl/" />
+<title>redagowanie_dodanej_wiadomosci</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">redagowanie_dodanej_wiadomosci</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>http://wiadomosci.ngo.pl/view/site.EditSite?site_id=8439</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=(OBIEG)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//a[contains(@href, '/view/structure.EditNode?node_id=${docId}&amp;site_id=8439')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyValue</td>
+	<td>name=title</td>
+	<td>Selenium test - wiadomość testowa</td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Dokument przydzielony</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Przyjmij dokument</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>Stan dokumentu zmieniono poprawnie</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Edytuj</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPopUp</td>
+	<td>related</td>
+	<td>30000</td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>name=related</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>name=search</td>
+	<td>logo</td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>name=related</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=szukaj</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>xpath=(//a[contains(text(),'Dodaj poniżej')])[2]</td>
+	<td>Dodaj poniżej</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=resource-447227</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=resource-436241</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=form[name=&quot;form1&quot;] &gt; div.action-buttons.clearfix &gt; div.modification &gt; a</td>
+	<td></td>
+</tr>
+<tr>
+	<td>close</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=(//a[contains(text(),'Edytuj')])[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForPopUp</td>
+	<td>categorization</td>
+	<td>30000</td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>name=categorization</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=category-267525</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=category-673805</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[11]/td[2]/a/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[14]/td[2]/a/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=category-564755</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=category-564755</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[30]/td[2]/a/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=category-378093</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[41]/td[2]/a/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=category-26553</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=category-769271</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[39]/td[2]/a/img</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=category-75825</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=category-26587</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>name=categorization</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Zapisz</td>
+	<td></td>
+</tr>
+<tr>
+	<td>selectWindow</td>
+	<td>null</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Podgląd strony</td>
+	<td></td>
+</tr>
+<tr>
+	<td>goBackAndWait</td>
+	<td></td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Przeslij do akceptacji</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>1 do wiadomosci ngo.pl, 2 na główną serwisu wiadomosci, Aktywne społeczności CAL, Białoruś, dyskryminacja, dzieci, Warszawa - na główną</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Wymuś publikację</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
