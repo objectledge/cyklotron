@@ -1,10 +1,10 @@
 package net.cyklotron.ngo.it.tests;
 
 import net.cyklotron.ngo.it.SeleniumTest;
-import net.cyklotron.ngo.it.common.Wiadomosci;
+import net.cyklotron.ngo.it.common.Admin;
 import org.junit.Test;
 
-public class WiadomosciLogin
+public class AdminLoginTest
     extends SeleniumTest
 {
 
@@ -20,9 +20,9 @@ public class WiadomosciLogin
         throws Exception
     {
 
-        Wiadomosci wiadomosci = new Wiadomosci(selenium);
-        wiadomosci.login("selenium", "12345");
-        wiadomosci.logout();
+        Admin admin = new Admin(selenium);
+        admin.login("root", "12345");
+        admin.logout();
 
     }
 

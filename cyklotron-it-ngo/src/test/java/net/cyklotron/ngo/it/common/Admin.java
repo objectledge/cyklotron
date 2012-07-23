@@ -21,14 +21,14 @@ public class Admin
         throws Exception
     {
         selenium.open("/admin");
-        selenium.waitForPageToLoad("30000");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isElementPresent("link=strona logowania"));
         Assert.assertTrue(selenium.isTextPresent("Gość"));
         Assert.assertEquals("Zaloguj", selenium.getValue("id=submitbutton"));
         selenium.type("id=login", this.login);
         selenium.type("id=password", this.password);
         selenium.click("id=submitbutton");
-        selenium.waitForPageToLoad("30000");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertEquals("wyloguj się", selenium.getText("link=wyloguj się"));
         return selenium;
     }
@@ -45,10 +45,10 @@ public class Admin
         throws Exception
     {
         selenium.open("/admin");
-        selenium.waitForPageToLoad("30000");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertEquals("wyloguj się", selenium.getText("link=wyloguj się"));
         selenium.click("link=wyloguj się");
-        selenium.waitForPageToLoad("30000");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isElementPresent("link=strona logowania"));
         Assert.assertTrue(selenium.isTextPresent("Gość"));
     }

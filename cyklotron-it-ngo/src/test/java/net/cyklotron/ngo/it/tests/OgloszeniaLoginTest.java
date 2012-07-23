@@ -4,7 +4,7 @@ import net.cyklotron.ngo.it.SeleniumTest;
 import net.cyklotron.ngo.it.common.Ogloszenia;
 import org.junit.Test;
 
-public class OgloszeniaLogin
+public class OgloszeniaLoginTest
     extends SeleniumTest
 {
 
