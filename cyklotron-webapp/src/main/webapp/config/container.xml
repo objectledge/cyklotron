@@ -553,6 +553,7 @@
   <component class="org.objectledge.statistics.Statistics">
     <sequence>
       <component class="org.objectledge.statistics.VMStatisticsProvider"/>
+      <component class="org.objectledge.statistics.TomcatStatisticsProvider"/>
       <parameter class-key="org.objectledge.pipeline.ConcurrencyControlValve"/>
       <parameter class-key="org.objectledge.database.ThreadDataSource$Statistics"/>
       <parameter class-key="org.objectledge.web.RequestTrackingValve"/>
