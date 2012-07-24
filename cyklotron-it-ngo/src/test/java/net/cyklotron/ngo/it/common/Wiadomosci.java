@@ -1,15 +1,10 @@
 package net.cyklotron.ngo.it.common;
 
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.thoughtworks.selenium.Selenium;
-
 import net.cyklotron.ngo.it.Page;
-
 import org.junit.Assert;
 
 public class Wiadomosci
@@ -19,12 +14,20 @@ public class Wiadomosci
 
     private String password;
 
+    // keep added documents names
+    private List<String> documents = new ArrayList();
+
     public Wiadomosci(Selenium selenium)
     {
         super(selenium);
     }
 
-    public Selenium login()
+    /**
+     * login
+     * 
+     * @throws Exception
+     */
+    public void login()
         throws Exception
     {
         selenium.open("/dodaj");
@@ -34,17 +37,28 @@ public class Wiadomosci
         selenium.click("id=submitbutton");
         Assert.assertEquals("Jesteś zalogowany/a jako: " + this.login,
             selenium.getText("css=strong"));
-        return selenium;
     }
 
-    public Selenium login(String login, String password)
+    /**
+     * login
+     * 
+     * @param login
+     * @param password
+     * @throws Exception
+     */
+    public void login(String login, String password)
         throws Exception
     {
         setLogin(login);
         setPassword(password);
-        return login();
+        login();
     }
 
+    /**
+     * logout
+     * 
+     * @throws Exception
+     */
     public void logout()
         throws Exception
     {
@@ -57,6 +71,14 @@ public class Wiadomosci
 
     }
 
+    /**
+     * Test add document
+     * 
+     * @param logged if true add document as signed user, else add document as anonimous.
+     * @param attachment if true attache test file to added document
+     * @return document name
+     * @throws Exception
+     */
     public String addDocument(Boolean logged, Boolean attachment)
         throws Exception
     {
@@ -72,7 +94,7 @@ public class Wiadomosci
             Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość / informację o szkoleniu"));
             Assert.assertTrue(selenium.isElementPresent("//input[@name='name']"));
             documentName = selenium.getValue("//input[@name='name']");
-            selenium.type("name=title", "Selenium test - wiadomość testowa");
+            selenium.type("name=title", "Selenium@" + documentName);
             selenium
                 .type(
                     "name=abstract",
@@ -97,27 +119,50 @@ public class Wiadomosci
         {
 
         }
+        documents.add(documentName);
         return documentName;
     }
 
-    public void verifyPublishedDocument(String id)
+    /**
+     * Verify is document published
+     * 
+     * @param id document id
+     * @param name document name
+     * @throws Exception
+     */
+    public void verifyPublishedDocument(String id, String name)
         throws Exception
     {
-        selenium.open("/wiadomosci/" + id + ".html");
-        Assert.assertTrue(selenium.isTextPresent("Selenium test - wiadomość testowa"));
+        selenium.open("/wiadomosci/" + id + ".html", "preview_document_" + id);
+        Assert.assertTrue(selenium.isTextPresent("Selenium@" + name));
         selenium.close();
     }
 
+    /**
+     * get login
+     * 
+     * @return login
+     */
     public String getLogin()
     {
         return login;
     }
 
+    /**
+     * set login
+     * 
+     * @param login
+     */
     public void setLogin(String login)
     {
         this.login = login;
     }
 
+    /**
+     * get password
+     * 
+     * @return password
+     */
     public String getPassword()
     {
         return password;
@@ -126,6 +171,11 @@ public class Wiadomosci
     public void setPassword(String password)
     {
         this.password = password;
+    }
+
+    public List<String> getDocuments()
+    {
+        return documents;
     }
 
 }

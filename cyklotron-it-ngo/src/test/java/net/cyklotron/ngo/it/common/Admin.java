@@ -17,7 +17,13 @@ public class Admin
         super(selenium);
     }
 
-    public Selenium login()
+    /**
+     * login to admin panel
+     * 
+     * @return login
+     * @throws Exception
+     */
+    public void login()
         throws Exception
     {
         selenium.open("/admin");
@@ -30,17 +36,29 @@ public class Admin
         selenium.click("id=submitbutton");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertEquals("wyloguj się", selenium.getText("link=wyloguj się"));
-        return selenium;
     }
 
-    public Selenium login(String login, String password)
+    /**
+     * login to admin panel
+     * 
+     * @param login
+     * @param password
+     * @return
+     * @throws Exception
+     */
+    public void login(String login, String password)
         throws Exception
     {
         setLogin(login);
         setPassword(password);
-        return login();
+        login();
     }
 
+    /**
+     * logout
+     * 
+     * @throws Exception
+     */
     public void logout()
         throws Exception
     {
@@ -53,21 +71,41 @@ public class Admin
         Assert.assertTrue(selenium.isTextPresent("Gość"));
     }
 
+    /**
+     * get login
+     * 
+     * @return login
+     */
     public String getLogin()
     {
         return login;
     }
 
+    /**
+     * set login
+     * 
+     * @param login
+     */
     public void setLogin(String login)
     {
         this.login = login;
     }
 
+    /**
+     * get password
+     * 
+     * @return password
+     */
     public String getPassword()
     {
         return password;
     }
 
+    /**
+     * set password
+     * 
+     * @param password
+     */
     public void setPassword(String password)
     {
         this.password = password;

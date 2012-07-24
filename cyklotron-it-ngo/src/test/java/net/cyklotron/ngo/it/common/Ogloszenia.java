@@ -19,7 +19,13 @@ public class Ogloszenia
         super(selenium);
     }
 
-    public Selenium login()
+    /**
+     * login
+     * 
+     * @return
+     * @throws Exception
+     */
+    public void login()
         throws Exception
     {
         selenium.open("/dodaj");
@@ -35,17 +41,27 @@ public class Ogloszenia
         Assert.assertTrue(selenium.isTextPresent("Dodaj ogłoszenie"));
         Assert.assertEquals("Jesteś zalogowany/a jako: " + this.login,
             selenium.getText("css=strong"));
-        return selenium;
     }
 
-    public Selenium login(String login, String password)
+    /**
+     * login
+     * 
+     * @param login
+     * @param password
+     * @throws Exception
+     */
+    public void login(String login, String password)
         throws Exception
     {
         setLogin(login);
         setPassword(password);
-        return login();
     }
 
+    /**
+     * logout
+     * 
+     * @throws Exception
+     */
     public void logout()
         throws Exception
     {
@@ -61,21 +77,41 @@ public class Ogloszenia
         Assert.assertEquals("Nie jesteś zalogowany/a", selenium.getText("css=strong"));
     }
 
+    /**
+     * get login
+     * 
+     * @return login
+     */
     public String getLogin()
     {
         return login;
     }
 
+    /**
+     * set login
+     * 
+     * @param login
+     */
     public void setLogin(String login)
     {
         this.login = login;
     }
 
+    /**
+     * get password
+     * 
+     * @return password
+     */
     public String getPassword()
     {
         return password;
     }
 
+    /**
+     * set password
+     * 
+     * @param password
+     */
     public void setPassword(String password)
     {
         this.password = password;

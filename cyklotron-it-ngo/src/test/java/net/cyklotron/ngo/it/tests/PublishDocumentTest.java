@@ -1,5 +1,6 @@
 package net.cyklotron.ngo.it.tests;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import net.cyklotron.ngo.it.SeleniumTest;
@@ -23,25 +24,32 @@ public class PublishDocumentTest
     public void test()
         throws Exception
     {
-        String documentId, documentName;
+        // sores added document name,id
+        Map<String, String> documents = new HashMap();
 
         // login and add document
         Wiadomosci wiadomosci = new Wiadomosci(selenium);
         wiadomosci.login("selenium", "12345");
-        documentName = wiadomosci.addDocument(true, false);
+        wiadomosci.addDocument(true, false);
         wiadomosci.logout();
-        
+
         // publish document
         Admin admin = new Admin(selenium);
         admin.login("root", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
-        //documentId = editorialTasks.getDocumentId(documentName);
-        //editorialTasks.assignToMe(documentName);
-        //editorialTasks.publishDocument(documentName);
+        for(String documentName : wiadomosci.getDocuments())
+        {
+            documents.put(documentName, editorialTasks.getDocumentId(documentName));
+            editorialTasks.assignToMe(documents.get(documentName));
+            editorialTasks.publishDocument(documents.get(documentName));
+        }
         admin.logout();
 
         // verify published document
-        //wiadomosci.verifyPublishedDocument(documentId);
+        for(String key : documents.keySet())
+        {
+            wiadomosci.verifyPublishedDocument(documents.get(key), key);
+        }
         wiadomosci.Close();
     }
 }
