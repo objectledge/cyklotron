@@ -1,5 +1,7 @@
 package net.cyklotron.ngo.it.common;
 
+import java.util.List;
+
 import net.cyklotron.ngo.it.Page;
 
 import com.thoughtworks.selenium.Selenium;
@@ -113,6 +115,7 @@ public class EditorialTasks
         selenium.close();
 
         // categorize document
+        selenium.selectWindow("null");
         Assert.assertTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Edytuj')])[2]"));
         selenium.click("xpath=(//a[contains(text(),'Edytuj')])[2]");
         selenium.waitForPopUp("categorization", DEFAULT_PAGE_LOAD_TIME);
@@ -161,25 +164,58 @@ public class EditorialTasks
         selenium.click("link=Zapisz");
         selenium.selectWindow("null");
 
-        // verify document categories
-        Assert
-            .assertTrue(selenium
-                .isTextPresent("1 do wiadomosci ngo.pl, 2 na główną serwisu wiadomosci, Aktywne społeczności CAL, Białoruś, dyskryminacja, dzieci, Warszawa - na główną"));
-
         // preview document
-        Assert.assertTrue(selenium.isElementPresent("link=Podgląd strony"));
-        selenium.click("link=Podgląd strony");
-        selenium.goBack();
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        // Assert.assertTrue(selenium.isElementPresent("link=Podgląd strony"));
+        // selenium.click("link=Podgląd strony");
+        // selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        // selenium.goBack();
+        // selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         // change document state
         Assert.assertTrue(selenium.isElementPresent("link=Przeslij do akceptacji"));
         selenium.click("link=Przeslij do akceptacji");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Stan dokumentu zmieniono poprawnie"));
+
+        // verify document categories
+        Assert
+            .assertTrue(selenium
+                .isTextPresent("1 do wiadomosci ngo.pl, 2 na główną serwisu wiadomosci, Aktywne społeczności CAL, Białoruś, dyskryminacja, dzieci, Warszawa - na główną  "));
 
         // publish document
         Assert.assertTrue(selenium.isElementPresent("link=Wymuś publikację"));
         selenium.click("link=Wymuś publikację");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+    }
+
+    /**
+     * Documents mass assign to assignee.
+     * 
+     * @param ids list of documents ids
+     * @param assignee login of assignee
+     * @throws Exception
+     */
+    public void documentsMassAsign(List<String> ids, String assignee)
+        throws Exception
+    {
+
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        for(String id : ids)
+        {
+            Assert.assertTrue(selenium.isElementPresent("//td[@id='N" + id + "']/input"));
+            selenium.click("//td[@id='N" + id + "']/input");
+        }
+
+        Assert.assertTrue(selenium.isElementPresent("name=subject_name"));
+        selenium.type("name=subject_name", assignee);
+        Assert.assertTrue(selenium.isElementPresent("link=Przydziel zaznaczone do redaktora"));
+        selenium.click("link=Przydziel zaznaczone do redaktora");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("link=Przydziel"));
+        selenium.click("link=Przydziel");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
     }
 

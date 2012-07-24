@@ -30,7 +30,7 @@ public class PublishDocumentTest
         // login and add document
         Wiadomosci wiadomosci = new Wiadomosci(selenium);
         wiadomosci.login("selenium", "12345");
-        wiadomosci.addDocument(true, false);
+        wiadomosci.addDocument(true, true);
         wiadomosci.logout();
 
         // publish document

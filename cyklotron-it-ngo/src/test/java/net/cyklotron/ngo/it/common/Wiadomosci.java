@@ -1,5 +1,7 @@
 package net.cyklotron.ngo.it.common;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,41 +85,118 @@ public class Wiadomosci
         throws Exception
     {
         String documentName = "";
+
+        selenium.open("/dodaj");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość / informację o szkoleniu"));
+
         if(logged)
         {
-            selenium.open("/dodaj");
-            selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-            Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość / informację o szkoleniu"));
+            Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login + " "));
+            Assert.assertTrue(selenium.isElementPresent("name=type"));
             selenium.select("name=type", "label=wiadomość / zaproszenie");
+            Assert.assertTrue(selenium.isElementPresent("css=input.dodaj"));
             selenium.click("css=input.dodaj");
             selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
             Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość / informację o szkoleniu"));
             Assert.assertTrue(selenium.isElementPresent("//input[@name='name']"));
             documentName = selenium.getValue("//input[@name='name']");
+            Assert.assertTrue(selenium.isElementPresent("name=title"));
             selenium.type("name=title", "Selenium@" + documentName);
-            selenium
-                .type(
-                    "name=abstract",
-                    "Selenium test - skrót wiadomości testowej, Selenium test - skrót wiadomości testowej, Selenium test - skrót wiadomości testowej, Selenium test - skrót wiadomości testowej, Selenium test - skrót wiadomości testowej, Selenium test - skrót wiadomości testowej, Selenium test - skrót wiadomości testowej.");
+            Assert.assertTrue(selenium.isElementPresent("name=abstract"));
+            selenium.type("name=abstract", "Selenium@wiadomosci as signed user.");
+            Assert.assertTrue(selenium.isElementPresent("css=html"));
             selenium.click("css=html");
+            Assert.assertTrue(selenium.isElementPresent("css=button.calendar"));
             selenium.click("css=button.calendar");
+            Assert.assertTrue(selenium.isElementPresent("//tr[4]/td[4]"));
             selenium.click("//tr[4]/td[4]");
+            Assert.assertTrue(selenium.isElementPresent("xpath=(//button[@type='button'])[2]"));
             selenium.click("xpath=(//button[@type='button'])[2]");
+            Assert.assertTrue(selenium.isElementPresent("//tr[4]/td[4]"));
             selenium.click("//tr[4]/td[4]");
+            Assert.assertTrue(selenium.isElementPresent("name=event_place"));
             selenium.type("name=event_place", "Warszawa");
-            selenium.type("id=organization_1_name", "Stwarzyszenie Klon/ Jawo");
+            Assert.assertTrue(selenium.isElementPresent("id=organization_1_name"));
+            selenium.type("id=organization_1_name", "Stwarzyszenie Klon/ Jawor");
+            Assert.assertTrue(selenium.isElementPresent("name=source_name"));
             selenium.type("name=source_name", "Selenium test");
+            Assert.assertTrue(selenium.isElementPresent("name=proposer_credentials"));
             selenium.type("name=proposer_credentials", "Selenium");
+            if(attachment)
+            {
+                Assert.assertTrue(selenium.isElementPresent("name=attachment_1"));
+                selenium.type("name=attachment_1", this.getAttachmentUri("selenium.jpg"));
+                selenium.type("name=attachment_description_1", "Selenium - zdjęcie testowe");
+            }
+            Assert.assertTrue(selenium.isElementPresent("name=content_rights_confirmation"));
             selenium.click("name=content_rights_confirmation");
+            if(attachment)
+            {
+                Assert.assertTrue(selenium.isElementPresent("name=file_rights_confirmation"));
+                selenium.click("name=file_rights_confirmation");
+            }
+            Assert.assertTrue(selenium.isElementPresent("css=input.dodaj"));
             selenium.click("css=input.dodaj");
             selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
             Assert.assertTrue(selenium
                 .isTextPresent("Wiadomość przesłano do moderacji. Jesteś zalogowany/a jako: "
                     + this.login));
         }
         else
         {
+            Assert.assertTrue(selenium.isTextPresent("Nie jesteś zalogowany/a."));
+            Assert.assertTrue(selenium.isElementPresent("link=Dodaj wiadomość bez logowania"));
+            selenium.click("link=Dodaj wiadomość bez logowania");
+            selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
+            Assert.assertTrue(selenium.isTextPresent("Nie jesteś zalogowany/a."));
+            Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość / informację o szkoleniu"));
+
+            Assert.assertTrue(selenium.isElementPresent("//input[@name='name']"));
+            documentName = selenium.getValue("//input[@name='name']");
+            Assert.assertTrue(selenium.isElementPresent("name=title"));
+            selenium.type("name=title", "Selenium@" + documentName);
+            Assert.assertTrue(selenium.isElementPresent("name=abstract"));
+            selenium.type("name=abstract", "Selenium@wiadomosci as signed user.");
+            Assert.assertTrue(selenium.isElementPresent("css=html"));
+            selenium.click("css=html");
+            Assert.assertTrue(selenium.isElementPresent("css=button.calendar"));
+            selenium.click("css=button.calendar");
+            Assert.assertTrue(selenium.isElementPresent("//tr[4]/td[4]"));
+            selenium.click("//tr[4]/td[4]");
+            Assert.assertTrue(selenium.isElementPresent("xpath=(//button[@type='button'])[2]"));
+            selenium.click("xpath=(//button[@type='button'])[2]");
+            Assert.assertTrue(selenium.isElementPresent("//tr[4]/td[4]"));
+            selenium.click("//tr[4]/td[4]");
+            Assert.assertTrue(selenium.isElementPresent("name=event_place"));
+            selenium.type("name=event_place", "Warszawa");
+            Assert.assertTrue(selenium.isElementPresent("id=organization_1_name"));
+            selenium.type("id=organization_1_name", "Stwarzyszenie Klon/ Jawor");
+            Assert.assertTrue(selenium.isElementPresent("name=source_name"));
+            selenium.type("name=source_name", "Selenium test");
+            Assert.assertTrue(selenium.isElementPresent("name=proposer_credentials"));
+            selenium.type("name=proposer_credentials", "Selenium");
+            if(attachment)
+            {
+                Assert.assertTrue(selenium.isElementPresent("name=attachment_1"));
+                selenium.type("name=attachment_1", this.getAttachmentUri("selenium.jpg"));
+                Assert.assertTrue(selenium.isElementPresent("name=attachment_description_1"));
+                selenium.type("name=attachment_description_1", "Selenium - zdjęcie testowe");
+            }
+            Assert.assertTrue(selenium.isElementPresent("name=content_rights_confirmation"));
+            selenium.click("name=content_rights_confirmation");
+            if(attachment)
+            {
+                Assert.assertTrue(selenium.isElementPresent("name=file_rights_confirmation"));
+                selenium.click("name=file_rights_confirmation");
+            }
+            Assert.assertTrue(selenium.isElementPresent("css=input.dodaj"));
+            selenium.click("css=input.dodaj");
+            selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+            Assert.assertTrue(selenium.isTextPresent("Wiadomość przesłano do moderacji."));
         }
         documents.add(documentName);
         return documentName;
@@ -139,7 +218,21 @@ public class Wiadomosci
     }
 
     /**
-     * get login
+     * Get test attachment file path
+     * 
+     * @param name
+     * @return file absolute path
+     * @throws Exception
+     */
+    public String getAttachmentUri(String name)
+        throws Exception
+    {
+        File attachment = new File((new File("")).getAbsolutePath() + "/src/test/resources/" + name);
+        return attachment.isFile() ? attachment.toURI().toURL().toString() : "";
+    }
+
+    /**
+     * Get login
      * 
      * @return login
      */
@@ -149,7 +242,7 @@ public class Wiadomosci
     }
 
     /**
-     * set login
+     * Set login
      * 
      * @param login
      */
@@ -159,7 +252,7 @@ public class Wiadomosci
     }
 
     /**
-     * get password
+     * Get password
      * 
      * @return password
      */
