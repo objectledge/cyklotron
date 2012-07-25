@@ -1,5 +1,8 @@
 package net.cyklotron.ngo.it.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.cyklotron.ngo.it.Page;
 
 import com.thoughtworks.selenium.Selenium;
@@ -13,6 +16,9 @@ public class Ogloszenia
     private String login;
 
     private String password;
+    
+    // keep added documents names
+    private List<String> documents = new ArrayList();
 
     public Ogloszenia(Selenium selenium)
     {
@@ -41,8 +47,7 @@ public class Ogloszenia
         selenium.click("id=submitbutton");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Dodaj ogłoszenie"));
-        Assert.assertEquals("Jesteś zalogowany/a jako: " + this.login,
-            selenium.getText("css=strong"));
+        Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login));
     }
 
     /**
@@ -105,18 +110,68 @@ public class Ogloszenia
                     .isTextPresent("Dodaj ogłoszenie - organizacja szuka wolontariusza/wolontariuszki"));
             Assert.assertTrue(selenium.isElementPresent("//input[@name='name']"));
             documentName = selenium.getValue("//input[@name='name']");
+            
+            Assert.assertTrue(selenium.isElementPresent("name=title"));
             selenium.type("name=title", "Selenium@" + documentName);
+            Assert.assertTrue(selenium.isElementPresent("id=event_end_date"));
             selenium.click("id=event_end_date");
+            Assert.assertTrue(selenium.isElementPresent("css=div.group.s_date > div.fieldset > div.middle > p"));
             selenium.click("css=div.group.s_date > div.fieldset > div.middle > p");
+            Assert.assertTrue(selenium.isElementPresent("name=event_place"));
             selenium.type("name=event_place", "Warszawa");
+            Assert.assertTrue(selenium.isElementPresent("xpath=(//input[@name='selected_categories'])[9]"));
             selenium.click("xpath=(//input[@name='selected_categories'])[9]");
+            Assert.assertTrue(selenium.isElementPresent("id=organization_1_name"));
             selenium.type("id=organization_1_name", "Organizacja");
-            selenium.type("name=proposer_credentials", "test");
+            Assert.assertTrue(selenium.isElementPresent("name=proposer_credentials"));
+            selenium.type("name=proposer_credentials", "Selenium test");
+            Assert.assertTrue(selenium.isElementPresent("css=input.dodaj"));
             selenium.click("css=input.dodaj");
             selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+            Assert.assertTrue(selenium.isTextPresent("Ogłoszenie przesłano do moderacji."));
         } else {
             
+            selenium.open("/dodaj");
+            Assert.assertTrue(selenium.isTextPresent("Dodaj ogłoszenie - wybór kategorii"));
+            Assert.assertTrue(selenium.isElementPresent("link=wolontariat"));
+            selenium.click("link=wolontariat");
+            selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+            Assert.assertTrue(selenium.isTextPresent("Nie jesteś zalogowany/a"));
+            Assert.assertTrue(selenium.isTextPresent("Dodaj ogłoszenie"));
+            Assert.assertTrue(selenium.isElementPresent("link=Dodaj ogłoszenie bez logowania"));
+            selenium.click("link=Dodaj ogłoszenie bez logowania");
+            selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
             
+            Assert.assertTrue(selenium.isTextPresent("Nie jesteś zalogowany/a"));
+            Assert.assertTrue(selenium.isTextPresent("Dodaj ogłoszenie - wybór kategorii"));
+            Assert.assertTrue(selenium.isElementPresent("link=wolontariat"));
+            selenium.click("link=wolontariat");
+            selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+            Assert.assertTrue(selenium.isTextPresent("Nie jesteś zalogowany/a"));
+            Assert.assertTrue(selenium.isTextPresent("Dodaj ogłoszenie - organizacja szuka wolontariusza/wolontariuszki"));
+            
+            Assert.assertTrue(selenium.isElementPresent("//input[@name='name']"));
+            documentName = selenium.getValue("//input[@name='name']");
+            
+            Assert.assertTrue(selenium.isElementPresent("name=title"));
+            selenium.type("name=title", "Selenium@" + documentName);
+            Assert.assertTrue(selenium.isElementPresent("id=event_end_date"));
+            selenium.click("id=event_end_date");
+            Assert.assertTrue(selenium.isElementPresent("css=div.group.s_date > div.fieldset > div.middle > p"));
+            selenium.click("css=div.group.s_date > div.fieldset > div.middle > p");
+            Assert.assertTrue(selenium.isElementPresent("name=event_place"));
+            selenium.type("name=event_place", "Warszawa");
+            Assert.assertTrue(selenium.isElementPresent("xpath=(//input[@name='selected_categories'])[9]"));
+            selenium.click("xpath=(//input[@name='selected_categories'])[9]");
+            Assert.assertTrue(selenium.isElementPresent("id=organization_1_name"));
+            selenium.type("id=organization_1_name", "Organizacja");
+            Assert.assertTrue(selenium.isElementPresent("name=proposer_credentials"));
+            selenium.type("name=proposer_credentials", "Selenium test");
+            Assert.assertTrue(selenium.isElementPresent("css=input.dodaj"));
+            selenium.click("css=input.dodaj");
+            selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+            Assert.assertTrue(selenium.isTextPresent("Ogłoszenie przesłano do moderacji."));
         }
         return documentName;
     }
@@ -161,4 +216,13 @@ public class Ogloszenia
         this.password = password;
     }
 
+    /**
+     * Return added document names.
+     * @return list of document names
+     */
+    public List<String> getDocuments()
+    {
+        return documents;
+    }
+    
 }

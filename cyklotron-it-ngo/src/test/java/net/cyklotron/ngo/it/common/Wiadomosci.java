@@ -1,7 +1,6 @@
 package net.cyklotron.ngo.it.common;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -265,7 +264,11 @@ public class Wiadomosci
     {
         this.password = password;
     }
-
+    
+    /**
+     * Return added document names.
+     * @return list of document names
+     */
     public List<String> getDocuments()
     {
         return documents;

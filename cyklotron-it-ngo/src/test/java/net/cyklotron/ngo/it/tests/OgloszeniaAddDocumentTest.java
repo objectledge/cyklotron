@@ -11,7 +11,7 @@ public class OgloszeniaAddDocumentTest
     protected String startPage()
     {
 
-        return "http://wiadomosci.ngo.pl/";
+        return "http://ogloszenia.ngo.pl/";
 
     }
 
@@ -20,6 +20,15 @@ public class OgloszeniaAddDocumentTest
         throws Exception
     {
         Ogloszenia ogloszenia = new Ogloszenia(selenium);
+        
+        // add document as unsigned 
+        ogloszenia.addDocument(false);
+        
+        // add document as signed 
+        ogloszenia.login("selenium", "12345");
+        ogloszenia.addDocument(true);
+        ogloszenia.logout();
+        
         ogloszenia.Close();
     }
 }
