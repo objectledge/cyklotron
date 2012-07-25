@@ -164,13 +164,6 @@ public class EditorialTasks
         selenium.click("link=Zapisz");
         selenium.selectWindow("null");
 
-        // preview document
-        // Assert.assertTrue(selenium.isElementPresent("link=Podgląd strony"));
-        // selenium.click("link=Podgląd strony");
-        // selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        // selenium.goBack();
-        // selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-
         // change document state
         Assert.assertTrue(selenium.isElementPresent("link=Przeslij do akceptacji"));
         selenium.click("link=Przeslij do akceptacji");
@@ -195,7 +188,7 @@ public class EditorialTasks
      * @param assignee login of assignee
      * @throws Exception
      */
-    public void documentsMassAsign(List<String> ids, String assignee)
+    public void documentsMassAsign(List<String> names, String assignee)
         throws Exception
     {
 
@@ -203,10 +196,13 @@ public class EditorialTasks
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
-        for(String id : ids)
+        for(String name : names)
         {
-            Assert.assertTrue(selenium.isElementPresent("//td[@id='N" + id + "']/input"));
-            selenium.click("//td[@id='N" + id + "']/input");
+            Assert.assertTrue(selenium
+                .isElementPresent("//td/span/span/b[contains(text(),'Selenium@" + name
+                    + "')]/../../../input"));
+            selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
+                + "')]/../../../input");
         }
 
         Assert.assertTrue(selenium.isElementPresent("name=subject_name"));
