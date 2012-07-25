@@ -105,7 +105,7 @@ public class EditorialTasks
         selenium.type("name=search", "logo");
         selenium.selectWindow("name=related");
         selenium.click("link=szukaj");
-        selenium.waitForPageToLoad("60000");
+        selenium.waitForPageToLoad("80000");
         Assert.assertEquals("Dodaj poniżej",
             selenium.getText("xpath=(//a[contains(text(),'Dodaj poniżej')])[2]"));
         selenium.click("id=resource-447227");
@@ -181,6 +181,32 @@ public class EditorialTasks
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
     }
 
+    
+    public void acceptAllPublishedDocumentProposal(String name)
+        throws Exception
+    {
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium.isTextPresent("Opublikowane dokumenty z zapropowanymi zmianami "));
+        Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
+            + name + "')]/../../../../td/div/a[contains(text(),'Pokaż różnice')]"));
+        selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
+            + "')]/../../../../td/div/a[contains(text(),'Pokaż różnice')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        
+        Assert.assertTrue(selenium.isTextPresent("Dokumenty z zapropowanymi zmianami"));
+
+        Assert.assertTrue(selenium
+            .isElementPresent("//a[contains(text(),'Zaznacz wszystkie jako zaakceptowane')]"));
+        selenium.click("//a[contains(text(),'Zaznacz wszystkie jako zaakceptowane')]");
+        Assert.assertTrue(selenium.isElementPresent("//a[contains(text(),'Zapisz')]"));
+        selenium.click("//a[contains(text(),'Zapisz')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Zadania redaktorskie"));
+    }
+    
     /**
      * Test accept unpublished document proposal
      * @param name document proposal name
