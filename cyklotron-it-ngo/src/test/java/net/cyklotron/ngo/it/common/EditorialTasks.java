@@ -184,7 +184,7 @@ public class EditorialTasks
     /**
      * Documents mass assign to assignee.
      * 
-     * @param ids list of documents ids
+     * @param ids list of documents names
      * @param assignee login of assignee
      * @throws Exception
      */
@@ -213,6 +213,40 @@ public class EditorialTasks
         Assert.assertTrue(selenium.isElementPresent("link=Przydziel"));
         selenium.click("link=Przydziel");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Stan dokumentu zmieniono poprawnie"));
+    }
+    
+    
+    /**
+     * Documents mass delete to assignee.
+     * 
+     * @param ids list of documents names
+     * @throws Exception
+     */
+    public void documentsMassDelete(List<String> names) throws Exception {
+        
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        for(String name : names)
+        {
+            Assert.assertTrue(selenium
+                .isElementPresent("//td/span/span/b[contains(text(),'Selenium@" + name
+                    + "')]/../../../input"));
+            selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
+                + "')]/../../../input");
+        }
+        
+        
+        
+        Assert.assertTrue(selenium.isElementPresent("link=Usuń zaznaczone"));
+        selenium.click("link=Usuń zaznaczone");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("link=Skasuj"));
+        selenium.click("link=Skasuj");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Skasowano pomyślnie"));
     }
 
 }

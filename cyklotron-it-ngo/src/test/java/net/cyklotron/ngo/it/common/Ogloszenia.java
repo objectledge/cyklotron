@@ -155,7 +155,7 @@ public class Ogloszenia
             documentName = selenium.getValue("//input[@name='name']");
             
             Assert.assertTrue(selenium.isElementPresent("name=title"));
-            selenium.type("name=title", "Selenium@" + documentName);
+            selenium.type("name=title", "ogłoszenie testowe");
             Assert.assertTrue(selenium.isElementPresent("id=event_end_date"));
             selenium.click("id=event_end_date");
             Assert.assertTrue(selenium.isElementPresent("css=div.group.s_date > div.fieldset > div.middle > p"));

@@ -10,7 +10,7 @@ import net.cyklotron.ngo.it.common.Wiadomosci;
 
 import org.junit.Test;
 
-public class DocumentMassAssignTest
+public class DocumentMassDeleteTest
     extends SeleniumTest
 {
 
@@ -25,7 +25,6 @@ public class DocumentMassAssignTest
     public void test()
         throws Exception
     {
-
         Wiadomosci wiadomosci = new Wiadomosci(selenium);
 
         for(int i = 0; i < 5; i++)
@@ -48,7 +47,7 @@ public class DocumentMassAssignTest
         Admin admin = new Admin(selenium);
         admin.login("root", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
-        editorialTasks.documentsMassAsign(wiadomosci.getDocuments(), "bogdan");
+        editorialTasks.documentsMassDelete(wiadomosci.getDocuments());
         admin.logout();
 
         wiadomosci.Close();
