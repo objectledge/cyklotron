@@ -182,6 +182,37 @@ public class EditorialTasks
     }
 
     /**
+     * Test accept unpublished document proposal
+     * @param name document proposal name
+     * @throws Exception
+     */
+    public void acceptUnpublishedDocumentProposal(String name)
+        throws Exception
+    {
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium.isTextPresent("Nieopublikowane dokumenty z zapropowanymi zmianami "));
+        Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
+            + name + "')]/../../../../td/div/a[contains(text(),'Pokaż różnice')]"));
+        selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
+            + "')]/../../../../td/div/a[contains(text(),'Pokaż różnice')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        
+        Assert.assertTrue(selenium.isTextPresent("Dokumenty z zapropowanymi zmianami"));
+
+        Assert.assertTrue(selenium
+            .isElementPresent("//a[contains(text(),'Zaznacz wszystkie jako zaakceptowane')]"));
+        selenium.click("//a[contains(text(),'Zaznacz wszystkie jako zaakceptowane')]");
+        Assert.assertTrue(selenium.isElementPresent("//a[contains(text(),'Zapisz')]"));
+        selenium.click("//a[contains(text(),'Zapisz')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Zadania redaktorskie"));
+    }
+    
+    
+    /**
      * Documents mass assign to assignee.
      * 
      * @param ids list of documents names

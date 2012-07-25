@@ -91,7 +91,8 @@ public class Wiadomosci
 
         if(logged)
         {
-            Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login + " "));
+            Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login
+                + " "));
             Assert.assertTrue(selenium.isElementPresent("name=type"));
             selenium.select("name=type", "label=wiadomość / zaproszenie");
             Assert.assertTrue(selenium.isElementPresent("css=input.dodaj"));
@@ -202,6 +203,36 @@ public class Wiadomosci
     }
 
     /**
+     * Test edit document
+     * 
+     * @param name document name
+     * @throws Exception
+     */
+    public void editDocument(String name)
+        throws Exception
+    {
+        selenium.open("/dodaj");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login + " "));
+        Assert.assertTrue(selenium.isElementPresent("//td[contains(text(),'Selenium@" + name
+            + "')]/../td/div/a[contains(text(),'edytuj')]"));
+        selenium.click("//td[contains(text(),'Selenium@" + name
+            + "')]/../td/div/a[contains(text(),'edytuj')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość / informację o szkoleniu"));
+        Assert.assertTrue(selenium.isElementPresent("name=abstract"));
+        selenium.type("name=abstract", "Selenium@wiadomosci as signed user. Proposal.");
+        Assert.assertTrue(selenium.isElementPresent("name=proposer_credentials"));
+        selenium.type("name=proposer_credentials", "Selenium. Proposal.");
+        Assert.assertTrue(selenium.isElementPresent("css=input.dodaj"));
+        selenium.click("css=input.dodaj");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium
+            .isTextPresent("Propozycja zmian została zapisana. Jesteś zalogowany/a jako: "
+                + this.login));
+    }
+
+    /**
      * Verify is document published
      * 
      * @param id document id
@@ -264,9 +295,10 @@ public class Wiadomosci
     {
         this.password = password;
     }
-    
+
     /**
      * Return added document names.
+     * 
      * @return list of document names
      */
     public List<String> getDocuments()
