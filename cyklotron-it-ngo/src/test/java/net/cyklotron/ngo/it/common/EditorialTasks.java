@@ -105,7 +105,7 @@ public class EditorialTasks
         selenium.type("name=search", "logo");
         selenium.selectWindow("name=related");
         selenium.click("link=szukaj");
-        selenium.waitForPageToLoad("80000");
+        selenium.waitForPageToLoad("100000");
         Assert.assertEquals("Dodaj poniżej",
             selenium.getText("xpath=(//a[contains(text(),'Dodaj poniżej')])[2]"));
         selenium.click("id=resource-447227");
@@ -182,6 +182,46 @@ public class EditorialTasks
     }
 
     
+    /**
+     * Test accept and reject published document proposal
+     * @param name document proposal name
+     * @throws Exception
+     */
+    public void acceptSomePublishedDocumentProposal(String name)
+        throws Exception
+    {
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium.isTextPresent("Opublikowane dokumenty z zapropowanymi zmianami "));
+        Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
+            + name + "')]/../../../../td/div/a[contains(text(),'Pokaż różnice')]"));
+        selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
+            + "')]/../../../../td/div/a[contains(text(),'Pokaż różnice')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        
+        Assert.assertTrue(selenium.isTextPresent("Dokumenty z zapropowanymi zmianami"));
+        
+        Assert.assertTrue(selenium.isElementPresent("id=accept_abstract"));
+        selenium.click("id=accept_abstract");
+        Assert.assertTrue(selenium.isElementPresent("id=accept_proposerCredentials"));
+        selenium.click("id=accept_proposerCredentials");
+        Assert.assertTrue(selenium.isElementPresent("id=reject_proposerCredentials"));
+        selenium.click("id=reject_proposerCredentials");
+        Assert.assertTrue(selenium.isElementPresent("name=redactors_note"));
+        selenium.type("name=redactors_note", "Uwagi dla twórcy");
+        Assert.assertTrue(selenium.isElementPresent("//a[contains(text(),'Zapisz')]"));
+        selenium.click("//a[contains(text(),'Zapisz')]");    
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Zadania redaktorskie"));
+    }
+    
+    /**
+     * Test accept all published document proposal
+     * @param name document proposal name
+     * @throws Exception
+     */
     public void acceptAllPublishedDocumentProposal(String name)
         throws Exception
     {
@@ -204,6 +244,100 @@ public class EditorialTasks
         Assert.assertTrue(selenium.isElementPresent("//a[contains(text(),'Zapisz')]"));
         selenium.click("//a[contains(text(),'Zapisz')]");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Zadania redaktorskie"));
+    }
+    
+    /**
+     * Test accept all published document proposal and edit document.
+     * @param name document proposal name
+     * @throws Exception
+     */
+    public void acceptPublishedDocumentProposalEditDocument(String name)
+        throws Exception
+    {
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium.isTextPresent("Opublikowane dokumenty z zapropowanymi zmianami "));
+        Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
+            + name + "')]/../../../../td/div/a[contains(text(),'Pokaż różnice')]"));
+        selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
+            + "')]/../../../../td/div/a[contains(text(),'Pokaż różnice')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        
+        Assert.assertTrue(selenium.isTextPresent("Dokumenty z zapropowanymi zmianami"));
+
+        Assert.assertTrue(selenium
+            .isElementPresent("//a[contains(text(),'Zaznacz wszystkie jako zaakceptowane')]"));
+        selenium.click("//a[contains(text(),'Zaznacz wszystkie jako zaakceptowane')]");
+
+        Assert.assertTrue(selenium.isElementPresent("//a[contains(text(),'Zapisz i przejdz do edycji')]"));
+        selenium.click("//a[contains(text(),'Zapisz i przejdz do edycji')]");        
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Edycja Dokumentu"));
+        
+        Assert.assertTrue(selenium.isElementPresent("id=form.page-0.group-3.dynamicSelectOne-0"));
+        selenium.select("id=form.page-0.group-3.dynamicSelectOne-0", "label=Warszawa");
+        Assert.assertTrue(selenium.isElementPresent("name=form.page-0.group-5.date-3_day"));
+        selenium.select("name=form.page-0.group-5.date-3_day", "label=13");
+
+        Assert.assertTrue(selenium.isElementPresent("//a[contains(text(),'Zapisz i przejdz do właściwości')]"));
+        selenium.click("//a[contains(text(),'Zapisz i przejdz do właściwości')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Edycja właściwości dokumentu"));
+        
+        selenium.click("link=Wymuś publikację");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        
+        selenium.click("link=Anuluj i przejdz do obiegu");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium.isTextPresent("Zadania redaktorskie"));
+    }
+    
+    
+    /**
+     * Test accept all published document proposal and edit properties.
+     * @param name document proposal name
+     * @throws Exception
+     */
+    public void acceptPublishedDocumentProposalEditProperties(String name)
+        throws Exception
+    {
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium.isTextPresent("Opublikowane dokumenty z zapropowanymi zmianami "));
+        Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
+            + name + "')]/../../../../td/div/a[contains(text(),'Pokaż różnice')]"));
+        selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
+            + "')]/../../../../td/div/a[contains(text(),'Pokaż różnice')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        
+        Assert.assertTrue(selenium.isTextPresent("Dokumenty z zapropowanymi zmianami"));
+
+        Assert.assertTrue(selenium
+            .isElementPresent("//a[contains(text(),'Zaznacz wszystkie jako zaakceptowane')]"));
+        selenium.click("//a[contains(text(),'Zaznacz wszystkie jako zaakceptowane')]");
+
+        Assert.assertTrue(selenium.isElementPresent("//a[contains(text(),'Zapisz i przejdz do właściwości')]"));
+        selenium.click("//a[contains(text(),'Zapisz i przejdz do właściwości')]");        
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Edycja właściwości dokumentu"));
+        
+        selenium.click("xpath=(//input[@name='validity_end_enabled'])[2]");
+        selenium.select("name=validity_end_day", "label=17");
+        selenium.click("link=Zapisz i zostań");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        
+        selenium.click("link=Wymuś publikację");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        
+        selenium.click("link=Anuluj i przejdz do obiegu");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
         Assert.assertTrue(selenium.isTextPresent("Zadania redaktorskie"));
     }
     

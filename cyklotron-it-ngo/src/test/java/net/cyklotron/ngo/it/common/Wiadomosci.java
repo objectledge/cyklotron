@@ -214,10 +214,10 @@ public class Wiadomosci
         selenium.open("/dodaj");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login + " "));
-        Assert.assertTrue(selenium.isElementPresent("//td[contains(text(),'Selenium@" + name
-            + "')]/../td/div/a[contains(text(),'edytuj')]"));
-        selenium.click("//td[contains(text(),'Selenium@" + name
-            + "')]/../td/div/a[contains(text(),'edytuj')]");
+        Assert.assertTrue(selenium.isElementPresent("//td/a[contains(text(),'Selenium@" + name
+            + "')]/../../td/div/a[contains(text(),'edytuj')]"));
+        selenium.click("//td/a[contains(text(),'Selenium@" + name
+            + "')]/../../td/div/a[contains(text(),'edytuj')]");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość / informację o szkoleniu"));
         Assert.assertTrue(selenium.isElementPresent("name=abstract"));
@@ -242,7 +242,7 @@ public class Wiadomosci
     public void verifyPublishedDocument(String id, String name)
         throws Exception
     {
-        selenium.open("/wiadomosci/" + id + ".html", "preview_document_" + id);
+        selenium.openWindow("/wiadomosci/" + id + ".html", "preview_document_" + id);
         Assert.assertTrue(selenium.isTextPresent("Selenium@" + name));
         selenium.close();
     }
