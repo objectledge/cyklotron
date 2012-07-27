@@ -248,8 +248,8 @@ public class EditorialTasks
         selenium.click("xpath=(//a[contains(text(),'Edytuj')])[2]");
         selenium.waitForPopUp("categorization", DEFAULT_PAGE_LOAD_TIME);
         selenium.selectWindow("name=categorization");
-        Assert.assertTrue(selenium.isElementPresent("id=category-267525"));
-        selenium.click("id=category-267525");
+        Assert.assertTrue(selenium.isElementPresent("id=category-673805"));
+        selenium.click("id=category-673805");
         Assert.assertTrue(selenium.isElementPresent("link=Zapisz"));
         selenium.click("link=Zapisz");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
