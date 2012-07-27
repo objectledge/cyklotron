@@ -1,8 +1,5 @@
 package net.cyklotron.ngo.it.specialTests;
 
-import java.sql.Time;
-import java.util.Calendar;
-
 import net.cyklotron.ngo.it.SeleniumTest;
 import net.cyklotron.ngo.it.common.Admin;
 import net.cyklotron.ngo.it.common.EditorialTasks;
@@ -32,9 +29,9 @@ public class TerminatedDocumentTest
         test1();
 
         /**
-         * Test delete terminated document
+         * Test Move terminated document to waiting room.
          */
-        // test2();
+        test2();
 
     }
 
@@ -61,26 +58,49 @@ public class TerminatedDocumentTest
         editorialTasks.assignToMe(documentId);
         editorialTasks.publishDocumentAsTerminated(documentId);
         admin.logout();
- 
+
         // Wait till document state update (every 1' on tilia).
-        Thread.sleep(1000*60*4);
-                      
+        Thread.sleep(1000 * 60 * 3);
+        
         // republish
-        admin.login("root", "12345");
+        admin.login("root", "12345");        
         editorialTasks.RepublishTerminatedDocument(wiadomosci.getDocuments().get(0));
         admin.logout();
     }
 
     /**
+     * Test Move terminated document to waiting room.
      * 
      * @throws Exception
      */
     private void test2()
         throws Exception
     {
+        // add document
+        Wiadomosci wiadomosci = new Wiadomosci(selenium);
+        wiadomosci.login("selenium", "12345");
+        wiadomosci.addDocument(true, false);
+        wiadomosci.logout();
 
+        // publish
+        Admin admin = new Admin(selenium);
+        admin.login("root", "12345");
+        EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
+        String documentId = editorialTasks.getDocumentId(wiadomosci.getDocuments().get(0));
+        editorialTasks.assignToMe(documentId);
+        editorialTasks.publishDocument(documentId);
+        admin.logout();
+
+        // request document remove proposal
+        wiadomosci.login("selenium", "12345");
+        wiadomosci.requestDocumentRemoveProposal(wiadomosci.getDocuments().get(0));
+        wiadomosci.logout();
+
+        admin.login("root", "12345");
+        editorialTasks.acceptPublishedDocumentRemoveProposal(wiadomosci.getDocuments().get(0));
+        editorialTasks.documentMoveToWaitingRoom(wiadomosci.getDocuments().get(0));
+        admin.logout();
 
     }
-
 
 }

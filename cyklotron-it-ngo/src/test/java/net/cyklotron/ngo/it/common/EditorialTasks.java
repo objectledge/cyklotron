@@ -65,7 +65,7 @@ public class EditorialTasks
         selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
             + "')]/../../div/a[contains(text(), 'Podgląd')]");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        
+
         Assert.assertTrue(selenium.isTextPresent("Selenium@" + name));
         selenium.close();
         selenium.selectWindow("null");
@@ -209,11 +209,9 @@ public class EditorialTasks
         selenium.click("link=Wymuś publikację");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
     }
-    
-    
+
     /**
-     * Test republish top priority level
-     * document as ordinary document
+     * Test republish top priority level document as ordinary document
      * 
      * @param name document name
      * @throws Exception
@@ -238,10 +236,10 @@ public class EditorialTasks
             + "')]/../../div/a[contains(text(), 'Edytuj właściwości')]");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
-        // switch priority level to ordinary 
+        // switch priority level to ordinary
         Assert.assertTrue(selenium.isElementPresent("name=priority"));
         selenium.select("name=priority", "label=5");
-        
+
         // uncheck top news category
         Assert.assertTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Edytuj')])[2]"));
         selenium.click("xpath=(//a[contains(text(),'Edytuj')])[2]");
@@ -253,27 +251,26 @@ public class EditorialTasks
         selenium.click("link=Zapisz");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.selectWindow("null");
-       
+
         // unset validity end date
         Assert.assertTrue(selenium.isElementPresent("id=validity_end_enabled_false"));
         selenium.click("id=validity_end_enabled_false");
-        
+
         // republish
         Assert.assertTrue(selenium.isElementPresent("link=Wymuś publikację"));
         selenium.click("link=Wymuś publikację");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        
+
         Assert.assertTrue(selenium.isElementPresent("link=Anuluj i przejdz do obiegu"));
         selenium.click("link=Anuluj i przejdz do obiegu");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        
+
         Assert.assertFalse(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
-                        + name + "')]"));
+            + name + "')]"));
     }
-    
+
     /**
-     * Test publish document at wiadomosci.ngo.pl
-     * with top priority level as terminated 
+     * Test publish document at wiadomosci.ngo.pl with top priority level as terminated
      * 
      * @param id document id
      * @throws Exception
@@ -360,28 +357,28 @@ public class EditorialTasks
         // set top priority level
         Assert.assertTrue(selenium.isElementPresent("name=priority"));
         selenium.select("name=priority", "label=9");
-        
+
         // set end date to current time
-        Assert.assertTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'ustaw aktualną datę')])[2]"));
+        Assert.assertTrue(selenium
+            .isElementPresent("xpath=(//a[contains(text(),'ustaw aktualną datę')])[2]"));
         selenium.click("xpath=(//a[contains(text(),'ustaw aktualną datę')])[2]");
-        
+
         Assert.assertTrue(selenium.isElementPresent("link=Zapisz i zostań"));
         selenium.click("link=Zapisz i zostań");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-                
+
         // change document state
         Assert.assertTrue(selenium.isElementPresent("link=Przeslij do akceptacji"));
         selenium.click("link=Przeslij do akceptacji");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Stan dokumentu zmieniono poprawnie"));
-        
+
         // publish document
         Assert.assertTrue(selenium.isElementPresent("link=Wymuś publikację"));
         selenium.click("link=Wymuś publikację");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);    
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
     }
-    
 
     /**
      * Test publish document as unclassified at wiadomosci.ngo.pl
@@ -491,11 +488,11 @@ public class EditorialTasks
         selenium.click("//a[contains(text(),'Zapisz')]");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Zadania redaktorskie"));
-        
+
         selenium.refresh();
-        
+
         Assert.assertFalse(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
-                        + name + "')]"));
+            + name + "')]"));
     }
 
     /**
@@ -528,11 +525,11 @@ public class EditorialTasks
         selenium.click("//a[contains(text(),'Zapisz')]");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Zadania redaktorskie"));
-        
+
         selenium.refresh();
-        
+
         Assert.assertFalse(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
-                        + name + "')]"));
+            + name + "')]"));
     }
 
     /**
@@ -586,11 +583,11 @@ public class EditorialTasks
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium.isTextPresent("Zadania redaktorskie"));
-        
+
         selenium.refresh();
-        
+
         Assert.assertFalse(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
-                        + name + "')]"));
+            + name + "')]"));
     }
 
     /**
@@ -638,11 +635,11 @@ public class EditorialTasks
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium.isTextPresent("Zadania redaktorskie"));
-        
+
         selenium.refresh();
-        
+
         Assert.assertFalse(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
-                        + name + "')]"));
+            + name + "')]"));
     }
 
     /**
@@ -678,6 +675,74 @@ public class EditorialTasks
     }
 
     /**
+     * Test accept published document remove proposal. Set document as terminated.
+     * 
+     * @param name document proposal name
+     * @throws Exception
+     */
+    public void acceptPublishedDocumentRemoveProposal(String name)
+        throws Exception
+    {
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium
+            .isTextPresent("Opublikowane dokumenty z zapropowanymi zmianami "));
+        Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
+            + name + "')]/../../../../td/div/a[contains(text(),'Pokaż propozycję')]"));
+        selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
+            + "')]/../../../../td/div/a[contains(text(),'Pokaż propozycję')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium.isTextPresent("Dokumenty z zapropowanymi zmianami"));
+
+        Assert.assertTrue(selenium.isElementPresent("//a[contains(text(),'Ustaw jako wygasły')]"));
+        selenium.click("//a[contains(text(),'Ustaw jako wygasły')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Zadania redaktorskie"));
+
+        Assert.assertFalse(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
+            + name + "')]/../../../../td/div/a[contains(text(),'Pokaż propozycję')]"));
+
+    }
+    
+    /**
+     * Test accept unpublished document remove proposal. Remove document permanently.
+     * 
+     * @param name document proposal name
+     * @throws Exception
+     */
+    public void acceptUnpublishedDocumentRemoveProposal(String name)
+        throws Exception
+    {
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium
+            .isTextPresent("Nieopublikowane dokumenty z zapropowanymi zmianami "));
+        Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
+            + name + "')]/../../../../td/div/a[contains(text(),'Pokaż propozycję')]"));
+        selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
+            + "')]/../../../../td/div/a[contains(text(),'Pokaż propozycję')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium.isTextPresent("Dokumenty z zapropowanymi zmianami"));
+
+        Assert.assertTrue(selenium.isElementPresent("//a[contains(text(),'Usuń dokument')]"));
+        selenium.click("//a[contains(text(),'Usuń dokument')]");
+        selenium.chooseOkOnNextConfirmation();
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium.isTextPresent("Zadania redaktorskie"));
+
+        Assert.assertFalse(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
+            + name + "')]"));
+
+    }
+
+    /**
      * Test dismiss unclassified document
      * 
      * @param name
@@ -691,17 +756,16 @@ public class EditorialTasks
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium.isTextPresent("Dokumenty niesklasyfikowane "));
-        
+
         Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
             + name + "')]/../../../../td/div/a[contains(text(),'Wyrzuć z obiegu')]"));
-        selenium
-            .click("//td/span/span/b[contains(text(),'Selenium@"
-            + name + "')]/../../../../td/div/a[contains(text(),'Wyrzuć z obiegu')]");
-        
+        selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
+            + "')]/../../../../td/div/a[contains(text(),'Wyrzuć z obiegu')]");
+
         selenium.refresh();
-        
+
         Assert.assertFalse(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
-                        + name + "')]"));
+            + name + "')]"));
     }
 
     /**
@@ -718,16 +782,16 @@ public class EditorialTasks
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium.isTextPresent("Dokumenty niesklasyfikowane "));
-        
+
         Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
             + name + "')]/../../../../td/div/a[contains(text(),'Do wiadomości')]"));
         selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
             + "')]/../../../../td/div/a[contains(text(),'Do wiadomości')]");
-        
+
         selenium.refresh();
-        
+
         Assert.assertFalse(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
-                        + name + "')]"));
+            + name + "')]"));
     }
 
     /**
@@ -769,17 +833,17 @@ public class EditorialTasks
         selenium.click("link=Zapisz");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.selectWindow("null");
-        
+
         Assert.assertTrue(selenium.isElementPresent("link=Wymuś publikację"));
         selenium.click("link=Wymuś publikację");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        
+
         Assert.assertTrue(selenium.isElementPresent("link=Anuluj i przejdz do obiegu"));
         selenium.click("link=Anuluj i przejdz do obiegu");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        
+
         Assert.assertFalse(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
-                        + name + "')]"));
+            + name + "')]"));
     }
 
     /**
@@ -846,6 +910,34 @@ public class EditorialTasks
         selenium.click("link=Skasuj");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Skasowano pomyślnie"));
+    }
+
+    /**
+     * Test move terminated document to waiting room
+     * 
+     * @param name
+     */
+    public void documentMoveToWaitingRoom(String name)
+    {
+
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium.isTextPresent("Dokumenty wygaśnięte albo wygasłe "));
+        Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
+            + name + "')]"));
+        selenium.mouseDown("//td/span/span/b[contains(text(),'Selenium@" + name + "')]");
+        Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
+            + name + "')]/../../div/a[contains(text(), 'Do poczekalni')]"));
+        selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
+            + "')]/../../div/a[contains(text(), 'Do poczekalni')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        Assert.assertTrue(selenium.isTextPresent("Stan dokumentu zmieniono poprawnie"));
+        Assert.assertFalse(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
+            + name + "')]"));
+
     }
 
 }

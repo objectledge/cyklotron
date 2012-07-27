@@ -201,7 +201,7 @@ public class Wiadomosci
         documents.add(documentName);
         return documentName;
     }
-
+    
     /**
      * Test edit document
      * 
@@ -232,6 +232,33 @@ public class Wiadomosci
                 + this.login));
     }
 
+    /**
+     * Add document remove proposal
+     * @param name document name
+     * @throws Exception
+     */
+    public void requestDocumentRemoveProposal(String name)
+        throws Exception
+    {
+        selenium.open("/dodaj");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login + " "));
+        Assert.assertTrue(selenium.isElementPresent("//td/a[contains(text(),'Selenium@" + name
+            + "')]/../../td/div/a[contains(text(),'usuń')]"));
+        selenium.click("//td/a[contains(text(),'Selenium@" + name
+            + "')]/../../td/div/a[contains(text(),'usuń')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Usunięcie wiadomości"));
+        Assert.assertTrue(selenium.isElementPresent("name=editorial_note"));
+        selenium.type("name=editorial_note", "Proszę o usunięcie dokumentu.");
+        Assert.assertTrue(selenium.isElementPresent("css=input.dodaj"));
+        selenium.click("css=input.dodaj");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        
+        Assert.assertTrue(selenium.isTextPresent("Propozycja usunięcia dokumentu została zapisana. Jesteś zalogowany/a jako: " + this.login + " "));
+
+    }
+    
     /**
      * Verify is document published
      * 
