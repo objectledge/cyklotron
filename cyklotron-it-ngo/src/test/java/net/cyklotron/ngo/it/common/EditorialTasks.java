@@ -211,6 +211,103 @@ public class EditorialTasks
     }
 
     /**
+     * Test publish document without attaching logo images at wiadomosci.ngo.pl
+     * 
+     * @param id document id
+     * @throws Exception
+     */
+    public void publishDocumentWithoutAttachment(String id)
+        throws Exception
+    {
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        // open PopUp and go to edit node
+        Assert.assertTrue(selenium.isElementPresent("//td[@id='N" + id + "']/span/span/b"));
+        selenium.mouseDown("//td[@id='N" + id + "']/span/span/b");
+        selenium.click("//a[contains(@href, '/view/structure.EditNode?node_id=" + id
+            + "&site_id=8439')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        // change document state
+        Assert.assertTrue(selenium.isTextPresent("Dokument przydzielony"));
+        Assert.assertTrue(selenium.isElementPresent("link=Przyjmij dokument"));
+        selenium.click("link=Przyjmij dokument");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Stan dokumentu zmieniono poprawnie"));
+
+        // categorize document
+        selenium.selectWindow("null");
+        Assert.assertTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Edytuj')])[2]"));
+        selenium.click("xpath=(//a[contains(text(),'Edytuj')])[2]");
+        selenium.waitForPopUp("categorization", DEFAULT_PAGE_LOAD_TIME);
+        selenium.selectWindow("name=categorization");
+        selenium.click("id=category-267525");
+        selenium.click("id=category-673805");
+        Assert
+            .assertTrue(selenium
+                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[11]/td[2]/a/img"));
+        selenium
+            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[11]/td[2]/a/img");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert
+            .assertTrue(selenium
+                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[14]/td[2]/a/img"));
+        selenium
+            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[14]/td[2]/a/img");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        selenium.click("id=category-564755");
+        selenium.click("id=category-564755");
+        Assert
+            .assertTrue(selenium
+                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[30]/td[2]/a/img"));
+        selenium
+            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[30]/td[2]/a/img");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        selenium.click("id=category-378093");
+        Assert
+            .assertTrue(selenium
+                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[41]/td[2]/a/img"));
+        selenium
+            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[41]/td[2]/a/img");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        selenium.click("id=category-26553");
+        selenium.click("id=category-769271");
+        Assert
+            .assertTrue(selenium
+                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[39]/td[2]/a/img"));
+        selenium
+            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[39]/td[2]/a/img");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        selenium.click("id=category-75825");
+        selenium.click("id=category-26587");
+        selenium.selectWindow("name=categorization");
+        Assert.assertTrue(selenium.isElementPresent("link=Zapisz"));
+        selenium.click("link=Zapisz");
+        selenium.selectWindow("null");
+
+        // verify assigned categories
+        Assert.assertTrue(selenium.isElementPresent("link=Zapisz i zostań"));
+        selenium.click("link=Zapisz i zostań");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert
+            .assertTrue(selenium
+                .isTextPresent("1 do wiadomosci ngo.pl, 2 na główną serwisu wiadomosci, Aktywne społeczności CAL, Białoruś, dyskryminacja, dzieci, Warszawa - na główną  "));
+
+        // change document state
+        Assert.assertTrue(selenium.isElementPresent("link=Przeslij do akceptacji"));
+        selenium.click("link=Przeslij do akceptacji");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Stan dokumentu zmieniono poprawnie"));
+
+        // publish document
+        Assert.assertTrue(selenium.isElementPresent("link=Wymuś publikację"));
+        selenium.click("link=Wymuś publikację");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+    }
+
+    /**
      * Test republish top priority level document as ordinary document
      * 
      * @param name document name
@@ -242,7 +339,7 @@ public class EditorialTasks
 
         Assert.assertTrue(selenium.isElementPresent("link=Zapisz i zostań"));
         selenium.click("link=Zapisz i zostań");
-        
+
         // uncheck top news category
         Assert.assertTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Edytuj')])[2]"));
         selenium.click("xpath=(//a[contains(text(),'Edytuj')])[2]");
@@ -261,7 +358,7 @@ public class EditorialTasks
 
         Assert.assertTrue(selenium.isElementPresent("link=Zapisz i zostań"));
         selenium.click("link=Zapisz i zostań");
-        
+
         // republish
         Assert.assertTrue(selenium.isElementPresent("link=Wymuś publikację"));
         selenium.click("link=Wymuś publikację");
@@ -712,7 +809,7 @@ public class EditorialTasks
             + name + "')]/../../../../td/div/a[contains(text(),'Pokaż propozycję')]"));
 
     }
-    
+
     /**
      * Test accept unpublished document remove proposal. Remove document permanently.
      * 

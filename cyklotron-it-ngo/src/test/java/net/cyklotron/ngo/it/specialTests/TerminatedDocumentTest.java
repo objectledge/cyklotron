@@ -88,7 +88,7 @@ public class TerminatedDocumentTest
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(wiadomosci.getDocuments().get(0));
         editorialTasks.assignToMe(documentId);
-        editorialTasks.publishDocument(documentId);
+        editorialTasks.publishDocumentWithoutAttachment(documentId);
         admin.logout();
 
         // request document remove proposal

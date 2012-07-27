@@ -65,7 +65,7 @@ public class AcceptPublishedDocumentProposalTest
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(documentName);
         editorialTasks.assignToMe(documentId);
-        editorialTasks.publishDocument(documentId);
+        editorialTasks.publishDocumentWithoutAttachment(documentId);
         admin.logout();
 
         // edit document
@@ -101,7 +101,7 @@ public class AcceptPublishedDocumentProposalTest
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(documentName);
         editorialTasks.assignToMe(documentId);
-        editorialTasks.publishDocument(documentId);
+        editorialTasks.publishDocumentWithoutAttachment(documentId);
         admin.logout();
 
         // edit document
@@ -137,7 +137,7 @@ public class AcceptPublishedDocumentProposalTest
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(documentName);
         editorialTasks.assignToMe(documentId);
-        editorialTasks.publishDocument(documentId);
+        editorialTasks.publishDocumentWithoutAttachment(documentId);
         admin.logout();
 
         // edit document
@@ -173,7 +173,7 @@ public class AcceptPublishedDocumentProposalTest
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(documentName);
         editorialTasks.assignToMe(documentId);
-        editorialTasks.publishDocument(documentId);
+        editorialTasks.publishDocumentWithoutAttachment(documentId);
         admin.logout();
 
         // edit document
