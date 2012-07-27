@@ -5,7 +5,7 @@ import com.thoughtworks.selenium.Selenium;
 public abstract class Page
 {
 
-    public static String DEFAULT_PAGE_LOAD_TIME = "30000";
+    protected static String DEFAULT_PAGE_LOAD_TIME = "30000";
 
     protected Selenium selenium;
 

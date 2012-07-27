@@ -11,6 +11,9 @@ import com.thoughtworks.selenium.Selenium;
 
 public abstract class SeleniumTest
 {
+ 
+    protected static String DEFAULT_TEST_SPEED = "1000";
+    
     protected abstract String startPage();
     
     protected Selenium selenium;
@@ -21,6 +24,7 @@ public abstract class SeleniumTest
     {
         WebDriver driver = new FirefoxDriver();
         selenium = new WebDriverBackedSelenium(driver, startPage());
+        selenium.setSpeed(DEFAULT_TEST_SPEED);
     }
     
     @After
