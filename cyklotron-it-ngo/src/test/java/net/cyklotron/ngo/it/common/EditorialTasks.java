@@ -240,6 +240,9 @@ public class EditorialTasks
         Assert.assertTrue(selenium.isElementPresent("name=priority"));
         selenium.select("name=priority", "label=5");
 
+        Assert.assertTrue(selenium.isElementPresent("link=Zapisz i zostań"));
+        selenium.click("link=Zapisz i zostań");
+        
         // uncheck top news category
         Assert.assertTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Edytuj')])[2]"));
         selenium.click("xpath=(//a[contains(text(),'Edytuj')])[2]");
@@ -256,6 +259,9 @@ public class EditorialTasks
         Assert.assertTrue(selenium.isElementPresent("id=validity_end_enabled_false"));
         selenium.click("id=validity_end_enabled_false");
 
+        Assert.assertTrue(selenium.isElementPresent("link=Zapisz i zostań"));
+        selenium.click("link=Zapisz i zostań");
+        
         // republish
         Assert.assertTrue(selenium.isElementPresent("link=Wymuś publikację"));
         selenium.click("link=Wymuś publikację");
