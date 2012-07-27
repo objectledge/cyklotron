@@ -62,8 +62,8 @@ public class TerminatedDocumentTest
         editorialTasks.publishDocumentAsTerminated(documentId);
         admin.logout();
  
-        // Wait till document state update (59'/25' each hour).
-        Thread.sleep(1000*60*35);
+        // Wait till document state update (59'/25' each hour on ngo.pl/ every 1' on tilia).
+        Thread.sleep(1000*60*2);
                       
         // republish
         admin.login("root", "12345");
