@@ -27,7 +27,7 @@ public class TerminatedDocumentTest
     {
 
         /**
-         * Test republish terminated top priority level document as ordinary document
+         * Test Republish top priority level document as ordinary document
          */
         test1();
 
@@ -39,7 +39,7 @@ public class TerminatedDocumentTest
     }
 
     /**
-     * Test republish terminated top priority level document as ordinary document
+     * Republish top priority level document as ordinary document
      * 
      * @throws Exception
      */
@@ -62,8 +62,8 @@ public class TerminatedDocumentTest
         editorialTasks.publishDocumentAsTerminated(documentId);
         admin.logout();
  
-        // Wait till document state update (59'/25' each hour on ngo.pl/ every 1' on tilia).
-        Thread.sleep(1000*60*2);
+        // Wait till document state update (every 1' on tilia).
+        Thread.sleep(1000*60*4);
                       
         // republish
         admin.login("root", "12345");

@@ -212,7 +212,7 @@ public class EditorialTasks
     
     
     /**
-     * Test republish terminated top priority level
+     * Test republish top priority level
      * document as ordinary document
      * 
      * @param name document name
@@ -227,6 +227,7 @@ public class EditorialTasks
 
         Assert.assertTrue(selenium.isTextPresent("Dokumenty wygaśnięte albo wygasłe"));
 
+        System.out.println("name: " + name);
         Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
             + name + "')]"));
         selenium.mouseDown("//td/span/span/b[contains(text(),'Selenium@" + name + "')]");
