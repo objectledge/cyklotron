@@ -313,7 +313,7 @@ public class EditorialTasks
      * @param name document name
      * @throws Exception
      */
-    public void RepublishTerminatedDocument(String name)
+    public void republishTerminatedDocument(String name)
         throws Exception
     {
         selenium.open("/view/site.EditSite?site_id=8439");

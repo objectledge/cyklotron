@@ -64,7 +64,7 @@ public class TerminatedDocumentTest
         
         // republish
         admin.login("root", "12345");        
-        editorialTasks.RepublishTerminatedDocument(wiadomosci.getDocuments().get(0));
+        editorialTasks.republishTerminatedDocument(wiadomosci.getDocuments().get(0));
         admin.logout();
     }
 
