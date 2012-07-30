@@ -61,7 +61,7 @@ public class AcceptPublishedDocumentProposalTest
 
         // publish document
         Admin admin = new Admin(selenium);
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(documentName);
         editorialTasks.assignToMe(documentId);
@@ -73,7 +73,7 @@ public class AcceptPublishedDocumentProposalTest
         wiadomosci.editDocument(documentName);
         wiadomosci.logout();
 
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         editorialTasks.acceptAllPublishedDocumentProposal(documentName);
         admin.logout();
 
@@ -97,7 +97,7 @@ public class AcceptPublishedDocumentProposalTest
 
         // publish document
         Admin admin = new Admin(selenium);
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(documentName);
         editorialTasks.assignToMe(documentId);
@@ -109,7 +109,7 @@ public class AcceptPublishedDocumentProposalTest
         wiadomosci.editDocument(documentName);
         wiadomosci.logout();
 
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         editorialTasks.acceptSomePublishedDocumentProposal(documentName);
         admin.logout();
 
@@ -133,7 +133,7 @@ public class AcceptPublishedDocumentProposalTest
 
         // publish document
         Admin admin = new Admin(selenium);
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(documentName);
         editorialTasks.assignToMe(documentId);
@@ -145,7 +145,7 @@ public class AcceptPublishedDocumentProposalTest
         wiadomosci.editDocument(documentName);
         wiadomosci.logout();
 
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         editorialTasks.acceptPublishedDocumentProposalEditDocument(documentName);
         admin.logout();
 
@@ -169,7 +169,7 @@ public class AcceptPublishedDocumentProposalTest
 
         // publish document
         Admin admin = new Admin(selenium);
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(documentName);
         editorialTasks.assignToMe(documentId);
@@ -181,7 +181,7 @@ public class AcceptPublishedDocumentProposalTest
         wiadomosci.editDocument(documentName);
         wiadomosci.logout();
 
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         editorialTasks.acceptPublishedDocumentProposalEditProperties(documentName);
         admin.logout();
 

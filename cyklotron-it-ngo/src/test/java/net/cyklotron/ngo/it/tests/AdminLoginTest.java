@@ -21,7 +21,7 @@ public class AdminLoginTest
     {
 
         Admin admin = new Admin(selenium);
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         admin.logout();
 
     }

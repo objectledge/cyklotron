@@ -52,7 +52,7 @@ public class TerminatedDocumentTest
 
         // publish
         Admin admin = new Admin(selenium);
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(wiadomosci.getDocuments().get(0));
         editorialTasks.assignToMe(documentId);
@@ -63,7 +63,7 @@ public class TerminatedDocumentTest
         Thread.sleep(1000 * 60 * 3);
         
         // republish
-        admin.login("root", "12345");        
+        admin.login("selenium_administrator_serwisu", "12345");        
         editorialTasks.republishTerminatedDocument(wiadomosci.getDocuments().get(0));
         admin.logout();
     }
@@ -84,7 +84,7 @@ public class TerminatedDocumentTest
 
         // publish
         Admin admin = new Admin(selenium);
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(wiadomosci.getDocuments().get(0));
         editorialTasks.assignToMe(documentId);
@@ -96,7 +96,7 @@ public class TerminatedDocumentTest
         wiadomosci.requestDocumentRemoveProposal(wiadomosci.getDocuments().get(0));
         wiadomosci.logout();
 
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         editorialTasks.acceptPublishedDocumentRemoveProposal(wiadomosci.getDocuments().get(0));
         editorialTasks.documentMoveToWaitingRoom(wiadomosci.getDocuments().get(0));
         admin.logout();

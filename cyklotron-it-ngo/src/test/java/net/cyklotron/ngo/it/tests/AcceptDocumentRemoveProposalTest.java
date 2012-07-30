@@ -36,7 +36,7 @@ public class AcceptDocumentRemoveProposalTest
 
         // remove document permanently
         Admin admin = new Admin(selenium);
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         editorialTasks.acceptUnpublishedDocumentRemoveProposal(wiadomosci.getDocuments().get(0));
         admin.logout();

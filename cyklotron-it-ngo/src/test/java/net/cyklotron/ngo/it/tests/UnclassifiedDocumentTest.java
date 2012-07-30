@@ -57,14 +57,14 @@ public class UnclassifiedDocumentTest
 
         // publish
         Admin admin = new Admin(selenium);
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(wiadomosci.getDocuments().get(0));
         editorialTasks.assignToMe(documentId);
         editorialTasks.publishDocumentAsUnclassified(wiadomosci.getDocuments().get(0));
         admin.logout();
 
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         editorialTasks.acceptUnclassifiedDocument(wiadomosci.getDocuments().get(0));
         admin.logout();
     }
@@ -86,14 +86,14 @@ public class UnclassifiedDocumentTest
 
         // publish
         Admin admin = new Admin(selenium);
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(wiadomosci.getDocuments().get(0));
         editorialTasks.assignToMe(documentId);
         editorialTasks.publishDocumentAsUnclassified(wiadomosci.getDocuments().get(0));
         admin.logout();
 
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         editorialTasks.dismissUnclassifiedDocument(wiadomosci.getDocuments().get(0));
         admin.logout();
     }
@@ -115,14 +115,14 @@ public class UnclassifiedDocumentTest
 
         // publish
         Admin admin = new Admin(selenium);
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         String documentId = editorialTasks.getDocumentId(wiadomosci.getDocuments().get(0));
         editorialTasks.assignToMe(documentId);
         editorialTasks.publishDocumentAsUnclassified(wiadomosci.getDocuments().get(0));
         admin.logout();
 
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         editorialTasks.acceptUnclasifiedDocumentEditDocument(wiadomosci.getDocuments().get(0));
         admin.logout();
     }

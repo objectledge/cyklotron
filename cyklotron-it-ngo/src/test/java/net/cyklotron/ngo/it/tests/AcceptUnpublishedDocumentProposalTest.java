@@ -1,8 +1,5 @@
 package net.cyklotron.ngo.it.tests;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.cyklotron.ngo.it.SeleniumTest;
 import net.cyklotron.ngo.it.common.Admin;
 import net.cyklotron.ngo.it.common.EditorialTasks;
@@ -39,7 +36,7 @@ public class AcceptUnpublishedDocumentProposalTest
 
         // accept unpublished document proposal
         Admin admin = new Admin(selenium);
-        admin.login("root", "12345");
+        admin.login("selenium_administrator_serwisu", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         editorialTasks.acceptUnpublishedDocumentProposal(wiadomosci.getDocuments().get(0));
         admin.logout();
