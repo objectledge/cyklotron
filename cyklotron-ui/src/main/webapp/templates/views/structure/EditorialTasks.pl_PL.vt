@@ -29,7 +29,22 @@ function checkAll(form)
 	  theForm[i].checked = true;
     }
    }
-}                                                                                                                       
+}  
+
+function checkAllTasks(taskId)
+{     
+   var theTable = document.getElementById(taskId);
+   var theForm = theTable.getElementsByTagName('input');
+   var i = 0;
+
+   for(i=0; i<theForm.length;i++)
+   {
+    if(theForm[i].type == 'checkbox')
+    {
+	  theForm[i].checked = true;
+    }
+   }
+}                                                                                                                        
                                                                                                                                                              
 function doConfirm(name, url, confirmationMsg)                                                                                                               
 {                                                                                                                                                            
@@ -76,7 +91,12 @@ function massOperation(action)
 <br/> $empty_text
  #else
  <tr>
-<th colspan="5"> $text </th>
+<th colspan="5">
+ <p style="text-align: left; float: left; margin: 10px;">
+   <a href="javascript:checkAllTasks('T$tasks_id')"> Zaznacz wszystkie w sekcji </a>
+ </p>
+ <p style="margin: 10px;"> $text </p>
+</th>
 </tr>
  <br/>
   <tr>
