@@ -214,6 +214,8 @@ public class Wiadomosci
         selenium.open("/dodaj");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login + " "));
+        Assert.assertTrue(selenium.isElementPresent("//span[contains(@class,'table-pagesize-chooser')]/input[3]"));
+        selenium.click("//span[contains(@class,'table-pagesize-chooser')]/input[3]");
         Assert.assertTrue(selenium.isElementPresent("//td/a[contains(text(),'Selenium@" + name
             + "')]/../../td/div/a[contains(text(),'edytuj')]"));
         selenium.click("//td/a[contains(text(),'Selenium@" + name
@@ -243,6 +245,8 @@ public class Wiadomosci
         selenium.open("/dodaj");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login + " "));
+        Assert.assertTrue(selenium.isElementPresent("//span[contains(@class,'table-pagesize-chooser')]/input[3]"));
+        selenium.click("//span[contains(@class,'table-pagesize-chooser')]/input[3]");
         Assert.assertTrue(selenium.isElementPresent("//td/a[contains(text(),'Selenium@" + name
             + "')]/../../td/div/a[contains(text(),'usuń')]"));
         selenium.click("//td/a[contains(text(),'Selenium@" + name
