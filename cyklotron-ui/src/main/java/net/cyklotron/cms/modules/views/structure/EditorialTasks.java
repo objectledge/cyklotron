@@ -224,7 +224,14 @@ public class EditorialTasks
                         }
                         if(state.equals("locked"))
                         {
-                            lockedNodes.add(node);
+                            if(((DocumentNodeResource)node).isProposedContentDefined())
+                            {
+                                unpublishedProposedNodes.add(node);
+                            }
+                            else
+                            {
+                                lockedNodes.add(node);
+                            }
                             continue;
                         }
                         if(state.equals("rejected"))
