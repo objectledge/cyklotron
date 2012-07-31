@@ -28,6 +28,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         // open PopUp and go to Edit Preferences
         Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
@@ -83,6 +88,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         // Assign document
         Assert.assertTrue(selenium.isElementPresent("//td[@id='N" + id + "']/input"));
@@ -107,6 +117,11 @@ public class EditorialTasks
     {
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         // open PopUp and go to edit node
@@ -222,6 +237,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         // open PopUp and go to edit node
         Assert.assertTrue(selenium.isElementPresent("//td[@id='N" + id + "']/span/span/b"));
@@ -319,6 +339,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium.isTextPresent("Dokumenty wygaśnięte albo wygasłe"));
 
@@ -383,6 +408,11 @@ public class EditorialTasks
     {
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         // open PopUp and go to edit node
@@ -495,6 +525,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         // open PopUp and go to edit node
         Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
@@ -568,6 +603,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium
             .isTextPresent("Opublikowane dokumenty z zapropowanymi zmianami "));
@@ -610,6 +650,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium
             .isTextPresent("Opublikowane dokumenty z zapropowanymi zmianami "));
@@ -646,6 +691,11 @@ public class EditorialTasks
     {
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium
@@ -705,6 +755,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium
             .isTextPresent("Opublikowane dokumenty z zapropowanymi zmianami "));
@@ -757,6 +812,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium
             .isTextPresent("Nieopublikowane dokumenty z zapropowanymi zmianami "));
@@ -788,6 +848,11 @@ public class EditorialTasks
     {
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium
@@ -821,6 +886,11 @@ public class EditorialTasks
     {
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium
@@ -857,6 +927,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium.isTextPresent("Dokumenty niesklasyfikowane "));
 
@@ -883,6 +958,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium.isTextPresent("Dokumenty niesklasyfikowane "));
 
@@ -908,6 +988,11 @@ public class EditorialTasks
     {
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium.isTextPresent("Dokumenty niesklasyfikowane "));
@@ -962,6 +1047,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         for(String name : names)
         {
@@ -996,6 +1086,11 @@ public class EditorialTasks
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         for(String name : names)
         {
@@ -1025,6 +1120,11 @@ public class EditorialTasks
 
         selenium.open("/view/site.EditSite?site_id=8439");
         selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2"); 
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium.isTextPresent("Dokumenty wygaśnięte albo wygasłe "));
