@@ -30,6 +30,7 @@
         <configuration>
           <!-- Skip the normal tests, we'll run them in the integration-test phase -->
           <skip>true</skip>
+          <forkMode>never</forkMode>
         </configuration>
         <executions>
           <execution>
