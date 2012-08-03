@@ -87,7 +87,7 @@ public class Wiadomosci
 
         selenium.open("/dodaj");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość / informację o szkoleniu"));
+        Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość"));
 
         if(logged)
         {
@@ -99,7 +99,7 @@ public class Wiadomosci
             selenium.click("css=input.dodaj");
             selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
-            Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość / informację o szkoleniu"));
+            Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość"));
             Assert.assertTrue(selenium.isElementPresent("//input[@name='name']"));
             documentName = selenium.getValue("//input[@name='name']");
             Assert.assertTrue(selenium.isElementPresent("name=title"));
@@ -153,7 +153,7 @@ public class Wiadomosci
             selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
             Assert.assertTrue(selenium.isTextPresent("Nie jesteś zalogowany/a."));
-            Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość / informację o szkoleniu"));
+            Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość"));
 
             Assert.assertTrue(selenium.isElementPresent("//input[@name='name']"));
             documentName = selenium.getValue("//input[@name='name']");
@@ -221,7 +221,7 @@ public class Wiadomosci
         selenium.click("//td/a[contains(text(),'Selenium@" + name
             + "')]/../../td/div/a[contains(text(),'edytuj')]");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość / informację o szkoleniu"));
+        Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość"));
         Assert.assertTrue(selenium.isElementPresent("name=abstract"));
         selenium.type("name=abstract", "Selenium@wiadomosci as signed user. Proposal.");
         Assert.assertTrue(selenium.isElementPresent("name=proposer_credentials"));
