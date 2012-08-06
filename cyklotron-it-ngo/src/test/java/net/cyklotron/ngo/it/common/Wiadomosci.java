@@ -4,9 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.thoughtworks.selenium.Selenium;
-import net.cyklotron.ngo.it.Page;
 import org.junit.Assert;
+
+import net.cyklotron.ngo.it.Page;
+
+import com.thoughtworks.selenium.Selenium;
 
 public class Wiadomosci
     extends Page
@@ -148,8 +150,9 @@ public class Wiadomosci
         else
         {
             Assert.assertTrue(selenium.isTextPresent("Nie jesteś zalogowany/a."));
-            Assert.assertTrue(selenium.isElementPresent("link=Dodaj wiadomość bez logowania"));
-            selenium.click("link=Dodaj wiadomość bez logowania");
+            Assert.assertTrue(selenium.isTextPresent("Dodaj bez logowania:"));
+            Assert.assertTrue(selenium.isElementPresent("link=wiadomość"));
+            selenium.click("link=wiadomość");
             selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
             Assert.assertTrue(selenium.isTextPresent("Nie jesteś zalogowany/a."));
@@ -216,10 +219,10 @@ public class Wiadomosci
         Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login + " "));
         Assert.assertTrue(selenium.isElementPresent("//span[contains(@class,'table-pagesize-chooser')]/input[3]"));
         selenium.click("//span[contains(@class,'table-pagesize-chooser')]/input[3]");
-        Assert.assertTrue(selenium.isElementPresent("//td/a[contains(text(),'Selenium@" + name
-            + "')]/../../td/div/a[contains(text(),'edytuj')]"));
-        selenium.click("//td/a[contains(text(),'Selenium@" + name
-            + "')]/../../td/div/a[contains(text(),'edytuj')]");
+        Assert.assertTrue(selenium.isElementPresent("//td[contains(text(),'Selenium@" + name
+            + "')]/../td/div/a[contains(text(),'edytuj')]"));
+        selenium.click("//td[contains(text(),'Selenium@" + name
+            + "')]/../td/div/a[contains(text(),'edytuj')]");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość"));
         Assert.assertTrue(selenium.isElementPresent("name=abstract"));
