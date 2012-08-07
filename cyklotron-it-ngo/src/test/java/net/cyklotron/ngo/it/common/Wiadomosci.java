@@ -219,10 +219,10 @@ public class Wiadomosci
         Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login + " "));
         Assert.assertTrue(selenium.isElementPresent("//span[contains(@class,'table-pagesize-chooser')]/input[3]"));
         selenium.click("//span[contains(@class,'table-pagesize-chooser')]/input[3]");
-        Assert.assertTrue(selenium.isElementPresent("//td[contains(text(),'Selenium@" + name
-            + "')]/../td/div/a[contains(text(),'edytuj')]"));
-        selenium.click("//td[contains(text(),'Selenium@" + name
-            + "')]/../td/div/a[contains(text(),'edytuj')]");
+        Assert.assertTrue(selenium.isElementPresent("//td[.//text()[contains(.,'Selenium@" + name
+            + "')]]/../td/div/a[contains(text(),'edytuj')]"));
+        selenium.click("//td[.//text()[contains(.,'Selenium@" + name
+            + "')]]/../td/div/a[contains(text(),'edytuj')]");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Dodaj wiadomość"));
         Assert.assertTrue(selenium.isElementPresent("name=abstract"));
@@ -250,10 +250,10 @@ public class Wiadomosci
         Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login + " "));
         Assert.assertTrue(selenium.isElementPresent("//span[contains(@class,'table-pagesize-chooser')]/input[3]"));
         selenium.click("//span[contains(@class,'table-pagesize-chooser')]/input[3]");
-        Assert.assertTrue(selenium.isElementPresent("//td/a[contains(text(),'Selenium@" + name
-            + "')]/../../td/div/a[contains(text(),'usuń')]"));
-        selenium.click("//td/a[contains(text(),'Selenium@" + name
-            + "')]/../../td/div/a[contains(text(),'usuń')]");
+        Assert.assertTrue(selenium.isElementPresent("//td[.//text()[contains(.,'Selenium@" + name
+            + "')]]/../td/div/a[contains(text(),'usuń')]"));
+        selenium.click("//td[.//text()[contains(.,'Selenium@" + name
+            + "')]]/../td/div/a[contains(text(),'usuń')]");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Usunięcie wiadomości"));
         Assert.assertTrue(selenium.isElementPresent("name=editorial_note"));

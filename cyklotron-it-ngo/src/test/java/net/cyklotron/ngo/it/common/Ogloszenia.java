@@ -3,11 +3,11 @@ package net.cyklotron.ngo.it.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import net.cyklotron.ngo.it.Page;
 
 import com.thoughtworks.selenium.Selenium;
-
-import junit.framework.Assert;
 
 public class Ogloszenia
     extends Page
@@ -46,6 +46,14 @@ public class Ogloszenia
         Assert.assertTrue(selenium.isElementPresent("id=submitbutton"));
         selenium.click("id=submitbutton");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        if(selenium.isTextPresent("Nie jesteś zalogowany/a"))
+        {
+            selenium.type("id=login", this.login);
+            selenium.type("id=password", this.password);
+            Assert.assertTrue(selenium.isElementPresent("id=submitbutton"));
+            selenium.click("id=submitbutton");
+            selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        }
         Assert.assertTrue(selenium.isTextPresent("Dodaj ogłoszenie"));
         Assert.assertTrue(selenium.isTextPresent("Jesteś zalogowany/a jako: " + this.login));
     }

@@ -1,8 +1,9 @@
 package net.cyklotron.ngo.it.tests;
 
+import org.junit.Test;
+
 import net.cyklotron.ngo.it.SeleniumTest;
 import net.cyklotron.ngo.it.common.Ogloszenia;
-import org.junit.Test;
 
 public class OgloszeniaAddDocumentTest
     extends SeleniumTest

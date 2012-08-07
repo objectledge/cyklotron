@@ -2,10 +2,11 @@ package net.cyklotron.ngo.it.common;
 
 import java.util.List;
 
+import junit.framework.Assert;
+
 import net.cyklotron.ngo.it.Page;
 
 import com.thoughtworks.selenium.Selenium;
-import junit.framework.Assert;
 
 public class EditorialTasks
     extends Page
@@ -263,45 +264,19 @@ public class EditorialTasks
         selenium.click("xpath=(//a[contains(text(),'Edytuj')])[2]");
         selenium.waitForPopUp("categorization", DEFAULT_PAGE_LOAD_TIME);
         selenium.selectWindow("name=categorization");
+        Assert.assertTrue(selenium.isElementPresent("link=Rozwiń wszystko"));
+        selenium.click("link=Rozwiń wszystko");
+
         selenium.click("id=category-267525");
         selenium.click("id=category-673805");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[11]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[11]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[14]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[14]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.click("id=category-564755");
         selenium.click("id=category-564755");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[30]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[30]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.click("id=category-378093");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[41]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[41]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.click("id=category-26553");
         selenium.click("id=category-769271");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[39]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[39]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.click("id=category-75825");
         selenium.click("id=category-26587");
+
         selenium.selectWindow("name=categorization");
         Assert.assertTrue(selenium.isElementPresent("link=Zapisz"));
         selenium.click("link=Zapisz");
@@ -435,45 +410,20 @@ public class EditorialTasks
         selenium.click("xpath=(//a[contains(text(),'Edytuj')])[2]");
         selenium.waitForPopUp("categorization", DEFAULT_PAGE_LOAD_TIME);
         selenium.selectWindow("name=categorization");
+
+        Assert.assertTrue(selenium.isElementPresent("link=Rozwiń wszystko"));
+        selenium.click("link=Rozwiń wszystko");
+
         selenium.click("id=category-267525");
         selenium.click("id=category-673805");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[11]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[11]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[14]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[14]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.click("id=category-564755");
         selenium.click("id=category-564755");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[30]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[30]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.click("id=category-378093");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[41]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[41]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.click("id=category-26553");
         selenium.click("id=category-769271");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[39]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[39]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.click("id=category-75825");
         selenium.click("id=category-26587");
+
         selenium.selectWindow("name=categorization");
         Assert.assertTrue(selenium.isElementPresent("link=Zapisz"));
         selenium.click("link=Zapisz");
@@ -1133,9 +1083,10 @@ public class EditorialTasks
         selenium.mouseDown("//td/span/span/b[contains(text(),'Selenium@" + name + "')]");
         Assert.assertTrue(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
             + name + "')]/../../div/a[contains(text(), 'Do poczekalni')]"));
+        selenium.setTimeout(SLOW_PAGE_LOAD_TIME);
         selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
             + "')]/../../div/a[contains(text(), 'Do poczekalni')]");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        selenium.waitForPageToLoad(SLOW_PAGE_LOAD_TIME);
 
         Assert.assertTrue(selenium.isTextPresent("Stan dokumentu zmieniono poprawnie"));
         Assert.assertFalse(selenium.isElementPresent("//td/span/span/b[contains(text(),'Selenium@"
