@@ -162,43 +162,14 @@ public class EditorialTasks
         selenium.click("xpath=(//a[contains(text(),'Edytuj')])[2]");
         selenium.waitForPopUp("categorization", DEFAULT_PAGE_LOAD_TIME);
         selenium.selectWindow("name=categorization");
+        Assert.assertTrue(selenium.isElementPresent("link=Rozwiń wszystko"));
+        selenium.click("link=Rozwiń wszystko");
         selenium.click("id=category-267525");
         selenium.click("id=category-673805");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[11]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[11]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[14]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[14]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.click("id=category-564755");
         selenium.click("id=category-564755");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[30]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[30]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        selenium.click("id=category-378093");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[41]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[41]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.click("id=category-26553");
         selenium.click("id=category-769271");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[39]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[39]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         selenium.click("id=category-75825");
         selenium.click("id=category-26587");
         selenium.selectWindow("name=categorization");
@@ -505,20 +476,9 @@ public class EditorialTasks
         selenium.waitForPopUp("categorization", DEFAULT_PAGE_LOAD_TIME);
         selenium.selectWindow("name=categorization");
 
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[8]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[8]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        Assert.assertTrue(selenium.isElementPresent("id=category-160836"));
-        selenium.click("id=category-160836");
-        Assert
-            .assertTrue(selenium
-                .isElementPresent("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[10]/td[2]/a/img"));
-        selenium
-            .click("//div[@id='main-block']/table[2]/tbody/tr/td/form/table/tbody/tr[10]/td[2]/a/img");
-        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("link=Rozwiń wszystko"));
+        selenium.click("link=Rozwiń wszystko");
+
         Assert.assertTrue(selenium.isElementPresent("id=category-607896"));
         selenium.click("id=category-607896");
         Assert.assertTrue(selenium.isElementPresent("id=category-607895"));
