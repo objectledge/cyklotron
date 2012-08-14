@@ -7,9 +7,18 @@
 		<servlet-name>ledge</servlet-name>
 		<servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>files</servlet-name>
+		<servlet-class>org.objectledge.web.RestServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>ledge</servlet-name>
 		<url-pattern>/ledge/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>files</servlet-name>
+		<url-pattern>/f/*</url-pattern>
 	</servlet-mapping>
 	
 	<session-config>

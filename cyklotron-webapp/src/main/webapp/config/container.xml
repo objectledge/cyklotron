@@ -317,7 +317,7 @@
     </sequence>      
   </component>
   
-  <component class="org.objectledge.pipeline.ErrorHandlingPipeline">
+  <component key="templatePipeline" class="org.objectledge.pipeline.ErrorHandlingPipeline">
     <parameter class-key="org.jcontainer.dna.Logger"/>
     <sequence>
       <parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
@@ -341,11 +341,11 @@
 
   <!-- // dispatchers ///////////////////////////////////////////////////////////////////// -->
     
-  <component class-key="org.objectledge.web.HttpDispatcher" 
+  <component key="templatePipeline"
              class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
     <component class="org.objectledge.web.RequestTrackingValve">
       <component class="org.objectledge.pipeline.ConcurrencyControlValve">
-        <parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
+        <parameter key="templatePipeline" class="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
         <parameter/>
         <parameter/>
         <parameter/>
@@ -355,6 +355,56 @@
     </component>
     <parameter/>
   </component>
+  
+  <!-- //// REST simplified pipeline //// -->
+  
+   <component key="restPipeline"
+              class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
+    <component class="org.objectledge.web.RequestTrackingValve">
+      <component class="org.objectledge.pipeline.ConcurrencyControlValve">
+        <component class="org.objectledge.pipeline.ErrorHandlingPipeline">
+            <parameter class-key="org.jcontainer.dna.Logger"/>
+		    <sequence>
+		      <parameter key="simpleAuthenticationPipeline"/>
+		      <parameter key="restRenderingPipeline"/>
+		    </sequence>
+			<sequence>
+		      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
+		      <parameter class-key="org.objectledge.web.RestExceptionRenderingValve"/>
+		    </sequence>
+			<sequence>
+		      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
+		      <parameter class-key="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/> 
+		      <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
+		      <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
+		    </sequence>          
+        </component>         
+        <parameter/>
+        <parameter/>
+        <parameter/>
+      </component>
+      <parameter/>
+      <parameter/>
+    </component>
+    <parameter/>
+  </component>
+  
+  <component key="simpleAuthenticationPipeline"
+			 class="org.objectledge.pipeline.SimplePipeline">
+    <sequence>			 
+      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
+      <parameter class-key="org.objectledge.authentication.AuthenticationValve"/>
+    </sequence>
+  </component>
+  
+  <component key="restRenderingPipeline"
+  			 class="org.objectledge.pipeline.SimplePipeline">
+    <sequence>
+      <component class-key="org.objectledge.web.rest.RestValve"
+      			 class="org.objectledge.web.rest.JerseyRestValve">
+      </component>      
+    </sequence>      
+  </component>          
     
   <!-- // cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
   
