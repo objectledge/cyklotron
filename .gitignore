@@ -4,4 +4,6 @@ target/
 .settings/
 *.log
 /cyklotron-webapp/workdir
+/cyklotron-webapp/eclipse
 *~
+.metadata
