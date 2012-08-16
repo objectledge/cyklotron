@@ -28,5 +28,5 @@
 --> 
 
 <config>
-  <response pattern=".*" status="200" type="text/plain">Hello world!</response>
+  <response pattern=".*" status="200" type="text/plain">Hello world!!!</response>
 </config>
