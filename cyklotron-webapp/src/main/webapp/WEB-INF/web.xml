@@ -9,7 +9,7 @@
 	</servlet>
 	<servlet>
 		<servlet-name>files</servlet-name>
-		<servlet-class>org.objectledge.web.RestServlet</servlet-class>
+		<servlet-class>org.objectledge.web.rest.RestServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ledge</servlet-name>

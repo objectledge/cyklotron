@@ -317,41 +317,7 @@
     </sequence>      
   </component>
   
-
-  <!-- // dispatchers ///////////////////////////////////////////////////////////////////// -->
   
-  <!-- cms view dispatcher -->
-  <component key="cmsDispatcher"
-             class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
-    <component class="org.objectledge.web.RequestTrackingValve">
-      <component class="org.objectledge.pipeline.ConcurrencyControlValve">
-        <parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
-		<parameter class-key="org.jcontainer.dna.Logger"/>
-	    <sequence>
-	      <parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
-	      <parameter key="oneTimeProcessingPipeline"/>
-	      <parameter key="cmsRenderingPipeline"/>
-	    </sequence>
-		<sequence>
-	      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
-	      <parameter class-key="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
-	      <parameter key="renderingPipeline"/>
-	    </sequence>
-		<sequence>
-			      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
-			      <parameter class-key="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/> 
-			      <parameter class-key="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
-				  <parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
-			      <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
-			      <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
-			    </sequence>        
-      </component>
-      <parameter/>
-      <parameter/>
-    </component>
-    <parameter/>
-  </component>
-
   <component key="simpleAuthenticationPipeline"
 			 class="org.objectledge.pipeline.SimplePipeline">
     <sequence>			 
@@ -363,16 +329,60 @@
   <component key="restRenderingPipeline"
   			 class="org.objectledge.pipeline.SimplePipeline">
     <sequence>
-      <component class-key="org.objectledge.web.rest.RestValve"
+      <component class-key="org.objectledge.web.rest.RestProcessor"
       			 class="org.objectledge.web.rest.JerseyRestValve">
       </component>      
     </sequence>      
-  </component>          
+  </component>    
+  
 
+  <!-- // dispatchers ///////////////////////////////////////////////////////////////////// -->
+  
+  <!-- cms view dispatcher -->
+  <component key="cmsDispatcher"
+             class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
+    <component class="org.objectledge.web.RequestTrackingValve">
+      <component class="org.objectledge.pipeline.ConcurrencyControlValve">
+        <component class="org.objectledge.pipeline.ErrorHandlingPipeline">         
+			<parameter class-key="org.jcontainer.dna.Logger"/>
+		    <sequence>
+		      <parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
+		      <parameter key="oneTimeProcessingPipeline"/>
+		      <parameter key="cmsRenderingPipeline"/>
+		    </sequence>
+			<sequence>
+		      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
+		      <parameter class-key="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
+		      <parameter key="renderingPipeline"/>
+		    </sequence>
+			<sequence>
+		      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
+		      <parameter class-key="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/> 
+		      <parameter class-key="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
+			  <parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
+		      <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
+		      <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
+		    </sequence>        
+	      </component>
+		  <parameter/>
+		  <parameter/>
+		  <parameter/>	      
+	  </component>
+      <parameter/>
+      <parameter/>
+    </component>
+    <parameter/>
+  </component>
     
   <!-- //// REST dispatcher //// -->
   
-   <component key="restDispatcher"
+  <component key="restDispatcher"
+             class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">	
+	  <component class="org.objectledge.web.rest.JerseyRestValve"/>
+	  <parameter class-key="org.objectledge.context.Context"/>
+  </component>
+  
+  <!--  <component key="restDispatcher"
               class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
     <component class="org.objectledge.web.RequestTrackingValve">
       <component class="org.objectledge.pipeline.ConcurrencyControlValve">
@@ -401,7 +411,7 @@
       <parameter/>
     </component>
     <parameter/>
-  </component>
+  </component> -->
   
 
 
