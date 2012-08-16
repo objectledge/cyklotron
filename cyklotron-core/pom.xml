@@ -106,7 +106,7 @@
     </dependency>
     <dependency>
       <groupId>cglib</groupId>
-      <artifactId>cglib-full</artifactId>
+      <artifactId>cglib-nodep</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
