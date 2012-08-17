@@ -10,38 +10,53 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
+import com.sun.jersey.multipart.FormDataParam;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 
 
 @Produces({"application/xml","application/json"}) 
-@Path("/pliki/{orgId}/{ftype}/{fname}")
+@Path("/pliki")
 public class OrganizationFilesRestResource {
 
+	@Context UriInfo ui; 
+	
     @GET
     @Produces("application/json")
-    public String getFile(@PathParam("{orgId}") long orgId, 
+    @Path("/{orgId: [a-zA-Z0-9_]+}/{ftype}/{fname}")
+    public String getFile(@PathParam("{orgId}") String orgId, 
     		@PathParam("{ftype}") String ftype,
     		@PathParam("{fname}") String fname) {
         return "Pobierz pjedynczy plik :" + orgId + " ftype:" + ftype +" fname:" + fname;    
     }
 
     @GET
-    @Path("/pliki/{orgId}")
+    @Path("/{orgId: [a-zA-Z0-9_]+}")
     @Produces("application/json")
-    public String getFiles(@PathParam("{orgId}") long orgId) {
-        return "Wszystkie pliki z podziałem an kategorie.";    
+    public String getFiles(@PathParam("{orgId}") String orgId) {
+        return "Wszystkie pliki organizacji orgId:" + orgId + ", z podziałem an kategorie." + ui.getRequestUri().toString() ;    
+    }
+
+    @GET
+    @Path("/{orgId: [a-zA-Z0-9_]+}/{ftype}")
+    @Produces("application/json")
+    public String getFiles(@PathParam("{orgId}") String orgId, 
+    		@PathParam("{ftype}") String ftype) {
+        return "Wszystkie pliki organizacji orgId:" + orgId + ", typu:" + ftype + ".";    
     }
 
     @POST
     @Produces("application/json")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public String createFile(@PathParam("{orgId}") long orgId, 
+    @Path("/{orgId: [a-zA-Z0-9_]+}/{ftype}/{fname}")
+    public String createFile(@PathParam("{orgId}") String orgId, 
     		@PathParam("{ftype}") String ftype,
     		@PathParam("{fname}") String fname,
-    		@FormParam("file") InputStream uploadedInputStream,
-    		@FormParam("file") FormDataContentDisposition fileDetail
+    		@FormDataParam("file") InputStream uploadedInputStream,
+    		@FormDataParam("file") FormDataContentDisposition fileDetail
     		) {
         return "Plik do stworzenia: \n " + orgId + " ftype:" + ftype +" fname:" + fname + "\nnazwa" +
     		     fileDetail.getFileName() + " o wielkości :" + fileDetail.getSize();    
@@ -49,11 +64,13 @@ public class OrganizationFilesRestResource {
 
     @PUT
     @Produces("application/json")
-    public String modifyFile(@PathParam("{orgId}") long orgId, 
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/{orgId}/{ftype}/{fname}")
+    public String modifyFile(@PathParam("{orgId}") String orgId, 
     		@PathParam("{ftype}") String ftype,
     		@PathParam("{fname}") String fname,
-    		@FormParam("file") InputStream uploadedInputStream,
-    		@FormParam("file") FormDataContentDisposition fileDetail) {
+    		@FormDataParam("file") InputStream uploadedInputStream,
+    		@FormDataParam("file") FormDataContentDisposition fileDetail) {
         return "Plik do modyfikacji\n orgId:" + orgId + " ftype:" + ftype +" fname:" + fname +
         		" \nnazwa: " + fileDetail.getFileName() + " o wielkości :" + fileDetail.getSize();    
     }    
