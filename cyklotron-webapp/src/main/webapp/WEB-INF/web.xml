@@ -1,9 +1,22 @@
 <?xml version="1.0"?>
 <!DOCTYPE web-app
     PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
-    "http://java.sun.com/j2ee/dtds/web-app_2.2.dtd">
+    "http://java.sun.com/j2ee/dtds/web-app_2.5.dtd">
 <web-app>
-	<servlet>
+    <listener>
+        <listener-class>org.objectledge.web.LedgeServletManager</listener-class>
+    </listener>
+    <context-param> 
+        <description>Filesystem Root</description> 
+        <param-name>root</param-name> 
+        <param-value>../cyklotron</param-value> 
+     </context-param>
+    <context-param> 
+        <description>LedgeContainer config path</description> 
+        <param-name>configPath</param-name> 
+        <param-value>/config</param-value> 
+     </context-param>
+    <servlet>
 		<servlet-name>ledge</servlet-name>
 		<servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
 	</servlet>
