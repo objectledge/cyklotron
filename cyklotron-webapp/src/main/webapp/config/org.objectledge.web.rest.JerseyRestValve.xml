@@ -27,5 +27,5 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 <config>
- <restPackageNames>net.cyklotron.cms.files</restPackageNames>
+ <restPackageNames>net.cyklotron.cms.rest</restPackageNames>
 </config>
