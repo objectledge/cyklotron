@@ -2,6 +2,9 @@ package net.cyklotron.cms.modules.actions.files;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.relation.Relation;
+import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.util.ResourceSelectionState;
@@ -9,6 +12,7 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
+import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
@@ -48,10 +52,29 @@ public class UploadAndBindFile
         String result = (String)templatingContext.get("result");
         if(result.equals("uploaded_successfully") && quickAdd)
         {
-            Resource file = (Resource)templatingContext.get("file");
-            ResourceSelectionState relatedState = ResourceSelectionState.getState(context,
-                BaseRelatedAction.RELATED_SELECTION_STATE + ":" + parameters.get("res_id", ""));
-            relatedState.setValue(file, "selected");
+            try
+            {
+                Resource file = (Resource)templatingContext.get("file");
+                ResourceSelectionState relatedState = ResourceSelectionState.getState(context,
+                    BaseRelatedAction.RELATED_SELECTION_STATE + ":" + parameters.get("res_id", ""));
+                relatedState.setValue(file, "selected");
+
+                long resId = parameters.getLong("res_id", 0);
+                Resource resource = coralSession.getStore().getResource(resId);
+                Relation relation = relatedService.getRelation(coralSession);
+                RelationModification modification = new RelationModification();
+
+                modification.add(resource, file);
+                coralSession.getRelationManager().updateRelation(relation, modification);
+
+            }
+            catch(EntityDoesNotExistException e)
+            {
+                logger.error("ARLException: ", e);
+                templatingContext.put("result", "exception");
+                templatingContext.put("trace", new StackTrace(e));
+                return;
+            }
         }
     }
 
