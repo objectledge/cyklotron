@@ -100,6 +100,23 @@
       <groupId>org.bouncycastle</groupId>
       <artifactId>bcmail-jdk15</artifactId>
     </dependency>
+	<dependency>
+	    <groupId>com.sun.jersey</groupId>
+	    <artifactId>jersey-server</artifactId>
+	</dependency>
+	<dependency>
+	    <groupId>com.sun.jersey</groupId>
+	    <artifactId>jersey-servlet</artifactId>
+	</dependency>       
+	
+	<dependency>
+	    <groupId>com.sun.jersey.contribs</groupId>
+	    <artifactId>jersey-multipart</artifactId>
+	</dependency>    
+	<dependency>
+	    <groupId>com.sun.jersey</groupId>
+	    <artifactId>jersey-json</artifactId>
+	</dependency>    
   </dependencies>
   <build>
     <plugins>

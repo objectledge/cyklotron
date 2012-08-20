@@ -304,7 +304,27 @@
         <artifactId>bcmail-jdk15</artifactId>
         <version>1.44</version>
       </dependency>      
-    </dependencies>
+		<dependency>
+		    <groupId>com.sun.jersey</groupId>
+		    <artifactId>jersey-server</artifactId>
+		    <version>1.13</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.sun.jersey</groupId>
+		    <artifactId>jersey-servlet</artifactId>
+		    <version>1.13</version>
+		</dependency>       		
+		<dependency>
+		    <groupId>com.sun.jersey.contribs</groupId>
+		    <artifactId>jersey-multipart</artifactId>
+		    <version>1.13</version>
+		</dependency>    
+		<dependency>
+		    <groupId>com.sun.jersey</groupId>
+		    <artifactId>jersey-json</artifactId>
+		    <version>1.13</version>
+		</dependency>
+	</dependencies>    
   </dependencyManagement>
   <build>
     <pluginManagement>

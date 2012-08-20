@@ -31,7 +31,7 @@
 
 	<servlet-mapping>
 		<servlet-name>files</servlet-name>
-		<url-pattern>/f/*</url-pattern>
+		<url-pattern>/rr/*</url-pattern>
 	</servlet-mapping>
 	
 	<session-config>
