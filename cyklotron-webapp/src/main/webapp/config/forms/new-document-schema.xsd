@@ -74,13 +74,13 @@
    <xs:restriction base="xs:string">
 <!--     <xs:pattern value="(http://(([a-zA-Z0-9\.\-_]+(:[a-zA-Z0-9\.\-_]+)?@)?[a-zA-Z0-9\.\-_]+\.[a-zA-Z]{2,4}(:[0-9]{2,6})?(/([a-zA-Z0-9\.\-_%/~]+)+)?(\?[a-zA-Z0-9\.\-_=%&amp;]+)?(#[a-zA-Z0-9\.\-_%]+)?)?)?"/>
 -->
-     <xs:pattern value="(http://(([a-zA-Z0-9\.\-_]+(:[a-zA-Z0-9\.\-_]+)?@)?[a-zA-Z0-9\.\-_]+\.[a-zA-Z]{2,4}(:[0-9]{2,6})?(/.*)?)?)?"/>
+     <xs:pattern value="((http|https)://(([a-zA-Z0-9\.\-_]+(:[a-zA-Z0-9\.\-_]+)?@)?[a-zA-Z0-9\.\-_]+\.[a-zA-Z]{2,4}(:[0-9]{2,6})?(/.*)?)?)?"/>
    </xs:restriction>
   </xs:simpleType>
   
   <xs:simpleType name="myurls">
    <xs:restriction base="xs:string">
-     <xs:pattern value="(http://(([a-zA-Z0-9\.\-_]+(:[a-zA-Z0-9\.\-_]+)?@)?[a-zA-Z0-9\.\-_]+\.[a-zA-Z]{2,4}(:[0-9]{2,6})?(/.*)?)?(\shttp://(([a-zA-Z0-9\.\-_]+(:[a-zA-Z0-9\.\-_]+)?@)?[a-zA-Z0-9\.\-_]+\.[a-zA-Z]{2,4}(:[0-9]{2,6})?(/.*)?)?)*)?"/>
+     <xs:pattern value="((http|https)://(([a-zA-Z0-9\.\-_]+(:[a-zA-Z0-9\.\-_]+)?@)?[a-zA-Z0-9\.\-_]+\.[a-zA-Z]{2,4}(:[0-9]{2,6})?(/.*)?)?(\s(http|https)://(([a-zA-Z0-9\.\-_]+(:[a-zA-Z0-9\.\-_]+)?@)?[a-zA-Z0-9\.\-_]+\.[a-zA-Z]{2,4}(:[0-9]{2,6})?(/.*)?)?)*)?"/>
    </xs:restriction>
   </xs:simpleType>
 
