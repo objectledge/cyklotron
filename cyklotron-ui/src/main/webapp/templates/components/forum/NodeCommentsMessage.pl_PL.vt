@@ -62,7 +62,16 @@
       <td>
     #cms_personal_credentials($message.getCreatedBy())<br>
       </td>
+    </tr>  
+    <tr>
+      <td>
+       <b>IP adres:</b>
+      </td>
+      <td>
+        $message.getRemoteAddr()<br>
+      </td>
     </tr>
+    
     <tr>
       <td>
     <b>Data:</b>

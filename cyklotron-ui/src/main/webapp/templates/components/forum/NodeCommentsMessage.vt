@@ -65,6 +65,14 @@
     </tr>
     <tr>
       <td>
+    <b>IP address:</b>
+      </td>
+      <td>
+        $message.getRemoteAddr()<br>
+      </td>
+    </tr>
+    <tr>
+      <td>
     <b>Date:</b>
       </td>
       <td>
