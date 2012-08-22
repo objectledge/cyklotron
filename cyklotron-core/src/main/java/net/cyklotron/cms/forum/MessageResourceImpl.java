@@ -84,6 +84,9 @@ public class MessageResourceImpl
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
     private static AttributeDefinition<Integer> priorityDef;
 
+    /** The AttributeDefinition object for the <code>remoteAddr</code> attribute. */
+	private static AttributeDefinition<String> remoteAddrDef;
+
     /** The AttributeDefinition object for the <code>state</code> attribute. */
 	private static AttributeDefinition<StateResource> stateDef;
 
@@ -563,6 +566,66 @@ public class MessageResourceImpl
         }
     }
     
+    /**
+     * Returns the value of the <code>remoteAddr</code> attribute.
+     *
+     * @return the value of the <code>remoteAddr</code> attribute.
+     */
+    public String getRemoteAddr()
+    {
+        return get(remoteAddrDef);
+    }
+    
+    /**
+     * Returns the value of the <code>remoteAddr</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>remoteAddr</code> attribute.
+     */
+    public String getRemoteAddr(String defaultValue)
+    {
+        return get(remoteAddrDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>remoteAddr</code> attribute.
+     *
+     * @param value the value of the <code>remoteAddr</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRemoteAddr(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(remoteAddrDef, value);
+            }
+            else
+            {
+                unset(remoteAddrDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>remoteAddr</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>remoteAddr</code> attribute is defined.
+	 */
+    public boolean isRemoteAddrDefined()
+	{
+	    return isDefined(remoteAddrDef);
+	}
+ 
     /**
      * Returns the value of the <code>state</code> attribute.
      *

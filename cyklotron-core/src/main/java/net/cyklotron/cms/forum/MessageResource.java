@@ -235,7 +235,37 @@ public interface MessageResource
      * @param value the value of the <code>priority</code> attribute.
      */
     public void setPriority(int value);
-   	
+    
+    /**
+     * Returns the value of the <code>remoteAddr</code> attribute.
+     *
+     * @return the value of the the <code>remoteAddr</code> attribute.
+     */
+    public String getRemoteAddr();
+    
+    /**
+     * Returns the value of the <code>remoteAddr</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>remoteAddr</code> attribute.
+     */
+    public String getRemoteAddr(String defaultValue);
+
+    /**
+     * Sets the value of the <code>remoteAddr</code> attribute.
+     *
+     * @param value the value of the <code>remoteAddr</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRemoteAddr(String value);   
+   
+	/**
+	 * Checks if the value of the <code>remoteAddr</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>remoteAddr</code> attribute is defined.
+	 */
+    public boolean isRemoteAddrDefined();
+	
     /**
      * Returns the value of the <code>sticky</code> attribute.
      *
