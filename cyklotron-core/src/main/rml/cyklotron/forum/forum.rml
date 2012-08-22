@@ -68,6 +68,7 @@ string moderationCookie,
 string messageId,
 string author,
 string email,
+string remoteAddr,
 REQUIRED resource(cms.forum.discussion) discussion,
 boolean sticky
 );

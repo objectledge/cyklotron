@@ -139,6 +139,7 @@ public class AddMessage
             String email = parameters.get("email","");
             message.setAuthor(author);
             message.setEmail(email);
+            message.setRemoteAddr(httpContext.getRequest().getRemoteAddr());
             message.setSticky(false);
             message.update();
             

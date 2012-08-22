@@ -72,6 +72,14 @@
     </tr>
     <tr>
       <td>
+    <b>Adress IP:</b>
+      </td>
+      <td>
+    $!message.getRemoteAddr()<br>
+      </td>
+    </tr>
+    <tr>
+      <td>
     <b>Email autora:</b>
       </td>
       <td>
