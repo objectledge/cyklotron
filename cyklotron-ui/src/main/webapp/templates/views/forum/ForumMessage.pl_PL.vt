@@ -60,6 +60,14 @@ $pageTool.addScriptLink("script/WinPopup.js")
     </tr>
     <tr>
       <td>
+    <b>IP adres:</b>
+      </td>
+      <td>
+        $message.getRemoteAddr()<br>
+      </td>
+    </tr>
+    <tr>
+      <td>
     <b>Data:</b>
       </td>
       <td>
