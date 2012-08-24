@@ -22,6 +22,7 @@ import org.objectledge.web.mvc.MVCContext;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
@@ -50,10 +51,10 @@ public class ChooseRelatedResources
     public ChooseRelatedResources(Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, RelatedService relatedService,
-        IntegrationService integrationService)
+        IntegrationService integrationService, FilesService filesService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
-                        integrationService);
+                        integrationService, filesService);
         this.relatedService = relatedService;
     }
 
@@ -107,6 +108,7 @@ public class ChooseRelatedResources
                 {
                     initialState.put(related[i], "selected");
                 }
+                
                 // initialise state
                 relatedState.init(initialState);
             }

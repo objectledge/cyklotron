@@ -1,0 +1,22 @@
+$pageTool.addScriptLink('script/CMSPopups.js')
+
+#genericScreenHeader('Application configuration - Files')
+
+#result_inline_message('results.files')
+
+<form name="form1" method="post" action="$link.view('files.ListDirectory').action('files.UpdateConfiguration')">
+  <table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
+    <tr>
+      <td nowrap="true">File resource tree initial expand path:</td>
+      <td width="90%">
+        <input type="text" name="expanded_directory" value="$!htmlEncoder.encodeAttribute($!expanded_directory.sitePath)" size="60"/>
+        <input type="hidden" name="expanded_directory_id" value="$!expanded_directory.id" />
+        <a href="#select_directory('local_path id' 'form1' 'expanded_directory expanded_directory_id')">Choose</a>
+      </td>
+    </tr>
+  </table>
+</form>
+
+#command_bar([['javascript:document.form1.submit()','Save']])
+
+#genericScreenTrailer()

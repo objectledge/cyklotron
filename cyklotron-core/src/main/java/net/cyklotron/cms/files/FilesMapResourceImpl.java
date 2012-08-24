@@ -56,6 +56,9 @@ public class FilesMapResourceImpl
     /** The AttributeDefinition object for the <code>administrator</code> attribute. */
 	private static AttributeDefinition<Role> administratorDef;
 
+    /** The AttributeDefinition object for the <code>expandedDirectory</code> attribute. */
+	private static AttributeDefinition<Resource> expandedDirectoryDef;
+
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
 	private static AttributeDefinition<Role> visitorDef;
 
@@ -194,6 +197,66 @@ public class FilesMapResourceImpl
     public boolean isAdministratorDefined()
 	{
 	    return isDefined(administratorDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>expandedDirectory</code> attribute.
+     *
+     * @return the value of the <code>expandedDirectory</code> attribute.
+     */
+    public Resource getExpandedDirectory()
+    {
+        return get(expandedDirectoryDef);
+    }
+    
+    /**
+     * Returns the value of the <code>expandedDirectory</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>expandedDirectory</code> attribute.
+     */
+    public Resource getExpandedDirectory(Resource defaultValue)
+    {
+        return get(expandedDirectoryDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>expandedDirectory</code> attribute.
+     *
+     * @param value the value of the <code>expandedDirectory</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setExpandedDirectory(Resource value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(expandedDirectoryDef, value);
+            }
+            else
+            {
+                unset(expandedDirectoryDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>expandedDirectory</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>expandedDirectory</code> attribute is defined.
+	 */
+    public boolean isExpandedDirectoryDefined()
+	{
+	    return isDefined(expandedDirectoryDef);
 	}
  
     /**
