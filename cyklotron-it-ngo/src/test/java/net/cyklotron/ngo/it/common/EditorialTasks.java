@@ -167,6 +167,7 @@ public class EditorialTasks
         selenium.click("id=category-267525");
         selenium.click("id=category-673805");
         selenium.click("id=category-564755");
+        selenium.click("id=category-378093");
         selenium.click("id=category-564755");
         selenium.click("id=category-26553");
         selenium.click("id=category-769271");
@@ -479,6 +480,7 @@ public class EditorialTasks
         Assert.assertTrue(selenium.isElementPresent("link=Rozwiń wszystko"));
         selenium.click("link=Rozwiń wszystko");
 
+        selenium.click("id=category-160836");
         Assert.assertTrue(selenium.isElementPresent("id=category-607896"));
         selenium.click("id=category-607896");
         Assert.assertTrue(selenium.isElementPresent("id=category-607895"));
