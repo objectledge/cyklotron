@@ -4,5 +4,6 @@
  
   #genericNaviHeader('Files')
     #linkCell('' 'File list' $link.view('files.ListDirectory'))
+    #linkCell('' 'Configuration' $link.view('files.EditConfiguration'))
   #genericNaviTrailer()
 #end

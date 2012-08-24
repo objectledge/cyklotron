@@ -1,1 +1,3 @@
 ALTER RESOURCE CLASS 'cms.forum.message' ADD ATTRIBUTE string remoteAddr;
+
+ALTER RESOURCE CLASS 'cms.files.files_map' ADD ATTRIBUTE resource expandedDirectory;

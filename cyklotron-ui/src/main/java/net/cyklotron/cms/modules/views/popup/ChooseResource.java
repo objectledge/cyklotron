@@ -12,6 +12,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.modules.views.BaseChooseResource;
@@ -29,11 +30,11 @@ public class ChooseResource
     
     public ChooseResource(Context context, Logger logger, PreferencesService preferencesService,
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
-        IntegrationService integrationService)
+        IntegrationService integrationService, FilesService filesService)
     {
 
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
-                        integrationService);
+                        integrationService, filesService);
     }
 
     public void process(Parameters parameters, MVCContext mvcContext,

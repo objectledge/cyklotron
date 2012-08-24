@@ -47,7 +47,8 @@ SUPERCLASSES ( 'cms.files.item' )
 ATTRIBUTES (
 ## REQUIRED READONLY cross_reference references,
 role administrator,
-role visitor
+role visitor,
+resource expandedDirectory
 );
 
 ##  security

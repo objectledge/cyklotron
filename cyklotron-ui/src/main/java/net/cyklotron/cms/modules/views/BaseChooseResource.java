@@ -33,12 +33,18 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.files.DirectoryResource;
+import net.cyklotron.cms.files.FilesException;
+import net.cyklotron.cms.files.FilesMapResource;
+import net.cyklotron.cms.files.FilesService;
+import net.cyklotron.cms.files.RootDirectoryResource;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.integration.ResourceClassResourceImpl;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.util.CmsPathFilter;
 import net.cyklotron.cms.util.CmsResourceClassFilter;
 import net.cyklotron.cms.util.ProtectedViewFilter;
@@ -48,16 +54,20 @@ public abstract class BaseChooseResource
     extends BaseCMSScreen
 {
     /** integration service */
+    protected FilesService filesService;
+    
     protected IntegrationService integrationService;
     
     protected ResourceClassResource resourceClassResource = null;
 
     public BaseChooseResource(Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
-        TableStateManager tableStateManager, IntegrationService integrationService)
+        TableStateManager tableStateManager, IntegrationService integrationService,
+        FilesService filesService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
         this.integrationService = integrationService;
+        this.filesService = filesService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext,
@@ -125,6 +135,10 @@ public abstract class BaseChooseResource
         {
             throw new ProcessingException("Internal error", e);
         }
+        catch(FilesException e)
+        {
+            throw new ProcessingException("Files directory configuration error", e);
+        }
     }
 
     private void initResClassChooser(TemplatingContext templatingContext, CoralSession coralSession, Parameters parameters)
@@ -183,7 +197,7 @@ public abstract class BaseChooseResource
     
     protected abstract String getStateName();
     
-    protected TableState getState(SiteResource site, boolean resetState, CoralSession coralSession, Resource resource) throws ProcessingException
+    protected TableState getState(SiteResource site, boolean resetState, CoralSession coralSession, Resource resource) throws ProcessingException, FilesException
     {        
         String rootId = Long.toString(site.getId());
         TableState state = tableStateManager.getState(context, getStateName());
@@ -200,6 +214,24 @@ public abstract class BaseChooseResource
             state.setRootId(rootId);
             state.clearExpanded();
             state.setExpanded(rootId);
+        }
+        if((resetState || state.isNew())
+            && resourceClassResource.getName().equals("cms.files.file"))
+        {
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
+            FilesMapResource filesMap = filesService.getFilesRoot(coralSession, cmsData.getSite());
+            if(filesMap.isExpandedDirectoryDefined())
+            {
+                Resource dr = (DirectoryResource)filesMap.getExpandedDirectory();
+                state.setExpanded(dr.getIdString());
+                while(dr.getParent() instanceof DirectoryResource
+                    || dr.getParent() instanceof RootDirectoryResource
+                    || dr.getParent() instanceof FilesMapResource)
+                {
+                    dr = dr.getParent();
+                    state.setExpanded(dr.getIdString());
+                }
+            }
         }
         
         return state;

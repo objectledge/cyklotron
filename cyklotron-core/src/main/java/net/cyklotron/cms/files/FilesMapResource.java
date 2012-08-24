@@ -77,6 +77,36 @@ public interface FilesMapResource
     public boolean isAdministratorDefined();
  
     /**
+     * Returns the value of the <code>expandedDirectory</code> attribute.
+     *
+     * @return the value of the the <code>expandedDirectory</code> attribute.
+     */
+    public Resource getExpandedDirectory();
+    
+    /**
+     * Returns the value of the <code>expandedDirectory</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>expandedDirectory</code> attribute.
+     */
+    public Resource getExpandedDirectory(Resource defaultValue);
+
+    /**
+     * Sets the value of the <code>expandedDirectory</code> attribute.
+     *
+     * @param value the value of the <code>expandedDirectory</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setExpandedDirectory(Resource value);   
+   
+	/**
+	 * Checks if the value of the <code>expandedDirectory</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>expandedDirectory</code> attribute is defined.
+	 */
+    public boolean isExpandedDirectoryDefined();
+ 
+    /**
      * Returns the value of the <code>visitor</code> attribute.
      *
      * @return the value of the the <code>visitor</code> attribute.
