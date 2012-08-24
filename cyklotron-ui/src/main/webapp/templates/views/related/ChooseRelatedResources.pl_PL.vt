@@ -34,7 +34,7 @@ function selCheckbox(id) {
 
   <div class="modification" style="float: rigth; margin: 0px;">
 #if($resource.canModify($cms_tool.coralSession,$cms_tool.getUserData().getSubject()))
-  <a href="javascript:fSub('$link.action('related.UpdateRelations')');">Zapisz zmiany</a>
+  <a href="javascript:updateAll('$link.action('related.UpdateRelations')');">Zapisz zmiany</a>
 #end
   </div>
 </div>
@@ -67,16 +67,17 @@ function fSub(action)
   document.form1.submit();
 }
 
+function updateAll(action)
+{
+  orderSub();
+  fSub(action);
+}
+
 function orderSub()
 {
- var params = "action=related.UpdateOrder&res_id=$resource.id&" + $("#related_order").sortable("serialize");
- 
+ var params = "action=related.UpdateOrder&res_id=$resource.id&" + $("#related_order").sortable("serialize"); 
   $##
-.post("$link", params,
-  function(data){
-    alert("Zapisano.");
-  });
-
+.post("$link", params );
 }
 
 function fSubConf(link, actionType)
@@ -171,7 +172,7 @@ function categorizeResource(url)
   #end
   <br/>
   #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
-	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>
+	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.id).set('target_view', 'related.ChooseRelatedResources')');">Pokaż i edytuj</a>
   #end
   #if($categorizeResourceClassDefNames.contains("$definition.name") && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession, $cms_tool.subject))
   	 <a href="javascript:categorizeResource('$link.view('category.Categorize').set('res_id',$row.id)');">Kategorie</a>
@@ -184,7 +185,7 @@ function categorizeResource(url)
   </li>
 #end
 </ul>
-<a href="#" onclick="orderSub(); return false; ">Zapisz kolejność</a>
+## <a href="#" onclick="orderSub(); return false; ">Zapisz kolejność</a>
 
 <script type="text/javascript">
 <!--
@@ -201,10 +202,10 @@ $("#related_order").sortable();
   
 
 #if( $res_class_res.name == "documents.document_node" )
-<div style="float: left;">
+<div style="float: right;">
 		<input type="checkbox" name="sym_rel" value="true" #if($sym_rel) checked #end /><I> utwórz</I> / <I>usuń</I> powiązania symetryczne
 </div>
-<div style="float: right;" >	
+<div style="float: left;" >	
 		id:<input size="5" maxlength="7" type="text" name="doc_res_id" value="$!doc_res_id" />
 		<a href="javascript:fSub('$link.view('related.ChooseRelatedResources').action('related.BindDocument')');">Powiąż</a>
 </div><br>
@@ -274,7 +275,7 @@ $res_title
 ##
 ## show quick edit button
 #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row.object, 'protected') && $row.object.canModify($cms_tool.coralSession,$cms_tool.subject))
-<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Edytuj opis</a>##
+<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $row.object.id).set('target_view', 'related.ChooseRelatedResources')');">Pokaż i edytuj</a>##
 #if($categorizeResourceClassDefNames.contains("$definition.name")) <a href="javascript:categorizeResource('$link.view('category.Categorize').set('res_id',$row.id)');">Kategorie</a>#end
 #end
 </td>

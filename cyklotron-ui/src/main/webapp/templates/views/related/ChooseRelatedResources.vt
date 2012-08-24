@@ -34,7 +34,7 @@ function selCheckbox(id) {
 
   <div class="modification" style="float: rigth; margin: 0px;">
 #if($resource.canModify($cms_tool.coralSession,$cms_tool.getUserData().getSubject()))
-  <a href="javascript:fSub('$link.action('related.UpdateRelations')');">Save changes</a>
+  <a href="javascript:updateAll('$link.action('related.UpdateRelations')');">Save changes</a>
 #end
   </div>
 </div>
@@ -67,16 +67,17 @@ function fSub(action)
   document.form1.submit();
 }
 
+function updateAll(action)
+{
+  orderSub();
+  fSub(action);
+}
+
 function orderSub()
 {
- var params = "action=related.UpdateOrder&res_id=$resource.id&" + $("#related_order").sortable("serialize");
- 
+ var params = "action=related.UpdateOrder&res_id=$resource.id&" + $("#related_order").sortable("serialize"); 
   $##
-.post("$link", params,
-  function(data){
-    alert("Saved successfuly");
-  });
-
+.post("$link", params );
 }
  
 function fSubConf(link, actionType)
@@ -184,7 +185,7 @@ function categorizeResource(url)
   </li>
 #end
 </ul>
-<a href="#" onclick="orderSub(); return false; ">Save order</a>
+## <a href="#" onclick="orderSub(); return false; ">Save order</a>
 
 <script type="text/javascript">
 <!--
@@ -201,10 +202,10 @@ $("#related_order").sortable();
   
 
 #if( $res_class_res.name == "documents.document_node" )
-<div style="float: left;">
+<div style="float: right;">
 		<input type="checkbox" name="sym_rel" value="true" #if($sym_rel) checked #end /><I> create</I> / <I>delete</I> symmetric binding
 </div>
-<div style="float: right;" >	
+<div style="float: left;" >	
 		id:<input size="5" maxlength="7" type="text" name="doc_res_id" value="$!doc_res_id" />
 		<a href="javascript:fSub('$link.view('related.ChooseRelatedResources').action('related.BindDocument')');">Bind</a>
 </div><br>
