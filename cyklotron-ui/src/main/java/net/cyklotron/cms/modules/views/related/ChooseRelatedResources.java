@@ -127,6 +127,16 @@ public class ChooseRelatedResources
                 new IndexTitleComparator(context, integrationService, i18nContext.getLocale()));
             templatingContext.put("related_to", Arrays.asList(relatedTo));
             templatingContext.put("related_selection_state", relatedState);
+            
+            if(resource instanceof DocumentNodeResource)
+            {
+                Resource thumbnail = ((DocumentNodeResource)resource).getThumbnail();
+                if(thumbnail != null)
+                {
+                    templatingContext.put("thumbnail", thumbnail);
+                }
+            }
+            
             if(!templatingContext.containsKey("sym_rel"))
             {
                 templatingContext.put("sym_rel", parameters.getBoolean("sym_rel", true));

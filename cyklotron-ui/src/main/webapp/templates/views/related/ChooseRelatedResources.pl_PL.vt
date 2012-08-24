@@ -106,12 +106,13 @@ function categorizeResource(url)
 //-->
 </script>
 <style>
-#related_order  { margin:0; padding:0; width: 100% }
-#related_order li { border:1px solid #DADADA; background-color:#EFEFEF; margin-bottom:3px; margin-top:3px; list-style-type:none;
+#related_order, #thumbnail  { margin:0; padding:0; width: 100% }
+#related_order li, #thumbnail li{ border:1px solid #DADADA; background-color:#EFEFEF; margin-bottom:3px; margin-top:3px; list-style-type:none;
 	color:#666666; width: 100% }
-#related_order li:hover { 	background-color:#FFF; cursor:move; }
-#related_order li .actions a { padding-right: 0.5em; } 
-#related_order div { float: left; padding: 4px 0px 4px 4px }
+#related_order li:hover { background-color:#FFF; cursor:move; }
+#thumbnail li:hover { background-color:#FFF; }
+#related_order li .actions a, #thumbnail li .actions a{ padding-right: 0.5em; } 
+#related_order div, #thumbnail div { float: left; padding: 4px 0px 4px 4px }
 </style>
 
 <div style="float: right;">
@@ -147,6 +148,39 @@ function categorizeResource(url)
 #set($categorizeResourceClassDefNames = ['cms.files.file'])
 #set($previewExtensions = ['jpg','jpeg','png','gif'])
 
+#if($thumbnail)
+<h5>Zdjęcie główne:</h5>
+<ul id="thumbnail">
+  #set($definition = $cms_tool.getClassDefinition($thumbnail))##
+  <li id="listItem_$thumbnail.id" class="clearfix">
+  #if($previewExtensions.contains($files.getExtension($thumbnail).toLowerCase()))
+  <div>
+  #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($thumbnail, 'protected') && $thumbnail.canModify($cms_tool.coralSession,$cms_tool.subject))
+	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $thumbnail.id).set('target_view', 'related.ChooseRelatedResources')');">
+  	  <img src="$files.getLink($thumbnail)" height="28px"/>
+	</a>
+  #else	
+      <img src="$files.getLink($thumbnail)" height="28px"/>
+  #end
+  </div>
+  #end
+  <div class="actions">
+  #resource_label($thumbnail) 
+  #set($categories = $category_context_tool.getCategoriesAsList($thumbnail, false))
+  #foreach($cat in $categories)
+    <em>$cat.name#if($velocityCount < $categories.size()), #end</em> 
+  #end
+  <br/>
+  #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($thumbnail, 'protected') && $thumbnail.canModify($cms_tool.coralSession,$cms_tool.subject))
+	<a href="javascript:fSub('$link.view($definition.relatedQuickEditView).action('related.RefreshRelations').set('item_id', $thumbnail.id).set('target_view', 'related.ChooseRelatedResources')');">Pokaż i edytuj</a>
+  #end
+  #if($categorizeResourceClassDefNames.contains("$definition.name") && $cms_tool.isInstance($thumbnail, 'protected') && $thumbnail.canModify($cms_tool.coralSession, $cms_tool.subject))
+  	 <a href="javascript:categorizeResource('$link.view('category.Categorize').set('res_id',$thumbnail.id)');">Kategorie</a>
+  #end
+  </div>
+</li>
+</ul>
+#end
 #if($related_to.size() > 0)
 <h5>Ustaw kolejność zasobów powiązanych:</h5>
 <ul id="related_order">
