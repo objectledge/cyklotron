@@ -46,9 +46,9 @@ $pageTool.addScriptLink('script/CMSPopups.js')##
 javascript:selectCategory('$attribute_names', '$form', '$element_names', '$link.view('popup.ChooseCategory')')##
 #end
 
-#macro( select_categories $selected_element $attribute_names $form $element_names )
+#macro( select_categories $selected_element $attribute_names $form $element_names $res_class_name)
 $pageTool.addScriptLink('script/CMSPopups.js')##
-javascript:selectCategories('$attribute_names', '$form', '$element_names', '$link.view('category.ChooseCategories').set('reset-state',true)', '$selected_element')##
+javascript:selectCategories('$attribute_names', '$form', '$element_names', '$link.view('category.ChooseCategories').set('reset-state',true)', '$selected_element', '$res_class_name')##
 #end
 
 #macro( select_index_pool $attribute_names $form $element_names )

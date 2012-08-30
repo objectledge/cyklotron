@@ -148,6 +148,7 @@ function categorizeResource(url)
 #set($categorizeResourceClassDefNames = ['cms.files.file'])
 #set($previewExtensions = ['jpg','jpeg','png','gif'])
 
+<form name="form1" method="POST" action="">
 #if($thumbnail)
 <h5>Zdjęcie główne:</h5>
 <ul id="thumbnail">
@@ -178,6 +179,15 @@ function categorizeResource(url)
   	 <a href="javascript:categorizeResource('$link.view('category.Categorize').set('res_id',$thumbnail.id)');">Kategorie</a>
   #end
   </div>
+  #if($categorizeResourceClassDefNames.contains("$definition.name") && $cms_tool.isInstance($thumbnail, 'protected') && $thumbnail.canModify($cms_tool.coralSession, $cms_tool.subject) && $files_front_categories.size() > 0 )
+  <div class="actions" style="float:right;margin-right:5px;">
+  Kategorie wyszczególnione:<br/>
+  #set($categories = $category_context_tool.getCategoriesAsList($thumbnail, false))
+  #foreach($cat in $files_front_categories)
+    <input type="checkbox" #if($categories.contains($cat)) checked="checked" #end name="res-${thumbnail.id}-front-categories" value="$cat.id"><em>$cat.name#if($velocityCount < $files_front_categories.size()), #end</em>
+  #end  
+  </div>
+  #end
 </li>
 </ul>
 #end
@@ -216,6 +226,15 @@ function categorizeResource(url)
  	<a href="javascript:fSubConf('$link.view('related.ChooseRelatedResources').action('files.DeleteRelatedFile').set('file_id',$row.id)','delete');">Usuń</a>
   #end
   </div>
+  #if($categorizeResourceClassDefNames.contains("$definition.name") && $cms_tool.isInstance($thumbnail, 'protected') && $thumbnail.canModify($cms_tool.coralSession, $cms_tool.subject) && $files_front_categories.size() > 0 )
+  <div class="actions" style="float:right;margin-right:5px;">
+  Kategorie wyszczególnione:<br/>
+  #set($categories = $category_context_tool.getCategoriesAsList($row, false))
+  #foreach($cat in $files_front_categories)
+    <input type="checkbox" #if($categories.contains($cat)) checked="checked" #end name="res-${row.id}-front-categories" value="$cat.id"><em>$cat.name#if($velocityCount < $files_front_categories.size()), #end</em>
+  #end  
+  </div>
+  #end
   </li>
 #end
 </ul>
@@ -229,11 +248,9 @@ $("#related_order").sortable();
 <br/><br/>
 #end
 
-
-<form name="form1" method="POST" action="">
   <input type="hidden" name="res_id" value="$resource.id" />
   <input type="hidden" name="res_class_id" value="$res_class_res.id" />
-  
+	  
 
 #if( $res_class_res.name == "documents.document_node" )
 <div style="float: right;">

@@ -25,7 +25,8 @@ public class EditConfiguration
     private final FilesService filesService;
 
     public EditConfiguration(Context context, Logger logger, PreferencesService preferencesService,
-        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager, FilesService filesService)
+        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
+        FilesService filesService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager);
         this.filesService = filesService;
@@ -42,6 +43,7 @@ public class EditConfiguration
             CmsData cmsData = cmsDataFactory.getCmsData(context);
             FilesMapResource filesMap = filesService.getFilesRoot(coralSession, cmsData.getSite());
             templatingContext.put("expanded_directory", filesMap.getExpandedDirectory());
+            templatingContext.put("front_categories", filesMap.getFrontCategories());
         }
         catch(FilesException e)
         {

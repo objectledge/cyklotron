@@ -29,6 +29,7 @@
 package net.cyklotron.cms.files;
 
 import org.objectledge.coral.BackendException;
+import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
@@ -58,6 +59,9 @@ public class FilesMapResourceImpl
 
     /** The AttributeDefinition object for the <code>expandedDirectory</code> attribute. */
 	private static AttributeDefinition<Resource> expandedDirectoryDef;
+
+    /** The AttributeDefinition object for the <code>frontCategories</code> attribute. */
+	private static AttributeDefinition<ResourceList> frontCategoriesDef;
 
     /** The AttributeDefinition object for the <code>visitor</code> attribute. */
 	private static AttributeDefinition<Role> visitorDef;
@@ -257,6 +261,66 @@ public class FilesMapResourceImpl
     public boolean isExpandedDirectoryDefined()
 	{
 	    return isDefined(expandedDirectoryDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>frontCategories</code> attribute.
+     *
+     * @return the value of the <code>frontCategories</code> attribute.
+     */
+    public ResourceList getFrontCategories()
+    {
+        return get(frontCategoriesDef);
+    }
+    
+    /**
+     * Returns the value of the <code>frontCategories</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>frontCategories</code> attribute.
+     */
+    public ResourceList getFrontCategories(ResourceList defaultValue)
+    {
+        return get(frontCategoriesDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>frontCategories</code> attribute.
+     *
+     * @param value the value of the <code>frontCategories</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setFrontCategories(ResourceList value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(frontCategoriesDef, value);
+            }
+            else
+            {
+                unset(frontCategoriesDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>frontCategories</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>frontCategories</code> attribute is defined.
+	 */
+    public boolean isFrontCategoriesDefined()
+	{
+	    return isDefined(frontCategoriesDef);
 	}
  
     /**

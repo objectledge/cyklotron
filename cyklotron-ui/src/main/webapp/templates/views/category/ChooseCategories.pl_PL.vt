@@ -3,6 +3,9 @@ $pageTool.addScriptLink('script/jquery/jquery-latest.js')##
 
 #macro(category_tree $table $root_row_title)
 #set($tableLink = $resLink.set('tableId',$table.id))
+#if($parametersTool.isDefined('res_class_name'))
+ #set($tableLink = $tableLink.set('res_class_name', $parametersTool.get('res_class_name')))
+#end
 ##
 #foreach($row in $table.rows)
 #if($table.rootRow != $row)## WARN: rootRow is not a category
@@ -19,11 +22,11 @@ function selectCategories()
   values['name'] = "";
   values['id'] = "";
   jQuery('input:checked').each( function(index)
-  {    
+  {
     if( index == 0 ) {   
-       values['name'] += $(this).attr('category-name').substring(9);
+       values['name'] += $(this).attr('category_name').substring(9);
     } else {
-       values['name'] += ", " + $(this).attr('category-name').substring(9);
+       values['name'] += ", " + $(this).attr('category_name').substring(9);
     }
     values['id'] +=  $(this).attr('id').substring(9) + " ";
   });
@@ -48,18 +51,23 @@ function selCheckbox(id) {
 
 <table width="100%" class="genericItemTree" cellspacing="0">
 #foreach($row in $table.rows)
-    <tr>
-      <td width="20"#if($row.object.css_class != '') class="$row.object.css_class"#end>
-#set($readonly = false)
-#if($table.rootRow == $row)
+<tr>
+<td width="20"#if($row.object.css_class != '') class="$row.object.css_class"#end>
+#set($subject = $cms_tool.getSubject())
+#if($cms_tool.hasPermission($subject, $row.object, 'cms.category.classify'))
+  #set($readonly = false)
+#else
+  #set($readonly = true)
+#end
+#if($table.rootRow == $row || ($resource_class && !$category_tool.supportsResourceClass($row.object, $resource_class)))
 &nbsp;
 #elseif($category_selection_state.getValue($row.object).equals('selected'))
-<input type="checkbox" name="category-$row.id" category-name="category-$row.object.name" id="category-$row.id" value="selected" checked="checked" #if($readonly) disabled#else onChange="selCheckbox($row.id)"#end />
+<input type="checkbox" name="category-$row.id" category_name="category-$row.object.name" id="category-$row.id" value="selected" checked="checked" #if($readonly) disabled#else onChange="selCheckbox($row.id)"#end />
  #if($readonly)
-  <input type="hidden" name="category-$row.id" category-name="category-$row.object.name" id="category-$row.id" value="selected"/>
+  <input type="hidden" name="category-$row.id" category_name="category-$row.object.name" id="category-$row.id" value="selected"/>
  #end
 #else
-<input type="checkbox" name="category-$row.id" category-name="category-$row.object.name" id="category-$row.id" value="selected" #if($readonly) disabled#else onChange="selCheckbox($row.id)"#end />
+<input type="checkbox" name="category-$row.id" category_name="category-$row.object.name" id="category-$row.id" value="selected" #if($readonly) disabled#else onChange="selCheckbox($row.id)"#end />
 #end
       </td>
 #set($row_css_class = 'cms-category-no')

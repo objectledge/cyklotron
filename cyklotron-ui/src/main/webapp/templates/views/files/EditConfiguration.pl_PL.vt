@@ -1,17 +1,54 @@
 $pageTool.addScriptLink('script/CMSPopups.js')
+$pageTool.addScriptLink('script/Forms.js')
 
 #genericScreenHeader('Konfiguracja aplikacji - Pliki')
 
 #result_inline_message('results.files')
+
+<script>
+function clearExpandedDirectory()
+{
+  Forms.setValue('form1', 'expanded_directory', '');
+  Forms.setValue('form1', 'expanded_directory_id', '');
+}
+function clearCategories()
+{
+  Forms.setValue('form1', 'front_categories', '');
+  Forms.setValue('form1', 'front_categories_ids', '');
+}
+</script>
 
 <form name="form1" method="post" action="$link.view('files.ListDirectory').action('files.UpdateConfiguration')">
   <table class="genericScreen" width="100%" cellspacing="0" cellpadding="0">
     <tr>
       <td nowrap="true">Początkowe rozwinięcie drzewa plików:</td>
       <td width="90%">
-        <input type="text" name="expanded_directory" value="$!htmlEncoder.encodeAttribute($!expanded_directory.sitePath)" size="60"/>
+        <input type="text" readonly name="expanded_directory" value="$!htmlEncoder.encodeAttribute($!expanded_directory.sitePath)" size="60"/>
         <input type="hidden" name="expanded_directory_id" value="$!expanded_directory.id" />
         <a href="#select_directory('local_path id' 'form1' 'expanded_directory expanded_directory_id')">Wybierz</a>
+        <a href="javascript:clearExpandedDirectory()" >Wyczyść</a>
+      </td>
+    </tr>
+    <tr>
+      <td nowrap="true">Kategorie wyszczególnione:</td>
+      <td width="90%">
+         #set($categories_names = "")
+    	 #set($categories_ids = "")
+    	 #if($front_categories)
+          #foreach($cat in $front_categories)
+           #if($velocityCount < $front_categories.size())
+             #set($categories_names = $categories_names + $cat.name + ", ")
+             #set($categories_ids = $categories_ids + $cat.id + " ")
+           #else
+             #set($categories_names = $categories_names + $cat.name) 
+             #set($categories_ids = $categories_ids + $cat.id)
+           #end
+          #end
+    	 #end
+    	 <input type="text"    name="front_categories" value="$!categories_names" readonly size="60"/>
+         <input type="hidden"  name="front_categories_ids" id="front_categories_ids"  value="$!categories_ids" />
+         <a href="#select_categories('front_categories_ids' 'name id' 'form1' 'front_categories front_categories_ids' 'cms.files.file')" >Wybierz</a>
+         <a href="javascript:clearCategories()" >Wyczyść</a>       
       </td>
     </tr>
   </table>

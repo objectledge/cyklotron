@@ -21,7 +21,10 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.files.FilesException;
+import net.cyklotron.cms.files.FilesMapResource;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.ApplicationResource;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -39,6 +42,8 @@ public class ChooseRelatedResources
 {
     protected RelatedService relatedService;
     
+    protected CategoryService categoryService;
+    
     public static String SELECTION_STATE = RelatedConstants.RELATED_SELECTION_STATE;
     
     public static String STATE_NAME = "cms:screens:related,ChooseRelatedResources";
@@ -51,11 +56,13 @@ public class ChooseRelatedResources
     public ChooseRelatedResources(Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, RelatedService relatedService,
-        IntegrationService integrationService, FilesService filesService)
+        IntegrationService integrationService, FilesService filesService,
+        CategoryService categoryService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         integrationService, filesService);
         this.relatedService = relatedService;
+        this.categoryService = categoryService;
     }
 
     public void process(Parameters parameters, MVCContext mvcContext,
@@ -128,6 +135,10 @@ public class ChooseRelatedResources
             templatingContext.put("related_to", Arrays.asList(relatedTo));
             templatingContext.put("related_selection_state", relatedState);
             
+            CmsData cmsData = cmsDataFactory.getCmsData(context);
+            FilesMapResource filesRoot = filesService.getFilesRoot(coralSession, cmsData.getSite());
+            templatingContext.put("files_front_categories", filesRoot.getFrontCategories());
+            
             if(resource instanceof DocumentNodeResource)
             {
                 Resource thumbnail = ((DocumentNodeResource)resource).getThumbnail();
@@ -145,6 +156,10 @@ public class ChooseRelatedResources
         catch(EntityDoesNotExistException e)
         {
             throw new ProcessingException("Could not find selected resource or resource class", e);
+        }
+        catch(FilesException e)
+        {
+            throw new ProcessingException("Could not find FilesRoot resource", e);
         }
         
     }
