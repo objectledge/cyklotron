@@ -1,8 +1,13 @@
 package net.cyklotron.cms.modules.actions.files;
 
+import java.util.StringTokenizer;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -11,14 +16,14 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.files.DirectoryResource;
+import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesMapResource;
 import net.cyklotron.cms.files.FilesService;
-import net.cyklotron.cms.files.RootDirectoryResource;
 import net.cyklotron.cms.files.RootDirectoryResourceImpl;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 
 public class UpdateConfiguration
@@ -26,11 +31,15 @@ public class UpdateConfiguration
 {
     private final FilesService filesService;
 
+    private final CoralSessionFactory coralSessionFactory;
+
     public UpdateConfiguration(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, FilesService filesService)
+        CmsDataFactory cmsDataFactory, FilesService filesService,
+        CoralSessionFactory coralSessionFactory)
     {
         super(logger, structureService, cmsDataFactory);
         this.filesService = filesService;
+        this.coralSessionFactory = coralSessionFactory;
     }
 
     @Override
@@ -56,12 +65,44 @@ public class UpdateConfiguration
             {
                 filesMap.setExpandedDirectory(null);
             }
+
+            ResourceList<CategoryResource> frontCategoriesList = getCategories(parameters,
+                "front_categories_ids", coralSession, coralSessionFactory);
+            filesMap.setFrontCategories(frontCategoriesList);
             filesMap.update();
         }
-        catch(Exception e)
+        catch(FilesException e)
         {
             throw new ProcessingException(e);
         }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new ProcessingException(e);
+        }
+    }
+
+    private static ResourceList<CategoryResource> getCategories(Parameters parameters,
+        String parameterName, CoralSession coralSession, CoralSessionFactory coralSessionFactory)
+        throws EntityDoesNotExistException
+    {
+        ResourceList<CategoryResource> categories = new ResourceList<CategoryResource>(
+            coralSessionFactory);
+        String ids = parameters.get(parameterName, "");
+        if(!ids.isEmpty())
+        {
+            CategoryResource category = null;
+            StringTokenizer st = new StringTokenizer(ids, " ");
+            while(st.hasMoreTokens())
+            {
+                category = CategoryResourceImpl.getCategoryResource(coralSession,
+                    Long.parseLong(st.nextToken()));
+                if(category != null)
+                {
+                    categories.add(category);
+                }
+            }
+        }
+        return categories;
     }
 
     @Override

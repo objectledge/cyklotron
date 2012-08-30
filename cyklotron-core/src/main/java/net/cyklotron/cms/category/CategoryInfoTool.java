@@ -224,6 +224,39 @@ public class CategoryInfoTool
 
         return ((Boolean)(categories.get(category))).booleanValue();
     }
+    
+    
+    public boolean supportsResourceClass(CategoryResource category, ResourceClassResource resClass)
+        throws ProcessingException
+    {
+
+        if(category == null || resClass == null)
+        {
+            return false;
+        }
+
+        if(categorizableBy == null)
+        {
+            categorizableBy = new HashMap();
+        }
+        if(!categorizableBy.containsKey(resClass))
+        {
+            categorizableBy.put(resClass, new HashMap());
+        }
+
+        HashMap categories = (HashMap)(categorizableBy.get(resClass));
+
+        if(!categories.containsKey(category))
+        {
+            categories.put(
+                category,
+                new Boolean(categoryService.supportsResourceClass(getCoralSession(context),
+                    category, resClass)));
+        }
+
+        return ((Boolean)(categories.get(category))).booleanValue();
+    }
+        
 
     public List getSupportedResourceClasses(CategoryResource category)
     {

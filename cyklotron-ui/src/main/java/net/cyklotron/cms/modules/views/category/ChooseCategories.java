@@ -28,6 +28,7 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteService;
 
@@ -62,6 +63,11 @@ public class ChooseCategories
         CategoryInfoTool categoryTool = new CategoryInfoTool(context, integrationService,
             categoryService);
         templatingContext.put("category_tool", categoryTool);
+        ResourceClassResource resourceClass = getResourceClass(coralSession, parameters);
+        if(resourceClass != null)
+        {
+            templatingContext.put("resource_class", resourceClass);
+        }
         boolean resetState = parameters.getBoolean("reset-state", false);
 
         ResourceSelectionState categorizationState = ResourceSelectionState.getState(context,
@@ -97,6 +103,40 @@ public class ChooseCategories
         templatingContext.put("category_selection_state", categorizationState);
 
         prepareTableTools(coralSession, templatingContext, i18nContext, expandedCategoriesIds, resetState );
+    }
+
+    protected ResourceClassResource getResourceClass(CoralSession coralSession,
+        Parameters parameters)
+        throws ProcessingException
+    {
+
+        String resClassName = parameters.get("res_class_name", "");
+        if(resClassName.isEmpty())
+        {
+            return null;
+        }
+
+        ResourceClassResource resClass = null;
+        try
+        {
+            resClass = integrationService.getResourceClass(getCoralSession(context), coralSession
+                .getSchema().getResourceClass(resClassName));
+            if(resClass == null)
+            {
+                throw new ProcessingException("Cannot find resource class for resource class name "
+                    + resClassName);
+            }
+            if(!resClass.getCategorizable())
+            {
+                throw new ProcessingException("Cannot categorize non categorizable resource class "
+                    + resClass.getIdString());
+            }
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new ProcessingException("resource class does not exist", e);
+        }
+        return resClass;
     }
 
     protected CategoryResource[] getCategories(CoralSession coralSession, Parameters parameters,

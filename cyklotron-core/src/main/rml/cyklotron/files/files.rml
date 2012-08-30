@@ -48,7 +48,8 @@ ATTRIBUTES (
 ## REQUIRED READONLY cross_reference references,
 role administrator,
 role visitor,
-resource expandedDirectory
+resource expandedDirectory,
+resource_list frontCategories
 );
 
 ##  security

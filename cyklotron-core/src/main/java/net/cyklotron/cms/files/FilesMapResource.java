@@ -28,6 +28,7 @@
  
 package net.cyklotron.cms.files;
 
+import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.store.Resource;
 
@@ -105,6 +106,36 @@ public interface FilesMapResource
 	 * @return <code>true</code> if the value of the <code>expandedDirectory</code> attribute is defined.
 	 */
     public boolean isExpandedDirectoryDefined();
+ 
+    /**
+     * Returns the value of the <code>frontCategories</code> attribute.
+     *
+     * @return the value of the the <code>frontCategories</code> attribute.
+     */
+    public ResourceList getFrontCategories();
+    
+    /**
+     * Returns the value of the <code>frontCategories</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>frontCategories</code> attribute.
+     */
+    public ResourceList getFrontCategories(ResourceList defaultValue);
+
+    /**
+     * Sets the value of the <code>frontCategories</code> attribute.
+     *
+     * @param value the value of the <code>frontCategories</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setFrontCategories(ResourceList value);   
+   
+	/**
+	 * Checks if the value of the <code>frontCategories</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>frontCategories</code> attribute is defined.
+	 */
+    public boolean isFrontCategoriesDefined();
  
     /**
      * Returns the value of the <code>visitor</code> attribute.
