@@ -182,6 +182,26 @@ public class FilesServiceImpl
                 + "' in site '" + site.getName() + "' ", e);
         }
     }
+    
+    /**
+     * Get root directory for site if exists.
+     * @return the files root resource.
+     * @throws FilesException if  the operation fails.
+     */
+    public RootDirectoryResource getRootDirectoryResource(CoralSession coralSession, SiteResource site) 
+                    throws FilesException {
+        FilesMapResource parent = getFilesRoot(coralSession, site);
+        String name = "files";
+        Resource[] resources = coralSession.getStore().getResource(parent, name);
+        
+        if(resources.length == 0)
+        {
+            throw new FilesException("The directory '" + name
+                + "' appears to not exist for site '" + site.getName() + "'");
+        }
+        
+        return (RootDirectoryResource)resources[0];
+    }
 
     /**
      * Create the directory.
