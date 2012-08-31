@@ -1,5 +1,6 @@
 package net.cyklotron.cms.rest;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
 import net.cyklotron.cms.files.FilesService;
@@ -14,19 +15,12 @@ public class FilesRestValve extends JerseyRestValve
 
     protected FilesService filesService;
 
-    public FilesRestValve(Logger logger, Configuration config)
+    public FilesRestValve(Logger logger, final Configuration config,
+        final ServletContext servletContext)
                     throws ConfigurationException, ServletException
     {
-        super(logger, config);
+        super(logger, config, servletContext);
         // TODO Auto-generated constructor stub
     }
-
-    public FilesRestValve(Logger logger, Configuration config, FilesService fileService)
-                    throws ConfigurationException, ServletException
-                {
-                    super(logger, config);
-                    this.filesService = fileService;
-                    // TODO Auto-generated constructor stub
-                }
 
 }

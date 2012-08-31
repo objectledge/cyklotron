@@ -329,9 +329,7 @@
   <component key="restRenderingPipeline"
   			 class="org.objectledge.pipeline.SimplePipeline">
     <sequence>
-      <component class-key="org.objectledge.web.rest.RestProcessor"
-      			 class="org.objectledge.web.rest.JerseyRestValve">
-      </component>      
+      <component class="org.objectledge.web.rest.JerseyRestValve"/>
     </sequence>      
   </component>    
   
@@ -376,25 +374,26 @@
     
   <!-- //// REST dispatcher //// -->
   
-  <component key="restDispatcher"
+  <!-- <component key="restDispatcher"
              class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">	
 	  <component class="org.objectledge.web.rest.JerseyRestValve"/>
-	  <parameter class-key="org.objectledge.context.Context"/>
-  </component>
+	  <component class-key="org.objectledge.context.Context"/>
+  </component> -->
   
-  <!--  <component key="restDispatcher"
+  <component key="restDispatcher"
               class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
-    <component class="org.objectledge.web.RequestTrackingValve">
-      <component class="org.objectledge.pipeline.ConcurrencyControlValve">
-        <component class="org.objectledge.pipeline.ErrorHandlingPipeline">
+    <component key="RTVRest" class="org.objectledge.web.RequestTrackingValve">
+      <component key="CCVRest" class="org.objectledge.pipeline.ConcurrencyControlValve">
+        <component key="restErrorHandlingPipeline" class="org.objectledge.pipeline.ErrorHandlingPipeline">
             <parameter class-key="org.jcontainer.dna.Logger"/>
 		    <sequence>
 		      <parameter key="simpleAuthenticationPipeline"/>
-		      <parameter key="restRenderingPipeline"/>
+			  <!-- <component class="org.objectledge.web.rest.JerseyRestValve"/> -->			  
+			  <parameter key="restRenderingPipeline"/>
 		    </sequence>
 			<sequence>
 		      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
-		      <parameter class-key="org.objectledge.web.RestExceptionRenderingValve"/>
+		      <!-- <component class-key="org.objectledge.web.RestExceptionRenderingValve"/> -->
 		    </sequence>
 			<sequence>
 		      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
@@ -410,8 +409,8 @@
       <parameter/>
       <parameter/>
     </component>
-    <parameter/>
-  </component> -->
+	<parameter class-key="org.objectledge.context.Context"/>   
+  </component>
   
 
 
