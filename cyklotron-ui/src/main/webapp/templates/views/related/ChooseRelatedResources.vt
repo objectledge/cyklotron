@@ -226,7 +226,7 @@ function categorizeResource(url)
  	<a href="javascript:fSubConf('$link.view('related.ChooseRelatedResources').action('files.DeleteRelatedFile').set('file_id',$row.id)','delete');">Remove</a>
   #end
   </div>
-  #if($categorizeResourceClassDefNames.contains("$definition.name") && $cms_tool.isInstance($thumbnail, 'protected') && $thumbnail.canModify($cms_tool.coralSession, $cms_tool.subject) && $files_front_categories.size() > 0 )
+  #if($categorizeResourceClassDefNames.contains("$definition.name") && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession, $cms_tool.subject) && $files_front_categories.size() > 0 )
   <div class="actions" style="float:right;margin-right:5px;">
   Front categories:<br/>
   #set($categories = $category_context_tool.getCategoriesAsList($row, false))
