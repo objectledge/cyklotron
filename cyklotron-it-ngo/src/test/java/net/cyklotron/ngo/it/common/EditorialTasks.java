@@ -41,6 +41,7 @@ public class EditorialTasks
         selenium.mouseDown("//td/span/span/b[contains(text(),'Selenium@" + name + "')]");
         Assert.assertTrue(selenium.isElementPresent("//a[contains(@title, '" + name + "')]"));
         selenium.click("//a[contains(@title, '" + name + "')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertTrue(selenium.isTextPresent("Edycja właściwości dokumentu"));
         Assert.assertTrue(selenium.isElementPresent("//input[@name='docid']"));
         documentId = selenium.getValue("//input[@name='docid']");
@@ -1055,5 +1056,132 @@ public class EditorialTasks
             + name + "')]"));
 
     }
+    
+    /**
+     * Expanded directory path test on choose related resource.
+     * 
+     * @param name
+     */
+    public void testExpandedDirectory()
+    {
+        selenium.open("/view/structure.NaviInfo?site_id=8439");
+        Assert.assertTrue(selenium.isElementPresent("link=DOKUMENTY"));
+        selenium.click("link=DOKUMENTY");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        selenium.click("link=Powiązania");
+        selenium.waitForPopUp("related", SLOW_PAGE_LOAD_TIME);
+        selenium.selectWindow("name=related");
+        Assert.assertTrue(selenium.isTextPresent("filespublic"));
+        // close popup
+        selenium.close();
+    }
+    
+    
+    /**
+     * Front categories test on choose related resource.
+     * 
+     * @param name
+     */
+    public void testSelectFrontCategories(String id)
+    {
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2");
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
+        // open PopUp and go to edit node
+        Assert.assertTrue(selenium.isElementPresent("//td[@id='N" + id + "']/span/span/b"));
+        selenium.mouseDown("//td[@id='N" + id + "']/span/span/b");
+        selenium.click("//a[contains(@href, '/view/structure.EditNode?node_id=" + id
+            + "&site_id=8439')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        // change document state
+        Assert.assertTrue(selenium.isTextPresent("Dokument przydzielony"));
+        Assert.assertTrue(selenium.isElementPresent("link=Przyjmij dokument"));
+        selenium.click("link=Przyjmij dokument");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Stan dokumentu zmieniono poprawnie"));
+
+        // search and relate "logo" images to document
+        Assert.assertTrue(selenium.isElementPresent("link=Edytuj"));
+        selenium.click("link=Edytuj");
+        selenium.waitForPopUp("related", DEFAULT_PAGE_LOAD_TIME);
+        selenium.selectWindow("name=related");
+        Assert.assertTrue(selenium.isTextPresent("Kategorie wyszczególnione:"));
+        Assert.assertTrue(selenium.isElementPresent("xpath=(//input[@value='670506'])"));
+        selenium.click("xpath=(//input[@value='670506'])");
+        Assert.assertTrue(selenium.isElementPresent("xpath=(//input[@value='670507'])"));
+        selenium.click("xpath=(//input[@value='670507'])");
+        selenium.click("link=Zapisz zmiany");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        selenium.click("link=Kategorie");
+        selenium.waitForPopUp("categorization", DEFAULT_PAGE_LOAD_TIME);
+        selenium.selectWindow("name=categorization");
+        Assert.assertEquals( "on", selenium.getValue("id=category-670506"));
+        Assert.assertEquals( "on", selenium.getValue("id=category-670507"));
+        selenium.click("link=Anuluj");
+        
+        selenium.selectWindow("name=related");
+        selenium.close();
+        selenium.selectWindow("null");
+    }
+    
+    
+    /**
+     * Display thumbnail on related resource view test
+     * 
+     * @param name
+     */
+    public void testThumbnailOnRelatedResource(String id)
+    {
+        selenium.open("/view/site.EditSite?site_id=8439");
+        selenium.click("link=(OBIEG)");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("//input[@name='offset']"));
+        selenium.type("//input[@name='offset']", "2");
+        Assert.assertTrue(selenium.isElementPresent("link=Ustaw filtr"));
+        selenium.click("link=Ustaw filtr");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        // open PopUp and go to edit node
+        Assert.assertTrue(selenium.isElementPresent("//td[@id='N" + id + "']/span/span/b"));
+        selenium.mouseDown("//td[@id='N" + id + "']/span/span/b");
+        selenium.click("//a[contains(@href, '/view/structure.EditNode?node_id=" + id
+            + "&site_id=8439')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        // change document state
+        Assert.assertTrue(selenium.isTextPresent("Dokument przydzielony"));
+        Assert.assertTrue(selenium.isElementPresent("link=Przyjmij dokument"));
+        selenium.click("link=Przyjmij dokument");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isTextPresent("Stan dokumentu zmieniono poprawnie"));
+
+        Assert.assertTrue(selenium.isElementPresent("css=img"));
+        selenium.click("css=img");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        Assert.assertTrue(selenium.isElementPresent("link=Zapisz i zostań"));
+        selenium.click("link=Zapisz i zostań");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+
+        // search and relate "logo" images to document
+        Assert.assertTrue(selenium.isElementPresent("link=Edytuj"));
+        selenium.click("link=Edytuj");
+        selenium.waitForPopUp("related", DEFAULT_PAGE_LOAD_TIME);
+        selenium.selectWindow("name=related");
+        Assert.assertTrue(selenium.isTextPresent("Zdjęcie główne:"));
+        Assert.assertTrue(selenium.isElementPresent("link=Pokaż i edytuj"));
+        selenium.click("link=Pokaż i edytuj");        
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
+        selenium.click("link=Anuluj");
+        
+        selenium.selectWindow("name=related");
+        selenium.close();
+        selenium.selectWindow("null");
+    }
 }
