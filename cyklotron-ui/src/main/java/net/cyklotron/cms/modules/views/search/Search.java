@@ -15,6 +15,8 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryException;
+import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.SearchException;
@@ -35,14 +37,17 @@ public class Search extends BaseSearchScreen
     
     protected IntegrationService integrationService;
     
+    protected CategoryQueryService categoryQueryService;
+    
     public Search(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, SearchService searchService,
-        Instantiator instantiator, IntegrationService integrationService)
+        Instantiator instantiator, IntegrationService integrationService, CategoryQueryService categoryQueryService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager, searchService);
         this.instantiator = instantiator;
         this.integrationService = integrationService;
+        this.categoryQueryService = categoryQueryService;
     }
     
     public void process(Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext, CoralSession coralSession)
@@ -59,13 +64,26 @@ public class Search extends BaseSearchScreen
         {
             throw new ProcessingException("could not get pools parent for site "+site.getName(), e);
         }
-        
+
         Resource[] pools = coralSession.getStore().getResource(poolsParent);
         templatingContext.put("pools", Arrays.asList(pools));
+        
+        Resource categoryQueryParent;
+        try
+        {
+            categoryQueryParent = categoryQueryService.getCategoryQueryRoot(coralSession, site);
+        }
+        catch(CategoryQueryException e)
+        {
+            throw new ProcessingException("could not get category query parent for site "+site.getName(), e);
+        }
+        
+        Resource[] categoryQueries = coralSession.getStore().getResource(categoryQueryParent);
+        templatingContext.put("required_queries", Arrays.asList(categoryQueries));
 
         // search
         SearchScreen sScreen = new SearchScreen(context, logger, tableStateManager,
-            searchService, integrationService, cmsDataFactory, 
+            searchService, integrationService, categoryQueryService, cmsDataFactory, 
             new HitsViewPermissionFilter(coralSession.getUserSubject(), coralSession),
             instantiator);
         sScreen.process(parameters, templatingContext, mvcContext, i18nContext, coralSession);

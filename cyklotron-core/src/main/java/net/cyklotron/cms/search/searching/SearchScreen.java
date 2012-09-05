@@ -1,8 +1,12 @@
 package net.cyklotron.cms.search.searching;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.lucene.search.Query;
+import org.apache.poi.hssf.record.formula.functions.T;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.Instantiator;
@@ -15,6 +19,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
+import org.objectledge.table.TableRow;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
@@ -23,12 +28,21 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.mvc.MVCContext;
 
+import bak.pcj.set.LongOpenHashSet;
+import bak.pcj.set.LongSet;
+
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryBuilder;
+import net.cyklotron.cms.category.query.CategoryQueryException;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
+import net.cyklotron.cms.category.query.CategoryQueryResourceImpl;
+import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.search.ExternalPoolResource;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
+import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
 import net.cyklotron.cms.site.SiteResource;
 
 /**
@@ -47,6 +61,8 @@ public class SearchScreen
     private SearchService searchService;
  
     private IntegrationService integrationService;
+    
+    private CategoryQueryService categoryQueryService;
 
     /** table service for hit list display. */
     private TableStateManager tableStateManager;
@@ -57,16 +73,17 @@ public class SearchScreen
     
     private Instantiator instantiator;
 
-    public SearchScreen(Context context, Logger logger, 
-          TableStateManager tableStateManager, SearchService searchService,
-          IntegrationService integrationService, CmsDataFactory cmsDataFactory,
-          TableFilter filter, Instantiator instantiator)
+    public SearchScreen(Context context, Logger logger, TableStateManager tableStateManager,
+        SearchService searchService, IntegrationService integrationService,
+        CategoryQueryService categoryQueryService, CmsDataFactory cmsDataFactory,
+        TableFilter filter, Instantiator instantiator)
     {
         super(context);
         this.logger = logger;
         this.searchService = searchService;
         this.tableStateManager = tableStateManager;
         this.integrationService = integrationService;
+        this.categoryQueryService = categoryQueryService;
         this.cmsDataFactory = cmsDataFactory;
         this.filter = filter;
         this.instantiator = instantiator;
@@ -150,20 +167,74 @@ public class SearchScreen
             return;
         }
 
+        CategoryQueryBuilder queryBuilder = null;
+        try
+        {
+            long[] requiredQueriesIds = parameters.getLongs("required_queries");
+            Set<CategoryQueryResource> requiredQueries = new HashSet<CategoryQueryResource>();
+            for(int i = 0; i < requiredQueriesIds.length; i++)
+            {
+                long queryId = requiredQueriesIds[i];
+                if(queryId != -1)
+                {
+                    CategoryQueryResource categoryQueryResource = CategoryQueryResourceImpl
+                        .getCategoryQueryResource(coralSession, queryId);
+                    requiredQueries.add(categoryQueryResource);
+                }
+                else
+                {
+                    requiredQueries.clear();
+                    break;
+                }
+            }
+            templatingContext.put("selected_required_queries", requiredQueries);
+
+            long[] optionalQueriesIds = parameters.getLongs("optional_queries");
+            Set<CategoryQueryResource> optionalQueries = new HashSet<CategoryQueryResource>();
+            for(int i = 0; i < optionalQueriesIds.length; i++)
+            {
+                long queryId = optionalQueriesIds[i];
+                if(queryId != -1)
+                {
+                    CategoryQueryResource categoryQueryResource = CategoryQueryResourceImpl
+                        .getCategoryQueryResource(coralSession, queryId);
+                    optionalQueries.add(categoryQueryResource);
+                }
+                else
+                {
+                    optionalQueries.clear();
+                    break;
+                }
+            }
+            templatingContext.put("selected_optional_queries", optionalQueries);
+            
+            if(!requiredQueries.isEmpty() || !optionalQueries.isEmpty() )
+            {
+                queryBuilder = new CategoryQueryBuilder(requiredQueries, optionalQueries);
+            }
+        }
+        catch(Exception e)
+        {
+            templatingContext.put("result", "exception");
+            templatingContext.put("trace", new StackTrace(e).toString());
+            logger.error("cannot get a chosen category query", e);
+            return;
+        }
+        
 
         // search
         // - prepare display state
         TableState state = tableStateManager.getState(context, "cms.search.results."+site.getName());
         method.setupTableState(state);
         // - prepare search handler
-        SearchHandler searchHandler = null;
+        LuceneSearchHandler searchHandler = null;
         if(pools.length == 1 && pools[0] instanceof ExternalPoolResource)
         {
             ExternalPoolResource extPool = (ExternalPoolResource)pools[0];
             try
             {
                 Class clazz = instantiator.loadClass(extPool.getSearchHandler());
-                searchHandler = (SearchHandler)(instantiator.newInstance(clazz));
+                searchHandler = (LuceneSearchHandler)(instantiator.newInstance(clazz));
             }
             catch(Exception e)
             {
@@ -185,8 +256,8 @@ public class SearchScreen
             ArrayList filters = new ArrayList();
             filters.add(filter);
 
-            TableModel hitsTableModel = searchHandler.search(coralSession, pools, method, state, parameters, i18nContext); 
-            hitsTable = new TableTool(state, filters, hitsTableModel);
+            TableModel hitsTableModel = searchHandler.search(coralSession, pools, method, state, parameters, i18nContext);
+            hitsTable = getHitsTable(coralSession, method, state, filters, hitsTableModel, searchHandler, queryBuilder);
         }
         catch(Exception e1)
         {
@@ -204,5 +275,58 @@ public class SearchScreen
             }
         }
         templatingContext.put("hits_table", hitsTable);
+    }
+
+    
+    private TableTool<LuceneSearchHit> getHitsTable(CoralSession coralSession, SearchMethod method,
+        TableState state, List<TableFilter<T>> filters, TableModel<LuceneSearchHit> model,
+        LuceneSearchHandler searchHandler, CategoryQueryBuilder queryBuilder)
+        throws TableException, SearchingException
+    {
+
+        if(queryBuilder == null)
+        {
+            return new TableTool(state, filters, model);
+        }
+        else
+        {
+            TableState allHits = new TableState("<local>", -1);
+            allHits.setPageSize(-1);
+
+            TableModel<LuceneSearchHit> hitsTableModel;
+                        
+            TableRow<LuceneSearchHit>[] rows = model.getRowSet(allHits, null).getRows();
+            LongSet docIds = new LongOpenHashSet();
+            for(TableRow<LuceneSearchHit> row : rows)
+            {
+                docIds.add(row.getObject().getId());
+            }
+
+            try
+            {
+                System.out.println("query::"+queryBuilder.getQuery());
+                // run category query, limited to document set returned by lucene search
+                docIds = categoryQueryService.forwardQueryIds(coralSession,
+                    queryBuilder.getQuery(), docIds);
+
+                // retain only those documents present in category query results
+                List<LuceneSearchHit> filteredHits = new ArrayList<LuceneSearchHit>(docIds.size());
+                for(TableRow<LuceneSearchHit> row : rows)
+                {
+                    if(docIds.contains(row.getObject().getId()))
+                    {
+                        filteredHits.add(row.getObject());
+                    }
+                }
+
+                hitsTableModel = searchHandler.hitsTableModel(filteredHits, coralSession);;
+                
+                return new TableTool(state, filters, hitsTableModel);
+            }
+            catch(CategoryQueryException e)
+            {
+                throw new SearchingException("category query failed", e);
+            }
+        }
     }
 }

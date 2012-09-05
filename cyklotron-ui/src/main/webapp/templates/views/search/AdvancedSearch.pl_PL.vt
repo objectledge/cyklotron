@@ -81,6 +81,18 @@
 </tr>
 
 <tr>
+<td>W zapytaniu po kategorii</td>
+<td>
+<select name="required_queries">
+ <option value="-1" #if($selected_required_queries.isEmpty()) selected#end>w dowolnym</option>
+ #foreach($query in $required_queries)
+    <option value="$query.id"#if($selected_required_queries.contains($query)) selected#end >$query.name</option>
+  #end
+</select>
+</td>
+</tr>
+
+<tr>
 <td>Sortowanie wyników</td>
 <td>
 <select name="sort_field">
