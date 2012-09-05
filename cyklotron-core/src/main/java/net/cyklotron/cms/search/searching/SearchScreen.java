@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.lucene.search.Query;
-import org.apache.poi.hssf.record.formula.functions.T;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.Instantiator;
@@ -28,9 +27,6 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.mvc.MVCContext;
 
-import bak.pcj.set.LongOpenHashSet;
-import bak.pcj.set.LongSet;
-
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryBuilder;
@@ -44,6 +40,9 @@ import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
 import net.cyklotron.cms.site.SiteResource;
+
+import bak.pcj.set.LongOpenHashSet;
+import bak.pcj.set.LongSet;
 
 /**
  * Searching implementation.
@@ -279,7 +278,8 @@ public class SearchScreen
 
     
     private TableTool<LuceneSearchHit> getHitsTable(CoralSession coralSession, SearchMethod method,
-        TableState state, List<TableFilter<T>> filters, TableModel<LuceneSearchHit> model,
+        TableState state, List<TableFilter<LuceneSearchHit>> filters,
+        TableModel<LuceneSearchHit> model,
         LuceneSearchHandler searchHandler, CategoryQueryBuilder queryBuilder)
         throws TableException, SearchingException
     {
