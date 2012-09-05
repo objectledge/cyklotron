@@ -27,7 +27,7 @@
 <td>Szukaj w polu zasobu</td>
 <td>
 <select name="field">
-#set($opts = [['gdziekolwiek','extended'],['w tytule, skrócie i treści','standard'],['w tytule','index_title'],['w skrócie','index_abbreviation'],['w treści','index_content'],['w opisie administracyjnym','description'],['w indentyfikatorach zasobów','id'],['w loginach właścicieli','owner'],['w loginach twórców','created_by'],['w słowach kluczowych','keywords'],['w tytule kalendarzowym','titleCalendar'],['w polu ostatni edytor','lastEditor'],['w polu autorzy','authors'],['w polu źródła','sources']])
+#set($opts = [['gdziekolwiek','extended'],['w tytule, skrócie i treści','standard'],['w tytule','index_title'],['w skrócie','index_abbreviation'],['w treści','index_content'],['w opisie administracyjnym','description'],['w indentyfikatorach zasobów','id'],['w loginach właścicieli','owner'],['w loginach twórców','created_by'],['w słowach kluczowych','keywords'],['w tytule kalendarzowym','titleCalendar'],['w polu ostatni edytor','lastEditor'],['w polu autorzy','authors'],['w polu źródła','sources'],['w polu nazwa organizacji','organization_name']])
 #options($opts $!field)
 </select>
 </td>

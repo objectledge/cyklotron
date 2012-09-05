@@ -27,7 +27,7 @@
 <td>Search in resource field</td>
 <td>
 <select name="field">
-#set($opts = [['all fields','extended'],[['title, abstract and content']['standard']],['title','index_title'],['abstract','index_abbreviation'],['content','index_content'],['administrative description','description'],['resource identifiers','id'],['owner logins','owner'],['creator logins','created_by'],['keywords','keywords'],['calendar title','titleCalendar'],['last editor logins','lastEditor'],['authors','authors'],['sources','sources']])
+#set($opts = [['all fields','extended'],['title, abstract and content','standard'],['title','index_title'],['abstract','index_abbreviation'],['content','index_content'],['administrative description','description'],['resource identifiers','id'],['owner logins','owner'],['creator logins','created_by'],['keywords','keywords'],['calendar title','titleCalendar'],['last editor logins','lastEditor'],['authors','authors'],['sources','sources'],['organization name','organization_name']])
 #options($opts $!field)
 </select>
 </td>

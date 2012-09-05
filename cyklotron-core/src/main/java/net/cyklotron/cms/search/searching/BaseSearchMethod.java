@@ -27,7 +27,8 @@ public abstract class BaseSearchMethod implements SearchMethod
     
     public static final String[] EXTENDED_FIELD_NAMES = { SearchConstants.FIELD_INDEX_TITLE,
                     SearchConstants.FIELD_INDEX_ABBREVIATION, SearchConstants.FIELD_INDEX_CONTENT,
-                    "keywords", "titleCalendar", "authors", "sources" };
+                    "keywords", "titleCalendar", "authors", "sources",
+                    SearchConstants.FIELD_ORGANIZATION_NAME };
     
     protected SearchService searchService;
     protected Parameters parameters;
