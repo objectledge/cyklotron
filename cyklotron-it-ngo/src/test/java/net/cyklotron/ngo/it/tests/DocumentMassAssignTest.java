@@ -1,14 +1,11 @@
 package net.cyklotron.ngo.it.tests;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.junit.Test;
 
 import net.cyklotron.ngo.it.SeleniumTest;
 import net.cyklotron.ngo.it.common.Admin;
 import net.cyklotron.ngo.it.common.EditorialTasks;
 import net.cyklotron.ngo.it.common.Wiadomosci;
-
-import org.junit.Test;
 
 public class DocumentMassAssignTest
     extends SeleniumTest

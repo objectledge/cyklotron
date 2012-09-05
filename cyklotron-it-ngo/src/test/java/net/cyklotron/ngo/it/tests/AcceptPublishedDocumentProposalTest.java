@@ -1,11 +1,11 @@
 package net.cyklotron.ngo.it.tests;
 
+import org.junit.Test;
+
 import net.cyklotron.ngo.it.SeleniumTest;
 import net.cyklotron.ngo.it.common.Admin;
 import net.cyklotron.ngo.it.common.EditorialTasks;
 import net.cyklotron.ngo.it.common.Wiadomosci;
-
-import org.junit.Test;
 
 public class AcceptPublishedDocumentProposalTest
     extends SeleniumTest
