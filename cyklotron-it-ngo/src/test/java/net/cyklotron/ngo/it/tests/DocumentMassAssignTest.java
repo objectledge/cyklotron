@@ -50,7 +50,5 @@ public class DocumentMassAssignTest
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         editorialTasks.documentsMassAsign(wiadomosci.getDocuments(), "bogdan");
         admin.logout();
-
-        wiadomosci.Close();
     }
 }

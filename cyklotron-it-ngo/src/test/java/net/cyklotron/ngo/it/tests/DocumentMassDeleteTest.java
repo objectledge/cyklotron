@@ -49,7 +49,5 @@ public class DocumentMassDeleteTest
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         editorialTasks.documentsMassDelete(wiadomosci.getDocuments());
         admin.logout();
-
-        wiadomosci.Close();
     }
 }

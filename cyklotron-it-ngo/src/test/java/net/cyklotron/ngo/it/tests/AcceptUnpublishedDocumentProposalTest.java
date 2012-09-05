@@ -40,7 +40,5 @@ public class AcceptUnpublishedDocumentProposalTest
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         editorialTasks.acceptUnpublishedDocumentProposal(wiadomosci.getDocuments().get(0));
         admin.logout();
-
-        wiadomosci.Close();
     }
 }

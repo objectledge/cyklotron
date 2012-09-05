@@ -29,7 +29,5 @@ public class OgloszeniaAddDocumentTest
         ogloszenia.login("selenium", "12345");
         ogloszenia.addDocument(true);
         ogloszenia.logout();
-        
-        ogloszenia.Close();
     }
 }
