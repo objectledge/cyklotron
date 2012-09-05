@@ -33,6 +33,7 @@ public class ChooseRelatedResourceTest
         Admin admin = new Admin(selenium);
         admin.login("selenium_administrator_serwisu", "12345");
         Files files = new Files(admin.getPage());
+        files.clearConfiguration();
         files.initConfiguration();
         admin.logout();
 
@@ -42,7 +43,6 @@ public class ChooseRelatedResourceTest
         admin.logout();
 
         admin.login("selenium_administrator_serwisu", "12345");
-        files.clearConfiguration();
         admin.logout();
 
     }
@@ -61,6 +61,7 @@ public class ChooseRelatedResourceTest
         Admin admin = new Admin(selenium);
         admin.login("selenium_administrator_serwisu", "12345");
         Files files = new Files(admin.getPage());
+        files.clearConfiguration();
         files.initConfiguration();
         admin.logout();
 
@@ -80,7 +81,6 @@ public class ChooseRelatedResourceTest
 
         // clear files configuration
         admin.login("selenium_administrator_serwisu", "12345");
-        files.clearConfiguration();
         admin.logout();
     }
     
@@ -99,6 +99,7 @@ public class ChooseRelatedResourceTest
         Admin admin = new Admin(selenium);
         admin.login("selenium_administrator_serwisu", "12345");
         Files files = new Files(admin.getPage());
+        files.clearConfiguration();
         files.initConfiguration();
         admin.logout();
 
@@ -118,7 +119,6 @@ public class ChooseRelatedResourceTest
 
         // clear files configuration
         admin.login("selenium_administrator_serwisu", "12345");
-        files.clearConfiguration();
         admin.logout();
     }
 }
