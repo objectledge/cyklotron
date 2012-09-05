@@ -852,6 +852,7 @@ public class EditorialTasks
             + name + "')]/../../../../td/div/a[contains(text(),'Wyrzuć z obiegu')]"));
         selenium.click("//td/span/span/b[contains(text(),'Selenium@" + name
             + "')]/../../../../td/div/a[contains(text(),'Wyrzuć z obiegu')]");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
 
         selenium.refresh();
 

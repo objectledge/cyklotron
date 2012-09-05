@@ -38,6 +38,7 @@ public class Wiadomosci
         selenium.type("id=login", this.login);
         selenium.type("id=password", this.password);
         selenium.click("id=submitbutton");
+        selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         Assert.assertEquals("Jesteś zalogowany/a jako: " + this.login,
             selenium.getText("css=strong"));
     }
