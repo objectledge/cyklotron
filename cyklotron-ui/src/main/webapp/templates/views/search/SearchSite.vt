@@ -84,7 +84,7 @@ Search in
 <td>Search in resource field</td>
 <td>
 <select name="field">
-<option value="any">everywhere</option>
+<option value="extended">everywhere</option>
 <option value="index_title">in title only</option>
 <option value="index_abbreviation">in abstract only</option>
 <option value="index_content">in content only</option>
@@ -105,6 +105,27 @@ Search in
 <option value="185">last 6 months</option>
 <option value="365">last year</option>
 </select>
+</td>
+</tr>
+
+<tr>
+<td>In category query </td>
+<td>
+<select name="required_queries">
+ <option value="-1" #if($selected_required_queries.isEmpty()) selected#end>any</option>
+ #foreach($query in $required_queries)
+    <option value="$query.id"#if($selected_required_queries.contains($query)) selected#end>$query.name</option>
+  #end
+</select>
+</td>
+</tr>
+
+<tr>
+<td>In one of category queries </td>
+<td>
+ #foreach($query in $optional_queries)
+ <P><input type="checkbox" name="optional_queries" value="$query.id"#if($selected_optional_queries.contains($query)) selected#end><label>$!query.name</label></P>
+ #end
 </td>
 </tr>
 

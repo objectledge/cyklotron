@@ -84,7 +84,7 @@ Szukaj w
 <td>Szukaj w polu zasobu</td>
 <td>
 <select name="field">
-<option value="any">gdziekolwiek</option>
+<option value="extended">gdziekolwiek</option>
 <option value="index_title">w tytule</option>
 <option value="index_abbreviation">w skrócie</option>
 <option value="index_content">w treści</option>
@@ -105,6 +105,27 @@ Szukaj w
 <option value="185">ostatnich 6 miesięcy</option>
 <option value="365">ostatniego roku</option>
 </select>
+</td>
+</tr>
+
+<tr>
+<td>W zapytaniu po kategorii </td>
+<td>
+<select name="required_queries">
+ <option value="-1" #if($selected_required_queries.isEmpty()) selected#end>w dowolnym</option>
+ #foreach($query in $required_queries)
+    <option value="$query.id"#if($selected_required_queries.contains($query)) selected#end>$query.name</option>
+  #end
+</select>
+</td>
+</tr>
+
+<tr>
+<td>W wybranych zapytaniach po kategorii </td>
+<td>
+ #foreach($query in $optional_queries)
+ <P><input type="checkbox" name="optional_queries" value="$query.id"#if($selected_optional_queries.contains($query)) selected#end><label>$!query.name</label></P>
+ #end
 </td>
 </tr>
 

@@ -75,6 +75,32 @@ public class CategoryQueryBuilder
     }
     
     /**
+     * Builds a category query from a CategoryQueryResource sets.
+     * @param required the set of required category queries.
+     * @param optional the set of optional category queries.
+     * 
+     * @throws ProcessingException
+     */
+    public CategoryQueryBuilder(Set<CategoryQueryResource> required, Set<CategoryQueryResource> optional)
+    throws ProcessingException
+    {
+        requiredPart = new QueryPart(required, "*");
+        optionalPart = new QueryPart(optional, "+");
+        if(requiredPart.length() > 0 && optionalPart.length() > 0)
+        {
+            query = requiredPart.getPart() + " * " + optionalPart.getPart() + ";";
+        }
+        else if(requiredPart.length() > 0)
+        {
+            query = requiredPart.getPart() + ";";
+        }
+        else if(optionalPart.length() > 0)
+        {
+            query = optionalPart.getPart() + ";";
+        }
+    }
+    
+    /**
      * Returns query body.
      * 
      * @return query body.
@@ -155,6 +181,50 @@ public class CategoryQueryBuilder
             
             identifiers = (String[]) identifiersList.toArray(new String[identifiersList.size()]);
         }
+        
+        /**
+         * Query Parts from queries.
+         * @param queries
+         * @param queryOperator
+         * @throws ProcessingException
+         */
+        
+        public QueryPart(Set<CategoryQueryResource> queries, String queryOperator)
+            throws ProcessingException
+        {
+            StringBuilder queryPartBuffer = new StringBuilder();
+            List identifiersList = new ArrayList(queries.size());
+
+            int j = 0;
+            for(Iterator<CategoryQueryResource> i = queries.iterator(); i.hasNext(); j++)
+            {
+                CategoryQueryResource query = i.next();
+
+                if(j == 0)
+                {
+                    queryPartBuffer.append('(');
+                }
+                else
+                {
+                    queryPartBuffer.append(' ');
+                    queryPartBuffer.append(queryOperator);
+                    queryPartBuffer.append(' ');
+                }
+                queryPartBuffer.append(query.getQuery().replace(";", ""));
+
+                if(!i.hasNext())
+                {
+                    queryPartBuffer.append(')');
+                }
+                
+                identifiersList.add(query.getOptionalCategoryIdentifiers());
+                identifiersList.add(query.getRequiredCategoryIdentifiers());
+            }
+
+            queryPart = queryPartBuffer.toString();
+            identifiers = (String[]) identifiersList.toArray(new String[identifiersList.size()]);
+        }
+        
 
         public String getPart()
         {

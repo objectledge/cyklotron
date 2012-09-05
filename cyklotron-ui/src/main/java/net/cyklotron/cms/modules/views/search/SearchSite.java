@@ -7,6 +7,8 @@ import java.util.List;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.Instantiator;
+import org.objectledge.coral.datatypes.ResourceList;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.comparator.NameComparator;
@@ -21,6 +23,9 @@ import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
+import net.cyklotron.cms.category.query.CategoryQueryPoolResourceImpl;
+import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.views.BaseSkinableScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -47,6 +52,8 @@ public class SearchSite
     protected Instantiator instantiator;
     
     protected IntegrationService integrationService;
+    
+    protected CategoryQueryService categoryQueryService;
 
 
     public SearchSite(org.objectledge.context.Context context, Logger logger,
@@ -54,13 +61,14 @@ public class SearchSite
         StructureService structureService, StyleService styleService, SkinService skinService,
         MVCFinder mvcFinder, TableStateManager tableStateManager,
         SearchService searchService,
-        Instantiator instantiator, IntegrationService integrationService)
+        Instantiator instantiator, IntegrationService integrationService, CategoryQueryService categoryQueryService)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
         this.searchService = searchService;
         this.instantiator = instantiator;
         this.integrationService = integrationService;
+        this.categoryQueryService = categoryQueryService;
     }
 
     public String getState()
@@ -98,7 +106,7 @@ public class SearchSite
             return;
         }
         SearchScreen sScreen = new SearchScreen(context, logger, tableStateManager,
-            searchService, integrationService, cmsDataFactory, 
+            searchService, integrationService, categoryQueryService, cmsDataFactory, 
             new HitsViewPermissionFilter(coralSession.getUserSubject(), coralSession),
             instantiator);
         sScreen.process(parameters, templatingContext, mvcContext, i18nContext, coralSession);
@@ -146,6 +154,41 @@ public class SearchSite
         }
         Collections.sort(pools, new NameComparator(i18nContext.getLocale()));
         templatingContext.put("pools",pools);
+        
+        try
+        {
+            long requiredQueryPool = screenConfig.getLong("required_query_pool_id", -1);
+            if(requiredQueryPool != -1)
+            {
+                CategoryQueryPoolResource queryPool = CategoryQueryPoolResourceImpl
+                    .getCategoryQueryPoolResource(coralSession, requiredQueryPool);
+                ResourceList queries = queryPool.getQueries();
+                Collections.sort(queries, new NameComparator(i18nContext.getLocale()));
+                if(queryPool != null)
+                {
+                    templatingContext.put("required_queries", queries);
+                }
+            }
+            long optionalQueryPool = screenConfig.getLong("optional_query_pool_id", -1);
+            if(optionalQueryPool != -1)
+            {
+                CategoryQueryPoolResource queryPool = CategoryQueryPoolResourceImpl
+                    .getCategoryQueryPoolResource(coralSession, optionalQueryPool);
+                ResourceList queries = queryPool.getQueries();
+                Collections.sort(queries, new NameComparator(i18nContext.getLocale()));
+                if(queryPool != null)
+                {
+                    templatingContext.put("optional_queries", queries);
+                }
+            }
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            screenError(getNode(), context,
+                "could not get category query pool for site " + site.getName(), e);
+            return false;
+        }
+
         return true;
     }
 }
