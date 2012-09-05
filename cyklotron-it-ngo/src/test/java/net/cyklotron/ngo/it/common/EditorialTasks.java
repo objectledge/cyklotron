@@ -1074,6 +1074,7 @@ public class EditorialTasks
         Assert.assertTrue(selenium.isTextPresent("filespublic"));
         // close popup
         selenium.close();
+        selenium.selectWindow("null");
     }
     
     
