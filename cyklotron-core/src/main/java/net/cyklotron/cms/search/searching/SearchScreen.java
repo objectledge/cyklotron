@@ -232,7 +232,7 @@ public class SearchScreen
             ExternalPoolResource extPool = (ExternalPoolResource)pools[0];
             try
             {
-                Class clazz = instantiator.loadClass(extPool.getSearchHandler());
+                Class<?> clazz = instantiator.loadClass(extPool.getSearchHandler());
                 searchHandler = (LuceneSearchHandler)(instantiator.newInstance(clazz));
             }
             catch(Exception e)
@@ -279,14 +279,14 @@ public class SearchScreen
     
     private TableTool<LuceneSearchHit> getHitsTable(CoralSession coralSession, SearchMethod method,
         TableState state, List<TableFilter<LuceneSearchHit>> filters,
-        TableModel<LuceneSearchHit> model,
-        LuceneSearchHandler searchHandler, CategoryQueryBuilder queryBuilder)
+        TableModel<LuceneSearchHit> model, LuceneSearchHandler searchHandler,
+        CategoryQueryBuilder queryBuilder)
         throws TableException, SearchingException
     {
 
         if(queryBuilder == null)
         {
-            return new TableTool(state, filters, model);
+            return new TableTool<LuceneSearchHit>(state, filters, model);
         }
         else
         {
@@ -321,7 +321,7 @@ public class SearchScreen
 
                 hitsTableModel = searchHandler.hitsTableModel(filteredHits, coralSession);;
                 
-                return new TableTool(state, filters, hitsTableModel);
+                return new TableTool<LuceneSearchHit>(state, filters, hitsTableModel);
             }
             catch(CategoryQueryException e)
             {
