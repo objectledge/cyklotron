@@ -18,37 +18,12 @@ public class AcceptPublishedDocumentProposalTest
 
     }
 
-    @Test
-    public void test()
-        throws Exception
-    {
-        /**
-         * Test accept all document proposal
-         */
-        test1();
-
-        /**
-         * Test accept/reject document proposal
-         */
-        test2();
-
-        /**
-         * Test accept all document proposal
-         */
-        test3();
-
-        /**
-         * Test accept/reject document proposal
-         */
-        test4();
-
-    }
-
     /**
      * Test accept all document proposal
      * 
      * @throws Exception
      */
+    @Test
     public void test1()
         throws Exception
     {
@@ -85,6 +60,7 @@ public class AcceptPublishedDocumentProposalTest
      * 
      * @throws Exception
      */
+    @Test
     public void test2()
         throws Exception
     {
@@ -121,6 +97,7 @@ public class AcceptPublishedDocumentProposalTest
      * 
      * @throws Exception
      */
+    @Test
     public void test3()
         throws Exception
     {
@@ -157,6 +134,7 @@ public class AcceptPublishedDocumentProposalTest
      * 
      * @throws Exception
      */
+    @Test
     public void test4()
         throws Exception
     {
