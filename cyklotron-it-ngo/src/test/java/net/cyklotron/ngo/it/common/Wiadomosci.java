@@ -277,6 +277,7 @@ public class Wiadomosci
         throws Exception
     {
         selenium.openWindow("/wiadomosci/" + id + ".html", "preview_document_" + id);
+        selenium.selectWindow("preview_document_" + id);
         Assert.assertTrue(selenium.isTextPresent("Selenium@" + name));
         selenium.close();
     }
