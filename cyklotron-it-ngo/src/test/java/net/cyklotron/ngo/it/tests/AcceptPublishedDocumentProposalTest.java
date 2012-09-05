@@ -13,9 +13,7 @@ public class AcceptPublishedDocumentProposalTest
 
     protected String startPage()
     {
-
         return "http://wiadomosci.ngo.pl/";
-
     }
 
     /**
@@ -27,7 +25,6 @@ public class AcceptPublishedDocumentProposalTest
     public void test1()
         throws Exception
     {
-
         // add document
         Wiadomosci wiadomosci = new Wiadomosci(selenium);
         wiadomosci.login("selenium", "12345");
@@ -51,8 +48,6 @@ public class AcceptPublishedDocumentProposalTest
         admin.login("selenium_administrator_serwisu", "12345");
         editorialTasks.acceptAllPublishedDocumentProposal(documentName);
         admin.logout();
-
-
     }
 
     /**
@@ -64,7 +59,6 @@ public class AcceptPublishedDocumentProposalTest
     public void test2()
         throws Exception
     {
-
         // add document
         Wiadomosci wiadomosci = new Wiadomosci(selenium);
         wiadomosci.login("selenium", "12345");
@@ -88,8 +82,6 @@ public class AcceptPublishedDocumentProposalTest
         admin.login("selenium_administrator_serwisu", "12345");
         editorialTasks.acceptSomePublishedDocumentProposal(documentName);
         admin.logout();
-
-
     }
 
     /**
@@ -125,8 +117,6 @@ public class AcceptPublishedDocumentProposalTest
         admin.login("selenium_administrator_serwisu", "12345");
         editorialTasks.acceptPublishedDocumentProposalEditDocument(documentName);
         admin.logout();
-
-
     }
 
     /**
@@ -162,6 +152,5 @@ public class AcceptPublishedDocumentProposalTest
         admin.login("selenium_administrator_serwisu", "12345");
         editorialTasks.acceptPublishedDocumentProposalEditProperties(documentName);
         admin.logout();
-
     }
 }
