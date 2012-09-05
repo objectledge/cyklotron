@@ -35,14 +35,11 @@ public class ChooseRelatedResourceTest
         Files files = new Files(admin.getPage());
         files.clearConfiguration();
         files.initConfiguration();
-        admin.logout();
 
-        admin.login("selenium_administrator_serwisu", "12345");
         EditorialTasks editorialTasks = new EditorialTasks(admin.getPage());
         editorialTasks.testExpandedDirectory();
-        admin.logout();
 
-        admin.login("selenium_administrator_serwisu", "12345");
+        files.clearConfiguration();
         admin.logout();
 
     }
@@ -77,10 +74,8 @@ public class ChooseRelatedResourceTest
         String docId = editorialTasks.getDocumentId(wiadomosci.getDocuments().get(0));
         editorialTasks.assignToMe(docId);
         editorialTasks.testSelectFrontCategories(docId);
-        admin.logout();
 
-        // clear files configuration
-        admin.login("selenium_administrator_serwisu", "12345");
+        files.clearConfiguration();
         admin.logout();
     }
     
@@ -115,10 +110,8 @@ public class ChooseRelatedResourceTest
         String docId = editorialTasks.getDocumentId(wiadomosci.getDocuments().get(0));
         editorialTasks.assignToMe(docId);
         editorialTasks.testThumbnailOnRelatedResource(docId);
-        admin.logout();
 
-        // clear files configuration
-        admin.login("selenium_administrator_serwisu", "12345");
+        files.clearConfiguration();
         admin.logout();
     }
 }
