@@ -27,7 +27,7 @@ function sendConfig()
   <tr>
     <td colspan="2" align="left">Category query pool source:</td>
     <td>
-     <a href="#select_category_query_pool('name id' 'form1' 'query_pool_name query_pool_id')">wybierz</a>
+     <a href="#select_category_query_pool('name id' 'form1' 'query_pool_name query_pool_id')">choose</a>
      <input type="text" name="query_pool_name" style="width:100%;" value="$!query_pool.name" maxlength="150" readonly= "readonly" />
      <input type="hidden" name="query_pool_id" value="$!query_pool.id"/>
     </td>

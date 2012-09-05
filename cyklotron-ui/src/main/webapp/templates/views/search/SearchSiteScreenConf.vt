@@ -13,13 +13,38 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "poolNames" );
+var fieldNames = new Array( "poolNames", "required_query_pool_id", "optional_query_pool_id" );
 // -->
 </script>
 
 
 <form name="searchConf">
-
+<table width="100%" class="genericScreen" cellspacing="0">
+  <tr>
+    <th colspan="2">Search screen configuration</th>
+  </tr>
+  <tr>
+    <td align="left">
+      <label>Required query pool:</label>
+    </td>
+    <td>
+     <input type="text" name="required_query_pool_name" style="width:100%;" value="$!required_query_pool.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="required_query_pool_id" value="$!required_query_pool.id"/>
+     <a href="#select_category_query_pool('name id' 'searchConf' 'required_query_pool_name required_query_pool_id')">choose</a>
+    </td>
+  </tr>
+  <tr>
+    <td align="left">
+      <label>Optional query pool:</label>
+    </td>
+    <td>
+     <input type="text" name="optional_query_pool_name" style="width:100%;" value="$!optional_query_pool.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="optional_query_pool_id" value="$!optional_query_pool.id"/>
+     <a href="#select_category_query_pool('name id' 'searchConf' 'optional_query_pool_name optional_query_pool_id')">choose</a>
+    </td>
+  </tr>
+</table>
+<br/>
 <table width="100%" class="genericItemTree" cellspacing="0">
 <tr>
 <th colspan="2">Choose index pools to be shown on the screen</th>

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -44,6 +45,26 @@ public class SearchSiteScreenConf extends PoolList
         Parameters config = getScreenConfig();
         Set poolNames = new HashSet(Arrays.asList(config.getStrings("poolNames")));
         templatingContext.put("selected_pools", poolNames);
+
+        try
+        {
+            long requiredQueryPool = config.getLong("required_query_pool_id", -1);
+            if(requiredQueryPool != -1)
+            {
+                templatingContext.put("required_query_pool",
+                    coralSession.getStore().getResource(requiredQueryPool));
+            }
+            long optionalQueryPool = config.getLong("optional_query_pool_id", -1);
+            if(optionalQueryPool != -1)
+            {
+                templatingContext.put("optional_query_pool",
+                    coralSession.getStore().getResource(optionalQueryPool));
+            }
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            throw new ProcessingException("Exception occurred", e);
+        }
     }
     
     public boolean checkAccessRights(Context context)
