@@ -4,6 +4,7 @@
 package net.cyklotron.cms.search.internal;
 
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.lucene.document.Document;
@@ -16,17 +17,21 @@ import org.objectledge.context.Context;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.html.HTMLException;
 
 import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.UserData;
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.documents.DocumentMetadataHelper;
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.search.IndexableResource;
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchUtil;
+import net.cyklotron.cms.structure.internal.OrganizationData;
 
 /**
  * Constructs lucene documents from Indexable resources. 
@@ -199,6 +204,12 @@ public class DocumentConstructor
             }
             // we don't want to store category information
             doc.add(this.getFieldUnstored(SearchConstants.FIELD_CATEGORY, sb.toString()));
+            
+            if(node instanceof DocumentNodeResource)
+            {
+                setOrganizationNameField(doc, (DocumentNodeResource)node);
+            }
+            
             return doc;
         }
         else
@@ -213,6 +224,32 @@ public class DocumentConstructor
         {
             doc.removeFields(SearchConstants.FIELD_BRANCH_ID);
             doc.add(this.getFieldKeyword(SearchConstants.FIELD_BRANCH_ID, branch.getIdString()));
+        }
+    }
+    
+    public void setOrganizationNameField(Document doc, DocumentNodeResource node)
+    {
+        if(doc != null)
+        {
+            StringBuilder sb = new StringBuilder();
+            try
+            {
+                List<OrganizationData> organizationData = OrganizationData.fromMeta(
+                    DocumentMetadataHelper.textToDom4j(node.getMeta()), "/meta/organizations");
+                for(int i = 0; i < organizationData.size(); i++)
+                {
+                    if(i > 0)
+                    {
+                        sb.append('\n');
+                    }
+                    sb.append(organizationData.get(i).getName());
+                }
+            }
+            catch(HTMLException e)
+            {
+                // do nothing.
+            }
+            doc.add(this.getFieldTermVector(SearchConstants.FIELD_ORGANIZATION_NAME, sb.toString()));
         }
     }
 
@@ -297,5 +334,11 @@ public class DocumentConstructor
     private Field getFieldUnstored(String name, String value)
     {
         return new Field(name, value, Store.NO, Index.ANALYZED);
+    }
+    
+    private Field getFieldTermVector(String name, String value)
+    {
+        return new Field(name, value, Field.Store.YES, Field.Index.ANALYZED,
+            Field.TermVector.WITH_POSITIONS_OFFSETS);
     }
 }

@@ -89,6 +89,7 @@ Szukaj w
 <option value="index_abbreviation">w skrócie</option>
 <option value="index_content">w treści</option>
 <option value="keywords">w słowach kluczowych</option>
+<option value="organization_name">w nazwie organizacji</option>
 </select>
 </td>
 </tr>

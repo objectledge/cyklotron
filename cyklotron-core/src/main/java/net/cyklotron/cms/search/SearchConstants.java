@@ -37,4 +37,6 @@ public interface SearchConstants
     public static String FIELD_DESCRIPTION = "description";
     /** categories field - synthetic */
     public static String FIELD_CATEGORY = "category";
+    /** organization name field - synthetic */
+    public static String FIELD_ORGANIZATION_NAME = "organization_name";
 }

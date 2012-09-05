@@ -89,6 +89,7 @@ Search in
 <option value="index_abbreviation">in abstract only</option>
 <option value="index_content">in content only</option>
 <option value="keywords">in keywords only</option>
+<option value="organization_name">in organization name only</option>
 </select>
 </td>
 </tr>
