@@ -109,23 +109,35 @@ Szukaj w
 </tr>
 
 <tr>
-<td>W zapytaniu po kategorii </td>
+<td>Ogranicz do wyników zapytania wg. kategorii </td>
 <td>
 <select name="required_queries">
- <option value="-1" #if($selected_required_queries.isEmpty()) selected#end>w dowolnym</option>
+ <option value="-1" #if($selected_required_queries.isEmpty()) selected#end>nie ograniczaj</option>
  #foreach($query in $required_queries)
     <option value="$query.id"#if($selected_required_queries.contains($query)) selected#end>$query.name</option>
   #end
 </select>
 </td>
 </tr>
+<tr>
+<td>Wyniki wyszukiwania pełnotekstowego zostaną ograniczone do części wspólnej zbiorów wyników zapytań wybranych w tej tej sekcji.
+Jeśli nie zostaną wybrane żadne zapytania, organiczenie nie stosuje się.
+</td>
+</tr>
 
 <tr>
-<td>W wybranych zapytaniach po kategorii </td>
+<td>Ogranicz do sumy wyników wybranych zapytań wg. kategorii </td>
 <td>
  #foreach($query in $optional_queries)
  <P><input type="checkbox" name="optional_queries" value="$query.id"#if($selected_optional_queries.contains($query)) selected#end><label>$!query.name</label></P>
  #end
+</td>
+</tr>
+<tr>
+<td>Wyniki wyszukiwania pełnotekstowego zostaną ograniczone do sumy zbiorów wyników zapytań wybranych w tej tej sekcji.
+Jeśli nie zostaną wybrane żadne zapytania, organiczenie nie stosuje się. Jeśli zarówno w tej jaki w poprzedniej sekcji zostaną wskazane zapytania,
+wyniki wyszukiwania pełnotekstowego zostaną ograniczone do części wspólnej sumy zbiorów wyników zapytań wybranych w tej sekcji, oraz wyników
+ograniczenia określonego w poprzedniej sekcji.
 </td>
 </tr>
 

@@ -81,10 +81,10 @@
 </tr>
 
 <tr>
-<td>In category query </td>
+<td>Restrict to category-based query results</td>
 <td>
 <select name="required_queries">
- <option value="-1" #if($selected_required_queries.isEmpty()) selected#end>any</option>
+ <option value="-1" #if($selected_required_queries.isEmpty()) selected#end>do not restrict</option>
  #foreach($query in $required_queries)
     <option value="$query.id"#if($selected_required_queries.contains($query)) selected#end >$query.name</option>
   #end

@@ -24,7 +24,7 @@ var fieldNames = new Array( "poolNames", "required_query_pool_id", "optional_que
     <th colspan="2">Konfiguracja ekranu wyszukiwania</th>
   </tr>
   <tr>
-    <td align="left">Wymagany zestaw zapytań po kategoriach:</td>
+    <td align="left">Zestaw zapytań do wyboru kategorii obowiązkowych:</td>
     <td>
      <a href="#select_category_query_pool('name id' 'searchConf' 'required_query_pool_name required_query_pool_id')">wybierz</a>
      <input type="text" name="required_query_pool_name" style="width:100%;" value="$!required_query_pool.name" maxlength="150" readonly= "readonly" />
@@ -32,12 +32,22 @@ var fieldNames = new Array( "poolNames", "required_query_pool_id", "optional_que
     </td>
   </tr>
   <tr>
-    <td align="left">Opcjonalny zestaw zapytań po kategoriach:</td>
+	 <td colspan="2">Wyniki wyszukiwania pełnotekstowego zostaną ograniczone do części wspólnej zbiorów wyników zapytań wybranych w tej tej sekcji.
+	 Jeśli nie zostaną wybrane żadne zapytania, organiczenie nie stosuje się.</td>
+  </tr>
+  <tr>
+    <td align="left">Zestaw zapytań do wyboru kategorii alternatywnych:</td>
     <td>
      <a href="#select_category_query_pool('name id' 'searchConf' 'optional_query_pool_name optional_query_pool_id')">wybierz</a>
      <input type="text" name="optional_query_pool_name" style="width:100%;" value="$!optional_query_pool.name" maxlength="150" readonly= "readonly" />
      <input type="hidden" name="optional_query_pool_id" value="$!optional_query_pool.id"/>
     </td>
+  </tr>
+  <tr>
+	 <td colspan="2">Wyniki wyszukiwania pełnotekstowego zostaną ograniczone do sumy zbiorów wyników zapytań wybranych w tej tej sekcji.
+	 Jeśli nie zostaną wybrane żadne zapytania, organiczenie nie stosuje się. Jeśli zarówno w tej jaki w poprzedniej sekcji zostaną wskazane zapytania,
+	 wyniki wyszukiwania pełnotekstowego zostaną ograniczone do części wspólnej sumy zbiorów wyników zapytań wybranych w tej sekcji, oraz wyników
+	 ograniczenia określonego w poprzedniej sekcji.</td>
   </tr>
 </table>
 <br/>
