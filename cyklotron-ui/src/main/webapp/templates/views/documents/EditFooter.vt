@@ -20,7 +20,7 @@
 
     <tr>
       <td align="right" nowrap><b>$ui_labels.get('content'):</b></td>
-      <td colspan="3"><input type="text" name="content" value="$parametersTool.get('content',$footer.content)" style="width:100%;"></td>
+      <td colspan="3"><input type="text" name="content" value="$!htmlEncoder.encodeAttribute($parametersTool.get('content',$footer.content))" style="width:100%;"></td>
     </tr>
   </table>
 
