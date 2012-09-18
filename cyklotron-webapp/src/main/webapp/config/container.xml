@@ -521,7 +521,13 @@
   			 class="net.cyklotron.cms.ngodatabase.locations.PNALocationsProvider"/> 
             
   <component class-key="net.cyklotron.cms.ngodatabase.LocationDatabaseService"
-             class="net.cyklotron.cms.ngodatabase.LocationDatabaseServiceImpl"/>
+             class="net.cyklotron.cms.ngodatabase.LocationDatabaseServiceImpl"/>             
+
+  <component class-key="net.cyklotron.cms.ngodatabase.BrokerConnectionProvider"
+  			 class="net.cyklotron.cms.ngodatabase.jms.NgoConnectionProvider"/>
+
+  <component class-key="net.cyklotron.cms.ngodatabase.NgoConsumerService"
+		class="net.cyklotron.cms.ngodatabase.NgoConsumerServiceImpl" />
              
   <component class="net.cyklotron.cms.CmsDataFactory"/>
   
