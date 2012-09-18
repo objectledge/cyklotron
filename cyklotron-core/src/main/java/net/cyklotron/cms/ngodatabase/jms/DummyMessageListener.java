@@ -26,83 +26,51 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package net.cyklotron.cms.ngodatabase;
+package net.cyklotron.cms.ngodatabase.jms;
 
-import javax.jms.Connection;
-import javax.jms.Destination;
+import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
-import javax.jms.MessageConsumer;
-import javax.jms.Session;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.TextMessage;
 
 import org.jcontainer.dna.Logger;
-import org.picocontainer.Startable;
 
-import net.cyklotron.cms.ngodatabase.jms.DummyMessageListener;
-import net.cyklotron.cms.ngodatabase.jms.MessagingConnectionProviderImpl;
-
-public class NgoConsumerServiceImpl
-    implements NgoConsumerService, Startable
+public class DummyMessageListener
+    implements MessageListener, ExceptionListener
 {
-
-    private static String brokerQueue = "TESTQUEUE";
-
     private Logger logger;
 
-    private final Session jmsSession;
-
-    private final Connection connection;
-
-    public NgoConsumerServiceImpl(Logger logger, MessagingConnectionProviderImpl ngoConnectionProvider)
+    public DummyMessageListener(Logger logger)
         throws Exception
     {
         this.logger = logger;
-        this.connection = ngoConnectionProvider.createConnection("TEST", Connection.class);
-        this.jmsSession = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
     }
 
     @Override
-    public void start()
+    public void onMessage(Message message)
     {
-        try
+        if(message instanceof TextMessage)
         {
-            DummyMessageListener messageListener = new DummyMessageListener(logger);
-            connection.setExceptionListener(messageListener);
-            connection.start();
-
-            Destination destination = jmsSession.createQueue(brokerQueue);
-            MessageConsumer messageConsumer = jmsSession.createConsumer(destination);
-            messageConsumer.setMessageListener(messageListener);
-
+            TextMessage textMessage = (TextMessage)message;
+            try
+            {
+                logger.info("Received message: " + textMessage.getText());
+            }
+            catch(JMSException ex)
+            {
+                logger.error("Error reading message: " + ex);
+            }
         }
-        catch(JMSException e)
+        else
         {
-            e.printStackTrace();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
+            logger.info("Received: " + message);
         }
     }
 
     @Override
-    public void stop()
+    public void onException(JMSException e)
     {
-        try
-        {
-            if(jmsSession != null)
-            {
-                jmsSession.close();
-            }
-            if(connection != null)
-            {
-                connection.close();
-            }
-        }
-        catch(JMSException e)
-        {
-            e.printStackTrace();
-        }
-
+        logger.error("NgoMessageListener Exception: ", e);
     }
-
 }
