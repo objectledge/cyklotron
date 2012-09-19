@@ -11,7 +11,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.objectledge.web.LedgeServletContextListener;
+import org.picocontainer.PicoContainer;
+
+import net.cyklotron.cms.files.FilesTool;
 import net.cyklotron.cms.rest.FilesProvider;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.ngo.bazy.BazyngoService;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
@@ -52,4 +58,12 @@ public class OrganizationFilesProvider extends FilesProvider
         return "Plik do modyfikacji\n orgId:" + orgId + " ftype:" + ftype +" fname:" + fname +
                 " \nnazwa: " + fileDetail.getFileName() + " o wielkości :" + fileDetail.getSize();    
     }    
+    
+    
+    protected SiteResource getSite() {
+        final PicoContainer container = (PicoContainer)context.getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
+        final BazyngoService bazyngo = (BazyngoService)container.getComponentInstance(BazyngoService.class);        
+
+        return bazyngo.getSite();
+    }
 }
