@@ -11,6 +11,7 @@ import org.apache.tika.Tika;
 import org.apache.tika.metadata.Metadata;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
@@ -639,5 +640,47 @@ public class FilesServiceImpl
         }
         throw new IllegalStateException(item+" does not have a SiteResource parent");
     }
+    
+    /**
+     * Retrieves a <code>cms.files.file</code> resource instance from the store.
+     *
+     * <p>This is a simple wrapper of StoreService.getResource() method plus
+     * the typecast.</p>
+     *
+     * @param session the CoralSession
+     * @param path the path of file to be retrieved
+     * @param site optional (can be null) site parameter - causes method to prepend site root to the path
+     * @return a resource instance.
+     * @throws EntityDoesNotExistException if the resource with the given id does not exist.
+     * @throws FilesException 
+     */
+    @Override
+    public FileResource getFileResource(CoralSession session, String path, SiteResource site)
+        throws EntityDoesNotExistException, FilesException
+    {
+        if(path.startsWith("/"))
+        {
+            path = path.substring(1);
+        }
+        
+        String rootPath = "";        
+        if(site != null) {
+            final Resource root = this.getFilesRoot(session, site);
+            rootPath = root.getPath();
+        }
+        
+        final Resource[] res = session.getStore().getResourceByPath(rootPath + "/" +path);   
+        
+        Resource fileOrDir = null;
+        if(res.length >= 1)
+        {
+            fileOrDir = res[0];
+        } else {
+            throw new EntityDoesNotExistException("File " + path + " does not exist.");
+        }
+        return FileResourceImpl.getFileResource(session, fileOrDir.getId());
+    }
+
+  
 }
 

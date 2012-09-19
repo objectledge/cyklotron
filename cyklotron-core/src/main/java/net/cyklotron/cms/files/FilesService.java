@@ -3,8 +3,10 @@ package net.cyklotron.cms.files;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.site.SiteResource;
 
@@ -198,4 +200,18 @@ public interface FilesService
      * @param file the file.
      */
     public SiteResource getSite(ItemResource item);
+    
+    /**
+     * Retrieves a <code>cms.files.file</code> resource instance from the store.
+     * 
+     * <p>This is a simple wrapper of StoreService.getResource() method plus
+     * the typecast.</p>
+     *
+     * @param session the CoralSession
+     * @param id the id of the object to be retrieved
+     * @return a resource instance.
+     * @throws EntityDoesNotExistException if the resource with the given id does not exist.
+     */
+     public FileResource getFileResource(CoralSession session, String path, SiteResource site) 
+                     throws EntityDoesNotExistException, FilesException;
 }

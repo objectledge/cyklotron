@@ -388,12 +388,11 @@
             <parameter class-key="org.jcontainer.dna.Logger"/>
 		    <sequence>
 		      <parameter key="simpleAuthenticationPipeline"/>
-			  <!-- <component class="org.objectledge.web.rest.JerseyRestValve"/> -->			  
+			  <parameter class-key="org.objectledge.coral.session.CoralSessionInitValve"/>      		      
 			  <parameter key="restRenderingPipeline"/>
 		    </sequence>
 			<sequence>
 		      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
-		      <!-- <component class-key="org.objectledge.web.RestExceptionRenderingValve"/> -->
 		    </sequence>
 			<sequence>
 		      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
