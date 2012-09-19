@@ -36,6 +36,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.jms.Connection;
+import javax.jms.XAConnection;
+
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.ngodatabase.organizations.IncomingOrganizationsService;
 import net.cyklotron.cms.ngodatabase.organizations.OrganizationNewsFeedService;
@@ -51,6 +54,9 @@ import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.database.Database;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.DateFormatter;
+import org.objectledge.messaging.DummyMessageListener;
+import org.objectledge.messaging.MessagingConsumerHelper;
+import org.objectledge.messaging.MessagingFactory;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Templating;
@@ -60,6 +66,8 @@ import org.picocontainer.Startable;
 public class NgoDatabaseServiceImpl
     implements NgoDatabaseService, Startable
 {
+    private final Logger logger;
+    
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
     private static final String DEFAULT_LOCALE = "pl_PL";
@@ -77,14 +85,17 @@ public class NgoDatabaseServiceImpl
     private final DateFormat dateFormat;
 
     private final Locale locale;
+    
+    private final MessagingConsumerHelper messagingConsumerHelper;
 
     public NgoDatabaseServiceImpl(Configuration config, Logger logger,
         UpdatedDocumentsProvider updatedDocuments, FileSystem fileSystem, SiteService siteService,
         CoralSessionFactory coralSessionFactory, Database database, Templating templating,
         OfflineLinkRenderingService offlineLinkRenderingService, DateFormatter dateFormatter,
-        CategoryService categoryService)
+        CategoryService categoryService, MessagingFactory messagingFactory)
         throws Exception
     {
+        this.logger = logger;
         // date format
         Configuration dateFormatConfig = config.getChild("dateFormat");
         this.dateFormat = new SimpleDateFormat(dateFormatConfig.getChild("pattern").getValue(
@@ -106,6 +117,19 @@ public class NgoDatabaseServiceImpl
         this.newsFeed = new OrganizationNewsFeedService(config.getChild("newsFeed"), dateFormat,
             locale, organizationsIndex, updatedDocumetns, categoryService, coralSessionFactory,
             fileSystem, dateFormatter, offlineLinkRenderingService, templating, logger);
+        
+        Configuration connectionConf = config.getChild("connection");
+        boolean isXAConnection = false;
+        if(connectionConf == null)
+        {
+            connectionConf = config.getChild("xaconnection");
+            isXAConnection = true;
+        }
+        String connectionName = connectionConf.getAttribute("name");
+        DummyMessageListener messagelistener = new DummyMessageListener(logger);
+        messagingConsumerHelper = new MessagingConsumerHelper(messagingFactory.createConnection(
+            connectionName, isXAConnection ? XAConnection.class : Connection.class),
+            messagelistener, messagelistener, connectionConf);
     }
 
     @Override
@@ -117,13 +141,28 @@ public class NgoDatabaseServiceImpl
     @Override
     public void start()
     {
-        incoming.readIncoming(false);
+        try
+        {
+            incoming.readIncoming(false);
+            messagingConsumerHelper.start();
+        }
+        catch(ProcessingException e)
+        {
+            logger.error("Error starting NgoDatabaseService: " + e);
+        }
     }
 
     @Override
     public void stop()
     {
-
+        try
+        {
+            messagingConsumerHelper.stop();
+        }
+        catch(ProcessingException e)
+        {
+            logger.error("Error stopping NgoDatabaseService: " + e);
+        }
     }
 
     // incoming organization data

@@ -49,4 +49,11 @@
     <baseURL>http://ngo.pl/view/ngodatabase.NewsFeed?org=</baseURL>
     <idParameter>org</idParameter>    
   </newsFeed>
+  <connection name="DefaultConnection">
+    <ackMode></ackMode>
+    <clientId></clientId>
+    <destinationName>TESTQUEUE</destinationName>
+    <isTopic>0</isTopic>
+    <isTransacted>0</isTransacted>
+  </connection>
 </config>

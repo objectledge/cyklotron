@@ -511,6 +511,9 @@
   <component class-key="org.objectledge.html.HTMLService"
              class="org.objectledge.html.HTMLServiceImpl"/>
 
+  <component class-key="org.objectledge.messaging.MessagingFactory"
+  			 class="org.objectledge.messaging.MessagingFactoryImpl"/>
+
   <component class-key="net.cyklotron.cms.ngodatabase.organizations.UpdatedDocumentsProvider" 
              class="net.cyklotron.cms.ngodatabase.organizations.CachingUpdatedDocumentsProvider" />
              
@@ -522,12 +525,6 @@
             
   <component class-key="net.cyklotron.cms.ngodatabase.LocationDatabaseService"
              class="net.cyklotron.cms.ngodatabase.LocationDatabaseServiceImpl"/>             
-
-  <component class-key="net.cyklotron.cms.ngodatabase.BrokerConnectionProvider"
-  			 class="net.cyklotron.cms.ngodatabase.jms.NgoConnectionProvider"/>
-
-  <component class-key="net.cyklotron.cms.ngodatabase.NgoConsumerService"
-		class="net.cyklotron.cms.ngodatabase.NgoConsumerServiceImpl" />
              
   <component class="net.cyklotron.cms.CmsDataFactory"/>
   
