@@ -104,8 +104,7 @@ public class OrganizationFilesProvider extends FilesProvider
     
     @DELETE
     @Produces("application/json")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Path(orgPrefix + "/{orgId}/{ftype}/{fname}")
+    @Path(orgPrefix + "/{orgId: [a-zA-Z0-9_]+}/{ftype}/{fname}")
     public Response deleteFile(@PathParam("orgId") String orgId, 
             @PathParam("ftype") String ftype,
             @PathParam("fname") String fname) {
