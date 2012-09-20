@@ -681,6 +681,31 @@ public class FilesServiceImpl
         return FileResourceImpl.getFileResource(session, fileOrDir.getId());
     }
 
+    /**
+     * Retrieves a <code>cms.files.file</code> resource instance from the store.
+     *
+     * <p>This is a simple wrapper of StoreService.getResource() method plus
+     * the typecast.</p>
+     *
+     * @param session the CoralSession
+     * @param id the id of the object to be retrieved
+     * @return a resource instance.
+     * @throws EntityDoesNotExistException if the resource with the given id does not exist.
+     */
+    @Override
+    public FileResource getFileResource(CoralSession session, long id)
+        throws EntityDoesNotExistException
+    {
+        Resource res = session.getStore().getResource(id);
+        if(!(res instanceof FileResource))
+        {
+            throw new IllegalArgumentException("resource #"+id+" is "+
+                                               res.getResourceClass().getName()+
+                                               " not cms.files.file");
+        }
+        return (FileResource)res;
+    } 
+    
   
 }
 

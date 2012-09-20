@@ -414,7 +414,17 @@
 
 
     
-  <!-- // cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
+  <!-- // Cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
+
+  <!-- BAZY -->
+  <component class="net.cyklotron.ngo.bazy.BazyngoService">
+<!--       <parameter class-key="org.jcontainer.dna.Logger"/> -->
+<!--       <parameter/> -->
+<!--       <parameter class-key="net.cyklotron.cms.site.SiteService"/> -->
+<!--       <parameter class-key="org.objectledge.context.Context"/> -->
+<!--       <parameter class-key="org.objectledge.coral.session.CoralSessionFactory"/> -->
+  </component>  
+  <!-- /BAZY -->
   
   <component class-key="net.cyklotron.cms.banner.BannerService"
              class="net.cyklotron.cms.banner.internal.BannerServiceImpl"/>

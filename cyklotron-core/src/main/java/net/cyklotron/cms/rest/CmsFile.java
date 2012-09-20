@@ -14,9 +14,15 @@ public class CmsFile { //aka ImmutableSausage
     
     private FileResource fileResource;
     private FilesTool tool;
+    private String name;
+    private Date creationTime;
+    private String description;
+    private long id;
+    private String mimeType;
+    private long size;
     
     public CmsFile() {
-        
+
     }
      
     public CmsFile(FileResource fileResource) {
@@ -26,37 +32,44 @@ public class CmsFile { //aka ImmutableSausage
     public CmsFile(FileResource fileResource, FilesTool tool) {
         this.fileResource = fileResource;
         this.tool = tool;
+        this.name = fileResource.getName();
+        this.creationTime = fileResource.getCreationTime();
+        this.description = fileResource.getDescription();
+        this.id = fileResource.getId();
+        this.mimeType = fileResource.getMimetype();
+        this.size = fileResource.getSize();
     }
     
     @XmlElement
     public String getName() {        
-        return fileResource.getName();
+        return name;
     }
     
     @XmlElement
     public Date getCreationTime() {        
-        return fileResource.getCreationTime();
+        return creationTime;
     }
     
     @XmlElement
     public String getDescription() {        
-        return fileResource.getDescription();
+        return description;
     }
     
     @XmlElement
     public long getId() {        
-        return fileResource.getId();
+        return id;
     }
     
     @XmlElement
     public String getMimetype() {        
-        return fileResource.getMimetype();
+        return mimeType;
     }
     
     @XmlElement
     public long getSize() {        
-        return fileResource.getSize();
+        return size;
     }    
+       
     
     @XmlElement
     public String getLink() {    
@@ -67,12 +80,48 @@ public class CmsFile { //aka ImmutableSausage
             }
             catch(FilesException e)
             {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         } 
         
         return null;        
+    }
+
+    public String getMimeType()
+    {
+        return mimeType;
+    }
+
+    //setters
+    
+    public void setMimeType(String mimeType)
+    {
+        this.mimeType = mimeType;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setCreationTime(Date creationTime)
+    {
+        this.creationTime = creationTime;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+    public void setId(long id)
+    {
+        this.id = id;
+    }
+
+    public void setSize(long size)
+    {
+        this.size = size;
     }
     
 

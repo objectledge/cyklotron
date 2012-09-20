@@ -27,5 +27,5 @@
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
 <config>
- <restPackageNames>net.cyklotron.ngo.bazy.files</restPackageNames>
+ <siteName>bazy.ngo.pl</siteName>
 </config>
