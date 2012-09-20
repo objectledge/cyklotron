@@ -20,6 +20,7 @@ import org.objectledge.web.LedgeServletContextListener;
 import org.picocontainer.PicoContainer;
 
 import net.cyklotron.cms.files.FilesException;
+import net.cyklotron.cms.files.FilesListener;
 import net.cyklotron.cms.rest.FilesProvider;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.ngo.bazy.BazyngoService;
@@ -32,7 +33,7 @@ import net.cyklotron.cms.rest.CmsFile;
 @Path("/org_files")
 public class OrganizationFilesProvider extends FilesProvider
 {
-    private static final String BASE_NODE_NAME = "org_files";
+    private static final String baseDirName = FilesListener.SITE_PUBLIC_ROOT_DIR + "/" + BazyngoService.BAZYNGO_SITE_FILES_ROOT_DIR;
 
     @GET
     @Path("/{orgId: [a-zA-Z0-9_]+}/{ftype}/{fname}")
@@ -42,7 +43,7 @@ public class OrganizationFilesProvider extends FilesProvider
             @PathParam("fname") String fname) {
         try
         {
-            return getCmsFile(orgId + "/" + ftype, fname);
+            return getCmsFile(buildPath(orgId, ftype, null));
         }
         catch(EntityDoesNotExistException e)
         {
@@ -62,7 +63,7 @@ public class OrganizationFilesProvider extends FilesProvider
     @Produces("application/json")
     public List<CmsFile> getFiles(@PathParam("orgId") String orgId, 
             @PathParam("ftype") String ftype) {
-        return getCmsFiles(orgId + "/" + ftype);
+        return getCmsFiles(buildPath(orgId, ftype, null));
     }
 
 //    @GET
@@ -82,7 +83,18 @@ public class OrganizationFilesProvider extends FilesProvider
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail
             ) {
-        return createCmsFile(buildPath(orgId, ftype, fname), uploadedInputStream, fileDetail);
+        if(fname == null) {
+            fname = fileDetail.getFileName();
+        }
+        try
+        {
+            return createCmsFile(buildPath(orgId, ftype, fname), uploadedInputStream, fileDetail);
+        }
+        catch(FilesException e)
+        {
+            e.printStackTrace();
+            return errorResponse(Response.Status.BAD_REQUEST, e.getMessage());
+        }
     }
 
     @PUT
@@ -125,7 +137,10 @@ public class OrganizationFilesProvider extends FilesProvider
     }
     
     private String buildPath(String orgId, String ftype, String fname) {
-        return BASE_NODE_NAME + "/" + buildOrgIdPath(orgId) + "/" + ftype + "/" + fname;
+        if(fname == null) {
+            return baseDirName + "/" + buildOrgIdPath(orgId) + "/" + ftype;
+        }
+        return baseDirName + "/" + buildOrgIdPath(orgId) + "/" + ftype + "/" + fname;
     }
     
     private String buildOrgIdPath(String orgId) {

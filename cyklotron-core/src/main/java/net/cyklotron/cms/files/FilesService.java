@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.site.SiteResource;
@@ -70,7 +71,7 @@ public interface FilesService
      */
     public DirectoryResource createDirectory(CoralSession coralSession, String name, DirectoryResource parent)
         throws FilesException;
-    
+
     /**
      * Create the file.
      *
@@ -227,5 +228,7 @@ public interface FilesService
       * @throws EntityDoesNotExistException if the resource with the given id does not exist.
       */
       FileResource getFileResource(CoralSession session, long id)
-        throws EntityDoesNotExistException;     
+        throws EntityDoesNotExistException;
+
+      DirectoryResource createParentDirs(CoralSession session, String filepath, SiteResource site)  throws FileAlreadyExistsException, FilesException, InvalidResourceNameException;     
 }

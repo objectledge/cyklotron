@@ -26,6 +26,10 @@ public class FilesListener
 extends BaseSiteListener
 implements SiteCreationListener, SiteDestructionValve, Startable
 {
+    public static final String SITE_PUBLIC_ROOT_DIR = "public";
+
+    public static final String SITE_PROTECTED_ROOT_DIR = "protected";
+
     /** files service */
     private FilesService filesService;
 
@@ -82,11 +86,11 @@ implements SiteCreationListener, SiteDestructionValve, Startable
             filesRoot.update();
 
             DirectoryResource publicDirectory =
-                filesService.createRootDirectory(coralSession, site, "public", true, null);
+                filesService.createRootDirectory(coralSession, site, SITE_PUBLIC_ROOT_DIR, true, null);
             publicDirectory.setDescription("Public directory");
             publicDirectory.update();
             DirectoryResource protectedDirectory =
-                filesService.createRootDirectory(coralSession, site, "protected", false, null);
+                filesService.createRootDirectory(coralSession, site, SITE_PROTECTED_ROOT_DIR, false, null);
             protectedDirectory.setDescription("Protected directory");
             protectedDirectory.update();
         }

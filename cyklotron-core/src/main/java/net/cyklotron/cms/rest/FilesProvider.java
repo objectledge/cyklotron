@@ -7,19 +7,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.xml.bind.JAXBException;
 
 import net.cyklotron.cms.files.DirectoryResource;
+import net.cyklotron.cms.files.FileAlreadyExistsException;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.files.FilesTool;
+import net.cyklotron.cms.files.FilesToolFactory;
+import net.cyklotron.cms.files.ItemResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.web.LedgeServletContextListener;
 import org.picocontainer.PicoContainer;
@@ -43,9 +50,9 @@ public class FilesProvider {
      * @throws EntityDoesNotExistException
      * @throws FilesException
      */
-    public CmsFile getCmsFile(String filepath, String filename) throws EntityDoesNotExistException, FilesException {
+    public CmsFile getCmsFile(String filepath) throws EntityDoesNotExistException, FilesException {
         final CoralSession session = getCoralSession();
-        return new CmsFile(getFileService().getFileResource(session, filepath + "/" + filename, getSite()), 
+        return new CmsFile(getFileService().getFileResource(session, filepath, getSite()), 
             getFilesTool());
     }    
  
@@ -54,46 +61,67 @@ public class FilesProvider {
      * @param uploadedInputStream
      * @param fileDetail
      * @return
+     * @throws FilesException 
      */
     public Response createCmsFile(String fpath,
             InputStream uploadedInputStream,
             FormDataContentDisposition fileDetail
-        ) {
+        ) throws FilesException {
+        
         
         final FilesService filesService = getFileService();
         final CoralSession coralSession = getCoralSession();
-        FileResource f = null;        
-        DirectoryResource siteRoot = null;
+        final SiteResource site = getSite();
+        FileResource f = null;             
         
-        try
-        {
-            siteRoot = (DirectoryResource)filesService.getFilesRoot(coralSession, getSite());
+        if(fpath.length() == 0) {
+            throw new FilesException("Empty file name.");
         }
-        catch(FilesException e1)
-        {
-            e1.printStackTrace();
-            return postResponse(null);    
-        }
+        final String[] tokens = fpath.split("/");
+        String fname = tokens[tokens.length-1];
         
+        if(uploadedInputStream == null) {
+            return errorResponse(Response.Status.BAD_REQUEST, "Missing file content");
+        }
         String mimeType = filesService.detectMimeType(uploadedInputStream, fileDetail.getFileName());
         try
         {
-            f = getFileService().createFile(
+            DirectoryResource dir = filesService.createParentDirs(coralSession, fpath, site);
+            f = filesService.createFile(
                 coralSession, 
-                fileDetail.getFileName(), 
+                fname, 
                 uploadedInputStream, 
                 mimeType, 
                 null, 
-                siteRoot);
+                (DirectoryResource)dir);
+        }
+        catch (FileAlreadyExistsException e1) {
+            e1.printStackTrace();
+            return errorResponse(Response.Status.CONFLICT, e1.getMessage());
         }
         catch(FilesException e)
         {
             e.printStackTrace();
+            return errorResponse(Response.Status.BAD_REQUEST, e.getMessage());
+        }
+        catch(InvalidResourceNameException e)
+        {
+            e.printStackTrace();
+            return errorResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         
         return postResponse(new CmsFile(f, getFilesTool()));    
     }
-    
+//    protected void deleteSiteNode(CoralSession coralSession, Resource node)
+//                    throws Exception
+//                {
+//                    Resource[] children = coralSession.getStore().getResource(node);
+//                    for(Resource child: children)
+//                    {
+//                        deleteSiteNode(coralSession, child);
+//                    }
+//                    coralSession.getStore().deleteResource(node);
+//                }
     
     public Response deleteCmsFile(String fpath) {
         return deleteResponse(null);
@@ -115,7 +143,7 @@ public class FilesProvider {
         catch(FilesException e)
         {
             e.printStackTrace();
-            return null;    
+            return files;    
         }        
         
         final Resource[] res = coralSession.getStore().getResourceByPath(siteRoot.getPath() + "/" + dirPath + "/*");
@@ -151,24 +179,32 @@ public class FilesProvider {
             return putResponse(file);
     }
     
+    
     //Responses
     
     /**
      * @param file
      * @return
-     */
-    private Response postResponse(CmsFile file) {    
+     */ 
+    private Response postResponse(CmsFile file) {   
+        ResponseBuilder builder = null;
         Response res = Response.noContent().build();
         if(file != null) {
             try
             {
-                res = Response.created(new URI(file.getLink())).build();
+                String link = file.getLink();
+                builder = Response.created(new URI(link));
+                builder.tag(new EntityTag("{id:" +file.getId()+"}"));
             }
             catch(URISyntaxException e)
             {
                 e.printStackTrace();
-                res = Response.noContent().build();
+                res = errorResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
             }
+        }
+        
+        if(builder != null) {
+            res = builder.build();           
         }
         return res;
     }
@@ -187,7 +223,7 @@ public class FilesProvider {
             catch(URISyntaxException e)
             {
                 e.printStackTrace();
-                res = Response.noContent().build();
+                res = errorResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
             }
         }
         return res;
@@ -204,28 +240,37 @@ public class FilesProvider {
             catch(URISyntaxException e)
             {
                 e.printStackTrace();
-                res = Response.noContent().build();
+                res = errorResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
             }
         }
         return res;
     }
     
-    private Response errorResponse(CmsFile file)
+    protected Response errorResponse(Response.Status status, String reason)
     {
+        ResponseBuilder builder = null;
         Response res = Response.noContent().build();
-        if(file != null) {
-            try
-            {
-                res = Response.created(new URI(file.getLink())).build();
-            }
-            catch(URISyntaxException e)
-            {
-                e.printStackTrace();
-                res = Response.noContent().build();
-            }
+        
+        switch(status) {
+            case BAD_REQUEST:
+            case UNAUTHORIZED:
+            case CONFLICT:
+            case UNSUPPORTED_MEDIA_TYPE:
+            case INTERNAL_SERVER_ERROR:
+                builder = Response.status(status);
+                break;
         }
+        reason = reason.replace("'", "\'");
+        if(reason != null) {
+            builder.tag(new EntityTag("{ reason:'" + reason + "'}"));
+        }
+        if(builder != null) {
+            res = builder.build();           
+        }
+       
         return res;
     }
+    
     
     
     //Overridable accessors
@@ -255,7 +300,7 @@ public class FilesProvider {
      */
     private FilesTool getFilesTool() {
         final PicoContainer container = (PicoContainer)context.getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
-        final FilesTool tool = (FilesTool)container.getComponentInstance(FilesTool.class);        
+        final FilesTool tool = (FilesTool)((FilesToolFactory)container.getComponentInstance(FilesToolFactory.class)).getTool();        
         return tool;
     }
         
@@ -266,7 +311,7 @@ public class FilesProvider {
         final PicoContainer container = (PicoContainer)context.getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
         final SiteService filesService = (SiteService)container.getComponentInstance(SiteService.class);        
         return filesService;
-    }
+    }        
     
     /**
      * @return

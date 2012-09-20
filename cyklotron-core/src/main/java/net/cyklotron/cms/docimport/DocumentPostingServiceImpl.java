@@ -199,7 +199,7 @@ public class DocumentPostingServiceImpl
         Collection<FileResource> files = new ArrayList<FileResource>();
         if(docData.getAttachments().size() > 0)
         {
-            DirectoryResource docDirectory = filesService.createDirectory(coralSession, docName,
+            DirectoryResource docDirectory = (DirectoryResource)filesService.createDirectory(coralSession, docName,
                 config.getAttachmentsLocation());
             for(AttachmentData attData : docData.getAttachments())
             {

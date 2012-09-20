@@ -1,9 +1,15 @@
 package net.cyklotron.cms.rest;
 
+import java.io.StringWriter;
 import java.util.Date;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.codehaus.jackson.map.util.JSONWrappedObject;
 
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesException;
@@ -76,7 +82,7 @@ public class CmsFile { //aka ImmutableSausage
         if(tool != null) {
             try
             {
-                return tool.getLink(fileResource);
+                return tool.getLink(fileResource, true);
             }
             catch(FilesException e)
             {
@@ -124,5 +130,12 @@ public class CmsFile { //aka ImmutableSausage
         this.size = size;
     }
     
-
+    public String toXML() throws JAXBException {
+        final StringWriter st = new StringWriter();
+        JAXBContext jc = JAXBContext.newInstance(CmsFile.class);
+        Marshaller m = jc.createMarshaller();
+        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        m.marshal(this, st);
+        return st.toString();
+    }
 }

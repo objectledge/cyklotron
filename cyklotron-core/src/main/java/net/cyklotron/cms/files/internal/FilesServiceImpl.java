@@ -15,6 +15,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.mail.MailSystem;
@@ -44,6 +45,8 @@ public class FilesServiceImpl
     implements FilesService
 {
     // instance variables ////////////////////////////////////////////////////
+
+    private static final String FILES_ROOT_DIR_NAME = "files";
 
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
 
@@ -93,7 +96,7 @@ public class FilesServiceImpl
      */
     public FilesMapResource getFilesRoot(CoralSession coralSession, SiteResource site) throws FilesException
     {
-        Resource[] roots = coralSession.getStore().getResource(site, "files");
+        Resource[] roots = coralSession.getStore().getResource(site, FILES_ROOT_DIR_NAME);
         if(roots.length == 1)
         {
             return (FilesMapResource)roots[0];
@@ -102,10 +105,11 @@ public class FilesServiceImpl
         {
             try
             {
-                return FilesMapResourceImpl.createFilesMapResource(coralSession, "files", site);
+                return FilesMapResourceImpl.createFilesMapResource(coralSession, FILES_ROOT_DIR_NAME, site);
             }
             catch(Exception e)
             {
+                e.printStackTrace();
                 throw new FilesException("Couldn't create files root node");
             }
         }
@@ -192,7 +196,7 @@ public class FilesServiceImpl
     public RootDirectoryResource getRootDirectoryResource(CoralSession coralSession, SiteResource site) 
                     throws FilesException {
         FilesMapResource parent = getFilesRoot(coralSession, site);
-        String name = "files";
+        String name = FILES_ROOT_DIR_NAME;
         Resource[] resources = coralSession.getStore().getResource(parent, name);
         
         if(resources.length == 0)
@@ -214,6 +218,7 @@ public class FilesServiceImpl
      * @return the created directory.
      * @throws FilesException if  the operation fails.
      */
+   
     public DirectoryResource createDirectory(CoralSession coralSession, String name, DirectoryResource parent)
         throws FilesException
     {
@@ -705,6 +710,34 @@ public class FilesServiceImpl
         }
         return (FileResource)res;
     } 
+    
+    @Override
+    public DirectoryResource createParentDirs(CoralSession session, String path, SiteResource site) throws FilesException, InvalidResourceNameException {
+                
+        while(path.startsWith("/"))
+        {
+            path = path.substring(1);
+        }
+        
+        SiteResource siteRoot = null; 
+        siteRoot = (SiteResource)session.getStore().getResourceByPath(site.getPath())[0];
+
+        final String[] tokens = path.split("/");
+
+        Resource parent = session.getStore().getResource(siteRoot, FILES_ROOT_DIR_NAME)[0];
+        
+        for(int i=0; i<tokens.length-1; i++) {
+            String dirname = tokens[i];
+            final Resource[] res = session.getStore().getResource(parent, dirname);
+            if(res.length > 0) {
+                //dir exists, moving on
+                parent = (DirectoryResource)res[0];
+            } else {
+                parent = createDirectory(session, tokens[i], (DirectoryResource)parent);                
+            }
+        }
+        return (DirectoryResource)parent;
+    }
     
   
 }
