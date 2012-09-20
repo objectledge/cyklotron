@@ -83,7 +83,7 @@ public class FilesProvider {
         if(uploadedInputStream == null) {
             return errorResponse(Response.Status.BAD_REQUEST, "Missing file content");
         }
-        String mimeType = filesService.detectMimeType(uploadedInputStream, fileDetail.getFileName());
+        String mimeType = fileDetail.getType();
         try
         {
             DirectoryResource dir = filesService.createParentDirs(coralSession, fpath, site);
@@ -112,16 +112,7 @@ public class FilesProvider {
         
         return postResponse(new CmsFile(f, getFilesTool()));    
     }
-//    protected void deleteSiteNode(CoralSession coralSession, Resource node)
-//                    throws Exception
-//                {
-//                    Resource[] children = coralSession.getStore().getResource(node);
-//                    for(Resource child: children)
-//                    {
-//                        deleteSiteNode(coralSession, child);
-//                    }
-//                    coralSession.getStore().deleteResource(node);
-//                }
+
     
     public Response deleteCmsFile(String fpath) {
         return deleteResponse(null);
