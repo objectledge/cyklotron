@@ -95,11 +95,24 @@ public class OrganizationFilesProvider extends FilesProvider
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path(orgPrefix + "/{orgId: [a-zA-Z0-9_]+}/{ftype}/{fname}")
+    public Response modifyFile(@PathParam("orgId") String orgId, 
+            @PathParam("ftype") String ftype,
+            @PathParam("fname") String fname,
+            @FormDataParam("file") InputStream uploadedInputStream,
+            @FormDataParam("file") FormDataContentDisposition fileDetail) {
+        return modifyCmsFileByPath(buildPath(orgId, ftype, fname), uploadedInputStream, fileDetail);
+    }        
+    
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path(filePrefix + "/{fid}")
     public Response modifyFile(@PathParam("fid") long fid,
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) {
-        return modifyCmsFile(fid, uploadedInputStream, fileDetail);
+        return modifyCmsFileById(fid, uploadedInputStream, fileDetail);
     }        
     
     @DELETE

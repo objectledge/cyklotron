@@ -1,6 +1,8 @@
 package net.cyklotron.cms.rest;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -206,19 +208,51 @@ public class FilesProvider {
      * @param fileDetail
      * @return
      */
-    public Response modifyCmsFile(long fid, InputStream uploadedInputStream,
+    public Response modifyCmsFileById(long fid, InputStream uploadedInputStream,
         FormDataContentDisposition fileDetail) {
-            return putResponse(null);
+            CmsFile file = getCmsFileById(fid);
+            return modifyCmsFile(file, uploadedInputStream, fileDetail);
     }
     
-    /**
-     * 
-     * 
-     * @param file
-     * @return
-     */
-    public Response modifyCmsFileMeta(CmsFile file) {
-            return putResponse(file);
+    public Response modifyCmsFileByPath(String fpath, InputStream uploadedInputStream,
+        FormDataContentDisposition fileDetail)
+    {
+        CmsFile file;
+        file = getCmsFile(fpath);
+        return modifyCmsFile(file, uploadedInputStream, fileDetail);
+    }
+    
+    private Response modifyCmsFile(CmsFile cmsfile, InputStream uploadedInputStream, FormDataContentDisposition fileDetail)
+    {
+        String mimetype = fileDetail.getType();
+        long size = fileDetail.getSize();
+        FileResource file  = cmsfile.getFileResource();
+        OutputStream output = file.getOutputStream();
+        try
+        {
+            rewrite(uploadedInputStream, output);
+            file.setSize(size);
+            file.setMimetype(mimetype);
+            file.update();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            return errorResponse(Response.Status.BAD_REQUEST, e.getMessage());
+        }
+        return putResponse(cmsfile);
+    }
+
+    private long rewrite(InputStream input, OutputStream output) throws IOException {
+        byte[] buffer = new byte[256];
+        long total = 0;
+        int bytesRead = 0;
+        while ((bytesRead = input.read(buffer)) != -1) {
+            output.write(buffer, 0, bytesRead);
+            total += bytesRead;
+        }
+        
+        return total;
     }
     
     
@@ -256,17 +290,16 @@ public class FilesProvider {
      * @return
      */
     private Response putResponse(CmsFile file) {    
+        ResponseBuilder builder = null;
         Response res = Response.noContent().build();
         if(file != null) {
-            try
-            {
-                res = Response.created(new URI(file.getLink())).build();
-            }
-            catch(URISyntaxException e)
-            {
-                e.printStackTrace();
-                res = errorResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
-            }
+            String link = file.getLink();
+            builder = Response.ok();
+            builder.tag(new EntityTag("{id:" +file.getId()+"}"));
+        }
+        
+        if(builder != null) {
+            res = builder.build();           
         }
         return res;
     }
