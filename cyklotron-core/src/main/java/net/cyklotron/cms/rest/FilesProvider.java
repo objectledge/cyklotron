@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
@@ -50,10 +51,39 @@ public class FilesProvider {
      * @throws EntityDoesNotExistException
      * @throws FilesException
      */
-    public CmsFile getCmsFile(String filepath) throws EntityDoesNotExistException, FilesException {
+    public CmsFile getCmsFile(String filepath) {
         final CoralSession session = getCoralSession();
-        return new CmsFile(getFileService().getFileResource(session, filepath, getSite()), 
-            getFilesTool());
+        try
+        {
+            CmsFile file = new CmsFile(getFileService().getFileResource(session, filepath, getSite()), 
+                getFilesTool());
+            return file;
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            e.printStackTrace();
+            throw new RESTWebException(Response.Status.NOT_FOUND, e.getMessage());
+        }
+        catch(FilesException e)
+        {
+            e.printStackTrace();
+            throw new RESTWebException(Response.Status.NOT_FOUND, e.getMessage());
+        }
+    }    
+ 
+    public CmsFile getCmsFileById(long id) {
+        final CoralSession session = getCoralSession();
+        try
+        {
+            CmsFile file = new CmsFile(getFileService().getFileResource(session, id), 
+                getFilesTool());
+            return file;
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            e.printStackTrace();
+            throw new RESTWebException(Response.Status.NOT_FOUND, e.getMessage());            
+        }
     }    
  
     /**
@@ -114,10 +144,31 @@ public class FilesProvider {
     }
 
     
-    public Response deleteCmsFile(String fpath) {
-        return deleteResponse(null);
+    public Response deleteCmsFileByPath(String fpath) {
+        CmsFile file;
+        file = getCmsFile(fpath);
+        return deleteCmsFile(file);
     }
        
+    public Response deleteCmsFileById(long id) {
+        CmsFile file;
+        file = getCmsFileById(id);
+        return deleteCmsFile(file);
+    }
+       
+    public Response deleteCmsFile(CmsFile file) {
+        long id = file.getId();
+        try
+        {
+            getFileService().deleteFile(getCoralSession(), file.getFileResource());
+        }
+        catch(FilesException e)
+        {
+            e.printStackTrace();
+            return errorResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return deleteResponse("" + id);
+    }
     /**
      * @param filepath
      * @return
@@ -220,19 +271,13 @@ public class FilesProvider {
         return res;
     }
 
-    private Response deleteResponse(CmsFile file)
+    private Response deleteResponse(String id)
     {
         Response res = Response.noContent().build();
-        if(file != null) {
-            try
-            {
-                res = Response.created(new URI(file.getLink())).build();
-            }
-            catch(URISyntaxException e)
-            {
-                e.printStackTrace();
-                res = errorResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
-            }
+        if(id != null) {
+            ResponseBuilder builder = Response.ok();
+            builder.tag(new EntityTag("{id:" +id+"}"));
+            res = builder.build();
         }
         return res;
     }
@@ -248,6 +293,7 @@ public class FilesProvider {
             case CONFLICT:
             case UNSUPPORTED_MEDIA_TYPE:
             case INTERNAL_SERVER_ERROR:
+            case NOT_FOUND:
                 builder = Response.status(status);
                 break;
         }
@@ -328,5 +374,18 @@ public class FilesProvider {
     public void setContext(ServletContext context)
     {
         this.context = context;
-    }    
+    }  
+    
+    private class RESTWebException extends WebApplicationException {
+
+        /**
+          * Create a HTTP 401 (Unauthorized) exception.
+         */
+         public RESTWebException(Response.Status status, String desc) {
+             super(errorResponse(status, desc));
+         }
+
+
+    }
+    
 }

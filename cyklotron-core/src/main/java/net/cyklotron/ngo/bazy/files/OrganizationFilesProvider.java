@@ -34,49 +34,44 @@ import net.cyklotron.cms.rest.CmsFile;
 public class OrganizationFilesProvider extends FilesProvider
 {
     private static final String baseDirName = FilesListener.SITE_PUBLIC_ROOT_DIR + "/" + BazyngoService.BAZYNGO_SITE_FILES_ROOT_DIR;
+    private static final String orgPrefix ="/org";
+    private static final String filePrefix = "/file";
 
     @GET
-    @Path("/{orgId: [a-zA-Z0-9_]+}/{ftype}/{fname}")
+    @Path(orgPrefix + "/{orgId: [a-zA-Z0-9_]+}/{ftype}/{fname}")
     @Produces("application/json")
     public CmsFile getFile(@PathParam("orgId") String orgId, 
             @PathParam("ftype") String ftype,
             @PathParam("fname") String fname) {
-        try
-        {
-            return getCmsFile(buildPath(orgId, ftype, null));
-        }
-        catch(EntityDoesNotExistException e)
-        {
-            e.printStackTrace();
-        }
-        catch(FilesException e)
-        {
-            e.printStackTrace();
-        }
-        
-        return null;
-                        
+        CmsFile file = getCmsFile(buildPath(orgId, ftype, fname));
+        file.setOrganizationFileType(ftype);
+        return file;
+                       
     }
+    
+    @GET
+    @Path(filePrefix + "/{fid}")
+    @Produces("application/json")
+    public CmsFile getFileById(@PathParam("fid") long fid) {
+        CmsFile file = getCmsFileById(fid);
+        String ftype = file.getFileResource().getParent().getName();
+        file.setOrganizationFileType(ftype);
+        return file;
+
+    }    
 
     @GET
-    @Path("/{orgId: [a-zA-Z0-9_]+}/{ftype}")
+    @Path(orgPrefix +"/{orgId: [a-zA-Z0-9_]+}/{ftype}")
     @Produces("application/json")
     public List<CmsFile> getFiles(@PathParam("orgId") String orgId, 
             @PathParam("ftype") String ftype) {
         return getCmsFiles(buildPath(orgId, ftype, null));
     }
 
-//    @GET
-//    @Path("/file/{fid}")
-//    @Produces("application/json")
-//    public List<CmsFile> getFiles(@PathParam("fid") String fid) {
-//        return getCmsFileById(fid);
-//    }
-
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Path("/{orgId: [a-zA-Z0-9_]+}/{ftype}")
+    @Path(orgPrefix + "/{orgId: [a-zA-Z0-9_]+}/{ftype}")
     public Response createFile(@PathParam("orgId") String orgId, 
             @PathParam("ftype") String ftype,
             @FormDataParam("fname") String fname,
@@ -100,32 +95,28 @@ public class OrganizationFilesProvider extends FilesProvider
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Path("/{fid}")
+    @Path(filePrefix + "/{fid}")
     public Response modifyFile(@PathParam("fid") long fid,
             @FormDataParam("file") InputStream uploadedInputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail) {
         return modifyCmsFile(fid, uploadedInputStream, fileDetail);
-    }    
-    
-    @PUT
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/meta/{fid}")
-    public Response modifyFileMeta(JAXBElement<CmsFile> file, 
-        @PathParam("fid") String fid) {
-        CmsFile f = file.getValue();
-        f.setId(Long.parseLong(fid));
-        return modifyCmsFileMeta(f);
-    }    
+    }        
     
     @DELETE
     @Produces("application/json")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Path("/{orgId}/{ftype}/{fname}")
+    @Path(orgPrefix + "/{orgId}/{ftype}/{fname}")
     public Response deleteFile(@PathParam("orgId") String orgId, 
             @PathParam("ftype") String ftype,
             @PathParam("fname") String fname) {
-        return deleteCmsFile(buildPath(orgId, ftype, fname));                    
+        return deleteCmsFileByPath(buildPath(orgId, ftype, fname));                    
+    }    
+  
+    @DELETE
+    @Produces("application/json")
+    @Path(filePrefix + "/{fid}")
+    public Response deleteFile(@PathParam("fid") long fid) {
+        return deleteCmsFileById(fid);                    
     }    
   
     @Override
@@ -146,4 +137,5 @@ public class OrganizationFilesProvider extends FilesProvider
     private String buildOrgIdPath(String orgId) {
         return orgId;
     }
+    
 }

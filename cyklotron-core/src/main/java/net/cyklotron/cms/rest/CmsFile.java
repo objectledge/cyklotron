@@ -6,18 +6,30 @@ import java.util.Date;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.codehaus.jackson.map.util.JSONWrappedObject;
 
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesTool;
 
+import javax.xml.bind.annotation.XmlAccessType;
+
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
 public class CmsFile { //aka ImmutableSausage
     
+    public FileResource getFileResource()
+    {
+        return fileResource;
+    }
+
+    public void setFileResource(FileResource fileResource)
+    {
+        this.fileResource = fileResource;
+    }
+
     private FileResource fileResource;
     private FilesTool tool;
     private String name;
@@ -26,6 +38,7 @@ public class CmsFile { //aka ImmutableSausage
     private long id;
     private String mimeType;
     private long size;
+    private String organizationFileType;
     
     public CmsFile() {
 
@@ -67,11 +80,6 @@ public class CmsFile { //aka ImmutableSausage
     }
     
     @XmlElement
-    public String getMimetype() {        
-        return mimeType;
-    }
-    
-    @XmlElement
     public long getSize() {        
         return size;
     }    
@@ -93,13 +101,24 @@ public class CmsFile { //aka ImmutableSausage
         return null;        
     }
 
+    @XmlElement
     public String getMimeType()
     {
         return mimeType;
     }
+    @XmlElement
+    public String getOrganizationFileType()
+    {
+        return organizationFileType;
+    }
 
     //setters
     
+    public void setOrganizationFileType(String organizationFileType)
+    {
+        this.organizationFileType = organizationFileType;
+    }
+
     public void setMimeType(String mimeType)
     {
         this.mimeType = mimeType;

@@ -29,7 +29,6 @@ public class BazyngoService
     {
         final CoralSession coralSession = coralSessionFactory.getCurrentSession();
         site = siteService.getSite(coralSession, config.getChild(SITE_NAME_KEY).getValue());
-        //filesService.createRootDirectory(coralSession, site, BAZYNGO_SITE_FILES_ROOT_DIR, true, null);
     }
     
 
