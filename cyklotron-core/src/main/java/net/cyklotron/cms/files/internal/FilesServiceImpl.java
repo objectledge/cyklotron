@@ -711,6 +711,9 @@ public class FilesServiceImpl
         return (FileResource)res;
     } 
     
+    /* (non-Javadoc)
+     * @see net.cyklotron.cms.files.FilesService#createParentDirs(org.objectledge.coral.session.CoralSession, java.lang.String, net.cyklotron.cms.site.SiteResource)
+     */
     @Override
     public DirectoryResource createParentDirs(CoralSession session, String path, SiteResource site) throws FilesException, InvalidResourceNameException {
                 

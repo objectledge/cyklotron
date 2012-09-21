@@ -81,15 +81,7 @@ public class OrganizationFilesProvider extends FilesProvider
         if(fname == null) {
             fname = fileDetail.getFileName();
         }
-        try
-        {
-            return createCmsFile(buildPath(orgId, ftype, fname), uploadedInputStream, fileDetail);
-        }
-        catch(FilesException e)
-        {
-            e.printStackTrace();
-            return errorResponse(Response.Status.BAD_REQUEST, e.getMessage());
-        }
+        return createCmsFile(buildPath(orgId, ftype, fname), uploadedInputStream, fileDetail);
     }
 
     @PUT

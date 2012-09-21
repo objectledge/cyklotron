@@ -230,5 +230,15 @@ public interface FilesService
       FileResource getFileResource(CoralSession session, long id)
         throws EntityDoesNotExistException;
 
-      DirectoryResource createParentDirs(CoralSession session, String filepath, SiteResource site)  throws FileAlreadyExistsException, FilesException, InvalidResourceNameException;     
+      /**
+       * Creates Parent dirs for file or directory in given path.
+     * @param session current CoralSession
+     * @param filepath path of file
+     * @param site site
+     * @return
+     * @throws FileAlreadyExistsException
+     * @throws FilesException
+     * @throws InvalidResourceNameException
+     */
+    DirectoryResource createParentDirs(CoralSession session, String filepath, SiteResource site)  throws FileAlreadyExistsException, FilesException, InvalidResourceNameException;     
 }

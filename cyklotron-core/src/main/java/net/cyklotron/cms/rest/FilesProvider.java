@@ -48,10 +48,9 @@ public class FilesProvider {
     //CRUD
     
     /**
-     * @param filepath
-     * @return
-     * @throws EntityDoesNotExistException
-     * @throws FilesException
+     * Creates CmsFile object stuffed with FileResource object retrieved from given path.
+     * @param filepath path for FileResource
+     * @return the CmsFile object
      */
     public CmsFile getCmsFile(String filepath) {
         final CoralSession session = getCoralSession();
@@ -73,6 +72,11 @@ public class FilesProvider {
         }
     }    
  
+    /**
+     * Creates CmsFile object stuffed with FileResource object retrieved from given resource id.
+     * @param id id of FileResource
+     * @return the CmsFile object
+     */
     public CmsFile getCmsFileById(long id) {
         final CoralSession session = getCoralSession();
         try
@@ -88,17 +92,18 @@ public class FilesProvider {
         }
     }    
  
+
     /**
-     * @param fpath
-     * @param uploadedInputStream
-     * @param fileDetail
-     * @return
-     * @throws FilesException 
+     * Creates CmsFile object stuffed with newly created FileResource.
+     * @param fpath path to create file resource
+     * @param uploadedInputStream InputStream containing file content
+     * @param fileDetail file details
+     * @return response to parse to servlet
      */
     public Response createCmsFile(String fpath,
             InputStream uploadedInputStream,
             FormDataContentDisposition fileDetail
-        ) throws FilesException {
+        ) {
         
         
         final FilesService filesService = getFileService();
@@ -107,7 +112,7 @@ public class FilesProvider {
         FileResource f = null;             
         
         if(fpath.length() == 0) {
-            throw new FilesException("Empty file name.");
+            return errorResponse(Response.Status.BAD_REQUEST, "Empty File Name.");
         }
         final String[] tokens = fpath.split("/");
         String fname = tokens[tokens.length-1];
@@ -146,19 +151,29 @@ public class FilesProvider {
     }
 
     
+    /**
+     * Deletes FileResource of given path.
+     * @param fpath path of resource to delete
+     * @return response for servlet
+     */
     public Response deleteCmsFileByPath(String fpath) {
         CmsFile file;
         file = getCmsFile(fpath);
         return deleteCmsFile(file);
     }
-       
+    
+    /**
+     * Deletes FileResource of given id.
+     * @param id id of resource to delete
+     * @return response for servlet
+     */       
     public Response deleteCmsFileById(long id) {
         CmsFile file;
         file = getCmsFileById(id);
         return deleteCmsFile(file);
     }
        
-    public Response deleteCmsFile(CmsFile file) {
+    private Response deleteCmsFile(CmsFile file) {
         long id = file.getId();
         try
         {
@@ -172,8 +187,9 @@ public class FilesProvider {
         return deleteResponse("" + id);
     }
     /**
-     * @param filepath
-     * @return
+     * Returns list of FileResources in specified directory wrapped each with CmsFile object.
+     * @param filepath path of DirectoryResource
+     * @return list of CmsFiles
      */
     public List<CmsFile> getCmsFiles(String dirPath) {     
         final FilesService filesService = getFileService();
@@ -200,13 +216,14 @@ public class FilesProvider {
         return files;
     } 
     
+
     /**
+     * Modifies existing file from given stream and file details.
      * 
-     * 
-     * @param fid
-     * @param uploadedInputStream
-     * @param fileDetail
-     * @return
+     * @param fid id of FileResource to modify
+     * @param uploadedInputStream stream containing new file content
+     * @param fileDetail details of new file
+     * @return response for servlet
      */
     public Response modifyCmsFileById(long fid, InputStream uploadedInputStream,
         FormDataContentDisposition fileDetail) {
@@ -214,6 +231,14 @@ public class FilesProvider {
             return modifyCmsFile(file, uploadedInputStream, fileDetail);
     }
     
+    /**
+     * Modifies existing file from given stream and file details.
+     * 
+     * @param fpath path of FileResource to modify
+     * @param uploadedInputStream uploadedInputStream stream containing new file content
+     * @param fileDetail fileDetail details of new file
+     * @return response for servlet
+     */
     public Response modifyCmsFileByPath(String fpath, InputStream uploadedInputStream,
         FormDataContentDisposition fileDetail)
     {
@@ -258,10 +283,7 @@ public class FilesProvider {
     
     //Responses
     
-    /**
-     * @param file
-     * @return
-     */ 
+
     private Response postResponse(CmsFile file) {   
         ResponseBuilder builder = null;
         Response res = Response.noContent().build();
