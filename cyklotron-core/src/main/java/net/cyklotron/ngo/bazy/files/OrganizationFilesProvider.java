@@ -38,7 +38,7 @@ public class OrganizationFilesProvider extends FilesProvider
     private static final String filePrefix = "/file";
 
     @GET
-    @Path(orgPrefix + "/{orgId: [a-zA-Z0-9_]+}/{ftype}/{fname}")
+    @Path(orgPrefix + "{orgPrefix}/{orgId: [a-zA-Z0-9_]+}/{ftype}/{fname}")
     @Produces("application/json")
     public CmsFile getFile(@PathParam("orgId") String orgId, 
             @PathParam("ftype") String ftype,
@@ -139,7 +139,14 @@ public class OrganizationFilesProvider extends FilesProvider
     }
     
     private String buildOrgIdPath(String orgId) {
-        return orgId;
+        String path = orgId;
+        if(orgId.length() == 1) {
+            path = "0" + orgId + "/" + orgId;
+        } else {
+            path = orgId.substring(orgId.length()-2) + "/" + orgId;
+        }
+              
+        return path;
     }
     
 }
