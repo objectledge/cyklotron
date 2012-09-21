@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.jms.Connection;
+import javax.jms.JMSException;
 import javax.jms.XAConnection;
 
 import net.cyklotron.cms.category.CategoryService;
@@ -67,7 +68,7 @@ public class NgoDatabaseServiceImpl
     implements NgoDatabaseService, Startable
 {
     private final Logger logger;
-    
+
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
     private static final String DEFAULT_LOCALE = "pl_PL";
@@ -79,13 +80,13 @@ public class NgoDatabaseServiceImpl
     private final OutgoingOrganizationsService outgoing;
 
     private final OrganizationNewsFeedService newsFeed;
-    
+
     private final UpdatedDocumentsProvider updatedDocumetns;
 
     private final DateFormat dateFormat;
 
     private final Locale locale;
-    
+
     private final MessagingConsumerHelper messagingConsumerHelper;
 
     public NgoDatabaseServiceImpl(Configuration config, Logger logger,
@@ -112,24 +113,13 @@ public class NgoDatabaseServiceImpl
         // service components
         this.incoming = new IncomingOrganizationsService(config.getChild("incoming"), fileSystem,
             organizationsIndex, logger);
-        this.outgoing = new OutgoingOrganizationsService(config.getChild("outgoing"), updatedDocumetns,
-            coralSessionFactory, fileSystem, logger, dateFormat);
+        this.outgoing = new OutgoingOrganizationsService(config.getChild("outgoing"),
+            updatedDocumetns, coralSessionFactory, fileSystem, logger, dateFormat);
         this.newsFeed = new OrganizationNewsFeedService(config.getChild("newsFeed"), dateFormat,
             locale, organizationsIndex, updatedDocumetns, categoryService, coralSessionFactory,
             fileSystem, dateFormatter, offlineLinkRenderingService, templating, logger);
-        
-        Configuration connectionConf = config.getChild("connection");
-        boolean isXAConnection = false;
-        if(connectionConf == null)
-        {
-            connectionConf = config.getChild("xaconnection");
-            isXAConnection = true;
-        }
-        String connectionName = connectionConf.getAttribute("name");
-        DummyMessageListener messagelistener = new DummyMessageListener(logger);
-        messagingConsumerHelper = new MessagingConsumerHelper(messagingFactory.createConnection(
-            connectionName, isXAConnection ? XAConnection.class : Connection.class),
-            messagelistener, messagelistener, connectionConf);
+
+        this.messagingConsumerHelper = getMessagingConsumerHelper(messagingFactory, config);
     }
 
     @Override
@@ -144,7 +134,10 @@ public class NgoDatabaseServiceImpl
         try
         {
             incoming.readIncoming(false);
-            messagingConsumerHelper.start();
+            if(messagingConsumerHelper != null)
+            {
+                messagingConsumerHelper.start();
+            }
         }
         catch(ProcessingException e)
         {
@@ -157,7 +150,10 @@ public class NgoDatabaseServiceImpl
     {
         try
         {
-            messagingConsumerHelper.stop();
+            if(messagingConsumerHelper != null)
+            {
+                messagingConsumerHelper.stop();
+            }
         }
         catch(ProcessingException e)
         {
@@ -193,7 +189,7 @@ public class NgoDatabaseServiceImpl
     {
         outgoing.updateOutgoing(startDate, endDate, outputStream);
     }    
-    
+        
     // news feeds
 
     @Override
@@ -203,4 +199,38 @@ public class NgoDatabaseServiceImpl
         return newsFeed.getOrganizationNewsFeed(parameters);
     }
 
+    /**
+     * Construct MessagingConsumerHelper from configuration.
+     * 
+     * @param messagingFactory
+     * @param config
+     * @return MessagingConsumerHelper if not defined return null
+     * @throws JMSException
+     * @throws Exception
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    protected MessagingConsumerHelper getMessagingConsumerHelper(MessagingFactory messagingFactory,
+        Configuration config)
+        throws JMSException, Exception
+    {
+        Configuration connectionConf = config.getChild("connection");
+        boolean isXAConnection = false;
+        if(connectionConf.getAttribute("name", null) == null)
+        {
+            connectionConf = config.getChild("xaconnection");
+            isXAConnection = true;
+        }
+        if(connectionConf.getAttribute("name", null) != null)
+        {
+            String connectionName = connectionConf.getAttribute("name");
+            DummyMessageListener messagelistener = new DummyMessageListener(logger);
+            return new MessagingConsumerHelper(messagingFactory.createConnection(connectionName,
+                isXAConnection ? XAConnection.class : Connection.class), messagelistener,
+                messagelistener, connectionConf);
+        }
+        else
+        {
+            return null;
+        }
+    }
 }

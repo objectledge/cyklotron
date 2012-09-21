@@ -28,9 +28,11 @@
 --> 
 
 <config>
+  <!--
   <connection name="DefaultConnection">
-    <url></url>
+    <url>tcp://localhost:61616</url>
     <user></user>
     <password></password>
   </connection>
+  -->
 </config>
