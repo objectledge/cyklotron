@@ -26,11 +26,14 @@ import net.cyklotron.cms.files.ItemResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.web.LedgeServlet;
 import org.objectledge.web.LedgeServletContextListener;
 import org.picocontainer.PicoContainer;
 
@@ -40,9 +43,12 @@ public class FilesProvider {
 	
     private SiteResource site = null;
     @javax.ws.rs.core.Context 
-    private ServletContext context;    
+    private ServletContext context;
+    private Logger logger;    
     
     public FilesProvider() {
+        BasicConfigurator.configure();
+        logger = Logger.getLogger(LedgeServlet.class);
     }           
     
     //CRUD
@@ -61,13 +67,13 @@ public class FilesProvider {
             return file;
         }
         catch(EntityDoesNotExistException e)
-        {
-            e.printStackTrace();
+        {            
+            logger.error("Error while retrieving file.", e);
             throw new RESTWebException(Response.Status.NOT_FOUND, e.getMessage());
         }
         catch(FilesException e)
         {
-            e.printStackTrace();
+            logger.error("Error while retrieving file.", e);
             throw new RESTWebException(Response.Status.NOT_FOUND, e.getMessage());
         }
     }    
@@ -87,7 +93,7 @@ public class FilesProvider {
         }
         catch(EntityDoesNotExistException e)
         {
-            e.printStackTrace();
+            logger.error("Error while retrieving file.", e);
             throw new RESTWebException(Response.Status.NOT_FOUND, e.getMessage());            
         }
     }    
@@ -133,17 +139,17 @@ public class FilesProvider {
                 (DirectoryResource)dir);
         }
         catch (FileAlreadyExistsException e1) {
-            e1.printStackTrace();
+            logger.error("Error while creating file resource.", e1);
             return errorResponse(Response.Status.CONFLICT, e1.getMessage());
         }
         catch(FilesException e)
         {
-            e.printStackTrace();
+            logger.error("Error while creating file resource.", e);
             return errorResponse(Response.Status.BAD_REQUEST, e.getMessage());
         }
         catch(InvalidResourceNameException e)
         {
-            e.printStackTrace();
+            logger.error("Error while creating file resource.", e);
             return errorResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         
@@ -181,7 +187,7 @@ public class FilesProvider {
         }
         catch(FilesException e)
         {
-            e.printStackTrace();
+            logger.error("Error while deleting file resource.", e);
             return errorResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }
         return deleteResponse("" + id);
@@ -202,7 +208,7 @@ public class FilesProvider {
         }
         catch(FilesException e)
         {
-            e.printStackTrace();
+            logger.error("Error while retrievin file resource list.", e);
             return files;    
         }        
         
@@ -262,7 +268,7 @@ public class FilesProvider {
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            logger.error("Error while modifying file resource.", e);
             return errorResponse(Response.Status.BAD_REQUEST, e.getMessage());
         }
         return putResponse(cmsfile);
@@ -296,7 +302,7 @@ public class FilesProvider {
             }
             catch(URISyntaxException e)
             {
-                e.printStackTrace();
+                logger.error("Error while generating response.", e);
                 res = errorResponse(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
             }
         }
@@ -367,9 +373,6 @@ public class FilesProvider {
     
     //Overridable accessors
     
-    /**
-     * @return
-     */
     private CoralSession getCoralSession()
     {
         final PicoContainer container = (PicoContainer)context.getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
@@ -377,9 +380,6 @@ public class FilesProvider {
         return (CoralSession)ledgeContext.getAttribute(CoralSession.class);
     }
 
-    /**
-     * @return
-     */
     private FilesService getFileService()
     {
         final PicoContainer container = (PicoContainer)context.getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
@@ -387,35 +387,23 @@ public class FilesProvider {
         return filesService;
     }
     
-    /**
-     * @return
-     */
     private FilesTool getFilesTool() {
         final PicoContainer container = (PicoContainer)context.getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
         final FilesTool tool = (FilesTool)((FilesToolFactory)container.getComponentInstance(FilesToolFactory.class)).getTool();        
         return tool;
     }
         
-    /**
-     * @return
-     */
     private SiteService getSiteService() {
         final PicoContainer container = (PicoContainer)context.getAttribute(LedgeServletContextListener.CONTAINER_CONTEXT_KEY);
         final SiteService filesService = (SiteService)container.getComponentInstance(SiteService.class);        
         return filesService;
     }        
     
-    /**
-     * @return
-     */
     public SiteResource getSite()
     {
         return site;
     }
 
-    /**
-     * @param siteName
-     */
     public void setSite(SiteResource site)
     {
         this.site = site;
