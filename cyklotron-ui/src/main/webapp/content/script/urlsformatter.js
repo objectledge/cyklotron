@@ -43,24 +43,3 @@ function convertProposeDocumentUrlFileds(maxOrgs)
   convertUrlFiled(document.getElementById('source_url'));
   convertEmailFiled(document.getElementById('proposer_email'));
 }
-
-/*
- * method gets video source path from youtube, vimeo url sites. 
- */
-function getMovieSourcePath(url) {
-	if (url.indexOf('youtube.com/watch?v=') != -1) {
-		if (url.indexOf('&') != -1) {
-			// remove unwanted params
-			url = url.substring(0, url.indexOf('&'));
-		}
-		url = url.replace('/watch?v=', '/embed/');
-		url += "?rel=0"; // do not show other movies after end.
-	} else if (url.indexOf('vimeo.com/') != -1) {
-		if (url.indexOf('?') != -1) {
-			// remove unwanted params
-			url = url.substring(0, url.indexOf('?'));
-		}
-		url = url.replace('vimeo.com/', 'player.vimeo.com/video/');
-	} else {url = "";}
-	return url;
-}

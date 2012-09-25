@@ -165,7 +165,7 @@ public class ReviewProposedChanges
                 htmlService);
             content = DiffUtil.diff(proposedContent, publishedContentForComparison,
                 HTMLWordBoundarySplitter.INSTANCE, Splitter.SP_SPLITTER); // HTMLParagraphSplitter.INSTANCE
-            if(!content.getState().equals(State.EQUAL) || !equals(publishedData.getContentMovie(), proposedData.getContentMovie()))
+            if(!content.getState().equals(State.EQUAL))
             {
                 templatingContext.put("content", content);
                 if(proposedData.getContent() != null)

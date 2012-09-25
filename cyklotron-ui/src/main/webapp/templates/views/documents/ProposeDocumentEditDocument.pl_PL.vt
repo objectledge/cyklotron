@@ -212,6 +212,7 @@ function addOrganization(i)
     </td>
   </tr>
 #end  
+
 #if($attachments_enabled and $attachments_max_size > 0)
   <tr>
 	<td>Nowe pliki</td>
@@ -228,60 +229,7 @@ function addOrganization(i)
     <td>Nie możesz dołączyć więcej plików.</td> 
 #end
   </tr>
-#end
-
-#if($content_movie_enabled)
-  <style type="text/css">
-    #display_content_movie #embeddedMedia iframe{width:300px;height:200px;}
-  </style>
-  <script>
-   jQuery(document).ready(function() { initMovieFrame(); });
-   function appendMovieFrame()
-   {
-     var movie_source = jQuery("#content_movie_input").val();
-     if(movie_source!=''){
-       movie_source = getMovieSourcePath(movie_source);
-       if(jQuery("#embeddedMedia IFRAME").size() > 0){
-         jQuery("#embeddedMedia IFRAME").attr('src', movie_source);
-       }else{
-         jQuery("#display_content_movie").append('<SPAN id="embeddedMedia"><IFRAME src="'+movie_source+'">&nbsp;</IFRAME></SPAN>');
-       }
-       jQuery("#content_movie_input").hide();
-       jQuery("#content_movie_button").attr('onClick','removeMovieFrame();').val('usuń');
-     }else{
-       removeMovieFrame();
-     }
-     jQuery("#content_movie").val(movie_source);
-   }
-   function initMovieFrame()
-   {
-     var movie_source = jQuery("#content_movie").val();
-     if(movie_source!=''){ 
-      jQuery("#display_content_movie").append('<SPAN id="embeddedMedia"><IFRAME src="'+movie_source+'">&nbsp;</IFRAME></SPAN>'); 
-      jQuery("#content_movie_input").hide();
-      jQuery("#content_movie_button").attr('onClick','removeMovieFrame();').val('usuń');
-     }
-   }
-   function removeMovieFrame()
-   {
-      jQuery("#embeddedMedia").remove();
-      jQuery("#content_movie").val('');
-      jQuery("#content_movie_input").val('');
-      jQuery("#content_movie_input").show();
-      jQuery("#content_movie_button").attr('onClick','appendMovieFrame();').val('dodaj');
-   }
-  </script>
-  <tr>
-	<td>Powiązane movie</td>
-	<td>Możesz dołączyć film z serwisu youtube bądz vimeo. Aby dołączyć film, wklej adres strony www z filmem.<br/>
-		<input type="hidden" id="content_movie" name="content_movie" value="$!content_movie" />
-		<input type="input" id="content_movie_input" style="width: 100%;" name="content_movie_input" value="$!content_movie_input"/>
-		<input type="button" id="content_movie_button" onClick="appendMovieFrame();" value="dodaj" style="float:right;">
-		<div id="display_content_movie"></div>
-	</td>
-  </tr>
-#end
-  
+#end  
   <tr>
     <td>Uwagi dotyczące zaproponowanych zmian:</td>
     <td><textarea rows="" cols="" style="width: 100%; height:6em;"

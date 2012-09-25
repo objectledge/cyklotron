@@ -131,7 +131,6 @@
       <item name="attachments_max_count">maksymalna ilość plików</item>
       <item name="attachments_max_size">maksymalny rozmiar pliku (kB)</item>
       <item name="attachments_allowed_formats">dozwolone formaty</item>
-      <item name="content_movie_enabled">zezwalaj na dołączanie filmów</item>
       <item name="parent">lokalizacja docelowa</item>
       <item name="owner_login">wybierz redaktora</item>
       <item name="editing_enabled">zezwalaj na edycję dokumentów przez autorów</item>

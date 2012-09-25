@@ -82,7 +82,6 @@ public class UpdateProposedDocument
                 valid = false;
                 templatingContext.put("result", data.getValidationFailure());
             }
-            data.addContent(htmlService);
 
             // file upload - checking
             if(valid && !data.isFileUploadValid(coralSession, fileUpload))

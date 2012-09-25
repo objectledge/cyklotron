@@ -130,7 +130,6 @@
       <item name="attachments_max_count">maximum number of files</item>
       <item name="attachments_max_size">maximum size of files (kB)</item>
       <item name="attachments_allowed_formats">allowed formats</item>
-      <item name="content_movie_enabled">allow attaching movie</item>
       <item name="parent">target location of the new documents</item>
       <item name="owner_login">choose owner</item>
       <item name="editing_enabled">allow editing of own document by authors</item>
