@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!--  
  Copyright (c) 2003, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
  All rights reserved. 
@@ -28,34 +28,11 @@
 --> 
 
 <config>
-  <incoming>
-    <sourceURL>http://bazy.ngo.pl/xml/index.xml</sourceURL>
-  </incoming>
-  <outgoing>
-    <sites>
-      <site>test</site>
-    </sites>
-    <queryDays>7</queryDays>
-  </outgoing>
-  <newsFeed>
-    <sites>
-      <site>test</site>
-    </sites>
-    <cacheTime>60</cacheTime>
-    <queryDays>7</queryDays>
-    <type>rss_2.0</type>
-    <title>${organization.name}</title>
-    <description>Wiadomości opublikowane w serwisie ngo.pl</description>
-    <baseURL>http://ngo.pl/view/ngodatabase.NewsFeed?org=</baseURL>
-    <idParameter>org</idParameter>    
-  </newsFeed>
   <!--
   <connection name="DefaultConnection">
-    <ackMode></ackMode>
-    <clientId></clientId>
-    <destinationName>TESTQUEUE</destinationName>
-    <isTopic>0</isTopic>
-    <isTransacted>0</isTransacted>
+    <url>tcp://localhost:61616</url>
+    <user></user>
+    <password></password>
   </connection>
   -->
 </config>

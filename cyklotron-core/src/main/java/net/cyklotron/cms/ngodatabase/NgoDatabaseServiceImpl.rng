@@ -46,6 +46,24 @@
       <data type="integer" />
     </element>
   </define>
+  <define name="connection-data">
+    <attribute name ="name"/>
+    <element name="ackMode">
+      <text />
+    </element>
+    <element name="clientId">
+      <text />
+    </element>
+    <element name="destinationName">
+      <text />
+    </element>
+    <element name="isTopic">
+      <text />
+    </element>
+    <element name="isTransacted">
+      <text />
+    </element>
+  </define>
   <start>
     <element name="config">
       <interleave>
@@ -103,6 +121,16 @@
             </element>
           </interleave>
         </element>
+        <optional>
+         <choice>
+          <element name="connection">
+            <ref name="connection-data" />
+          </element>
+          <element name="xaconnection">
+            <ref name="connection-data" />
+          </element>
+         </choice>
+       </optional>
       </interleave>
     </element>
   </start>
