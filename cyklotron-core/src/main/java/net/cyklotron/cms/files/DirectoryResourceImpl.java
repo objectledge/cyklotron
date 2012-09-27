@@ -50,6 +50,7 @@ public class DirectoryResourceImpl
     // class variables /////////////////////////////////////////////////////////
 
     /** Class variables initialization status. */
+	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
     // initialization /////////////////////////////////////////////////////////

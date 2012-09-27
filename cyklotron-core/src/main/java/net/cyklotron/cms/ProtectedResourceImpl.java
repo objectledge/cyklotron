@@ -31,7 +31,7 @@ package net.cyklotron.cms;
 import java.util.Date;
 
 import org.objectledge.coral.BackendException;
-import org.objectledge.coral.datatypes.GenericResource;
+import org.objectledge.coral.datatypes.StandardResource;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
@@ -47,12 +47,13 @@ import org.objectledge.coral.store.ValueRequiredException;
  * @author Coral Maven plugin
  */
 public class ProtectedResourceImpl
-    extends GenericResource
+    extends StandardResource
     implements ProtectedResource
 {
     // class variables /////////////////////////////////////////////////////////
 
     /** Class variables initialization status. */
+	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
     // initialization /////////////////////////////////////////////////////////

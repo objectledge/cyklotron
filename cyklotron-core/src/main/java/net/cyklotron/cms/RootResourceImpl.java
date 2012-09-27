@@ -49,6 +49,7 @@ public class RootResourceImpl
     // class variables /////////////////////////////////////////////////////////
 
     /** Class variables initialization status. */
+	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
     // initialization /////////////////////////////////////////////////////////

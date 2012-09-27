@@ -29,7 +29,7 @@
 package net.cyklotron.cms.search;
 
 import org.objectledge.coral.BackendException;
-import org.objectledge.coral.datatypes.GenericResource;
+import org.objectledge.coral.datatypes.StandardResource;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
@@ -44,12 +44,13 @@ import org.objectledge.coral.store.ValueRequiredException;
  * @author Coral Maven plugin
  */
 public class IndexableResourceImpl
-    extends GenericResource
+    extends StandardResource
     implements IndexableResource
 {
     // class variables /////////////////////////////////////////////////////////
 
     /** Class variables initialization status. */
+	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
     // initialization /////////////////////////////////////////////////////////

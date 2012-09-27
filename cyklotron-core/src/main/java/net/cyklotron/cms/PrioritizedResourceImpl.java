@@ -29,7 +29,7 @@
 package net.cyklotron.cms;
 
 import org.objectledge.coral.BackendException;
-import org.objectledge.coral.datatypes.GenericResource;
+import org.objectledge.coral.datatypes.StandardResource;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
@@ -45,12 +45,13 @@ import org.objectledge.coral.store.ValueRequiredException;
  * @author Coral Maven plugin
  */
 public class PrioritizedResourceImpl
-    extends GenericResource
+    extends StandardResource
     implements PrioritizedResource
 {
     // class variables /////////////////////////////////////////////////////////
 
     /** Class variables initialization status. */
+	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>priority</code> attribute. */

@@ -53,6 +53,7 @@ public class ResourcePreferenceResourceImpl
     // class variables /////////////////////////////////////////////////////////
 
     /** Class variables initialization status. */
+	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>multi</code> attribute. */

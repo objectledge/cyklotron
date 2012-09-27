@@ -58,6 +58,7 @@ public class MessageResourceImpl
     // class variables /////////////////////////////////////////////////////////
 
     /** Class variables initialization status. */
+	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>author</code> attribute. */

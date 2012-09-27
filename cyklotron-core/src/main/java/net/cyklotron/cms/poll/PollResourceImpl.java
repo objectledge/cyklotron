@@ -59,6 +59,7 @@ public class PollResourceImpl
     // class variables /////////////////////////////////////////////////////////
 
     /** Class variables initialization status. */
+	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>endDate</code> attribute. */

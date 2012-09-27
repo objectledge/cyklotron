@@ -29,7 +29,7 @@
 package net.cyklotron.cms.workflow;
 
 import org.objectledge.coral.BackendException;
-import org.objectledge.coral.datatypes.GenericResource;
+import org.objectledge.coral.datatypes.StandardResource;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
@@ -45,12 +45,13 @@ import org.objectledge.coral.store.ValueRequiredException;
  * @author Coral Maven plugin
  */
 public class StatefulResourceImpl
-    extends GenericResource
+    extends StandardResource
     implements StatefulResource
 {
     // class variables /////////////////////////////////////////////////////////
 
     /** Class variables initialization status. */
+	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
     /** The AttributeDefinition object for the <code>state</code> attribute. */
