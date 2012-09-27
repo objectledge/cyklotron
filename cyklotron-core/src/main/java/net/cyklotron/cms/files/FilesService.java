@@ -1,5 +1,6 @@
 package net.cyklotron.cms.files;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -240,5 +241,7 @@ public interface FilesService
      * @throws FilesException
      * @throws InvalidResourceNameException
      */
-    DirectoryResource createParentDirs(CoralSession session, String filepath, SiteResource site)  throws FileAlreadyExistsException, FilesException, InvalidResourceNameException;     
+    DirectoryResource createParentDirs(CoralSession session, String filepath, SiteResource site)  throws FileAlreadyExistsException, FilesException, InvalidResourceNameException;
+
+    public void replaceFile(FileResource file, InputStream uploadedInputStream, long size) throws IOException;     
 }

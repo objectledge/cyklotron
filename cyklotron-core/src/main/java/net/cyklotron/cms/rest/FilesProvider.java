@@ -2,7 +2,6 @@ package net.cyklotron.cms.rest;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.EntityTag;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.xml.bind.JAXBException;
 
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.FileAlreadyExistsException;
@@ -22,7 +20,6 @@ import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.files.FilesTool;
 import net.cyklotron.cms.files.FilesToolFactory;
-import net.cyklotron.cms.files.ItemResource;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
@@ -255,37 +252,22 @@ public class FilesProvider {
     
     private Response modifyCmsFile(CmsFile cmsfile, InputStream uploadedInputStream, FormDataContentDisposition fileDetail)
     {
-        String mimetype = fileDetail.getType();
+        FilesService fileService = getFileService();
         long size = fileDetail.getSize();
         FileResource file  = cmsfile.getFileResource();
-        OutputStream output = file.getOutputStream();
+       
         try
         {
-            rewrite(uploadedInputStream, output);
-            file.setSize(size);
-            file.setMimetype(mimetype);
-            file.update();
+            fileService.replaceFile(file, uploadedInputStream, size);
         }
         catch(IOException e)
         {
             logger.error("Error while modifying file resource.", e);
             return errorResponse(Response.Status.BAD_REQUEST, e.getMessage());
         }
+        
         return putResponse(cmsfile);
     }
-
-    private long rewrite(InputStream input, OutputStream output) throws IOException {
-        byte[] buffer = new byte[256];
-        long total = 0;
-        int bytesRead = 0;
-        while ((bytesRead = input.read(buffer)) != -1) {
-            output.write(buffer, 0, bytesRead);
-            total += bytesRead;
-        }
-        
-        return total;
-    }
-    
     
     //Responses
     

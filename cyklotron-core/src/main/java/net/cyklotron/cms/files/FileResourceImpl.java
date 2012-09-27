@@ -30,7 +30,6 @@ package net.cyklotron.cms.files;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -421,12 +420,6 @@ public class FileResourceImpl
     public InputStream getInputStream()
     {
         return filesService.getInputStream(this);
-    }
-    
-    @Override 
-    public OutputStream getOutputStream()
-    {
-        return filesService.getOutputStream(this);
     }
     
     public String getIndexContent()

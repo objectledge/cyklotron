@@ -28,8 +28,6 @@
  
 package net.cyklotron.cms.files;
 
-import java.io.OutputStream;
-
 import org.objectledge.coral.store.Resource;
 
 /**
@@ -173,8 +171,7 @@ public interface FileResource
 	 * @return <code>true</code> if the value of the <code>size</code> attribute is defined.
 	 */
     public boolean isSizeDefined();
-
-    OutputStream getOutputStream();
   
     // @custom methods ///////////////////////////////////////////////////////
+
 }
