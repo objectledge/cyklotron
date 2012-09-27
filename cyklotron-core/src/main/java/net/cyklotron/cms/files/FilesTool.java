@@ -189,7 +189,7 @@ public class FilesTool
     }
 
 
-    private String getLink(Resource resource, boolean absolute)
+    public String getLink(Resource resource, boolean absolute)
         throws FilesException
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);

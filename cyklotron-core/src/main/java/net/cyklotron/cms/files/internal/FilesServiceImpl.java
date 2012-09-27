@@ -11,9 +11,11 @@ import org.apache.tika.Tika;
 import org.apache.tika.metadata.Metadata;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.mail.MailSystem;
@@ -43,6 +45,8 @@ public class FilesServiceImpl
     implements FilesService
 {
     // instance variables ////////////////////////////////////////////////////
+
+    private static final String FILES_ROOT_DIR_NAME = "files";
 
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
 
@@ -92,7 +96,7 @@ public class FilesServiceImpl
      */
     public FilesMapResource getFilesRoot(CoralSession coralSession, SiteResource site) throws FilesException
     {
-        Resource[] roots = coralSession.getStore().getResource(site, "files");
+        Resource[] roots = coralSession.getStore().getResource(site, FILES_ROOT_DIR_NAME);
         if(roots.length == 1)
         {
             return (FilesMapResource)roots[0];
@@ -101,10 +105,11 @@ public class FilesServiceImpl
         {
             try
             {
-                return FilesMapResourceImpl.createFilesMapResource(coralSession, "files", site);
+                return FilesMapResourceImpl.createFilesMapResource(coralSession, FILES_ROOT_DIR_NAME, site);
             }
             catch(Exception e)
             {
+                e.printStackTrace();
                 throw new FilesException("Couldn't create files root node");
             }
         }
@@ -182,6 +187,26 @@ public class FilesServiceImpl
                 + "' in site '" + site.getName() + "' ", e);
         }
     }
+    
+    /**
+     * Get root directory for site if exists.
+     * @return the files root resource.
+     * @throws FilesException if  the operation fails.
+     */
+    public RootDirectoryResource getRootDirectoryResource(CoralSession coralSession, SiteResource site) 
+                    throws FilesException {
+        FilesMapResource parent = getFilesRoot(coralSession, site);
+        String name = FILES_ROOT_DIR_NAME;
+        Resource[] resources = coralSession.getStore().getResource(parent, name);
+        
+        if(resources.length == 0)
+        {
+            throw new FilesException("The directory '" + name
+                + "' appears to not exist for site '" + site.getName() + "'");
+        }
+        
+        return (RootDirectoryResource)resources[0];
+    }
 
     /**
      * Create the directory.
@@ -193,6 +218,7 @@ public class FilesServiceImpl
      * @return the created directory.
      * @throws FilesException if  the operation fails.
      */
+   
     public DirectoryResource createDirectory(CoralSession coralSession, String name, DirectoryResource parent)
         throws FilesException
     {
@@ -619,5 +645,126 @@ public class FilesServiceImpl
         }
         throw new IllegalStateException(item+" does not have a SiteResource parent");
     }
+    
+    /**
+     * Retrieves a <code>cms.files.file</code> resource instance from the store.
+     *
+     * <p>This is a simple wrapper of StoreService.getResource() method plus
+     * the typecast.</p>
+     *
+     * @param session the CoralSession
+     * @param path the path of file to be retrieved
+     * @param site optional (can be null) site parameter - causes method to prepend site root to the path
+     * @return a resource instance.
+     * @throws EntityDoesNotExistException if the resource with the given id does not exist.
+     * @throws FilesException 
+     */
+    @Override
+    public FileResource getFileResource(CoralSession session, String path, SiteResource site)
+        throws EntityDoesNotExistException, FilesException
+    {
+        if(path.startsWith("/"))
+        {
+            path = path.substring(1);
+        }
+        
+        String rootPath = "";        
+        if(site != null) {
+            final Resource root = this.getFilesRoot(session, site);
+            rootPath = root.getPath();
+        }
+        
+        final Resource[] res = session.getStore().getResourceByPath(rootPath + "/" +path);   
+        
+        Resource fileOrDir = null;
+        if(res.length >= 1)
+        {
+            fileOrDir = res[0];
+        } else {
+            throw new EntityDoesNotExistException("File " + path + " does not exist.");
+        }
+        return FileResourceImpl.getFileResource(session, fileOrDir.getId());
+    }
+
+    /**
+     * Retrieves a <code>cms.files.file</code> resource instance from the store.
+     *
+     * <p>This is a simple wrapper of StoreService.getResource() method plus
+     * the typecast.</p>
+     *
+     * @param session the CoralSession
+     * @param id the id of the object to be retrieved
+     * @return a resource instance.
+     * @throws EntityDoesNotExistException if the resource with the given id does not exist.
+     */
+    @Override
+    public FileResource getFileResource(CoralSession session, long id)
+        throws EntityDoesNotExistException
+    {
+        Resource res = session.getStore().getResource(id);
+        if(!(res instanceof FileResource))
+        {
+            throw new IllegalArgumentException("resource #"+id+" is "+
+                                               res.getResourceClass().getName()+
+                                               " not cms.files.file");
+        }
+        return (FileResource)res;
+    } 
+    
+    /* (non-Javadoc)
+     * @see net.cyklotron.cms.files.FilesService#createParentDirs(org.objectledge.coral.session.CoralSession, java.lang.String, net.cyklotron.cms.site.SiteResource)
+     */
+    @Override
+    public DirectoryResource createParentDirs(CoralSession session, String path, SiteResource site) throws FilesException, InvalidResourceNameException {
+                
+        while(path.startsWith("/"))
+        {
+            path = path.substring(1);
+        }
+        
+        SiteResource siteRoot = null; 
+        siteRoot = (SiteResource)session.getStore().getResourceByPath(site.getPath())[0];
+
+        final String[] tokens = path.split("/");
+
+        Resource parent = session.getStore().getResource(siteRoot, FILES_ROOT_DIR_NAME)[0];
+        
+        for(int i=0; i<tokens.length-1; i++) {
+            String dirname = tokens[i];
+            final Resource[] res = session.getStore().getResource(parent, dirname);
+            if(res.length > 0) {
+                //dir exists, moving on
+                parent = (DirectoryResource)res[0];
+            } else {
+                parent = createDirectory(session, tokens[i], (DirectoryResource)parent);                
+            }
+        }
+        return (DirectoryResource)parent;
+    }
+
+    @Override
+    public void replaceFile(FileResource file, InputStream uploadedInputStream, long size) 
+                    throws IOException
+    {        
+        OutputStream output = getOutputStream(file);
+        rewrite(uploadedInputStream, output);
+        file.setSize(size);
+        //file.setMimetype(mimetype);
+        file.update();
+    }
+    
+    private long rewrite(InputStream input, OutputStream output) throws IOException {
+        byte[] buffer = new byte[256];
+        long total = 0;
+        int bytesRead = 0;
+        while ((bytesRead = input.read(buffer)) != -1) {
+            output.write(buffer, 0, bytesRead);
+            total += bytesRead;
+        }
+        
+        return total;
+    }
+    
+  
 }
 

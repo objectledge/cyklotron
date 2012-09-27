@@ -173,4 +173,5 @@ public interface FileResource
     public boolean isSizeDefined();
   
     // @custom methods ///////////////////////////////////////////////////////
+
 }

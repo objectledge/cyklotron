@@ -1,10 +1,14 @@
 package net.cyklotron.cms.files;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.site.SiteResource;
 
@@ -68,7 +72,7 @@ public interface FilesService
      */
     public DirectoryResource createDirectory(CoralSession coralSession, String name, DirectoryResource parent)
         throws FilesException;
-    
+
     /**
      * Create the file.
      *
@@ -198,4 +202,46 @@ public interface FilesService
      * @param file the file.
      */
     public SiteResource getSite(ItemResource item);
+    
+    /**
+     * Retrieves a <code>cms.files.file</code> resource instance from the store.
+     * 
+     * <p>This is a simple wrapper of StoreService.getResource() method plus
+     * the typecast.</p>
+     *
+     * @param session the CoralSession
+     * @param id the id of the object to be retrieved
+     * @return a resource instance.
+     * @throws EntityDoesNotExistException if the resource with the given id does not exist.
+     */
+     public FileResource getFileResource(CoralSession session, String path, SiteResource site) 
+                     throws EntityDoesNotExistException, FilesException;
+     
+     /**
+      * Retrieves a <code>cms.files.file</code> resource instance from the store.
+      * 
+      * <p>This is a simple wrapper of StoreService.getResource() method plus
+      * the typecast.</p>
+      *
+      * @param session the CoralSession
+      * @param id the id of the object to be retrieved
+      * @return a resource instance.
+      * @throws EntityDoesNotExistException if the resource with the given id does not exist.
+      */
+      FileResource getFileResource(CoralSession session, long id)
+        throws EntityDoesNotExistException;
+
+      /**
+       * Creates Parent dirs for file or directory in given path.
+     * @param session current CoralSession
+     * @param filepath path of file
+     * @param site site
+     * @return
+     * @throws FileAlreadyExistsException
+     * @throws FilesException
+     * @throws InvalidResourceNameException
+     */
+    DirectoryResource createParentDirs(CoralSession session, String filepath, SiteResource site)  throws FileAlreadyExistsException, FilesException, InvalidResourceNameException;
+
+    public void replaceFile(FileResource file, InputStream uploadedInputStream, long size) throws IOException;     
 }

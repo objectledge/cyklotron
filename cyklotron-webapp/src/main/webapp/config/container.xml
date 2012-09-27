@@ -317,35 +317,90 @@
     </sequence>      
   </component>
   
-  <component class="org.objectledge.pipeline.ErrorHandlingPipeline">
-    <parameter class-key="org.jcontainer.dna.Logger"/>
-    <sequence>
-      <parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
-      <parameter key="oneTimeProcessingPipeline"/>
-      <parameter key="cmsRenderingPipeline"/>
-    </sequence>
-	<sequence>
+  
+  <component key="simpleAuthenticationPipeline"
+			 class="org.objectledge.pipeline.SimplePipeline">
+    <sequence>			 
       <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
-      <parameter class-key="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
-      <parameter key="renderingPipeline"/>
-    </sequence>
-	<sequence>
-      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
-      <parameter class-key="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/> 
-      <parameter class-key="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
-	  <parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
-      <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
-      <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
+      <parameter class-key="org.objectledge.authentication.AuthenticationValve"/>
     </sequence>
   </component>
+  
+  <component key="restRenderingPipeline"
+  			 class="org.objectledge.pipeline.SimplePipeline">
+    <sequence>
+      <component class="org.objectledge.web.rest.JerseyRestValve"/>
+    </sequence>      
+  </component>    
+  
 
   <!-- // dispatchers ///////////////////////////////////////////////////////////////////// -->
-    
-  <component class-key="org.objectledge.web.HttpDispatcher" 
+  
+  <!-- cms view dispatcher -->
+  <component key="cmsDispatcher"
              class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
     <component class="org.objectledge.web.RequestTrackingValve">
       <component class="org.objectledge.pipeline.ConcurrencyControlValve">
-        <parameter class-key="org.objectledge.pipeline.ErrorHandlingPipeline"/>         
+        <component class="org.objectledge.pipeline.ErrorHandlingPipeline">         
+			<parameter class-key="org.jcontainer.dna.Logger"/>
+		    <sequence>
+		      <parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
+		      <parameter key="oneTimeProcessingPipeline"/>
+		      <parameter key="cmsRenderingPipeline"/>
+		    </sequence>
+			<sequence>
+		      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
+		      <parameter class-key="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
+		      <parameter key="renderingPipeline"/>
+		    </sequence>
+			<sequence>
+		      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
+		      <parameter class-key="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/> 
+		      <parameter class-key="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
+			  <parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
+		      <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
+		      <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
+		    </sequence>        
+	      </component>
+		  <parameter/>
+		  <parameter/>
+		  <parameter/>	      
+	  </component>
+      <parameter/>
+      <parameter/>
+    </component>
+    <parameter/>
+  </component>
+    
+  <!-- //// REST dispatcher //// -->
+  
+  <!-- <component key="restDispatcher"
+             class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">	
+	  <component class="org.objectledge.web.rest.JerseyRestValve"/>
+	  <component class-key="org.objectledge.context.Context"/>
+  </component> -->
+  
+  <component key="restDispatcher"
+              class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
+    <component key="RTVRest" class="org.objectledge.web.RequestTrackingValve">
+      <component key="CCVRest" class="org.objectledge.pipeline.ConcurrencyControlValve">
+        <component key="restErrorHandlingPipeline" class="org.objectledge.pipeline.ErrorHandlingPipeline">
+            <parameter class-key="org.jcontainer.dna.Logger"/>
+		    <sequence>
+		      <parameter key="simpleAuthenticationPipeline"/>
+			  <parameter class-key="org.objectledge.coral.session.CoralSessionInitValve"/>      		      
+			  <parameter key="restRenderingPipeline"/>
+		    </sequence>
+			<sequence>
+		      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
+		    </sequence>
+			<sequence>
+		      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
+		      <parameter class-key="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/> 
+		      <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
+		      <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
+		    </sequence>          
+        </component>         
         <parameter/>
         <parameter/>
         <parameter/>
@@ -353,10 +408,23 @@
       <parameter/>
       <parameter/>
     </component>
-    <parameter/>
+	<parameter class-key="org.objectledge.context.Context"/>   
   </component>
+  
+
+
     
-  <!-- // cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
+  <!-- // Cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
+
+  <!-- BAZY -->
+  <component class="net.cyklotron.ngo.bazy.BazyngoService">
+<!--       <parameter class-key="org.jcontainer.dna.Logger"/> -->
+<!--       <parameter/> -->
+<!--       <parameter class-key="net.cyklotron.cms.site.SiteService"/> -->
+<!--       <parameter class-key="org.objectledge.context.Context"/> -->
+<!--       <parameter class-key="org.objectledge.coral.session.CoralSessionFactory"/> -->
+  </component>  
+  <!-- /BAZY -->
   
   <component class-key="net.cyklotron.cms.banner.BannerService"
              class="net.cyklotron.cms.banner.internal.BannerServiceImpl"/>
