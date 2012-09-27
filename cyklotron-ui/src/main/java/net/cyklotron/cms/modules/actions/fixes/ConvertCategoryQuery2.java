@@ -63,7 +63,7 @@ public class ConvertCategoryQuery2
             cS.deleteAttribute(catQueryResClass, queryDef);
 
             AttributeClass textAttributeClass =  cS.getAttributeClass("text");
-            queryDef = cS.createAttribute("query", textAttributeClass, null, 0);
+            queryDef = cS.createAttribute("query", textAttributeClass, null, null, 0);
             cS.addAttribute(catQueryResClass, queryDef, null);
 
             QueryResults results = coralSession.getQuery().
