@@ -549,6 +549,9 @@ public class ProposedDocumentData
             }
             else
             {
+                htmlService.collapseSubsequentBreaksInParas(contentDom);
+                htmlService.trimBreaksFromParas(contentDom);
+                htmlService.removeEmptyParas(contentDom);
                 StringWriter contentWriter = new StringWriter();
                 htmlService.dom4jToText(contentDom, contentWriter, true);
                 content = contentWriter.toString();
