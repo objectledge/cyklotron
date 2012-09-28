@@ -337,35 +337,34 @@
   <!-- // dispatchers ///////////////////////////////////////////////////////////////////// -->
   
   <!-- cms view dispatcher -->
-  <component key="cmsDispatcher"
-             class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
+  <component key="cmsDispatcher" class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
     <component class="org.objectledge.web.RequestTrackingValve">
       <component class="org.objectledge.pipeline.ConcurrencyControlValve">
-        <component class="org.objectledge.pipeline.ErrorHandlingPipeline">         
-			<parameter class-key="org.jcontainer.dna.Logger"/>
-		    <sequence>
-		      <parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
-		      <parameter key="oneTimeProcessingPipeline"/>
-		      <parameter key="cmsRenderingPipeline"/>
-		    </sequence>
-			<sequence>
-		      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
-		      <parameter class-key="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
-		      <parameter key="renderingPipeline"/>
-		    </sequence>
-			<sequence>
-		      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
-		      <parameter class-key="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/> 
-		      <parameter class-key="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
-			  <parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
-		      <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
-		      <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
-		    </sequence>        
-	      </component>
-		  <parameter/>
-		  <parameter/>
-		  <parameter/>	      
-	  </component>
+        <component class="org.objectledge.pipeline.ErrorHandlingPipeline">
+          <parameter class-key="org.jcontainer.dna.Logger"/>
+          <sequence>
+            <parameter class-key="org.objectledge.templating.TemplatingContextLoaderValve"/>
+            <parameter key="oneTimeProcessingPipeline"/>
+            <parameter key="cmsRenderingPipeline"/>
+          </sequence>
+          <sequence>
+            <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
+            <parameter class-key="org.objectledge.web.mvc.ExceptionRedirectorValve"/>
+            <parameter key="renderingPipeline"/>
+          </sequence>
+          <sequence>
+            <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>
+            <parameter class-key="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/>
+            <parameter class-key="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
+            <parameter class-key="org.objectledge.web.mvc.MVCResultsValve"/>
+            <parameter class-key="org.objectledge.database.Transaction$GuardValve"/>
+            <parameter class-key="org.objectledge.database.ThreadDataSource$GuardValve"/>
+          </sequence>
+        </component>
+        <parameter/>
+        <parameter/>
+        <parameter/>
+      </component>
       <parameter/>
       <parameter/>
     </component>
@@ -410,20 +409,11 @@
     </component>
 	<parameter class-key="org.objectledge.context.Context"/>   
   </component>
-  
-
-
     
   <!-- // Cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
 
   <!-- BAZY -->
-  <component class="net.cyklotron.ngo.bazy.BazyngoService">
-<!--       <parameter class-key="org.jcontainer.dna.Logger"/> -->
-<!--       <parameter/> -->
-<!--       <parameter class-key="net.cyklotron.cms.site.SiteService"/> -->
-<!--       <parameter class-key="org.objectledge.context.Context"/> -->
-<!--       <parameter class-key="org.objectledge.coral.session.CoralSessionFactory"/> -->
-  </component>  
+  <component class="net.cyklotron.ngo.bazy.BazyngoService"/>
   <!-- /BAZY -->
   
   <component class-key="net.cyklotron.cms.banner.BannerService"

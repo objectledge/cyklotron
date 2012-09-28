@@ -218,7 +218,6 @@ public class FilesServiceImpl
      * @return the created directory.
      * @throws FilesException if  the operation fails.
      */
-   
     public DirectoryResource createDirectory(CoralSession coralSession, String name, DirectoryResource parent)
         throws FilesException
     {
