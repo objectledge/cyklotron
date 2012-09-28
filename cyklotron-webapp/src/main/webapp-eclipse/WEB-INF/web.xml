@@ -7,11 +7,28 @@
 		<param-name>root</param-name>
 		<param-value>${project.build.directory}/../workdir</param-value>
 	</context-param>
+  
+    <listener>
+        <listener-class>org.objectledge.web.LedgeServletContextListener</listener-class>
+    </listener>
 
 	<servlet>
 		<servlet-name>ledge</servlet-name>
 		<servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
+        <init-param>
+            <param-name>dispatcher</param-name>
+            <param-value>cmsDispatcher</param-value>
+        </init-param>
 	</servlet>
+  
+    <servlet>
+        <servlet-name>REST</servlet-name>
+        <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
+        <init-param>
+            <param-name>dispatcher</param-name>
+            <param-value>restDispatcher</param-value>
+        </init-param>
+    </servlet>
   
     <servlet>
         <servlet-name>content</servlet-name>
@@ -31,6 +48,11 @@
     <servlet-mapping>
         <servlet-name>content</servlet-name>
         <url-pattern>/files/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>REST</servlet-name>
+        <url-pattern>/rr/*</url-pattern>
     </servlet-mapping>
 
 	<session-config>
