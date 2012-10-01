@@ -50,6 +50,5 @@ public class PublishDocumentTest
         {
             wiadomosci.verifyPublishedDocument(documents.get(key), key);
         }
-        wiadomosci.Close();
     }
 }
