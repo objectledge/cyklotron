@@ -147,12 +147,17 @@ public class EditorialTasks
         selenium.selectWindow("name=related");
         selenium.type("name=search", "logo");
         selenium.selectWindow("name=related");
-        selenium.click("link=szukaj");
-        selenium.waitForPageToLoad("200000");
-        Assert.assertEquals("Dodaj poniżej",
-            selenium.getText("xpath=(//a[contains(text(),'Dodaj poniżej')])[2]"));
-        selenium.click("id=resource-447227");
-        selenium.click("id=resource-436241");
+        /*
+         * selenium.click("link=szukaj"); selenium.waitForPageToLoad("200000");
+         * Assert.assertEquals("Dodaj poniżej",
+         * selenium.getText("xpath=(//a[contains(text(),'Dodaj poniżej')])[2]"));
+         * selenium.click("id=resource-447227"); selenium.click("id=resource-436241");
+         */
+        selenium.click("//A[contains(@href,'action=table.ToggleExpanded&rowId=8445')]");
+        selenium.click("//A[contains(@href,'action=table.ToggleExpanded&rowId=8561')]");
+        selenium.click("//A[contains(@href,'action=table.ToggleExpanded&rowId=38771')]");
+        selenium.click("id=resource-429595");
+
         selenium
             .click("css=form[name=\"form1\"] > div.action-buttons.clearfix > div.modification > a");
         selenium.close();
