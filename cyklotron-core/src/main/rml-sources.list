@@ -24,6 +24,7 @@ src/main/rml/cyklotron/httpfeed/httpfeed.rml
 src/main/rml/cyklotron/syndication/syndication.rml
 src/main/rml/cyklotron/periodicals/periodicals.rml
 src/main/rml/cyklotron/catalogue/catalogue.rml
+src/main/rml/bazy/bazy.rml
 #init data
 src/main/rml/cyklotron/common/base-init.rml
 src/main/rml/cyklotron/integration/integration-init.rml
@@ -48,4 +49,12 @@ src/main/rml/cyklotron/common/components-init.rml
 src/main/rml/cyklotron/common/simple-portal-en.rml
 src/main/rml/cyklotron/periodicals/periodicals-init.rml
 src/main/rml/cyklotron/catalogue/catalogue-init.rml
+<<<<<<< HEAD
 
+||||||| merged common ancestors
+src/main/rml/cyklotron/docimport/docimport-init.rml
+
+=======
+src/main/rml/cyklotron/docimport/docimport-init.rml
+src/main/rml/bazy/bazy-init.rml
+>>>>>>> BAZYNGO-260 OrganizationResource created.
