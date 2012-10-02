@@ -13,22 +13,17 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.JAXBElement;
 
-import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.web.LedgeServletContextListener;
 import org.picocontainer.PicoContainer;
 
-import net.cyklotron.cms.files.FilesException;
 import net.cyklotron.cms.files.FilesListener;
-import net.cyklotron.cms.rest.FilesProvider;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.ngo.bazy.BazyngoService;
 
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
-import net.cyklotron.cms.rest.CmsFile;
 
 @Path("/org_files")
 public class OrganizationFilesProvider extends FilesProvider

@@ -1,4 +1,4 @@
-package net.cyklotron.cms.rest;
+package net.cyklotron.ngo.bazy.files;
 
 import java.io.IOException;
 import java.io.InputStream;
