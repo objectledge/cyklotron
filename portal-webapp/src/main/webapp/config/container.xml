@@ -410,8 +410,21 @@
     </component>
 	<parameter class-key="org.objectledge.context.Context"/>   
   </component>
+  
+
+
     
   <!-- // Cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
+
+  <!-- BAZY -->
+  <component class="net.cyklotron.ngo.bazy.BazyngoService">
+<!--       <parameter class-key="org.jcontainer.dna.Logger"/> -->
+<!--       <parameter/> -->
+<!--       <parameter class-key="net.cyklotron.cms.site.SiteService"/> -->
+<!--       <parameter class-key="org.objectledge.context.Context"/> -->
+<!--       <parameter class-key="org.objectledge.coral.session.CoralSessionFactory"/> -->
+  </component>  
+  <!-- /BAZY -->
   
   <component class-key="net.cyklotron.cms.banner.BannerService"
              class="net.cyklotron.cms.banner.internal.BannerServiceImpl"/>
@@ -569,6 +582,12 @@
   <component class-key="org.objectledge.messaging.MessagingFactory"
   			 class="org.objectledge.messaging.MessagingFactoryImpl"/>
 
+  <component class-key="net.cyklotron.cms.ngodatabase.organizations.UpdatedDocumentsProvider" 
+             class="net.cyklotron.cms.ngodatabase.organizations.CachingUpdatedDocumentsProvider" />
+             
+  <component class-key="net.cyklotron.cms.ngodatabase.NgoDatabaseService"
+             class="net.cyklotron.cms.ngodatabase.NgoDatabaseServiceImpl"/>
+  
   <component class-key="net.cyklotron.cms.locations.LocationsProvider"
   			 class="net.cyklotron.cms.locations.poland.PNALocationsProvider"/> 
             
@@ -579,6 +598,15 @@
   
   <component class-key="net.cyklotron.cms.poll.PollService"
              class="net.cyklotron.cms.poll.internal.PollServiceImpl"/>
+             
+  <component class-key="net.cyklotron.cms.docimport.DocumentImportService"
+             class="net.cyklotron.cms.docimport.DocumentImportServiceImpl"/>   
+             
+  <component class-key="net.cyklotron.cms.docimport.DocumentPostingService"
+             class="net.cyklotron.cms.docimport.DocumentPostingServiceImpl"/>
+             
+  <component class-key="net.cyklotron.cms.docimport.DocumentImportCoordinatorService"
+             class="net.cyklotron.cms.docimport.DocumentImportCoordinatorServiceImpl"/>                     
              
   <!-- remote management -->           
              
