@@ -25,8 +25,8 @@ import org.objectledge.templating.TemplatingContext;
 
 import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.ngodatabase.Location;
-import net.cyklotron.cms.ngodatabase.LocationDatabaseService;
+import net.cyklotron.cms.locations.Location;
+import net.cyklotron.cms.locations.LocationDatabaseService;
 
 public class UpgradeDocumentMetadata214
     implements Valve

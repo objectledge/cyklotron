@@ -1,30 +1,17 @@
 package net.cyklotron.cms.modules.views.ngodatabase;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.Date;
 
-import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.i18n.I18nContext;
-import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.Template;
-import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.ngodatabase.NgoDatabaseService;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.syndication.SyndicationService;
-import net.cyklotron.cms.util.OfflineLinkRenderingService;
 
 /**
  * View organization's news outgoing feed.
