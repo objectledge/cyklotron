@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>portal-common</artifactId>
+    <groupId>pl.ngo</groupId>
+    <version>2.22-SNAPSHOT</version>
+    <relativePath>../portal-common</relativePath>
+  </parent>
+  <artifactId>portal</artifactId>
+  <packaging>war</packaging>
+  <name>Portal ngo.pl : web application</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.cyklotron</groupId>
+      <artifactId>cyklotron</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>pl.ngo</groupId>
+      <artifactId>portal-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>pl.ngo</groupId>
+      <artifactId>portal-ui</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>pl.ngo</groupId>
+      <artifactId>portal-ui</artifactId>
+      <classifier>classes</classifier>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <overlays>
+            <overlay>
+              <groupId>pl.ngo</groupId>
+              <artifactId>portal-ui</artifactId>
+            </overlay>
+            <overlay>
+              <groupId>org.cyklotron</groupId>
+              <artifactId>cyklotron</artifactId>
+            </overlay>
+          </overlays>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>eclipse</id>
+      <activation>
+        <property>
+          <name>m2e.version</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <configuration>
+              <!-- override web.xml for development mode -->
+              <webXml>src/main/webapp-eclipse/WEB-INF/web.xml</webXml>
+              <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+              <webResources>
+                <resource>
+                  <directory>src/main/webapp-eclipse</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </webResources>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>bamboo</id>
+      <activation>
+        <property>
+          <name>buildId</name>
+        </property>
+      </activation>
+      <build>
+        <finalName>cyklotron-b${buildId}</finalName>
+      </build>
+    </profile>
+  </profiles>
+
+</project>
