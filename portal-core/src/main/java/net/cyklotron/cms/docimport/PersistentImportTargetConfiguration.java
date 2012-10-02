@@ -50,7 +50,6 @@ public class PersistentImportTargetConfiguration
     {
         if(res.isCategoriesDefined())
         {
-            @SuppressWarnings("unchecked")
             final List<CategoryResource> categories = res.getCategories();
             return new HashSet<CategoryResource>(categories);
         }

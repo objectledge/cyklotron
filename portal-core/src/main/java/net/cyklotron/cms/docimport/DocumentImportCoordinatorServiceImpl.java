@@ -135,10 +135,9 @@ public class DocumentImportCoordinatorServiceImpl
     @Override
     public void processAllImports()
     {
-        CoralSession coralSession = null;
+        CoralSession coralSession = coralSessionFactory.getRootSession();
         try
         {
-            coralSession = coralSessionFactory.getRootSession();
             QueryResults results = coralSession.getQuery().executeQuery(
                 "FIND RESOURCE FROM docimport.import");
             for(Resource res : results.getList(1))

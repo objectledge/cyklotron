@@ -37,7 +37,7 @@ public class TestImportSourceConfiguration
     {
         if(localXML)
         {
-            return new File("src/test/resources/ngo/um/aktualnosci.xml").toURI().toURL();
+            return new File("src/test/resources/docimport/aktualnosci.xml").toURI().toURL();
         }
         else
         {

@@ -1,31 +1,6 @@
+//
+// Copyright (c) 2012, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  All rights reserved. 
 // 
-// Copyright (c) 2004, Caltha - Gajda, Krzewski, Mach, Potempski Sp.J. 
-// All rights reserved. 
-// 
-// Redistribution and use in source and binary forms, with or without modification,  
-// are permitted provided that the following conditions are met: 
-// 
-// * Redistributions of source code must retain the above copyright notice,  
-//       this list of conditions and the following disclaimer. 
-// * Redistributions in binary form must reproduce the above copyright notice,  
-//       this list of conditions and the following disclaimer in the documentation  
-//       and/or other materials provided with the distribution. 
-// * Neither the name of the Caltha - Gajda, Krzewski, Mach, Potempski Sp.J.  
-//       nor the names of its contributors may be used to endorse or promote products  
-//       derived from this software without specific prior written permission. 
-// 
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED  
-// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-// IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,  
-// INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,  
-// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, 
-// OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,  
-// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
-// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
-// POSSIBILITY OF SUCH DAMAGE. 
-// 
- 
 package net.cyklotron.cms.docimport;
 
 import java.util.Date;
@@ -59,9 +34,6 @@ public class ImportTraceResourceImpl
 	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
-    /** The AttributeDefinition object for the <code>navigationNode</code> attribute. */
-	private static AttributeDefinition<Resource> navigationNodeDef;
-
     /** The AttributeDefinition object for the <code>originalURL</code> attribute. */
 	private static AttributeDefinition<String> originalURLDef;
 
@@ -70,6 +42,9 @@ public class ImportTraceResourceImpl
 
     /** The AttributeDefinition object for the <code>targetUpdateTime</code> attribute. */
 	private static AttributeDefinition<Date> targetUpdateTimeDef;
+
+    /** The AttributeDefinition object for the <code>navigationNode</code> attribute. */
+	private static AttributeDefinition<Resource> navigationNodeDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -117,27 +92,27 @@ public class ImportTraceResourceImpl
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param navigationNode the navigationNode attribute
      * @param originalURL the originalURL attribute
      * @param sourceModificationTime the sourceModificationTime attribute
      * @param targetUpdateTime the targetUpdateTime attribute
+     * @param navigationNode the navigationNode attribute
      * @return a new ImportTraceResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static ImportTraceResource createImportTraceResource(CoralSession session, String
-        name, Resource parent, Resource navigationNode, String originalURL, Date
-        sourceModificationTime, Date targetUpdateTime)
+        name, Resource parent, String originalURL, Date sourceModificationTime, Date
+        targetUpdateTime, Resource navigationNode)
         throws ValueRequiredException, InvalidResourceNameException
     {
         try
         {
             ResourceClass<ImportTraceResource> rc = session.getSchema().getResourceClass("docimport.trace", ImportTraceResource.class);
 			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
-            attrs.put(rc.getAttribute("navigationNode"), navigationNode);
             attrs.put(rc.getAttribute("originalURL"), originalURL);
             attrs.put(rc.getAttribute("sourceModificationTime"), sourceModificationTime);
             attrs.put(rc.getAttribute("targetUpdateTime"), targetUpdateTime);
+            attrs.put(rc.getAttribute("navigationNode"), navigationNode);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof ImportTraceResource))
             {
@@ -154,44 +129,6 @@ public class ImportTraceResourceImpl
 
     // public interface //////////////////////////////////////////////////////
  
-    /**
-     * Returns the value of the <code>navigationNode</code> attribute.
-     *
-     * @return the value of the <code>navigationNode</code> attribute.
-     */
-    public Resource getNavigationNode()
-    {
-        return get(navigationNodeDef);
-    }
- 
-    /**
-     * Sets the value of the <code>navigationNode</code> attribute.
-     *
-     * @param value the value of the <code>navigationNode</code> attribute.
-     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
-     *         value.
-     */
-    public void setNavigationNode(Resource value)
-        throws ValueRequiredException
-    {
-        try
-        {
-            if(value != null)
-            {
-                set(navigationNodeDef, value);
-            }
-            else
-            {
-                throw new ValueRequiredException("attribute navigationNode "+
-                                                 "is declared as REQUIRED");
-            }
-        }
-        catch(ModificationNotPermitedException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-    }
-    
     /**
      * Returns the value of the <code>originalURL</code> attribute.
      *
@@ -305,6 +242,46 @@ public class ImportTraceResourceImpl
             throw new BackendException("incompatible schema change",e);
         }
     }
+    
+    /**
+     * Returns the value of the <code>navigationNode</code> attribute.
+     *
+     * @return the value of the <code>navigationNode</code> attribute.
+     */
+    public Resource getNavigationNode()
+    {
+        return get(navigationNodeDef);
+    }
+ 
+    /**
+     * Sets the value of the <code>navigationNode</code> attribute.
+     *
+     * @param value the value of the <code>navigationNode</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
+     */
+    public void setNavigationNode(Resource value)
+        throws ValueRequiredException
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(navigationNodeDef, value);
+            }
+            else
+            {
+                throw new ValueRequiredException("attribute navigationNode "+
+                                                 "is declared as REQUIRED");
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
      
     // @custom methods ///////////////////////////////////////////////////////
+
+    // @order originalURL, sourceModificationTime, targetUpdateTime, navigationNode
 }

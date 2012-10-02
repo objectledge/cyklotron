@@ -111,7 +111,6 @@ public class DocumentImportServiceImpl
         throws DocumentException, IOException
     {
         Collection<DocumentData> documents = new ArrayList<DocumentData>();
-        @SuppressWarnings("unchecked")
         List<Node> documentNodes = xmlDocument.selectNodes(config.getDocumentXPath());
         for(Node documentNode : documentNodes)
         {
@@ -131,7 +130,6 @@ public class DocumentImportServiceImpl
                 documentNode.selectSingleNode(config.getModificationDateXPath()), dateFormat);
 
             List<AttachmentData> attachments = new ArrayList<AttachmentData>();
-            @SuppressWarnings("unchecked")
             List<Node> attachmentNodes = documentNode.selectNodes(config.getAttachentURLXPath());
             for(Node attachmentNode : attachmentNodes)
             {
