@@ -1,10 +1,12 @@
-package net.cyklotron.cms.ngodatabase.locations;
+package net.cyklotron.cms.locations;
 
 import java.io.IOException;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.objectledge.test.LedgeTestCase;
+
+import net.cyklotron.cms.locations.poland.PNALocationsProvider;
 
 public class PNALocationProviderTest
     extends LedgeTestCase

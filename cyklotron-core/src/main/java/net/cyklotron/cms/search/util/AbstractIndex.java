@@ -1,4 +1,4 @@
-package net.cyklotron.cms.ngodatabase;
+package net.cyklotron.cms.search.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +16,6 @@ import org.apache.lucene.index.CheckIndex;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.SegmentReader;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.search.IndexSearcher;
@@ -72,7 +71,7 @@ public abstract class AbstractIndex<T>
         // open reader
         try
         {
-            reader = SegmentReader.open(directory);
+            reader = IndexReader.open(directory);
         }
         catch(CorruptIndexException e)
         {
@@ -80,7 +79,7 @@ public abstract class AbstractIndex<T>
             CheckIndex checkIndex = new CheckIndex(directory);
             checkIndex.checkIndex();
             // try to reopen index
-            reader = SegmentReader.open(directory);
+            reader = IndexReader.open(directory);
         }
         searcher = new IndexSearcher(reader);
         writer = null;
@@ -89,7 +88,7 @@ public abstract class AbstractIndex<T>
     /**
      * Called by the constructor, subclasses may override it to provide custom analyzer.
      * 
-     * @param fileSystem ledge files ystem for loading stopwords lists etc.
+     * @param fileSystem ledge files system for loading stop word lists etc.
      * @return Analyzer instance.
      * @throws IOException
      */

@@ -1,4 +1,4 @@
-package net.cyklotron.cms.modules.views.ngodatabase;
+package net.cyklotron.cms.modules.views.locations;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Set;
 
 import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.ngodatabase.Location;
-import net.cyklotron.cms.ngodatabase.LocationDatabaseService;
+import net.cyklotron.cms.locations.Location;
+import net.cyklotron.cms.locations.LocationDatabaseService;
 import net.cyklotron.cms.preferences.PreferencesService;
 
 import org.codehaus.jackson.JsonGenerationException;

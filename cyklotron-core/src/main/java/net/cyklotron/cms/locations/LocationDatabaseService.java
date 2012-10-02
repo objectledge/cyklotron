@@ -1,4 +1,4 @@
-package net.cyklotron.cms.ngodatabase;
+package net.cyklotron.cms.locations;
 
 import java.io.IOException;
 import java.util.List;

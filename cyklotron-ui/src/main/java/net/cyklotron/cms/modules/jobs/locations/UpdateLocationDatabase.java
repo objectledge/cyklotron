@@ -1,11 +1,8 @@
-package net.cyklotron.cms.modules.jobs.ngodatabase;
-
-import java.io.IOException;
+package net.cyklotron.cms.modules.jobs.locations;
 
 import org.objectledge.scheduler.Job;
 
-import net.cyklotron.cms.ngodatabase.LocationDatabaseService;
-import net.cyklotron.cms.ngodatabase.NgoDatabaseService;
+import net.cyklotron.cms.locations.LocationDatabaseService;
 
 /**
  * A job that download and update Location database.

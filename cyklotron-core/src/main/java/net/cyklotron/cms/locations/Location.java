@@ -26,7 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package net.cyklotron.cms.ngodatabase;
+package net.cyklotron.cms.locations;
 
 /**
  * A location descriptor.

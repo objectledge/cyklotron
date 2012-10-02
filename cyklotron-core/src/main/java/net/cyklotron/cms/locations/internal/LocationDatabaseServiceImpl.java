@@ -26,7 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
 
-package net.cyklotron.cms.ngodatabase;
+package net.cyklotron.cms.locations.internal;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -36,7 +36,9 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.picocontainer.Startable;
 
-import net.cyklotron.cms.ngodatabase.locations.LocationsIndex;
+import net.cyklotron.cms.locations.Location;
+import net.cyklotron.cms.locations.LocationDatabaseService;
+import net.cyklotron.cms.locations.LocationsProvider;
 
 public class LocationDatabaseServiceImpl
     implements LocationDatabaseService, Startable

@@ -1,4 +1,4 @@
-package net.cyklotron.cms.ngodatabase.locations;
+package net.cyklotron.cms.locations.internal;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -18,8 +18,8 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.utils.Timer;
 
-import net.cyklotron.cms.ngodatabase.AbstractIndex;
-import net.cyklotron.cms.ngodatabase.Location;
+import net.cyklotron.cms.locations.Location;
+import net.cyklotron.cms.search.util.AbstractIndex;
 
 public class LocationsIndex
     extends AbstractIndex<Location>

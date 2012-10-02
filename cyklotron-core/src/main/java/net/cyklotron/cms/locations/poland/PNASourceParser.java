@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.cyklotron.cms.ngodatabase.locations;
+package net.cyklotron.cms.locations.poland;
 
 import java.io.IOException;
 import java.io.PrintWriter;
