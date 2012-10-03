@@ -178,6 +178,10 @@ function categorizeResource(url)
   #if($categorizeResourceClassDefNames.contains("$definition.name") && $cms_tool.isInstance($thumbnail, 'protected') && $thumbnail.canModify($cms_tool.coralSession, $cms_tool.subject))
   	 <a href="javascript:categorizeResource('$link.view('category.Categorize').set('res_id',$thumbnail.id)');">Categorize</a>
   #end
+  #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($thumbnail, 'protected') && $thumbnail.canModify($cms_tool.coralSession,$cms_tool.subject))
+ 	 <a href="javascript:fSub('$link.action('structure.UnbindThumbnail')')">Odwiąż</a>
+     <a href="javascript:fSub('$link.set('node_id', $resource.id).action('structure.SwapPhoto').set('reset','true')');"><img src="$link.content('/images/action/swap.png')"/></a>##
+  #end
   </div>
   #if($categorizeResourceClassDefNames.contains("$definition.name") && $cms_tool.isInstance($thumbnail, 'protected') && $thumbnail.canModify($cms_tool.coralSession, $cms_tool.subject) && $files_front_categories.size() > 0 )
   <div class="actions" style="float:right;margin-right:5px;">
@@ -224,6 +228,11 @@ function categorizeResource(url)
   	<a href="javascript:fSubConf('$link.view('related.ChooseRelatedResources').action('related.RemoveRelation').set('item_id', $row.id)','unbind');">Unbind</a>
   #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
  	<a href="javascript:fSubConf('$link.view('related.ChooseRelatedResources').action('files.DeleteRelatedFile').set('file_id',$row.id)','delete');">Remove</a>
+  #end
+  #if($cms_tool.isInstance($row, 'cms.files.file') && $previewExtensions.contains($files.getExtension($row).toLowerCase()))
+  #if($definition.relatedQuickEditView && $definition.relatedQuickEditView.length()>0 && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession,$cms_tool.subject))
+     <a href="javascript:fSub('$link.set('node_id', $resource.id).action('structure.SwapPhoto').set('photo_id',$row.id).set('reset','true')');"><img src="$link.content('/images/action/swap.png')"/></a>##
+  #end
   #end
   </div>
   #if($categorizeResourceClassDefNames.contains("$definition.name") && $cms_tool.isInstance($row, 'protected') && $row.canModify($cms_tool.coralSession, $cms_tool.subject) && $files_front_categories.size() > 0 )
