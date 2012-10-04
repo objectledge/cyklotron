@@ -23,7 +23,6 @@ import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 
-
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentException;
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -68,7 +67,7 @@ public class EditDocument extends BaseDocumentScreen
         throws ProcessingException
     {
         templatingContext.put("maxInactiveSessionInterval",
-            httpContext.getRequest().getSession().getMaxInactiveInterval());
+            httpContext.getRequest().getSession(true).getMaxInactiveInterval());
         
         // get processed node
         DocumentNodeResource doc = getDocument();
