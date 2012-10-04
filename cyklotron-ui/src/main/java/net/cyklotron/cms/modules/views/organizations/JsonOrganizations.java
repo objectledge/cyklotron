@@ -1,12 +1,7 @@
-package net.cyklotron.cms.modules.views.ngodatabase;
+package net.cyklotron.cms.modules.views.organizations;
 
 import java.io.IOException;
 import java.util.List;
-
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.ngodatabase.NgoDatabaseService;
-import net.cyklotron.cms.ngodatabase.Organization;
-import net.cyklotron.cms.preferences.PreferencesService;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.jcontainer.dna.Logger;
@@ -16,6 +11,11 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.web.json.AbstractJsonView;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.organizations.Organization;
+import net.cyklotron.cms.organizations.OrganizationRegistryService;
+import net.cyklotron.cms.preferences.PreferencesService;
 
 /**
  * The screen for serving files.
@@ -27,14 +27,14 @@ public class JsonOrganizations
     extends AbstractJsonView
 {   
     /** The NGO database service. */
-    NgoDatabaseService ngoDatabaseService;
+    OrganizationRegistryService organizationsRegistry;
  
     public JsonOrganizations(Context context, Logger log, PreferencesService preferencesService,
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
-        NgoDatabaseService ngoDatabaseService)
+        OrganizationRegistryService ngoDatabaseService)
     {
         super(context, log);
-        this.ngoDatabaseService = ngoDatabaseService;
+        this.organizationsRegistry = ngoDatabaseService;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class JsonOrganizations
         }
         else
         {
-            return this.ngoDatabaseService.getOrganizations(organization);
+            return this.organizationsRegistry.getOrganizations(organization);
         }
     }
 }

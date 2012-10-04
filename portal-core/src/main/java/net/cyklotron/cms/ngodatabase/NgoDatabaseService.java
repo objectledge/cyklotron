@@ -3,10 +3,11 @@ package net.cyklotron.cms.ngodatabase;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
-import java.util.List;
 
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
+
+import net.cyklotron.cms.organizations.OrganizationRegistryService;
 
 /**
  * Integration between Cyklotron and bazy.ngo.pl
@@ -15,22 +16,8 @@ import org.objectledge.pipeline.ProcessingException;
  * @version $Id: DocumentService.java,v 1.4 2007-11-18 21:23:07 rafal Exp $
  */
 public interface NgoDatabaseService
+    extends OrganizationRegistryService
 {
-    /**
-     * Retrieve organizations with matching names.
-     * 
-     * @param substring substring to be searched within organization names.
-     * @return list of organizations.
-     */
-    public List<Organization> getOrganizations(String substring);
-
-    /**
-     * Retrieve organization data.
-     * 
-     * @return organization with specified id.
-     */
-    public Organization getOrganization(long id);
-
     /**
      * Update incoming organizations data from source.
      */

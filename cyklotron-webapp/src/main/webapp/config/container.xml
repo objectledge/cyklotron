@@ -573,7 +573,10 @@
   			 class="net.cyklotron.cms.locations.poland.PNALocationsProvider"/> 
             
   <component class-key="net.cyklotron.cms.locations.LocationDatabaseService"
-             class="net.cyklotron.cms.locations.internal.LocationDatabaseServiceImpl"/>             
+             class="net.cyklotron.cms.locations.internal.LocationDatabaseServiceImpl"/>   
+             
+  <component class-key="net.cyklotron.cms.organizations.OrganizationRegistryService"
+             class="net.cyklotron.cms.organizations.DummyOrganizationRegistryService"/>                        
              
   <component class="net.cyklotron.cms.CmsDataFactory"/>
   

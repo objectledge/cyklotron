@@ -64,7 +64,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.utils.Timer;
 
-import net.cyklotron.cms.ngodatabase.Organization;
+import net.cyklotron.cms.organizations.Organization;
 import net.cyklotron.cms.search.analysis.AlphanumericFilter;
 import net.cyklotron.cms.search.util.AbstractIndex;
 

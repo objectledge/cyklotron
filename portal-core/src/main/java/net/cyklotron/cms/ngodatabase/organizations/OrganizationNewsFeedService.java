@@ -42,7 +42,7 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.LinkRenderer;
-import net.cyklotron.cms.ngodatabase.Organization;
+import net.cyklotron.cms.organizations.Organization;
 import net.cyklotron.cms.structure.table.CustomModificationTimeComparator;
 import net.cyklotron.cms.util.OfflineLinkRenderingService;
 

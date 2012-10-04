@@ -46,6 +46,7 @@ import net.cyklotron.cms.ngodatabase.organizations.OrganizationNewsFeedService;
 import net.cyklotron.cms.ngodatabase.organizations.OrganizationsIndex;
 import net.cyklotron.cms.ngodatabase.organizations.OutgoingOrganizationsService;
 import net.cyklotron.cms.ngodatabase.organizations.UpdatedDocumentsProvider;
+import net.cyklotron.cms.organizations.Organization;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.util.OfflineLinkRenderingService;
 

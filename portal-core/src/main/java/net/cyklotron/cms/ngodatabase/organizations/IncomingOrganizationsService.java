@@ -18,7 +18,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 
-import net.cyklotron.cms.ngodatabase.Organization;
+import net.cyklotron.cms.organizations.Organization;
 
 public class IncomingOrganizationsService
 {
