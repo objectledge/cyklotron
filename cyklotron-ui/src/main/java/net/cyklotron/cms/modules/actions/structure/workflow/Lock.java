@@ -77,7 +77,7 @@ public class Lock extends BaseWorkflowAction
             node.setState(transitions[i].getTo());
             node.update();
             workflowService.enterState(coralSession, node, transitions[i].getTo());
-            httpContext.getRequest().getSession().setAttribute(
+            httpContext.setSessionAttribute(
                 "net.cyklotron.cms.modules.actions.structure.workflow." + node.getIdString(),
                 new LockedBySessionListener(node, subject));
         }
