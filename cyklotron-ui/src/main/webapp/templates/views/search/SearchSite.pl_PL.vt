@@ -46,6 +46,13 @@ bez słów
 </tr>
 
 <tr>
+<td>Zasoby organizacji o nazwie</td>
+<td>
+<input type="text" size="25" name="q_org" value="$!q_org" />
+</td>
+</tr>
+
+<tr>
 <td colspan="2">
 <h4>Opcje</h4>
 </td>
@@ -105,6 +112,36 @@ Szukaj w
 <option value="185">ostatnich 6 miesięcy</option>
 <option value="365">ostatniego roku</option>
 </select>
+</td>
+</tr>
+
+<tr>
+<td>Pokaż zasoby z datą</td>
+#set($time_fields = [['nie ograniczaj','undefined'],['początku wydarzenia','eventStart'],['końca wydarzenia','eventEnd']])
+<td>
+<select name="f_time">
+  #options($time_fields $!f_time)
+</select>
+<td>
+</tr>
+<tr>
+<td>od</td>
+<td>
+  #if($parametersTool.getBoolean('s_time_enabled',false))
+   #dateSelectorOptionalTS("s_time" $parametersTool.getLong('s_time', $format_date.now().getTime()) 'nie ograniczaj')
+  #else
+   #dateSelectorOptionalTS("s_time" 'false' 'nie ograniczaj')
+  #end
+</td>
+</tr>
+<tr>
+<td>do</td>
+<td>
+  #if($parametersTool.getBoolean('e_time_enabled',false))
+   #dateSelectorOptionalTS("e_time" $parametersTool.getLong('e_time', $format_date.now().getTime()) 'nie ograniczaj')
+  #else
+   #dateSelectorOptionalTS("e_time" 'false' 'nie ograniczaj')
+  #end
 </td>
 </tr>
 
