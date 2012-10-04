@@ -46,6 +46,13 @@ no words
 </tr>
 
 <tr>
+<td>Show resources with organization name</td>
+<td>
+<input type="text" size="25" name="q_org" value="$!q_org" />
+</td>
+</tr>
+
+<tr>
 <td colspan="2">
 <h4>Options</h4>
 </td>
@@ -105,6 +112,36 @@ Search in
 <option value="185">last 6 months</option>
 <option value="365">last year</option>
 </select>
+</td>
+</tr>
+
+<tr>
+<td>Show resources with date</td>
+#set($time_fields = [['do not restrict','undefined'],['event start','eventStart'],['event end','eventEnd']])
+<td>
+<select name="f_time">
+  #options($time_fields $!f_time)
+</select>
+<td>
+</tr>
+<tr>
+<td>date from</td>
+<td>
+  #if($parametersTool.getBoolean('s_time_enabled',false))
+   #dateSelectorOptionalTS("s_time" $parametersTool.getLong('s_time', $format_date.now().getTime()) 'do not restrict')
+  #else
+   #dateSelectorOptionalTS("s_time" 'false' 'do not restrict')
+  #end
+</td>
+</tr>
+<tr>
+<td>date to</td>
+<td>
+  #if($parametersTool.getBoolean('e_time_enabled',false))
+   #dateSelectorOptionalTS("e_time" $parametersTool.getLong('e_time', $format_date.now().getTime()) 'do not restrict')
+  #else
+   #dateSelectorOptionalTS("e_time" 'false' 'do not restrict')
+  #end
 </td>
 </tr>
 

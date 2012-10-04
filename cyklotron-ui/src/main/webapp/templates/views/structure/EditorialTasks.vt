@@ -115,7 +115,7 @@ function massOperation(action)
   
 <span class="cms-popupmenubutton"><span><b>$task.title</b></span>
 #if(($task.description)&&($task.description != ''))## 
-<span onmouseover="domTT_activate(this, event, 'content', '<B>Administrator description: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
+<span onmouseover="domTT_activate(this, event, 'content', '<B>Administrator description: <br/></B>$stringTool.htmlLineBreaks($!task.description.replace('"', "'").replace("'", "\'"))', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
 #end## 
 
 <div class="cms-popupmenu">
@@ -252,7 +252,7 @@ function showResponse2(req) {
 
 <span class="cms-popupmenubutton"><span><b>$task.title</b></span> 
 #if(($task.description)&&($task.description != ''))## 
-<span onmouseover="domTT_activate(this, event, 'content', '<B>Adminstrator description: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
+<span onmouseover="domTT_activate(this, event, 'content', '<B>Administrator description: <br/></B>$stringTool.htmlLineBreaks($!task.description.replace('"', "'").replace("'", "\'"))', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
 #end## 
 <div class="cms-popupmenu"> 
     <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edit properties</a>
@@ -341,7 +341,7 @@ function showResponse2(req) {
 
 <span class="cms-popupmenubutton"><span><b>$task.title</b></span> 
 #if(($task.description)&&($task.description != ''))## 
-<span onmouseover="domTT_activate(this, event, 'content', '<B>Adminstrator description: <br></B>${task.description.replace('"', "'").replace("'", "\'")}', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
+<span onmouseover="domTT_activate(this, event, 'content', '<B>Administrator description: <br/></B>$stringTool.htmlLineBreaks($!task.description.replace('"', "'").replace("'", "\'"))', 'trail', true, 'delay', 0);" class="desc">(!)</span>##
 #end## 
 <div class="cms-popupmenu"> 
     <a title="$task.path.substring($task.site.path.length())" href="$link.view('structure.EditNode').set('node_id',$task.id)">Edit properties</a>

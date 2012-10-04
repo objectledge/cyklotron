@@ -21,6 +21,10 @@ public interface SearchConstants
     public static String FIELD_ID = "id";
     /** modification_time - IS, technical */
     public static String FIELD_MODIFICATION_TIME = "modification_time";
+    /** event_start_time - IS, technical */
+    public static String FIELD_EVENT_START = "eventStart";
+    /** event_end_time - IS, technical */
+    public static String FIELD_EVENT_END = "eventEnd";
     /** path - I, technical */
     public static String FIELD_PATH = "path";
     /** site_name - IS, technical */

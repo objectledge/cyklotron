@@ -38,7 +38,7 @@ public class Files
         Assert.assertTrue(selenium.isElementPresent("link=public"));
         selenium.click("link=public");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
-        selenium.click("id=table4-size0");
+        selenium.click("//SPAN[@class='table-pagesize-chooser']/INPUT[contains(@id, 'size0')]");
         selenium.waitForPageToLoad(DEFAULT_PAGE_LOAD_TIME);
         String filespublic = "//a[contains(@href, ##javascript:select('/public/filespublic','428790')##)]"
             .replaceAll("##", "\"");

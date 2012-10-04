@@ -127,6 +127,14 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
             aQuery.add(parser.parse(qNot), BooleanClause.Occur.MUST_NOT);
         }
         
+        String q_org = parameters.get("q_org","");
+        if(q_org.length() > 0)
+        {
+            QueryParser orgParser = new QueryParser(Version.LUCENE_30, searchService.FIELD_ORGANIZATION_NAME, analyzer);
+            orgParser.setDateResolution(DateTools.Resolution.SECOND);
+            aQuery.add(orgParser.parse("\""+q_org+"\""), BooleanClause.Occur.MUST);
+        }
+        
         BooleanQuery outQuery = new BooleanQuery();
         outQuery.add(aQuery, BooleanClause.Occur.MUST);
         
@@ -139,6 +147,15 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
 
         String vTime = parameters.get("v_time","all");
         clause = getDateRangeClause("validityStart", vTime);
+        if(clause != null)
+        {
+            outQuery.add(clause);
+        }
+
+        String fiendTime = parameters.get("f_time", "");
+        String startTime = parameters.get("s_time", "");
+        String endTime = parameters.get("e_time", "");
+        clause = getDateRangeClause(fiendTime, startTime, endTime);
         if(clause != null)
         {
             outQuery.add(clause);
@@ -176,6 +193,35 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         return clause;
     }
     
+    private BooleanClause getDateRangeClause(String fieldName, String startTime, String endTime)
+    {
+        BooleanClause clause = null;
+        if((SearchConstants.FIELD_EVENT_END.equals(fieldName)
+            || SearchConstants.FIELD_EVENT_START.equals(fieldName) || SearchConstants.FIELD_MODIFICATION_TIME
+                .equals(fieldName)) && !(startTime.isEmpty() && endTime.isEmpty()))
+        {
+            String lowerDateToText = null;
+            String upperDateToText = null;
+            if(!startTime.isEmpty())
+            {
+                Date startDate = new Date(Long.parseLong(startTime));
+                Term lowerDate = new Term(fieldName, SearchUtil.dateToString(startDate));
+                lowerDateToText = lowerDate.text();
+            }
+            if(!endTime.isEmpty())
+            {
+                Date endDate = new Date(Long.parseLong(endTime));
+                Term upperDate = new Term(fieldName, SearchUtil.dateToString(endDate));
+                upperDateToText = upperDate.text();
+            }
+
+            TermRangeQuery dateRange = new TermRangeQuery(fieldName, lowerDateToText,
+                upperDateToText, lowerDateToText != null, upperDateToText != null);
+            clause = new BooleanClause(dateRange, BooleanClause.Occur.MUST);
+        }
+        return clause;
+    }
+    
     @Override
     public String getErrorQueryString()
     {
@@ -190,7 +236,11 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         storeQueryParameter("q_expr", templatingContext);
         storeQueryParameter("q_or", templatingContext);
         storeQueryParameter("q_not", templatingContext);
+        storeQueryParameter("q_org", templatingContext);
         storeQueryParameter("q_time", templatingContext);
         storeQueryParameter("v_time", templatingContext);
+        storeQueryParameter("f_time", templatingContext);
+        storeQueryParameter("s_time", templatingContext);
+        storeQueryParameter("e_time", templatingContext);
     }
 }
