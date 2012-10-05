@@ -36,7 +36,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
-import net.cyklotron.bazy.organizations.OrganizationResourceImpl;
+import net.cyklotron.bazy.organizations.OrganizationResource;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.annotate.JsonSubTypes;
@@ -49,16 +49,27 @@ import org.codehaus.jackson.map.PropertyNamingStrategy;
 import org.codehaus.jackson.map.introspect.AnnotatedField;
 import org.codehaus.jackson.map.introspect.AnnotatedMethod;
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.ValueRequiredException;
 
 public class BazyngoMessageListener
     implements MessageListener, ExceptionListener
-    {    
+{
     private final Logger logger;
 
-    public BazyngoMessageListener(Logger logger)
+    private final NgoDatabaseServiceImpl ngoDatabaseServiceImpl;
+
+    private final CoralSessionFactory coralSessionFactory;
+
+    public BazyngoMessageListener(Logger logger, NgoDatabaseServiceImpl ngoDatabaseServiceImpl,
+        CoralSessionFactory coralSessionFactory)
         throws Exception
     {
         this.logger = logger;
+        this.ngoDatabaseServiceImpl = ngoDatabaseServiceImpl;
+        this.coralSessionFactory = coralSessionFactory;
     }
 
     @Override
@@ -66,6 +77,7 @@ public class BazyngoMessageListener
     {
         if(message instanceof TextMessage)
         {
+            CoralSession coralSession = coralSessionFactory.getRootSession();
             TextMessage textMessage = (TextMessage)message;
             try
             {
@@ -76,12 +88,23 @@ public class BazyngoMessageListener
                     {
                         // do your job.
                         logger.info("get category tree message: " + bazyngoMessage.toString());
-                        
+
                     }
                     else if(bazyngoMessage instanceof OrganizationBazyngoMessage)
                     {
                         // do your job.
                         logger.info("get organization message: " + bazyngoMessage.toString());
+                        OrganizationBazyngoMessage organizationMessage = (OrganizationBazyngoMessage)bazyngoMessage;
+                        OrganizationResource organization = ngoDatabaseServiceImpl
+                            .getOrganizationResource(coralSession, organizationMessage.getId(),
+                                organizationMessage.getName());
+                        if(organization != null)
+                        {
+                            organization.setData(organizationMessage.getData());
+                            organization.update();
+                            logger.info("organization resource updated: "
+                                + organization.getIdString());
+                        }
                     }
                     else
                     {
@@ -105,22 +128,37 @@ public class BazyngoMessageListener
             {
                 logger.error("Error reading message: " + ex);
             }
+            catch(InvalidResourceNameException ex)
+            {
+                logger.error("Error reading message: " + ex);
+            }
+            catch(ValueRequiredException ex)
+            {
+                logger.error("Error reading message: " + ex);
+            }
+            finally
+            {
+                if(coralSession != null)
+                {
+                    coralSession.close();
+                }
+            }
         }
         else
         {
             logger.info("Received: " + message);
         }
     }
-    
+
     @Override
     public void onException(JMSException e)
     {
         logger.error("JMS Exception: ", e);
     }
-    
 
     /**
      * Converts json message data to Cyklotron CiviCrmMessage object
+     * 
      * @param textMessage
      * @return CiviCrmMessage
      * @throws JsonParseException
@@ -142,6 +180,7 @@ public class BazyngoMessageListener
 
     /**
      * Converts json message data to Cyklotron OrganizationBazyngoMessage object
+     * 
      * @param textMessage
      * @return CiviCrmMessage
      * @throws JsonParseException
@@ -227,23 +266,25 @@ public class BazyngoMessageListener
         }
     }
 
-
-    @JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,  
-        include = JsonTypeInfo.As.PROPERTY,  
-        property = "message_type")
-    @JsonSubTypes({  
-        @Type(value = CategoriesTreeBazyngoMessage.class, name = "categories_tree"),  
-        @Type(value = OrganizationBazyngoMessage.class, name = "organization") }) 
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "message_type")
+    @JsonSubTypes({ @Type(value = CategoriesTreeBazyngoMessage.class, name = "categories_tree"),
+                    @Type(value = OrganizationBazyngoMessage.class, name = "organization") })
     public abstract static class PolymorphicBazyngoMessageMixIn
     {
 
     }
 
+    /**
+     * Abstract BazyngoMessage 
+     * OrganizationBazyngoMessage JSON {"type":"organization", "id":"1234567", "name":"organization name", "data":"organization data"}
+     * CategoriesTreeBazyngoMessage JSON {"type":"categories_tree", "data":"categories tree"}
+     * 
+     * @author lukasz
+     */
     public abstract static class BazyngoMessage
     {
         public String messageType;
-        
+
         public String getMessageType()
         {
             return messageType;
@@ -254,7 +295,7 @@ public class BazyngoMessageListener
         extends BazyngoMessage
     {
         public String data;
-        
+
         public String getData()
         {
             return data;
@@ -285,5 +326,5 @@ public class BazyngoMessageListener
             return data;
         }
     }
-    
+
 }

@@ -40,6 +40,8 @@ import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.XAConnection;
 
+import net.cyklotron.bazy.organizations.OrganizationResource;
+import net.cyklotron.bazy.organizations.OrganizationResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.ngodatabase.organizations.IncomingOrganizationsService;
 import net.cyklotron.cms.ngodatabase.organizations.OrganizationNewsFeedService;
@@ -58,10 +60,10 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.database.Database;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.DateFormatter;
-import org.objectledge.messaging.DummyMessageListener;
 import org.objectledge.messaging.MessagingConsumerHelper;
 import org.objectledge.messaging.MessagingFactory;
 import org.objectledge.parameters.Parameters;
@@ -81,7 +83,7 @@ public class NgoDatabaseServiceImpl
     
     public static final String BAZYNGO_ROOT_PATH = "/bazy";
     
-    public static final String BAZYNGO_ORGANIZATION_ROOT_NAME = "organization";
+    public static final String BAZYNGO_ORGANIZATION_ROOT_NAME = "organizations";
 
     private final OrganizationsIndex organizationsIndex;
 
@@ -132,8 +134,10 @@ public class NgoDatabaseServiceImpl
         this.newsFeed = new OrganizationNewsFeedService(config.getChild("newsFeed"), dateFormat,
             locale, organizationsIndex, updatedDocumetns, categoryService, coralSessionFactory,
             fileSystem, dateFormatter, offlineLinkRenderingService, templating, logger);
-        
-        this.messagingConsumerHelper = getMessagingConsumerHelper(messagingFactory, config);
+
+        // messagingConsumer
+        this.messagingConsumerHelper = getMessagingConsumerHelper(messagingFactory,
+            coralSessionFactory, config);
     }
 
     @Override
@@ -233,29 +237,54 @@ public class NgoDatabaseServiceImpl
         return organizationRootResource;
     }
     
-    public Resource createOrganizationParentDirs(CoralSession coralSession, String name,
-        SiteResource site)
-        throws InvalidResourceNameException
+    /**
+     * Gets OrganizationResource if not exist create it.
+     * @param coralSession
+     * @param organizationId external organization id not resource id.
+     * @param organizationName
+     * @return OrganizationResource
+     * @throws InvalidResourceNameException
+     * @throws ValueRequiredException
+     */
+    public OrganizationResource getOrganizationResource(CoralSession coralSession,
+        String organizationId, String organizationName)
+        throws InvalidResourceNameException, ValueRequiredException
     {
-
-        final String[] tokens = name.split("(?<=\\G..)");
-
+        // get/create organization parent dirs
+        final String[] tokens = organizationId.split("(?<=\\G..)");
         Resource parent = getOrganizationRootResource(coralSession);
         for(int i = 0; i < tokens.length - 1; i++)
         {
             String dirname = tokens[i];
-            final Resource[] res = coralSession.getStore().getResource(parent, dirname);
-            if(res.length > 0)
+            if(dirname.length() == 2)
             {
-                parent = (Resource)res[0];
-            }
-            else
-            {
-                parent = (Resource)NodeImpl.createNode(coralSession, dirname, parent);
+                final Resource[] res = coralSession.getStore().getResource(parent, dirname);
+                if(res.length > 0)
+                {
+                    parent = (Resource)res[0];
+                }
+                else
+                {
+                    parent = (Resource)NodeImpl.createNode(coralSession, dirname, parent);
+                }
             }
         }
-        return (Resource)parent;
+
+        // get organization resource if not exist create it.
+        OrganizationResource organizationResource = null;
+        final Resource[] res = coralSession.getStore().getResource(parent, organizationId);
+        if(res.length > 0)
+        {
+            organizationResource = (OrganizationResource)res[0];
+        }
+        else
+        {
+            organizationResource = OrganizationResourceImpl.createOrganizationResource(
+                coralSession, organizationId, parent, organizationName);
+        }
+        return organizationResource;
     }
+    
     
     /**
      * Construct MessagingConsumerHelper from configuration.
@@ -268,7 +297,7 @@ public class NgoDatabaseServiceImpl
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected MessagingConsumerHelper getMessagingConsumerHelper(MessagingFactory messagingFactory,
-        Configuration config)
+        CoralSessionFactory coralSessionFactory, Configuration config)
         throws JMSException, Exception
     {
         Configuration connectionConf = config.getChild("connection");
@@ -281,7 +310,8 @@ public class NgoDatabaseServiceImpl
         if(connectionConf.getAttribute("name", null) != null)
         {
             String connectionName = connectionConf.getAttribute("name");
-            BazyngoMessageListener messagelistener = new BazyngoMessageListener(logger);
+            BazyngoMessageListener messagelistener = new BazyngoMessageListener(logger, this,
+                coralSessionFactory);
             return new MessagingConsumerHelper(messagingFactory.createConnection(connectionName,
                 isXAConnection ? XAConnection.class : Connection.class), messagelistener,
                 messagelistener, connectionConf);
