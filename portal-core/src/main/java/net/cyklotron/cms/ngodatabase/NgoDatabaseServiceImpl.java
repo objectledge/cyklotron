@@ -47,12 +47,17 @@ import net.cyklotron.cms.ngodatabase.organizations.OrganizationsIndex;
 import net.cyklotron.cms.ngodatabase.organizations.OutgoingOrganizationsService;
 import net.cyklotron.cms.ngodatabase.organizations.UpdatedDocumentsProvider;
 import net.cyklotron.cms.organizations.Organization;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.util.OfflineLinkRenderingService;
 
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.datatypes.NodeImpl;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.database.Database;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.i18n.DateFormatter;
@@ -73,6 +78,10 @@ public class NgoDatabaseServiceImpl
     private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
     private static final String DEFAULT_LOCALE = "pl_PL";
+    
+    public static final String BAZYNGO_ROOT_PATH = "/bazy";
+    
+    public static final String BAZYNGO_ORGANIZATION_ROOT_NAME = "organization";
 
     private final OrganizationsIndex organizationsIndex;
 
@@ -89,6 +98,10 @@ public class NgoDatabaseServiceImpl
     private final Locale locale;
 
     private final MessagingConsumerHelper messagingConsumerHelper;
+    
+    private Resource bazyRootResource;
+    
+    private Resource organizationRootResource;
 
     public NgoDatabaseServiceImpl(Configuration config, Logger logger,
         UpdatedDocumentsProvider updatedDocuments, FileSystem fileSystem, SiteService siteService,
@@ -119,7 +132,7 @@ public class NgoDatabaseServiceImpl
         this.newsFeed = new OrganizationNewsFeedService(config.getChild("newsFeed"), dateFormat,
             locale, organizationsIndex, updatedDocumetns, categoryService, coralSessionFactory,
             fileSystem, dateFormatter, offlineLinkRenderingService, templating, logger);
-
+        
         this.messagingConsumerHelper = getMessagingConsumerHelper(messagingFactory, config);
     }
 
@@ -199,7 +212,51 @@ public class NgoDatabaseServiceImpl
     {
         return newsFeed.getOrganizationNewsFeed(parameters);
     }
+    
+    public Resource getBazyRootResource(CoralSession coralSession)
+    {
+        if(bazyRootResource == null)
+        {
+            bazyRootResource = (Resource)coralSession.getStore().getResourceByPath(
+                BAZYNGO_ROOT_PATH)[0];
+        }
+        return bazyRootResource;
+    }
+    
+    public Resource getOrganizationRootResource(CoralSession coralSession)
+    {
+        if(organizationRootResource == null)
+        {
+            Resource bazyRoot = getBazyRootResource(coralSession);
+            organizationRootResource = coralSession.getStore().getResource(bazyRoot, BAZYNGO_ORGANIZATION_ROOT_NAME)[0];
+        }
+        return organizationRootResource;
+    }
+    
+    public Resource createOrganizationParentDirs(CoralSession coralSession, String name,
+        SiteResource site)
+        throws InvalidResourceNameException
+    {
 
+        final String[] tokens = name.split("(?<=\\G..)");
+
+        Resource parent = getOrganizationRootResource(coralSession);
+        for(int i = 0; i < tokens.length - 1; i++)
+        {
+            String dirname = tokens[i];
+            final Resource[] res = coralSession.getStore().getResource(parent, dirname);
+            if(res.length > 0)
+            {
+                parent = (Resource)res[0];
+            }
+            else
+            {
+                parent = (Resource)NodeImpl.createNode(coralSession, dirname, parent);
+            }
+        }
+        return (Resource)parent;
+    }
+    
     /**
      * Construct MessagingConsumerHelper from configuration.
      * 
@@ -224,7 +281,7 @@ public class NgoDatabaseServiceImpl
         if(connectionConf.getAttribute("name", null) != null)
         {
             String connectionName = connectionConf.getAttribute("name");
-            DummyMessageListener messagelistener = new DummyMessageListener(logger);
+            BazyngoMessageListener messagelistener = new BazyngoMessageListener(logger);
             return new MessagingConsumerHelper(messagingFactory.createConnection(connectionName,
                 isXAConnection ? XAConnection.class : Connection.class), messagelistener,
                 messagelistener, connectionConf);
