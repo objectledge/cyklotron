@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
-import org.objectledge.parameters.Parameters;
-import org.objectledge.pipeline.ProcessingException;
-
 import net.cyklotron.cms.organizations.OrganizationRegistryService;
 
 /**
@@ -38,16 +35,4 @@ public interface NgoDatabaseService
      */
     public void updateOutgoing(Date startDate, Date endDate, OutputStream outputStream)
         throws IOException;
-
-    /**
-     * Returns the contents of RSS/Atom news feed for an organization.
-     * <P>
-     * Content-Type header for the response should be text/xml and encoding should be UTF-8.
-     * </p>
-     * 
-     * @param parameters request parameters, containing organization id
-     * @return contents of the feed.
-     */
-    public String getOrganizationNewsFeed(Parameters parameters)
-        throws ProcessingException;
 }

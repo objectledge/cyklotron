@@ -1,4 +1,4 @@
-package net.cyklotron.cms.modules.views.ngodatabase;
+package net.cyklotron.cms.modules.views.organizations;
 
 import java.io.Writer;
 import java.util.Date;
@@ -11,7 +11,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
 
-import net.cyklotron.cms.ngodatabase.NgoDatabaseService;
+import net.cyklotron.cms.organizations.OrganizationRegistryService;
 
 /**
  * View organization's news outgoing feed.
@@ -23,12 +23,12 @@ import net.cyklotron.cms.ngodatabase.NgoDatabaseService;
 public class NewsFeed
     extends AbstractBuilder
 {
-    private NgoDatabaseService ngoDatabaseService;
+    private OrganizationRegistryService organizationRegistry;
 
-    public NewsFeed(Context context, NgoDatabaseService ngoDatabaseService)
+    public NewsFeed(Context context, OrganizationRegistryService ngoDatabaseService)
     {
         super(context);
-        this.ngoDatabaseService = ngoDatabaseService;
+        this.organizationRegistry = ngoDatabaseService;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class NewsFeed
             httpContext.getResponse().addDateHeader("Last-Modified", (new Date()).getTime());
             httpContext.setEncoding("UTF-8");
             Writer writer = httpContext.getPrintWriter();
-            writer.write(ngoDatabaseService.getOrganizationNewsFeed(parameters));
+            writer.write(organizationRegistry.getOrganizationNewsFeed(parameters));
             writer.close();
         }
         catch(Exception e)
