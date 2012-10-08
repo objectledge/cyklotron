@@ -92,7 +92,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>    
     <versions.ledge>1.0.14.1</versions.ledge>
-    <versions.coral>1.0.14</versions.coral>
+    <versions.coral>1.0.14.1</versions.coral>
   </properties>
   <dependencyManagement>
     <dependencies>
