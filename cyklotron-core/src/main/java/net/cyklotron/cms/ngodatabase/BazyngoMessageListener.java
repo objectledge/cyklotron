@@ -58,6 +58,7 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ValueRequiredException;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 public class BazyngoMessageListener
@@ -101,7 +102,6 @@ public class BazyngoMessageListener
                     {
                         // do your job.
                         logger.info("get organization message: " + bazyngoMessage.toString());
-                        logger.info("get organization name: " + ((OrganizationBazyngoMessage)bazyngoMessage).getOrganizationName());
                         OrganizationBazyngoMessage organizationMessage = (OrganizationBazyngoMessage)bazyngoMessage;
                         OrganizationResource organization = ngoDatabaseServiceImpl
                             .getOrganizationResource(coralSession, organizationMessage.getexternalIdentifier());
@@ -208,6 +208,7 @@ public class BazyngoMessageListener
         // JSON2XML
         Map<String,Object> mapMessage = mapper.readValue(textMessage.getText(), Map.class);        
         XmlMapper xmlMapper = new XmlMapper();
+        xmlMapper.configure( ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true );
         String messageMXL = xmlMapper.writeValueAsString(mapMessage);
         
         // Cast to bazyngoMessage
@@ -305,7 +306,6 @@ public class BazyngoMessageListener
      * @author lukasz
      */
     @JsonIgnoreProperties(ignoreUnknown = true)
-    @JacksonXmlRootElement(namespace="http://www.w3.org/TR/xml-names/")
     public abstract static class BazyngoMessage
     {
         @JsonProperty
@@ -342,7 +342,7 @@ public class BazyngoMessageListener
 
     }
     
-    @JacksonXmlRootElement(namespace="http://www.w3.org/TR/xml-names/")
+    @JacksonXmlRootElement( localName = "organization", namespace = "" )
     public static class OrganizationBazyngoMessage
         extends BazyngoMessage
     {
