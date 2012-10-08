@@ -346,10 +346,10 @@ public class BazyngoMessageListener
     public static class OrganizationBazyngoMessage
         extends BazyngoMessage
     {
-        //@JsonProperty("external_identifier")
+        @JsonProperty("external_identifier")
         private String externalIdentifier;
 
-        //@JsonProperty("organization_name")
+        @JsonProperty("organization_name")
         private String organizationName;
 
         public String getexternalIdentifier()
