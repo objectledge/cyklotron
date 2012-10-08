@@ -3,6 +3,6 @@ JAVA CLASS 'net.cyklotron.bazy.organizations.OrganizationResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node' )
 ATTRIBUTES (
-REQUIRED string organizationName,
-string data
+string organizationName,
+text data
 );

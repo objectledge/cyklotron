@@ -28,9 +28,6 @@
  
 package net.cyklotron.bazy.organizations;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
@@ -110,21 +107,18 @@ public class OrganizationResourceImpl
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param organizationName the organizationName attribute
      * @return a new OrganizationResource instance.
-     * @throws ValueRequiredException if one of the required attribues is undefined.
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static OrganizationResource createOrganizationResource(CoralSession session, String
-        name, Resource parent, String organizationName)
-        throws ValueRequiredException, InvalidResourceNameException
+        name, Resource parent)
+        throws InvalidResourceNameException
     {
         try
         {
             ResourceClass<OrganizationResource> rc = session.getSchema().getResourceClass("bazy.organizations.organization", OrganizationResource.class);
-			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
-            attrs.put(rc.getAttribute("organizationName"), organizationName);
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
             if(!(res instanceof OrganizationResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
@@ -133,6 +127,10 @@ public class OrganizationResourceImpl
             return (OrganizationResource)res;
         }
         catch(EntityDoesNotExistException e)
+        {
+            throw new BackendException("incompatible schema change", e);
+        }
+        catch(ValueRequiredException e)
         {
             throw new BackendException("incompatible schema change", e);
         }
@@ -209,16 +207,25 @@ public class OrganizationResourceImpl
     {
         return get(organizationNameDef);
     }
- 
+    
+    /**
+     * Returns the value of the <code>organizationName</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>organizationName</code> attribute.
+     */
+    public String getOrganizationName(String defaultValue)
+    {
+        return get(organizationNameDef, defaultValue);
+    }    
+
     /**
      * Sets the value of the <code>organizationName</code> attribute.
      *
-     * @param value the value of the <code>organizationName</code> attribute.
-     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
-     *         value.
+     * @param value the value of the <code>organizationName</code> attribute,
+     *        or <code>null</code> to remove value.
      */
     public void setOrganizationName(String value)
-        throws ValueRequiredException
     {
         try
         {
@@ -228,15 +235,28 @@ public class OrganizationResourceImpl
             }
             else
             {
-                throw new ValueRequiredException("attribute organizationName "+
-                                                 "is declared as REQUIRED");
+                unset(organizationNameDef);
             }
         }
         catch(ModificationNotPermitedException e)
         {
             throw new BackendException("incompatible schema change",e);
         }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
     }
-     
+   
+	/**
+	 * Checks if the value of the <code>organizationName</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>organizationName</code> attribute is defined.
+	 */
+    public boolean isOrganizationNameDefined()
+	{
+	    return isDefined(organizationNameDef);
+	}
+  
     // @custom methods ///////////////////////////////////////////////////////
 }

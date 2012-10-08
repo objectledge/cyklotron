@@ -29,6 +29,7 @@
 package net.cyklotron.cms.ngodatabase;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
@@ -39,6 +40,8 @@ import javax.jms.TextMessage;
 import net.cyklotron.bazy.organizations.OrganizationResource;
 
 import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonSubTypes.Type;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
@@ -53,6 +56,9 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.ValueRequiredException;
+
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 public class BazyngoMessageListener
     implements MessageListener, ExceptionListener
@@ -82,6 +88,7 @@ public class BazyngoMessageListener
             try
             {
                 BazyngoMessage bazyngoMessage = getMessageObject(textMessage);
+                
                 if(bazyngoMessage != null)
                 {
                     if(bazyngoMessage instanceof CategoriesTreeBazyngoMessage)
@@ -94,16 +101,20 @@ public class BazyngoMessageListener
                     {
                         // do your job.
                         logger.info("get organization message: " + bazyngoMessage.toString());
+                        logger.info("get organization name: " + ((OrganizationBazyngoMessage)bazyngoMessage).getOrganizationName());
                         OrganizationBazyngoMessage organizationMessage = (OrganizationBazyngoMessage)bazyngoMessage;
                         OrganizationResource organization = ngoDatabaseServiceImpl
-                            .getOrganizationResource(coralSession, organizationMessage.getId(),
-                                organizationMessage.getName());
+                            .getOrganizationResource(coralSession, organizationMessage.getexternalIdentifier());
                         if(organization != null)
                         {
-                            organization.setData(organizationMessage.getData());
-                            organization.update();
-                            logger.info("organization resource updated: "
-                                + organization.getIdString());
+                            synchronized(organization)
+                            {
+                                organization.setOrganizationName(organizationMessage.getOrganizationName());
+                                organization.setData(organizationMessage.getData());
+                                organization.update();
+                                logger.info("organization resource updated: "
+                                    + organization.getIdString());
+                            }
                         }
                     }
                     else
@@ -193,7 +204,19 @@ public class BazyngoMessageListener
     {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(new CamelCaseNamingStrategy());
-        return mapper.readValue(textMessage.getText(), OrganizationBazyngoMessage.class);
+
+        // JSON2XML
+        Map<String,Object> mapMessage = mapper.readValue(textMessage.getText(), Map.class);        
+        XmlMapper xmlMapper = new XmlMapper();
+        String messageMXL = xmlMapper.writeValueAsString(mapMessage);
+        
+        // Cast to bazyngoMessage
+        BazyngoMessage bazyngoMessage = mapper.readValue(textMessage.getText(), OrganizationBazyngoMessage.class);
+        bazyngoMessage.setData(messageMXL);
+        
+        logger.info("message JSON2XML: " + bazyngoMessage.getData());
+        
+        return bazyngoMessage;
     }
     
     
@@ -276,54 +299,77 @@ public class BazyngoMessageListener
 
     /**
      * Abstract BazyngoMessage 
-     * OrganizationBazyngoMessage JSON {"type":"organization", "id":"1234567", "name":"organization name", "data":"organization data"}
+     * OrganizationBazyngoMessage JSON 
      * CategoriesTreeBazyngoMessage JSON {"type":"categories_tree", "data":"categories tree"}
      * 
      * @author lukasz
      */
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JacksonXmlRootElement(namespace="http://www.w3.org/TR/xml-names/")
     public abstract static class BazyngoMessage
     {
-        public String messageType;
+        @JsonProperty
+        private String messageType;
+
+        @JsonProperty
+        private String data;
 
         public String getMessageType()
         {
             return messageType;
         }
+
+        public void setMessageType(String messageType)
+        {
+            this.messageType = messageType;
+        }
+
+        public String getData()
+        {
+            return data;
+        }
+
+        public void setData(String data)
+        {
+            this.data = data;
+        }
+        
     }
 
     public static class CategoriesTreeBazyngoMessage
         extends BazyngoMessage
     {
-        public String data;
 
-        public String getData()
-        {
-            return data;
-        }
     }
-
+    
+    @JacksonXmlRootElement(namespace="http://www.w3.org/TR/xml-names/")
     public static class OrganizationBazyngoMessage
         extends BazyngoMessage
     {
-        public String id;
+        //@JsonProperty("external_identifier")
+        private String externalIdentifier;
 
-        public String name;
+        //@JsonProperty("organization_name")
+        private String organizationName;
 
-        public String data;
-
-        public String getId()
+        public String getexternalIdentifier()
         {
-            return id;
+            return externalIdentifier;
         }
 
-        public String getName()
+        public void setId(String externalIdentifier)
         {
-            return name;
+            this.externalIdentifier = externalIdentifier;
         }
 
-        public String getData()
+        public String getOrganizationName()
         {
-            return data;
+            return organizationName;
+        }
+
+        public void setName(String organizationName)
+        {
+            this.organizationName = organizationName;
         }
     }
 

@@ -29,7 +29,6 @@
 package net.cyklotron.bazy.organizations;
 
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsNodeResource;
 
@@ -84,16 +83,29 @@ public interface OrganizationResource
      * @return the value of the the <code>organizationName</code> attribute.
      */
     public String getOrganizationName();
- 
+    
+    /**
+     * Returns the value of the <code>organizationName</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>organizationName</code> attribute.
+     */
+    public String getOrganizationName(String defaultValue);
+
     /**
      * Sets the value of the <code>organizationName</code> attribute.
      *
-     * @param value the value of the <code>organizationName</code> attribute.
-     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
-     *         value.
+     * @param value the value of the <code>organizationName</code> attribute,
+     *        or <code>null</code> to remove value.
      */
-    public void setOrganizationName(String value)
-        throws ValueRequiredException;
-     
+    public void setOrganizationName(String value);   
+   
+	/**
+	 * Checks if the value of the <code>organizationName</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>organizationName</code> attribute is defined.
+	 */
+    public boolean isOrganizationNameDefined();
+  
     // @custom methods ///////////////////////////////////////////////////////
 }

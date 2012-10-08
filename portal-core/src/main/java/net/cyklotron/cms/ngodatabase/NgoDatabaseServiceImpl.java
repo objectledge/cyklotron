@@ -247,7 +247,7 @@ public class NgoDatabaseServiceImpl
      * @throws ValueRequiredException
      */
     public OrganizationResource getOrganizationResource(CoralSession coralSession,
-        String organizationId, String organizationName)
+        String organizationId)
         throws InvalidResourceNameException, ValueRequiredException
     {
         // get/create organization parent dirs
@@ -280,7 +280,7 @@ public class NgoDatabaseServiceImpl
         else
         {
             organizationResource = OrganizationResourceImpl.createOrganizationResource(
-                coralSession, organizationId, parent, organizationName);
+                coralSession, organizationId, parent);
         }
         return organizationResource;
     }
