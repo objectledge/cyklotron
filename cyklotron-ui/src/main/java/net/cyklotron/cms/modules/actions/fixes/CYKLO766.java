@@ -9,7 +9,6 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 
-import net.cyklotron.cms.ngodatabase.LocationDatabaseService;
 import net.cyklotron.cms.periodicals.EmailPeriodicalResource;
 import net.cyklotron.cms.periodicals.PeriodicalResource;
 
@@ -18,7 +17,7 @@ public class CYKLO766
 {
     private Logger logger;
 
-    public CYKLO766(LocationDatabaseService locationDatabaseService, Logger logger)
+    public CYKLO766(Logger logger)
     {
         this.logger = logger;
     }

@@ -10,8 +10,8 @@ $pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.base.css')##
 $pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.theme.css')##
 $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 
-#set($organizationsLink = $link.view('ngodatabase.JsonOrganizations').unset('site_id'))
-#set($locationsLink = $link.view('ngodatabase.JsonLocations').unset('site_id'))
+#set($organizationsLink = $link.view('organizations.JsonOrganizations').unset('site_id'))
+#set($locationsLink = $link.view('locations.JsonLocations').unset('site_id'))
 #set($link = $link.set('node_id',$cms_data.node.id))
 ##
 $pageTool.addStyleLink('style/cms-admin-forms.css')##
@@ -86,7 +86,7 @@ function gotoDocument(url, docid) {
 // organizations / events autocomplete
 jQuery(document).ready(function()
 {
-   initEditDocumentAutocomplete(5, '$link.view('ngodatabase.JsonOrganizations')', '$link.view('ngodatabase.JsonLocations')', true);
+   initEditDocumentAutocomplete(5, '$link.view('organizations.JsonOrganizations')', '$link.view('locations.JsonLocations')', true);
 });
                                                                                                                                                            
 // -->
