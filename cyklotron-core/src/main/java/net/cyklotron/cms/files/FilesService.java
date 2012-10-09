@@ -242,6 +242,14 @@ public interface FilesService
      * @throws InvalidResourceNameException
      */
     DirectoryResource createParentDirs(CoralSession session, String filepath, SiteResource site)  throws FileAlreadyExistsException, FilesException, InvalidResourceNameException;
-
-    public void replaceFile(FileResource file, InputStream uploadedInputStream, long size) throws IOException;     
+    
+    /**
+     * Replace file content. Does not file name change determining file must have same mime type. 
+     * @param file
+     * @param uploadedInputStream
+     * @param mimetype
+     * @throws IOException
+     */
+    public void replaceFile(FileResource file, InputStream uploadedInputStream)
+        throws IOException;
 }

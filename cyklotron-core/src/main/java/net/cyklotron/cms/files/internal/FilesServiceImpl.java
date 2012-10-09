@@ -741,30 +741,37 @@ public class FilesServiceImpl
         }
         return (DirectoryResource)parent;
     }
-
+    
     @Override
-    public void replaceFile(FileResource file, InputStream uploadedInputStream, long size) 
-                    throws IOException
-    {        
+    public void replaceFile(FileResource file, InputStream uploadedInputStream)
+        throws IOException
+    {
         OutputStream output = getOutputStream(file);
-        rewrite(uploadedInputStream, output);
+        long size = rewrite(uploadedInputStream, output);
+        file.update();
         file.setSize(size);
-        //file.setMimetype(mimetype);
         file.update();
     }
     
-    private long rewrite(InputStream input, OutputStream output) throws IOException {
-        byte[] buffer = new byte[256];
+    private long rewrite(InputStream input, OutputStream output)
+        throws IOException
+    {
+        byte[] buffer = new byte[1024];
         long total = 0;
         int bytesRead = 0;
-        while ((bytesRead = input.read(buffer)) != -1) {
-            output.write(buffer, 0, bytesRead);
-            total += bytesRead;
+        do
+        {
+            bytesRead = input.read(buffer, 0, 1024);
+            if(bytesRead > 0)
+            {
+                output.write(buffer, 0, bytesRead);
+                total += bytesRead;
+            }
         }
-        
+        while(bytesRead > 0);
+        output.close();
+        input.close();
         return total;
     }
-    
-  
 }
 
