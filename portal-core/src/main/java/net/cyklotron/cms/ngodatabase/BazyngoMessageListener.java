@@ -104,7 +104,7 @@ public class BazyngoMessageListener
                         logger.info("get organization message: " + bazyngoMessage.toString());
                         OrganizationBazyngoMessage organizationMessage = (OrganizationBazyngoMessage)bazyngoMessage;
                         OrganizationResource organization = ngoDatabaseServiceImpl
-                            .getOrganizationResource(coralSession, organizationMessage.getexternalIdentifier());
+                            .getOrganizationResource(coralSession, organizationMessage.getExternalIdentifier());
                         if(organization != null)
                         {
                             synchronized(organization)
@@ -352,12 +352,12 @@ public class BazyngoMessageListener
         @JsonProperty("organization_name")
         private String organizationName;
 
-        public String getexternalIdentifier()
+        public String getExternalIdentifier()
         {
             return externalIdentifier;
         }
 
-        public void setId(String externalIdentifier)
+        public void setExternalIdentifier(String externalIdentifier)
         {
             this.externalIdentifier = externalIdentifier;
         }
