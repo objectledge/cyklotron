@@ -4,3 +4,4 @@ rml/coral/CoralDatatypesInitial.rml
 rml/cyklotron/common/base.rml
 
 src/main/resources/rml/ngo.pl/docimport/docimport.rml
+src/main/resources/rml/bazy/bazy.rml
