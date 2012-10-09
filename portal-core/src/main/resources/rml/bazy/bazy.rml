@@ -1,8 +1,0 @@
-CREATE RESOURCE CLASS 'bazy.organizations.organization'
-JAVA CLASS 'net.cyklotron.bazy.organizations.OrganizationResourceImpl'
-HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
-ATTRIBUTES (
-string organizationName,
-text data
-);
