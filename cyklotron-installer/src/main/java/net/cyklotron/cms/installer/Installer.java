@@ -10,6 +10,7 @@ import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.coral.tools.DataSourceFactory;
 import org.objectledge.coral.tools.init.InitComponent;
+import org.objectledge.coral.tools.rml.RmlRunnerComponent;
 import org.objectledge.filesystem.FileSystem;
 
 public class Installer
@@ -50,6 +51,7 @@ public class Installer
         initDataSource();
 
         initSchema();
+        installModules();
     }
 
     private void initLogger()
@@ -101,6 +103,20 @@ public class Installer
         catch(SQLException e)
         {
             die("failed to initialize Coral schema init component", e);
+        }
+    }
+
+    private void installModules()
+    {
+        try
+        {
+            RmlRunnerComponent runner = new RmlRunnerComponent(".", "config", "root",
+                "rml/cyklotron/install.list", "UTF-8", dataSource, fileSystem, log);
+            runner.run();
+        }
+        catch(Exception e)
+        {
+            die("failed to execute installation scripts", e);
         }
     }
 
