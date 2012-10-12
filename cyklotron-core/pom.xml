@@ -166,7 +166,7 @@
         <artifactId>coral-maven2-plugin</artifactId>
         <version>${versions.coral}</version>
         <configuration>
-          <sourcesList>src/main/rml-sources-gen.list</sourcesList>
+          <sourcesList>rml.list</sourcesList>
           <packageIncludes>net.cyklotron.*</packageIncludes>
         </configuration>
         <executions>

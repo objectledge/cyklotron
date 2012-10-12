@@ -1,0 +1,27 @@
+# Coral datatypes
+rml/coral/CoralDatatypesInitial.rml
+
+# Class definitions
+src/main/rml/cyklotron/common/base.rml
+src/main/rml/cyklotron/common/abstract.rml
+src/main/rml/cyklotron/integration/integration.rml
+src/main/rml/cyklotron/security/security.rml
+src/main/rml/cyklotron/preferences/preferences.rml
+src/main/rml/cyklotron/site/site.rml
+src/main/rml/cyklotron/style/style.rml
+src/main/rml/cyklotron/skins/skins.rml
+src/main/rml/cyklotron/workflow/workflow.rml
+src/main/rml/cyklotron/category/category.rml
+src/main/rml/cyklotron/files/files.rml
+src/main/rml/cyklotron/structure/structure.rml
+src/main/rml/cyklotron/search/search.rml
+src/main/rml/cyklotron/category/category-query.rml
+src/main/rml/cyklotron/related/related.rml
+src/main/rml/cyklotron/link/link.rml
+src/main/rml/cyklotron/forum/forum.rml
+src/main/rml/cyklotron/poll/poll.rml
+src/main/rml/cyklotron/banner/banner.rml
+src/main/rml/cyklotron/httpfeed/httpfeed.rml
+src/main/rml/cyklotron/syndication/syndication.rml
+src/main/rml/cyklotron/periodicals/periodicals.rml
+src/main/rml/cyklotron/catalogue/catalogue.rml
