@@ -29,4 +29,5 @@
 
 <config>
   <transactionTimeout>300</transactionTimeout>
+  <statementLog>org.objectledge.database.SQL</statementLog>
 </config>
