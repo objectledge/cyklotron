@@ -116,7 +116,11 @@
 	<dependency>
 	    <groupId>com.sun.jersey</groupId>
 	    <artifactId>jersey-json</artifactId>
-	</dependency>    
+	</dependency>
+	<dependency>
+	  <groupId>org.codehaus.btm</groupId>
+	  <artifactId>btm</artifactId>
+	</dependency>
   </dependencies>
   <build>
     <plugins>
