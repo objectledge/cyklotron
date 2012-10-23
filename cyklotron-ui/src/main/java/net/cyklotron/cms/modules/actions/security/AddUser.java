@@ -444,21 +444,6 @@ public class AddUser extends BaseSecurityAction
 	    throws ProcessingException, Exception
 	{
 	    Principal principal = userManager.createAccount(login, name, password);
-	    Subject subject = null;
-	    try
-	    {
-	        subject = coralSession.getSecurity().getSubject(name);
-	        Role role = coralSession.getSecurity().getUniqueRole("cms.registered");
-	        coralSession.getSecurity().grant(role, subject, false);
-	    }
-	    catch (EntityDoesNotExistException e)
-	    {
-	        throw new ProcessingException("User was not found in ARL",e);
-	    }
-	    catch (SecurityException e)
-	    {
-	        throw new ProcessingException("Granting cms.registerd role failed",e);
-	    }
 		return principal;
 	}
     
