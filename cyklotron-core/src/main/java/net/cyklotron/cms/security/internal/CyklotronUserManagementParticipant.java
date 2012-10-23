@@ -36,7 +36,7 @@ public class CyklotronUserManagementParticipant
         throws UserAlreadyExistsException
     {
 
-        try (CoralSession coralSession = coralSessionFactory.getCurrentSession())
+        try (CoralSession coralSession = coralSessionFactory.getRootSession())
         {
             Subject subject = coralSession.getSecurity().getSubject(user.getName());
             Role role = coralSession.getSecurity().getUniqueRole("cms.registered");
