@@ -28,7 +28,6 @@
 
 package net.cyklotron.cms.confirmation;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -196,7 +195,7 @@ public class EmailConfirmationServiceImpl
             throw new ProcessingException("message rendering failed", e);
         }
     }
-  
+
     @Override
     public void deleteNotConfirmedEmailConfirmationRequests(CoralSession coralSession,
         String howMany, String howOld)
@@ -205,7 +204,7 @@ public class EmailConfirmationServiceImpl
         Resource res = getConfirmationRequestsRoot(coralSession);
         Resource[] confirmations = res.getChildren();
         Date ServerDate = new Date();
-        int i = 0;
+        int i = 1;
         for(Resource r : confirmations)
         {
             if(i == Integer.parseInt(howMany))
@@ -218,7 +217,6 @@ public class EmailConfirmationServiceImpl
                 if(r instanceof EmailConfirmationRequestResourceImpl)
                 {
                     Date date = r.getCreationTime();
-                 System.out.println(date);
                     Calendar c = Calendar.getInstance();
                     c.setTime(date);
                     c.add(Calendar.DATE, Integer.parseInt(howOld));
@@ -239,4 +237,4 @@ public class EmailConfirmationServiceImpl
             }
         }
     }
-    }
+}
