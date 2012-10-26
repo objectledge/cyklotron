@@ -15,6 +15,8 @@ import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
+import javax.naming.directory.SearchControls;
+import javax.naming.directory.SearchResult;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.modules.actions.BaseCMSAction;
@@ -36,7 +38,9 @@ public class BAZYNGO318LdapCleanUp
 {
     private final ContextHelper directory;
 
-    private final static String PREFIX = "123abc";
+    private final static String PREFIX = "123abcddsda";
+    
+    private static int LIMIT = 30;
 
     public BAZYNGO318LdapCleanUp(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, ContextFactory factory)
@@ -51,6 +55,7 @@ public class BAZYNGO318LdapCleanUp
         TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession)
         throws ProcessingException
     {
+        final int limitOfEntries = parameters.getInt("limit", LIMIT);
         logger.info("LDAP CLEANUP RAN");
         // for testing purposes I gonna do just clean up on one specific person and after confirming
         // that it works
@@ -59,11 +64,29 @@ public class BAZYNGO318LdapCleanUp
         {
             DirContext dirContext = directory.getBaseDirContext();
 
-            NamingEnumeration<NameClassPair> list = dirContext.list("");
-            while(list.hasMore())
+         // Create the default search controls
+            SearchControls ctls = new SearchControls();
+
+            // Specify the search filter to match
+            // Ask for objects that have the attribute "sn" == "Geisel"
+            // and the "mail" attribute
+            String filter = "(objectClass=cyklotronPerson)";
+            //ctls.setCountLimit(limitOfEntries);
+            ctls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+            // Search for objects using the filter
+            NamingEnumeration<SearchResult> answer = dirContext.search("", filter, ctls);
+            int proccessedCount = -1;
+            while(answer.hasMore() && proccessedCount < limitOfEntries)
             {
-                NameClassPair nc = list.next();
-                String rdn = nc.getName(); // retrives uid=xxx
+                proccessedCount++;
+                SearchResult result = answer.nextElement();
+                String rdn = result.getName();
+            //}
+            //NamingEnumeration<NameClassPair> list = dirContext.list("");
+            //while(list.hasMore())
+            //{
+            //    NameClassPair nc = list.next();
+            //    String rdn = nc.getName(); // retrives uid=xxx
                 String login = rdn.substring(4); // xxx 
                 String newRdn = "uid=" + PREFIX + login;
                 
