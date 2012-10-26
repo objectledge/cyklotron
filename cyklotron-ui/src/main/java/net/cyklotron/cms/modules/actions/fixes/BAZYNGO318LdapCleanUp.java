@@ -184,12 +184,12 @@ public class BAZYNGO318LdapCleanUp
             copyItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute("l",
                 city)));
         }
-        String country = getCleanedCountry(attributes);
-        if(country != null)
-        {
-            copyItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute("c",
-                country)));
-        }
+//        String country = getCleanedCountry(attributes);
+//        if(country != null)
+//        {
+//            copyItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute("c",
+//                country)));
+//        }
         Address address = getCleanedAddress(attributes);
         if(address.hasPostalCode())
         {
