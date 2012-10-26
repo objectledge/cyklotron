@@ -29,6 +29,7 @@
         <property name="databaseName">lcms</property>
         <property name="user">cyklotron</property>
         <property name="password">coraltest</property>
+        <property name="prepareThreshold">100</property>
       </driverProperties>
     </connectionPool>
   </jdbc>
