@@ -138,6 +138,7 @@ public class EmailConfirmationServiceImpl
      * @param coralSession CoralSession.
      * @return the confirmationResources root.
      */
+    @Override
     public Resource getConfirmationRequestsRoot(CoralSession coralSession)
     {
         if(confirmationRoot == null)
