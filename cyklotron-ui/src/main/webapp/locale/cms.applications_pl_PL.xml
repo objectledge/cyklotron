@@ -1132,6 +1132,9 @@
     </prefix>
   </prefix>
   
+  
+  
+  
   <prefix name="syndication">
     <prefix name="components">
       <prefix name="incoming_feed_view">
@@ -1167,62 +1170,7 @@
       <value>Agregacja dokumentów z serwisów pobocznych do serwisu głównego.</value>
     </prefix>
   </prefix>
-  
-  <prefix name="account">
-  	<prefix name="name">
-	  	<value>Konto</value>
-  	</prefix>
-  	<prefix name="description">
-  		<value>Wyświetla ekran rejestracji konta</value>
-  	</prefix>
-  	<prefix name="screens" >
-  		<prefix name="account">
-  			<prefix name="states">
-  				<prefix name="Login">
-  					<prefix name="description">
-  						<value>Wyświetla ekran logowania uzytkownika</value>
-  					</prefix>
-  			
-  					<prefix name="name">
-  						<value>Ekran logowania</value>
-  					</prefix>
-  				</prefix>
-  		
-  				<prefix name="Signup">
-  					<prefix name="description">
-  						<value>Wyświetla ekran rejestracji uzytkownika</value>
-  					</prefix>
-  			
-  					<prefix name="name"> 
-  						<value>Ekran rejestracji</value>
-  					</prefix>		
-  				</prefix>
-  		
-  				<prefix name="ResendPassword">
-  					<prefix name="description">
-  						<value>Ekran resetowania hasla</value>
-  					</prefix>
-  			
-  					<prefix name="name">
-  						<value>Ekran resetowania hasła</value>
-  					</prefix>
-  				</prefix>
-  		
-  				<prefix name="Dashboard">
-  					<prefix name="description">
-  						<value>Ekran danych uzytkownika</value>
-  					</prefix>
-  			
-  					<prefix name="name">
-  						<value>Dashboard</value>
-  					</prefix>
-  				</prefix>  					
-  			</prefix>	
-  		</prefix>		
-  	</prefix>
-  </prefix>
-  
-  
+
   <prefix name="statistics">
     <prefix name="name">
       <value>Statystyki</value>

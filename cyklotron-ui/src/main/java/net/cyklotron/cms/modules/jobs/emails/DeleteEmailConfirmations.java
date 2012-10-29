@@ -10,23 +10,27 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.scheduler.Job;
 
-public class DeleteEmailConfirmations extends Job
+public class DeleteEmailConfirmations
+    extends Job
 {
     private CoralSessionFactory sessionFactory;
+
     private EmailConfirmationService emailConfirmationService;
+
     // initialization ///////////////////////////////////////////////////////
-    
+
     /**
      *
      */
-    public DeleteEmailConfirmations(CoralSessionFactory sessionFactory, EmailConfirmationService emailConfirmationService)
+    public DeleteEmailConfirmations(CoralSessionFactory sessionFactory,
+        EmailConfirmationService emailConfirmationService)
     {
         this.emailConfirmationService = emailConfirmationService;
         this.sessionFactory = sessionFactory;
     }
 
     // Job interface ////////////////////////////////////////////////////////
-    
+
     /**
      * Performs the mainteance.
      */
@@ -35,8 +39,9 @@ public class DeleteEmailConfirmations extends Job
         CoralSession coralSession = sessionFactory.getRootSession();
         try
         {
-            String[] res = arguments[0].split("\\,\\s*");       
-            emailConfirmationService.deleteNotConfirmedEmailConfirmationRequests(coralSession, res[0], res[1]);
+            String[] res = arguments[0].split("\\,\\s*");
+            emailConfirmationService.deleteNotConfirmedEmailConfirmationRequests(coralSession,
+                res[0], res[1]);
         }
         catch(ConfirmationRequestException e)
         {
