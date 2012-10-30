@@ -32,16 +32,6 @@
     </dependency>
     <dependency>
       <groupId>org.objectledge</groupId>
-      <artifactId>ledge-lgpl</artifactId>
-      <exclusions>
-        <exclusion>
-          <artifactId>connector</artifactId>
-          <groupId>javax.resource</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.objectledge</groupId>
       <artifactId>ledge-forms</artifactId>
       <classifier>classes</classifier>
     </dependency>
