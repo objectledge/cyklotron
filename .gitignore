@@ -7,3 +7,4 @@ target/
 /cyklotron-webapp/eclipse
 *~
 .metadata
+/portal-webapp/workdir

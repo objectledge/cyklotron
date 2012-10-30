@@ -28,6 +28,7 @@
 
 package net.cyklotron.cms.confirmation;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -137,6 +138,7 @@ public class EmailConfirmationServiceImpl
      * @param coralSession CoralSession.
      * @return the confirmationResources root.
      */
+    @Override
     public Resource getConfirmationRequestsRoot(CoralSession coralSession)
     {
         if(confirmationRoot == null)
@@ -177,7 +179,7 @@ public class EmailConfirmationServiceImpl
             }
             if(templatingContextEntries != null)
             {
-                for(Map.Entry<String,Object> entry : templatingContextEntries.entrySet())
+                for(Map.Entry<String, Object> entry : templatingContextEntries.entrySet())
                 {
                     templatingContext.put(entry.getKey(), entry.getValue());
                 }
@@ -192,6 +194,48 @@ public class EmailConfirmationServiceImpl
         catch(Exception e)
         {
             throw new ProcessingException("message rendering failed", e);
+        }
+    }
+
+    @Override
+    public void deleteNotConfirmedEmailConfirmationRequests(CoralSession coralSession,
+        String howMany, String howOld)
+        throws ConfirmationRequestException
+    {
+        Resource res = getConfirmationRequestsRoot(coralSession);
+        Resource[] confirmations = res.getChildren();
+        Date ServerDate = new Date();
+        int i = 1;
+        for(Resource r : confirmations)
+        {
+            if(i == Integer.parseInt(howMany))
+            {
+                break;
+            }
+            else
+            {
+                i++;
+                if(r instanceof EmailConfirmationRequestResourceImpl)
+                {
+                    Date date = r.getCreationTime();
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(date);
+                    c.add(Calendar.DATE, Integer.parseInt(howOld));
+                    date = c.getTime();
+                    if(date.before(ServerDate))
+                    {
+                        try
+                        {
+                            coralSession.getStore().deleteResource(r);
+                        }
+                        catch(IllegalArgumentException | EntityInUseException e)
+                        {
+                            new ConfirmationRequestException(
+                                "Failed to remove email confirmation request");
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -30,5 +30,5 @@
 <config>
   <server>localhost</server>
   <port>8080</port>
-  <context>cyklotron</context>
+  <context>/cyklotron/</context>
 </config>

@@ -1,5 +1,27 @@
 package net.cyklotron.cms.skins.internal;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import org.jcontainer.dna.Logger;
+import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.security.Subject;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.Resource;
+import org.objectledge.encodings.HTMLEntityEncoder;
+import org.objectledge.filesystem.FileSystem;
+import org.objectledge.i18n.I18n;
+import org.objectledge.mail.MailSystem;
+import org.objectledge.templating.Template;
+import org.objectledge.templating.TemplateNotFoundException;
+import org.objectledge.templating.Templating;
+import org.objectledge.web.mvc.finders.MVCFinder;
+
 import net.cyklotron.cms.CmsNodeResourceImpl;
 import net.cyklotron.cms.integration.ComponentResource;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -19,28 +41,6 @@ import net.cyklotron.cms.skins.SystemScreenResource;
 import net.cyklotron.cms.skins.SystemScreenResourceImpl;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
-
-import org.jcontainer.dna.Logger;
-import org.objectledge.coral.entity.EntityInUseException;
-import org.objectledge.coral.security.Subject;
-import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
-import org.objectledge.encodings.HTMLEntityEncoder;
-import org.objectledge.filesystem.FileSystem;
-import org.objectledge.i18n.I18n;
-import org.objectledge.mail.MailSystem;
-import org.objectledge.templating.Template;
-import org.objectledge.templating.TemplateNotFoundException;
-import org.objectledge.templating.Templating;
-import org.objectledge.web.mvc.finders.MVCFinder;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 
 /**
@@ -831,6 +831,11 @@ public class SkinServiceImpl
                                                            String app, String screen)
         throws SkinException
     {
+        if(app == null || screen == null)
+        {
+            // screen not yet chosen, don't report any variants.
+            return new ScreenVariantResource[0];
+        }
         Resource[] res = coralSession.getStore().getResource(site, "skins");
         if(res.length != 1)
         {

@@ -1132,6 +1132,9 @@
     </prefix>
   </prefix>
   
+  
+  
+  
   <prefix name="syndication">
     <prefix name="components">
       <prefix name="incoming_feed_view">
@@ -1167,7 +1170,7 @@
       <value>Agregacja dokumentów z serwisów pobocznych do serwisu głównego.</value>
     </prefix>
   </prefix>
-  
+
   <prefix name="statistics">
     <prefix name="name">
       <value>Statystyki</value>

@@ -75,7 +75,7 @@ public class CmsData
     
     private Date date;
 
-    private Set renderedComponentInstances;
+    private Set<String> renderedComponentInstances;
     private CmsComponentData componentData;
 
     private UserData userData;
@@ -366,16 +366,22 @@ public class CmsData
      */
     public String getBrowseMode()
     {
-        Map modes = getBrowseModes();
-        String mode = BROWSE_MODE_ADMINISTER;
-        if(site != null)
+        Map<String, String> modes = getBrowseModes();
+        String mode;
+        if(site == null)
         {
-            String siteName = site.getName();
-            mode = (String)(modes.get(siteName));
-            if(mode == null)
+            mode = BROWSE_MODE_ADMINISTER;
+        }
+        else
+        {
+            mode = BROWSE_MODE_BROWSE;
+            if(modes != null)
             {
-                mode = BROWSE_MODE_BROWSE;
-                modes.put(siteName, mode);
+                String siteName = site.getName();
+                if(modes.containsKey(siteName))
+                {
+                    mode = modes.get(siteName);
+                }
             }
         }
         if(adminMode)
@@ -394,7 +400,13 @@ public class CmsData
      */
     public void setBrowseMode(String mode)
     {
-        Map modes = getBrowseModes();
+        Map<String, String> modes = getBrowseModes();
+        if(modes == null)
+        {
+            modes = new HashMap<>();
+            HttpContext httpContext = HttpContext.getHttpContext(context);
+            httpContext.setSessionAttribute(BROWSE_MODES_KEY, modes);
+        }
         modes.put(site.getName(), mode);
     }
     
@@ -460,7 +472,7 @@ public class CmsData
         // Check if this instance name does not have any duplicates in current layout
         if(renderedComponentInstances == null)
         {
-            renderedComponentInstances = new HashSet();
+            renderedComponentInstances = new HashSet<>();
         }
         if(renderedComponentInstances.contains(instanceName))
         {
@@ -555,16 +567,10 @@ public class CmsData
         }
     }
 
-    private Map getBrowseModes()
+    private Map<String, String> getBrowseModes()
     {
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        Map modes = (Map)(httpContext.getSessionAttribute(BROWSE_MODES_KEY));
-        if(modes == null)
-        {
-            modes = new HashMap();
-            httpContext.setSessionAttribute(BROWSE_MODES_KEY, modes);
-        }
-        return modes;
+        return (Map<String, String>)httpContext.getSessionAttribute(BROWSE_MODES_KEY);
     }
     
     private CoralSession getCoralSession(Context context)

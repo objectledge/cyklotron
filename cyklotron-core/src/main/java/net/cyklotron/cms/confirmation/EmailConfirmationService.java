@@ -31,6 +31,7 @@ package net.cyklotron.cms.confirmation;
 import java.util.Map;
 
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 
@@ -50,8 +51,9 @@ public interface EmailConfirmationService
      * @param email the requestors email address.
      * @return a magic cookie to be returned to the user.
      */
-    public String createEmailConfirmationRequest(CoralSession coralSession, String email, String items)
-    throws ConfirmationRequestException;
+    public String createEmailConfirmationRequest(CoralSession coralSession, String email,
+        String items)
+        throws ConfirmationRequestException;
 
     /**
      * Return a subscription change request.
@@ -61,7 +63,7 @@ public interface EmailConfirmationService
      */
     public EmailConfirmationRequestResource getEmailConfirmationRequest(CoralSession coralSession,
         String cookie)
-    throws ConfirmationRequestException;
+        throws ConfirmationRequestException;
 
     /**
      * Discard a subscription change request.
@@ -69,10 +71,10 @@ public interface EmailConfirmationService
      * @param cookie the magic cookie recieved form the user.
      */
     public void discardEmailConfirmationRequest(CoralSession coralSession, String cookie)
-    throws ConfirmationRequestException;
+        throws ConfirmationRequestException;
 
     /**
-     * Sent EmailConfirmationRequest
+     * Send EmailConfirmationRequest
      * 
      * @param cookie the magic cookie to include in the message
      * @param sender sender's e-mail address
@@ -90,5 +92,17 @@ public interface EmailConfirmationService
         Map<String, Object> templatingContextEntries, NavigationNodeResource node,
         Template template, String medium, LinkRenderer linkRenderer, CoralSession coralSession)
         throws ProcessingException;
+
+    /**
+     * Delete inactive email confirmation requests
+     */
+
+    public void deleteNotConfirmedEmailConfirmationRequests(CoralSession coralSession, String howMany, String howOld)
+        throws ConfirmationRequestException;
     
+    /**
+     *  Get email confirmation request root
+     */
+    public Resource getConfirmationRequestsRoot(CoralSession coralSession);
+
 }

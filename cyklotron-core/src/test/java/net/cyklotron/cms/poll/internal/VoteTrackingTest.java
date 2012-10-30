@@ -57,7 +57,7 @@ public class VoteTrackingTest
         mockResource = mock(Resource.class);
         resource = (Resource)mockResource.proxy();
 
-        mockHttpServletRequest.stubs().method("getSession").withNoArguments()
+        mockHttpServletRequest.stubs().method("getSession").with(ANYTHING)
             .will(returnValue(httpSession));
         mockHttpServletRequest.stubs().method("getCookies").withNoArguments()
             .will(returnValue(null));
