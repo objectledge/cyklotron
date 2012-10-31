@@ -28,6 +28,7 @@ import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.relation.RelationModification;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CircularDependencyException;
+import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
@@ -953,15 +954,28 @@ public class StructureServiceImpl
                 {
                     log.info("preloading validity start cache");
                     Timer timer = new Timer();
-                    AttributeDefinition<?> def = coralSession.getSchema().getResourceClass(
-                        NavigationNodeResource.CLASS_NAME).getAttribute("validityStart");
+                    final ResourceClass<?> nodeClass = coralSession.getSchema().getResourceClass(
+                        NavigationNodeResource.CLASS_NAME);
+                    String query;
+                    if(nodeClass.getDbTable() == null)
+                    {
+                        AttributeDefinition<?> def = nodeClass.getAttribute("validityStart");
+                        // @formatter:off
+                        query = "SELECT g.resource_id, d.data "
+                            + "FROM coral_attribute_date d, coral_generic_resource g "
+                            + "WHERE g.attribute_definition_id = " + def.getId() + " "
+                            + "AND d.data_key = g.data_key";
+                        // @formatter:on
+                    }
+                    else
+                    {
+                        query = "SELECT n.resource_id, n.validityStart "
+                            + "FROM structure_navigation_node n";
+                    }
                     
                     conn = database.getConnection();
                     stmt = conn.createStatement();
-                    rset = stmt.executeQuery("SELECT g.resource_id, d.data "
-                        + "FROM coral_attribute_date d, coral_generic_resource g "
-                        + "WHERE g.attribute_definition_id = " + def.getId() + " "
-                        + "AND d.data_key = g.data_key");
+                    rset = stmt.executeQuery(query);
                     
                     GregorianCalendar cal = new GregorianCalendar();
                     int counter = 0;
