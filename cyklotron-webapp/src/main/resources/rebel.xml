@@ -18,8 +18,6 @@
 		</dir>
 		<dir name="${workspace.root}/cyklotron/cyklotron-ui/target/classes">
 		</dir>
-		<dir name="${workspace.root}/cyklotron/cyklotron-ui-fckeditor/target/classes">
-		</dir>
 		<dir name="${workspace.root}/cyklotron/cyklotron-webapp/target/classes">
 		</dir>
 		<dir name="${workspace.root}/ledge/ledge-components/target/classes">
@@ -27,12 +25,6 @@
 		<dir name="${workspace.root}/ledge/ledge-container/target/classes">
 		</dir>
 		<dir name="${workspace.root}/ledge/ledge-forms/target/classes">
-		</dir>
-		<dir name="${workspace.root}/ledge/ledge-forms-fckeditor/target/classes">
-		</dir>
-		<dir name="${workspace.root}/ledge/ledge-gpl/target/classes">
-		</dir>
-		<dir name="${workspace.root}/ledge/ledge-lgpl/target/classes">
 		</dir>
 		<dir name="${workspace.root}/ledge/ledge-web/target/classes">
 		</dir>
