@@ -39,7 +39,7 @@ public class BAZYNGO318LdapCleanUp
     private final ContextHelper directory;
 
     private final static String PREFIX = "123abcddsda";
-    
+
     private static int LIMIT = 30;
 
     public BAZYNGO318LdapCleanUp(Logger logger, StructureService structureService,
@@ -57,21 +57,13 @@ public class BAZYNGO318LdapCleanUp
     {
         final int limitOfEntries = parameters.getInt("limit", LIMIT);
         logger.info("LDAP CLEANUP RAN");
-        // for testing purposes I gonna do just clean up on one specific person and after confirming
-        // that it works
-        // change for all people
         try
         {
             DirContext dirContext = directory.getBaseDirContext();
 
-         // Create the default search controls
+            // Create the default search controls
             SearchControls ctls = new SearchControls();
-
-            // Specify the search filter to match
-            // Ask for objects that have the attribute "sn" == "Geisel"
-            // and the "mail" attribute
             String filter = "(objectClass=cyklotronPerson)";
-            //ctls.setCountLimit(limitOfEntries);
             ctls.setSearchScope(SearchControls.SUBTREE_SCOPE);
             // Search for objects using the filter
             NamingEnumeration<SearchResult> answer = dirContext.search("", filter, ctls);
@@ -81,15 +73,9 @@ public class BAZYNGO318LdapCleanUp
                 proccessedCount++;
                 SearchResult result = answer.nextElement();
                 String rdn = result.getName();
-            //}
-            //NamingEnumeration<NameClassPair> list = dirContext.list("");
-            //while(list.hasMore())
-            //{
-            //    NameClassPair nc = list.next();
-            //    String rdn = nc.getName(); // retrives uid=xxx
-                String login = rdn.substring(4); // xxx 
+                String login = rdn.substring(4); // xxx
                 String newRdn = "uid=" + PREFIX + login;
-                
+
                 javax.naming.Context userContext = (javax.naming.Context)dirContext.lookup(rdn);
                 DirContext userDirContext = (DirContext)userContext;
                 Attributes userAttributes = userDirContext.getAttributes("");
@@ -105,75 +91,16 @@ public class BAZYNGO318LdapCleanUp
                     attrs.put(objclass);
                     attrs.put(snAttr);
                     attrs.put(cnAttr);
-                    
+
                     javax.naming.Context newContext = dirContext.createSubcontext(newRdn, attrs);
                     processUser(userContext, newContext); // contexts are closed after processing
                     dirContext.destroySubcontext(rdn);
-                    dirContext.rename(newRdn, rdn); // renames from newRdn to rdn so that PREFIX is gone.
+                    dirContext.rename(newRdn, rdn); // renames from newRdn to rdn so that PREFIX is
+                                                    // gone.
                 }
-                
+
             }
             dirContext.close();
-            /*
-            String rdn = "uid=marwald";
-            javax.naming.Context userContext = (javax.naming.Context)dirContext.lookup(rdn);
-            String newRdn = rdn + "123";
-            DirContext userDirContext = (DirContext)userContext;
-            Attributes userAttributes = userDirContext.getAttributes("");
-            Attribute snAttr = userAttributes.get("sn");
-            Attribute cnAttr = userAttributes.get("cn");
-            Attributes attrs = new BasicAttributes(true); // case-ignore
-            Attribute objclass = new BasicAttribute("objectclass");
-            objclass.add("shadowAccount");
-            objclass.add("inetOrgPerson");
-            objclass.add("logonTracking");
-            attrs.put(objclass);
-            attrs.put(snAttr);
-            attrs.put(cnAttr);
-            
-            javax.naming.Context newContext = dirContext.createSubcontext("uid=" + PREFIX
-                + "marwald", attrs);
-            //javax.naming.Context newContext = (javax.naming.Context)dirContext.lookup("uid="
-            //    + PREFIX + "marwald");
-            processUser(userContext, newContext);
-            dirContext.destroySubcontext("uid=marwald");
-            dirContext.rename("uid=" + PREFIX + "marwald", "uid=" + PREFIX + "marwald" + "renamed");
-            
-            // //////////////
-            NamingEnumeration<NameClassPair> list = dirContext.list("");
-            int i = 0;
-            while(list.hasMore())
-            {
-                NameClassPair nc = list.next();
-                // javax.naming.Context userContext = (javax.naming.Context)dirContext.lookup(nc
-                // .getName());
-                // processUser(userContext);
-                System.out.println(nc);
-                i++;
-                if(i > 10)
-                {
-                    break;
-                }
-                System.out.println(nc.getNameInNamespace());
-                System.out.println(nc.getName());
-            }
-            i = 0;
-            NamingEnumeration<Binding> bindings = dirContext.listBindings("");
-            // Object object = dirContext.lookup("uid=marwald");
-            // System.out.println("retrived object");
-            // System.out.println(object);
-
-            while(bindings.hasMore())
-            {
-                Binding binding = bindings.next();
-                System.out.println(binding);
-                i++;
-                if(i > 10)
-                {
-                    break;
-                }
-            }
-            */
 
         }
         catch(NamingException e)
@@ -207,12 +134,7 @@ public class BAZYNGO318LdapCleanUp
             copyItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute("l",
                 city)));
         }
-//        String country = getCleanedCountry(attributes);
-//        if(country != null)
-//        {
-//            copyItems.add(new ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute("c",
-//                country)));
-//        }
+
         Address address = getCleanedAddress(attributes);
         if(address.hasPostalCode())
         {
@@ -225,45 +147,12 @@ public class BAZYNGO318LdapCleanUp
                 "postalAddress", address.getPostalAddress())));
         }
 
-        // copyItems.addAll(addClasses(CLASSES_FOR_ADDITION));
-
-        // old below
-        /*
-         * for(NamingEnumeration<String> e = attributes.getIDs(); e.hasMore();) { String attrName =
-         * (String)e.next(); if(!(attrName.toLowerCase().equals("objectclass") ||
-         * attrName.toLowerCase().equals("uid") || attrName.toLowerCase().equals("userid") ||
-         * attrName.equals("sn") || attrName.equals("cn"))) { Attribute attribute =
-         * attributes.get(attrName); for(NamingEnumeration<?> valueElement = attribute.getAll();
-         * valueElement.hasMore();) { Object value = valueElement.next(); copyItems.add(new
-         * ModificationItem(DirContext.ADD_ATTRIBUTE, new BasicAttribute(attrName, value)));
-         * System.out.println("Adding attribute (Name, Value):(" + attrName + "," + value.toString()
-         * + ")"); } } }
-         */
-        // dirContextToModify.modifyAttributes(rdn,
-        // (ModificationItem[])copyItems.toArray(new ModificationItem[copyItems.size()]));
         newDirContext.modifyAttributes("",
             (ModificationItem[])copyItems.toArray(new ModificationItem[copyItems.size()]));
         newDirContext.close();
         dirContext.close();
-        /*
-         * Attributes newAttributes = newDirContext.getAttributes(""); List<ModificationItem>
-         * modificationItems = new ArrayList<>(); //
-         * modificationItems.addAll(addClasses(CLASSES_FOR_ADDITION)); //
-         * modificationItems.addAll(modifyObjectClass(attributes, CLASSES_FOR_REMOVAL, //
-         * DirContext.REMOVE_ATTRIBUTE)); modificationItems.addAll(mergeMail(newAttributes));
-         * modificationItems.addAll(cleanAddress(newAttributes));
-         * modificationItems.addAll(cleanCity(newAttributes));
-         * modificationItems.addAll(cleanCountry(newAttributes));
-         * modificationItems.addAll(removeAttributes(ATTRIBUTES_FOR_REMOVAL, newAttributes));
-         * newDirContext.modifyAttributes("", (ModificationItem[])modificationItems .toArray(new
-         * ModificationItem[modificationItems.size()])); // dirContext.modifyAttributes("",
-         * (ModificationItem[])modificationItems // .toArray(new
-         * ModificationItem[modificationItems.size()])); dirContext.close(); newDirContext.close();
-         * // debug // // while(allAttributes.hasMore()) { Attribute next = allAttributes.next(); //
-         * System.out.println(next.getID()); }
-         */
-    }
 
+    }
 
     private String getCleanedCountry(Attributes attributes)
         throws NamingException
@@ -286,7 +175,6 @@ public class BAZYNGO318LdapCleanUp
         return null;
     }
 
-
     private String getCleanedCity(Attributes attributes)
         throws NamingException
     {
@@ -307,7 +195,6 @@ public class BAZYNGO318LdapCleanUp
         return null;
     }
 
-  
     private Address getCleanedAddress(Attributes attributes)
         throws NamingException
     {
@@ -331,7 +218,6 @@ public class BAZYNGO318LdapCleanUp
         }
         return new Address();
     }
-
 
     private Collection<String> getMergedMails(Attributes attributes)
         throws NamingException
