@@ -7,7 +7,10 @@ import org.objectledge.authentication.UserInUseException;
 import org.objectledge.authentication.UserManagementParticipant;
 import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.security.Role;
+import org.objectledge.coral.security.RoleAssignment;
+import org.objectledge.coral.security.SecurityException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
@@ -28,7 +31,7 @@ public class CyklotronUserManagementParticipant
     @Override
     public boolean supportsRemoval()
     {
-        return false;
+        return true;
     }
 
     @Override
@@ -52,8 +55,24 @@ public class CyklotronUserManagementParticipant
     public void removeAccount(Principal user)
         throws UserUnknownException, UserInUseException
     {
-        // TODO Auto-generated method stub
-
+        CoralSession coralSession = coralSessionFactory.getRootSession();
+        Subject subject;
+        try
+        {
+            subject = coralSession.getSecurity().getSubject(user.getName());
+            RoleAssignment[] roles = subject.getRoleAssignments();
+            for(RoleAssignment role : roles)
+            {
+                coralSession.getSecurity().getRole(role.getRole().getId());
+                coralSession.getSecurity().revoke(role.getRole(), subject);
+            }
+            coralSession.getSecurity().deleteSubject(subject);
+        }
+        catch(EntityDoesNotExistException | IllegalArgumentException | SecurityException | EntityInUseException e)
+        {
+            throw new UserUnknownException("Failed to lookup coral subject", e);
+        }
+       
     }
 
 }
