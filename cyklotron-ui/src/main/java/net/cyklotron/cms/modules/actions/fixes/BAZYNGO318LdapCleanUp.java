@@ -154,27 +154,6 @@ public class BAZYNGO318LdapCleanUp
 
     }
 
-    private String getCleanedCountry(Attributes attributes)
-        throws NamingException
-    {
-        final String attrName = "c";
-        Attribute attribute = attributes.get(attrName);
-        if(attribute != null)
-        {
-            String country = (String)attribute.get();
-            if(country.trim().toLowerCase().equals("kraj"))
-            {
-                return null;
-            }
-            else
-            {
-                return country;
-            }
-
-        }
-        return null;
-    }
-
     private String getCleanedCity(Attributes attributes)
         throws NamingException
     {
