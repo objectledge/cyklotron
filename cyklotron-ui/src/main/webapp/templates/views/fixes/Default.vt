@@ -85,4 +85,10 @@
 <li><a href="$link.action('fixes.CYKLO834')">Reorganize footers resources</a></li>
 </ol>
 
+<h3>LDAP Clean up</h3>
+
+<ol>
+<li><a href="$link.action('fixes.BAZYNGO318LdapCleanUp')">Run LDAP clean up</a></li>
+</ol>
+
 <h5>Caution! Effects of of some of these actions cannot be undone. Make a backup and double check anything you do.</h5>

@@ -108,7 +108,7 @@ public class AddUser extends BaseSecurityAction
             {
                 admin = coralSession.getSecurity().getSubject(Subject.ROOT);
             }
-            principal = addUser(uid, dn, password, coralSession);
+            principal = addUser(uid, password, coralSession);
         }
         catch(ProcessingException e)
         {
@@ -440,10 +440,10 @@ public class AddUser extends BaseSecurityAction
         return UID_PATTERN.matcher(uid).matches();
     }
     
-    protected Principal addUser(String login, String name, String password, CoralSession coralSession) 
+    protected Principal addUser(String login, String password, CoralSession coralSession) 
 	    throws ProcessingException, Exception
 	{
-	    Principal principal = userManager.createAccount(login, name, password);
+	    Principal principal = userManager.createAccount(login, password);
 		return principal;
 	}
     
