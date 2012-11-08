@@ -55,20 +55,17 @@ public class CyklotronUserManagementParticipant
     public void removeAccount(Principal user)
         throws UserUnknownException, UserInUseException
     {
-        CoralSession coralSession = coralSessionFactory.getRootSession();
-        Subject subject;
-        try
+        try(CoralSession coralSession = coralSessionFactory.getRootSession())
         {
-            subject = coralSession.getSecurity().getSubject(user.getName());
+            Subject subject = coralSession.getSecurity().getSubject(user.getName());
             RoleAssignment[] roles = subject.getRoleAssignments();
             for(RoleAssignment role : roles)
             {
                 coralSession.getSecurity().getRole(role.getRole().getId());
                 coralSession.getSecurity().revoke(role.getRole(), subject);
             }
-            coralSession.getSecurity().deleteSubject(subject);
         }
-        catch(EntityDoesNotExistException | IllegalArgumentException | SecurityException | EntityInUseException e)
+        catch(EntityDoesNotExistException | IllegalArgumentException | SecurityException e)
         {
             throw new UserUnknownException("Failed to lookup coral subject", e);
         }
