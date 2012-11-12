@@ -1,10 +1,12 @@
 package net.cyklotron.cms.modules.actions.fixes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.naming.NameClassPair;
 import javax.naming.NamingEnumeration;
@@ -59,8 +61,8 @@ public class BAZYNGO318LdapCleanUp
         logger.info("LDAP CLEANUP RAN");
         try
         {
-            DirContext dirContext = directory.getBaseDirContext(); 
-            
+            DirContext dirContext = directory.getBaseDirContext();
+
             // Create the default search controls
             SearchControls ctls = new SearchControls();
             String filter = "(objectClass=cyklotronPerson)";
@@ -73,7 +75,7 @@ public class BAZYNGO318LdapCleanUp
                 proccessedCount++;
                 SearchResult result = answer.nextElement();
                 String rdn = result.getName(); // rdn: uid=xxx
-                String login = rdn.substring(4); //login:  xxx
+                String login = rdn.substring(4); // login: xxx
                 String newRdn = "uid=" + PREFIX + login; // uid=PREFIXxxx
 
                 javax.naming.Context userContext = (javax.naming.Context)dirContext.lookup(rdn);
@@ -100,18 +102,20 @@ public class BAZYNGO318LdapCleanUp
                 }
 
             }
-            
+
             // process root
             String rootRDN = "uid=root";
             String rootNewRDN = "uid=" + PREFIX + "root";
             processSystemUser(dirContext, rootRDN, rootNewRDN);
-            
+
             // process anonymous
             String anonymousRDN = "uid=anonymous";
             String anonymousNewRDN = "uid=" + PREFIX + "anonymous";
             processSystemUser(dirContext, anonymousRDN, anonymousNewRDN);
-            
-            
+
+            removeCyklotronSystemUsersButWithout(
+                new TreeSet<String>(Arrays.asList(rootRDN, anonymousRDN)), dirContext);
+
             dirContext.close();
 
         }
@@ -122,12 +126,33 @@ public class BAZYNGO318LdapCleanUp
 
     }
 
+    private void removeCyklotronSystemUsersButWithout(Set<String> excludedRDNs,
+        DirContext dirContext)
+        throws NamingException
+    {
+        SearchControls searchControls = new SearchControls();
+        String filterQuery = "(objectClass=cyklotronSystemUser)";
+        searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        NamingEnumeration<SearchResult> answer = dirContext.search("", filterQuery, searchControls);
+        while(answer.hasMore())
+        {
+            SearchResult result = answer.nextElement();
+            String rdn = result.getName();
+            if(!excludedRDNs.contains(rdn))
+            {
+                dirContext.destroySubcontext(rdn);
+            }
+        }
+    }
+
     private void processSystemUser(DirContext dirContext, String oldRDN, String newRDN)
         throws NamingException
     {
         javax.naming.Context systemUserContext = (javax.naming.Context)dirContext.lookup(oldRDN);
-        DirContext systemUserDirContext = (DirContext) systemUserContext;
-        Attributes systemUserAttributes = systemUserDirContext.getAttributes(""); // get current system user attributes
+        DirContext systemUserDirContext = (DirContext)systemUserContext;
+        Attributes systemUserAttributes = systemUserDirContext.getAttributes(""); // get current
+                                                                                  // system user
+                                                                                  // attributes
         if(systemUserAttributes.get("description") == null) // process system user only once
         {
             Attributes newAttributes = new BasicAttributes(true);
@@ -135,24 +160,24 @@ public class BAZYNGO318LdapCleanUp
             newAttributes.put(systemUserAttributes.get("uid"));
             // copy password
             newAttributes.put(systemUserAttributes.get("userPassword"));
-            
+
             // create new object classes
             Attribute objclass = new BasicAttribute("objectclass");
-            objclass.add("shadowAccount"); 
+            objclass.add("shadowAccount");
             objclass.add("logonTracking");
             objclass.add("organizationalRole");
             newAttributes.put(objclass);
-            
+
             // change cn attribute to current uid
             Attribute cn = new BasicAttribute("cn");
             cn.add(systemUserAttributes.get("uid").get());
             newAttributes.put(cn);
-            
+
             // create new description attribute with value of old cn
             Attribute description = new BasicAttribute("description");
             description.add(systemUserAttributes.get("cn").get());
             newAttributes.put(description);
-            
+
             // create new system user with prefix
             dirContext.createSubcontext(newRDN, newAttributes);
             // delete old system user
