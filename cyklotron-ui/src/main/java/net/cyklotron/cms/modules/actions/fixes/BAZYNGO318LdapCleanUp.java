@@ -39,6 +39,8 @@ public class BAZYNGO318LdapCleanUp
     extends BaseCMSAction
 {
     private final ContextHelper directory;
+    private final ContextFactory contextFactory;
+    private boolean part2Done;
 
     private final static String PREFIX = "123abcddsda";
 
@@ -50,6 +52,8 @@ public class BAZYNGO318LdapCleanUp
     {
         super(logger, structureService, cmsDataFactory);
         directory = new ContextHelper(factory, "people", logger);
+        contextFactory = factory;
+        part2Done = false;
     }
 
     @Override
@@ -115,6 +119,16 @@ public class BAZYNGO318LdapCleanUp
 
             removeCyklotronSystemUsersButWithout(
                 new TreeSet<String>(Arrays.asList(rootRDN, anonymousRDN)), dirContext);
+             
+            if(!part2Done) // this flag is set in processSystemUser
+            {
+                ContextHelper contextHelper = new ContextHelper(contextFactory, "ngo", logger);
+                DirContext ngoContext = contextHelper.getBaseDirContext();
+                // remove aliases subtree
+                ngoContext.destroySubcontext("ou=aliases");
+                // remove entry
+                ngoContext.destroySubcontext("cn=postmaster");
+            }
 
             dirContext.close();
 
@@ -184,6 +198,10 @@ public class BAZYNGO318LdapCleanUp
             dirContext.destroySubcontext(oldRDN);
             // remove prefix
             dirContext.rename(newRDN, oldRDN);
+        }
+        else
+        {
+            part2Done = true; // mark it so that removing aliases subtree will not create new context each time
         }
         systemUserDirContext.close();
     }
