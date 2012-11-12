@@ -101,44 +101,15 @@ public class BAZYNGO318LdapCleanUp
 
             }
             
+            // process root
             String rootRDN = "uid=root";
             String rootNewRDN = "uid=" + PREFIX + "root";
-            javax.naming.Context rootContext = (javax.naming.Context)dirContext.lookup(rootRDN);
-            DirContext rootDirContext = (DirContext) rootContext;
-            Attributes rootAttributes = rootDirContext.getAttributes(""); // get current root attributes
-            if(rootAttributes.get("description") == null) // process root only once
-            {
-                Attributes newRootAttributes = new BasicAttributes(true);
-                // copy uid
-                newRootAttributes.put(rootAttributes.get("uid"));
-                // copy password
-                newRootAttributes.put(rootAttributes.get("userPassword"));
-                
-                // create new object classes
-                Attribute objclass = new BasicAttribute("objectclass");
-                objclass.add("shadowAccount"); 
-                objclass.add("logonTracking");
-                objclass.add("organizationalRole");
-                newRootAttributes.put(objclass);
-                
-                // change cn attribute to current uid
-                Attribute cn = new BasicAttribute("cn");
-                cn.add(rootAttributes.get("uid").get());
-                newRootAttributes.put(cn);
-                
-                // create new description attribute with value of old cn
-                Attribute description = new BasicAttribute("description");
-                description.add(rootAttributes.get("cn").get());
-                newRootAttributes.put(description);
-                
-                // create new root with prefix
-                dirContext.createSubcontext(rootNewRDN, newRootAttributes);
-                // delete old root
-                dirContext.destroySubcontext(rootRDN);
-                // remove prefix
-                dirContext.rename(rootNewRDN, rootRDN);
-            }
+            processSystemUser(dirContext, rootRDN, rootNewRDN);
             
+            // process anonymous
+            String anonymousRDN = "uid=anonymous";
+            String anonymousNewRDN = "uid=" + PREFIX + "anonymous";
+            processSystemUser(dirContext, anonymousRDN, anonymousNewRDN);
             
             
             dirContext.close();
@@ -149,6 +120,47 @@ public class BAZYNGO318LdapCleanUp
             throw new RuntimeException("cleanup failed", e);
         }
 
+    }
+
+    private void processSystemUser(DirContext dirContext, String oldRDN, String newRDN)
+        throws NamingException
+    {
+        javax.naming.Context systemUserContext = (javax.naming.Context)dirContext.lookup(oldRDN);
+        DirContext systemUserDirContext = (DirContext) systemUserContext;
+        Attributes systemUserAttributes = systemUserDirContext.getAttributes(""); // get current system user attributes
+        if(systemUserAttributes.get("description") == null) // process system user only once
+        {
+            Attributes newAttributes = new BasicAttributes(true);
+            // copy uid
+            newAttributes.put(systemUserAttributes.get("uid"));
+            // copy password
+            newAttributes.put(systemUserAttributes.get("userPassword"));
+            
+            // create new object classes
+            Attribute objclass = new BasicAttribute("objectclass");
+            objclass.add("shadowAccount"); 
+            objclass.add("logonTracking");
+            objclass.add("organizationalRole");
+            newAttributes.put(objclass);
+            
+            // change cn attribute to current uid
+            Attribute cn = new BasicAttribute("cn");
+            cn.add(systemUserAttributes.get("uid").get());
+            newAttributes.put(cn);
+            
+            // create new description attribute with value of old cn
+            Attribute description = new BasicAttribute("description");
+            description.add(systemUserAttributes.get("cn").get());
+            newAttributes.put(description);
+            
+            // create new system user with prefix
+            dirContext.createSubcontext(newRDN, newAttributes);
+            // delete old system user
+            dirContext.destroySubcontext(oldRDN);
+            // remove prefix
+            dirContext.rename(newRDN, oldRDN);
+        }
+        systemUserDirContext.close();
     }
 
     private void processUser(javax.naming.Context userContext, javax.naming.Context newContext)
