@@ -122,11 +122,14 @@ public class BAZYNGO318LdapCleanUp
             removeCyklotronSystemUsersButWithout(
                 new TreeSet<String>(Arrays.asList(rootRDN, anonymousRDN)), dirContext);
 
-            if(!part2Done) // this flag is set in processSystemUser
+            if(!part2Done || parameters.isDefined("removeAliases")) // this flag is set in processSystemUser
             {
                 ContextHelper contextHelper = new ContextHelper(contextFactory, "ngo", logger);
                 DirContext ngoContext = contextHelper.getBaseDirContext();
                 // remove aliases subtree
+                DirContext aliasesContext = (DirContext)ngoContext.lookup("ou=aliases");
+                removeAllChildrenOfAliases(aliasesContext);
+                aliasesContext.close();
                 ngoContext.destroySubcontext("ou=aliases");
                 // remove entry
                 ngoContext.destroySubcontext("cn=postmaster");
@@ -140,6 +143,20 @@ public class BAZYNGO318LdapCleanUp
             throw new RuntimeException("cleanup failed", e);
         }
 
+    }
+
+    private void removeAllChildrenOfAliases(DirContext dirContext) throws NamingException
+    {
+        SearchControls ctls = new SearchControls();
+        String filter = "(objectClass=cyklotronMailAlias)";
+        ctls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+        NamingEnumeration<SearchResult> answer = dirContext.search("", filter, ctls);
+        while(answer.hasMore())
+        {
+            SearchResult result = answer.nextElement();
+            String rdn = result.getName();
+            dirContext.destroySubcontext(rdn);
+        }
     }
 
     private void removeCyklotronSystemUsersButWithout(Set<String> excludedRDNs,
