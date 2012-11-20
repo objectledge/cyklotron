@@ -98,6 +98,9 @@ public class PeriodicalsServiceImpl
 {
     // constants ////////////////////////////////////////////////////////////
     
+    /** sendingEnabled parameter key. */
+    public static final String SENDING_ENABLED_KEY = "send";
+
     /** serverName parameter key. */
     public static final String SERVER_NAME_KEY = "server";
 
@@ -164,6 +167,8 @@ public class PeriodicalsServiceImpl
 
     private final PeriodicalsSubscriptionService subscriptionService;
     
+    private final boolean sendingEnabled;
+
     public PeriodicalsServiceImpl(Configuration config, Logger logger,
         CategoryQueryService categoryQueryService, FilesService cmsFilesService,
         FileSystem fileSystem, MailSystem mailSystem, I18n i18n, SiteService siteService,
@@ -182,6 +187,7 @@ public class PeriodicalsServiceImpl
         {
             rendererFactories.put(renderers[i].getRendererName(), renderers[i]);
         }
+        sendingEnabled = config.getChild(SENDING_ENABLED_KEY).getValueAsBoolean(true);
         serverName = config.getChild(SERVER_NAME_KEY).getValue(); // no default
         port = config.getChild(PORT_KEY).getValueAsInteger(PORT_DEFAULT);
         context = config.getChild(CONTEXT_KEY).getValue(CONTEXT_DEFAULT);
@@ -278,7 +284,7 @@ public class PeriodicalsServiceImpl
         try
         {
             List<FileResource> results = generate(coralSession, periodical, time, update);
-            if(periodical instanceof EmailPeriodicalResource && send
+            if(sendingEnabled && periodical instanceof EmailPeriodicalResource && send
                 && (!results.isEmpty() || ((EmailPeriodicalResource)periodical).getSendEmpty()))
             {
                 FileResource last = results.get(results.size() - 1);
@@ -309,7 +315,7 @@ public class PeriodicalsServiceImpl
             try
             {
                 List<FileResource> results = generate(coralSession,p, time, true);
-                if(p instanceof EmailPeriodicalResource
+                if(sendingEnabled && p instanceof EmailPeriodicalResource
                     && (!results.isEmpty() || ((EmailPeriodicalResource)p).getSendEmpty()))
                 {
                     FileResource last = results.get(results.size() - 1);
