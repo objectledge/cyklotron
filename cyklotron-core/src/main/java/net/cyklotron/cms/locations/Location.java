@@ -39,16 +39,26 @@ public class Location
 {
     private String province;
 
+    private String district;
+
+    private String commune;
+
     private String city;
+
+    private String area;
 
     private String street;
 
     private String postCode;
 
-    public Location(String province, String city, String street, String postCode)
+    public Location(String province, String district, String commune, String city, String area,
+        String street, String postCode)
     {
         this.province = province;
+        this.district = district;
+        this.commune = commune;
         this.city = city;
+        this.area = area;
         this.street = street;
         this.postCode = postCode;
     }
@@ -86,4 +96,20 @@ public class Location
         }
         return false;
     }
+
+    public String getDistrict()
+    {
+        return district;
+    }
+
+    public String getCommune()
+    {
+        return commune;
+    }
+
+    public String getArea()
+    {
+        return area;
+    }
+
 }

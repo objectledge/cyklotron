@@ -40,7 +40,12 @@ public class LocationsIndex
         Document document = new Document();
         document.add(new Field("province", item.getProvince(), Field.Store.YES,
             Field.Index.ANALYZED));
+        document.add(new Field("district", item.getDistrict(), Field.Store.YES,
+            Field.Index.ANALYZED));
+        document.add(new Field("commune", item.getCommune(), Field.Store.YES,
+            Field.Index.ANALYZED));
         document.add(new Field("city", item.getCity(), Field.Store.YES, Field.Index.ANALYZED));
+        document.add(new Field("area", item.getArea(), Field.Store.YES, Field.Index.ANALYZED));
         document.add(new Field("street", item.getStreet(), Field.Store.YES, Field.Index.ANALYZED));
         document.add(new Field("postCode", item.getPostCode(), Field.Store.YES,
             Field.Index.NOT_ANALYZED));
@@ -51,10 +56,13 @@ public class LocationsIndex
     protected Location fromDocument(Document doc)
     {
         String province = doc.get("province");
+        String district = doc.get("district");
+        String commune = doc.get("commune");
         String city = doc.get("city");
+        String area = doc.get("area");
         String street = doc.get("street");
         String postCode = doc.get("postCode");
-        return new Location(province, city, street, postCode);
+        return new Location(province, district, commune, city, area, street, postCode);
     }
 
     /**
