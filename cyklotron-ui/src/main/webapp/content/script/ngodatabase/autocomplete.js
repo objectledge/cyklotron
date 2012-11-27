@@ -178,6 +178,227 @@ function initLocationAutocomplete(fields, jsonDataUrl) {
 	});
 }
 
+function flushTotalLocationCacheIfEmpty(fields, object) {
+	var object = object || null;
+	for (field in fields) {
+		if (object != fields[field]) {
+			fields[field].flushCache();
+		}
+	}
+}
+
+function initTotalLocationAutocomplete(fields, jsonDataUrl) {
+	fields.street.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
+		extraParams : {
+		    qarea : function() {
+		        return fields.area.val();
+ 	        },
+			qcity : function() {
+		        return fields.city.val();
+ 	        },
+		    qpostCode : function() {
+				return fields.postCode.val();
+			},
+		    qcommune : function() {
+		        return fields.commune.val();
+ 	        },
+			qdistrict : function() {
+				return fields.district.val();
+			},
+			qprovince : function() {
+				return fields.province.val();
+			},
+			qfield : "street"
+		}
+	}).result(function(e, item) {
+		flushTotalLocationCacheIfEmpty(fields, fields.street);
+	}).focus(function() {
+		fields.street.click();
+	}).blur(function() {
+		flushTotalLocationCacheIfEmpty(fields);
+	});
+	
+	fields.area.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
+		extraParams : {
+	        qstreet : function() {
+                return fields.street.val();
+            },
+		    qcity : function() {
+				return fields.city.val();
+			},
+			qpostCode : function() {
+				return fields.postCode.val();
+			},
+		    qcommune : function() {
+		        return fields.commune.val();
+ 	        },			
+		    qdistrict : function() {
+		        return fields.commune.val();
+ 	        },
+			qprovince : function() {
+				return fields.province.val();
+			},
+			qfield : "area"
+		}
+	}).result(function(e, item) {
+		flushTotalLocationCacheIfEmpty(fields, fields.area);
+	}).focus(function() {
+		fields.area.click();
+	}).blur(function() {
+		flushTotalLocationCacheIfEmpty(fields);
+	});
+	
+	fields.city.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
+		extraParams : {
+			qstreet : function() {
+		        return fields.street.val();
+ 	        },
+		    qpostCode : function() {
+				return fields.postCode.val();
+			},
+		    qarea : function() {
+		        return fields.area.val();
+ 	        },			
+		    qcommune : function() {
+		        return fields.commune.val();
+ 	        },
+			qdistrict : function() {
+				return fields.district.val();
+			},
+			qprovince : function() {
+				return fields.province.val();
+			},
+			qfield : "city"
+		}
+	}).result(function(e, item) {
+		flushTotalLocationCacheIfEmpty(fields, fields.city);
+	}).focus(function() {
+		fields.city.click();
+	}).blur(function() {
+		flushTotalLocationCacheIfEmpty(fields);
+	});
+
+	fields.postCode.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
+		extraParams : {
+	        qstreet : function() {
+                return fields.street.val();
+            },
+		    qarea : function() {
+		        return fields.area.val();
+ 	        },            
+			qcity : function() {
+				return fields.city.val();
+			},
+		    qcommune : function() {
+		        return fields.commune.val();
+ 	        },
+			qdistrict : function() {
+				return fields.district.val();
+			},
+			qprovince : function() {
+				return fields.province.val();
+			},
+			qfield : "postCode"
+		}
+	}).result(function(e, item) {
+		flushTotalLocationCacheIfEmpty(fields, fields.postCode);
+	}).focus(function() {
+		fields.postCode.click();
+	}).blur(function() {
+		flushTotalLocationCacheIfEmpty(fields);
+	});
+
+	fields.commune.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
+		extraParams : {
+	        qstreet : function() {
+                return fields.street.val();
+            },
+		    qarea : function() {
+		        return fields.area.val();
+ 	        },
+		    qcity : function() {
+				return fields.city.val();
+			},
+			qpostCode : function() {
+				return fields.postCode.val();
+			},
+		    qdistrict : function() {
+		        return fields.commune.val();
+ 	        },
+			qprovince : function() {
+				return fields.province.val();
+			},
+			qfield : "commune"
+		}
+	}).result(function(e, item) {
+		flushTotalLocationCacheIfEmpty(fields, fields.commune);
+	}).focus(function() {
+		fields.commune.click();
+	}).blur(function() {
+		flushTotalLocationCacheIfEmpty(fields);
+	});
+	
+	fields.district.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
+		extraParams : {
+	        qstreet : function() {
+                return fields.street.val();
+            },
+		    qarea : function() {
+		        return fields.area.val();
+ 	        },
+		    qcity : function() {
+				return fields.city.val();
+			},
+			qpostCode : function() {
+				return fields.postCode.val();
+			},
+		    qcommune : function() {
+		        return fields.commune.val();
+ 	        },
+			qprovince : function() {
+				return fields.province.val();
+			},
+			qfield : "district"
+		}
+	}).result(function(e, item) {
+		flushTotalLocationCacheIfEmpty(fields, fields.district);
+	}).focus(function() {
+		fields.district.click();
+	}).blur(function() {
+		flushTotalLocationCacheIfEmpty(fields);
+	});
+	
+	fields.province.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
+		extraParams : {
+	        qstreet : function() {
+                return fields.street.val();
+            },
+		    qarea : function() {
+		        return fields.area.val();
+ 	        },
+		    qcity : function() {
+				return fields.city.val();
+			},
+			qpostCode : function() {
+				return fields.postCode.val();
+			},
+		    qcommune : function() {
+		        return fields.commune.val();
+ 	        },
+			qdistrict : function() {
+				return fields.district.val();
+			},
+			qfield : "province"
+		}
+	}).result(function(e, item) {
+		flushTotalLocationCacheIfEmpty(fields, fields.province);
+	}).focus(function() {
+		fields.province.click();
+	}).blur(function() {
+		flushTotalLocationCacheIfEmpty(fields);
+	});
+}
+
 function proposeDocumentOrgFields(index) {
 	var fields = {};
 	fields["name"] = jQuery("#organization_" + index + "_name");
@@ -248,4 +469,29 @@ function initEditDocumentAutocomplete(maxOrgs, jsonOrganizationDataUrl,
 			}
 	}
 	initLocationAutocomplete(editDocumentEventFields(), jsonLocationDataUrl);
+}
+
+function locationFields(fieldsIds) {
+	fieldsIds = fieldsIds || {};
+	var fields = {};
+	fields["street"] = fieldsIds["street"] != 'undefined' ? jQuery("#"
+			+ fieldsIds["street"]) : "";
+	fields["postCode"] = fieldsIds["postCode"] != 'undefined' ? jQuery("#"
+			+ fieldsIds["postCode"]) : "";
+	fields["area"] = fieldsIds["area"] != 'undefined' ? jQuery("#"
+			+ fieldsIds["area"]) : "";
+	fields["city"] = fieldsIds["city"] != 'undefined' ? jQuery("#"
+			+ fieldsIds["city"]) : "";
+	fields["commune"] = fieldsIds["commune"] != 'undefined' ? jQuery("#"
+			+ fieldsIds["commune"]) : "";
+	fields["district"] = fieldsIds["district"] != 'undefined' ? jQuery("#"
+			+ fieldsIds["district"]) : "";
+	fields["province"] = fieldsIds["province"] != 'undefined' ? jQuery("#"
+			+ fieldsIds["province"]) : "";
+	return fields;
+}
+
+function initCustomFieldsLocationAutocomplete(fieldsIds, jsonLocationDataUrl) {
+	initTotalLocationAutocomplete(locationFields(fieldsIds),
+			jsonLocationDataUrl);
 }
