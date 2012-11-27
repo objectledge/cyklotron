@@ -99,10 +99,11 @@ public class LocationDatabaseServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<Location> getLocations(String requestedField, String province, String city,
-        String street, String postCode)
+    public List<Location> getLocations(String requestedField, String province, String district,
+        String commune, String city, String area, String street, String postCode)
     {
-        return index.getLocations(requestedField, province, city, street, postCode);
+        return index.getLocations(requestedField, province, district, commune, city, area, street,
+            postCode);
     }
 
     /**

@@ -76,21 +76,27 @@ public class LocationsIndex
      * problems occur.
      * </p>
      * 
-     * @param requestedField one of "province", "city", "street", "postCode".
+     * @param requestedField one of "province", "district", "commune", "city", "area", "street", "postCode".
      * @param province user supplied value.
+     * @param district user supplied value.
+     * @param commune user supplied value.
      * @param city user supplied value.
+     * @param area user supplied value.
      * @param street user supplied value.
      * @param postCode user supplied value.
      * @return list of locations sorted by relevance.
      */
-    public List<Location> getLocations(String requestedField, String province, String city,
-        String street, String postCode)
+    public List<Location> getLocations(String requestedField, String province, String district,
+        String commune, String city, String area, String street, String postCode)
     {
         try
         {
             BooleanQuery query = new BooleanQuery();
             addClause(query, requestedField, "province", province, false);
+            addClause(query, requestedField, "district", district, false);
+            addClause(query, requestedField, "commune", commune, false);
             addClause(query, requestedField, "city", city, false);
+            addClause(query, requestedField, "area", area, false);
             addClause(query, requestedField, "street", street, true);
             addClause(query, requestedField, "postCode", postCode, false);
             Timer timer = new Timer();

@@ -42,7 +42,7 @@ public class JsonLocations
         super(context, log);
         this.locationDatabaseService = locationDatabaseService;
     }
-    
+
     @Override
     protected void buildJsonStream()
         throws ProcessingException, JsonGenerationException, IOException
@@ -59,7 +59,10 @@ public class JsonLocations
         String requestedField = parameters.get("qfield", "");
         String query = parameters.get("q", "");
         String province = parameters.get("qprovince", "");
+        String district = parameters.get("qdistrict", "");
+        String commune = parameters.get("qcommune", "");
         String city = parameters.get("qcity", "");
+        String area = parameters.get("qarea", "");
         String street = parameters.get("qstreet", "");
         String postCode = parameters.get("qpostCode", "");
         int limit = parameters.getInt("limit", DEFAULT_LIMIT);
@@ -68,9 +71,21 @@ public class JsonLocations
         {
             province = query;
         }
+        if("district".equals(requestedField))
+        {
+            district = query;
+        }
+        if("commune".equals(requestedField))
+        {
+            commune = query;
+        }
         if("city".equals(requestedField))
         {
             city = query;
+        }
+        if("area".equals(requestedField))
+        {
+            area = query;
         }
         if("street".equals(requestedField))
         {
@@ -82,16 +97,29 @@ public class JsonLocations
         }
 
         if(requestedField.equals("province")
-            && province.length() + city.length() + street.length() + postCode.length() == 0)
+            && province.length() + district.length() + commune.length() + city.length()
+                + area.length() + street.length() + postCode.length() == 0)
         {
             return locationDatabaseService.getAllTerms("province");
         }
+        else if(requestedField.equals("district")
+            && province.length() + district.length() + commune.length() + city.length()
+                + area.length() + street.length() + postCode.length() == 0)
+        {
+            return locationDatabaseService.getAllTerms("district");
+        }
+        else if(requestedField.equals("commune")
+            && province.length() + district.length() + commune.length() + city.length()
+                + area.length() + street.length() + postCode.length() == 0)
+        {
+            return locationDatabaseService.getAllTerms("commune");
+        }
         else
         {
-            List<Location> locations = locationDatabaseService.getLocations(requestedField, province,
-                city, street, postCode);
+            List<Location> locations = locationDatabaseService.getLocations(requestedField,
+                province, district, commune, city, area, street, postCode);
             return getFieldValues(requestedField, locations, limit);
-        }        
+        }
     }
 
     private List<String> getFieldValues(String requestedField, List<Location> locations, int limit)
@@ -104,9 +132,21 @@ public class JsonLocations
             {
                 fieldValue = location.getProvince();
             }
+            if("district".equals(requestedField))
+            {
+                fieldValue = location.getDistrict();
+            }
+            if("commune".equals(requestedField))
+            {
+                fieldValue = location.getCommune();
+            }
             if("city".equals(requestedField))
             {
                 fieldValue = location.getCity();
+            }
+            if("area".equals(requestedField))
+            {
+                fieldValue = location.getArea();
             }
             if("street".equals(requestedField))
             {

@@ -34,8 +34,8 @@ public interface LocationDatabaseService
      * @param postCode user supplied value.
      * @return list of locations sorted by relevance.
      */
-    public List<Location> getLocations(String requestedField, String province, String city,
-        String street, String postCode);
+    public List<Location> getLocations(String requestedField, String province, String district,
+        String commune, String city, String area, String street, String postCode);
 
     /**
      * Returns all terms in given field of location index.
