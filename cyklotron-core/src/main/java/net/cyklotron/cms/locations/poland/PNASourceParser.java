@@ -280,9 +280,14 @@ public class PNASourceParser
             return y;
         }
 
-        public boolean isAdjecent(TextItem item)
+        public float getW()
         {
-            return (item.y == this.y) && (item.x == this.x + this.w);
+            return w;
+        }
+
+        public boolean isAdjecent(TextItem item, float tolerance)
+        {
+            return (item.y == this.y) && (Math.abs(item.x - (this.x + this.w)) < tolerance);
         }
 
         public void append(TextItem item)
@@ -325,7 +330,7 @@ public class PNASourceParser
         protected void processTextPosition(TextPosition text)
         {
             TextItem item = new TextItem(text);
-            if(lastItem != null && lastItem.isAdjecent(item))
+            if(lastItem != null && lastItem.isAdjecent(item, tolerance))
             {
                 lastItem.append(item);
             }
@@ -365,7 +370,8 @@ public class PNASourceParser
                 Collections.sort(row, TextItem.HORIZONTAL_ORDER);
                 for(TextItem item : row)
                 {
-                    buff.append("X: ").append(item.getX()).append(" ");
+                    buff.append("X: ").append(item.getX()).append("..")
+                        .append(item.getX() + item.getW()).append(" ");
                     buff.append(item.getText());
                     buff.append(" ");
                 }
