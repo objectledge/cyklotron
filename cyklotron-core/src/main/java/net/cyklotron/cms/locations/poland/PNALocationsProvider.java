@@ -1,24 +1,28 @@
 package net.cyklotron.cms.locations.poland;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.jcontainer.dna.Logger;
+import org.objectledge.database.Database;
+import org.objectledge.database.DatabaseUtils;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 import org.objectledge.utils.Timer;
 
-import net.cyklotron.cms.files.util.CSVFileReader;
 import net.cyklotron.cms.locations.Location;
 import net.cyklotron.cms.locations.LocationsProvider;
 
@@ -47,14 +51,17 @@ public class PNALocationsProvider
 
     private final Logger logger;
 
+    private final Database database;
+
     private final FileSystem fileSystem;
 
     private List<Location> cachedLocations = null;
 
-    public PNALocationsProvider(Logger logger, FileSystem fileSystem)
+    public PNALocationsProvider(Logger logger, FileSystem fileSystem, Database database)
     {
         this.logger = logger;
         this.fileSystem = fileSystem;
+        this.database = database;
     }
 
     /**
@@ -103,18 +110,136 @@ public class PNALocationsProvider
             parser.parse(CACHE_DIRECTORY + SOURCE_FILE);
             List<String[]> content = parser.getContent();
             writeCache(parser.getHeadings(), content);
-            cachedLocations = new ArrayList<Location>(content.size());
-            for(String[] row : content)
-            {
-                cachedLocations.add(new Location(row[6], row[5], row[4], stripCityName(row[1]),
-                    stripAreaName(row[1]) != null ? stripAreaName(row[1]) : "",
-                    row[2] != null ? row[2] : "", row[0]));
-            }
+            writeDB(content);
+            readDB();
         }
         catch(IOException e)
         {
             logger.error("failed to parse source file " + SOURCE_FILE, e);
         }
+    }
+
+    private void writeDB(List<String[]> content)
+    {
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        int[] inserted = new int[0];
+        try
+        {
+            Timer timer = new Timer();
+            conn = database.getConnection();
+            conn.setAutoCommit(false);
+
+            pstmt = conn.prepareStatement("DELETE FROM locations_pna");
+            pstmt.execute();
+            pstmt = conn
+                .prepareStatement("INSERT INTO locations_pna(pna, miejscowość, ulica, numery, gmina, powiat, województwo, nazwa, nazwa_pod, nazwa_rm) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            for(String[] row : content)
+            {
+                String city = stripCityName(row[1]);
+
+                pstmt.setString(1, row[0]);
+                pstmt.setString(2, city);
+                pstmt.setString(3, row[2]);
+                pstmt.setString(4, row[3]);
+                pstmt.setString(5, row[4]);
+                pstmt.setString(6, row[5]);
+                pstmt.setString(7, row[6]);
+
+                // fill extra fields form matching with TERYT data.
+                String area = stripAreaName(row[1]);
+                if(area == null)
+                {
+                    pstmt.setString(8, city);
+                    pstmt.setString(9, city);
+                    pstmt.setString(10, null);
+                }
+                else if(area.matches("^[A-ZĆŁÓŃŚŹŻ].+$"))
+                {
+                    pstmt.setString(8, area);
+                    pstmt.setString(9, city);
+                    pstmt.setString(10, null);
+                }
+                else if(area.matches("^[a-z].+$"))
+                {
+                    pstmt.setString(8, city);
+                    pstmt.setString(9, null);
+                    pstmt.setString(10, area);
+                }
+                pstmt.addBatch();
+            }
+            inserted = pstmt.executeBatch();
+            logger.info("INSERT " + inserted.length + "with " + content.size()
+                + " items to locations_pna DB in " + timer.getElapsedSeconds() + "s");
+
+            conn.commit();
+        }
+        catch(SQLException e)
+        {
+            try
+            {
+                conn.rollback();
+            }
+            catch(SQLException ex)
+            {
+                logger.error("error on rollback items to DB in ", ex);
+                throw new RuntimeException(e);
+            }
+            finally
+            {
+
+                logger.error("error on wroting items to DB in ", e);
+                throw new RuntimeException(e);
+            }
+        }
+        finally
+        {
+            DatabaseUtils.close(pstmt);
+            DatabaseUtils.close(conn);
+        }
+
+    }
+    
+    private void readDB()
+    {
+
+        Connection conn = null;
+        Statement stmt = null;
+        try
+        {
+            Timer timer = new Timer();
+            conn = database.getConnection();
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM locations_vpna");
+            cachedLocations = new ArrayList<Location>();
+            while(rs.next())
+            {
+                String terc = rs.getString("woj") + rs.getString("pow") + rs.getString("gmi")
+                    + rs.getString("rodz_gmi");
+                String area = rs.getString("miejscowość") == rs.getString("nazwa") ? rs
+                    .getString("nazwa_rm") != null ? rs.getString("nazwa_rm") : "" : rs
+                    .getString("nazwa");
+
+                cachedLocations.add(new Location(rs.getString("województwo"), rs
+                    .getString("powiat"), rs.getString("gmina"), rs.getString("miejscowość"), area,
+                    rs.getString("ulica") != null ? rs.getString("ulica") : "",
+                    rs.getString("pna"), terc, rs.getString("sym") != null ? rs.getString("sym") : ""));
+            }
+            logger.info("READ " + cachedLocations.size() + " items from locations_bpna DB in "
+                + timer.getElapsedSeconds() + "s");
+        }
+        catch(SQLException e)
+        {
+            logger.error("error on wroting items to DB in ", e);
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            DatabaseUtils.close(stmt);
+            DatabaseUtils.close(conn);
+        }
+
     }
 
     private void writeCache(String[] headings, List<String[]> content)
@@ -142,37 +267,7 @@ public class PNALocationsProvider
 
     private void parseCache()
     {
-        InputStream is = fileSystem.getInputStream(CACHE_DIRECTORY + CACHE_FILE);
-        try
-        {
-            Timer timer = new Timer();
-            CSVFileReader csvReader = new CSVFileReader(is, ENCODING, ';');
-            Map<String, String> line;
-            cachedLocations = new ArrayList<Location>();
-            while((line = csvReader.getNextLine()) != null)
-            {
-                cachedLocations.add(new Location(line.get("Województwo"), line.get("Powiat"), line
-                    .get("Gmina"), stripCityName(line.get("Miejscowość")), stripAreaName(line
-                    .get("Miejscowość")), line.get("Ulica"), line.get("PNA")));
-            }
-            logger.info("loaded " + cachedLocations.size() + " items from cache in "
-                + timer.getElapsedSeconds() + "s");
-        }
-        catch(IOException e)
-        {
-            logger.error("failed to parse cache file " + CACHE_FILE, e);
-        }
-        finally
-        {
-            try
-            {
-                is.close();
-            }
-            catch(IOException e)
-            {
-                logger.error("i/o error", e);
-            }
-        }
+        readDB();
     }
 
     /**
@@ -200,7 +295,7 @@ public class PNALocationsProvider
     {
         return city != null ? city.replaceFirst("\\s[(].+[)]", "") : null;
     }
-    
+
     /**
      * Strip area name from extra information
      */

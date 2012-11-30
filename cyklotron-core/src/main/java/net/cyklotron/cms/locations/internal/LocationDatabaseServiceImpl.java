@@ -38,22 +38,26 @@ import org.picocontainer.Startable;
 
 import net.cyklotron.cms.locations.Location;
 import net.cyklotron.cms.locations.LocationDatabaseService;
-import net.cyklotron.cms.locations.LocationsProvider;
+import net.cyklotron.cms.locations.poland.PNALocationsProvider;
+import net.cyklotron.cms.locations.poland.TERCLocationsProvider;
 
 public class LocationDatabaseServiceImpl
     implements LocationDatabaseService, Startable
 {
-    private final LocationsProvider provider;
+    private final PNALocationsProvider pnaProvider;
+    
+    private final TERCLocationsProvider tercProvider;
 
     private final LocationsIndex index;
 
     private final Logger logger;
 
-    public LocationDatabaseServiceImpl(LocationsProvider provider, FileSystem fileSystem,
+    public LocationDatabaseServiceImpl(PNALocationsProvider pnaProvider, TERCLocationsProvider tercProvider, FileSystem fileSystem,
         Logger logger)
         throws IOException
     {
-        this.provider = provider;
+        this.pnaProvider = pnaProvider;
+        this.tercProvider = tercProvider;
         this.logger = logger;
         this.index = new LocationsIndex(fileSystem, logger);
     }
@@ -65,8 +69,9 @@ public class LocationDatabaseServiceImpl
         {
             if(index.isEmpty())
             {
-                load(provider.fromCache());
-            }
+                tercProvider.fromSource();
+                load(pnaProvider.fromCache());
+            }            
         }
         catch(IOException e)
         {
@@ -88,7 +93,8 @@ public class LocationDatabaseServiceImpl
     {
         try
         {
-            load(provider.fromSource());
+            tercProvider.fromSource();
+            load(pnaProvider.fromSource());
         }
         catch(IOException e)
         {

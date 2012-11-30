@@ -50,9 +50,13 @@ public class Location
     private String street;
 
     private String postCode;
+    
+    private String terc;
+    
+    private String sym;
 
     public Location(String province, String district, String commune, String city, String area,
-        String street, String postCode)
+        String street, String postCode, String terc, String sym)
     {
         this.province = province;
         this.district = district;
@@ -61,6 +65,8 @@ public class Location
         this.area = area;
         this.street = street;
         this.postCode = postCode;
+        this.terc = terc;
+        this.sym = sym;
     }
 
     public String getProvince()
@@ -112,4 +118,14 @@ public class Location
         return area;
     }
 
+    public String getTerc()
+    {
+        return terc;
+    }
+
+    public String getSym()
+    {
+        return sym;
+    }
+    
 }

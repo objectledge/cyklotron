@@ -42,13 +42,15 @@ public class LocationsIndex
             Field.Index.ANALYZED));
         document.add(new Field("district", item.getDistrict(), Field.Store.YES,
             Field.Index.ANALYZED));
-        document.add(new Field("commune", item.getCommune(), Field.Store.YES,
-            Field.Index.ANALYZED));
+        document
+            .add(new Field("commune", item.getCommune(), Field.Store.YES, Field.Index.ANALYZED));
         document.add(new Field("city", item.getCity(), Field.Store.YES, Field.Index.ANALYZED));
         document.add(new Field("area", item.getArea(), Field.Store.YES, Field.Index.ANALYZED));
         document.add(new Field("street", item.getStreet(), Field.Store.YES, Field.Index.ANALYZED));
         document.add(new Field("postCode", item.getPostCode(), Field.Store.YES,
             Field.Index.NOT_ANALYZED));
+        document.add(new Field("terc", item.getTerc(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+        document.add(new Field("sym", item.getSym(), Field.Store.YES, Field.Index.NOT_ANALYZED));
         return document;
     }
 
@@ -62,7 +64,9 @@ public class LocationsIndex
         String area = doc.get("area");
         String street = doc.get("street");
         String postCode = doc.get("postCode");
-        return new Location(province, district, commune, city, area, street, postCode);
+        String terc = doc.get("terc");
+        String sym = doc.get("sym");
+        return new Location(province, district, commune, city, area, street, postCode, terc, sym);
     }
 
     /**
