@@ -170,7 +170,7 @@ public class PNALocationsProvider
                 pstmt.addBatch();
             }
             inserted = pstmt.executeBatch();
-            logger.info("INSERT " + inserted.length + "with " + content.size()
+            logger.info("INSERT " + inserted.length + " with " + content.size()
                 + " items to locations_pna DB in " + timer.getElapsedSeconds() + "s");
 
             conn.commit();
