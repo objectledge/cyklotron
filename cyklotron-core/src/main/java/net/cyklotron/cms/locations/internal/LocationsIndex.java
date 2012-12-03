@@ -103,6 +103,8 @@ public class LocationsIndex
             addClause(query, requestedField, "area", area, false);
             addClause(query, requestedField, "street", street, true);
             addClause(query, requestedField, "postCode", postCode, false);
+            addClause(query, requestedField, "terc", postCode, false);
+            addClause(query, requestedField, "sym", postCode, false);
             Timer timer = new Timer();
             List<Location> results = results(getSearcher().search(query, MAX_RESULTS));
             logger.debug("query: " + query.toString() + " " + results.size() + " in "

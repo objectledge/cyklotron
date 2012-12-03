@@ -35,7 +35,7 @@ public interface LocationDatabaseService
      * @return list of locations sorted by relevance.
      */
     public List<Location> getLocations(String requestedField, String province, String district,
-        String commune, String city, String area, String street, String postCode);
+        String commune, String city, String area, String street, String postCode, String terc, String sym);
 
     /**
      * Returns all terms in given field of location index.

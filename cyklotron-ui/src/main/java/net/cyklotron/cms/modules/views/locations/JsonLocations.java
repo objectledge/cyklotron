@@ -65,6 +65,8 @@ public class JsonLocations
         String area = parameters.get("qarea", "");
         String street = parameters.get("qstreet", "");
         String postCode = parameters.get("qpostCode", "");
+        String terc = parameters.get("qterc", "");
+        String sym = parameters.get("qsym", "");
         int limit = parameters.getInt("limit", DEFAULT_LIMIT);
 
         if("province".equals(requestedField))
@@ -95,6 +97,14 @@ public class JsonLocations
         {
             postCode = query;
         }
+        if("terc".equals(requestedField))
+        {
+            terc = query;
+        }
+        if("sym".equals(requestedField))
+        {
+            sym = query;
+        }
 
         if(requestedField.equals("province")
             && province.length() + district.length() + commune.length() + city.length()
@@ -117,7 +127,7 @@ public class JsonLocations
         else
         {
             List<Location> locations = locationDatabaseService.getLocations(requestedField,
-                province, district, commune, city, area, street, postCode);
+                province, district, commune, city, area, street, postCode, terc, sym);
             return getFieldValues(requestedField, locations, limit);
         }
     }
@@ -155,6 +165,14 @@ public class JsonLocations
             if("postCode".equals(requestedField))
             {
                 fieldValue = location.getPostCode();
+            }
+            if("terc".equals(requestedField))
+            {
+                fieldValue = location.getTerc();
+            }
+            if("sym".equals(requestedField))
+            {
+                fieldValue = location.getSym();
             }
             valueSet.add(fieldValue);
         }
