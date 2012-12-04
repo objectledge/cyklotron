@@ -79,8 +79,6 @@ public class TERCLocationsProvider
 
     private List<String> source_locations;
 
-    private List<String[]> cachedTeryt = null;
-
     public TERCLocationsProvider(Logger logger, FileSystem fileSystem, HTMLService htmlService,
         Database database)
     {
@@ -183,7 +181,7 @@ public class TERCLocationsProvider
             }
             finally
             {
-                logger.error("error on wroting items to DB in ", e);
+                logger.error("error on writing items to DB in ", e);
                 throw new RuntimeException(e);
             }
         }
