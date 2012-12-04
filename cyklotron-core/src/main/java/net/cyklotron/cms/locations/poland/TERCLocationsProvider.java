@@ -138,7 +138,7 @@ public class TERCLocationsProvider
                 {
                     fileSystem.mkdirs(CACHE_DIRECTORY);
                 }
-                fileSystem.unpackZipFile(CACHE_DIRECTORY, method.getResponseBodyAsStream());
+                fileSystem.unpackZipFile(method.getResponseBodyAsStream(), CACHE_DIRECTORY);
                 method.releaseConnection();
                 rename(SOURCE_TMP_FILES[i], SOURCE_FILES[i]);
                 logger.info("downloaded " + fileSystem.length(CACHE_DIRECTORY + SOURCE_FILES[i])
