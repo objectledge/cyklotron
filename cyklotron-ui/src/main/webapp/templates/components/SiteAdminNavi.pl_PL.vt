@@ -35,7 +35,7 @@
   #if($cmsData.site && !$cms_tool.subject.equals($cms_tool.anonymousSubject))
   #set($siteLink = $link.set("site_id",$cmsData.site.id))
   
-  #if($cms_tool.isAppEnabled('search') || $cms_tool.isAppEnabled('forum') || $cms_tool.isAppEnabled('banner') || $cms_tool.isAppEnabled('poll') || $cms_tool.isAppEnabled('link') || $cms_tool.isAppEnabled('syndication') || $cms_tool.isAppEnabled('periodicals') || $cms_tool.isAppEnabled('statistics') || $block)      
+  #if($cms_tool.isAppEnabled('search') || $cms_tool.isAppEnabled('forum') || $cms_tool.isAppEnabled('banner') || $cms_tool.isAppEnabled('poll') || $cms_tool.isAppEnabled('link') || $cms_tool.isAppEnabled('syndication') || $cms_tool.isAppEnabled('periodicals') || $cms_tool.isAppEnabled('statistics') ||  $cms_tool.isAppEnabled('bazy')  || $block)      
   
   <table width="100%" class="adminNavi" cellspacing="0">
     <tr>
@@ -76,7 +76,11 @@
 	#if($cms_tool.isAppEnabled('catalogue') || $block)
       #linkCell('' 'KATALOGI' $siteLink.view('catalogue.List'))
       <td class="separator">|</td>
-    #end
+	#end
+	#if($cms_tool.isAppEnabled('bazy') || $block)      
+      #linkCell('' 'BAZY' $siteLink.view('bazy.Bazy'))
+      <td class="separator">|</td>
+    #end 
     </tr>
   </table>
   #end
