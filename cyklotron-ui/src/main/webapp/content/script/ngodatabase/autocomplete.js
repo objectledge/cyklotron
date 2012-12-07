@@ -178,7 +178,7 @@ function initLocationAutocomplete(fields, jsonDataUrl) {
 	});
 }
 
-function flushTotalLocationCacheIfEmpty(fields, object) {
+function flushFullLocationCacheIfEmpty(fields, object) {
 	var object = object || null;
 	for (field in fields) {
 		if (object != fields[field]) {
@@ -187,7 +187,7 @@ function flushTotalLocationCacheIfEmpty(fields, object) {
 	}
 }
 
-function initTotalLocationAutocomplete(fields, jsonDataUrl) {
+function initFullLocationAutocomplete(fields, jsonDataUrl) {
 	fields.street.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
 		extraParams : {
 		    qarea : function() {
@@ -211,11 +211,11 @@ function initTotalLocationAutocomplete(fields, jsonDataUrl) {
 			qfield : "street"
 		}
 	}).result(function(e, item) {
-		flushTotalLocationCacheIfEmpty(fields, fields.street);
+		flushFullLocationCacheIfEmpty(fields, fields.street);
 	}).focus(function() {
 		fields.street.click();
 	}).blur(function() {
-		flushTotalLocationCacheIfEmpty(fields);
+		flushFullLocationCacheIfEmpty(fields);
 	});
 	
 	fields.area.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
@@ -241,11 +241,11 @@ function initTotalLocationAutocomplete(fields, jsonDataUrl) {
 			qfield : "area"
 		}
 	}).result(function(e, item) {
-		flushTotalLocationCacheIfEmpty(fields, fields.area);
+		flushFullLocationCacheIfEmpty(fields, fields.area);
 	}).focus(function() {
 		fields.area.click();
 	}).blur(function() {
-		flushTotalLocationCacheIfEmpty(fields);
+		flushFullLocationCacheIfEmpty(fields);
 	});
 	
 	fields.city.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
@@ -271,11 +271,11 @@ function initTotalLocationAutocomplete(fields, jsonDataUrl) {
 			qfield : "city"
 		}
 	}).result(function(e, item) {
-		flushTotalLocationCacheIfEmpty(fields, fields.city);
+		flushFullLocationCacheIfEmpty(fields, fields.city);
 	}).focus(function() {
 		fields.city.click();
 	}).blur(function() {
-		flushTotalLocationCacheIfEmpty(fields);
+		flushFullLocationCacheIfEmpty(fields);
 	});
 
 	fields.postCode.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
@@ -301,11 +301,11 @@ function initTotalLocationAutocomplete(fields, jsonDataUrl) {
 			qfield : "postCode"
 		}
 	}).result(function(e, item) {
-		flushTotalLocationCacheIfEmpty(fields, fields.postCode);
+		flushFullLocationCacheIfEmpty(fields, fields.postCode);
 	}).focus(function() {
 		fields.postCode.click();
 	}).blur(function() {
-		flushTotalLocationCacheIfEmpty(fields);
+		flushFullLocationCacheIfEmpty(fields);
 	});
 
 	fields.commune.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
@@ -331,11 +331,11 @@ function initTotalLocationAutocomplete(fields, jsonDataUrl) {
 			qfield : "commune"
 		}
 	}).result(function(e, item) {
-		flushTotalLocationCacheIfEmpty(fields, fields.commune);
+		flushFullLocationCacheIfEmpty(fields, fields.commune);
 	}).focus(function() {
 		fields.commune.click();
 	}).blur(function() {
-		flushTotalLocationCacheIfEmpty(fields);
+		flushFullLocationCacheIfEmpty(fields);
 	});
 	
 	fields.district.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
@@ -361,11 +361,11 @@ function initTotalLocationAutocomplete(fields, jsonDataUrl) {
 			qfield : "district"
 		}
 	}).result(function(e, item) {
-		flushTotalLocationCacheIfEmpty(fields, fields.district);
+		flushFullLocationCacheIfEmpty(fields, fields.district);
 	}).focus(function() {
 		fields.district.click();
 	}).blur(function() {
-		flushTotalLocationCacheIfEmpty(fields);
+		flushFullLocationCacheIfEmpty(fields);
 	});
 	
 	fields.province.autocomplete(jsonDataUrl, acLocationsOptions).setOptions( {
@@ -391,11 +391,11 @@ function initTotalLocationAutocomplete(fields, jsonDataUrl) {
 			qfield : "province"
 		}
 	}).result(function(e, item) {
-		flushTotalLocationCacheIfEmpty(fields, fields.province);
+		flushFullLocationCacheIfEmpty(fields, fields.province);
 	}).focus(function() {
 		fields.province.click();
 	}).blur(function() {
-		flushTotalLocationCacheIfEmpty(fields);
+		flushFullLocationCacheIfEmpty(fields);
 	});
 }
 
@@ -491,7 +491,7 @@ function locationFields(fieldsIds) {
 	return fields;
 }
 
-function initCustomFieldsLocationAutocomplete(fieldsIds, jsonLocationDataUrl) {
-	initTotalLocationAutocomplete(locationFields(fieldsIds),
+function initFullFieldsLocationAutocomplete(fieldsIds, jsonLocationDataUrl) {
+	initFullLocationAutocomplete(locationFields(fieldsIds),
 			jsonLocationDataUrl);
 }
