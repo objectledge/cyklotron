@@ -56,7 +56,7 @@ public class PNALocationProviderTest
         }
         catch(Exception e)
         {
-            getLogger().warn("postgres database localhost/btm not available - skipping test");
+            getLogger().warn("postgres database localhost/locations not available - skipping test");
             return;
         }
         pg_exist = true;
