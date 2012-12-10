@@ -18,7 +18,6 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.jcontainer.dna.Logger;
 import org.objectledge.database.Database;
-import org.objectledge.database.DatabaseUtils;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 import org.objectledge.utils.Timer;
@@ -121,125 +120,114 @@ public class PNALocationsProvider
 
     private void writeDB(List<String[]> content)
     {
-
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        int[] inserted = new int[0];
-        try
+        try(Connection conn = database.getConnection())
         {
             Timer timer = new Timer();
-            conn = database.getConnection();
             conn.setAutoCommit(false);
-
-            pstmt = conn.prepareStatement("DELETE FROM locations_pna");
-            pstmt.execute();
-            pstmt = conn
-                .prepareStatement("INSERT INTO locations_pna(pna, miejscowość, ulica, numery, gmina, powiat, województwo, nazwa, nazwa_pod, nazwa_rm) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            for(String[] row : content)
+            try
             {
-                String city = stripCityName(row[1]);
+                try(PreparedStatement pstmt = conn.prepareStatement("DELETE FROM locations_pna"))
+                {
+                    pstmt.execute();
+                }
 
-                pstmt.setString(1, row[0]);
-                pstmt.setString(2, city);
-                pstmt.setString(3, row[2]);
-                pstmt.setString(4, row[3]);
-                pstmt.setString(5, row[4]);
-                pstmt.setString(6, row[5]);
-                pstmt.setString(7, row[6]);
+                int[] inserted;
+                try(PreparedStatement pstmt = conn
+                    .prepareStatement("INSERT INTO locations_pna(pna, miejscowość, ulica, "
+                        + "numery, gmina, powiat, województwo, nazwa, nazwa_pod, nazwa_rm) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
+                {
+                    for(String[] row : content)
+                    {
+                        String city = stripCityName(row[1]);
 
-                // fill extra fields form matching with TERYT data.
-                String area = stripAreaName(row[1]);
-                if(area == null)
-                {
-                    pstmt.setString(8, city);
-                    pstmt.setString(9, city);
-                    pstmt.setString(10, null);
+                        pstmt.setString(1, row[0]);
+                        pstmt.setString(2, city);
+                        pstmt.setString(3, row[2]);
+                        pstmt.setString(4, row[3]);
+                        pstmt.setString(5, row[4]);
+                        pstmt.setString(6, row[5]);
+                        pstmt.setString(7, row[6]);
+
+                        // fill extra fields form matching with TERYT data.
+                        String area = stripAreaName(row[1]);
+                        if(area == null)
+                        {
+                            pstmt.setString(8, city);
+                            pstmt.setString(9, city);
+                            pstmt.setString(10, null);
+                        }
+                        else if(area.matches("^[A-ZĆŁÓŃŚŹŻ].+$"))
+                        {
+                            pstmt.setString(8, area);
+                            pstmt.setString(9, city);
+                            pstmt.setString(10, null);
+                        }
+                        else if(area.matches("^[a-z].+$"))
+                        {
+                            pstmt.setString(8, city);
+                            pstmt.setString(9, null);
+                            pstmt.setString(10, area);
+                        }
+                        pstmt.addBatch();
+                    }
+                    inserted = pstmt.executeBatch();
                 }
-                else if(area.matches("^[A-ZĆŁÓŃŚŹŻ].+$"))
-                {
-                    pstmt.setString(8, area);
-                    pstmt.setString(9, city);
-                    pstmt.setString(10, null);
-                }
-                else if(area.matches("^[a-z].+$"))
-                {
-                    pstmt.setString(8, city);
-                    pstmt.setString(9, null);
-                    pstmt.setString(10, area);
-                }
-                pstmt.addBatch();
+                conn.commit();
+                logger.info("INSERT " + inserted.length + " with " + content.size()
+                    + " items to locations_pna DB in " + timer.getElapsedSeconds() + "s");
             }
-            inserted = pstmt.executeBatch();
-            logger.info("INSERT " + inserted.length + " with " + content.size()
-                + " items to locations_pna DB in " + timer.getElapsedSeconds() + "s");
-
-            conn.commit();
+            catch(SQLException e)
+            {
+                logger.error("failed to write data to database", e);
+                try
+                {
+                    conn.rollback();
+                }
+                catch(SQLException ex)
+                {
+                    logger.error("rollback failed", ex);
+                    e.addSuppressed(ex);
+                }
+            }
         }
         catch(SQLException e)
         {
-            try
-            {
-                conn.rollback();
-            }
-            catch(SQLException ex)
-            {
-                logger.error("error on rollback items to DB in ", ex);
-                throw new RuntimeException(e);
-            }
-            finally
-            {
-
-                logger.error("error on wroting items to DB in ", e);
-                throw new RuntimeException(e);
-            }
+            logger.error("failed to acquire or close connection", e);
         }
-        finally
-        {
-            DatabaseUtils.close(pstmt);
-            DatabaseUtils.close(conn);
-        }
-
     }
-    
+
     private void readDB()
     {
-
-        Connection conn = null;
-        Statement stmt = null;
-        try
+        try(Connection conn = database.getConnection(); Statement stmt = conn.createStatement())
         {
             Timer timer = new Timer();
-            conn = database.getConnection();
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM locations_vpna");
-            cachedLocations = new ArrayList<Location>();
-            while(rs.next())
+            try(ResultSet rs = stmt.executeQuery("SELECT * FROM locations_vpna"))
             {
-                String terc = rs.getString("woj") + rs.getString("pow") + rs.getString("gmi")
-                    + rs.getString("rodz_gmi");
-                String area = rs.getString("miejscowość") == rs.getString("nazwa") ? rs
-                    .getString("nazwa_rm") != null ? rs.getString("nazwa_rm") : "" : rs
-                    .getString("nazwa");
+                cachedLocations = new ArrayList<Location>();
+                while(rs.next())
+                {
+                    String terc = rs.getString("woj") + rs.getString("pow") + rs.getString("gmi")
+                        + rs.getString("rodz_gmi");
+                    String area = rs.getString("miejscowość") == rs.getString("nazwa") ? rs
+                        .getString("nazwa_rm") != null ? rs.getString("nazwa_rm") : "" : rs
+                        .getString("nazwa");
 
-                cachedLocations.add(new Location(rs.getString("województwo"), rs
-                    .getString("powiat"), rs.getString("gmina"), rs.getString("miejscowość"), area,
-                    rs.getString("ulica") != null ? rs.getString("ulica") : "",
-                    rs.getString("pna"), terc, rs.getString("sym") != null ? rs.getString("sym") : ""));
+                    cachedLocations.add(new Location(rs.getString("województwo"), rs
+                        .getString("powiat"), rs.getString("gmina"), rs.getString("miejscowość"),
+                        area, rs.getString("ulica") != null ? rs.getString("ulica") : "", rs
+                            .getString("pna"), terc, rs.getString("sym") != null ? rs
+                            .getString("sym") : ""));
+                }
+                logger.info("READ " + cachedLocations.size() + " items from locations_bpna DB in "
+                    + timer.getElapsedSeconds() + "s");
             }
-            logger.info("READ " + cachedLocations.size() + " items from locations_bpna DB in "
-                + timer.getElapsedSeconds() + "s");
         }
         catch(SQLException e)
         {
             logger.error("error on wroting items to DB in ", e);
             throw new RuntimeException(e);
         }
-        finally
-        {
-            DatabaseUtils.close(stmt);
-            DatabaseUtils.close(conn);
-        }
-
     }
 
     private void writeCache(String[] headings, List<String[]> content)
