@@ -1,5 +1,8 @@
 package net.cyklotron.cms.locations;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -82,5 +85,21 @@ public abstract class LocationTestBase
             DatabaseUtils.runScript(ds,
                 fs.getReader("sql/locations/LocationsDataTables.sql", "UTF-8"));
         }
+    }
+
+    protected int count(Statement stmt, String table)
+        throws SQLException
+    {
+        try(ResultSet rset = stmt.executeQuery("SELECT COUNT(*) FROM " + table))
+        {
+            rset.next();
+            return rset.getInt(1);
+        }
+    }
+
+    protected void assertMinCount(Statement stmt, String table, int minCount)
+        throws SQLException
+    {
+        assertTrue(count(stmt, table) >= minCount);
     }
 }

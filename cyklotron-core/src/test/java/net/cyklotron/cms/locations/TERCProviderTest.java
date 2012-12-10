@@ -1,7 +1,6 @@
 package net.cyklotron.cms.locations;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -44,16 +43,6 @@ public class TERCProviderTest
                 assertMinCount(stmt, "locations_simc", 100000);
                 assertMinCount(stmt, "locations_wmrodz", 40);
             }
-        }
-    }
-
-    protected void assertMinCount(Statement stmt, String table, int minCount)
-        throws SQLException
-    {
-        try(ResultSet rset = stmt.executeQuery("SELECT COUNT(*) FROM " + table))
-        {
-            rset.next();
-            assertTrue(rset.getInt(1) >= minCount);
         }
     }
 }
