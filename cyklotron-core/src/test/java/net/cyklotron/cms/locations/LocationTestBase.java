@@ -34,8 +34,8 @@ public abstract class LocationTestBase
         Logger logger = new Log4JLogger(org.apache.log4j.Logger.getLogger(getClass()));
         try
         {
-            BitronixTransactionManager btm = new BitronixTransactionManager("pg",
-                "org.postgresql.xa.PGXADataSource", getDsProperties(), logger);
+            btm = new BitronixTransactionManager("pg", "org.postgresql.xa.PGXADataSource",
+                getDsProperties(), logger);
 
             DataSource dataSource = new BitronixDataSource("pg", btm);
             prepareDataSource(dataSource);
