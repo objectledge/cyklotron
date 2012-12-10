@@ -150,6 +150,11 @@
       <version>9.1-901.jdbc4</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>net.sourceforge.nekohtml</groupId>
+      <artifactId>nekohtml</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <resources>
