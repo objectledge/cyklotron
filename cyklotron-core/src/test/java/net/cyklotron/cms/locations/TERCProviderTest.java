@@ -1,16 +1,21 @@
 package net.cyklotron.cms.locations;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.objectledge.html.HTMLServiceImpl;
 
-import net.cyklotron.cms.locations.poland.TERCLocationsProvider;
+import net.cyklotron.cms.locations.poland.TERCProvider;
 
 public class TERCProviderTest
     extends LocationTestBase
 {
-    private TERCLocationsProvider tercProvider;
+    private TERCProvider tercProvider;
 
     @Override
     public void setUp()
@@ -20,18 +25,35 @@ public class TERCProviderTest
 
         if(enabled)
         {
-            tercProvider = new TERCLocationsProvider(getLogger(), getFileSystem(),
+            tercProvider = new TERCProvider(getLogger(), getFileSystem(),
                 new HTMLServiceImpl(new DefaultConfiguration("config", "", "")), database);
         }
     }
 
     public void testTERCProvider()
+        throws SQLException
     {
         if(enabled)
         {
             initLog4J("ERROR");
             LogManager.getLogger(getClass()).setLevel(Level.INFO);
-            tercProvider.fromSource();
+            tercProvider.fetch();
+            try(Connection conn = database.getConnection(); Statement stmt = conn.createStatement())
+            {
+                assertMinCount(stmt, "locations_terc", 400);
+                assertMinCount(stmt, "locations_simc", 100000);
+                assertMinCount(stmt, "locations_wmrodz", 40);
+            }
+        }
+    }
+
+    protected void assertMinCount(Statement stmt, String table, int minCount)
+        throws SQLException
+    {
+        try(ResultSet rset = stmt.executeQuery("SELECT COUNT(*) FROM " + table))
+        {
+            rset.next();
+            assertTrue(rset.getInt(1) >= minCount);
         }
     }
 }
