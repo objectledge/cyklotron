@@ -106,6 +106,7 @@ public class TERCProvider
         catch(IOException e)
         {
             logger.error("failed to create cache directory");
+            return false;
         }
         for(Map.Entry<String, String> entry : sourceUrls.entrySet())
         {
