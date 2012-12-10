@@ -29,7 +29,6 @@ public class TERCSourceParser
         this.fileSystem = fileSystem;
     }
 
-    @SuppressWarnings("unchecked")
     public List<String[]> parse(String sourceLocation)
     {
         List<String[]> content = new ArrayList<String[]>();
@@ -38,7 +37,6 @@ public class TERCSourceParser
             SAXReader saxReader = new SAXReader();
             Document doc = saxReader.read(fileSystem.getInputStream(sourceLocation));
 
-            @SuppressWarnings("unchecked")
             List<Element> tercHeadings = (List<Element>)doc.selectSingleNode("/teryt/catalog/row")
                 .selectNodes("col");
             headings = new String[tercHeadings.size()];
@@ -47,7 +45,6 @@ public class TERCSourceParser
                 headings[i] = tercHeadings.get(i).attributeValue("name");
             }
 
-            @SuppressWarnings("unchecked")
             List<Element> tercContents = (List<Element>)doc.selectNodes("/teryt/catalog/row");
             for(Element row : tercContents)
             {
@@ -77,5 +74,4 @@ public class TERCSourceParser
     {
         return content;
     }
-
 }
