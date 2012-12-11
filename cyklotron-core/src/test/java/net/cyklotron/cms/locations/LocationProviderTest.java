@@ -10,12 +10,12 @@ import org.apache.log4j.LogManager;
 import org.jcontainer.dna.impl.DefaultConfiguration;
 import org.objectledge.html.HTMLServiceImpl;
 
-import net.cyklotron.cms.locations.poland.LocationsProvider;
+import net.cyklotron.cms.locations.poland.PNATERYTLocationsProvider;
 
 public class LocationProviderTest
     extends LocationTestBase
 {
-    private LocationsProvider provider;
+    private PNATERYTLocationsProvider provider;
 
     public void setUp()
         throws Exception
@@ -23,7 +23,7 @@ public class LocationProviderTest
         super.setUp();
         if(enabled)
         {
-            provider = new LocationsProvider(getLogger(), getFileSystem(), new HTMLServiceImpl(
+            provider = new PNATERYTLocationsProvider(getLogger(), getFileSystem(), new HTMLServiceImpl(
                 new DefaultConfiguration("config", "", "")), database);
         }
     }

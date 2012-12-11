@@ -24,22 +24,25 @@ import net.cyklotron.cms.locations.Location;
 /**
  * LocationProvider implementation for Poland using Pocztowe Numery Adresowe (postal area codes)
  * published by Poczta Polska SA and administrative portioning of the state TERYT published by GUS.
+ * <p>
+ * The implmentation requires access to PostgreSQL database with tables and views defined in
+ * {@code src/main/resources/sql/locations/LocationsDataTables.sql}
+ * </p>
  * 
  * @author rafal.krzewski@caltha.pl
  * @author lukasz.urbanski@caltha.pl
  */
-public class LocationsProvider
+public class PNATERYTLocationsProvider
     implements net.cyklotron.cms.locations.LocationsProvider
 {
     /**
-     * The fields defined for location indentifiation for Poland.
+     * The fields defined for location identification for Poland.
      * <ul>
      * <li>postCode: PNA (kod pocztowy)</li>
      * <li>sym: identyfikator miejscowości z rejestru SIMC GUS</li>
      * <li>terc: identyfikator gminy z rejestru TERC GUS - złożenie pól WOJ, POW, GMI, RODZ</li>
      * <li>street: nazwa ulicy (placu itp.)</li>
-     * <li>area: dzielnica/część miejscowości
-     * <li>
+     * <li>area: dzielnica/część miejscowości</li>
      * <li>city: miejscowość</li>
      * <li>commune: gmina</li>
      * <li>district: powiat</li>
@@ -59,7 +62,7 @@ public class LocationsProvider
 
     private final TERCProvider tercProvider;
 
-    public LocationsProvider(Logger logger, FileSystem fileSystem, HTMLService htmlService,
+    public PNATERYTLocationsProvider(Logger logger, FileSystem fileSystem, HTMLService htmlService,
         Database database)
     {
         this.logger = logger;
@@ -244,18 +247,16 @@ public class LocationsProvider
     }
 
     @Override
-    public Set<LocationsProvider.FieldOptions> getOptions(String field)
+    public Set<FieldOptions> getOptions(String field)
     {
         switch(field)
         {
-        case "province":
-            return EnumSet.of(LocationsProvider.FieldOptions.NOT_ANALYZED);
         case "postCode":
-            return EnumSet.of(LocationsProvider.FieldOptions.NOT_ANALYZED);
+            return EnumSet.of(FieldOptions.NOT_ANALYZED);
         case "street":
-            return EnumSet.of(LocationsProvider.FieldOptions.MULTI_TERM_SUBQUERY);
+            return EnumSet.of(FieldOptions.MULTI_TERM_SUBQUERY);
         default:
-            return EnumSet.noneOf(LocationsProvider.FieldOptions.class);
+            return EnumSet.noneOf(FieldOptions.class);
         }
     }
 }
