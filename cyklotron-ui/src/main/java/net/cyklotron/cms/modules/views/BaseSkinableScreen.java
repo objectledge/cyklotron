@@ -1,5 +1,6 @@
 package net.cyklotron.cms.modules.views;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
@@ -251,16 +252,15 @@ public class BaseSkinableScreen
         Method method = (Method)methodMap.get(state);
         if(method == null)
         {
-            Class[] args = new Class[] { Context.class };
+            Class<?>[] args = new Class[] { Context.class };
             try
             {
                 method = getClass().getMethod("prepare"+state, args);
             }
             catch(NoSuchMethodException e)
             {
-                throw new ProcessingException("method prepare"+state+
-                                              "(RunData, Context) not declared in class "+
-                                              getClass().getName(), e);
+                throw new ProcessingException("method prepare" + state
+                    + "(Context) not declared in class " + getClass().getName(), e);
             }
             methodMap.put(state, method);
         }
@@ -268,11 +268,15 @@ public class BaseSkinableScreen
         {
             method.invoke(this, new Object[] { context });
         }
-        catch(Exception e)
+        catch(InvocationTargetException e)
         {
-            throw new ProcessingException("failed to invoke prepare"+state+
-                                              "(RunData, Context) not declared in class "+
-                                              getClass().getName(), e);
+            throw new ProcessingException("failed to invoke prepare" + state
+                + "(Context) in class " + getClass().getName(), e.getTargetException());
+        }
+        catch(IllegalAccessException e)
+        {
+            throw new ProcessingException("failed to invoke prepare" + state
+                + "(Context) in class " + getClass().getName(), e);
         }
     }
 
