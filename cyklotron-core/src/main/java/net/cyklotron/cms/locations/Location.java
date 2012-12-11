@@ -28,6 +28,10 @@
 
 package net.cyklotron.cms.locations;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 /**
  * A location descriptor.
  * <p>
@@ -36,54 +40,76 @@ package net.cyklotron.cms.locations;
  * </p>
  */
 public class Location
+    implements Iterable<Map.Entry<String, String>>
 {
-    private String province;
+    private final Map<String, String> entries;
 
-    private String city;
+    private final String pkField;
 
-    private String street;
+    private final String[] fields;
 
-    private String postCode;
-
-    public Location(String province, String city, String street, String postCode)
+    public Location(String[] fields, Map<String, String> entries)
     {
-        this.province = province;
-        this.city = city;
-        this.street = street;
-        this.postCode = postCode;
+        this.fields = fields;
+        this.entries = entries;
+        this.pkField = entries.get(fields[0]);
     }
 
-    public String getProvince()
+    public String get(String field)
     {
-        return province;
+        return entries.get(field);
     }
 
-    public String getCity()
+    public Iterator<Map.Entry<String, String>> iterator()
     {
-        return city;
+        return new Iterator<Map.Entry<String, String>>()
+            {
+                private final Iterator<Map.Entry<String, String>> i = entries.entrySet().iterator();
+
+                @Override
+                public boolean hasNext()
+                {
+                    return i.hasNext();
+                }
+
+                @Override
+                public Entry<String, String> next()
+                {
+                    return i.next();
+                }
+
+                @Override
+                public void remove()
+                {
+                    throw new UnsupportedOperationException();
+                }
+            };
     }
 
-    public String getStreet()
-    {
-        return street;
-    }
-
-    public String getPostCode()
-    {
-        return postCode;
-    }
-
+    @Override
     public int hashCode()
     {
-        return postCode.hashCode();
+        return pkField.hashCode();
     }
 
+    @Override
     public boolean equals(Object obj)
     {
-        if(obj != null && obj instanceof Location)
+        return obj instanceof Location && ((Location)obj).pkField.equals(pkField);
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder buff = new StringBuilder();
+        for(int i = 1; i <= fields.length; i++)
         {
-            return postCode.equals(((Location)obj).postCode);
+            buff.append(entries.get(fields[fields.length - i]));
+            if(i < fields.length)
+            {
+                buff.append(" ");
+            }
         }
-        return false;
+        return buff.toString();
     }
 }

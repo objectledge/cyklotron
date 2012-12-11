@@ -2,9 +2,10 @@ package net.cyklotron.cms.locations.internal;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -12,13 +13,14 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.PrefixQuery;
-import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.utils.Timer;
 
 import net.cyklotron.cms.locations.Location;
+import net.cyklotron.cms.locations.LocationsProvider;
+import net.cyklotron.cms.locations.LocationsProvider.FieldOptions;
 import net.cyklotron.cms.search.util.AbstractIndex;
 
 public class LocationsIndex
@@ -28,33 +30,44 @@ public class LocationsIndex
 
     private static final int MAX_RESULTS = 200000;
 
-    public LocationsIndex(FileSystem fileSystem, Logger logger)
+    private final String[] fields;
+
+    private final Map<String, Set<FieldOptions>> fieldOptions = new HashMap<>();
+
+    public LocationsIndex(LocationsProvider provider, FileSystem fileSystem, Logger logger)
         throws IOException
     {
         super(fileSystem, logger, INDEX_PATH);
+        this.fields = provider.getFields();
+        for(String field : fields)
+        {
+            fieldOptions.put(field, provider.getOptions(field));
+        }
     }
 
     @Override
     protected Document toDocument(Location item)
     {
         Document document = new Document();
-        document.add(new Field("province", item.getProvince(), Field.Store.YES,
-            Field.Index.ANALYZED));
-        document.add(new Field("city", item.getCity(), Field.Store.YES, Field.Index.ANALYZED));
-        document.add(new Field("street", item.getStreet(), Field.Store.YES, Field.Index.ANALYZED));
-        document.add(new Field("postCode", item.getPostCode(), Field.Store.YES,
-            Field.Index.NOT_ANALYZED));
+        for(String field : fields)
+        {
+            Set<FieldOptions> options = fieldOptions.get(field);
+            document.add(new Field(field, item.get(field), Field.Store.YES, options
+                .contains(FieldOptions.NOT_ANALYZED) ? Field.Index.NOT_ANALYZED
+                : Field.Index.ANALYZED));
+        }
         return document;
     }
 
     @Override
     protected Location fromDocument(Document doc)
     {
-        String province = doc.get("province");
-        String city = doc.get("city");
-        String street = doc.get("street");
-        String postCode = doc.get("postCode");
-        return new Location(province, city, street, postCode);
+        Map<String, String> entries = new HashMap<>();
+        for(String field : fields)
+        {
+            entries.put(field, doc.get(field));
+        }
+        return new Location(fields, entries);
     }
 
     /**
@@ -64,27 +77,30 @@ public class LocationsIndex
      * fields are either matched exactly, or ignored when empty.
      * </p>
      * <p>
-     * This method logs and quenches IOExceptions and returns empty results, when index acess
+     * This method logs and quenches IOExceptions and returns empty results, when index access
      * problems occur.
      * </p>
      * 
-     * @param requestedField one of "province", "city", "street", "postCode".
+     * @param requestedField one of "province", "district", "commune", "city", "area", "street",
+     *        "postCode".
      * @param province user supplied value.
+     * @param district user supplied value.
+     * @param commune user supplied value.
      * @param city user supplied value.
+     * @param area user supplied value.
      * @param street user supplied value.
      * @param postCode user supplied value.
      * @return list of locations sorted by relevance.
      */
-    public List<Location> getLocations(String requestedField, String province, String city,
-        String street, String postCode)
+    public List<Location> getLocations(String requestedField, Map<String, String> fieldValues)
     {
         try
         {
             BooleanQuery query = new BooleanQuery();
-            addClause(query, requestedField, "province", province, false);
-            addClause(query, requestedField, "city", city, false);
-            addClause(query, requestedField, "street", street, true);
-            addClause(query, requestedField, "postCode", postCode, false);
+            for(String field : fields)
+            {
+                addClause(query, requestedField, field, fieldValues.get(field));
+            }
             Timer timer = new Timer();
             List<Location> results = results(getSearcher().search(query, MAX_RESULTS));
             logger.debug("query: " + query.toString() + " " + results.size() + " in "
@@ -98,52 +114,28 @@ public class LocationsIndex
         }
     }
 
-    private void addClause(BooleanQuery query, String requestedField, String field, String value, boolean useSubquery)
+    private void addClause(BooleanQuery query, String requestedField, String field, String value)
         throws IOException
     {
-        if(field.equals(requestedField))
+        if(value != null && value.length() > 0)
         {
-            if(value.length() > 0)
+            List<Term> terms = analyze(field, value);
+            if(fieldOptions.get(field).contains(FieldOptions.MULTI_TERM_SUBQUERY))
             {
-                List<Term> terms = analyze(field, value);
-                if(useSubquery)
+                BooleanQuery subQuery = new BooleanQuery();
+                for(Term term : terms)
                 {
-                    BooleanQuery subQuery = new BooleanQuery();
-                    for(Term term : terms)
-                    {
-                        subQuery.add(new PrefixQuery(term), BooleanClause.Occur.SHOULD);
-                    }
-                    query.add(subQuery, BooleanClause.Occur.MUST);
+                    subQuery.add(field.equals(requestedField) ? new PrefixQuery(term)
+                        : new TermQuery(term), BooleanClause.Occur.SHOULD);
                 }
-                else
-                {
-                    for(Term term : terms)
-                    {
-                        query.add(new PrefixQuery(term), BooleanClause.Occur.MUST);
-                    }
-                }
+                query.add(subQuery, BooleanClause.Occur.MUST);
             }
-        }
-        else
-        {
-            if(value.length() > 0)
+            else
             {
-                List<Term> terms = analyze(field, value);
-                if(useSubquery)
+                for(Term term : terms)
                 {
-                    BooleanQuery subQuery = new BooleanQuery();
-                    for(Term term : terms)
-                    {
-                        subQuery.add(new TermQuery(term), BooleanClause.Occur.SHOULD);
-                    }
-                    query.add(subQuery, BooleanClause.Occur.MUST);
-                }
-                else
-                {
-                    for(Term term : terms)
-                    {
-                        query.add(new TermQuery(term), BooleanClause.Occur.MUST);
-                    }
+                    query.add(field.equals(requestedField) ? new PrefixQuery(term) : new TermQuery(
+                        term), BooleanClause.Occur.MUST);
                 }
             }
         }
