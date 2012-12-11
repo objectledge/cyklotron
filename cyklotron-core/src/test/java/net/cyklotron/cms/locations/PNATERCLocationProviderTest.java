@@ -2,8 +2,11 @@ package net.cyklotron.cms.locations;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
@@ -12,7 +15,7 @@ import org.objectledge.html.HTMLServiceImpl;
 
 import net.cyklotron.cms.locations.poland.PNATERYTLocationsProvider;
 
-public class LocationProviderTest
+public class PNATERCLocationProviderTest
     extends LocationTestBase
 {
     private PNATERYTLocationsProvider provider;
@@ -47,10 +50,9 @@ public class LocationProviderTest
         {
             initLog4J("ERROR");
             LogManager.getLogger(getClass()).setLevel(Level.INFO);
-            // JUnit can execute tests in arbitrary order. When db is empty and testFromCache runs
-            // first, load the data twice rather than fail
             try(Connection conn = database.getConnection(); Statement stmt = conn.createStatement())
             {
+                // JUnit can execute tests in arbitrary order.
                 if(count(stmt, "locations_pna") < 100000)
                 {
                     provider.fromSource();
@@ -58,6 +60,41 @@ public class LocationProviderTest
             }
             final Collection<Location> locations = provider.fromCache();
             assertTrue(locations.size() > 100000);
+        }
+    }
+
+    public void testDataQuality()
+        throws Exception
+    {
+        if(enabled)
+        {
+            initLog4J("ERROR");
+            LogManager.getLogger(getClass()).setLevel(Level.INFO);
+            try(Connection conn = database.getConnection(); Statement stmt = conn.createStatement())
+            {
+                // JUnit can execute tests in arbitrary order.
+                if(count(stmt, "locations_pna") < 100000)
+                {
+                    provider.fromSource();
+                }
+                Map<Integer, Integer> rowCount = new HashMap<>();
+                for(int i = 1; i <= 6; i++)
+                {
+                    rowCount.put(i, 0);
+                }
+                try(ResultSet rset = stmt
+                    .executeQuery("select score, count(*) from locations_vpna group by score order by 1"))
+                {
+                    while(rset.next())
+                    {
+                        rowCount.put(rset.getInt(1), rset.getInt(2));
+                    }
+                }
+                assertTrue(rowCount.get(2) < 20);
+                assertTrue(rowCount.get(3) + rowCount.get(5) < 20);
+                assertTrue(rowCount.get(4) < 100);
+                assertTrue(rowCount.get(6) < 10);
+            }
         }
     }
 }
