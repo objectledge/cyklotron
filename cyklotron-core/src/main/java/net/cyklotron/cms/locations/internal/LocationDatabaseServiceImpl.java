@@ -31,6 +31,7 @@ package net.cyklotron.cms.locations.internal;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
@@ -43,19 +44,19 @@ import net.cyklotron.cms.locations.LocationsProvider;
 public class LocationDatabaseServiceImpl
     implements LocationDatabaseService, Startable
 {
-    private final LocationsProvider provider;
+    private final LocationsProvider locationsProvider;
 
     private final LocationsIndex index;
 
     private final Logger logger;
 
-    public LocationDatabaseServiceImpl(LocationsProvider provider, FileSystem fileSystem,
+    public LocationDatabaseServiceImpl(LocationsProvider locationsProvider, FileSystem fileSystem,
         Logger logger)
         throws IOException
     {
-        this.provider = provider;
+        this.locationsProvider = locationsProvider;
         this.logger = logger;
-        this.index = new LocationsIndex(fileSystem, logger);
+        this.index = new LocationsIndex(locationsProvider, fileSystem, logger);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class LocationDatabaseServiceImpl
         {
             if(index.isEmpty())
             {
-                load(provider.fromCache());
+                load(locationsProvider.fromCache());
             }
         }
         catch(IOException e)
@@ -88,7 +89,7 @@ public class LocationDatabaseServiceImpl
     {
         try
         {
-            load(provider.fromSource());
+            load(locationsProvider.fromSource());
         }
         catch(IOException e)
         {
@@ -99,10 +100,9 @@ public class LocationDatabaseServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<Location> getLocations(String requestedField, String province, String city,
-        String street, String postCode)
+    public List<Location> getLocations(String requestedField, Map<String, String> fieldValues)
     {
-        return index.getLocations(requestedField, province, city, street, postCode);
+        return index.getLocations(requestedField, fieldValues);
     }
 
     /**
