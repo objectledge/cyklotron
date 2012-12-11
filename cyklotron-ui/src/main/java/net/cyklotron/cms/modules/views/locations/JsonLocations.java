@@ -3,14 +3,11 @@ package net.cyklotron.cms.modules.views.locations;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.locations.Location;
-import net.cyklotron.cms.locations.LocationDatabaseService;
-import net.cyklotron.cms.preferences.PreferencesService;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.jcontainer.dna.Logger;
@@ -19,7 +16,13 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
+import org.objectledge.web.HttpContext;
 import org.objectledge.web.json.AbstractJsonView;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.locations.Location;
+import net.cyklotron.cms.locations.LocationDatabaseService;
+import net.cyklotron.cms.preferences.PreferencesService;
 
 /**
  * The screen for serving files.
@@ -44,6 +47,13 @@ public class JsonLocations
     }
 
     @Override
+    protected void buildResponseHeaders(HttpContext httpContext)
+        throws ProcessingException
+    {
+        httpContext.getResponse().setContentType("application/json;charset=UTF-8");
+    }
+
+    @Override
     protected void buildJsonStream()
         throws ProcessingException, JsonGenerationException, IOException
     {
@@ -55,79 +65,31 @@ public class JsonLocations
         throws ProcessingException
     {
         Parameters parameters = RequestParameters.getRequestParameters(context);
-
         String requestedField = parameters.get("qfield", "");
         String query = parameters.get("q", "");
-        String province = parameters.get("qprovince", "");
-        String district = parameters.get("qdistrict", "");
-        String commune = parameters.get("qcommune", "");
-        String city = parameters.get("qcity", "");
-        String area = parameters.get("qarea", "");
-        String street = parameters.get("qstreet", "");
-        String postCode = parameters.get("qpostCode", "");
-        String terc = parameters.get("qterc", "");
-        String sym = parameters.get("qsym", "");
         int limit = parameters.getInt("limit", DEFAULT_LIMIT);
 
-        if("province".equals(requestedField))
+        Map<String, String> fieldValues = new HashMap<>();
+        for(String param : parameters.getParameterNames())
         {
-            province = query;
+            if(param.startsWith("q") && !(param.equals("q") || param.equals("qfield")))
+            {
+                fieldValues.put(param.substring(1), parameters.get(param));
+            }
         }
-        if("district".equals(requestedField))
+        if(query.length() > 0)
         {
-            district = query;
-        }
-        if("commune".equals(requestedField))
-        {
-            commune = query;
-        }
-        if("city".equals(requestedField))
-        {
-            city = query;
-        }
-        if("area".equals(requestedField))
-        {
-            area = query;
-        }
-        if("street".equals(requestedField))
-        {
-            street = query;
-        }
-        if("postCode".equals(requestedField))
-        {
-            postCode = query;
-        }
-        if("terc".equals(requestedField))
-        {
-            terc = query;
-        }
-        if("sym".equals(requestedField))
-        {
-            sym = query;
+            fieldValues.put(requestedField, query);
         }
 
-        if(requestedField.equals("province")
-            && province.length() + district.length() + commune.length() + city.length()
-                + area.length() + street.length() + postCode.length() == 0)
+        if(fieldValues.size() == 0 && requestedField.length() > 0)
         {
-            return locationDatabaseService.getAllTerms("province");
-        }
-        else if(requestedField.equals("district")
-            && province.length() + district.length() + commune.length() + city.length()
-                + area.length() + street.length() + postCode.length() == 0)
-        {
-            return locationDatabaseService.getAllTerms("district");
-        }
-        else if(requestedField.equals("commune")
-            && province.length() + district.length() + commune.length() + city.length()
-                + area.length() + street.length() + postCode.length() == 0)
-        {
-            return locationDatabaseService.getAllTerms("commune");
+            return locationDatabaseService.getAllTerms(requestedField);
         }
         else
         {
             List<Location> locations = locationDatabaseService.getLocations(requestedField,
-                province, district, commune, city, area, street, postCode, terc, sym);
+                fieldValues);
             return getFieldValues(requestedField, locations, limit);
         }
     }
@@ -137,44 +99,7 @@ public class JsonLocations
         Set<String> valueSet = new HashSet<String>(locations.size());
         for(Location location : locations)
         {
-            String fieldValue = null;
-            if("province".equals(requestedField))
-            {
-                fieldValue = location.getProvince();
-            }
-            if("district".equals(requestedField))
-            {
-                fieldValue = location.getDistrict();
-            }
-            if("commune".equals(requestedField))
-            {
-                fieldValue = location.getCommune();
-            }
-            if("city".equals(requestedField))
-            {
-                fieldValue = location.getCity();
-            }
-            if("area".equals(requestedField))
-            {
-                fieldValue = location.getArea();
-            }
-            if("street".equals(requestedField))
-            {
-                fieldValue = location.getStreet();
-            }
-            if("postCode".equals(requestedField))
-            {
-                fieldValue = location.getPostCode();
-            }
-            if("terc".equals(requestedField))
-            {
-                fieldValue = location.getTerc();
-            }
-            if("sym".equals(requestedField))
-            {
-                fieldValue = location.getSym();
-            }
-            valueSet.add(fieldValue);
+            valueSet.add(location.get(requestedField));
         }
         List<String> valueList = new ArrayList<String>(valueSet);
         Collections.sort(valueList);

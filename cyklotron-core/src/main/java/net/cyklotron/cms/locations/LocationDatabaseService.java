@@ -2,6 +2,7 @@ package net.cyklotron.cms.locations;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Provides access to a collection of location descriptors.
@@ -23,32 +24,28 @@ public interface LocationDatabaseService
      * fields are either matched exactly, or ignored when empty.
      * </p>
      * <p>
-     * This method logs and quenches IOExceptions and returns empty results, when index acess
+     * This method logs and quenches IOExceptions and returns empty results, when index access
      * problems occur.
      * </p>
      * 
-     * @param requestedField one of "province", "city", "street", "postCode".
-     * @param province user supplied value.
-     * @param city user supplied value.
-     * @param street user supplied value.
-     * @param postCode user supplied value.
+     * @param requestedField name of the requested field
+     * @param fieldValues user supplied field values.
      * @return list of locations sorted by relevance.
      */
-    public List<Location> getLocations(String requestedField, String province, String district,
-        String commune, String city, String area, String street, String postCode, String terc, String sym);
+    public List<Location> getLocations(String requestedField, Map<String, String> fieldValues);
 
     /**
      * Returns all terms in given field of location index.
      * 
-     * @param field of "province", "city", "street", "postCode".
-     * @return list of distict terms in the given field;
+     * @param field name of the requested field.
+     * @return list of distinct terms in the given field;
      */
     public List<String> getAllTerms(String field);
 
     /**
      * Checks whether a Location exists with given field exactly matching a value.
      * 
-     * @param field one of "province", "city", "street", "postCode"
+     * @param field name of the requested field.
      * @param value field value.
      * @return boolean if at least one exact match exits.
      * @throws IOException on index access problems.

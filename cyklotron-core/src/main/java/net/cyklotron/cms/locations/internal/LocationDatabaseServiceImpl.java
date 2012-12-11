@@ -31,6 +31,7 @@ package net.cyklotron.cms.locations.internal;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
@@ -49,13 +50,13 @@ public class LocationDatabaseServiceImpl
 
     private final Logger logger;
 
-    public LocationDatabaseServiceImpl(LocationsProvider pnaProvider, FileSystem fileSystem,
+    public LocationDatabaseServiceImpl(LocationsProvider locationsProvider, FileSystem fileSystem,
         Logger logger)
         throws IOException
     {
-        this.locationsProvider = pnaProvider;
+        this.locationsProvider = locationsProvider;
         this.logger = logger;
-        this.index = new LocationsIndex(fileSystem, logger);
+        this.index = new LocationsIndex(locationsProvider, fileSystem, logger);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class LocationDatabaseServiceImpl
             if(index.isEmpty())
             {
                 load(locationsProvider.fromCache());
-            }            
+            }
         }
         catch(IOException e)
         {
@@ -99,11 +100,9 @@ public class LocationDatabaseServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<Location> getLocations(String requestedField, String province, String district,
-        String commune, String city, String area, String street, String postCode, String terc, String sym)
+    public List<Location> getLocations(String requestedField, Map<String, String> fieldValues)
     {
-        return index.getLocations(requestedField, province, district, commune, city, area, street,
-            postCode);
+        return index.getLocations(requestedField, fieldValues);
     }
 
     /**

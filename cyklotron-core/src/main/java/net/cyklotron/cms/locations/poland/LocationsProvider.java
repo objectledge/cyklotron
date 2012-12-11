@@ -7,7 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.database.Database;
@@ -27,6 +31,24 @@ import net.cyklotron.cms.locations.Location;
 public class LocationsProvider
     implements net.cyklotron.cms.locations.LocationsProvider
 {
+    /**
+     * The fields defined for location indentifiation for Poland.
+     * <ul>
+     * <li>postCode: PNA (kod pocztowy)</li>
+     * <li>sym: identyfikator miejscowości z rejestru SIMC GUS</li>
+     * <li>terc: identyfikator gminy z rejestru TERC GUS - złożenie pól WOJ, POW, GMI, RODZ</li>
+     * <li>street: nazwa ulicy (placu itp.)</li>
+     * <li>area: dzielnica/część miejscowości
+     * <li>
+     * <li>city: miejscowość</li>
+     * <li>commune: gmina</li>
+     * <li>district: powiat</li>
+     * <li>province: województwo</li>
+     * </ul>
+     */
+    public static final String[] FIELDS = { "postCode", "sym", "terc", "street", "area", "city",
+                    "commune", "district", "province" };
+
     private final Logger logger;
 
     private final Database database;
@@ -140,12 +162,22 @@ public class LocationsProvider
                     String area = rs.getString("miejscowość") == rs.getString("nazwa") ? rs
                         .getString("nazwa_rm") != null ? rs.getString("nazwa_rm") : "" : rs
                         .getString("nazwa");
+                    String street = rs.getString("ulica") != null ? rs.getString("ulica") : "";
+                    String sym = rs.getString("sym") != null ? rs.getString("sym") : "";
 
-                    locations.add(new Location(rs.getString("województwo"), rs.getString("powiat"),
-                        rs.getString("gmina"), rs.getString("miejscowość"), area, rs
-                            .getString("ulica") != null ? rs.getString("ulica") : "", rs
-                            .getString("pna"), terc, rs.getString("sym") != null ? rs
-                            .getString("sym") : ""));
+                    // create a new map, Location objects store the reference internally
+                    Map<String, String> fieldValues = new HashMap<>();
+                    fieldValues.put("province", rs.getString("województwo"));
+                    fieldValues.put("district", rs.getString("powiat"));
+                    fieldValues.put("commune", rs.getString("gmina"));
+                    fieldValues.put("city", rs.getString("miejscowość"));
+                    fieldValues.put("area", area);
+                    fieldValues.put("street", street);
+                    fieldValues.put("terc", terc);
+                    fieldValues.put("sym", sym);
+                    fieldValues.put("postCode", rs.getString("pna"));
+
+                    locations.add(new Location(FIELDS, fieldValues));
                 }
                 logger.info("READ " + locations.size() + " items from locations_vpna DB in "
                     + timer.getElapsedSeconds() + "s");
@@ -200,5 +232,30 @@ public class LocationsProvider
             cachedLocations = readDB();
         }
         return cachedLocations;
+    }
+
+    /**
+     * {@see #FIELDS}
+     */
+    @Override
+    public String[] getFields()
+    {
+        return FIELDS;
+    }
+
+    @Override
+    public Set<LocationsProvider.FieldOptions> getOptions(String field)
+    {
+        switch(field)
+        {
+        case "province":
+            return EnumSet.of(LocationsProvider.FieldOptions.NOT_ANALYZED);
+        case "postCode":
+            return EnumSet.of(LocationsProvider.FieldOptions.NOT_ANALYZED);
+        case "street":
+            return EnumSet.of(LocationsProvider.FieldOptions.MULTI_TERM_SUBQUERY);
+        default:
+            return EnumSet.noneOf(LocationsProvider.FieldOptions.class);
+        }
     }
 }
