@@ -1,8 +1,5 @@
 package net.cyklotron.cms.locations.poland;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,112 +7,43 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.jcontainer.dna.Logger;
 import org.objectledge.database.Database;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
+import org.objectledge.html.HTMLService;
 import org.objectledge.utils.Timer;
 
 import net.cyklotron.cms.locations.Location;
-import net.cyklotron.cms.locations.LocationsProvider;
 
 /**
  * LocationProvider implementation for Poland using Pocztowe Numery Adresowe (postal area codes)
- * published by Poczta Polska SA.
+ * published by Poczta Polska SA and administrative portioning of the state TERYT published by GUS.
  * 
- * @author rafal
+ * @author rafal.krzewski@caltha.pl
+ * @author lukasz.urbanski@caltha.pl
  */
-public class PNALocationsProvider
-    implements LocationsProvider
+public class LocationsProvider
+    implements net.cyklotron.cms.locations.LocationsProvider
 {
-    private static final String ENCODING = "UTF-8";
-
-    private static final String SOURCE_LOCATION = "http://www.poczta-polska.pl/spispna/spispna.pdf";
-
-    private static final String CACHE_DIRECTORY = "/ngo/locations/";
-
-    private static final String SOURCE_TMP_FILE = "spispna.pdf.tmp";
-
-    private static final String SOURCE_FILE = "spispna.pdf";
-
-    private static final String CACHE_TMP_FILE = "spispna.csv.tmp";
-
-    private static final String CACHE_FILE = "spispna.csv";
-
     private final Logger logger;
 
     private final Database database;
 
-    private final FileSystem fileSystem;
+    private volatile List<Location> cachedLocations = null;
 
-    private List<Location> cachedLocations = null;
+    private final PNAProvider pnaProvider;
 
-    public PNALocationsProvider(Logger logger, FileSystem fileSystem, Database database)
+    private final TERCProvider tercProvider;
+
+    public LocationsProvider(Logger logger, FileSystem fileSystem, HTMLService htmlService,
+        Database database)
     {
         this.logger = logger;
-        this.fileSystem = fileSystem;
         this.database = database;
-    }
-
-    /**
-     * Download source file. Data is downloaded from {@link #SOURCE_LOCATION} and written to
-     * {@link #SOURCE_TMP_FILE}.
-     * 
-     * @return true if download was successful.
-     */
-    private boolean downloadSource()
-    {
-        try
-        {
-            Timer timer = new Timer();
-            HttpClient client = new HttpClient();
-            HttpMethod method = new GetMethod(SOURCE_LOCATION);
-            client.executeMethod(method);
-            if(!fileSystem.isDirectory(CACHE_DIRECTORY))
-            {
-                fileSystem.mkdirs(CACHE_DIRECTORY);
-            }
-            fileSystem.write(CACHE_DIRECTORY + SOURCE_TMP_FILE, method.getResponseBodyAsStream());
-            method.releaseConnection();
-            rename(SOURCE_TMP_FILE, SOURCE_FILE);
-            logger.info("downloaded " + fileSystem.length(CACHE_DIRECTORY + SOURCE_FILE)
-                + " bytes in " + timer.getElapsedSeconds() + "s");
-            return true;
-        }
-        catch(IOException e)
-        {
-            logger.error("failed to download source from " + SOURCE_LOCATION, e);
-            return false;
-        }
-    }
-
-    /**
-     * Parse source file. Source file is parsed and on success {@link #cachedContent} variable is
-     * updated.
-     * 
-     * @return true if parsing was successful.
-     */
-    private void parseSource()
-    {
-        try
-        {
-            PNASourceParser parser = new PNASourceParser(fileSystem, logger);
-            parser.parse(CACHE_DIRECTORY + SOURCE_FILE);
-            List<String[]> content = parser.getContent();
-            writeCache(parser.getHeadings(), content);
-            writeDB(content);
-            readDB();
-        }
-        catch(IOException e)
-        {
-            logger.error("failed to parse source file " + SOURCE_FILE, e);
-        }
+        pnaProvider = new PNAProvider(fileSystem, logger);
+        tercProvider = new TERCProvider(logger, fileSystem, htmlService, database);
     }
 
     private void writeDB(List<String[]> content)
@@ -197,14 +125,14 @@ public class PNALocationsProvider
         }
     }
 
-    private void readDB()
+    private List<Location> readDB()
     {
         try(Connection conn = database.getConnection(); Statement stmt = conn.createStatement())
         {
             Timer timer = new Timer();
             try(ResultSet rs = stmt.executeQuery("SELECT * FROM locations_vpna"))
             {
-                cachedLocations = new ArrayList<Location>();
+                List<Location> locations = new ArrayList<>();
                 while(rs.next())
                 {
                     String terc = rs.getString("woj") + rs.getString("pow") + rs.getString("gmi")
@@ -213,65 +141,20 @@ public class PNALocationsProvider
                         .getString("nazwa_rm") != null ? rs.getString("nazwa_rm") : "" : rs
                         .getString("nazwa");
 
-                    cachedLocations.add(new Location(rs.getString("województwo"), rs
-                        .getString("powiat"), rs.getString("gmina"), rs.getString("miejscowość"),
-                        area, rs.getString("ulica") != null ? rs.getString("ulica") : "", rs
+                    locations.add(new Location(rs.getString("województwo"), rs.getString("powiat"),
+                        rs.getString("gmina"), rs.getString("miejscowość"), area, rs
+                            .getString("ulica") != null ? rs.getString("ulica") : "", rs
                             .getString("pna"), terc, rs.getString("sym") != null ? rs
                             .getString("sym") : ""));
                 }
-                logger.info("READ " + cachedLocations.size() + " items from locations_bpna DB in "
+                logger.info("READ " + locations.size() + " items from locations_vpna DB in "
                     + timer.getElapsedSeconds() + "s");
+                return locations;
             }
         }
         catch(SQLException e)
         {
-            logger.error("error on wroting items to DB in ", e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void writeCache(String[] headings, List<String[]> content)
-    {
-        try
-        {
-            Timer timer = new Timer();
-            Writer writer = fileSystem.getWriter(CACHE_DIRECTORY + CACHE_TMP_FILE, ENCODING);
-            PNASourceParser.dump(Collections.singletonList(headings), writer);
-            PNASourceParser.dump(content, writer);
-            writer.close();
-            rename(CACHE_TMP_FILE, CACHE_FILE);
-            logger.info("wrote " + content.size() + " items to cache in "
-                + timer.getElapsedSeconds() + "s");
-        }
-        catch(UnsupportedEncodingException e)
-        {
-            throw new RuntimeException(e);
-        }
-        catch(IOException e)
-        {
-            logger.error("failed to write cache file " + CACHE_FILE, e);
-        }
-    }
-
-    private void parseCache()
-    {
-        readDB();
-    }
-
-    /**
-     * Stores temporary cache file for future use.
-     * 
-     * @throws IOException
-     */
-    private void rename(String from, String to)
-        throws IOException
-    {
-        try
-        {
-            fileSystem.rename(CACHE_DIRECTORY + from, CACHE_DIRECTORY + to);
-        }
-        catch(UnsupportedCharactersInFilePathException e)
-        {
+            logger.error("error reading data from database", e);
             throw new RuntimeException(e);
         }
     }
@@ -298,11 +181,8 @@ public class PNALocationsProvider
     {
         if(cachedLocations == null)
         {
-            if(fileSystem.exists(CACHE_DIRECTORY + CACHE_FILE))
-            {
-                parseCache();
-            }
-            else
+            cachedLocations = readDB();
+            if(cachedLocations.size() == 0)
             {
                 fromSource();
             }
@@ -313,9 +193,11 @@ public class PNALocationsProvider
     @Override
     public Collection<Location> fromSource()
     {
-        if(downloadSource())
+        tercProvider.fetch();
+        if(pnaProvider.downloadSource())
         {
-            parseSource();
+            writeDB(pnaProvider.parseSource());
+            cachedLocations = readDB();
         }
         return cachedLocations;
     }

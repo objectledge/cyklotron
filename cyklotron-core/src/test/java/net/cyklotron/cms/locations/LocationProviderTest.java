@@ -7,13 +7,15 @@ import java.util.Collection;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+import org.jcontainer.dna.impl.DefaultConfiguration;
+import org.objectledge.html.HTMLServiceImpl;
 
-import net.cyklotron.cms.locations.poland.PNALocationsProvider;
+import net.cyklotron.cms.locations.poland.LocationsProvider;
 
-public class PNALocationProviderTest
+public class LocationProviderTest
     extends LocationTestBase
 {
-    private PNALocationsProvider provider;
+    private LocationsProvider provider;
 
     public void setUp()
         throws Exception
@@ -21,7 +23,8 @@ public class PNALocationProviderTest
         super.setUp();
         if(enabled)
         {
-            provider = new PNALocationsProvider(getLogger(), getFileSystem(), database);
+            provider = new LocationsProvider(getLogger(), getFileSystem(), new HTMLServiceImpl(
+                new DefaultConfiguration("config", "", "")), database);
         }
     }
 
