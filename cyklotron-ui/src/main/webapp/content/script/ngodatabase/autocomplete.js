@@ -78,7 +78,7 @@ function initOrganizationAutocomplete(fields, jsonOrganizationDataUrl) {
 				fields.province.val(item.province);
 			}).change(function(e, item) {
 				if (acOrganizedByOptions.clearIfNotMatch
-					&& $(this).val() != fields.id.attr("rel")) {
+				    && fields.id.attr("rel")!='undefined' && fields.id.attr("rel")!="" && $(this).val() != fields.id.attr("rel")) {
 					 clearFields(fields);
 					}
 			}); // fill data when complete
