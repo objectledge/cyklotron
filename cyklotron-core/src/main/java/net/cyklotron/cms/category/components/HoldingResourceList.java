@@ -121,7 +121,7 @@ extends DocumentResourceList
         throws ProcessingException
     {
         List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
-        filters.add(new StateFilter(new String[]{"Published"}));
+        filters.add(new StateFilter(new String[]{"published"}));
         return filters.toArray(new TableFilter[filters.size()]);
     }
 	
