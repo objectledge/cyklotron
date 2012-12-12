@@ -19,7 +19,7 @@ import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
-import net.cyklotron.cms.structure.table.PublishedStateFilter;
+import net.cyklotron.cms.structure.table.StateFilter;
 import net.cyklotron.cms.util.CmsResourceListTableModel;
 
 /**
@@ -121,7 +121,7 @@ extends DocumentResourceList
         throws ProcessingException
     {
         List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
-        filters.add(new PublishedStateFilter());
+        filters.add(new StateFilter(new String[]{"Published"}));
         return filters.toArray(new TableFilter[filters.size()]);
     }
 	

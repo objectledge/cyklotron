@@ -1,19 +1,27 @@
 package net.cyklotron.cms.structure.table;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.objectledge.table.TableFilter;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
 
 /**
- * This is a filter for filtering navigation nodes upon view permission.
+ * DocumentNodeResource state filter
  * 
- * @author <a href="mailto:zwierzem@ngo.pl">Damian Gajda</a>
- * @version $Id: ViewPermissionFilter.java,v 1.6 2007-11-18 21:23:03 rafal Exp $
+ * @author lukasz
  */
-public class PublishedStateFilter
+public class StateFilter
     implements TableFilter
 {
-    private final static String PUBLISHED_STATE_NAME = "published";
+    private final Set<String> allowedStatesNames;
+
+    public StateFilter(String[] states)
+    {
+        allowedStatesNames = new HashSet<String>(Arrays.asList(states));
+    }
 
     public boolean accept(Object object)
     {
@@ -23,7 +31,6 @@ public class PublishedStateFilter
         }
 
         DocumentNodeResource node = (DocumentNodeResource)object;
-
-        return PUBLISHED_STATE_NAME.equals(node.getState().getName());
+        return allowedStatesNames.contains(node.getState().getName());
     }
 }
