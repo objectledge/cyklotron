@@ -415,7 +415,7 @@ public class PeriodicalsServiceImpl
         Date publishAfter = r.getPublishAfter();
         if(publishAfter == null)
         {
-        	publishAfter = r.getCreationTime();
+            publishAfter = r.getCreationTime();
         }
         boolean afterMinimalPublicationDate = time.getTime() > publishAfter.getTime();
 
@@ -584,8 +584,16 @@ public class PeriodicalsServiceImpl
         List<CategoryQueryResource> queries = (List<CategoryQueryResource>)periodical
             .getCategoryQuerySet().getQueries();
         LongSet newIdSet = getNewDocuments(coralSession, periodical);
-        log.info("processing " + CmsTool.getSite(periodical).getName() + "/" + periodical.getName()
-            + " considering " + newIdSet.size() + " new documents");
+        if(newIdSet != null)
+        {
+            log.info("processing " + CmsTool.getSite(periodical).getName() + "/"
+                + periodical.getName() + " considering " + newIdSet.size() + " new documents");
+        }
+        else
+        {
+            log.info("processing " + CmsTool.getSite(periodical).getName() + "/"
+                + periodical.getName() + " considering zero new documents");
+        }
         for(CategoryQueryResource cq : queries)
         {
             String[] siteNames = cq.getAcceptedSiteNames();
@@ -765,7 +773,7 @@ public class PeriodicalsServiceImpl
         }
         if(message != null && r.isReplyToHeaderDefined())
         {
-        	try
+            try
             {
                 message.getMessage().setReplyTo(
                     new InternetAddress[] { new InternetAddress(r.getReplyToHeader()) });
