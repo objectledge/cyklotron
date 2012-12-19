@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.codehaus.jackson.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
