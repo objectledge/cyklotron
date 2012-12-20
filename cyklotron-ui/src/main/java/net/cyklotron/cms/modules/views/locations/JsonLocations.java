@@ -92,7 +92,10 @@ public class JsonLocations
         if(fieldValues.size() == 0 && requestedField.length() > 0)
         {
             Map<String, Object> fieldObjects = new HashMap<String, Object>();
-            fieldObjects.put(FIELD_VALUES, locationDatabaseService.getAllTerms(requestedField));
+            List<String> terms = locationDatabaseService.getAllTerms(requestedField);
+            Collections.sort(terms);
+            fieldObjects.put(FIELD_VALUES, terms);
+            fieldObjects.put(FIELD_UNIQUE_LOCATIONS, new HashMap<String, String>());
             return fieldObjects;
         }
         else
