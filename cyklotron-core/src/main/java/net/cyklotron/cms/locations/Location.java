@@ -59,6 +59,11 @@ public class Location
     {
         return entries.get(field);
     }
+    
+    public Map<String, String> getEntries()
+    {
+        return entries;
+    }
 
     public Iterator<Map.Entry<String, String>> iterator()
     {

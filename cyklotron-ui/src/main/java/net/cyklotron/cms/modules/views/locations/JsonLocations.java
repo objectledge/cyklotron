@@ -1,7 +1,6 @@
 package net.cyklotron.cms.modules.views.locations;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,15 +8,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
+import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
+import org.objectledge.table.comparator.BaseStringComparator;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.json.AbstractJsonView;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.locations.Location;
@@ -34,6 +36,10 @@ public class JsonLocations
     extends AbstractJsonView
 {
     private static final int DEFAULT_LIMIT = 25;
+
+    private static final String FIELD_VALUES = "fieldValues";
+
+    private static final String FIELD_UNIQUE_LOCATIONS = "uniqueLocations";
 
     /** The Location service. */
     private LocationDatabaseService locationDatabaseService;
@@ -57,11 +63,11 @@ public class JsonLocations
     protected void buildJsonStream()
         throws ProcessingException, JsonGenerationException, IOException
     {
-        List<String> fieldValues = getFieldValues(context);
+        Map<String, Object> fieldValues = getFieldValues(context);
         writeResponseValue(fieldValues);
     }
 
-    private List<String> getFieldValues(Context context)
+    private Map<String, Object> getFieldValues(Context context)
         throws ProcessingException
     {
         Parameters parameters = RequestParameters.getRequestParameters(context);
@@ -72,7 +78,8 @@ public class JsonLocations
         Map<String, String> fieldValues = new HashMap<>();
         for(String param : parameters.getParameterNames())
         {
-            if(param.startsWith("q") && !(param.equals("q") || param.equals("qfield")))
+            if(param.startsWith("q") && !parameters.get(param).isEmpty() 
+                && !(param.equals("q") || param.equals("qfield")))
             {
                 fieldValues.put(param.substring(1), parameters.get(param));
             }
@@ -84,7 +91,9 @@ public class JsonLocations
 
         if(fieldValues.size() == 0 && requestedField.length() > 0)
         {
-            return locationDatabaseService.getAllTerms(requestedField);
+            Map<String, Object> fieldObjects = new HashMap<String, Object>();
+            fieldObjects.put(FIELD_VALUES, locationDatabaseService.getAllTerms(requestedField));
+            return fieldObjects;
         }
         else
         {
@@ -94,15 +103,50 @@ public class JsonLocations
         }
     }
 
-    private List<String> getFieldValues(String requestedField, List<Location> locations, int limit)
+    private Map<String, Object> getFieldValues(String requestedField, List<Location> locations,
+        int limit)
     {
-        Set<String> valueSet = new HashSet<String>(locations.size());
+        Map<String, Object> fieldObjects = new HashMap<String, Object>();
+        Map<String, Map<String, String>> uniqueLocations = new HashMap<String, Map<String, String>>(
+            locations.size());
+
+        Collections.sort(locations, new LocationsComparator(requestedField));
+        locations = locations.subList(0, Math.min(limit, locations.size()));
         for(Location location : locations)
         {
-            valueSet.add(location.get(requestedField));
+            // put location object if key is unique
+            Map<String, String> locationMap = uniqueLocations.containsKey(location
+                .get(requestedField)) ? new HashMap<String, String>() : location.getEntries();
+            uniqueLocations.put(location.get(requestedField), locationMap);
         }
-        List<String> valueList = new ArrayList<String>(valueSet);
-        Collections.sort(valueList);
-        return valueList.subList(0, Math.min(limit, valueList.size()));
+        fieldObjects.put(FIELD_VALUES, uniqueLocations.keySet());
+        fieldObjects.put(FIELD_UNIQUE_LOCATIONS, uniqueLocations);
+
+        return fieldObjects;
+    }
+
+    /***
+     * Location Comparator used to sort by defined Location field value
+     * 
+     * @author lukasz
+     */
+    private class LocationsComparator
+        extends BaseStringComparator<Location>
+    {
+        private final String requestedField;
+
+        public LocationsComparator(String requestedField)
+        {
+            super(I18nContext.getI18nContext(context).getLocale());
+            this.requestedField = requestedField;
+        }
+
+        public int compare(Location l1, Location l2)
+        {
+            String f1 = l1.get(requestedField);
+            String f2 = l2.get(requestedField);
+
+            return compareStrings(f1, f2);
+        }
     }
 }
