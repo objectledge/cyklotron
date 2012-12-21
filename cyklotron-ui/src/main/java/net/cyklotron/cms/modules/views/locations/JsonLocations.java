@@ -3,10 +3,8 @@ package net.cyklotron.cms.modules.views.locations;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -78,7 +76,7 @@ public class JsonLocations
         Map<String, String> fieldValues = new HashMap<>();
         for(String param : parameters.getParameterNames())
         {
-            if(param.startsWith("q") && !parameters.get(param).isEmpty() 
+            if(param.startsWith("q") && !parameters.get(param).isEmpty()
                 && !(param.equals("q") || param.equals("qfield")))
             {
                 fieldValues.put(param.substring(1), parameters.get(param));
@@ -95,7 +93,7 @@ public class JsonLocations
             List<String> terms = locationDatabaseService.getAllTerms(requestedField);
             Collections.sort(terms);
             fieldObjects.put(FIELD_VALUES, terms);
-            fieldObjects.put(FIELD_UNIQUE_LOCATIONS, new HashMap<String, String>());
+            fieldObjects.put(FIELD_UNIQUE_LOCATIONS, new HashMap<String, Object>());
             return fieldObjects;
         }
         else
@@ -113,22 +111,60 @@ public class JsonLocations
         Map<String, Map<String, String>> uniqueLocations = new HashMap<String, Map<String, String>>(
             locations.size());
 
-        Collections.sort(locations, new LocationsComparator(requestedField));
         locations = locations.subList(0, Math.min(limit, locations.size()));
         for(Location location : locations)
         {
-            // put location object if key is unique
-            Map<String, String> locationMap = uniqueLocations.containsKey(location
-                .get(requestedField)) ? new HashMap<String, String>() : location.getEntries();
-            uniqueLocations.put(location.get(requestedField), locationMap);
+            Map<String, String> matchnigFields = getMatchingLocationFields(location.getEntries(),
+                uniqueLocations.get(location.get(requestedField)));
+            uniqueLocations.put(location.get(requestedField), matchnigFields);
         }
+
         fieldObjects.put(FIELD_VALUES, uniqueLocations.keySet());
         fieldObjects.put(FIELD_UNIQUE_LOCATIONS, uniqueLocations);
 
         return fieldObjects;
     }
 
-    /***
+    /**
+     * Return non empty matching fields map
+     * 
+     * @param m1 map object
+     * @param m2 map object
+     * @return <code>Map<String, String></code>
+     * @author lukasz
+     */
+    private Map<String, String> getMatchingLocationFields(Map<String, String> m1,
+        Map<String, String> m2)
+    {
+        Map<String, String> unique = new HashMap<String, String>();
+        if(m1 == null)
+        {
+            return new HashMap<String, String>();
+        }
+        if(m2 == null)
+        {
+            for(String key : m1.keySet())
+            {
+                if(m1.get(key) != null)
+                {
+                    unique.put(key, m1.get(key));
+                }
+            }
+        }
+        else
+        {
+            for(String key : m1.keySet())
+            {
+                if(m1.get(key) != null && m1.get(key).equals(m2.get(key)))
+                {
+                    unique.put(key, m1.get(key));
+                }
+            }
+        }
+        return unique;
+    }
+
+    /**
      * Location Comparator used to sort by defined Location field value
      * 
      * @author lukasz
