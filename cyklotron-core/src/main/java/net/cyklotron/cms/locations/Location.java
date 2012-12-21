@@ -33,6 +33,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * A location descriptor.
  * <p>
@@ -68,7 +70,8 @@ public class Location
     {
         return entries.get(field);
     }
-
+    
+    @JsonValue
     public Map<String, String> getEntries()
     {
         return entries;

@@ -35,14 +35,10 @@ var acLocationsOptions = {
 		var parsed = [];
 		if (data.fieldValues) {
 			for ( var i = 0; i < data.fieldValues.length; i++) {
-				var fieldValue = data.fieldValues[i];
-				var matchingLocations = data.matchingLocations[fieldValue] || {
-					entries : undefined
-				};
 				parsed[parsed.length] = {
 					data : {
-						"fieldValue" : fieldValue,
-						"matchingLocations" : matchingLocations.entries
+						"fieldValue" : data.fieldValues[i],
+						"matchingLocations" : data.matchingLocations[data.fieldValues[i]]
 					},
 					value : data.fieldValues[i],
 					result : data.fieldValues[i]

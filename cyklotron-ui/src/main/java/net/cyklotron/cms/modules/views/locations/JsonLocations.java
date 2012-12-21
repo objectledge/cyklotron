@@ -112,9 +112,9 @@ public class JsonLocations
         }
         limit = Math.min(limit, uniqueLocations.size());
         List<String> valueList = new ArrayList<String>(uniqueLocations.keySet());
-        if(valueList.size() > 1)
+        if(limit < valueList.size())
         {
-            uniqueLocations = uniqueLocations.headMap(valueList.get(limit - 1));
+            uniqueLocations = uniqueLocations.headMap(valueList.get(limit));
             valueList = valueList.subList(0, limit);
         }
         return new LocationResponse(valueList, uniqueLocations);
