@@ -11,12 +11,10 @@ import java.util.TreeMap;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
-import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
-import org.objectledge.table.comparator.BaseStringComparator;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.json.AbstractJsonView;
 
@@ -148,31 +146,6 @@ public class JsonLocations
         public SortedMap<String, Location> getMatchingLocations()
         {
             return matchingLocations;
-        }
-    }
-
-    /**
-     * Location Comparator used to sort by defined Location field value
-     * 
-     * @author lukasz
-     */
-    private class LocationsComparator
-        extends BaseStringComparator<Location>
-    {
-        private final String requestedField;
-
-        public LocationsComparator(String requestedField)
-        {
-            super(I18nContext.getI18nContext(context).getLocale());
-            this.requestedField = requestedField;
-        }
-
-        public int compare(Location l1, Location l2)
-        {
-            String f1 = l1.get(requestedField);
-            String f2 = l2.get(requestedField);
-
-            return compareStrings(f1, f2);
         }
     }
 
