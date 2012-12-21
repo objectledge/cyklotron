@@ -1,10 +1,13 @@
 package net.cyklotron.cms.modules.views.locations;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -108,18 +111,18 @@ public class JsonLocations
         int limit)
     {
         Map<String, Object> fieldObjects = new HashMap<String, Object>();
-        Map<String, Map<String, String>> uniqueLocations = new HashMap<String, Map<String, String>>(
-            locations.size());
+        SortedMap<String, Map<String, String>> uniqueLocations = new TreeMap<String, Map<String, String>>();
 
-        locations = locations.subList(0, Math.min(limit, locations.size()));
         for(Location location : locations)
         {
             Map<String, String> matchnigFields = getMatchingLocationFields(location.getEntries(),
                 uniqueLocations.get(location.get(requestedField)));
             uniqueLocations.put(location.get(requestedField), matchnigFields);
         }
+        List<String> valueList = new ArrayList<String>(uniqueLocations.keySet());
+        uniqueLocations = uniqueLocations.headMap(valueList.get(Math.min(limit,valueList.size())));
 
-        fieldObjects.put(FIELD_VALUES, uniqueLocations.keySet());
+        fieldObjects.put(FIELD_VALUES, valueList);
         fieldObjects.put(FIELD_UNIQUE_LOCATIONS, uniqueLocations);
 
         return fieldObjects;
@@ -136,7 +139,7 @@ public class JsonLocations
     private Map<String, String> getMatchingLocationFields(Map<String, String> m1,
         Map<String, String> m2)
     {
-        Map<String, String> unique = new HashMap<String, String>();
+        Map<String, String> matching = new HashMap<String, String>();
         if(m1 == null)
         {
             return new HashMap<String, String>();
@@ -147,7 +150,7 @@ public class JsonLocations
             {
                 if(m1.get(key) != null)
                 {
-                    unique.put(key, m1.get(key));
+                    matching.put(key, m1.get(key));
                 }
             }
         }
@@ -157,11 +160,11 @@ public class JsonLocations
             {
                 if(m1.get(key) != null && m1.get(key).equals(m2.get(key)))
                 {
-                    unique.put(key, m1.get(key));
+                    matching.put(key, m1.get(key));
                 }
             }
         }
-        return unique;
+        return matching;
     }
 
     /**
