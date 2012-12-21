@@ -38,10 +38,6 @@ public class JsonLocations
 {
     private static final int DEFAULT_LIMIT = 25;
 
-    private static final String FIELD_VALUES = "fieldValues";
-
-    private static final String FIELD_UNIQUE_LOCATIONS = "uniqueLocations";
-
     /** The Location service. */
     private LocationDatabaseService locationDatabaseService;
 
@@ -64,11 +60,11 @@ public class JsonLocations
     protected void buildJsonStream()
         throws ProcessingException, JsonGenerationException, IOException
     {
-        Map<String, Object> fieldValues = getFieldValues(context);
-        writeResponseValue(fieldValues);
+        LocationResponse lotationResponse = getFieldValues(context);
+        writeResponseValue(lotationResponse);
     }
 
-    private Map<String, Object> getFieldValues(Context context)
+    private LocationResponse getFieldValues(Context context)
         throws ProcessingException
     {
         Parameters parameters = RequestParameters.getRequestParameters(context);
@@ -92,12 +88,9 @@ public class JsonLocations
 
         if(fieldValues.size() == 0 && requestedField.length() > 0)
         {
-            Map<String, Object> fieldObjects = new HashMap<String, Object>();
             List<String> terms = locationDatabaseService.getAllTerms(requestedField);
             Collections.sort(terms);
-            fieldObjects.put(FIELD_VALUES, terms);
-            fieldObjects.put(FIELD_UNIQUE_LOCATIONS, new HashMap<String, Object>());
-            return fieldObjects;
+            return new LocationResponse(terms);
         }
         else
         {
@@ -107,64 +100,55 @@ public class JsonLocations
         }
     }
 
-    private Map<String, Object> getFieldValues(String requestedField, List<Location> locations,
+    private LocationResponse getFieldValues(String requestedField, List<Location> locations,
         int limit)
     {
-        Map<String, Object> fieldObjects = new HashMap<String, Object>();
-        SortedMap<String, Map<String, String>> uniqueLocations = new TreeMap<String, Map<String, String>>();
+        SortedMap<String, Location> uniqueLocations = new TreeMap<String, Location>();
 
         for(Location location : locations)
         {
-            Map<String, String> matchnigFields = getMatchingLocationFields(location.getEntries(),
-                uniqueLocations.get(location.get(requestedField)));
-            uniqueLocations.put(location.get(requestedField), matchnigFields);
+            Location matchnigLocation = new Location(location, uniqueLocations.get(location
+                .get(requestedField)));
+            uniqueLocations.put(location.get(requestedField), matchnigLocation);
         }
+        limit = Math.min(limit, uniqueLocations.size());
         List<String> valueList = new ArrayList<String>(uniqueLocations.keySet());
-        uniqueLocations = uniqueLocations.headMap(valueList.get(Math.min(limit,valueList.size())));
-
-        fieldObjects.put(FIELD_VALUES, valueList);
-        fieldObjects.put(FIELD_UNIQUE_LOCATIONS, uniqueLocations);
-
-        return fieldObjects;
+        if(valueList.size() > 1)
+        {
+            uniqueLocations = uniqueLocations.headMap(valueList.get(limit - 1));
+            valueList = valueList.subList(0, limit);
+        }
+        return new LocationResponse(valueList, uniqueLocations);
     }
 
-    /**
-     * Return non empty matching fields map
-     * 
-     * @param m1 map object
-     * @param m2 map object
-     * @return <code>Map<String, String></code>
-     * @author lukasz
-     */
-    private Map<String, String> getMatchingLocationFields(Map<String, String> m1,
-        Map<String, String> m2)
+    private class LocationResponse
     {
-        Map<String, String> matching = new HashMap<String, String>();
-        if(m1 == null)
+        private List<String> fieldValues;
+
+        private SortedMap<String, Location> matchingLocations;
+
+        public LocationResponse(List<String> fieldValues,
+            SortedMap<String, Location> matchingLocations)
         {
-            return new HashMap<String, String>();
+            this.fieldValues = fieldValues;
+            this.matchingLocations = matchingLocations;
         }
-        if(m2 == null)
+
+        public LocationResponse(List<String> fieldValues)
         {
-            for(String key : m1.keySet())
-            {
-                if(m1.get(key) != null)
-                {
-                    matching.put(key, m1.get(key));
-                }
-            }
+            this.fieldValues = fieldValues;
+            this.matchingLocations = new TreeMap<String, Location>();
         }
-        else
+
+        public List<String> getFieldValues()
         {
-            for(String key : m1.keySet())
-            {
-                if(m1.get(key) != null && m1.get(key).equals(m2.get(key)))
-                {
-                    matching.put(key, m1.get(key));
-                }
-            }
+            return fieldValues;
         }
-        return matching;
+
+        public SortedMap<String, Location> getMatchingLocations()
+        {
+            return matchingLocations;
+        }
     }
 
     /**
@@ -191,4 +175,5 @@ public class JsonLocations
             return compareStrings(f1, f2);
         }
     }
+
 }
