@@ -88,6 +88,7 @@ public class JsonLocations
         {
             List<String> terms = locationDatabaseService.getAllTerms(requestedField);
             Collections.sort(terms);
+            terms = terms.subList(0, Math.min(limit, terms.size()));
             return new LocationResponse(terms);
         }
         else
