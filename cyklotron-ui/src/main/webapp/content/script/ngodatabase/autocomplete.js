@@ -38,7 +38,7 @@ var acLocationsOptions = {
 				parsed[parsed.length] = {
 					data : {
 						"fieldValue" : data.fieldValues[i],
-						"uniqueLocations" : data.uniqueLocations[i]
+						"uniqueLocations" : data.uniqueLocations[data.fieldValues[i]]
 					},
 					value : data.fieldValues[i],
 					result : data.fieldValues[i]
