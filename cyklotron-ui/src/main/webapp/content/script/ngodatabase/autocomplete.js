@@ -89,7 +89,7 @@ function initOrganizationAutocomplete(fields, jsonOrganizationDataUrl) {
 						if (acOrganizedByOptions.clearIfNotMatch
 								&& fields.id.attr("rel") != 'undefined'
 								&& fields.id.attr("rel") != ""
-								&& $(this).val() != fields.id.attr("rel")) {
+								&& jQuery(this).val() != fields.id.attr("rel")) {
 							clearFields(fields);
 						}
 					}); // fill data when complete
@@ -438,7 +438,7 @@ function editDocumentOrgFields(index) {
 			+ (index - 1) + "\\.group-0\\.hidden-6");
 	fields["street"] = jQuery("#form\\.page-0\\.group-4\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.group-1\\.input-0");
-	fields["postCode"] = $("#form\\.page-0\\.group-4\\.repeat-1\\.repeatSubTree-"
+	fields["postCode"] = jQuery("#form\\.page-0\\.group-4\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.group-1\\.input-1");
 	fields["city"] = jQuery("#form\\.page-0\\.group-4\\.repeat-1\\.repeatSubTree-"
 			+ (index - 1) + "\\.group-0\\.group-1\\.input-2");
