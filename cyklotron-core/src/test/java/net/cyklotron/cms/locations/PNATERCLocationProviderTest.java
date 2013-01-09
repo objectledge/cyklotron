@@ -92,8 +92,9 @@ public class PNATERCLocationProviderTest
                 }
                 assertTrue(rowCount.get(2) < 20);
                 assertTrue(rowCount.get(3) + rowCount.get(5) < 20);
-                assertTrue(rowCount.get(4) < 100);
-                assertTrue(rowCount.get(6) < 10);
+                assertTrue(rowCount.get(4) < 150);
+                assertTrue(rowCount.get(6) < 60);
+                assertTrue(rowCount.get(7) < 5);
             }
         }
     }
