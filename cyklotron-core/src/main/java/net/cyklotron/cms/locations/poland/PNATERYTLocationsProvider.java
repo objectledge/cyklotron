@@ -126,6 +126,11 @@ public class PNATERYTLocationsProvider
                             pstmt.setString(9, null);
                             pstmt.setString(10, area);
                         }
+                        // workaround for apparent error in PNA 2013-01
+                        if(city.equals("Wałbrzych") && row[5].equals("wałbrzyski"))
+                        {
+                            pstmt.setString(6, "Wałbrzych");
+                        }
                         pstmt.addBatch();
                     }
                     inserted = pstmt.executeBatch();
