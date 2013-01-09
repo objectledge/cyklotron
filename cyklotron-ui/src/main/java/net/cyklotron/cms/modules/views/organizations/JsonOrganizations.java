@@ -3,7 +3,7 @@ package net.cyklotron.cms.modules.views.organizations;
 import java.io.IOException;
 import java.util.List;
 
-import org.codehaus.jackson.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;

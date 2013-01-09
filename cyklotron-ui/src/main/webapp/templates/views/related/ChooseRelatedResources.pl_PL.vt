@@ -69,6 +69,8 @@ function fSub(action)
 
 function updateAll(action)
 {
+  $##
+.ajaxSetup({async:false});
   orderSub();
   fSub(action);
 }

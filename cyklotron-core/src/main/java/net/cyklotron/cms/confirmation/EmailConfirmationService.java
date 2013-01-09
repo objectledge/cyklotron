@@ -97,7 +97,7 @@ public interface EmailConfirmationService
      * Delete inactive email confirmation requests
      */
 
-    public void deleteNotConfirmedEmailConfirmationRequests(CoralSession coralSession, String howMany, String howOld)
+    public void deleteNotConfirmedRequests(CoralSession coralSession, int howMany, int howOld)
         throws ConfirmationRequestException;
     
     /**

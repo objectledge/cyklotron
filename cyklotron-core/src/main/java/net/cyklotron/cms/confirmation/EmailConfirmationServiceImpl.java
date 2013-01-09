@@ -198,17 +198,16 @@ public class EmailConfirmationServiceImpl
     }
 
     @Override
-    public void deleteNotConfirmedEmailConfirmationRequests(CoralSession coralSession,
-        String howMany, String howOld)
+    public void deleteNotConfirmedRequests(CoralSession coralSession, int howMany, int howOld)
         throws ConfirmationRequestException
     {
         Resource res = getConfirmationRequestsRoot(coralSession);
         Resource[] confirmations = res.getChildren();
-        Date ServerDate = new Date();
+        Date serverDate = new Date();
         int i = 1;
         for(Resource r : confirmations)
         {
-            if(i == Integer.parseInt(howMany))
+            if(i == howMany)
             {
                 break;
             }
@@ -220,9 +219,9 @@ public class EmailConfirmationServiceImpl
                     Date date = r.getCreationTime();
                     Calendar c = Calendar.getInstance();
                     c.setTime(date);
-                    c.add(Calendar.DATE, Integer.parseInt(howOld));
+                    c.add(Calendar.DATE, howOld);
                     date = c.getTime();
-                    if(date.before(ServerDate))
+                    if(date.before(serverDate))
                     {
                         try
                         {

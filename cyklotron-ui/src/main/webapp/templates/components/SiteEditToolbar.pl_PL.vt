@@ -7,9 +7,17 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 ##
 ##
 #set($siteEditLink = $link.set('x', $cms_data.node.id))
+#if($pageTool.getDoctype() == 'HTML5')
+$pageTool.addSkinStyleLink('bootstrap/css/bootstrap-responsive.css')
+$pageTool.addSkinStyleLink('bootstrap/css/bootstrap-responsive.min.css')
+$pageTool.addSkinStyleLink('bootstrap/css/bootstrap.css')
+$pageTool.addSkinStyleLink('bootstrap/css/docs.css')
+<div class="navbar navbar-fixed-top">  
+<div class="navbar-inner">
+#end
 <form name="cmsmode" method="post" action="$siteEditLink.action('SetBrowseMode')">
 ##
-<table class="cms-edit-mode-toolbar" cellspacing="0">
+<table #if($pageTool.getDoctype() == 'HTML5') style="background-color: #2C2C2C; color : #999;" #end class="cms-edit-mode-toolbar" cellspacing="0">
 <tbody><tr>
 <td>
 #cms_personal_credentials($cms_tool.subject)
@@ -74,4 +82,8 @@ Tryb:
 </table>
 ##
 </form>
+#if($pageTool.getDoctype() == 'HTML5')
+</div>
+</div>
+#end
 #end

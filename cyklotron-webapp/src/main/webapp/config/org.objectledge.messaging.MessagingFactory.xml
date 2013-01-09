@@ -30,7 +30,7 @@
 <config>
   <!--
   <connection name="DefaultConnection">
-    <url>tcp://localhost:61616</url>
+    <url>failover:(tcp://localhost:61616)?maxReconnectAttempts=-1</url>
     <user></user>
     <password></password>
   </connection>

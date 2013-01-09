@@ -7,12 +7,12 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
@@ -31,13 +31,23 @@ import net.cyklotron.cms.locations.LocationsProvider;
 public class PNALocationsProvider
     implements LocationsProvider
 {
+    /**
+     * The fields defined for location identification for Poland.
+     * <ul>
+     * <li>postCode: PNA (kod pocztowy)</li>
+     * <li>street: nazwa ulicy (placu itp.)</li>
+     * <li>city: miejscowość</li>
+     * <li>commune: gmina</li>
+     * <li>district: powiat</li>
+     * <li>province: województwo</li>
+     * </ul>
+     */
+    public static final String[] FIELDS = { "postCode", "street", "city", "commune", "district",
+                    "province" };
+
     private static final String ENCODING = "UTF-8";
 
-    private static final String SOURCE_LOCATION = "http://www.poczta-polska.pl/spispna/spispna.pdf";
-
     private static final String CACHE_DIRECTORY = "/ngo/locations/";
-
-    private static final String SOURCE_TMP_FILE = "spispna.pdf.tmp";
 
     private static final String SOURCE_FILE = "spispna.pdf";
 
@@ -49,44 +59,15 @@ public class PNALocationsProvider
 
     private final FileSystem fileSystem;
 
+    private final PNAProvider pnaProvider;
+
     private List<Location> cachedLocations = null;
 
     public PNALocationsProvider(Logger logger, FileSystem fileSystem)
     {
         this.logger = logger;
         this.fileSystem = fileSystem;
-    }
-
-    /**
-     * Download source file. Data is downloaded from {@link #SOURCE_LOCATION} and written to
-     * {@link #SOURCE_TMP_FILE}.
-     * 
-     * @return true if download was successful.
-     */
-    private boolean downloadSource()
-    {
-        try
-        {
-            Timer timer = new Timer();
-            HttpClient client = new HttpClient();
-            HttpMethod method = new GetMethod(SOURCE_LOCATION);
-            client.executeMethod(method);
-            if(!fileSystem.isDirectory(CACHE_DIRECTORY))
-            {
-                fileSystem.mkdirs(CACHE_DIRECTORY);
-            }
-            fileSystem.write(CACHE_DIRECTORY + SOURCE_TMP_FILE, method.getResponseBodyAsStream());
-            method.releaseConnection();
-            rename(SOURCE_TMP_FILE, SOURCE_FILE);
-            logger.info("downloaded " + fileSystem.length(CACHE_DIRECTORY + SOURCE_FILE)
-                + " bytes in " + timer.getElapsedSeconds() + "s");
-            return true;
-        }
-        catch(IOException e)
-        {
-            logger.error("failed to download source from " + SOURCE_LOCATION, e);
-            return false;
-        }
+        pnaProvider = new PNAProvider(fileSystem, logger);
     }
 
     /**
@@ -106,8 +87,14 @@ public class PNALocationsProvider
             cachedLocations = new ArrayList<Location>(content.size());
             for(String[] row : content)
             {
-                cachedLocations.add(new Location(row[6], stripCityName(row[1]),
-                    row[2] != null ? row[2] : "", row[0]));
+                Map<String, String> fieldValues = new HashMap<>(4);
+                fieldValues.put("province", row[6]);
+                fieldValues.put("district", row[5]);
+                fieldValues.put("commune", row[4]);
+                fieldValues.put("city", stripCityName(row[1]));
+                fieldValues.put("street", row[2] != null ? row[2] : "");
+                fieldValues.put("postCode", row[0]);
+                cachedLocations.add(new Location(FIELDS, fieldValues));
             }
         }
         catch(IOException e)
@@ -150,8 +137,14 @@ public class PNALocationsProvider
             cachedLocations = new ArrayList<Location>();
             while((line = csvReader.getNextLine()) != null)
             {
-                cachedLocations.add(new Location(line.get("Województwo"), stripCityName(line
-                    .get("Miejscowość")), line.get("Ulica"), line.get("PNA")));
+                Map<String, String> fieldValues = new HashMap<>(4);
+                fieldValues.put("province", line.get("Województwo"));
+                fieldValues.put("district", line.get("Powiat"));
+                fieldValues.put("commune", line.get("Gmina"));
+                fieldValues.put("city", line.get("Miejscowość"));
+                fieldValues.put("street", line.get("Ulica"));
+                fieldValues.put("postCode", line.get("PNA"));
+                cachedLocations.add(new Location(FIELDS, fieldValues));
             }
             logger.info("loaded " + cachedLocations.size() + " items from cache in "
                 + timer.getElapsedSeconds() + "s");
@@ -219,10 +212,30 @@ public class PNALocationsProvider
     @Override
     public Collection<Location> fromSource()
     {
-        if(downloadSource())
+        if(pnaProvider.downloadSource())
         {
             parseSource();
         }
         return cachedLocations;
+    }
+
+    @Override
+    public String[] getFields()
+    {
+        return FIELDS;
+    }
+
+    @Override
+    public Set<FieldOptions> getOptions(String field)
+    {
+        switch(field)
+        {
+        case "postCode":
+            return EnumSet.of(FieldOptions.NOT_ANALYZED);
+        case "street":
+            return EnumSet.of(FieldOptions.MULTI_TERM_SUBQUERY);
+        default:
+            return EnumSet.noneOf(FieldOptions.class);
+        }
     }
 }

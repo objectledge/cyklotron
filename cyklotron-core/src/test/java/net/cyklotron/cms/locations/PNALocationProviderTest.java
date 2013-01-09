@@ -12,21 +12,23 @@ public class PNALocationProviderTest
     extends LedgeTestCase
 {
     private PNALocationsProvider provider;
-    
+
     public void setUp()
         throws Exception
     {
         provider = new PNALocationsProvider(getLogger(), getFileSystem());
     }
 
-    public void testFromSource() throws IOException
+    public void testFromSource()
+        throws IOException
     {
         initLog4J("ERROR");
         LogManager.getLogger(getClass()).setLevel(Level.INFO);
         provider.fromSource();
     }
-    
-    public void testFromCache() throws Exception
+
+    public void testFromCache()
+        throws Exception
     {
         initLog4J("ERROR");
         LogManager.getLogger(getClass()).setLevel(Level.INFO);

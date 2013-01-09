@@ -29,6 +29,14 @@
 
 <element name="config" xmlns="http://relaxng.org/ns/structure/1.0">
   <optional>
+    <element name="send">
+      <choice>
+        <value>true</value>
+        <value>false</value>
+      </choice>
+    </element>
+  </optional>
+  <optional>
     <element name="server">
       <text/>
     </element>

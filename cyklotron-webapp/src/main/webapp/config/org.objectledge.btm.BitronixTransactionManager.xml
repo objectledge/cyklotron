@@ -21,9 +21,10 @@
   <jdbc>
     <connectionPool uniqueName="pg">
       <className>org.postgresql.xa.PGXADataSource</className>
-      <maxPoolSize>10</maxPoolSize>
-      <isolationLevel>READ_COMMITTED</isolationLevel>
+      <maxPoolSize>20</maxPoolSize>
       <allowLocalTransactions>true</allowLocalTransactions>
+      <enableJdbc4ConnectionTest>true</enableJdbc4ConnectionTest>
+      <preparedStatementCacheSize>20</preparedStatementCacheSize>
       <driverProperties>
         <property name="serverName">localhost</property>
         <property name="databaseName">lcms</property>

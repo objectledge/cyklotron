@@ -28,6 +28,13 @@
 
 package net.cyklotron.cms.locations;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * A location descriptor.
  * <p>
@@ -36,54 +43,130 @@ package net.cyklotron.cms.locations;
  * </p>
  */
 public class Location
+    implements Iterable<Map.Entry<String, String>>
 {
-    private String province;
+    private final Map<String, String> entries;
 
-    private String city;
+    private final String pkField;
 
-    private String street;
+    private final String[] fields;
 
-    private String postCode;
-
-    public Location(String province, String city, String street, String postCode)
+    public Location(String[] fields, Map<String, String> entries)
     {
-        this.province = province;
-        this.city = city;
-        this.street = street;
-        this.postCode = postCode;
+        this.fields = fields;
+        this.entries = entries;
+        this.pkField = fields.length > 0 ? entries.get(fields[0]) : "";
     }
 
-    public String getProvince()
+    public Location(Location location1, Location location2)
     {
-        return province;
+        this.entries = getMatchingEntries(location1, location2);
+        this.fields = new String[entries.size()];
+        this.entries.keySet().toArray(this.fields);
+        this.pkField = fields.length > 0 ? entries.get(fields[0]) : "";
     }
 
-    public String getCity()
+    public String get(String field)
     {
-        return city;
+        return entries.get(field);
+    }
+    
+    @JsonValue
+    public Map<String, String> getEntries()
+    {
+        return entries;
     }
 
-    public String getStreet()
+    public Iterator<Map.Entry<String, String>> iterator()
     {
-        return street;
+        return new Iterator<Map.Entry<String, String>>()
+            {
+                private final Iterator<Map.Entry<String, String>> i = entries.entrySet().iterator();
+
+                @Override
+                public boolean hasNext()
+                {
+                    return i.hasNext();
+                }
+
+                @Override
+                public Entry<String, String> next()
+                {
+                    return i.next();
+                }
+
+                @Override
+                public void remove()
+                {
+                    throw new UnsupportedOperationException();
+                }
+            };
     }
 
-    public String getPostCode()
-    {
-        return postCode;
-    }
-
+    @Override
     public int hashCode()
     {
-        return postCode.hashCode();
+        return pkField.hashCode();
     }
 
+    @Override
     public boolean equals(Object obj)
     {
-        if(obj != null && obj instanceof Location)
+        return obj instanceof Location && ((Location)obj).pkField.equals(pkField);
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder buff = new StringBuilder();
+        for(int i = 1; i <= fields.length; i++)
         {
-            return postCode.equals(((Location)obj).postCode);
+            buff.append(entries.get(fields[fields.length - i]));
+            if(i < fields.length)
+            {
+                buff.append(" ");
+            }
         }
-        return false;
+        return buff.toString();
+    }
+
+    /**
+     * Return non empty matching fields map
+     * 
+     * @param location1 Location class
+     * @param location2 Location class
+     * @return <code>Map<String, String></code>
+     * @author lukasz
+     */
+    private Map<String, String> getMatchingEntries(Location location1, Location location2)
+    {
+        Map<String, String> matching = new HashMap<String, String>();
+        if(location1 != null)
+        {
+            Iterator i = location1.iterator();
+            if(location2 == null)
+            {
+                while(i.hasNext())
+                {
+                    Entry<String, String> e = (Entry)i.next();
+                    if(e.getValue() != null)
+                    {
+                        matching.put(e.getKey(), e.getValue());
+                    }
+                }
+            }
+            else
+            {
+                while(i.hasNext())
+                {
+                    Entry<String, String> e = (Entry)i.next();
+                    if(e.getValue() != null && e.getValue().equals(location2.get(e.getKey())))
+                    {
+                        matching.put(e.getKey(), e.getValue());
+                    }
+                }
+            }
+        }
+        return matching;
     }
 }
