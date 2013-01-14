@@ -78,7 +78,7 @@
       <td class="separator">|</td>
 	#end
 	#if($cms_tool.isAppEnabled('bazy') || $block)      
-      #linkCell('' 'BAZY' $siteLink.view('bazy.Bazy'))
+      #linkCell('' 'BAZY' $siteLink.view('bazy.Configuration'))
       <td class="separator">|</td>
     #end 
     </tr>
