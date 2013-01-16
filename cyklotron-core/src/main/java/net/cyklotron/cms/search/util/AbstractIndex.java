@@ -89,7 +89,7 @@ public abstract class AbstractIndex<T>
         writer = null;
     }
 
-    private IndexWriter getWriter()
+    protected IndexWriter getWriter()
         throws IOException
     {
         IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_40, analyzer);
