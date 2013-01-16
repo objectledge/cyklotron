@@ -95,7 +95,7 @@ public abstract class AbstractIndex<T>
     protected Analyzer getAnalyzer(FileSystem fileSystem)
         throws IOException
     {
-        return new StandardAnalyzer(Version.LUCENE_30);
+        return new StandardAnalyzer(Version.LUCENE_40);
     }
 
     protected Searcher getSearcher()
