@@ -69,8 +69,7 @@ public abstract class AbstractIndex<T>
         // if index directory is not there, create a blank index.
         if(!indexLocation.exists())
         {
-            IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_40, analyzer);
-            writer = new IndexWriter(directory, conf);
+            writer = getWriter();
             writer.close();
         }
         // open reader
@@ -88,6 +87,13 @@ public abstract class AbstractIndex<T>
         }
         searcher = new IndexSearcher(reader);
         writer = null;
+    }
+
+    private IndexWriter getWriter()
+        throws IOException
+    {
+        IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_40, analyzer);
+        return new IndexWriter(directory, conf);
     }
 
     /**
