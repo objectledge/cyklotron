@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.apache.lucene.util.Attribute;
 import org.apache.lucene.util.AttributeImpl;
 
@@ -14,7 +14,7 @@ public class StemFilter
 {
     private final Stemmer stemmer;
 
-    private final TermAttribute termAtt;
+    private final CharTermAttribute charTermAttribute;
 
     private final PositionIncrementAttribute posIncAtt;
 
@@ -24,7 +24,7 @@ public class StemFilter
     {
         super(in);
         this.stemmer = stemmer;
-        termAtt = addAttribute(TermAttribute.class);
+        charTermAttribute = addAttribute(CharTermAttribute.class);
         posIncAtt = addAttribute(PositionIncrementAttribute.class);
         stateAtt = addAttribute(StateAttribute.class);
     }
@@ -48,12 +48,12 @@ public class StemFilter
         }
         else
         {
-            String term = termAtt.term();
+            String term = charTermAttribute.toString();
             String s = stemmer.stem(term);
             // If not stemmed, don't waste the time adjusting the token.
             if((s != null) && !s.equals(term))
             {
-                termAtt.setTermBuffer(s);
+                charTermAttribute.copyBuffer(s.toCharArray(), 0, s.length());
             }
             posIncAtt.setPositionIncrement(1);
             stateAtt.setState(State.ORIGINAL);          
