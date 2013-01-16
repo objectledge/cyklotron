@@ -10,17 +10,15 @@ import java.util.List;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CheckIndex;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermEnum;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
@@ -71,7 +69,7 @@ public abstract class AbstractIndex<T>
         // open reader
         try
         {
-            reader = IndexReader.open(directory);
+            reader = DirectoryReader.open(directory);
         }
         catch(CorruptIndexException e)
         {
@@ -79,7 +77,7 @@ public abstract class AbstractIndex<T>
             CheckIndex checkIndex = new CheckIndex(directory);
             checkIndex.checkIndex();
             // try to reopen index
-            reader = IndexReader.open(directory);
+            reader = DirectoryReader.open(directory);
         }
         searcher = new IndexSearcher(reader);
         writer = null;
