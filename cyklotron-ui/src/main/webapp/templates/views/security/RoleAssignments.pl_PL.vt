@@ -56,7 +56,7 @@ $subjectTable.getColumn('givenName').set('label', 'Imię')
 $subjectTable.getColumn('sn').set('label', 'Nazwisko')
 $subjectTable.getColumn('mail').set('label', 'E-mail')
 #set($columnOrder = ['sel', 'uid', 'givenName', 'sn', 'mail'])
-#set($subjectTableLink = $link.set('tableId',$subjectTable.getId()))
+#set($subjectTableLink = $link.set('tableId',$subjectTable.getId()).set('popup',$parameters.get('popup','false')))
 <tr>
     #tableView_header($subjectTable $subjectTableLink $columnOrder)
 </tr>
@@ -130,7 +130,7 @@ $subjectTable.getColumn('mail').set('label', 'E-mail')
   $groupTable.getColumn('sel').set('width', '21')
   $groupTable.getColumn('element').set('label', 'Grupa')
   #set($columnOrder = ['sel','element'])
-  #set($groupTableLink = $link.set('tableId',$groupTable.getId()))
+  #set($groupTableLink = $link.set('tableId',$groupTable.getId()).set('popup',$parameters.get('popup','false')))
   <tr>
     #tableView_header($groupTable $groupTableLink $columnOrder)
   </tr>
