@@ -204,7 +204,7 @@ public abstract class AbstractIndex<T>
             throw new IllegalStateException("update in progress");
         }
         updateThread = Thread.currentThread();
-        writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+        writer = getWriter();
         writer.deleteAll();
     }
 
