@@ -18,13 +18,17 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.index.Terms;
+import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
+import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.Version;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
@@ -162,18 +166,22 @@ public abstract class AbstractIndex<T>
     {
         try
         {
-            List<String> values = new ArrayList<String>();
-            TermEnum termEnum = reader.terms(new Term(field, ""));
-            while(termEnum.next())
+            Terms terms = MultiFields.getTerms(reader, field);
+            if(terms == null)
             {
-                Term term = termEnum.term();
-                if(!term.field().equals(field))
-                {
-                    break;
-                }
-                values.add(term.text());
+                return Collections.emptyList();
             }
-            return values;
+            else
+            {
+                List<String> values = new ArrayList<String>();
+                TermsEnum termsEnum = terms.iterator(null);
+                BytesRef text;
+                while((text = termsEnum.next()) != null)
+                {
+                    values.add(text.utf8ToString());
+                }
+                return values;
+            }
         }
         catch(IOException e)
         {
