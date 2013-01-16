@@ -16,6 +16,7 @@ import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
@@ -63,7 +64,8 @@ public abstract class AbstractIndex<T>
         // if index directory is not there, create a blank index.
         if(!indexLocation.exists())
         {
-            writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+            IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_40, analyzer);
+            writer = new IndexWriter(directory, conf);
             writer.close();
         }
         // open reader
