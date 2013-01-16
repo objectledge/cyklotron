@@ -98,7 +98,7 @@ public abstract class AbstractIndex<T>
         return new StandardAnalyzer(Version.LUCENE_40);
     }
 
-    protected Searcher getSearcher()
+    protected IndexSearcher getSearcher()
     {
         return searcher;
     }
