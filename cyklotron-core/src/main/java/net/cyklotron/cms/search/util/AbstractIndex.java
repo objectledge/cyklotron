@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CheckIndex;
 import org.apache.lucene.index.CorruptIndexException;
@@ -132,12 +133,12 @@ public abstract class AbstractIndex<T>
         throws IOException
     {
         List<Term> tokens = new ArrayList<Term>();
-        TokenStream ts = analyzer.reusableTokenStream(field, new StringReader(value));
+        TokenStream ts = analyzer.tokenStream(field, new StringReader(value));
         ts.reset();
-        TermAttribute ta = ts.getAttribute(TermAttribute.class);
+        CharTermAttribute charTermAttribute = ts.addAttribute(CharTermAttribute.class);
         while(ts.incrementToken())
         {
-            tokens.add(new Term(field, ta.term()));
+            tokens.add(new Term(field, charTermAttribute.toString()));
         }
         ts.end();
         ts.close();
