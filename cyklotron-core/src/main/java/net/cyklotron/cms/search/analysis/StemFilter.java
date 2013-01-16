@@ -78,6 +78,7 @@ public class StemFilter
         extends AttributeImpl
         implements StateAttribute, Cloneable
     {
+        @SuppressWarnings("unused")
         private static final long serialVersionUID = 4003078802203028706L;
         
         private State state = State.ORIGINAL;
