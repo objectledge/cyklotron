@@ -265,9 +265,39 @@ CREATE RESOURCE 'system_screens'
 RESOURCE CLASS 'node'
 PARENT '/cms/sites/simple_portal_en/skins/default';
 
-################################################################
-# secondary skin
-################################################################
+# // Twitter Bootstrap skin //////////////////////////////////////////////////
+
+CREATE RESOURCE 'bootstrap'
+RESOURCE CLASS 'cms.skins.skin'
+PARENT '/cms/sites/simple_portal_en/skins'
+ATTRIBUTES (
+  'description' = 'Twitter bootstrap skin.'
+);
+
+CREATE RESOURCE 'layouts'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/simple_portal_en/skins/bootstrap'
+ATTRIBUTES (
+  'description' = 'Parent node for all layouts in this skin'
+);
+
+CREATE RESOURCE 'main_page'
+RESOURCE CLASS 'cms.skins.layout'
+PARENT '/cms/sites/simple_portal_en/skins/bootstrap/layouts'
+ATTRIBUTES (
+  'description' = 'Layout for main page in portal'
+);
+
+CREATE RESOURCE 'sub_page'
+RESOURCE CLASS 'cms.skins.layout'
+PARENT '/cms/sites/simple_portal_en/skins/bootstrap/layouts'
+ATTRIBUTES (
+  'description' = 'Sub page layout'
+);
+
+CREATE RESOURCE 'system_screens'
+RESOURCE CLASS 'node'
+PARENT '/cms/sites/simple_portal_en/skins/bootstrap';
 
 # // style ///////////////////////////////////////////////////////////////////
 
