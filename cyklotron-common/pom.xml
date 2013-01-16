@@ -229,6 +229,11 @@
         <version>4.0.0</version>
       </dependency>
       <dependency>
+    	<groupId>org.apache.lucene</groupId>
+    	<artifactId>lucene-analyzers-common</artifactId>
+    	<version>4.0.0</version>
+	  </dependency>
+      <dependency>
         <groupId>rome</groupId>
         <artifactId>rome</artifactId>
         <version>0.9</version>
