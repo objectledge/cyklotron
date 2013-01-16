@@ -225,7 +225,6 @@ public abstract class AbstractIndex<T>
         {
             throw new IllegalStateException("update in progress");
         }
-        writer.optimize();
         writer.commit();
         writer.close();
         writer = null;
