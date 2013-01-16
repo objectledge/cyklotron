@@ -1,10 +1,13 @@
 #if($parameters.get('popup','false') == 'true')
 $viewEnclosureTool.override('popup.Default')
+#set($formAction=$link.view('browser.ClosePopup').action('security.UpdateRoleAssignments'))
+#else
+#set($formAction=$link.view('security.RoleList').action('security.UpdateRoleAssignments'))	
 #end
 
 #genericScreenHeader('PRZYPISANIE ROLI OSOBOM I GRUPOM')
 
-<form name="form0" method="post" action="$link.view('security.RoleList').action('security.UpdateRoleAssignments')">
+<form name="form0" method="post" action="$formAction">
 <input type="hidden" name="role_id" value="$role.id" />
 <input type="hidden" name="all_selected_group_ids" value="$!all_selected_group_ids" />
 <input type="hidden" name="all_selected_subject_ids" value="$!all_selected_subject_ids" />
@@ -12,7 +15,6 @@ $viewEnclosureTool.override('popup.Default')
      function send()
      {
          document.form0.submit();
-         #if($parameters.get('popup','false') == 'true')window.close();#end
      }
      
      function sendUrl(url)
