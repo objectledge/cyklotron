@@ -229,7 +229,7 @@ public abstract class AbstractIndex<T>
         writer.close();
         writer = null;
 
-        IndexReader newReader = reader.reopen();
+        IndexReader newReader = DirectoryReader.open(directory);
         IndexReader oldReader = reader;
         reader = newReader;
         oldReader.close();
