@@ -48,7 +48,7 @@ public class SearchingFacilityImpl implements SearchingFacility
     public IndexSearcher getSearcher(PoolResource[] pools, Subject subject)
         throws SearchException
     {
-        List indexes = new ArrayList(pools.length * 8);
+        List<IndexResource> indexes = new ArrayList<>(pools.length * 8);
         for (int i = 0; i < pools.length; i++)
         {
             indexes.addAll(pools[i].getIndexes());
