@@ -15,9 +15,10 @@ import net.cyklotron.cms.search.SearchService;
 
 /**
  * Base search method implementation.
- *
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: BaseSearchMethod.java,v 1.4 2005-05-30 00:18:51 zwierzem Exp $
+ * @author <a href="mailto:marek@caltha.pl">Marek Lewandowski</a>
+ * @version $Id: BaseSearchMethod.java,v 1.5 2013-01-17 00:18:51 zwierzem Exp $
  */
 public abstract class BaseSearchMethod implements SearchMethod
 {
