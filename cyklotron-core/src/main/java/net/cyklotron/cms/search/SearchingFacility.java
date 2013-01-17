@@ -3,6 +3,8 @@ package net.cyklotron.cms.search;
 import org.apache.lucene.search.IndexSearcher;
 import org.objectledge.coral.security.Subject;
 
+import com.google.common.base.Optional;
+
 /**
  * Searching interface.
  *     
@@ -18,7 +20,7 @@ public interface SearchingFacility
      * @param subject searching subject.
      * @throws SearchException
      */
-    public IndexSearcher getSearcher(PoolResource[] pools, Subject subject)
+    public Optional<IndexSearcher> getSearcher(PoolResource[] pools, Subject subject)
         throws SearchException;
 
     /**
