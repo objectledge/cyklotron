@@ -88,15 +88,15 @@ public class SearchingFacilityImpl implements SearchingFacility
     {
         boolean useOnlyPublic = (Subject.ANONYMOUS == subject.getId());
         
-        List searchers = new ArrayList(indexes.size());
-        for (int i = 0; i < indexes.size(); i++)
+        // List<IndexSearcher> searchers = new ArrayList<>(indexes.size());
+        List<IndexReader> indexReaders = new ArrayList<>(indexes.size());
+        for(IndexResource index : indexes)
         {
-            IndexResource index = (IndexResource) (indexes.get(i));
             if(!useOnlyPublic || (useOnlyPublic && index.getPublic()))
             {
                 try
                 {
-                    searchers.add(getSearcher(index));
+                    indexReaders.add(getIndexReader(index));
                 }
                 catch (IOException e)
                 {
