@@ -1,6 +1,6 @@
 package net.cyklotron.cms.search;
 
-import org.apache.lucene.search.Searcher;
+import org.apache.lucene.search.IndexSearcher;
 import org.objectledge.coral.security.Subject;
 
 /**
@@ -18,15 +18,15 @@ public interface SearchingFacility
      * @param subject searching subject.
      * @throws SearchException
      */
-    public Searcher getSearcher(PoolResource[] pools, Subject subject)
+    public IndexSearcher getSearcher(PoolResource[] pools, Subject subject)
         throws SearchException;
 
     /**
      * returns a searcher to the searcher pool.
-     *
-     * @param searcher the Searcher.
+     * 
+     * @param searcher the IndexSearcher.
      */
-    public void returnSearcher(Searcher searcher);
+    public void returnSearcher(IndexSearcher searcher);
 
     /**
      * Removes a searcher associated with a given index from cache.
