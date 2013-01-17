@@ -160,7 +160,8 @@ public class LuceneSearchHandler implements SearchHandler<LuceneSearchHit>
     {
         TopDocs hits;
         TopFieldCollector topFieldCollector;
-        int numHits = searcher.maxDoc()>0 ? searcher.maxDoc() : 1;
+        int numHits = searcher.getIndexReader().maxDoc() > 0 ? searcher.getIndexReader().maxDoc()
+            : 1;
 
         if(sort == null)
         {
