@@ -101,14 +101,24 @@ public class LuceneSearchHandler implements SearchHandler<LuceneSearchHit>
         pools = (PoolResource[])(tmpPools.toArray(pools));
         
         // search
-        Searcher searcher = null;
+        IndexSearcher searcher = null;
         List<LuceneSearchHit> hits;
         try
         {	
         	Timer timer = new Timer();
-            searcher = searchService.getSearchingFacility().getSearcher(pools, coralSession.getUserSubject());
-            hits = getLuceneSearchHits(searcher, query, sort);
-            searchService.logQueryExecution(query.toString(), timer.getElapsedMillis(), hits.size());
+            Optional<IndexSearcher> optional = searchService.getSearchingFacility().getSearcher(
+                pools, coralSession.getUserSubject());
+            if(optional.isPresent())
+            {
+                searcher = optional.get();
+                hits = getLuceneSearchHits(searcher, query, sort);
+                searchService.logQueryExecution(query.toString(), timer.getElapsedMillis(),
+                    hits.size());
+            }
+            else
+            {
+                hits = Collections.emptyList();
+            }
         }
         catch(SearchException e)
         {
