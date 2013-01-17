@@ -155,7 +155,7 @@ public class LuceneSearchHandler implements SearchHandler<LuceneSearchHit>
         return model;
     }
 
-    List<LuceneSearchHit> getLuceneSearchHits(Searcher searcher, Query query, Sort sort)
+    List<LuceneSearchHit> getLuceneSearchHits(IndexSearcher searcher, Query query, Sort sort)
         throws IOException
     {
         TopDocs hits;
