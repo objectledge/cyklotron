@@ -106,7 +106,7 @@ public class SearchingFacilityImpl implements SearchingFacility
             }
         }
 
-        if(searchers.size() == 0)
+        if(indexReaders.size() == 0)
         {
             return new NullSearcher();
         }
