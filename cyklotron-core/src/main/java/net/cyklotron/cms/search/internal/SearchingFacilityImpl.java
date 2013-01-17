@@ -3,13 +3,9 @@ package net.cyklotron.cms.search.internal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.MultiSearcher;
-import org.apache.lucene.search.Searcher;
 import org.apache.lucene.store.Directory;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.security.Subject;
@@ -48,7 +44,9 @@ public class SearchingFacilityImpl implements SearchingFacility
         this.indexingFacility = indexingFacility;
     }
 
-    public Searcher getSearcher(PoolResource[] pools, Subject subject) throws SearchException
+    @Override
+    public IndexSearcher getSearcher(PoolResource[] pools, Subject subject)
+        throws SearchException
     {
         List indexes = new ArrayList(pools.length * 8);
         for (int i = 0; i < pools.length; i++)
@@ -64,7 +62,7 @@ public class SearchingFacilityImpl implements SearchingFacility
     }
 
     @Override
-    public void returnSearcher(Searcher searcher)
+    public void returnSearcher(IndexSearcher searcher)
     {
         try
         {
