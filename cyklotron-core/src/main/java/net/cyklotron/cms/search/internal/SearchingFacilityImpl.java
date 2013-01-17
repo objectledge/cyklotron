@@ -17,6 +17,8 @@ import net.cyklotron.cms.search.PoolResource;
 import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchingFacility;
 
+import com.google.common.base.Optional;
+
 /**
  * Implementation of Search Service
  * 
@@ -46,7 +48,7 @@ public class SearchingFacilityImpl implements SearchingFacility
     }
 
     @Override
-    public IndexSearcher getSearcher(PoolResource[] pools, Subject subject)
+    public Optional<IndexSearcher> getSearcher(PoolResource[] pools, Subject subject)
         throws SearchException
     {
         List<IndexResource> indexes = new ArrayList<>(pools.length * 8);
@@ -84,7 +86,7 @@ public class SearchingFacilityImpl implements SearchingFacility
     // implementation /////////////////////////////////////////////////////////////////////////////
 
 
-    private IndexSearcher getSearcher(List<IndexResource> indexes, Subject subject)
+    private Optional<IndexSearcher> getSearcher(List<IndexResource> indexes, Subject subject)
         throws SearchException
     {
         boolean useOnlyPublic = (Subject.ANONYMOUS == subject.getId());
@@ -109,19 +111,12 @@ public class SearchingFacilityImpl implements SearchingFacility
 
         if(indexReaders.size() == 0)
         {
-            return new NullSearcher();
+            return Optional.absent();
         }
         
-        try
-        {
-            MultiReader multiReader = new MultiReader(
-                indexReaders.toArray(new IndexReader[indexReaders.size()]));
-            return new IndexSearcher(multiReader);
-        }
-        catch (IOException e)
-        {
-            throw new SearchException("Cannot create mulisearcher", e);
-        }
+        MultiReader multiReader = new MultiReader(indexReaders.toArray(new IndexReader[indexReaders
+            .size()]));
+        return Optional.of(new IndexSearcher(multiReader));
     }
 
     private IndexReader getIndexReader(IndexResource indexResource)
