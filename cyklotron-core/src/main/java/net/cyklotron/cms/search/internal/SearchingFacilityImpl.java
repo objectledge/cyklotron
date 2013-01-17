@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.MultiReader;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.store.Directory;
 import org.jcontainer.dna.Logger;
@@ -18,9 +19,9 @@ import net.cyklotron.cms.search.SearchingFacility;
 
 /**
  * Implementation of Search Service
- *
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchingFacilityImpl.java,v 1.6 2005-05-30 07:36:44 rafal Exp $
+ * @version $Id: SearchingFacilityImpl.java,v 1.7 2013-01-17 07:36:44 marek Exp $
  */
 public class SearchingFacilityImpl implements SearchingFacility
 {
