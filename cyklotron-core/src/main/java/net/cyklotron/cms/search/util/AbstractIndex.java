@@ -36,6 +36,8 @@ import org.objectledge.filesystem.LocalFileSystemProvider;
 
 public abstract class AbstractIndex<T>
 {
+    protected static final Version LUCENE_VERSION = Version.LUCENE_40;
+
     protected final FileSystem fileSystem;
 
     protected final Logger logger;
@@ -92,7 +94,7 @@ public abstract class AbstractIndex<T>
     protected IndexWriter getWriter()
         throws IOException
     {
-        IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_40, analyzer);
+        IndexWriterConfig conf = new IndexWriterConfig(LUCENE_VERSION, analyzer);
         return new IndexWriter(directory, conf);
     }
 
@@ -106,7 +108,7 @@ public abstract class AbstractIndex<T>
     protected Analyzer getAnalyzer(FileSystem fileSystem)
         throws IOException
     {
-        return new StandardAnalyzer(Version.LUCENE_40);
+        return new StandardAnalyzer(LUCENE_VERSION);
     }
 
     protected IndexSearcher getSearcher()
