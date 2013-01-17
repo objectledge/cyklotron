@@ -66,7 +66,7 @@ public class SearchingFacilityImpl implements SearchingFacility
     {
         try
         {
-            searcher.close();
+            searcher.getIndexReader().close();
         }
         catch(IOException e)
         {
