@@ -83,7 +83,7 @@ public class SearchingFacilityImpl implements SearchingFacility
     // implementation /////////////////////////////////////////////////////////////////////////////
 
 
-    private IndexSearcher getSearcher(List indexes, Subject subject)
+    private IndexSearcher getSearcher(List<IndexResource> indexes, Subject subject)
         throws SearchException
     {
         boolean useOnlyPublic = (Subject.ANONYMOUS == subject.getId());
