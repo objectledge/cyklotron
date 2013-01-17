@@ -113,10 +113,9 @@ public class SearchingFacilityImpl implements SearchingFacility
         
         try
         {
-            Searcher[] searchables = new Searcher[searchers.size()];
-            searchables = (Searcher[]) (searchers.toArray(searchables));
-            Searcher searcher = new MultiSearcher(searchables);
-            return searcher;
+            MultiReader multiReader = new MultiReader(
+                indexReaders.toArray(new IndexReader[indexReaders.size()]));
+            return new IndexSearcher(multiReader);
         }
         catch (IOException e)
         {
