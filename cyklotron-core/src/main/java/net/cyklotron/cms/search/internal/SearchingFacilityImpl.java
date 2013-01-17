@@ -85,7 +85,8 @@ public class SearchingFacilityImpl implements SearchingFacility
     // implementation /////////////////////////////////////////////////////////////////////////////
 
 
-    private Searcher getSearcher(List indexes, Subject subject) throws SearchException
+    private IndexSearcher getSearcher(List indexes, Subject subject)
+        throws SearchException
     {
         boolean useOnlyPublic = (Subject.ANONYMOUS == subject.getId());
         
@@ -125,10 +126,12 @@ public class SearchingFacilityImpl implements SearchingFacility
         }
     }
 
-    private Searcher getSearcher(IndexResource index) throws IOException, SearchException
+    private IndexSearcher getSearcher(IndexResource index)
+        throws IOException, SearchException
     {
         Directory indexDirectory = indexingFacility.getIndexDirectory(index);
-        return new IndexSearcher(indexDirectory, true);        
+        IndexReader indexReader = IndexReader.open(indexDirectory);
+        return new IndexSearcher(indexReader);
     }
 }
 
