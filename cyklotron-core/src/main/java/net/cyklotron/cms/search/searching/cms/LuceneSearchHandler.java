@@ -44,7 +44,7 @@ import net.cyklotron.cms.search.searching.SearchingException;
  * SearchHandler implementation for searching lucene indexes used by CMS.
  *
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: LuceneSearchHandler.java,v 1.7 2005-06-03 07:29:35 pablo Exp $
+ * @version $Id: LuceneSearchHandler.java,v 1.8 2013-01-17 07:29:35 marek Exp $
  */
 public class LuceneSearchHandler implements SearchHandler<LuceneSearchHit>
 {
