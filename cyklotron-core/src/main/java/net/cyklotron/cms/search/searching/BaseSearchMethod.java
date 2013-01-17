@@ -20,38 +20,37 @@ import net.cyklotron.cms.search.SearchService;
  * @author <a href="mailto:marek@caltha.pl">Marek Lewandowski</a>
  * @version $Id: BaseSearchMethod.java,v 1.5 2013-01-17 00:18:51 zwierzem Exp $
  */
-public abstract class BaseSearchMethod implements SearchMethod
+public abstract class BaseSearchMethod
+    implements SearchMethod
 {
     public static final String[] DEFAULT_FIELD_NAMES = { SearchConstants.FIELD_INDEX_TITLE,
-                            SearchConstants.FIELD_INDEX_ABBREVIATION,
-                            SearchConstants.FIELD_INDEX_CONTENT };
-    
+                    SearchConstants.FIELD_INDEX_ABBREVIATION, SearchConstants.FIELD_INDEX_CONTENT };
+
     public static final String[] EXTENDED_FIELD_NAMES = { SearchConstants.FIELD_INDEX_TITLE,
                     SearchConstants.FIELD_INDEX_ABBREVIATION, SearchConstants.FIELD_INDEX_CONTENT,
                     "keywords", "titleCalendar", "authors", "sources",
                     SearchConstants.FIELD_ORGANIZATION_NAME };
-    
+
     protected SearchService searchService;
+
     protected Parameters parameters;
+
     protected Locale locale;
-                           
-    public BaseSearchMethod(
-        SearchService searchService,
-        Parameters parameters,
-        Locale locale)
+
+    public BaseSearchMethod(SearchService searchService, Parameters parameters, Locale locale)
     {
         this.searchService = searchService;
         this.parameters = parameters;
         this.locale = locale;
     }
-                            
+
     public abstract Query getQuery(CoralSession coralSession)
-    throws Exception;
-    
+        throws Exception;
+
     public abstract String getQueryString(CoralSession coralSession);
-    
+
     public abstract String getErrorQueryString();
-    
+
     public void setupTableState(TableState state)
     {
         if(state.isNew())
@@ -62,21 +61,21 @@ public abstract class BaseSearchMethod implements SearchMethod
         }
 
         // WARN: duplicate setPage action
-        if(parameters.isDefined(TableConstants.TABLE_ID_PARAM_KEY) &&
-           parameters.getInt(TableConstants.TABLE_ID_PARAM_KEY) == state.getId())
+        if(parameters.isDefined(TableConstants.TABLE_ID_PARAM_KEY)
+            && parameters.getInt(TableConstants.TABLE_ID_PARAM_KEY) == state.getId())
         {
-            state.setCurrentPage( parameters.getInt(TableConstants.PAGE_NO_PARAM_KEY,1) );
+            state.setCurrentPage(parameters.getInt(TableConstants.PAGE_NO_PARAM_KEY, 1));
         }
         else
         {
             state.setCurrentPage(1);
         }
     }
-    
+
     public SortField[] getSortFields()
     {
-        String sortField = parameters.get("sort_field","score");
-        String sortOrder = parameters.get("sort_order","desc");
+        String sortField = parameters.get("sort_field", "score");
+        String sortOrder = parameters.get("sort_order", "desc");
         if(!sortField.equals("score"))
         {
             SortField field = new SortField(sortField, SortField.Type.STRING,
@@ -90,7 +89,7 @@ public abstract class BaseSearchMethod implements SearchMethod
         }
         return null;
     }
-    
+
     protected void storeQueryParameter(String parameterName, TemplatingContext templatingContext)
     {
         String parameterValue = parameters.get(parameterName, null);
@@ -99,7 +98,7 @@ public abstract class BaseSearchMethod implements SearchMethod
             templatingContext.put(parameterName, parameterValue);
         }
     }
-    
+
     public void storeQueryParameters(TemplatingContext templatingContext)
     {
         storeQueryParameter("sort_field", templatingContext);
