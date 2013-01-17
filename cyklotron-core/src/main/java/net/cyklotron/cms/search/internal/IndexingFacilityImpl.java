@@ -267,7 +267,7 @@ public class IndexingFacilityImpl implements IndexingFacility
                 utility.openIndexWriter(dir, index, false, "optimizing the index");
             try
             {
-                indexWriter.optimize();
+                indexWriter.forceMerge(1);
                 indexWriter.commit(IndexingFacilityUtil.resetChangeCounter());
             }
             catch (IOException e)
