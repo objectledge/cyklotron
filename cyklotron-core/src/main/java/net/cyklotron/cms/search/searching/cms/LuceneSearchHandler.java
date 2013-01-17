@@ -2,14 +2,14 @@ package net.cyklotron.cms.search.searching.cms;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TopDocs;
@@ -40,9 +40,11 @@ import net.cyklotron.cms.search.searching.SearchHandler;
 import net.cyklotron.cms.search.searching.SearchMethod;
 import net.cyklotron.cms.search.searching.SearchingException;
 
+import com.google.common.base.Optional;
+
 /**
  * SearchHandler implementation for searching lucene indexes used by CMS.
- *
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
  * @version $Id: LuceneSearchHandler.java,v 1.8 2013-01-17 07:29:35 marek Exp $
  */
