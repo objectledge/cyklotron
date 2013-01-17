@@ -123,12 +123,11 @@ public class SearchingFacilityImpl implements SearchingFacility
         }
     }
 
-    private IndexSearcher getSearcher(IndexResource index)
-        throws IOException, SearchException
+    private IndexReader getIndexReader(IndexResource indexResource)
+        throws SearchException, IOException
     {
-        Directory indexDirectory = indexingFacility.getIndexDirectory(index);
-        IndexReader indexReader = IndexReader.open(indexDirectory);
-        return new IndexSearcher(indexReader);
+        Directory indexDirectory = indexingFacility.getIndexDirectory(indexResource);
+        return IndexReader.open(indexDirectory);
     }
 }
 
