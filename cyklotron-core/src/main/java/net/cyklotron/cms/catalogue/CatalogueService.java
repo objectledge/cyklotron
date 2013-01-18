@@ -391,7 +391,8 @@ public class CatalogueService
         try
         {
             Query query = parser.parse(queryString);
-            searcher = searchService.getSearchingFacility().getSearcher(
+            final Optional<IndexSearcher> optional = searchService.getSearchingFacility()
+                .getSearcher(
                 new PoolResource[] { searchPool }, coralSession.getUserSubject());
             int numHits = searcher.maxDoc() > 0 ? searcher.maxDoc() : 1;
             TopDocs hits = searcher.search(query, null, numHits);
