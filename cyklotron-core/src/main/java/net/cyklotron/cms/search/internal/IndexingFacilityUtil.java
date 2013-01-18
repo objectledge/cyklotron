@@ -14,11 +14,15 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.index.LogDocMergePolicy;
 import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.util.BytesRef;
+import org.apache.lucene.util.Version;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
@@ -170,12 +174,12 @@ public class IndexingFacilityUtil
     /**
      * Opens an index writer and sets configured parameters.
      * 
-     * @param dir lucene direcotry with the index to be written
+     * @param dir lucene directory with the index to be written
      * @param index index resource representing the index
      * @param createIndex set to <code>true</code> if the index should be newly created (emptied)
-     * @param whileMsg a part of the exeception message to inform about preformed operation
+     * @param whileMsg a part of the exception message to inform about performed operation
      * @return the index writer
-     * @throws SearchException on problems with index writer opening 
+     * @throws SearchException on problems with index writer opening
      */
     public IndexWriter openIndexWriter(Directory dir, IndexResource index, boolean createIndex,
         String whileMsg)
@@ -183,13 +187,14 @@ public class IndexingFacilityUtil
     {
         try
         {
-            IndexWriter indexWriter = new IndexWriter(dir,
-                getAnalyzer(index), createIndex,
-                IndexWriter.MaxFieldLength.UNLIMITED);
-            indexWriter.setMergeFactor(mergeFactor);
-            indexWriter.setMaxBufferedDocs(minMergeDocs);
-            indexWriter.setMaxMergeDocs(maxMergeDocs);
-            return indexWriter;
+            IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_40, getAnalyzer(index));
+            config.setMaxBufferedDocs(minMergeDocs);
+            config.setOpenMode(createIndex == true ? OpenMode.CREATE : OpenMode.APPEND);
+            final LogDocMergePolicy mergePolicy = new LogDocMergePolicy();
+            mergePolicy.setMergeFactor(mergeFactor);
+            mergePolicy.setMaxMergeDocs(maxMergeDocs);
+            config.setMergePolicy(mergePolicy);
+            return new IndexWriter(dir, config);
         }
         catch (IOException e)
         {
