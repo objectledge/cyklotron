@@ -50,9 +50,13 @@ public class NewlineSeparatedAnalyzer
         @Override
         protected boolean isTokenChar(int c)
         {
-            // TODO Auto-generated method stub
-            return false;
+            return !isLineSeparator(c);
         }
 
+    }
+
+    public static boolean isLineSeparator(int codePoint)
+    {
+        return (((1 << Character.LINE_SEPARATOR) >> Character.getType(codePoint)) & 1) != 0;
     }
 }
