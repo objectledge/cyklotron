@@ -366,20 +366,19 @@ public class IndexingFacilityUtil
         IndexReader indexReader = openIndexReader(index, "getting indexed resources ids");
     
         // get index ids
-        Set ids = new HashSet();
+        Set<Long> ids = new HashSet<>();
         
         try
         {
-            TermEnum te = indexReader.terms();
-            while(te.next())
+            final Terms terms = MultiFields.getTerms(indexReader, SearchConstants.FIELD_ID);
+            if(terms != null)
             {
-                Term t = te.term();
-                if(t.field().equals(SearchConstants.FIELD_ID))
+                final TermsEnum termsEnum = terms.iterator(null);
+                while(termsEnum.next() != null)
                 {
-                    ids.add(Long.valueOf(t.text()));
+                    ids.add(Long.valueOf(termsEnum.term().utf8ToString()));
                 }
             }
-            te.close();
         }
         catch(IOException e)
         {
