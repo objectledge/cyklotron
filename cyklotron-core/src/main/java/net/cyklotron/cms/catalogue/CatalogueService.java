@@ -387,7 +387,7 @@ public class CatalogueService
         QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_40, SEARCH_FIELDS, analyzer);
         parser.setDefaultOperator(QueryParser.Operator.AND);
         Set<Long> uniqueIds = new HashSet<Long>();
-        Searcher searcher = null;
+        IndexSearcher searcher = null;
         try
         {
             Query query = parser.parse(queryString);
