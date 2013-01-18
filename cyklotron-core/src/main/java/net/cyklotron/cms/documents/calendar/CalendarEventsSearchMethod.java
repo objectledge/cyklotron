@@ -243,7 +243,8 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         }
         else
         {
-            SortField field2 = new SortField(SearchConstants.FIELD_ID, SortField.LONG, "desc".equals("desc"));
+            SortField field2 = new SortField(SearchConstants.FIELD_ID, SortField.Type.LONG,
+                "desc".equals("desc"));
             return new SortField[] { field2 };
         }
     }
