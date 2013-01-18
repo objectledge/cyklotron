@@ -1,6 +1,8 @@
 package net.cyklotron.cms.search.internal;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
@@ -472,25 +473,25 @@ public class IndexingFacilityImpl implements IndexingFacility
         
         synchronized(index)
         {
-            IndexReader indexReader = utility.openIndexReader(index, "removing resources # "+id);
+            IndexWriter indexWriter = utility.openIndexWriter(getIndexDirectory(index), index,
+                false, "removing resources # " + id);
 
-            // delete old docs
-            Term idTerm = null;
-            for (int i = 0; i < id.length; i++)
+            Collection<Term> terms = new ArrayList<>();
+            for(String identifier : id)
             {
-                try
-                {
-                    idTerm = new Term(SearchConstants.FIELD_ID, id[i]);
-                    indexReader.deleteDocuments(idTerm);
-                }
-                catch (IOException e)
-                {
-                    log.error("IndexingFacility: Could not remove resource #"+id[i]+
-                    " from  index '"+index.getPath()+"'", e);
-                }
+                terms.add(new Term(SearchConstants.FIELD_ID, identifier));
+            }
+            try
+            {
+                indexWriter.deleteDocuments(terms.toArray(new Term[terms.size()]));
+            }
+            catch(IOException e)
+            {
+                log.error(
+                    "IndexingFacility: Could not remove resources #'" + index.getPath() + "'", e);
             }
 
-            utility.closeIndexReader(indexReader, index, "removing resources # "+id);
+            utility.closeIndexWriter(indexWriter, index, "removing resources # " + id);
         }
     }    
     
