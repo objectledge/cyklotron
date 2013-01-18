@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
 /**
  * A token filter that retains only characters that belong to Unicode L and N classes. 
@@ -19,12 +19,11 @@ import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 public class AlphanumericFilter
     extends TokenFilter
 {
-    private final TermAttribute termAtt;
+    private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
 
     public AlphanumericFilter(TokenStream input)
     {
         super(input);
-        termAtt = addAttribute(TermAttribute.class);
     }
 
     @Override
@@ -35,7 +34,9 @@ public class AlphanumericFilter
         {
             return false;
         }
-        termAtt.setTermBuffer(termAtt.term().replaceAll("[^\\p{L}\\p{N}]", ""));
+        final String replaced = termAtt.toString().replaceAll("[^\\p{L}\\p{N}]", "");
+        // TODO validate that this is correct. I still don't have a feeling about those buffers
+        termAtt.copyBuffer(replaced.toCharArray(), 0, replaced.length());
         return true;
     }
 }
