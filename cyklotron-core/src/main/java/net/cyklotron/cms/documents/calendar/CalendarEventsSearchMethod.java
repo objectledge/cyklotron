@@ -168,17 +168,20 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
 
         if(range.equals("ongoing"))
         {
-            TermRangeQuery dateRange = new TermRangeQuery(lowerEndDate.field(), lowerEndDate.text(), null, true, true);
-            TermRangeQuery dateRange2 = new TermRangeQuery(lowerStartDate.field(), null, upperStartDate.text(), true, true);
+            TermRangeQuery dateRange = TermRangeQuery.newStringRange(lowerEndDate.field(),
+                lowerEndDate.text(), null, true, true);
+            TermRangeQuery dateRange2 = TermRangeQuery.newStringRange(lowerStartDate.field(), null,
+                upperStartDate.text(), true, true);
 
             aQuery.add(new BooleanClause(dateRange, BooleanClause.Occur.MUST));
             aQuery.add(new BooleanClause(dateRange2, BooleanClause.Occur.MUST));
         }
         else if(range.equals("in"))
         {
-            TermRangeQuery dateRange = new TermRangeQuery(lowerEndDate.field(),
+            TermRangeQuery dateRange = TermRangeQuery.newStringRange(lowerEndDate.field(),
                 lowerEndDate.text(), upperEndDate.text(), true, true);
-            TermRangeQuery dateRange2 = new TermRangeQuery(lowerStartDate.field(), lowerStartDate
+            TermRangeQuery dateRange2 = TermRangeQuery.newStringRange(lowerStartDate.field(),
+                lowerStartDate
                 .text(), upperStartDate.text(), true, true);
 
             aQuery.add(new BooleanClause(dateRange, BooleanClause.Occur.MUST));
@@ -186,14 +189,15 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
         }
         else if(range.equals("ending"))
         {
-            TermRangeQuery dateRange = new TermRangeQuery(lowerEndDate.field(),
+            TermRangeQuery dateRange = TermRangeQuery.newStringRange(lowerEndDate.field(),
                 lowerEndDate.text(), upperEndDate
                 .text(), true, true);
             aQuery.add(new BooleanClause(dateRange, BooleanClause.Occur.MUST));
         }
         else if(range.equals("starting"))
         {
-            TermRangeQuery dateRange2 = new TermRangeQuery(lowerStartDate.field(), lowerStartDate
+            TermRangeQuery dateRange2 = TermRangeQuery.newStringRange(lowerStartDate.field(),
+                lowerStartDate
                 .text(), upperStartDate.text(), true, true);
             aQuery.add(new BooleanClause(dateRange2, BooleanClause.Occur.MUST));
         }
