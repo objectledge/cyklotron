@@ -39,58 +39,20 @@ public class NewlineSeparatedAnalyzer
     // Tokenizer implementation ///////////////////////////////////////////////////////////////////
 
     public static class NewlineSeparatedTokenizer
-        extends Tokenizer
+        extends CharTokenizer
     {
-        private final TermAttribute termAttribute = addAttribute(TermAttribute.class);
 
-        private final OffsetAttribute offsetAttribute = addAttribute(OffsetAttribute.class);
-
-        private LineNumberReader lineReader;
-
-        private int lastTokenStart = 0;
-
-        public NewlineSeparatedTokenizer(String fieldName, Reader reader)
+        public NewlineSeparatedTokenizer(Version matchVersion, Reader input)
         {
-            reset(reader);
+            super(matchVersion, input);
         }
 
-        /**
-         * Produces next token in the stream.
-         */
         @Override
-        public boolean incrementToken()
-            throws IOException
+        protected boolean isTokenChar(int c)
         {
-            String line = lineReader.readLine();
-            if(line != null)
-            {
-                termAttribute.setTermBuffer(line);
-                int tokenStart = lastTokenStart;
-                int tokenEnd = lastTokenStart + line.length();
-                lastTokenStart = tokenEnd + 1;
-                offsetAttribute.setOffset(tokenStart, tokenEnd);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            // TODO Auto-generated method stub
+            return false;
         }
 
-        /** Releases resources associated with this stream. */
-        @Override
-        public void close()
-            throws IOException
-        {
-            lineReader.close();
-        }
-
-        /** Reset the tokenizer to a new reader. */
-        @Override
-        public void reset(Reader reader)
-        {
-            lineReader = new LineNumberReader(reader);
-            lastTokenStart = 0;
-        }
     }
 }
