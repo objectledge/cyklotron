@@ -13,9 +13,12 @@ import java.util.Set;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermEnum;
+import org.apache.lucene.index.Terms;
+import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.util.BytesRef;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
@@ -477,24 +480,23 @@ public class IndexingFacilityUtil
         IndexReader indexReader = openIndexReader(index, "getting duplicate indexed resources ids");
     
         // duplicate index ids
-        Set duplicateIds = new HashSet();
+        Set<Long> duplicateIds = new HashSet<>();
         
         try
         {
-            TermEnum te = indexReader.terms();
-            while(te.next())
+            final Terms terms = MultiFields.getTerms(indexReader, SearchConstants.FIELD_ID);
+            if(terms != null)
             {
-                Term t = te.term();
-                if(t.field().equals(SearchConstants.FIELD_ID))
+                final TermsEnum termsEnum = terms.iterator(null); // no reuse
+                BytesRef idTerm;
+                while((idTerm = termsEnum.next()) != null)
                 {
-                    Long tId = Long.valueOf(t.text());
-                    if(te.docFreq() > 1)
+                    if(termsEnum.docFreq() > 1)
                     {
-                        duplicateIds.add(tId);
+                        duplicateIds.add(Long.valueOf(idTerm.utf8ToString()));
                     }
                 }
             }
-            te.close();
         }
         catch(IOException e)
         {
