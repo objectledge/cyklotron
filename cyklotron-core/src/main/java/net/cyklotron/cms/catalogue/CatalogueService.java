@@ -384,8 +384,8 @@ public class CatalogueService
             throw new NotConfiguredException("searchPool is not set");
         }
         Analyzer analyzer = searchService.getAnalyzer(locale);
-        QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, SEARCH_FIELDS, analyzer);
-        parser.setDefaultOperator(Operator.AND);
+        QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_40, SEARCH_FIELDS, analyzer);
+        parser.setDefaultOperator(QueryParser.Operator.AND);
         Set<Long> uniqueIds = new HashSet<Long>();
         Searcher searcher = null;
         try
