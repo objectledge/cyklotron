@@ -394,12 +394,17 @@ public class CatalogueService
             final Optional<IndexSearcher> optional = searchService.getSearchingFacility()
                 .getSearcher(
                 new PoolResource[] { searchPool }, coralSession.getUserSubject());
-            int numHits = searcher.maxDoc() > 0 ? searcher.maxDoc() : 1;
-            TopDocs hits = searcher.search(query, null, numHits);
-            for(ScoreDoc hit : hits.scoreDocs)
+            if(optional.isPresent())
             {
-                org.apache.lucene.document.Document doc = searcher.doc(hit.doc);
-                uniqueIds.add(Long.parseLong(doc.get(SearchConstants.FIELD_ID)));
+                searcher = optional.get();
+                int numHits = searcher.getIndexReader().maxDoc() > 0 ? searcher.getIndexReader()
+                    .maxDoc() : 1;
+                TopDocs hits = searcher.search(query, null, numHits);
+                for(ScoreDoc hit : hits.scoreDocs)
+                {
+                    org.apache.lucene.document.Document doc = searcher.doc(hit.doc);
+                    uniqueIds.add(Long.parseLong(doc.get(SearchConstants.FIELD_ID)));
+                }
             }
         }
         catch(Exception e)
