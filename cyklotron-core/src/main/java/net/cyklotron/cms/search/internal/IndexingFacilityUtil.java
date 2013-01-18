@@ -204,7 +204,10 @@ public class IndexingFacilityUtil
     {
         try
         {
-            return indexWriter.getReader().getCommitUserData();
+            final DirectoryReader open = DirectoryReader.open(indexWriter, false);
+            final Map<String, String> userData = open.getIndexCommit().getUserData();
+            open.close();
+            return userData;
         }
         catch(IOException e)
         {
