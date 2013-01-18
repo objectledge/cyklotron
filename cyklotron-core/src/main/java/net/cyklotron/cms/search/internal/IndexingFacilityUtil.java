@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.MultiFields;
-import org.apache.lucene.index.Term;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.store.Directory;
@@ -321,7 +321,7 @@ public class IndexingFacilityUtil
         try
         {
             Directory dir = getIndexDirectory(index);
-            return IndexReader.open(dir, false);
+            return DirectoryReader.open(dir);
         }
         catch (SearchException e)
         {
