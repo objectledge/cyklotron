@@ -186,7 +186,7 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
             Date date = new Date(System.currentTimeMillis() - (days * 1000L * 60L * 60L * 24L));
             Term lowerDate = new Term(fieldName, SearchUtil.dateToString(date));
             
-            TermRangeQuery dateRange = new TermRangeQuery(fieldName, lowerDate.text(),
+            TermRangeQuery dateRange = TermRangeQuery.newStringRange(fieldName, lowerDate.text(),
                 null, true, false);
             clause = new BooleanClause(dateRange, BooleanClause.Occur.MUST);
         }
@@ -215,7 +215,7 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
                 upperDateToText = upperDate.text();
             }
 
-            TermRangeQuery dateRange = new TermRangeQuery(fieldName, lowerDateToText,
+            TermRangeQuery dateRange = TermRangeQuery.newStringRange(fieldName, lowerDateToText,
                 upperDateToText, lowerDateToText != null, upperDateToText != null);
             clause = new BooleanClause(dateRange, BooleanClause.Occur.MUST);
         }
