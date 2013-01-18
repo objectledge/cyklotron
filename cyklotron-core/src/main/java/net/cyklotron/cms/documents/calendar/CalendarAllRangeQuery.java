@@ -78,9 +78,11 @@ public class CalendarAllRangeQuery extends Query
         if(termsAfterCut < (int)(0.5 * numCalendarDocs))
         {
             setMaxClauseCount(termsAfterCut);
-            TermRangeQuery endDateAfterRangeStart = new TermRangeQuery(lowerEndDate.field(),
+            TermRangeQuery endDateAfterRangeStart = TermRangeQuery.newStringRange(
+                lowerEndDate.field(),
                 lowerEndDate.text(), null, true, true);
-            TermRangeQuery startDateNotAfterRangeEnd = new TermRangeQuery(upperStartDate.field(),
+            TermRangeQuery startDateNotAfterRangeEnd = TermRangeQuery.newStringRange(
+                upperStartDate.field(),
                 upperStartDate.text(), null, false, false);
             rewritten.add(new BooleanClause(endDateAfterRangeStart, BooleanClause.Occur.MUST));
             rewritten
@@ -90,9 +92,11 @@ public class CalendarAllRangeQuery extends Query
         {
             setMaxClauseCount(numCalendarDocs - termsAfterCut);
 
-            TermRangeQuery endDateNotBeforeRangeStart = new TermRangeQuery(lowerEndDate.field(),
+            TermRangeQuery endDateNotBeforeRangeStart = TermRangeQuery.newStringRange(
+                lowerEndDate.field(),
                 null, lowerEndDate.text(), false, false);
-            TermRangeQuery startDateBeforeRangeEnd = new TermRangeQuery(upperStartDate.field(),
+            TermRangeQuery startDateBeforeRangeEnd = TermRangeQuery.newStringRange(
+                upperStartDate.field(),
                 null, upperStartDate.text(), true, true);
             rewritten.add(new BooleanClause(endDateNotBeforeRangeStart,
                 BooleanClause.Occur.MUST_NOT)); // negated
