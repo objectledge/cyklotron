@@ -41,10 +41,9 @@ public class NewlineSeparatedAnalyzer
     public static class NewlineSeparatedTokenizer
         extends CharTokenizer
     {
-
-        public NewlineSeparatedTokenizer(Version matchVersion, Reader input)
+        public NewlineSeparatedTokenizer(Reader input)
         {
-            super(matchVersion, input);
+            super(Version.LUCENE_40, input);
         }
 
         @Override
