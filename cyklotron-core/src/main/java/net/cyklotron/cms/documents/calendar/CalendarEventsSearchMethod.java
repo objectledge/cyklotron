@@ -22,6 +22,7 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SortField;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
+import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.Version;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
@@ -410,6 +411,12 @@ public class CalendarEventsSearchMethod extends PageableResultsSearchMethod
             {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 return "ClosestDateParser(" + format.format(selectedTime.getTime()) + ", " + evalEventsHigher + ")";
+            }
+
+            @Override
+            public long parseLong(BytesRef term)
+            {
+                return parseLong(term.utf8ToString());
             }
         }
     }
