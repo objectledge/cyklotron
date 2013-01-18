@@ -131,7 +131,7 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         if(q_org.length() > 0)
         {
             QueryParser orgParser = new QueryParser(Version.LUCENE_40,
-                searchService.FIELD_ORGANIZATION_NAME, analyzer);
+                SearchConstants.FIELD_ORGANIZATION_NAME, analyzer);
             orgParser.setDateResolution(DateTools.Resolution.SECOND);
             aQuery.add(orgParser.parse("\""+q_org+"\""), BooleanClause.Occur.MUST);
         }
