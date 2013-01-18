@@ -53,10 +53,9 @@ public class NewlineSeparatedAnalyzer
             return !isLineSeparator(c);
         }
 
-    }
-
-    public static boolean isLineSeparator(int codePoint)
-    {
-        return (((1 << Character.LINE_SEPARATOR) >> Character.getType(codePoint)) & 1) != 0;
+        private static boolean isLineSeparator(int codePoint)
+        {
+            return (((1 << Character.LINE_SEPARATOR) >> Character.getType(codePoint)) & 1) != 0;
+        }
     }
 }
