@@ -2,25 +2,34 @@ package net.cyklotron.cms.search.analysis;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.lucene.analysis.PerFieldAnalyzerWrapper;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.util.Version;
 
 import net.cyklotron.cms.search.SearchConstants;
 
 /**
  * @author <a href="mailto:damian@caltha.pl">Damian Gajda</a>
- * @version $Id: CategoryAnalyzer.java,v 1.2 2005-01-27 02:11:54 pablo Exp $
+ * @author Marek Lewandowski
+ * @version $Id: CategoryAnalyzer.java,v 1.3 2013-01-18 02:11:54 marek Exp $
  */
 public class PerFieldAnalyzer
-    extends PerFieldAnalyzerWrapper
 {
+    private static final Version LUCENE_VERSION = Version.LUCENE_40;
+
+    private PerFieldAnalyzer()
+    {
+        // uninstantiable
+    }
 
     /** Builds an analyzer. */
-    public PerFieldAnalyzer()
+    public static Analyzer createPerFieldAnalyzer()
     {
-        super(new TextAnalyzer(Version.LUCENE_30));
-        addAnalyzer(SearchConstants.FIELD_CATEGORY, new NewlineSeparatedAnalyzer());
+        return new PerFieldAnalyzerWrapper(new TextAnalyzer(LUCENE_VERSION),
+            getFieldCategoryAnalyzer());
     }
 
     /**
@@ -30,10 +39,24 @@ public class PerFieldAnalyzer
      * @param stemmer stemmer to be used.
      * @throws IOException when stop words could not be loaded
      */
-    public PerFieldAnalyzer(Reader stopwords, Stemmer stemmer)
+    public static Analyzer createPerFieldAnalyzer(Reader stopwords, Stemmer stemmer)
         throws IOException
     {
-        super(new TextAnalyzer(Version.LUCENE_30, stopwords, stemmer));
-        addAnalyzer(SearchConstants.FIELD_CATEGORY, new NewlineSeparatedAnalyzer());
+        return new PerFieldAnalyzerWrapper(new TextAnalyzer(LUCENE_VERSION, stopwords, stemmer),
+            getFieldCategoryAnalyzer());
     }
+
+    private static Map<String, Analyzer> getMapWithSingleEntry(String fieldName, Analyzer analyzer)
+    {
+        Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
+        analyzerPerField.put(fieldName, analyzer);
+        return analyzerPerField;
+    }
+
+    private static Map<String, Analyzer> getFieldCategoryAnalyzer()
+    {
+        return getMapWithSingleEntry(SearchConstants.FIELD_CATEGORY, new NewlineSeparatedAnalyzer());
+    }
+
+
 }
