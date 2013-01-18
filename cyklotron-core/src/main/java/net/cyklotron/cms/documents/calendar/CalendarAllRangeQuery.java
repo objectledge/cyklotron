@@ -27,9 +27,6 @@ import net.cyklotron.cms.search.SearchUtil;
 public class CalendarAllRangeQuery extends Query
 {
     private Logger log;
-    private Date startDate;
-    private Date endDate;
-    
     private Term lowerEndDate;
     private Term upperStartDate;
     
@@ -43,9 +40,6 @@ public class CalendarAllRangeQuery extends Query
     public CalendarAllRangeQuery(Logger log, Date startDate, Date endDate)
     {
         this.log = log;
-        this.startDate = startDate;
-        this.endDate = endDate;
-
         // get terms
         lowerEndDate = new Term("eventEnd", SearchUtil.dateToString(startDate));
         upperStartDate = new Term("eventStart", SearchUtil.dateToString(endDate));
