@@ -52,8 +52,6 @@ public class IndexingFacilityImpl implements IndexingFacility
     /** search service - for managing index resources */
     private SearchService searchService;
     
-    private Context context;
-
     // local ---------------------------------------------------------------------------------------
 
     private IndexingFacilityUtil utility;
@@ -63,7 +61,6 @@ public class IndexingFacilityImpl implements IndexingFacility
     private DocumentConstructor docConstructor;
     
     private Subject anonymousSubject;
-    private CoralSessionFactory coralSessionFactory;
     private FileSystem fileSystem;
 
     /**
@@ -76,12 +73,9 @@ public class IndexingFacilityImpl implements IndexingFacility
         PreferencesService preferencesService, CategoryService categoryService,CategoryQueryService categoryQueryService,
         UserManager userManager, IntegrationService integrationService)
     {
-        this.context = context;
         this.searchService = searchService;
         this.log = logger;
         this.fileSystem = fileSystem;
-        this.coralSessionFactory = sessionFactory;
-
         docConstructor = new DocumentConstructor(context, logger, preferencesService, userManager,
             categoryService, integrationService);
         
@@ -284,13 +278,13 @@ public class IndexingFacilityImpl implements IndexingFacility
     }
     
     /**
-     * Chcecks if a given resource may be put in the given index.
+     * Checks if a given resource may be put in the given index.
+     * 
      * @param node resource to be checked
      * @param index index to be checked
      * @param querySet TODO
-     * 
      * @return <code>true</code> if given resource may be indexed by a given index
-     * @throws SearchException 
+     * @throws SearchException
      */
     private boolean liableForIndexing(CoralSession coralSession, IndexableResource node,
         IndexResource index, Set<Resource> querySet)
