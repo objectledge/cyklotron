@@ -479,7 +479,7 @@ public class SearchServiceImpl
                 stopwords = fileSystem.getReader(STOPWORDS_LOCATION + STOPWORDS_DEFAULT,
                     STOPWORDS_ENCODING);
             }
-            return new PerFieldAnalyzer(stopwords, new StemmerPL());
+            return PerFieldAnalyzer.createPerFieldAnalyzer(stopwords, new StemmerPL());
         }
         catch(UnsupportedEncodingException e)
         {
