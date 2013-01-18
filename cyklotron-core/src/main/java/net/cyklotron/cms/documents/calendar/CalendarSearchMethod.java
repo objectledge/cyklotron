@@ -6,8 +6,8 @@ import java.util.Locale;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
@@ -146,7 +146,7 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
 
         if(textQuery.length() > 0)
         {
-            QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, DEFAULT_FIELD_NAMES,
+            QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_40, DEFAULT_FIELD_NAMES,
                 analyzer);
             parser.setDefaultOperator(QueryParser.AND_OPERATOR);
             parser.setDateResolution(DateTools.Resolution.SECOND);
@@ -167,9 +167,10 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         }
         else if(range.equals("in"))
         {
-            TermRangeQuery dateRange = new TermRangeQuery(lowerEndDate.field(),
+            TermRangeQuery dateRange = TermRangeQuery.newStringRange(lowerEndDate.field(),
                 lowerEndDate.text(), upperEndDate.text(), true, true);
-            TermRangeQuery dateRange2 = new TermRangeQuery(lowerStartDate.field(), lowerStartDate
+            TermRangeQuery dateRange2 = TermRangeQuery.newStringRange(lowerStartDate.field(),
+                lowerStartDate
                 .text(), upperStartDate.text(), true, true);
 
             aQuery.add(new BooleanClause(dateRange, BooleanClause.Occur.MUST));
@@ -177,14 +178,15 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         }
         else if(range.equals("ending"))
         {
-            TermRangeQuery dateRange = new TermRangeQuery(lowerEndDate.field(),
+            TermRangeQuery dateRange = TermRangeQuery.newStringRange(lowerEndDate.field(),
                 lowerEndDate.text(), upperEndDate
                 .text(), true, true);
             aQuery.add(new BooleanClause(dateRange, BooleanClause.Occur.MUST));
         }
         else if(range.equals("starting"))
         {
-            TermRangeQuery dateRange2 = new TermRangeQuery(lowerStartDate.field(), lowerStartDate
+            TermRangeQuery dateRange2 = TermRangeQuery.newStringRange(lowerStartDate.field(),
+                lowerStartDate
                 .text(), upperStartDate.text(), true, true);
             aQuery.add(new BooleanClause(dateRange2, BooleanClause.Occur.MUST));
         }
@@ -240,7 +242,8 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
         else
         {
             //SortField field = new SortField("eventStart", "desc".equals("desc"));
-            SortField field2 = new SortField(SearchConstants.FIELD_ID, SortField.LONG, "desc"
+            SortField field2 = new SortField(SearchConstants.FIELD_ID, SortField.Type.LONG,
+                "desc"
                 .equals("desc"));
             return new SortField[] { field2};
         }
