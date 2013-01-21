@@ -1,6 +1,9 @@
 package net.cyklotron.cms.search.internal;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +24,7 @@ import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.Version;
 import org.objectledge.ComponentInitializationError;
@@ -39,6 +43,8 @@ import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.site.SiteResource;
+
+import com.google.common.base.Optional;
 
 /**
  * Implementation of Indexing
@@ -151,9 +157,30 @@ public class IndexingFacilityUtil
      */
     public Directory getIndexDirectory(IndexResource index) throws SearchException
     {
-        String path = index.getFilesLocation();
+        String path = index.getFilesLocation(); // relative to workdir
+        return createOrGetDirectoryUnderPath(path);
+    }
+
+    public Directory createOrGetDirectoryUnderPath(String path)
+        throws SearchException
+    {
         checkDirectory(path);
-        return new LedgeFSDirectory(fileSystem, path);
+        try
+        {
+            Optional<File> optional = fileSystem.getFileRelativeToLocalFileSystem(path);
+            File directory = optional.get(); // must exist because checked earlier
+            return new NIOFSDirectory(directory);
+        }
+        catch(MalformedURLException | URISyntaxException e)
+        {
+            throw new SearchException("IndexingFacility: malformed path to directory '" + path
+                + "'", e);
+        }
+        catch(IOException e)
+        {
+            throw new SearchException(
+                "IndexingFacility: could not create NIOFSDirectory with path: '" + path + "'", e);
+        }
     }
 
     /**
@@ -165,8 +192,7 @@ public class IndexingFacilityUtil
     public Directory getTempIndexDirectory(IndexResource index) throws SearchException
     {
         String path = index.getFilesLocation() + System.nanoTime();
-        checkDirectory(path);
-        return new LedgeFSDirectory(fileSystem, path);
+        return createOrGetDirectoryUnderPath(path);
     }
 
     // IndexWriter management ----------------------------------------------------------------------
