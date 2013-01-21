@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.store.Directory;
 import org.jcontainer.dna.Logger;
@@ -144,7 +145,7 @@ public class IndexManagementTask
         IndexReader reader = null;
         try
         {
-            reindex = !IndexReader.indexExists(luceneDirectory);
+            reindex = !DirectoryReader.indexExists(luceneDirectory);
             if(!reindex)
             {
                 reader = IndexReader.open(luceneDirectory, false);
