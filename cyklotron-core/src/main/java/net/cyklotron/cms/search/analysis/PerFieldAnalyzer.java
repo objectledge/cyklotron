@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
 import org.apache.lucene.util.Version;
+import org.objectledge.filesystem.FileSystem;
 
 import net.cyklotron.cms.search.SearchConstants;
 
@@ -20,43 +21,50 @@ public class PerFieldAnalyzer
 {
     private static final Version LUCENE_VERSION = Version.LUCENE_40;
 
-    private PerFieldAnalyzer()
-    {
-        // uninstantiable
-    }
+    private final FileSystem fileSystem;
 
-    /** Builds an analyzer. */
-    public static Analyzer createPerFieldAnalyzer()
+    private final String stopwordsEncoding;
+
+    public PerFieldAnalyzer(FileSystem fileSystem, String stopwordsEncoding)
     {
-        return new PerFieldAnalyzerWrapper(new TextAnalyzer(LUCENE_VERSION),
-            getFieldCategoryAnalyzer());
+        this.fileSystem = fileSystem;
+        this.stopwordsEncoding = stopwordsEncoding;
     }
 
     /**
      * Builds an analyzer with defined stop words.
      * 
-     * @param stopwords a Reader for loading stop word list.
+     * @param stopwords a path to stopwords
      * @param stemmer stemmer to be used.
      * @throws IOException when stop words could not be loaded
      */
-    public static Analyzer createPerFieldAnalyzer(Reader stopwords, Stemmer stemmer)
+    public Analyzer createPerFieldAnalyzer(String pathToStopwords, Stemmer stemmer)
         throws IOException
     {
-        return new PerFieldAnalyzerWrapper(new TextAnalyzer(LUCENE_VERSION, stopwords, stemmer),
-            getFieldCategoryAnalyzer());
+        return new PerFieldAnalyzerWrapper(new TextAnalyzer(LUCENE_VERSION),
+            getFieldCategoryAnalyzer(pathToStopwords, stemmer));
     }
 
-    private static Map<String, Analyzer> getMapWithSingleEntry(String fieldName, Analyzer analyzer)
+    private Map<String, Analyzer> getFieldCategoryAnalyzer(String pathToStopwords,
+        Stemmer stemmer)
+        throws IOException
     {
         Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
-        analyzerPerField.put(fieldName, analyzer);
+        analyzerPerField.put(SearchConstants.FIELD_CATEGORY, new NewlineSeparatedAnalyzer());
+        
+        analyzerPerField.put(SearchConstants.FIELD_INDEX_ABBREVIATION, new TextAnalyzer(
+            LUCENE_VERSION, getStopwordsReader(pathToStopwords), stemmer));
+        analyzerPerField.put(SearchConstants.FIELD_INDEX_TITLE, new TextAnalyzer(LUCENE_VERSION,
+            getStopwordsReader(pathToStopwords), stemmer));
+        analyzerPerField.put(SearchConstants.FIELD_INDEX_CONTENT, new TextAnalyzer(LUCENE_VERSION,
+            getStopwordsReader(pathToStopwords), stemmer));
         return analyzerPerField;
     }
 
-    private static Map<String, Analyzer> getFieldCategoryAnalyzer()
+    private Reader getStopwordsReader(String path)
+        throws IOException
     {
-        return getMapWithSingleEntry(SearchConstants.FIELD_CATEGORY, new NewlineSeparatedAnalyzer());
+        return fileSystem.getReader(path, stopwordsEncoding);
     }
-
 
 }
