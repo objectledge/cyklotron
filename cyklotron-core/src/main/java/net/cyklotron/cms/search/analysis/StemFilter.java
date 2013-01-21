@@ -9,7 +9,7 @@ import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
 import org.apache.lucene.util.Attribute;
 import org.apache.lucene.util.AttributeImpl;
 
-public class StemFilter
+public final class StemFilter
     extends TokenFilter
 {
     private final Stemmer stemmer;
@@ -19,6 +19,8 @@ public class StemFilter
     private final PositionIncrementAttribute posIncAtt;
 
     private final StateAttribute stateAtt;
+
+    private boolean first = true;
 
     public StemFilter(TokenStream in, Stemmer stemmer)
     {
@@ -35,10 +37,17 @@ public class StemFilter
     {
         if(stateAtt.getState() == State.ORIGINAL)
         {
+            String original = charTermAttribute.toString();
             if(input.incrementToken())
             {
-                posIncAtt.setPositionIncrement(0);
-                stateAtt.setState(State.STEM);
+                String afterIncrement = charTermAttribute.toString();
+                // if(!first)
+                // {
+                // posIncAtt.setPositionIncrement(0);
+                posIncAtt.setPositionIncrement(1);
+                    stateAtt.setState(State.STEM);
+                // }
+                first = false;
                 return true;
             }
             else
