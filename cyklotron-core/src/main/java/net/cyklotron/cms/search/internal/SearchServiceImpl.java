@@ -1,7 +1,6 @@
 package net.cyklotron.cms.search.internal;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -468,18 +467,18 @@ public class SearchServiceImpl
         // analyser registry should be refactored out as an external component
         try
         {
-            Reader stopwords;
+            String path = null;
+            // TODO guess this should be called factory and got in on constructor as dependency
+            PerFieldAnalyzer perFieldAnalyzer = new PerFieldAnalyzer(fileSystem, STOPWORDS_ENCODING);
             if(locale != null && fileSystem.exists(STOPWORDS_LOCATION + locale.getDisplayName()))
             {
-                stopwords = fileSystem.getReader(
-                    STOPWORDS_LOCATION + "/" + locale.getDisplayName(), STOPWORDS_ENCODING);
+                path = STOPWORDS_LOCATION + "/" + locale.getDisplayName();
             }
             else
             {
-                stopwords = fileSystem.getReader(STOPWORDS_LOCATION + STOPWORDS_DEFAULT,
-                    STOPWORDS_ENCODING);
+                path = STOPWORDS_LOCATION + STOPWORDS_DEFAULT;
             }
-            return PerFieldAnalyzer.createPerFieldAnalyzer(stopwords, new StemmerPL());
+            return perFieldAnalyzer.createPerFieldAnalyzer(path, new StemmerPL());
         }
         catch(UnsupportedEncodingException e)
         {
