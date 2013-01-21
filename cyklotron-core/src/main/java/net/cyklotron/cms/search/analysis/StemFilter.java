@@ -20,8 +20,6 @@ public final class StemFilter
 
     private final StateAttribute stateAtt;
 
-    private boolean first = true;
-
     public StemFilter(TokenStream in, Stemmer stemmer)
     {
         super(in);
@@ -37,17 +35,12 @@ public final class StemFilter
     {
         if(stateAtt.getState() == State.ORIGINAL)
         {
-            String original = charTermAttribute.toString();
+            // String original = charTermAttribute.toString();
             if(input.incrementToken())
             {
-                String afterIncrement = charTermAttribute.toString();
-                // if(!first)
-                // {
-                // posIncAtt.setPositionIncrement(0);
+                // String afterIncrement = charTermAttribute.toString();
                 posIncAtt.setPositionIncrement(1);
                     stateAtt.setState(State.STEM);
-                // }
-                first = false;
                 return true;
             }
             else
