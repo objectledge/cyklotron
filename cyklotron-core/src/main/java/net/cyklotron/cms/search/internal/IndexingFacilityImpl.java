@@ -135,7 +135,7 @@ public class IndexingFacilityImpl implements IndexingFacility
         String oldDirectoryPath = index.getFilesLocation();
         String tempDirectoryPath = oldDirectoryPath + "_" + System.nanoTime();
         utility.checkDirectory(tempDirectoryPath);
-        Directory tempDir = new LedgeFSDirectory(fileSystem, tempDirectoryPath);
+        Directory tempDir = utility.createOrGetDirectoryUnderPath(tempDirectoryPath);
         IndexWriter indexWriter = 
             utility.openIndexWriter(tempDir, index, true, "reindexing the index");
         Set<Resource> querySet = utility.getQueryIndexResourceIds(coralSession, index);
