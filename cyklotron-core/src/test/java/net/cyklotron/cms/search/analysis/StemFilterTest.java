@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import junit.framework.TestCase;
+
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
@@ -31,13 +33,12 @@ import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.Version;
 import org.fest.assertions.Fail;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import net.cyklotron.cms.search.SearchConstants;
 
 public class StemFilterTest
+    extends TestCase
 {
     // source of words: news @ wp.pl
     // text has been down cased by hand
@@ -56,8 +57,9 @@ public class StemFilterTest
 
     List<String> expectedStreamOfWords;
 
-    @BeforeMethod
-    public void generateWordsAndStems()
+    @Override
+    protected void setUp()
+        throws Exception
     {
         String[] words = ORIGINAL_TEXT.split(" ");
         Stemmer stemmer = new StemmerPL();
@@ -74,7 +76,7 @@ public class StemFilterTest
     }
 
     @Test
-    public void should_add_stems_to_original_stream_of_tokens()
+    public void testShouldAddStemsToOriginalStreamOfTokens()
         throws Exception
     {
         // given
@@ -110,12 +112,15 @@ public class StemFilterTest
         assertThat(stemmedResults).isEqualTo(expectedStreamOfWords);
     }
 
-    @Test(dataProvider = "getDocuments")
-    public void should_not_fail_when_writing_into_index(Document document,
-        Map<String, Collection<String>> fieldToTerms)
+    @Test
+    public void testShouldNotFaiWhenWritingIntoIndex()
         throws Exception
     {
         // given
+        Object[][] documents = getDocuments();
+        Document document = (Document) documents[0][0];
+        Map<String, Collection<String>> fieldToTerms = (Map<String, Collection<String>>)documents[0][1];
+        
         RAMDirectory directory = new RAMDirectory();
         String stopwords = "";
         final StringReader stopWordsReader = new StringReader(stopwords);
@@ -178,7 +183,6 @@ public class StemFilterTest
         return new StringReader("");
     }
 
-    @DataProvider
     private Object[][] getDocuments()
     {
         Document dt1 = new Document();
