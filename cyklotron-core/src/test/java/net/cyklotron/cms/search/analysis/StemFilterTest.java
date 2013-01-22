@@ -33,7 +33,6 @@ import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.Version;
 import org.fest.assertions.Fail;
-import org.testng.annotations.Test;
 
 import net.cyklotron.cms.search.SearchConstants;
 
@@ -75,7 +74,6 @@ public class StemFilterTest
         }
     }
 
-    @Test
     public void testShouldAddStemsToOriginalStreamOfTokens()
         throws Exception
     {
@@ -112,7 +110,6 @@ public class StemFilterTest
         assertThat(stemmedResults).isEqualTo(expectedStreamOfWords);
     }
 
-    @Test
     public void testShouldNotFaiWhenWritingIntoIndex()
         throws Exception
     {
