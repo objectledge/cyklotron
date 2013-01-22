@@ -87,6 +87,12 @@ public abstract class AbstractIndex<T>
             // try to reopen index
             reader = DirectoryReader.open(directory);
         }
+        catch(IOException e)
+        {
+            writer = getWriter();
+            writer.close();
+            reader = DirectoryReader.open(directory);
+        }
         searcher = new IndexSearcher(reader);
         writer = null;
     }
