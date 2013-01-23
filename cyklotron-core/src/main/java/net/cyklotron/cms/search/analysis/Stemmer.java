@@ -13,5 +13,5 @@ public interface Stemmer
      * @param term the term.
      * @return the stem of the term. If stem could not be determined whole word should be retured.
      */
-    public String stem(String term);
+    public CharSequence stem(CharSequence term);
 }
