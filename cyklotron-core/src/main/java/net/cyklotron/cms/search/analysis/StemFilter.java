@@ -50,12 +50,11 @@ public final class StemFilter
         }
         else
         {
-            String term = charTermAttribute.toString();
-            String s = stemmer.stem(term);
+            CharSequence s = stemmer.stem(charTermAttribute);
             // If not stemmed, don't waste the time adjusting the token.
-            if((s != null) && !s.equals(term))
+            if((s != null) && !s.equals(charTermAttribute))
             {
-                charTermAttribute.copyBuffer(s.toCharArray(), 0, s.length());
+                charTermAttribute.setEmpty().append(s);
             }
             posIncAtt.setPositionIncrement(1);
             stateAtt.setState(State.ORIGINAL);          
