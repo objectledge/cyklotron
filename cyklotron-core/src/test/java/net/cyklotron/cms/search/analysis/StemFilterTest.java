@@ -68,9 +68,17 @@ public class StemFilterTest
     {
         factory = mock(StempelStemmerFactory.class);
 
-        when(factory.createStempelStemmer()).thenReturn(
-            new StemmerPL(new StempelStemmer(PolishAnalyzer.class
-                .getResourceAsStream(PolishAnalyzer.DEFAULT_STEMMER_FILE))));
+        final StempelStemmer stempelStemmer = new StempelStemmer(
+            PolishAnalyzer.class.getResourceAsStream(PolishAnalyzer.DEFAULT_STEMMER_FILE));
+        when(factory.createStempelStemmer()).thenReturn(new Stemmer()
+            {
+                @Override
+                public CharSequence stem(CharSequence term)
+                {
+                    return stempelStemmer.stem(term);
+                }
+
+            });
 
         String[] words = ORIGINAL_TEXT.split(" ");
         Stemmer stemmer = factory.createStempelStemmer();
@@ -79,10 +87,14 @@ public class StemFilterTest
         stemmedWords = new ArrayList<>();
         for(String original : words)
         {
-            String stem = stemmer.stem(original);
-            stemmedWords.add(stem);
+            // String stem =
+            CharSequence stem = stemmer.stem(original);
+            String stemStr = null;
+            if(stem != null)
+                stemStr = stem.toString();
+            stemmedWords.add(stemStr);
             expectedStreamOfWords.add(original);
-            expectedStreamOfWords.add(stem);
+            expectedStreamOfWords.add(stemStr);
         }
     }
 
@@ -227,7 +239,13 @@ public class StemFilterTest
         for(String word : words)
         {
             stemmed.add(word);
-            stemmed.add(stemmer.stem(word));
+            CharSequence stem = stemmer.stem(word);
+            String stemStr = null;
+            if(stem != null)
+            {
+                stemStr = stem.toString();
+            }
+            stemmed.add(stemStr);
         }
         return stemmed;
     }
