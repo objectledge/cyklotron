@@ -21,8 +21,15 @@ public class StempelStemmerFactoryImpl
     public Stemmer createStempelStemmer()
         throws IOException
     {
-        return new StemmerPL(new StempelStemmer(
-            fileSystem.getInputStream(PolishAnalyzer.DEFAULT_STEMMER_FILE)));
+        final StempelStemmer stempelStemmer = new StempelStemmer(
+            fileSystem.getInputStream(PolishAnalyzer.DEFAULT_STEMMER_FILE));
+        return new Stemmer()
+            {
+                @Override
+                public CharSequence stem(CharSequence term)
+                {
+                    return stempelStemmer.stem(term);
+                }
+            };
     }
-
 }
