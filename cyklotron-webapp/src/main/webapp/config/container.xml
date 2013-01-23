@@ -598,6 +598,8 @@
   <component class="net.cyklotron.cms.periodicals.internal.PlainTextRendererFactory"/>
   <component class="net.cyklotron.cms.periodicals.internal.HTMLNotificationRendererFactory"/>
   <component class="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
+  <component class-key="net.cyklotron.cms.search.analysis.StempelStemmerFactory"
+  			 class="net.cyklotron.cms.search.analysis.StempelStemmerFactoryImpl"/>
 
   <!-- stats come at the end so that all the providers are referencable -->  
   
