@@ -486,11 +486,11 @@ public class SearchServiceImpl
         }
         catch(UnsupportedEncodingException e)
         {
-            throw new IllegalStateException("UnsupportedEncodingException" + e);
+            throw new IllegalStateException("UnsupportedEncodingException" + e, e);
         }
         catch(IOException e)
         {
-            throw new IllegalStateException("File not exists exception" + e);
+            throw new IllegalStateException("File not exists exception" + e, e);
         }
     }
 
