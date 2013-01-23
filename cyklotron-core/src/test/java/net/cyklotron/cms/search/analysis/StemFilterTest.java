@@ -1,6 +1,8 @@
 package net.cyklotron.cms.search.analysis;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -18,6 +20,8 @@ import junit.framework.TestCase;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper;
+import org.apache.lucene.analysis.pl.PolishAnalyzer;
+import org.apache.lucene.analysis.stempel.StempelStemmer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field.Store;
@@ -56,12 +60,20 @@ public class StemFilterTest
 
     List<String> expectedStreamOfWords;
 
+    StempelStemmerFactory factory;
+
     @Override
     protected void setUp()
         throws Exception
     {
+        factory = mock(StempelStemmerFactory.class);
+
+        when(factory.createStempelStemmer()).thenReturn(
+            new StemmerPL(new StempelStemmer(PolishAnalyzer.class
+                .getResourceAsStream(PolishAnalyzer.DEFAULT_STEMMER_FILE))));
+
         String[] words = ORIGINAL_TEXT.split(" ");
-        Stemmer stemmer = new StemmerPL();
+        Stemmer stemmer = factory.createStempelStemmer();
         originalWords = Arrays.asList(words);
         expectedStreamOfWords = new ArrayList<>();
         stemmedWords = new ArrayList<>();
@@ -82,7 +94,7 @@ public class StemFilterTest
         final StringReader stopWordsReader = new StringReader(stopwords);
 
         TextAnalyzer analyzer = new TextAnalyzer(Version.LUCENE_40, stopWordsReader,
-            new StemmerPL());
+            factory.createStempelStemmer());
         TokenStream stream = analyzer.tokenStream("field", new StringReader(ORIGINAL_TEXT));
 
         // get the CharTermAttribute from the TokenStream
@@ -165,7 +177,7 @@ public class StemFilterTest
 
         Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
         analyzerPerField.put(SearchConstants.FIELD_CATEGORY, new NewlineSeparatedAnalyzer());
-        Stemmer stemmer = new StemmerPL();
+        Stemmer stemmer = factory.createStempelStemmer();
         analyzerPerField.put(SearchConstants.FIELD_INDEX_ABBREVIATION, new TextAnalyzer(
             Version.LUCENE_40, getStopwordsReader(), stemmer));
         analyzerPerField.put(SearchConstants.FIELD_INDEX_TITLE, new TextAnalyzer(Version.LUCENE_40,
@@ -181,6 +193,7 @@ public class StemFilterTest
     }
 
     private Object[][] getDocuments()
+        throws IOException
     {
         Document dt1 = new Document();
         Map<String, Collection<String>> dt1fieldToTerms = new HashMap<>();
@@ -206,8 +219,9 @@ public class StemFilterTest
     }
 
     private Collection<String> getStemmed(String content)
+        throws IOException
     {
-        Stemmer stemmer = new StemmerPL();
+        Stemmer stemmer = factory.createStempelStemmer();
         String[] words = content.split(" ");
         Collection<String> stemmed = new ArrayList<>();
         for(String word : words)
