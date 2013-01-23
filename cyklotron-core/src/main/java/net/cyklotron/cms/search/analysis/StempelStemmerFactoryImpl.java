@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.apache.lucene.analysis.pl.PolishAnalyzer;
 import org.apache.lucene.analysis.stempel.StempelStemmer;
+import org.egothor.stemmer.Trie;
 import org.objectledge.filesystem.FileSystem;
 
 public class StempelStemmerFactoryImpl
@@ -21,8 +22,12 @@ public class StempelStemmerFactoryImpl
     public Stemmer createStempelStemmer()
         throws IOException
     {
-        final StempelStemmer stempelStemmer = new StempelStemmer(
-            fileSystem.getInputStream(PolishAnalyzer.DEFAULT_STEMMER_FILE));
+        // TODO fileSysetm didn't find resource, tell me why during review
+        // URL resource = fileSystem.getResource(PolishAnalyzer.DEFAULT_STEMMER_FILE);
+        // fileSystem.getInputStream(PolishAnalyzer.DEFAULT_STEMMER_FILE));
+        Trie loaded = StempelStemmer.load(PolishAnalyzer.class
+            .getResourceAsStream(PolishAnalyzer.DEFAULT_STEMMER_FILE));
+        final StempelStemmer stempelStemmer = new StempelStemmer(loaded);
         return new Stemmer()
             {
                 @Override
