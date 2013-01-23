@@ -1,21 +1,37 @@
 package net.cyklotron.cms.search.analysis;
 
+import org.apache.lucene.analysis.stempel.StempelStemmer;
+
 /**
  * Stemmer for polish language using <a href="http://www.getopt.org/stempel/">Stempel</a>
  * 
- * @author rafal
+ * @author rafal, marek
  */
 public class StemmerPL
     implements Stemmer
 {
-    private final static String STEM_TABLE = "/org/getopt/stempel/tables/stemmer_2000.out";
+    private final StempelStemmer stemmer;
 
-    private final org.getopt.stempel.Stemmer stemmerImpl = new org.getopt.stempel.Stemmer(
-        STEM_TABLE);
+    StemmerPL(StempelStemmer stemmer)
+    {
+        this.stemmer = stemmer;
+    }
 
+    /**
+     * This is not effective at all. Strings should not be created. Need to refactor it later.
+     */
     @Override
     public String stem(String term)
     {
-        return stemmerImpl.stem(term, true);
+        // TODO refactor this method to return
+        StringBuilder stem = stemmer.stem(term);
+        if(stem != null)
+        {
+            return stem.toString();
+        }
+        else
+        {
+            return null;
+        }
     }
 }
