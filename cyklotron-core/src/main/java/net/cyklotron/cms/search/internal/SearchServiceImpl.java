@@ -56,7 +56,7 @@ import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.SearchingFacility;
 import net.cyklotron.cms.search.XRefsResource;
 import net.cyklotron.cms.search.analysis.PerFieldAnalyzer;
-import net.cyklotron.cms.search.analysis.StemmerPL;
+import net.cyklotron.cms.search.analysis.StempelStemmerFactory;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
@@ -131,6 +131,8 @@ public class SearchServiceImpl
     
     private final PerformanceMonitor performanceMonitor;
 
+    private final StempelStemmerFactory stemmerFactory;
+
     // initialization ////////////////////////////////////////////////////////
 
     /**
@@ -142,7 +144,7 @@ public class SearchServiceImpl
         CategoryService categoryService, CategoryQueryService categoryQueryService,
         UserManager userManager, PreferencesService preferencesService,
         IntegrationService integrationService, LoggingConfigurator loggingConfigurator,
-        SearchServiceImpl.Statistics statistics)
+        SearchServiceImpl.Statistics statistics, StempelStemmerFactory stemmerFactory)
         throws ConfigurationException
     {
         this.config = config;
@@ -156,6 +158,7 @@ public class SearchServiceImpl
         this.userManager = userManager;
         this.integrationService = integrationService;
         this.statistics = statistics;
+        this.stemmerFactory = stemmerFactory;
         if(config.getChild("performance", false) != null)
         {
             this.performanceMonitor = new PerformanceMonitor(config, loggingConfigurator);
@@ -478,7 +481,8 @@ public class SearchServiceImpl
             {
                 path = STOPWORDS_LOCATION + STOPWORDS_DEFAULT;
             }
-            return perFieldAnalyzer.createPerFieldAnalyzer(path, new StemmerPL());
+            return perFieldAnalyzer.createPerFieldAnalyzer(path,
+                stemmerFactory.createStempelStemmer());
         }
         catch(UnsupportedEncodingException e)
         {
