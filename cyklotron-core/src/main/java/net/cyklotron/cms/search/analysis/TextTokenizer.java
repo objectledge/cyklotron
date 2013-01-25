@@ -25,6 +25,7 @@ import java.io.Reader;
 
 import org.apache.lucene.analysis.Tokenizer;
 import org.apache.lucene.analysis.standard.ClassicTokenizer;
+import org.apache.lucene.analysis.standard.StandardTokenizerInterface;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
@@ -59,7 +60,7 @@ public final class TextTokenizer
     extends Tokenizer
 {
     /** A private instance of the JFlex-constructed scanner */
-    private TextTokenizerInterface scanner;
+    private StandardTokenizerInterface scanner;
 
     public static final int ALPHANUM = 0;
 
@@ -184,7 +185,7 @@ public final class TextTokenizer
         {
             int tokenType = scanner.getNextToken();
 
-            if(tokenType == TextTokenizerInterface.YYEOF)
+            if(tokenType == StandardTokenizerInterface.YYEOF)
             {
                 return false;
             }

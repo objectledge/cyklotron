@@ -21,6 +21,7 @@ package net.cyklotron.cms.search.analysis;
 
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.standard.StandardTokenizer;
+import org.apache.lucene.analysis.standard.StandardTokenizerInterface;
 
 /**
  * This class implements Word Break rules from the Unicode Text Segmentation 
@@ -44,7 +45,7 @@ import org.apache.lucene.analysis.standard.StandardTokenizer;
 %final
 %public
 %class TextTokenizerImpl
-%implements TextTokenizerInterface
+%implements StandardTokenizerInterface
 %function getNextToken
 %char
 %buffer 4096
@@ -121,7 +122,7 @@ HiraganaEx = {Hiragana} ({Format} | {Extend})*
 // UAX#29 WB1.   sot   Ã·
 //        WB2.     Ã·   eot
 //
-<<EOF>> { return TextTokenizerInterface.YYEOF; }
+<<EOF>> { return StandardTokenizerInterface.YYEOF; }
 
 // UAX#29 WB8.   Numeric Ã— Numeric
 //        WB11.  Numeric (MidNum | MidNumLet) Ã— Numeric
