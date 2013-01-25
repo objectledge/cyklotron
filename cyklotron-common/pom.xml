@@ -71,6 +71,17 @@
         <role>contributor</role>
       </roles>
     </developer>
+    <developer>
+      <id>marek</id>
+      <name>Marek Lewandowski</name>
+      <email>@caltha.pl</email>
+      <organization>Caltha</organization>
+      <organizationUrl>http://caltha.pl</organizationUrl>
+      <timezone>+1</timezone>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
   </developers>
   <contributors>
   </contributors>
