@@ -36,7 +36,7 @@ import org.objectledge.filesystem.LocalFileSystemProvider;
 
 public abstract class AbstractIndex<T>
 {
-    protected static final Version LUCENE_VERSION = Version.LUCENE_40;
+    protected static final Version LUCENE_VERSION = SearchConstants.LUCENE_VERSION;
 
     protected final FileSystem fileSystem;
 

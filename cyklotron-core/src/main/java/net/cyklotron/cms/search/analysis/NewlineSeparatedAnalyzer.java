@@ -22,7 +22,7 @@ public class NewlineSeparatedAnalyzer
     {
         public NewlineSeparatedTokenizer(Reader input)
         {
-            super(Version.LUCENE_40, input);
+            super(SearchConstants.LUCENE_VERSION, input);
         }
 
         @Override

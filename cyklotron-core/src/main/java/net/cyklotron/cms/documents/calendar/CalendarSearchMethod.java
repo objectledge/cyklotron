@@ -146,7 +146,7 @@ public class CalendarSearchMethod extends PageableResultsSearchMethod
 
         if(textQuery.length() > 0)
         {
-            QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_40, DEFAULT_FIELD_NAMES,
+            QueryParser parser = new MultiFieldQueryParser(SearchConstants.LUCENE_VERSION, DEFAULT_FIELD_NAMES,
                 analyzer);
             parser.setDefaultOperator(QueryParser.AND_OPERATOR);
             parser.setDateResolution(DateTools.Resolution.SECOND);

@@ -105,7 +105,7 @@ public class StemFilterTest
         final String stopwords = "";
         final StringReader stopWordsReader = new StringReader(stopwords);
 
-        TextAnalyzer analyzer = new TextAnalyzer(Version.LUCENE_40, stopWordsReader,
+        TextAnalyzer analyzer = new TextAnalyzer(SearchConstants.LUCENE_VERSION, stopWordsReader,
             factory.createStempelStemmer());
         TokenStream stream = analyzer.tokenStream("field", new StringReader(ORIGINAL_TEXT));
 
@@ -147,7 +147,7 @@ public class StemFilterTest
         final StringReader stopWordsReader = new StringReader(stopwords);
 
         Analyzer analyzer = createPerFieldAnalyzer();
-        IndexWriterConfig indexWriterConfig = new IndexWriterConfig(Version.LUCENE_40, analyzer);
+        IndexWriterConfig indexWriterConfig = new IndexWriterConfig(SearchConstants.LUCENE_VERSION, analyzer);
         IndexWriter writer = new IndexWriter(directory, indexWriterConfig);
         
         // when
@@ -191,12 +191,12 @@ public class StemFilterTest
         analyzerPerField.put(SearchConstants.FIELD_CATEGORY, new NewlineSeparatedAnalyzer());
         Stemmer stemmer = factory.createStempelStemmer();
         analyzerPerField.put(SearchConstants.FIELD_INDEX_ABBREVIATION, new TextAnalyzer(
-            Version.LUCENE_40, getStopwordsReader(), stemmer));
-        analyzerPerField.put(SearchConstants.FIELD_INDEX_TITLE, new TextAnalyzer(Version.LUCENE_40,
+            SearchConstants.LUCENE_VERSION, getStopwordsReader(), stemmer));
+        analyzerPerField.put(SearchConstants.FIELD_INDEX_TITLE, new TextAnalyzer(SearchConstants.LUCENE_VERSION,
             getStopwordsReader(), stemmer));
         analyzerPerField.put(SearchConstants.FIELD_INDEX_CONTENT, new TextAnalyzer(
-            Version.LUCENE_40, getStopwordsReader(), stemmer));
-        return new PerFieldAnalyzerWrapper(new TextAnalyzer(Version.LUCENE_40), analyzerPerField);
+            SearchConstants.LUCENE_VERSION, getStopwordsReader(), stemmer));
+        return new PerFieldAnalyzerWrapper(new TextAnalyzer(SearchConstants.LUCENE_VERSION), analyzerPerField);
     }
 
     private Reader getStopwordsReader()

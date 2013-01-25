@@ -213,7 +213,7 @@ public class IndexingFacilityUtil
     {
         try
         {
-            IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_40, getAnalyzer(index));
+            IndexWriterConfig config = new IndexWriterConfig(SearchConstants.LUCENE_VERSION, getAnalyzer(index));
             config.setMaxBufferedDocs(minMergeDocs);
             config.setOpenMode(createIndex == true ? OpenMode.CREATE : OpenMode.APPEND);
             final LogDocMergePolicy mergePolicy = new LogDocMergePolicy();

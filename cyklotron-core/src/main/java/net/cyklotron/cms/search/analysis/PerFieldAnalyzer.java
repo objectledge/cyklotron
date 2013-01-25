@@ -19,7 +19,7 @@ import net.cyklotron.cms.search.SearchConstants;
  */
 public class PerFieldAnalyzer
 {
-    private static final Version LUCENE_VERSION = Version.LUCENE_40;
+    private static final Version LUCENE_VERSION = SearchConstants.LUCENE_VERSION;
 
     private final FileSystem fileSystem;
 

@@ -142,7 +142,7 @@ public class CalendarEventsSearchMethod
 
         if(textQuery != null && textQuery.length() > 0)
         {
-            QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_40, EXTENDED_FIELD_NAMES,
+            QueryParser parser = new MultiFieldQueryParser(SearchConstants.LUCENE_VERSION, EXTENDED_FIELD_NAMES,
                 analyzer);
             parser.setDefaultOperator(QueryParser.AND_OPERATOR);
             parser.setDateResolution(DateTools.Resolution.SECOND);

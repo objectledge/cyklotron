@@ -1,5 +1,7 @@
 package net.cyklotron.cms.search;
 
+import org.apache.lucene.util.Version;
+
 /**
  *
  * @author <a href="mailto:pablo@ngo.pl">Pawel Potempski</a>
@@ -9,7 +11,8 @@ package net.cyklotron.cms.search;
 public interface SearchConstants
 {
     // field names ////////////////////////////////////////////////////////////////////////////////
-    
+    /** Lucene version */
+    public static Version LUCENE_VERSION = Version.LUCENE_41;
     /** index_title - IST, obligatory */
     public static String FIELD_INDEX_TITLE = "index_title";
     /** index_abbreviation - IST, obligatory */
