@@ -600,6 +600,7 @@
   <component class="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
   <component class-key="net.cyklotron.cms.search.analysis.StempelStemmerFactory"
   			 class="net.cyklotron.cms.search.analysis.StempelStemmerFactoryImpl"/>
+  <component class="net.cyklotron.cms.search.analysis.PerFieldAnalyzerFactory"/>
 
   <!-- stats come at the end so that all the providers are referencable -->  
   
