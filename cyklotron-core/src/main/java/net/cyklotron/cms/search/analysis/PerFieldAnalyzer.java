@@ -52,13 +52,17 @@ public class PerFieldAnalyzer
         Map<String, Analyzer> analyzerPerField = new HashMap<String, Analyzer>();
         analyzerPerField.put(SearchConstants.FIELD_CATEGORY, new NewlineSeparatedAnalyzer());
         
-        analyzerPerField.put(SearchConstants.FIELD_INDEX_ABBREVIATION, new TextAnalyzer(
-            LUCENE_VERSION, getStopwordsReader(pathToStopwords), stemmer));
-        analyzerPerField.put(SearchConstants.FIELD_INDEX_TITLE, new TextAnalyzer(LUCENE_VERSION,
-            getStopwordsReader(pathToStopwords), stemmer));
-        analyzerPerField.put(SearchConstants.FIELD_INDEX_CONTENT, new TextAnalyzer(LUCENE_VERSION,
-            getStopwordsReader(pathToStopwords), stemmer));
+        analyzerPerField.put(SearchConstants.FIELD_INDEX_ABBREVIATION, createTextAnalyzer(pathToStopwords, stemmer));
+        analyzerPerField.put(SearchConstants.FIELD_INDEX_TITLE, createTextAnalyzer(pathToStopwords, stemmer));
+        analyzerPerField.put(SearchConstants.FIELD_INDEX_CONTENT, createTextAnalyzer(pathToStopwords, stemmer));
         return analyzerPerField;
+    }
+
+    private TextAnalyzer createTextAnalyzer(String pathToStopwords, Stemmer stemmer)
+        throws IOException
+    {
+        return new TextAnalyzer(
+            LUCENE_VERSION, getStopwordsReader(pathToStopwords), stemmer);
     }
 
     private Reader getStopwordsReader(String path)
