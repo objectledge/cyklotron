@@ -17,7 +17,7 @@ import net.cyklotron.cms.search.SearchConstants;
  * @author Marek Lewandowski
  * @version $Id: CategoryAnalyzer.java,v 1.3 2013-01-18 02:11:54 marek Exp $
  */
-public class PerFieldAnalyzer
+public class PerFieldAnalyzerFactory
 {
     private static final Version LUCENE_VERSION = SearchConstants.LUCENE_VERSION;
 
@@ -25,7 +25,7 @@ public class PerFieldAnalyzer
 
     private final String stopwordsEncoding;
 
-    public PerFieldAnalyzer(FileSystem fileSystem, String stopwordsEncoding)
+    PerFieldAnalyzerFactory(FileSystem fileSystem, String stopwordsEncoding)
     {
         this.fileSystem = fileSystem;
         this.stopwordsEncoding = stopwordsEncoding;
