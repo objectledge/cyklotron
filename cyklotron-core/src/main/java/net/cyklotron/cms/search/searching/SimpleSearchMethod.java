@@ -7,11 +7,11 @@ import org.apache.lucene.document.DateTools;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.util.Version;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchService;
 
 /**

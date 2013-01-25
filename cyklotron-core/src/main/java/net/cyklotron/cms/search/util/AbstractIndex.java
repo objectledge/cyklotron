@@ -34,6 +34,8 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.LocalFileSystemProvider;
 
+import net.cyklotron.cms.search.SearchConstants;
+
 public abstract class AbstractIndex<T>
 {
     protected static final Version LUCENE_VERSION = SearchConstants.LUCENE_VERSION;

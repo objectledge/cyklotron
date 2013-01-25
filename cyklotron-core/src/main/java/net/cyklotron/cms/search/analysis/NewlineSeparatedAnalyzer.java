@@ -4,7 +4,8 @@ import java.io.Reader;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.util.CharTokenizer;
-import org.apache.lucene.util.Version;
+
+import net.cyklotron.cms.search.SearchConstants;
 
 public class NewlineSeparatedAnalyzer
     extends Analyzer
