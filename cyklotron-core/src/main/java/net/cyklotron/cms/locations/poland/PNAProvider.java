@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
@@ -39,27 +40,53 @@ public class PNAProvider
      */
     public boolean downloadSource()
     {
+        Timer timer = new Timer();
+        HttpClient client = new HttpClient();
+        HttpMethod method = new GetMethod(SOURCE_LOCATION);
         try
         {
-            Timer timer = new Timer();
-            HttpClient client = new HttpClient();
-            HttpMethod method = new GetMethod(SOURCE_LOCATION);
             client.executeMethod(method);
-            if(!fileSystem.isDirectory(CACHE_DIRECTORY))
+            if(method.getStatusCode() == HttpStatus.SC_OK)
             {
-                fileSystem.mkdirs(CACHE_DIRECTORY);
+                if(!fileSystem.isDirectory(CACHE_DIRECTORY))
+                {
+                    fileSystem.mkdirs(CACHE_DIRECTORY);
+                }
+                fileSystem.write(CACHE_DIRECTORY + SOURCE_TMP_FILE,
+                    method.getResponseBodyAsStream());
+                rename(SOURCE_TMP_FILE, SOURCE_FILE);
+                logger.info("downloaded " + fileSystem.length(CACHE_DIRECTORY + SOURCE_FILE)
+                    + " bytes in " + timer.getElapsedSeconds() + "s");
+                return true;
             }
-            fileSystem.write(CACHE_DIRECTORY + SOURCE_TMP_FILE, method.getResponseBodyAsStream());
-            method.releaseConnection();
-            rename(SOURCE_TMP_FILE, SOURCE_FILE);
-            logger.info("downloaded " + fileSystem.length(CACHE_DIRECTORY + SOURCE_FILE)
-                + " bytes in " + timer.getElapsedSeconds() + "s");
-            return true;
+            else
+            {
+                if(fileSystem.exists(CACHE_DIRECTORY + SOURCE_FILE))
+                {
+                    logger
+                        .error("failed to download data from "
+                            + SOURCE_LOCATION
+                            + " HTTP status "
+                            + method.getStatusCode()
+                            + " but previously downloaded source file exists, proceeding with what we got.");
+                    return true;
+                }
+                else
+                {
+                    logger.error("failed to download data from " + SOURCE_LOCATION
+                        + " HTTP status " + method.getStatusCode());
+                    return false;
+                }
+            }
         }
         catch(IOException e)
         {
             logger.error("failed to download source from " + SOURCE_LOCATION, e);
             return false;
+        }
+        finally
+        {
+            method.releaseConnection();
         }
     }
 
