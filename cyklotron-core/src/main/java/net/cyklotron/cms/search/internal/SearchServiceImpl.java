@@ -55,7 +55,7 @@ import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.SearchingFacility;
 import net.cyklotron.cms.search.XRefsResource;
-import net.cyklotron.cms.search.analysis.PerFieldAnalyzer;
+import net.cyklotron.cms.search.analysis.PerFieldAnalyzerFactory;
 import net.cyklotron.cms.search.analysis.StempelStemmerFactory;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -133,6 +133,8 @@ public class SearchServiceImpl
 
     private final StempelStemmerFactory stemmerFactory;
 
+    private final PerFieldAnalyzerFactory perFieldAnalyzerFactory;
+
     // initialization ////////////////////////////////////////////////////////
 
     /**
@@ -144,7 +146,8 @@ public class SearchServiceImpl
         CategoryService categoryService, CategoryQueryService categoryQueryService,
         UserManager userManager, PreferencesService preferencesService,
         IntegrationService integrationService, LoggingConfigurator loggingConfigurator,
-        SearchServiceImpl.Statistics statistics, StempelStemmerFactory stemmerFactory)
+        SearchServiceImpl.Statistics statistics, StempelStemmerFactory stemmerFactory,
+        PerFieldAnalyzerFactory perFieldAnalyzerFactory)
         throws ConfigurationException
     {
         this.config = config;
@@ -159,6 +162,7 @@ public class SearchServiceImpl
         this.integrationService = integrationService;
         this.statistics = statistics;
         this.stemmerFactory = stemmerFactory;
+        this.perFieldAnalyzerFactory = perFieldAnalyzerFactory;
         if(config.getChild("performance", false) != null)
         {
             this.performanceMonitor = new PerformanceMonitor(config, loggingConfigurator);
@@ -471,8 +475,6 @@ public class SearchServiceImpl
         try
         {
             String path = null;
-            // TODO guess this should be called factory and got in on constructor as dependency
-            PerFieldAnalyzer perFieldAnalyzer = new PerFieldAnalyzer(fileSystem, STOPWORDS_ENCODING);
             if(locale != null && fileSystem.exists(STOPWORDS_LOCATION + locale.getDisplayName()))
             {
                 path = STOPWORDS_LOCATION + "/" + locale.getDisplayName();
@@ -481,7 +483,7 @@ public class SearchServiceImpl
             {
                 path = STOPWORDS_LOCATION + STOPWORDS_DEFAULT;
             }
-            return perFieldAnalyzer.createPerFieldAnalyzer(path,
+            return perFieldAnalyzerFactory.createPerFieldAnalyzer(path,
                 stemmerFactory.createStempelStemmer());
         }
         catch(UnsupportedEncodingException e)
