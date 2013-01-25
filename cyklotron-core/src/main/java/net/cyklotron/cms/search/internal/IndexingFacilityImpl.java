@@ -158,7 +158,8 @@ public class IndexingFacilityImpl implements IndexingFacility
                 Resource branch = (Resource) (i.next());
                 index(coralSession, branch, branch, indexWriter, index, querySet, false, stats);
             }
-            indexWriter.commit(IndexingFacilityUtil.resetChangeCounter());
+            indexWriter.setCommitData(IndexingFacilityUtil.resetChangeCounter());
+            indexWriter.commit();
             if(stats.documentsAdded == 0)
             {
                 StringBuilder buff = new StringBuilder();
@@ -263,7 +264,8 @@ public class IndexingFacilityImpl implements IndexingFacility
             try
             {
                 indexWriter.forceMerge(1);
-                indexWriter.commit(IndexingFacilityUtil.resetChangeCounter());
+                indexWriter.setCommitData(IndexingFacilityUtil.resetChangeCounter());
+                indexWriter.commit();
             }
             catch (IOException e)
             {

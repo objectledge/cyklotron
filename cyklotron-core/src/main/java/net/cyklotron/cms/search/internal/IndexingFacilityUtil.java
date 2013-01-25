@@ -277,7 +277,8 @@ public class IndexingFacilityUtil
         {
             if(userData != null)
             {
-                indexWriter.commit(userData);
+                indexWriter.setCommitData(userData);
+                indexWriter.commit();
             }
             else
             {
