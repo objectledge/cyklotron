@@ -1,6 +1,7 @@
 package net.cyklotron.cms.installer;
 
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -19,11 +20,7 @@ public class Installer
 
     private String dbDriverClass;
 
-    private String dbUrl;
-
-    private String dbUser;
-
-    private String dbPassword;
+    private Properties dbProperties;
 
     private boolean initForce;
 
@@ -31,16 +28,15 @@ public class Installer
 
     private Logger log;
 
+    private DataSourceFactory dataSourceFactory;
+
     private DataSource dataSource;
 
     public void init(Properties properties)
     {
-        dbDriverClasspath = properties.getProperty("db.driver.classpath");
-        dbDriverClass = properties.getProperty("db.driver.class");
-        dbUrl = properties.getProperty("db.url");
-        dbUser = properties.getProperty("db.user");
-        dbPassword = properties.getProperty("db.password");
-
+        dbDriverClasspath = properties.getProperty("db.classpath");
+        dbDriverClass = properties.getProperty("db.dsclass");
+        dbProperties = extract(properties, "db.property.");
         initForce = Boolean.getBoolean(properties.getProperty("init.force", "false"));
     }
 
@@ -50,8 +46,15 @@ public class Installer
         initFileSystem();
         initDataSource();
 
-        initSchema();
-        installModules();
+        try
+        {
+            initSchema();
+            installModules();
+        }
+        finally
+        {
+            shutdownDataSource();
+        }
     }
 
     private void initLogger()
@@ -65,25 +68,40 @@ public class Installer
         fileSystem = FileSystem.getStandardFileSystem(".");
     }
 
+    private Properties extract(Properties in, String prefix)
+    {
+        Properties out = new Properties();
+        Enumeration<String> pe = (Enumeration<String>)in.propertyNames();
+        while(pe.hasMoreElements())
+        {
+            String p = pe.nextElement();
+            if(p.startsWith(prefix))
+            {
+                String k = p.substring(prefix.length());
+                String v = in.getProperty(p);
+                out.setProperty(k, v);
+            }
+        }
+        return out;
+    }
+
     private void initDataSource()
     {
         try
         {
-            ClassLoader cl = DataSourceFactory.getDriverClassLoader(dbDriverClasspath);
-            Thread.currentThread().setContextClassLoader(cl);
+            dataSourceFactory = new DataSourceFactory(dbDriverClasspath, dbDriverClass,
+                dbProperties, log);
+            dataSource = dataSourceFactory.getDataSource();
         }
         catch(Exception e)
         {
-            die("failed to initialize database driver classloader", e);
-        }
-        try
-        {
-            dataSource = DataSourceFactory.newDataSource(dbDriverClass, dbUrl, dbUser, dbPassword);
-        }
-        catch(SQLException e)
-        {
             die("failed to initialized datasource", e);
         }
+    }
+
+    private void shutdownDataSource()
+    {
+        dataSourceFactory.close();
     }
 
     private void initSchema()
