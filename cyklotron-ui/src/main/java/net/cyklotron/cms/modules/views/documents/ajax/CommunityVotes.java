@@ -2,7 +2,6 @@ package net.cyklotron.cms.modules.views.documents.ajax;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.JsonGenerationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -13,6 +12,8 @@ import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
 
 public class CommunityVotes
     extends AbstractJsonView

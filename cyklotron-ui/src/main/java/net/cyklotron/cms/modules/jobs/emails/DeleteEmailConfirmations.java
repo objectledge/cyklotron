@@ -1,11 +1,9 @@
 package net.cyklotron.cms.modules.jobs.emails;
 
-import java.util.Arrays;
-
-import net.cyklotron.cms.banner.BannerService;
 import net.cyklotron.cms.confirmation.ConfirmationRequestException;
 import net.cyklotron.cms.confirmation.EmailConfirmationService;
 
+import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.scheduler.Job;
@@ -16,17 +14,20 @@ public class DeleteEmailConfirmations
     private CoralSessionFactory sessionFactory;
 
     private EmailConfirmationService emailConfirmationService;
+    
+    private Logger logger;
 
     // initialization ///////////////////////////////////////////////////////
 
     /**
      *
      */
-    public DeleteEmailConfirmations(CoralSessionFactory sessionFactory,
+    public DeleteEmailConfirmations(CoralSessionFactory sessionFactory, Logger logger,
         EmailConfirmationService emailConfirmationService)
     {
         this.emailConfirmationService = emailConfirmationService;
         this.sessionFactory = sessionFactory;
+        this.logger = logger;
     }
 
     // Job interface ////////////////////////////////////////////////////////
@@ -40,12 +41,12 @@ public class DeleteEmailConfirmations
         try
         {
             String[] res = arguments[0].split("\\,\\s*");
-            emailConfirmationService.deleteNotConfirmedEmailConfirmationRequests(coralSession,
-                res[0], res[1]);
+            emailConfirmationService.deleteNotConfirmedRequests(coralSession,
+                Integer.parseInt(res[0]), Integer.parseInt(res[1]));
         }
         catch(ConfirmationRequestException e)
         {
-            new ConfirmationRequestException("Failed to delete email confirmation requests");
+            logger.error("Failed to delete email confirmation requests");        
         }
         finally
         {

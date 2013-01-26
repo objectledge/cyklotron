@@ -1,14 +1,17 @@
 package net.cyklotron.cms.category.components;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import org.objectledge.context.Context;
+import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
+import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
 
 import net.cyklotron.cms.CmsDataFactory;
@@ -16,6 +19,7 @@ import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.structure.table.StateFilter;
 import net.cyklotron.cms.util.CmsResourceListTableModel;
 
 /**
@@ -111,6 +115,15 @@ extends DocumentResourceList
         }
 
 	}
+	
+    protected TableFilter<Resource>[] getTableFilters(CoralSession coralSession,
+        BaseResourceListConfiguration config)
+        throws ProcessingException
+    {
+        List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
+        filters.add(new StateFilter(new String[]{"published"}));
+        return filters.toArray(new TableFilter[filters.size()]);
+    }
 	
 	public class HoldingComparator implements Comparator
 	{
