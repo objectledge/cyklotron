@@ -4,8 +4,6 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import javax.sql.DataSource;
-
 import org.apache.log4j.BasicConfigurator;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
@@ -29,8 +27,6 @@ public class Installer
     private Logger log;
 
     private DataSourceFactory dataSourceFactory;
-
-    private DataSource dataSource;
 
     public void init(Properties properties)
     {
@@ -91,7 +87,6 @@ public class Installer
         {
             dataSourceFactory = new DataSourceFactory(dbDriverClasspath, dbDriverClass,
                 dbProperties, log);
-            dataSource = dataSourceFactory.getDataSource();
         }
         catch(Exception e)
         {
@@ -108,7 +103,8 @@ public class Installer
     {
         try
         {
-            InitComponent init = new InitComponent(dataSource, fileSystem, initForce, log);
+            InitComponent init = new InitComponent(dataSourceFactory.getDataSource(), fileSystem,
+                initForce, log);
             try
             {
                 init.run();
@@ -129,7 +125,8 @@ public class Installer
         try
         {
             RmlRunnerComponent runner = new RmlRunnerComponent(".", "config", "root",
-                "rml/cyklotron/install.list", "UTF-8", dataSource, fileSystem, log);
+                "rml/cyklotron/install.list", "UTF-8", dataSourceFactory.getDataSource(),
+                dataSourceFactory.getTransaction(), fileSystem, log);
             runner.run();
         }
         catch(Exception e)
