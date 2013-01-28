@@ -31,6 +31,12 @@ public class PerFieldAnalyzerFactory
         this.stopwordsEncoding = stopwordsEncoding;
     }
 
+    public PerFieldAnalyzerFactory(FileSystem fileSystem)
+    {
+        this.fileSystem = fileSystem;
+        this.stopwordsEncoding = "UTF-8";
+    }
+
     /**
      * Builds an analyzer with defined stop words.
      * 
