@@ -32,8 +32,7 @@ RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/files/components'
 ATTRIBUTES (
   componentName = 'files.Files',
-  configurationView = 'files.FilesConf2',
-  aggregationSourceView = 'files.FileAggregationSource'
+  configurationView = 'files.FilesConf2'
 );
 
 CREATE RESOURCE 'publicUpload'
