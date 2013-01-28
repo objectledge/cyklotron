@@ -37,7 +37,7 @@ public class Installer
         dbDriverClasspath = properties.getProperty("db.classpath");
         dbDriverClass = properties.getProperty("db.dsclass");
         dbProperties = extract(properties, "db.property.");
-        initForce = Boolean.getBoolean(properties.getProperty("init.force", "false"));
+        initForce = Boolean.valueOf(properties.getProperty("init.force", "false"));
     }
 
     public void run()
