@@ -216,6 +216,10 @@ public class PNALocationsProvider
         {
             parseSource();
         }
+        else if(fileSystem.exists(CACHE_DIRECTORY + CACHE_FILE))
+        {
+            parseCache();
+        }
         return cachedLocations;
     }
 

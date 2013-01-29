@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.dom4j.Document;
 import org.objectledge.context.Context;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.datatypes.ResourceList;
@@ -47,22 +48,16 @@ import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.html.HTMLContentFilter;
 import org.objectledge.html.HTMLContentFilterChain;
 import org.objectledge.html.HTMLException;
-import org.objectledge.html.HTMLService;
-import org.objectledge.html.PassThroughHTMLContentFilter;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 
-import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.internal.DocumentRenderingHelper;
 import net.cyklotron.cms.documents.internal.RequestLinkRenderer;
 import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureException;
-import net.cyklotron.cms.structure.StructureService;
-import org.dom4j.Document;
 
 /**
  * An implementation of <code>documents.document_node</code> Coral resource class.
@@ -1164,8 +1159,6 @@ public class DocumentNodeResourceImpl
     // @import org.objectledge.html.HTMLContentFilter
     // @import org.objectledge.html.HTMLContentFilterChain
     // @import org.objectledge.html.HTMLException
-    // @import org.objectledge.html.HTMLService
-    // @import org.objectledge.html.PassThroughHTMLContentFilter    
     // @import org.objectledge.parameters.Parameters
     // @import org.objectledge.parameters.RequestParameters
     // @import org.objectledge.pipeline.ProcessingException
@@ -1378,28 +1371,37 @@ public class DocumentNodeResourceImpl
     private DocumentRenderingHelper getDocumentRenderingHelper(Context context)
         throws ProcessingException
     {
-        Map helperMap = cacheFactory.getInstance("docRenderingHelpers");
+        Map<Long, DocumentRenderingHelper> helperMap = cacheFactory
+            .getInstance("docRenderingHelpers");
+        DocumentRenderingHelper docHelper;
         synchronized(helperMap)
         {
-            DocumentRenderingHelper docHelper = (DocumentRenderingHelper)helperMap.get(getIdObject());
-            if(docHelper == null)
+            docHelper = helperMap.get(getIdObject());
+        }
+        // the following block may be executed concurrently by several threads
+        if(docHelper == null)
+        {
+            HttpContext httpContext = HttpContext.getHttpContext(context);
+            CoralSession coralSession = context.getAttribute(CoralSession.class);
+            RequestLinkRenderer linkRenderer = new RequestLinkRenderer(siteService, httpContext,
+                linkToolFactory);
+            HTMLContentFilter filter = documentService.getContentFilter(this, linkRenderer,
+                coralSession);
+            docHelper = new DocumentRenderingHelper(coralSession, siteService, structureService,
+                htmlService, this, linkRenderer, filter);
+            synchronized(helperMap)
             {
-                HttpContext httpContext = HttpContext.getHttpContext(context);
-                CoralSession coralSession = context.getAttribute(CoralSession.class);
-                RequestLinkRenderer linkRenderer = new RequestLinkRenderer(siteService, httpContext,
-                    linkToolFactory);
-                HTMLContentFilter filter = documentService.getContentFilter(this, linkRenderer, coralSession);
-                docHelper = new DocumentRenderingHelper(coralSession, siteService, structureService,
-                    htmlService, this, linkRenderer, filter);
                 helperMap.put(getIdObject(), docHelper);
             }
-            return docHelper;
         }
+        return docHelper;
+
     }
 
-    public void clearCache()
+    public void clearCachedContent()
     {
-        Map helperMap = cacheFactory.getInstance("docRenderingHelpers");
+        Map<Long, DocumentRenderingHelper> helperMap = cacheFactory
+            .getInstance("docRenderingHelpers");
         synchronized(helperMap)
         {
             helperMap.remove(getIdObject());
