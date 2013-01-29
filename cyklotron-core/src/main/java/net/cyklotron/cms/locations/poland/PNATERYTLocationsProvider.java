@@ -1,5 +1,6 @@
 package net.cyklotron.cms.locations.poland;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -62,10 +63,13 @@ public class PNATERYTLocationsProvider
 
     private final TERCProvider tercProvider;
 
+    private final FileSystem fileSystem;
+
     public PNATERYTLocationsProvider(Logger logger, FileSystem fileSystem, HTMLService htmlService,
         Database database)
     {
         this.logger = logger;
+        this.fileSystem = fileSystem;
         this.database = database;
         pnaProvider = new PNAProvider(fileSystem, logger);
         tercProvider = new TERCProvider(logger, fileSystem, htmlService, database);
@@ -229,10 +233,26 @@ public class PNATERYTLocationsProvider
     public Collection<Location> fromSource()
     {
         tercProvider.fetch();
-        if(pnaProvider.downloadSource())
+        try
         {
-            writeDB(pnaProvider.parseSource());
+            List<String[]> locations = null;
+            if(pnaProvider.downloadSource())
+            {
+                locations = pnaProvider.parseSource();
+            }
+            else if(fileSystem.exists(PNAProvider.CACHE_DIRECTORY + PNAProvider.CACHE_FILE))
+            {
+                locations = pnaProvider.parseCache();
+            }
+            if(locations != null)
+            {
+                writeDB(locations);
+            }
             cachedLocations = readDB();
+        }
+        catch(IOException e)
+        {
+            logger.error("failed to parse source data", e);
         }
         return cachedLocations;
     }
