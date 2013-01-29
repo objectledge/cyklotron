@@ -1159,8 +1159,6 @@ public class DocumentNodeResourceImpl
     // @import org.objectledge.html.HTMLContentFilter
     // @import org.objectledge.html.HTMLContentFilterChain
     // @import org.objectledge.html.HTMLException
-    // @import org.objectledge.html.HTMLService
-    // @import org.objectledge.html.PassThroughHTMLContentFilter    
     // @import org.objectledge.parameters.Parameters
     // @import org.objectledge.parameters.RequestParameters
     // @import org.objectledge.pipeline.ProcessingException
