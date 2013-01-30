@@ -2,13 +2,17 @@ package net.cyklotron.cms.search.util;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.store.Directory;
 import org.jcontainer.dna.Logger;
@@ -22,9 +26,9 @@ public class GenericIndex<T extends Resource>
     implements Closeable
 {
 
-    private Logger logger;
+    private final Logger logger;
 
-    private Directory directory;
+    private final Directory directory;
 
     private Analyzer analyzer;
 
@@ -32,6 +36,11 @@ public class GenericIndex<T extends Resource>
 
     private IndexSearcher searcher;
 
+    private IndexWriter writer;
+
+    private final FromDocumentMapper<T> fromDocumentMapper;
+
+    private final ToDocumentMapper<T> toDocumentMapper;
 
     public GenericIndex(FileSystem fileSystem, Logger logger, String indexPath,
         AnalyzerProvider analyzerProvider,
@@ -43,6 +52,9 @@ public class GenericIndex<T extends Resource>
         this.directory = directory;
         this.analyzer = analyzerProvider.getAnalyzer();
         this.reader = DirectoryReader.open(directory);
+        this.writer = getWriter();
+        this.toDocumentMapper = toDocumentMapper;
+        this.fromDocumentMapper = fromDocumentMapper;
         searcher = new IndexSearcher(reader);
     }
 
@@ -53,31 +65,126 @@ public class GenericIndex<T extends Resource>
         return new IndexWriter(directory, conf);
     }
 
+    /**
+     * Add new resource to index
+     * 
+     * @param resource
+     * @throws IOException
+     */
     public synchronized void addResource(T resource)
+        throws IOException
     {
-        // TODO
+        addResourcesInBatch(Arrays.asList(resource));
     }
 
     public synchronized void updateResource(T resource)
+        throws IOException
     {
-        // TODO
+        Term uniqueTerm = toDocumentMapper.getUniqueTerm(resource);
+
+        writer.prepareCommit();
+        writer.deleteDocuments(uniqueTerm);
+        writer.commit();
+
+        writer.prepareCommit();
+        writer.addDocument(toDocumentMapper.toDocument(resource));
+        writer.commit();
+
+        writer.close();
+        switchReader();
     }
 
-    public synchronized void addResourcesInBatch(Collection<T> resoures)
+    /**
+     * Adds new resources to index.
+     * 
+     * @param resources
+     * @throws IOException
+     */
+    public synchronized void addResourcesInBatch(Collection<T> resources)
+        throws IOException
     {
-        // TODO
+        writer.prepareCommit();
+        Collection<Document> documents = getDocuments(resources);
+        writer.addDocuments(documents);
+        writer.commit();
+
+        writer.close();
+        switchReader();
     }
 
+    /**
+     * Removes only documents which should be updated
+     * 
+     * @param resources
+     * @throws IOException
+     */
     public synchronized void updateResourcesInBatch(Collection<T> resources)
+        throws IOException
     {
-        // TODO
+        Collection<Term> uniqueIds = getUniqueIds(resources);
+
+        writer.prepareCommit();
+        writer.deleteDocuments(uniqueIds.toArray(new Term[uniqueIds.size()]));
+        writer.commit();
+        
+        writer.prepareCommit();
+        Collection<Document> documents = getDocuments(resources);
+        writer.addDocuments(documents);
+        writer.commit();
+
+        writer.close();
+        switchReader();
+    }
+
+    private Collection<Document> getDocuments(Collection<T> resources)
+    {
+        Collection<Document> documents = new ArrayList<>();
+        for(T resource : resources)
+        {
+            documents.add(toDocumentMapper.toDocument(resource));
+        }
+        return documents;
+    }
+
+    private Collection<Term> getUniqueIds(Collection<T> resources)
+    {
+        Collection<Term> ids = new ArrayList<>();
+        for(T resource : resources)
+        {
+            ids.add(toDocumentMapper.getUniqueTerm(resource));
+        }
+        return ids;
+    }
+
+    private void switchReader()
+        throws IOException
+    {
+        IndexReader newIndexReader = openIndexReader();
+        IndexReader oldReader = reader;
+        reader = newIndexReader;
+        oldReader.close();
+
+        searcher = new IndexSearcher(reader);
+    }
+
+    private IndexReader openIndexReader()
+        throws IOException
+    {
+        return DirectoryReader.open(directory);
     }
 
     @Override
     public void close()
         throws IOException
     {
-        // TODO
-        // close searchers, writers, readers. Close directory
+        if(writer != null)
+        {
+            writer.close();
+        }
+        if(reader != null)
+        {
+            reader.close();
+        }
+        directory.close();
     }
 }
