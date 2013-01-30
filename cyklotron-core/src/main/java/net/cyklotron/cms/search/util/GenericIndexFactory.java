@@ -20,12 +20,14 @@ public interface GenericIndexFactory
      * @param pathToDirectory
      * @param fromDocumentMapper
      * @param toDocumentMapper
+     * @param resourceProvider
      * @return GenericIndex
      * @throws IOException
      */
     GenericIndex<? extends Resource> createOrOpenIndex(String pathToDirectory,
         FromDocumentMapper<? extends Resource> fromDocumentMapper,
-        ToDocumentMapper<? extends Resource> toDocumentMapper)
+        ToDocumentMapper<? extends Resource> toDocumentMapper,
+        ResourceProvider<? extends Resource> resourceProvider)
         throws IOException;
 
     /**
@@ -34,13 +36,15 @@ public interface GenericIndexFactory
      * @param pathToDirectory
      * @param fromDocumentMapper
      * @param toDocumentMapper
+     * @param resourceProvider
      * @param analyzerProvider
      * @return GenericIndex
      * @throws IOException
      */
     GenericIndex<? extends Resource> createOrOpenIndex(String pathToDirectory,
         FromDocumentMapper<? extends Resource> fromDocumentMapper,
-        ToDocumentMapper<? extends Resource> toDocumentMapper, AnalyzerProvider analyzerProvider)
+        ToDocumentMapper<? extends Resource> toDocumentMapper,
+        ResourceProvider<? extends Resource> resourceProvider, AnalyzerProvider analyzerProvider)
         throws IOException;
 
 }
