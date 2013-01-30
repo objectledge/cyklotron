@@ -3,6 +3,8 @@ package net.cyklotron.cms.search.util;
 import java.io.IOException;
 
 import org.apache.commons.lang3.Validate;
+import org.apache.lucene.index.CheckIndex;
+import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -39,10 +41,21 @@ public class IndexInitializatorImpl
     public DirectoryReader forceCreateOrOpenIndex(Directory directory)
         throws IOException
     {
+        Validate.notNull(directory);
         ensureNoLocks(directory);
         if(indexExistsAt(directory))
         {
-            return DirectoryReader.open(directory);
+            try
+            {
+                return DirectoryReader.open(directory);
+            }
+            catch(CorruptIndexException e)
+            {
+                CheckIndex checkIndex = new CheckIndex(directory);
+                checkIndex.checkIndex();
+                // try to reopen index
+                return DirectoryReader.open(directory);
+            }
         }
         else
         {
@@ -58,7 +71,6 @@ public class IndexInitializatorImpl
         {
             directory.deleteFile("write.lock");
         }
-
     }
 
 }
