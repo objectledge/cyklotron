@@ -42,14 +42,18 @@ public class GenericIndex<T extends Resource>
 
     private final ToDocumentMapper<T> toDocumentMapper;
 
+    private final ResourceProvider<T> resourceProvider;
+
     public GenericIndex(FileSystem fileSystem, Logger logger, String indexPath,
         AnalyzerProvider analyzerProvider,
         IndexInitializator indexInitializator, FromDocumentMapper<T> fromDocumentMapper,
-        ToDocumentMapper<T> toDocumentMapper, Directory directory)
+ ToDocumentMapper<T> toDocumentMapper,
+        ResourceProvider<T> resourceProvider, Directory directory)
         throws IOException
     {
         this.logger = logger;
         this.directory = directory;
+        this.resourceProvider = resourceProvider;
         this.analyzer = analyzerProvider.getAnalyzer();
         this.reader = DirectoryReader.open(directory);
         this.writer = getWriter();
@@ -81,17 +85,18 @@ public class GenericIndex<T extends Resource>
         throws IOException
     {
         Term uniqueTerm = toDocumentMapper.getUniqueTerm(resource);
-
+        Document document = toDocumentMapper.toDocument(resource);
         writer.prepareCommit();
-        writer.deleteDocuments(uniqueTerm);
+        try
+        {
+            writer.updateDocument(uniqueTerm, document);
+        }
+        catch(IOException e)
+        {
+            logger.error("Failed to update resource " + resource, e);
+            writer.rollback();
+        }
         writer.commit();
-
-        writer.prepareCommit();
-        writer.addDocument(toDocumentMapper.toDocument(resource));
-        writer.commit();
-
-        writer.close();
-        switchReader();
     }
 
     /**
@@ -105,11 +110,17 @@ public class GenericIndex<T extends Resource>
     {
         writer.prepareCommit();
         Collection<Document> documents = getDocuments(resources);
-        writer.addDocuments(documents);
-        writer.commit();
+        try
+        {
+            writer.addDocuments(documents);
+        }
+        catch(IOException e)
+        {
+            logger.error("Failed to update resources " + resources, e);
+            writer.rollback();
+        }
 
-        writer.close();
-        switchReader();
+        writer.commit();
     }
 
     /**
@@ -121,19 +132,47 @@ public class GenericIndex<T extends Resource>
     public synchronized void updateResourcesInBatch(Collection<T> resources)
         throws IOException
     {
-        Collection<Term> uniqueIds = getUniqueIds(resources);
-
         writer.prepareCommit();
-        writer.deleteDocuments(uniqueIds.toArray(new Term[uniqueIds.size()]));
+        for(T resource : resources)
+        {
+            try
+            {
+                writer.updateDocument(toDocumentMapper.getUniqueTerm(resource),
+                    toDocumentMapper.toDocument(resource));
+            }
+            catch(IOException e)
+            {
+                logger.error("Failed to update resources " + resources, e);
+                writer.rollback();
+            }
+        }
         writer.commit();
-        
+    }
+    
+    /**
+     * Reindexes all resources. Deletes all documents and adds them again
+     * 
+     * @param resources
+     * @return
+     * @throws IOException
+     */
+    public synchronized void reindexAll()
+        throws IOException
+    {
         writer.prepareCommit();
-        Collection<Document> documents = getDocuments(resources);
-        writer.addDocuments(documents);
+        try
+        {
+            writer.deleteAll();
+            for(T resource : resourceProvider)
+            {
+                writer.addDocument(toDocumentMapper.toDocument(resource));
+            }
+        }
+        catch(IOException e)
+        {
+            writer.rollback();
+        }
         writer.commit();
-
-        writer.close();
-        switchReader();
     }
 
     private Collection<Document> getDocuments(Collection<T> resources)
