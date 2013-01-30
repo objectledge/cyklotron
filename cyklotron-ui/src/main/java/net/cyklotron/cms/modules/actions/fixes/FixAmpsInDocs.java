@@ -59,7 +59,7 @@ public class FixAmpsInDocs extends BaseStructureAction
                 //doc.setTitle(decoder.decodeAndFixXML(doc.getTitle()));
                 //doc.setTitleCalendar(decoder.decodeAndFixXML(doc.getTitleCalendar()));
                 doc.update();
-                doc.clearCache();
+                doc.clearCachedContent();
             }
             catch(NumberFormatException e)
             {

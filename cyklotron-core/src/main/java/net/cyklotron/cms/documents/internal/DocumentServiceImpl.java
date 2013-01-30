@@ -591,7 +591,7 @@ public class DocumentServiceImpl
     
     public void resourceChanged(Resource resource, Subject subject)
     {
-        ((DocumentNodeResource)resource).clearCache();
+        ((DocumentNodeResource)resource).clearCachedContent();
     }
 
     // keywords ///////////////////////////////////////////////////////////////////////////////////

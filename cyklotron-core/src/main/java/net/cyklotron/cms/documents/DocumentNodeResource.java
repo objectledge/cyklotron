@@ -519,7 +519,7 @@ public interface DocumentNodeResource
     
     public DocumentTool getDocumentTool(Context context) 
         throws ProcessingException;
-    public void clearCache();
+    public void clearCachedContent();
 
     public DocumentTool getDocumentTool(CoralSession coralSession, LinkRenderer linkRenderer,
         HTMLContentFilter filter, String characterEncoding)
