@@ -45,8 +45,7 @@ public class GenericIndex<T extends Resource>
     private final ResourceProvider<T> resourceProvider;
 
     public GenericIndex(FileSystem fileSystem, Logger logger, String indexPath,
-        AnalyzerProvider analyzerProvider,
-        IndexInitializator indexInitializator, FromDocumentMapper<T> fromDocumentMapper,
+        AnalyzerProvider analyzerProvider, FromDocumentMapper<T> fromDocumentMapper,
  ToDocumentMapper<T> toDocumentMapper,
         ResourceProvider<T> resourceProvider, Directory directory)
         throws IOException
