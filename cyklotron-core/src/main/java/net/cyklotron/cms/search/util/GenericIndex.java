@@ -184,16 +184,6 @@ public class GenericIndex<T extends Resource>
         return documents;
     }
 
-    private Collection<Term> getUniqueIds(Collection<T> resources)
-    {
-        Collection<Term> ids = new ArrayList<>();
-        for(T resource : resources)
-        {
-            ids.add(toDocumentMapper.getUniqueTerm(resource));
-        }
-        return ids;
-    }
-
     @Override
     public void close()
         throws IOException
