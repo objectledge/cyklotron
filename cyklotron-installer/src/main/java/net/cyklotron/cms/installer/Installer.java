@@ -124,10 +124,9 @@ public class Installer
     {
         try
         {
-            RmlRunnerComponent runner = new RmlRunnerComponent(".", "config", "root",
-                "rml/cyklotron/install.list", "UTF-8", dataSourceFactory.getDataSource(),
-                dataSourceFactory.getTransaction(), fileSystem, log);
-            runner.run();
+            RmlRunnerComponent runner = new RmlRunnerComponent(dataSourceFactory.getDataSource(),
+                dataSourceFactory.getTransaction(), log);
+            runner.run(".", "config", "root", "rml/cyklotron/install.list", "UTF-8");
         }
         catch(Exception e)
         {
