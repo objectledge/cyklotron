@@ -35,19 +35,22 @@ class GenericIndexFactoryImpl
     @Override
     public GenericIndex<? extends Resource> createOrOpenIndex(String pathToDirectory,
         FromDocumentMapper<? extends Resource> fromDocumentMapper,
-        ToDocumentMapper<? extends Resource> toDocumentMapper)
+        ToDocumentMapper<? extends Resource> toDocumentMapper,
+        ResourceProvider<? extends Resource> resourceProvider)
         throws IOException
     {
         validateNotNull(pathToDirectory, fromDocumentMapper, toDocumentMapper);
 
         return createOrOpenIndex(pathToDirectory, fromDocumentMapper, toDocumentMapper,
+            resourceProvider,
             AnalyzerProvider.DEFAULT_ANALYZER);
     }
 
     @Override
     public GenericIndex<? extends Resource> createOrOpenIndex(String pathToDirectory,
         FromDocumentMapper<? extends Resource> fromDocumentMapper,
-        ToDocumentMapper<? extends Resource> toDocumentMapper, AnalyzerProvider analyzerProvider)
+        ToDocumentMapper<? extends Resource> toDocumentMapper,
+        ResourceProvider<? extends Resource> resourceProvider, AnalyzerProvider analyzerProvider)
         throws IOException
     {
         validateNotNull(pathToDirectory, fromDocumentMapper, toDocumentMapper);
@@ -59,7 +62,8 @@ class GenericIndexFactoryImpl
         Directory directory = new NIOFSDirectory(indexLocation);
         indexInitializator.forceCreateOrOpenIndex(directory);
 
-        return null;
+        return new GenericIndex(fileSystem, logger, pathToDirectory,
+            analyzerProvider, fromDocumentMapper, toDocumentMapper, resourceProvider, directory);
     }
 
     private void validateNotNull(String pathToDirectory,
