@@ -562,6 +562,10 @@
     </sequence>
   </component>             
 
+  <component class-key="net.cyklotron.cms.search.util.IndexInitializator"
+  	class="net.cyklotron.cms.search.util.IndexInitializatorImpl"/>  
+	
+
   <component class-key="org.objectledge.forms.FormsService"
              class="org.objectledge.forms.internal.FormsServiceImpl"/>
 
