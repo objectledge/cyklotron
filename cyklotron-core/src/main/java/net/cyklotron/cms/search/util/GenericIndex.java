@@ -195,23 +195,6 @@ public class GenericIndex<T extends Resource>
         return ids;
     }
 
-    private void switchReader()
-        throws IOException
-    {
-        IndexReader newIndexReader = openIndexReader();
-        IndexReader oldReader = reader;
-        reader = newIndexReader;
-        oldReader.close();
-
-        searcher = new IndexSearcher(reader);
-    }
-
-    private IndexReader openIndexReader()
-        throws IOException
-    {
-        return DirectoryReader.open(directory);
-    }
-
     @Override
     public void close()
         throws IOException
