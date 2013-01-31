@@ -9,6 +9,7 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
+import org.jcontainer.dna.Logger;
 
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.analysis.AnalyzerProvider;
@@ -16,6 +17,13 @@ import net.cyklotron.cms.search.analysis.AnalyzerProvider;
 public class IndexInitializerImpl
     implements IndexInitializer
 {
+
+    private final Logger logger;
+
+    public IndexInitializerImpl(Logger logger)
+    {
+        this.logger = logger;
+    }
 
     @Override
     public void initEmptyIndexAt(Directory directory)
@@ -26,8 +34,6 @@ public class IndexInitializerImpl
         IndexWriter indexWriter;
         indexWriter = new IndexWriter(directory, conf);
         indexWriter.close();
-
-        return;
     }
 
     @Override
