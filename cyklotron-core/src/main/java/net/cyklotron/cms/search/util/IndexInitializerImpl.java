@@ -42,7 +42,7 @@ public class IndexInitializerImpl
         throws IOException
     {
         Validate.notNull(directory);
-        ensureNoLocks(directory);
+        clearLock(directory);
         if(indexExistsAt(directory))
         {
             try
@@ -64,7 +64,7 @@ public class IndexInitializerImpl
         }
     }
 
-    private void ensureNoLocks(Directory directory)
+    private void clearLock(Directory directory)
         throws IOException
     {
         if(directory.fileExists("write.lock"))
