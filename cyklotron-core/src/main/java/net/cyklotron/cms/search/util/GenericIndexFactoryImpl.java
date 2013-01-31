@@ -14,7 +14,7 @@ import org.objectledge.filesystem.LocalFileSystemProvider;
 
 import net.cyklotron.cms.search.analysis.AnalyzerProvider;
 
-class GenericIndexFactoryImpl
+public class GenericIndexFactoryImpl
     implements GenericIndexFactory
 {
 
@@ -24,7 +24,8 @@ class GenericIndexFactoryImpl
 
     private IndexInitializer indexInitializator;
 
-    GenericIndexFactoryImpl(FileSystem fileSystem, Logger logger, CoralSessionFactory coralSessionFactory,
+    public GenericIndexFactoryImpl(FileSystem fileSystem, Logger logger,
+        CoralSessionFactory coralSessionFactory,
         IndexInitializer indexInitializator)
     {
         this.fileSystem = fileSystem;
