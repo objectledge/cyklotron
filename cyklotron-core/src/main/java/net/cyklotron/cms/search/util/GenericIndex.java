@@ -166,12 +166,44 @@ public class GenericIndex<T extends Resource>
             {
                 writer.addDocument(toDocumentMapper.toDocument(resource));
             }
+            writer.commit();
         }
         catch(IOException e)
         {
             writer.rollback();
         }
-        writer.commit();
+    }
+
+    /**
+     * Reindexed all resources. Operation can be cancelled by callback which receives progress
+     * updates
+     * 
+     * @param resources
+     * @return
+     * @throws IOException
+     */
+
+    public synchronized void reindexAllCancellable(ResourceProcessedCallback callback)
+        throws IOException
+    {
+        writer.prepareCommit();
+        try
+        {
+            writer.deleteAll();
+            for(T resource : resourceProvider)
+            {
+                writer.addDocument(toDocumentMapper.toDocument(resource));
+                if(!callback.shouldContinue())
+                {
+                    throw new IOException("Rollback");
+                }
+            }
+            writer.commit();
+        }
+        catch(IOException e)
+        {
+            writer.rollback();
+        }
     }
 
     private Collection<Document> getDocuments(Collection<T> resources)
