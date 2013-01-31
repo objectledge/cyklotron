@@ -24,9 +24,9 @@ import net.cyklotron.cms.search.analysis.AnalyzerProvider;
 
 /**
  * GenericIndex is wrapper around Lucene 4.0 index readers and writers which provide useful methods
- * like addResource, updateResource. These operations are transactional. To use GenericIndex you
- * should implement FromDocumentMapper, ToDocumentMapper contracts and create instance of
- * ResourceProvider. To create GenericIndex one should use GenericIndexFactory.
+ * like add, update, addAll, updateAll resources. These operations are transactional. To use
+ * GenericIndex you should implement FromDocumentMapper, ToDocumentMapper contracts and create
+ * instance of ResourceProvider. To create GenericIndex one should use GenericIndexFactory.
  * 
  * @see FromDocumentMapper
  * @see ToDocumentMapper
@@ -97,12 +97,12 @@ public class GenericIndex<T extends Resource>
     public synchronized void update(T resource)
         throws IOException
     {
-        Term uniqueTerm = toDocumentMapper.getIdentifier(resource);
+        Term identifier = toDocumentMapper.getIdentifier(resource);
         Document document = toDocumentMapper.toDocument(resource);
         writer.prepareCommit();
         try
         {
-            writer.updateDocument(uniqueTerm, document);
+            writer.updateDocument(identifier, document);
             writer.commit();
         }
         catch(IOException e)
