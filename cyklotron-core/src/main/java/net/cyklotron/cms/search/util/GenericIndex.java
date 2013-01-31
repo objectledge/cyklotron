@@ -58,7 +58,7 @@ public class GenericIndex<T extends Resource>
 
     private final ResourceProvider<T> resourceProvider;
 
-    public GenericIndex(FileSystem fileSystem, Logger logger, String indexPath,
+    GenericIndex(FileSystem fileSystem, Logger logger, String indexPath,
         AnalyzerProvider analyzerProvider, FromDocumentMapper<T> fromDocumentMapper,
  ToDocumentMapper<T> toDocumentMapper,
         ResourceProvider<T> resourceProvider, Directory directory)
