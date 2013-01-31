@@ -22,10 +22,10 @@ class GenericIndexFactoryImpl
 
     private Logger logger;
 
-    private IndexInitializator indexInitializator;
+    private IndexInitializer indexInitializator;
 
     GenericIndexFactoryImpl(FileSystem fileSystem, Logger logger, CoralSessionFactory coralSessionFactory,
-        IndexInitializator indexInitializator)
+        IndexInitializer indexInitializator)
     {
         this.fileSystem = fileSystem;
         this.logger = logger;
