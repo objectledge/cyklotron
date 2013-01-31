@@ -89,13 +89,13 @@ public class GenericIndex<T extends Resource>
         try
         {
             writer.updateDocument(uniqueTerm, document);
+            writer.commit();
         }
         catch(IOException e)
         {
             logger.error("Failed to update resource " + resource, e);
             writer.rollback();
         }
-        writer.commit();
     }
 
     /**
@@ -112,6 +112,7 @@ public class GenericIndex<T extends Resource>
         try
         {
             writer.addDocuments(documents);
+            writer.commit();
         }
         catch(IOException e)
         {
@@ -119,7 +120,6 @@ public class GenericIndex<T extends Resource>
             writer.rollback();
         }
 
-        writer.commit();
     }
 
     /**
@@ -138,6 +138,7 @@ public class GenericIndex<T extends Resource>
             {
                 writer.updateDocument(toDocumentMapper.getUniqueTerm(resource),
                     toDocumentMapper.toDocument(resource));
+                writer.commit();
             }
             catch(IOException e)
             {
@@ -145,7 +146,6 @@ public class GenericIndex<T extends Resource>
                 writer.rollback();
             }
         }
-        writer.commit();
     }
     
     /**
