@@ -44,7 +44,7 @@ public class IndexInitializerImpl
     }
 
     @Override
-    public DirectoryReader forceCreateOrOpenIndex(Directory directory)
+    public DirectoryReader openIndex(Directory directory)
         throws IOException
     {
         Validate.notNull(directory);

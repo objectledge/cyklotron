@@ -60,7 +60,7 @@ class GenericIndexFactoryImpl
             .getFile(pathToDirectory);
 
         Directory directory = new NIOFSDirectory(indexLocation);
-        indexInitializator.forceCreateOrOpenIndex(directory);
+        indexInitializator.openIndex(directory);
 
         return new GenericIndex(fileSystem, logger, pathToDirectory,
             analyzerProvider, fromDocumentMapper, toDocumentMapper, resourceProvider, directory);

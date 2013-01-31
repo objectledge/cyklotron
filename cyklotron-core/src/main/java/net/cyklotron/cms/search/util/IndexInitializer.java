@@ -12,6 +12,6 @@ public interface IndexInitializer
 
     boolean indexExistsAt(Directory directory);
 
-    DirectoryReader forceCreateOrOpenIndex(Directory directory)
+    DirectoryReader openIndex(Directory directory)
         throws IOException;
 }
