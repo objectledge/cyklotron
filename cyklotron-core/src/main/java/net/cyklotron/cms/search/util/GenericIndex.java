@@ -88,13 +88,13 @@ public class GenericIndex<T extends Resource>
      * @param resource
      * @throws IOException
      */
-    public synchronized void addResource(T resource)
+    public synchronized void add(T resource)
         throws IOException
     {
-        addResourcesInBatch(Arrays.asList(resource));
+        addAll(Arrays.asList(resource));
     }
 
-    public synchronized void updateResource(T resource)
+    public synchronized void update(T resource)
         throws IOException
     {
         Term uniqueTerm = toDocumentMapper.getUniqueTerm(resource);
@@ -118,7 +118,7 @@ public class GenericIndex<T extends Resource>
      * @param resources
      * @throws IOException
      */
-    public synchronized void addResourcesInBatch(Collection<T> resources)
+    public synchronized void addAll(Collection<T> resources)
         throws IOException
     {
         writer.prepareCommit();
@@ -142,7 +142,7 @@ public class GenericIndex<T extends Resource>
      * @param resources
      * @throws IOException
      */
-    public synchronized void updateResourcesInBatch(Collection<T> resources)
+    public synchronized void updateAll(Collection<T> resources)
         throws IOException
     {
         writer.prepareCommit();
