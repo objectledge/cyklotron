@@ -97,7 +97,7 @@ public class GenericIndex<T extends Resource>
     public synchronized void update(T resource)
         throws IOException
     {
-        Term uniqueTerm = toDocumentMapper.getUniqueTerm(resource);
+        Term uniqueTerm = toDocumentMapper.getIdentifier(resource);
         Document document = toDocumentMapper.toDocument(resource);
         writer.prepareCommit();
         try
@@ -150,7 +150,7 @@ public class GenericIndex<T extends Resource>
         {
             try
             {
-                writer.updateDocument(toDocumentMapper.getUniqueTerm(resource),
+                writer.updateDocument(toDocumentMapper.getIdentifier(resource),
                     toDocumentMapper.toDocument(resource));
                 writer.commit();
             }
