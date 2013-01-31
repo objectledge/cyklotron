@@ -57,7 +57,8 @@ public class IndexInitializerImpl
             }
             catch(CorruptIndexException e)
             {
-                logger.error("corrupt index detected, attempting to recover", e);
+                logger.error("corrupt index detected, attempting to recover index at " + directory,
+                    e);
                 CheckIndex checkIndex = new CheckIndex(directory);
                 try
                 {
