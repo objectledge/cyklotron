@@ -1,7 +1,10 @@
 package net.cyklotron.cms.installer;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.BasicConfigurator;
@@ -10,6 +13,7 @@ import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.coral.tools.DataSourceFactory;
 import org.objectledge.coral.tools.init.InitComponent;
 import org.objectledge.coral.tools.rml.RmlRunnerComponent;
+import org.objectledge.coral.tools.sql.SqlRunnerComponent;
 import org.objectledge.filesystem.FileSystem;
 
 public class Installer
@@ -28,8 +32,11 @@ public class Installer
 
     private DataSourceFactory dataSourceFactory;
 
+    private Properties properties;
+
     public void init(Properties properties)
     {
+        this.properties = properties;
         dbDriverClasspath = properties.getProperty("db.classpath");
         dbDriverClass = properties.getProperty("db.dsclass");
         dbProperties = extract(properties, "db.property.");
@@ -124,14 +131,36 @@ public class Installer
     {
         try
         {
-            RmlRunnerComponent runner = new RmlRunnerComponent(dataSourceFactory.getDataSource(),
-                dataSourceFactory.getTransaction(), log);
-            runner.run(".", "config", "root", "rml/cyklotron/install.list", "UTF-8");
+            final Map<String, Object> templateVars = toMap(properties);
+            RmlRunnerComponent rmlRunner = new RmlRunnerComponent(
+                dataSourceFactory.getDataSource(), dataSourceFactory.getTransaction(), log);
+            SqlRunnerComponent sqlRunner = new SqlRunnerComponent(fileSystem,
+                dataSourceFactory.getDataSource(), log);
+
+            rmlRunner.run(".", "config", "root", "rml/cyklotron/install.list", "UTF-8",
+                templateVars, Collections.<String> emptyList());
+            rmlRunner.run(".", "config", "root", "rml/cyklotron/customization.list", "UTF-8",
+                templateVars, Collections.<String> emptyList());
+
+            sqlRunner.run("sql/cyklotron/customization.list", "UTF-8", templateVars,
+                Collections.<String> emptyList());
         }
         catch(Exception e)
         {
             die("failed to execute installation scripts", e);
         }
+    }
+
+    private Map<String, Object> toMap(Properties properties)
+    {
+        Enumeration<String> names = (Enumeration<String>)properties.propertyNames();
+        Map<String, Object> result = new HashMap<>();
+        while(names.hasMoreElements())
+        {
+            String name = names.nextElement();
+            result.put(name, properties.get(name));
+        }
+        return result;
     }
 
     private void die(String msg)
