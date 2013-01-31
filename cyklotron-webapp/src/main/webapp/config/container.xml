@@ -605,6 +605,8 @@
   <component class-key="net.cyklotron.cms.search.analysis.StempelStemmerFactory"
   			 class="net.cyklotron.cms.search.analysis.StempelStemmerFactoryImpl"/>
   <component class="net.cyklotron.cms.search.analysis.PerFieldAnalyzerFactory"/>
+  <component class-key="net.cyklotron.cms.search.util.GenericIndexFactory"
+  			 class="net.cyklotron.cms.search.util.GenericIndexFactoryImpl"/>
 
   <!-- stats come at the end so that all the providers are referencable -->  
   
