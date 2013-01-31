@@ -178,7 +178,11 @@ public class GenericIndex<T extends Resource>
             writer.deleteAll();
             for(T resource : resourceProvider)
             {
-                writer.addDocument(toDocumentMapper.toDocument(resource));
+                Document document = toDocumentMapper.toDocument(resource);
+                if(document != null)
+                {
+                    writer.addDocument(document);
+                }
             }
             writer.commit();
         }
@@ -206,7 +210,11 @@ public class GenericIndex<T extends Resource>
             writer.deleteAll();
             for(T resource : resourceProvider)
             {
-                writer.addDocument(toDocumentMapper.toDocument(resource));
+                Document document = toDocumentMapper.toDocument(resource);
+                if(document != null)
+                {
+                    writer.addDocument(document);
+                }
                 if(!callback.shouldContinue())
                 {
                     throw new IOException("Rollback");
@@ -225,7 +233,11 @@ public class GenericIndex<T extends Resource>
         Collection<Document> documents = new ArrayList<>();
         for(T resource : resources)
         {
-            documents.add(toDocumentMapper.toDocument(resource));
+            Document document = toDocumentMapper.toDocument(resource);
+            if(document != null)
+            {
+                documents.add(document);
+            }
         }
         return documents;
     }
