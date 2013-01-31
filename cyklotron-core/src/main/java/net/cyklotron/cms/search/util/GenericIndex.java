@@ -22,6 +22,20 @@ import org.objectledge.filesystem.FileSystem;
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.analysis.AnalyzerProvider;
 
+/**
+ * GenericIndex is wrapper around Lucene 4.0 index readers and writers which provide useful methods
+ * like addResource, updateResource. These operations are transactional. To use GenericIndex you
+ * should implement FromDocumentMapper, ToDocumentMapper contracts and create instance of
+ * ResourceProvider. To create GenericIndex one should use GenericIndexFactory.
+ * 
+ * @see FromDocumentMapper
+ * @see ToDocumentMapper
+ * @see ResourceProvider
+ * @see GenericIndexFactory
+ * @see AnalyzerProvider
+ * @author Marek Lewandowski
+ * @param <T> concrete resource type
+ */
 public class GenericIndex<T extends Resource>
     implements Closeable
 {
