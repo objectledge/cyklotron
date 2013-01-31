@@ -13,8 +13,8 @@ import org.apache.lucene.store.Directory;
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.analysis.AnalyzerProvider;
 
-public class IndexInitializatorImpl
-    implements IndexInitializator
+public class IndexInitializerImpl
+    implements IndexInitializer
 {
 
     @Override
