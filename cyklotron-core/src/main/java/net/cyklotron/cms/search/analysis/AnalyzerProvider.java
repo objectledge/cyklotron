@@ -9,7 +9,7 @@ import org.apache.lucene.analysis.Analyzer;
  */
 public interface AnalyzerProvider
 {
-    AnalyzerProvider DEFAULT_ANALYZER = new DefaultAnalyzerProvider();
+    AnalyzerProvider DEFAULT_PROVIDER = new DefaultAnalyzerProvider();
 
     Analyzer getAnalyzer();
 }

@@ -22,7 +22,7 @@ public class IndexInitializatorImpl
         throws IOException
     {
         IndexWriterConfig conf = new IndexWriterConfig(SearchConstants.LUCENE_VERSION,
-            AnalyzerProvider.DEFAULT_ANALYZER.getAnalyzer());
+            AnalyzerProvider.DEFAULT_PROVIDER.getAnalyzer());
         IndexWriter indexWriter;
         indexWriter = new IndexWriter(directory, conf);
         indexWriter.close();

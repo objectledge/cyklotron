@@ -43,7 +43,7 @@ class GenericIndexFactoryImpl
 
         return createOrOpenIndex(pathToDirectory, fromDocumentMapper, toDocumentMapper,
             resourceProvider,
-            AnalyzerProvider.DEFAULT_ANALYZER);
+            AnalyzerProvider.DEFAULT_PROVIDER);
     }
 
     @Override
