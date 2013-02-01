@@ -201,7 +201,7 @@ public class GenericIndex<T extends Resource>
      * @throws IOException
      */
 
-    public synchronized void reindexAllCancellable(ResourceProcessedCallback callback)
+    public synchronized void reindexAllCancellable(Cancellable callback)
         throws IOException
     {
         writer.prepareCommit();
