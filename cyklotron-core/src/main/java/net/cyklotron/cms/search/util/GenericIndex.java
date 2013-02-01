@@ -215,7 +215,7 @@ public class GenericIndex<T extends Resource>
                 {
                     writer.addDocument(document);
                 }
-                if(!callback.shouldContinue())
+                if(callback.isCancelled())
                 {
                     throw new IOException("Rollback");
                 }
