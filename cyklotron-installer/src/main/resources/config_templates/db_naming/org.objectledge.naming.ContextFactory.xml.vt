@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <context name="people" initial_factory="org.objectledge.naming.db.DatabaseInitialDirContextFactory">
+    <component-property name="org.objectledge.database.persistence.Persistence"
+    					class-key="org.objectledge.database.persistence.Persistence"/>
+    <property name="java.naming.provider.url" value="${usersBaseDN}"/>
+  </context>   
+</config>

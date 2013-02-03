@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config xmlns="http://objectledge.org/btm/1.0">
+  <tm>
+    <serverId>node0</serverId>
+    <disableJmx>true</disableJmx>
+    <journal>
+      <disk>
+        <logPart1Filename>${workdir}/btm/btm1.tlog</logPart1Filename>
+        <logPart2Filename>${workdir}/btm/btm2.tlog</logPart2Filename>
+      </disk>
+    </journal>
+    <timer>
+      <defaultTransactionTimeout>300</defaultTransactionTimeout>
+    </timer>
+  </tm>
+  <tracing>
+    <disabled />
+    <statementLog>org.objectledge.database.SQL</statementLog>
+  </tracing>
+  <jdbc>
+    <connectionPool uniqueName="pg">
+      <className>${db_dsclass}</className>
+      <maxPoolSize>20</maxPoolSize>
+      <allowLocalTransactions>true</allowLocalTransactions>
+      <enableJdbc4ConnectionTest>true</enableJdbc4ConnectionTest>
+      <preparedStatementCacheSize>20</preparedStatementCacheSize>
+      <driverProperties>
+        <property name="serverName">${db_property_serverName}</property>
+        <property name="databaseName">${db_property_databaseName}</property>
+        <property name="user">${db_property_user}</property>
+        <property name="password">${db_property_password}</property>
+        <property name="prepareThreshold">100</property>
+      </driverProperties>
+    </connectionPool>
+  </jdbc>
+</config>

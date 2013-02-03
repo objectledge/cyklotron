@@ -1,5 +1,7 @@
 package net.cyklotron.cms.installer;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -12,6 +14,7 @@ import org.apache.log4j.BasicConfigurator;
 import org.jcontainer.dna.Logger;
 import org.jcontainer.dna.impl.Log4JLogger;
 import org.objectledge.coral.tools.DataSourceFactory;
+import org.objectledge.coral.tools.extract.FileExtractionComponent;
 import org.objectledge.coral.tools.init.InitComponent;
 import org.objectledge.coral.tools.rml.RmlRunnerComponent;
 import org.objectledge.coral.tools.sql.SqlRunnerComponent;
@@ -39,7 +42,13 @@ public class Installer
 
     private SqlRunnerComponent sqlRunner;
 
+    private FileExtractionComponent fileExtractor;
+
     private Map<String, Object> templateVars;
+
+    private File workdir;
+
+    private File workdirConfig;
 
     private List<String> templateMacroLibraries = Collections.<String> emptyList();
 
@@ -53,6 +62,9 @@ public class Installer
         dbProperties = extract(properties, "db.property.");
         initForce = Boolean.valueOf(properties.getProperty("init.force", "false"));
         templateVars = toMap(properties);
+        String workdirPath = properties.getProperty("workdir", "./workdir");
+        workdir = new File(workdirPath);
+        workdirConfig = new File(workdir, "config");
         naming = properties.getProperty("naming");
     }
 
@@ -95,6 +107,16 @@ public class Installer
     private void initFileSystem()
     {
         fileSystem = FileSystem.getStandardFileSystem(".");
+        fileExtractor = new FileExtractionComponent(fileSystem);
+        workdirConfig.mkdirs();
+        try
+        {
+            templateVars.put("workdir", workdir.getCanonicalPath());
+        }
+        catch(IOException e)
+        {
+            die("failed to locate workdir", e);
+        }
     }
 
     private Properties extract(Properties in, String prefix)
@@ -171,6 +193,9 @@ public class Installer
 
         sqlRunner.run("sql/cyklotron/customization.list", "UTF-8", templateVars,
             templateMacroLibraries);
+
+        fileExtractor.run("config_templates/base", workdirConfig, "UTF-8", templateVars,
+            templateMacroLibraries);
     }
 
     private void installDbNaming()
@@ -178,11 +203,16 @@ public class Installer
     {
         sqlRunner.run("sql/cyklotron/db_naming.list", "UTF-8", templateVars,
             Collections.<String> emptyList());
+        
+        fileExtractor.run("config_templates/db_naming", workdirConfig, "UTF-8", templateVars,
+            templateMacroLibraries);
     }
 
     private void installLDAPNaming()
         throws Exception
     {
+        fileExtractor.run("config_templates/ldap", workdirConfig, "UTF-8", templateVars,
+            templateMacroLibraries);
     }
 
     private Map<String, Object> toMap(Properties properties)
@@ -192,7 +222,7 @@ public class Installer
         while(names.hasMoreElements())
         {
             String name = names.nextElement();
-            result.put(name, properties.get(name));
+            result.put(name.replace('.', '_'), properties.get(name));
         }
         return result;
     }
