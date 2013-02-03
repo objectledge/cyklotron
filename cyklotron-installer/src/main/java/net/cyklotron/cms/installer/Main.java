@@ -12,6 +12,7 @@ public class Main
     {
         Installer installer = new Installer();
         Properties properties = new Properties();
+        File workdir;
         if(args.length > 0)
         {
             File f = new File(args[0]);
@@ -40,7 +41,25 @@ public class Main
                 die("can't load /installer.properties from classpath");
             }
         }
-        installer.init(properties);
+        if(args.length > 1)
+        {
+            workdir = new File(args[1]);
+        }
+        else
+        {
+            workdir = new File("workdir");
+        }
+        if(workdir.exists() && !workdir.isDirectory())
+        {
+            die(workdir.getPath() + " exists but is not a directory. "
+                + "Please remove it or provide another path");
+        }
+        else
+        {
+            workdir.mkdirs();
+        }
+
+        installer.init(properties, workdir);
         installer.run();
     }
 

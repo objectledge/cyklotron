@@ -54,7 +54,7 @@ public class Installer
 
     private String naming;
 
-    public void init(Properties properties)
+    public void init(Properties properties, File workdir)
     {
         this.properties = properties;
         dbDriverClasspath = properties.getProperty("db.classpath");
@@ -62,10 +62,9 @@ public class Installer
         dbProperties = extract(properties, "db.property.");
         initForce = Boolean.valueOf(properties.getProperty("init.force", "false"));
         templateVars = toMap(properties);
-        String workdirPath = properties.getProperty("workdir", "./workdir");
-        workdir = new File(workdirPath);
-        workdirConfig = new File(workdir, "config");
         naming = properties.getProperty("naming");
+        this.workdir = workdir;
+        workdirConfig = new File(workdir, "config");
     }
 
     public void run()
