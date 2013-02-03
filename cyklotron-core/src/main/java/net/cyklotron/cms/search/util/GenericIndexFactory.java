@@ -24,10 +24,9 @@ public interface GenericIndexFactory
      * @return GenericIndex
      * @throws IOException
      */
-    GenericIndex<? extends Resource> createOrOpenIndex(String pathToDirectory,
-        FromDocumentMapper<? extends Resource> fromDocumentMapper,
-        ToDocumentMapper<? extends Resource> toDocumentMapper,
-        ResourceProvider<? extends Resource> resourceProvider)
+    <T extends Resource> GenericIndex<T> createOrOpenIndex(String pathToDirectory,
+        FromDocumentMapper<T> fromDocumentMapper, ToDocumentMapper<T> toDocumentMapper,
+        ResourceProvider<T> resourceProvider)
         throws IOException;
 
     /**
@@ -41,10 +40,9 @@ public interface GenericIndexFactory
      * @return GenericIndex
      * @throws IOException
      */
-    GenericIndex<? extends Resource> createOrOpenIndex(String pathToDirectory,
-        FromDocumentMapper<? extends Resource> fromDocumentMapper,
-        ToDocumentMapper<? extends Resource> toDocumentMapper,
-        ResourceProvider<? extends Resource> resourceProvider, AnalyzerProvider analyzerProvider)
+    <T extends Resource> GenericIndex<T> createOrOpenIndex(String pathToDirectory,
+        FromDocumentMapper<T> fromDocumentMapper, ToDocumentMapper<T> toDocumentMapper,
+        ResourceProvider<T> resourceProvider, AnalyzerProvider analyzerProvider)
         throws IOException;
 
 }

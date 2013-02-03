@@ -33,25 +33,31 @@ public class GenericIndexFactoryImpl
         this.indexInitializator = indexInitializator;
     }
 
-    @Override
-    public GenericIndex<? extends Resource> createOrOpenIndex(String pathToDirectory,
+    private void validateNotNull(String pathToDirectory,
         FromDocumentMapper<? extends Resource> fromDocumentMapper,
-        ToDocumentMapper<? extends Resource> toDocumentMapper,
-        ResourceProvider<? extends Resource> resourceProvider)
+        ToDocumentMapper<? extends Resource> toDocumentMapper)
+    {
+        Validate.notBlank(pathToDirectory);
+        Validate.notNull(fromDocumentMapper);
+        Validate.notNull(toDocumentMapper);
+    }
+
+    @Override
+    public <T extends Resource> GenericIndex<T> createOrOpenIndex(String pathToDirectory,
+        FromDocumentMapper<T> fromDocumentMapper, ToDocumentMapper<T> toDocumentMapper,
+        ResourceProvider<T> resourceProvider)
         throws IOException
     {
         validateNotNull(pathToDirectory, fromDocumentMapper, toDocumentMapper);
 
         return createOrOpenIndex(pathToDirectory, fromDocumentMapper, toDocumentMapper,
-            resourceProvider,
-            AnalyzerProvider.DEFAULT_PROVIDER);
+            resourceProvider, AnalyzerProvider.DEFAULT_PROVIDER);
     }
 
     @Override
-    public GenericIndex<? extends Resource> createOrOpenIndex(String pathToDirectory,
-        FromDocumentMapper<? extends Resource> fromDocumentMapper,
-        ToDocumentMapper<? extends Resource> toDocumentMapper,
-        ResourceProvider<? extends Resource> resourceProvider, AnalyzerProvider analyzerProvider)
+    public <T extends Resource> GenericIndex<T> createOrOpenIndex(String pathToDirectory,
+        FromDocumentMapper<T> fromDocumentMapper, ToDocumentMapper<T> toDocumentMapper,
+        ResourceProvider<T> resourceProvider, AnalyzerProvider analyzerProvider)
         throws IOException
     {
         validateNotNull(pathToDirectory, fromDocumentMapper, toDocumentMapper);
@@ -63,17 +69,9 @@ public class GenericIndexFactoryImpl
         Directory directory = new NIOFSDirectory(indexLocation);
         indexInitializator.openIndex(directory);
 
-        return new GenericIndex(fileSystem, logger, pathToDirectory,
-            analyzerProvider, fromDocumentMapper, toDocumentMapper, resourceProvider, directory);
-    }
+        return new GenericIndex<T>(fileSystem, logger, pathToDirectory, analyzerProvider,
+            fromDocumentMapper, toDocumentMapper, resourceProvider, directory);
 
-    private void validateNotNull(String pathToDirectory,
-        FromDocumentMapper<? extends Resource> fromDocumentMapper,
-        ToDocumentMapper<? extends Resource> toDocumentMapper)
-    {
-        Validate.notBlank(pathToDirectory);
-        Validate.notNull(fromDocumentMapper);
-        Validate.notNull(toDocumentMapper);
     }
 
 }
