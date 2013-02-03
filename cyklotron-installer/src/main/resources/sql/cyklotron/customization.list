@@ -1,2 +1,2 @@
-sql/cyklotron/customization/naming_init.sql.vt
+sql/scheduler/DBSchedulerTables.sql
 sql/cyklotron/customization/scheduled_jobs.sql

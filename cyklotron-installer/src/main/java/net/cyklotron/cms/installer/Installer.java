@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -34,6 +35,16 @@ public class Installer
 
     private Properties properties;
 
+    private RmlRunnerComponent rmlRunner;
+
+    private SqlRunnerComponent sqlRunner;
+
+    private Map<String, Object> templateVars;
+
+    private List<String> templateMacroLibraries = Collections.<String> emptyList();
+
+    private String naming;
+
     public void init(Properties properties)
     {
         this.properties = properties;
@@ -41,6 +52,8 @@ public class Installer
         dbDriverClass = properties.getProperty("db.dsclass");
         dbProperties = extract(properties, "db.property.");
         initForce = Boolean.valueOf(properties.getProperty("init.force", "false"));
+        templateVars = toMap(properties);
+        naming = properties.getProperty("naming");
     }
 
     public void run()
@@ -48,11 +61,24 @@ public class Installer
         initLogger();
         initFileSystem();
         initDataSource();
+        initScriptRunners();
 
         try
         {
             initSchema();
-            installModules();
+            installBase();
+            if(naming.equals("db"))
+            {
+                installDbNaming();
+            }
+            else
+            {
+                installLDAPNaming();
+            }
+        }
+        catch(Exception e)
+        {
+            die("failed to execute installation scripts", e);
         }
         finally
         {
@@ -101,6 +127,13 @@ public class Installer
         }
     }
 
+    private void initScriptRunners()
+    {
+        rmlRunner = new RmlRunnerComponent(dataSourceFactory.getDataSource(),
+            dataSourceFactory.getTransaction(), log);
+        sqlRunner = new SqlRunnerComponent(fileSystem, dataSourceFactory.getDataSource(), log);
+    }
+
     private void shutdownDataSource()
     {
         dataSourceFactory.close();
@@ -127,28 +160,29 @@ public class Installer
         }
     }
 
-    private void installModules()
+    private void installBase()
+        throws Exception
     {
-        try
-        {
-            final Map<String, Object> templateVars = toMap(properties);
-            RmlRunnerComponent rmlRunner = new RmlRunnerComponent(
-                dataSourceFactory.getDataSource(), dataSourceFactory.getTransaction(), log);
-            SqlRunnerComponent sqlRunner = new SqlRunnerComponent(fileSystem,
-                dataSourceFactory.getDataSource(), log);
+        rmlRunner.run(".", "config", "root", "rml/cyklotron/install.list", "UTF-8", templateVars,
+            templateMacroLibraries);
 
-            rmlRunner.run(".", "config", "root", "rml/cyklotron/install.list", "UTF-8",
-                templateVars, Collections.<String> emptyList());
-            rmlRunner.run(".", "config", "root", "rml/cyklotron/customization.list", "UTF-8",
-                templateVars, Collections.<String> emptyList());
+        rmlRunner.run(".", "config", "root", "rml/cyklotron/customization.list", "UTF-8",
+            templateVars, templateMacroLibraries);
 
-            sqlRunner.run("sql/cyklotron/customization.list", "UTF-8", templateVars,
-                Collections.<String> emptyList());
-        }
-        catch(Exception e)
-        {
-            die("failed to execute installation scripts", e);
-        }
+        sqlRunner.run("sql/cyklotron/customization.list", "UTF-8", templateVars,
+            templateMacroLibraries);
+    }
+
+    private void installDbNaming()
+        throws Exception
+    {
+        sqlRunner.run("sql/cyklotron/db_naming.list", "UTF-8", templateVars,
+            Collections.<String> emptyList());
+    }
+
+    private void installLDAPNaming()
+        throws Exception
+    {
     }
 
     private Map<String, Object> toMap(Properties properties)
