@@ -263,8 +263,7 @@ public class Installer
             File temp = Files.createTempDirectory("cyklotron-installer").toFile();
             final Path wp = war.toPath();
             File target = wp.resolveSibling(
-                wp.getName(wp.getNameCount() - 1).toString().replace(".war", "-customized.war"))
-                .toFile();
+                "customized-" + wp.getName(wp.getNameCount() - 1).toString()).toFile();
             JarProcessor.process(war, workdir, target, temp);
         }
     }
