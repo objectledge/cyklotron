@@ -36,8 +36,6 @@ public class Installer
 
     private DataSourceFactory dataSourceFactory;
 
-    private Properties properties;
-
     private RmlRunnerComponent rmlRunner;
 
     private SqlRunnerComponent sqlRunner;
@@ -56,7 +54,6 @@ public class Installer
 
     public void init(Properties properties, File workdir)
     {
-        this.properties = properties;
         dbDriverClasspath = properties.getProperty("db.classpath");
         dbDriverClass = properties.getProperty("db.dsclass");
         dbProperties = extract(properties, "db.property.");
@@ -110,7 +107,9 @@ public class Installer
         workdirConfig.mkdirs();
         try
         {
-            templateVars.put("workdir", workdir.getCanonicalPath());
+            final String workdirPath = workdir.getCanonicalPath();
+            log.info("work directory path: " + workdirPath);
+            templateVars.put("workdir", workdirPath);
         }
         catch(IOException e)
         {
@@ -166,6 +165,7 @@ public class Installer
     {
         try
         {
+            log.info("connecting to the database");
             dataSourceFactory = new DataSourceFactory(dbDriverClasspath, dbDriverClass,
                 dbProperties, log);
         }
@@ -191,6 +191,7 @@ public class Installer
     {
         try
         {
+            log.info("setting up Coral database schema");
             InitComponent init = new InitComponent(dataSourceFactory.getDataSource(), fileSystem,
                 initForce, log);
             try
@@ -211,15 +212,18 @@ public class Installer
     private void installBase()
         throws Exception
     {
+        log.info("intalling base system");
         rmlRunner.run(".", "config", "root", "rml/cyklotron/install.list", "UTF-8", templateVars,
             templateMacroLibraries);
 
+        log.info("applying customizations");
         rmlRunner.run(".", "config", "root", "rml/cyklotron/customization.list", "UTF-8",
             templateVars, templateMacroLibraries);
 
         sqlRunner.run("sql/cyklotron/customization.list", "UTF-8", templateVars,
             templateMacroLibraries);
 
+        log.info("generating configuration files for the base system");
         fileExtractor.run("config_templates/base", workdirConfig, "UTF-8", templateVars,
             templateMacroLibraries);
     }
@@ -227,6 +231,7 @@ public class Installer
     private void installDbNaming()
         throws Exception
     {
+        log.info("installing DB naming provider");
         sqlRunner.run("sql/cyklotron/db_naming.list", "UTF-8", templateVars,
             Collections.<String> emptyList());
         
@@ -237,6 +242,7 @@ public class Installer
     private void installLDAPNaming()
         throws Exception
     {
+        log.info("installing LDAP naming provider");
         fileExtractor.run("config_templates/ldap", workdirConfig, "UTF-8", templateVars,
             templateMacroLibraries);
     }
