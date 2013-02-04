@@ -2,6 +2,8 @@ package net.cyklotron.cms.installer;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -52,8 +54,11 @@ public class Installer
 
     private String naming;
 
-    public void init(Properties properties, File workdir)
+    private File war;
+
+    public void init(Properties properties, File workdir, File war)
     {
+        this.war = war;
         dbDriverClasspath = properties.getProperty("db.classpath");
         dbDriverClass = properties.getProperty("db.dsclass");
         dbProperties = extract(properties, "db.property.");
@@ -84,6 +89,7 @@ public class Installer
             {
                 installLDAPNaming();
             }
+            customizeWAR();
         }
         catch(Exception e)
         {
@@ -235,7 +241,7 @@ public class Installer
         log.info("installing DB naming provider");
         sqlRunner.run("sql/cyklotron/db_naming.list", "UTF-8", templateVars,
             Collections.<String> emptyList());
-        
+
         fileExtractor.run("config_templates/db_naming", workdirConfig, "UTF-8", templateVars,
             templateMacroLibraries);
     }
@@ -246,6 +252,21 @@ public class Installer
         log.info("installing LDAP naming provider");
         fileExtractor.run("config_templates/ldap", workdirConfig, "UTF-8", templateVars,
             templateMacroLibraries);
+    }
+
+    private void customizeWAR()
+        throws IOException
+    {
+        if(war != null)
+        {
+            log.info("creating customized WAR");
+            File temp = Files.createTempDirectory("cyklotron-installer").toFile();
+            final Path wp = war.toPath();
+            File target = wp.resolveSibling(
+                wp.getName(wp.getNameCount() - 1).toString().replace(".war", "-customized.war"))
+                .toFile();
+            JarProcessor.process(war, workdir, target, temp);
+        }
     }
 
     private Map<String, Object> toMap(Properties properties)

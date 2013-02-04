@@ -58,8 +58,17 @@ public class Main
         {
             workdir.mkdirs();
         }
+        File war = null;
+        if(args.length > 2)
+        {
+            war = new File(args[2]);
+            if(!war.exists() || !war.isFile())
+            {
+                die(war.getPath() + " does not exist or is not a regular file");
+            }
+        }
 
-        installer.init(properties, workdir);
+        installer.init(properties, workdir, war);
         installer.run();
     }
 
