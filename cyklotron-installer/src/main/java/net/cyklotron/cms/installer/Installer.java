@@ -116,6 +116,33 @@ public class Installer
         {
             die("failed to locate workdir", e);
         }
+        if(workdirConfig.list().length > 0)
+        {
+            if(initForce)
+            {
+                log.info("purging configuration directory");
+                deleteRecursively(workdirConfig, false);
+            }
+            else
+            {
+                die(workdirConfig.getPath() + " directory is not empty but force mode is disabled");
+            }
+        }
+    }
+
+    private void deleteRecursively(File file, boolean delete)
+    {
+        if(file.isDirectory())
+        {
+            for(File f : file.listFiles())
+            {
+                deleteRecursively(f, true);
+            }
+        }
+        if(delete)
+        {
+            file.delete();
+        }
     }
 
     private Properties extract(Properties in, String prefix)
