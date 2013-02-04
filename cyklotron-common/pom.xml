@@ -418,6 +418,7 @@
     <module>../cyklotron-ui</module>
     <module>../cyklotron-ui-fckeditor</module>
     <module>../cyklotron-webapp</module>
+    <module>../cyklotron-installer</module>
   </modules>
   <repositories>
     <repository>
