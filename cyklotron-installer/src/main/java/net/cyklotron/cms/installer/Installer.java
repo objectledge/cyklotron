@@ -59,6 +59,7 @@ public class Installer
         dbProperties = extract(properties, "db.property.");
         initForce = Boolean.valueOf(properties.getProperty("init.force", "false"));
         templateVars = toMap(properties);
+        templateVars.put("db_properties", dbProperties);
         naming = properties.getProperty("naming");
         this.workdir = workdir;
         workdirConfig = new File(workdir, "config");

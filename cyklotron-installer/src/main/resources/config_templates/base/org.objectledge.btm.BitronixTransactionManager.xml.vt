@@ -25,11 +25,9 @@
       <enableJdbc4ConnectionTest>true</enableJdbc4ConnectionTest>
       <preparedStatementCacheSize>20</preparedStatementCacheSize>
       <driverProperties>
-        <property name="serverName">${db_property_serverName}</property>
-        <property name="databaseName">${db_property_databaseName}</property>
-        <property name="user">${db_property_user}</property>
-        <property name="password">${db_property_password}</property>
-        <property name="prepareThreshold">100</property>
+#foreach($prop in $db_properties.stringPropertyNames())		
+        <property name="$prop">${db_properties.get($prop)}</property>
+#end
       </driverProperties>
     </connectionPool>
   </jdbc>
