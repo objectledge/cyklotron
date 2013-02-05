@@ -254,7 +254,12 @@
 		<groupId>org.apache.lucene</groupId>
 		<artifactId>lucene-analyzers-stempel</artifactId>
 		<version>${versions.lucene}</version>
-	  </dependency>	  
+	  </dependency>
+	  <dependency>
+          <groupId>org.apache.lucene</groupId>
+          <artifactId>lucene-analyzers-icu</artifactId>
+          <version>${versions.lucene}</version>
+      </dependency>	  
       <dependency>
         <groupId>rome</groupId>
         <artifactId>rome</artifactId>
