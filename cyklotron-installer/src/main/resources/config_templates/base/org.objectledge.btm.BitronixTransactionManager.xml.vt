@@ -5,8 +5,8 @@
     <disableJmx>true</disableJmx>
     <journal>
       <disk>
-        <logPart1Filename>${workdir}/btm/btm1.tlog</logPart1Filename>
-        <logPart2Filename>${workdir}/btm/btm2.tlog</logPart2Filename>
+        <logPart1Filename>btm/btm1.tlog</logPart1Filename>
+        <logPart2Filename>btm/btm2.tlog</logPart2Filename>
       </disk>
     </journal>
     <timer>
