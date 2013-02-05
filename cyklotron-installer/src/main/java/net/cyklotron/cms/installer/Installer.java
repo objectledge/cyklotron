@@ -174,7 +174,7 @@ public class Installer
         {
             log.info("connecting to the database");
             dataSourceFactory = new DataSourceFactory(dbDriverClasspath, dbDriverClass,
-                dbProperties, log);
+                dbProperties, fileSystem, log);
         }
         catch(Exception e)
         {
