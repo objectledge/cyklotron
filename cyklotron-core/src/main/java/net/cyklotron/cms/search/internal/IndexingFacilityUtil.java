@@ -1,9 +1,6 @@
 package net.cyklotron.cms.search.internal;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +23,6 @@ import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
 import org.apache.lucene.util.BytesRef;
-import org.apache.lucene.util.Version;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
@@ -43,8 +39,6 @@ import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.site.SiteResource;
-
-import com.google.common.base.Optional;
 
 /**
  * Implementation of Indexing
@@ -167,14 +161,7 @@ public class IndexingFacilityUtil
         checkDirectory(path);
         try
         {
-            Optional<File> optional = fileSystem.getFileRelativeToLocalFileSystem(path);
-            File directory = optional.get(); // must exist because checked earlier
-            return new NIOFSDirectory(directory);
-        }
-        catch(MalformedURLException | URISyntaxException e)
-        {
-            throw new SearchException("IndexingFacility: malformed path to directory '" + path
-                + "'", e);
+            return new NIOFSDirectory(fileSystem.getFile(path));
         }
         catch(IOException e)
         {
