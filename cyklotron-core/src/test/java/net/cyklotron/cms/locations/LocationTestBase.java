@@ -38,7 +38,7 @@ public abstract class LocationTestBase
         try
         {
             btm = new BitronixTransactionManager("pg", "org.postgresql.xa.PGXADataSource",
-                getDsProperties(), logger);
+                getDsProperties(), getFileSystem(), logger);
 
             DataSource dataSource = new BitronixDataSource("pg", btm);
             prepareDataSource(dataSource);
