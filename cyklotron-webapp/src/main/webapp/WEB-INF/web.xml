@@ -6,16 +6,17 @@
     <listener>
         <listener-class>org.objectledge.web.LedgeServletContextListener</listener-class>
     </listener>
-    <context-param> 
-        <description>Filesystem Root</description> 
-        <param-name>root</param-name> 
-        <param-value>../cyklotron</param-value> 
-     </context-param>
+    
+    <!-- 
+         context parameter named "root" may be used to select local filesystem root directory 
+         when not defined, work area assigned by the servlet container will be used instead.
+    -->
     <context-param> 
         <description>LedgeContainer config path</description> 
         <param-name>configPath</param-name> 
         <param-value>/config</param-value> 
-     </context-param>
+    </context-param>
+    
 	<servlet>
 	  <servlet-name>ledge</servlet-name>
 	  <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
