@@ -249,6 +249,26 @@ public class GenericIndex<T extends Resource>
         }
     }
 
+    public Collection<T> search(PerformSearch performSearch)
+        throws IOException
+    {
+        IndexSearcher searcher = searcherManager.acquire();
+        try
+        {
+            Collection<Document> results = performSearch.doSearch(searcher);
+            Collection<T> resources = new ArrayList<>();
+            for(Document document : results)
+            {
+                resources.add(fromDocumentMapper.fromDocument(document));
+            }
+            return resources;
+        }
+        finally
+        {
+            searcherManager.release(searcher);
+        }
+    }
+
     private Collection<Document> getDocuments(Collection<T> resources)
     {
         Collection<Document> documents = new ArrayList<>();
