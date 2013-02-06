@@ -1,7 +1,6 @@
 package net.cyklotron.cms.search.internal;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,8 +55,8 @@ import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.SearchingFacility;
 import net.cyklotron.cms.search.XRefsResource;
-import net.cyklotron.cms.search.analysis.PerFieldAnalyzer;
-import net.cyklotron.cms.search.analysis.StemmerPL;
+import net.cyklotron.cms.search.analysis.PerFieldAnalyzerFactory;
+import net.cyklotron.cms.search.analysis.StempelStemmerFactory;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
@@ -132,6 +131,10 @@ public class SearchServiceImpl
     
     private final PerformanceMonitor performanceMonitor;
 
+    private final StempelStemmerFactory stemmerFactory;
+
+    private final PerFieldAnalyzerFactory perFieldAnalyzerFactory;
+
     // initialization ////////////////////////////////////////////////////////
 
     /**
@@ -143,7 +146,8 @@ public class SearchServiceImpl
         CategoryService categoryService, CategoryQueryService categoryQueryService,
         UserManager userManager, PreferencesService preferencesService,
         IntegrationService integrationService, LoggingConfigurator loggingConfigurator,
-        SearchServiceImpl.Statistics statistics)
+        SearchServiceImpl.Statistics statistics, StempelStemmerFactory stemmerFactory,
+        PerFieldAnalyzerFactory perFieldAnalyzerFactory)
         throws ConfigurationException
     {
         this.config = config;
@@ -157,6 +161,8 @@ public class SearchServiceImpl
         this.userManager = userManager;
         this.integrationService = integrationService;
         this.statistics = statistics;
+        this.stemmerFactory = stemmerFactory;
+        this.perFieldAnalyzerFactory = perFieldAnalyzerFactory;
         if(config.getChild("performance", false) != null)
         {
             this.performanceMonitor = new PerformanceMonitor(config, loggingConfigurator);
@@ -468,26 +474,25 @@ public class SearchServiceImpl
         // analyser registry should be refactored out as an external component
         try
         {
-            Reader stopwords;
+            String path = null;
             if(locale != null && fileSystem.exists(STOPWORDS_LOCATION + locale.getDisplayName()))
             {
-                stopwords = fileSystem.getReader(
-                    STOPWORDS_LOCATION + "/" + locale.getDisplayName(), STOPWORDS_ENCODING);
+                path = STOPWORDS_LOCATION + "/" + locale.getDisplayName();
             }
             else
             {
-                stopwords = fileSystem.getReader(STOPWORDS_LOCATION + STOPWORDS_DEFAULT,
-                    STOPWORDS_ENCODING);
+                path = STOPWORDS_LOCATION + STOPWORDS_DEFAULT;
             }
-            return new PerFieldAnalyzer(stopwords, new StemmerPL());
+            return perFieldAnalyzerFactory.createPerFieldAnalyzer(path,
+                stemmerFactory.createStempelStemmer());
         }
         catch(UnsupportedEncodingException e)
         {
-            throw new IllegalStateException("UnsupportedEncodingException" + e);
+            throw new IllegalStateException("UnsupportedEncodingException", e);
         }
         catch(IOException e)
         {
-            throw new IllegalStateException("File not exists exception" + e);
+            throw new IllegalStateException("File not exists exception", e);
         }
     }
 

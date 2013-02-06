@@ -5,12 +5,15 @@ import java.text.ParseException;
 import java.util.Date;
 
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermEnum;
+import org.apache.lucene.index.Terms;
+import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermRangeQuery;
+import org.apache.lucene.util.BytesRef;
 import org.jcontainer.dna.Logger;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -27,9 +30,6 @@ import net.cyklotron.cms.search.SearchUtil;
 public class CalendarAllRangeQuery extends Query
 {
     private Logger log;
-    private Date startDate;
-    private Date endDate;
-    
     private Term lowerEndDate;
     private Term upperStartDate;
     
@@ -43,9 +43,6 @@ public class CalendarAllRangeQuery extends Query
     public CalendarAllRangeQuery(Logger log, Date startDate, Date endDate)
     {
         this.log = log;
-        this.startDate = startDate;
-        this.endDate = endDate;
-
         // get terms
         lowerEndDate = new Term("eventEnd", SearchUtil.dateToString(startDate));
         upperStartDate = new Term("eventStart", SearchUtil.dateToString(endDate));
@@ -78,9 +75,11 @@ public class CalendarAllRangeQuery extends Query
         if(termsAfterCut < (int)(0.5 * numCalendarDocs))
         {
             setMaxClauseCount(termsAfterCut);
-            TermRangeQuery endDateAfterRangeStart = new TermRangeQuery(lowerEndDate.field(),
+            TermRangeQuery endDateAfterRangeStart = TermRangeQuery.newStringRange(
+                lowerEndDate.field(),
                 lowerEndDate.text(), null, true, true);
-            TermRangeQuery startDateNotAfterRangeEnd = new TermRangeQuery(upperStartDate.field(),
+            TermRangeQuery startDateNotAfterRangeEnd = TermRangeQuery.newStringRange(
+                upperStartDate.field(),
                 upperStartDate.text(), null, false, false);
             rewritten.add(new BooleanClause(endDateAfterRangeStart, BooleanClause.Occur.MUST));
             rewritten
@@ -90,9 +89,11 @@ public class CalendarAllRangeQuery extends Query
         {
             setMaxClauseCount(numCalendarDocs - termsAfterCut);
 
-            TermRangeQuery endDateNotBeforeRangeStart = new TermRangeQuery(lowerEndDate.field(),
+            TermRangeQuery endDateNotBeforeRangeStart = TermRangeQuery.newStringRange(
+                lowerEndDate.field(),
                 null, lowerEndDate.text(), false, false);
-            TermRangeQuery startDateBeforeRangeEnd = new TermRangeQuery(upperStartDate.field(),
+            TermRangeQuery startDateBeforeRangeEnd = TermRangeQuery.newStringRange(
+                upperStartDate.field(),
                 null, upperStartDate.text(), true, true);
             rewritten.add(new BooleanClause(endDateNotBeforeRangeStart,
                 BooleanClause.Occur.MUST_NOT)); // negated
@@ -121,16 +122,24 @@ public class CalendarAllRangeQuery extends Query
         try
         {
             // get lowest non null date in index
-            TermEnum te = indexReader.terms(new Term(lowerTerm.field(), ""));
+            final Terms terms = MultiFields.getTerms(indexReader, lowerTerm.field());
+            final TermsEnum termsEnum = terms.iterator(null);
+            // Get last term. TODO validate that this is lowest
+            BytesRef term = null;
+            while(termsEnum.next() != null)
+            {
+                term = termsEnum.term();
+            }
+
+            // TermEnum te = indexReader.terms(new Term(lowerTerm.field(), ""));
             // enumeration contains all terms in the document sorted lexicographically by
             // field name then term content. it is positioned on the term greater than requested,
             // so when no terms for the field are present enumeration points to a different field's 
             // term or null if the requested term was the farthest in the index
-            if(te.term() != null && te.term().field() == lowerTerm.field())
+            if(term != null)
             {
-                String lowestDateText = te.term().text();
+                String lowestDateText = term.utf8ToString();
                 lowDate = SearchUtil.dateFromString(lowestDateText).getTime();
-
             }
             // no need to rewrite - seems like the number of terms is small
             if(lowDate == 0L)

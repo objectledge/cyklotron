@@ -10,28 +10,36 @@ import java.util.List;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CheckIndex;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermEnum;
+import org.apache.lucene.index.Terms;
+import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.NIOFSDirectory;
+import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.Version;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.LocalFileSystemProvider;
 
+import net.cyklotron.cms.search.SearchConstants;
+
 public abstract class AbstractIndex<T>
 {
+    protected static final Version LUCENE_VERSION = SearchConstants.LUCENE_VERSION;
+
     protected final FileSystem fileSystem;
 
     protected final Logger logger;
@@ -65,13 +73,13 @@ public abstract class AbstractIndex<T>
         // if index directory is not there, create a blank index.
         if(!indexLocation.exists())
         {
-            writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+            writer = getWriter();
             writer.close();
         }
         // open reader
         try
         {
-            reader = IndexReader.open(directory);
+            reader = DirectoryReader.open(directory);
         }
         catch(CorruptIndexException e)
         {
@@ -79,10 +87,23 @@ public abstract class AbstractIndex<T>
             CheckIndex checkIndex = new CheckIndex(directory);
             checkIndex.checkIndex();
             // try to reopen index
-            reader = IndexReader.open(directory);
+            reader = DirectoryReader.open(directory);
+        }
+        catch(IOException e)
+        {
+            writer = getWriter();
+            writer.close();
+            reader = DirectoryReader.open(directory);
         }
         searcher = new IndexSearcher(reader);
         writer = null;
+    }
+
+    protected IndexWriter getWriter()
+        throws IOException
+    {
+        IndexWriterConfig conf = new IndexWriterConfig(LUCENE_VERSION, analyzer);
+        return new IndexWriter(directory, conf);
     }
 
     /**
@@ -95,10 +116,10 @@ public abstract class AbstractIndex<T>
     protected Analyzer getAnalyzer(FileSystem fileSystem)
         throws IOException
     {
-        return new StandardAnalyzer(Version.LUCENE_30);
+        return new StandardAnalyzer(LUCENE_VERSION);
     }
 
-    protected Searcher getSearcher()
+    protected IndexSearcher getSearcher()
     {
         return searcher;
     }
@@ -132,12 +153,12 @@ public abstract class AbstractIndex<T>
         throws IOException
     {
         List<Term> tokens = new ArrayList<Term>();
-        TokenStream ts = analyzer.reusableTokenStream(field, new StringReader(value));
+        TokenStream ts = analyzer.tokenStream(field, new StringReader(value));
         ts.reset();
-        TermAttribute ta = ts.getAttribute(TermAttribute.class);
+        CharTermAttribute charTermAttribute = ts.addAttribute(CharTermAttribute.class);
         while(ts.incrementToken())
         {
-            tokens.add(new Term(field, ta.term()));
+            tokens.add(new Term(field, charTermAttribute.toString()));
         }
         ts.end();
         ts.close();
@@ -161,18 +182,22 @@ public abstract class AbstractIndex<T>
     {
         try
         {
-            List<String> values = new ArrayList<String>();
-            TermEnum termEnum = reader.terms(new Term(field, ""));
-            while(termEnum.next())
+            Terms terms = MultiFields.getTerms(reader, field);
+            if(terms == null)
             {
-                Term term = termEnum.term();
-                if(!term.field().equals(field))
-                {
-                    break;
-                }
-                values.add(term.text());
+                return Collections.emptyList();
             }
-            return values;
+            else
+            {
+                List<String> values = new ArrayList<String>();
+                TermsEnum termsEnum = terms.iterator(null);
+                BytesRef text;
+                while((text = termsEnum.next()) != null)
+                {
+                    values.add(text.utf8ToString());
+                }
+                return values;
+            }
         }
         catch(IOException e)
         {
@@ -189,7 +214,7 @@ public abstract class AbstractIndex<T>
             throw new IllegalStateException("update in progress");
         }
         updateThread = Thread.currentThread();
-        writer = new IndexWriter(directory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
+        writer = getWriter();
         writer.deleteAll();
     }
 
@@ -210,12 +235,11 @@ public abstract class AbstractIndex<T>
         {
             throw new IllegalStateException("update in progress");
         }
-        writer.optimize();
         writer.commit();
         writer.close();
         writer = null;
 
-        IndexReader newReader = reader.reopen();
+        IndexReader newReader = DirectoryReader.open(directory);
         IndexReader oldReader = reader;
         reader = newReader;
         oldReader.close();

@@ -1,6 +1,8 @@
 package net.cyklotron.cms.search.internal;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
@@ -51,8 +52,6 @@ public class IndexingFacilityImpl implements IndexingFacility
     /** search service - for managing index resources */
     private SearchService searchService;
     
-    private Context context;
-
     // local ---------------------------------------------------------------------------------------
 
     private IndexingFacilityUtil utility;
@@ -62,7 +61,6 @@ public class IndexingFacilityImpl implements IndexingFacility
     private DocumentConstructor docConstructor;
     
     private Subject anonymousSubject;
-    private CoralSessionFactory coralSessionFactory;
     private FileSystem fileSystem;
 
     /**
@@ -75,12 +73,9 @@ public class IndexingFacilityImpl implements IndexingFacility
         PreferencesService preferencesService, CategoryService categoryService,CategoryQueryService categoryQueryService,
         UserManager userManager, IntegrationService integrationService)
     {
-        this.context = context;
         this.searchService = searchService;
         this.log = logger;
         this.fileSystem = fileSystem;
-        this.coralSessionFactory = sessionFactory;
-
         docConstructor = new DocumentConstructor(context, logger, preferencesService, userManager,
             categoryService, integrationService);
         
@@ -140,7 +135,7 @@ public class IndexingFacilityImpl implements IndexingFacility
         String oldDirectoryPath = index.getFilesLocation();
         String tempDirectoryPath = oldDirectoryPath + "_" + System.nanoTime();
         utility.checkDirectory(tempDirectoryPath);
-        Directory tempDir = new LedgeFSDirectory(fileSystem, tempDirectoryPath);
+        Directory tempDir = utility.createOrGetDirectoryUnderPath(tempDirectoryPath);
         IndexWriter indexWriter = 
             utility.openIndexWriter(tempDir, index, true, "reindexing the index");
         Set<Resource> querySet = utility.getQueryIndexResourceIds(coralSession, index);
@@ -163,7 +158,8 @@ public class IndexingFacilityImpl implements IndexingFacility
                 Resource branch = (Resource) (i.next());
                 index(coralSession, branch, branch, indexWriter, index, querySet, false, stats);
             }
-            indexWriter.commit(IndexingFacilityUtil.resetChangeCounter());
+            indexWriter.setCommitData(IndexingFacilityUtil.resetChangeCounter());
+            indexWriter.commit();
             if(stats.documentsAdded == 0)
             {
                 StringBuilder buff = new StringBuilder();
@@ -267,8 +263,9 @@ public class IndexingFacilityImpl implements IndexingFacility
                 utility.openIndexWriter(dir, index, false, "optimizing the index");
             try
             {
-                indexWriter.optimize();
-                indexWriter.commit(IndexingFacilityUtil.resetChangeCounter());
+                indexWriter.forceMerge(1);
+                indexWriter.setCommitData(IndexingFacilityUtil.resetChangeCounter());
+                indexWriter.commit();
             }
             catch (IOException e)
             {
@@ -283,13 +280,13 @@ public class IndexingFacilityImpl implements IndexingFacility
     }
     
     /**
-     * Chcecks if a given resource may be put in the given index.
+     * Checks if a given resource may be put in the given index.
+     * 
      * @param node resource to be checked
      * @param index index to be checked
      * @param querySet TODO
-     * 
      * @return <code>true</code> if given resource may be indexed by a given index
-     * @throws SearchException 
+     * @throws SearchException
      */
     private boolean liableForIndexing(CoralSession coralSession, IndexableResource node,
         IndexResource index, Set<Resource> querySet)
@@ -472,25 +469,25 @@ public class IndexingFacilityImpl implements IndexingFacility
         
         synchronized(index)
         {
-            IndexReader indexReader = utility.openIndexReader(index, "removing resources # "+id);
+            IndexWriter indexWriter = utility.openIndexWriter(getIndexDirectory(index), index,
+                false, "removing resources # " + id);
 
-            // delete old docs
-            Term idTerm = null;
-            for (int i = 0; i < id.length; i++)
+            Collection<Term> terms = new ArrayList<>();
+            for(String identifier : id)
             {
-                try
-                {
-                    idTerm = new Term(SearchConstants.FIELD_ID, id[i]);
-                    indexReader.deleteDocuments(idTerm);
-                }
-                catch (IOException e)
-                {
-                    log.error("IndexingFacility: Could not remove resource #"+id[i]+
-                    " from  index '"+index.getPath()+"'", e);
-                }
+                terms.add(new Term(SearchConstants.FIELD_ID, identifier));
+            }
+            try
+            {
+                indexWriter.deleteDocuments(terms.toArray(new Term[terms.size()]));
+            }
+            catch(IOException e)
+            {
+                log.error(
+                    "IndexingFacility: Could not remove resources #'" + index.getPath() + "'", e);
             }
 
-            utility.closeIndexReader(indexReader, index, "removing resources # "+id);
+            utility.closeIndexWriter(indexWriter, index, "removing resources # " + id);
         }
     }    
     

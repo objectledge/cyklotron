@@ -562,6 +562,10 @@
     </sequence>
   </component>             
 
+  <component class-key="net.cyklotron.cms.search.util.IndexInitializer"
+  	class="net.cyklotron.cms.search.util.IndexInitializerImpl"/>  
+	
+
   <component class-key="org.objectledge.forms.FormsService"
              class="org.objectledge.forms.internal.FormsServiceImpl"/>
 
@@ -598,6 +602,11 @@
   <component class="net.cyklotron.cms.periodicals.internal.PlainTextRendererFactory"/>
   <component class="net.cyklotron.cms.periodicals.internal.HTMLNotificationRendererFactory"/>
   <component class="net.cyklotron.cms.periodicals.internal.PlainTextNotificationRendererFactory"/>
+  <component class-key="net.cyklotron.cms.search.analysis.StempelStemmerFactory"
+  			 class="net.cyklotron.cms.search.analysis.StempelStemmerFactoryImpl"/>
+  <component class="net.cyklotron.cms.search.analysis.PerFieldAnalyzerFactory"/>
+  <component class-key="net.cyklotron.cms.search.util.GenericIndexFactory"
+  			 class="net.cyklotron.cms.search.util.GenericIndexFactoryImpl"/>
 
   <!-- stats come at the end so that all the providers are referencable -->  
   

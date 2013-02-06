@@ -2,7 +2,6 @@ package net.cyklotron.cms.catalogue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumSet;
@@ -12,17 +11,14 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
-import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.queryParser.QueryParser.Operator;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.util.Version;
-import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
 import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Subject;
@@ -44,6 +40,8 @@ import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.site.SiteResource;
+
+import com.google.common.base.Optional;
 
 public class CatalogueService
 {
@@ -384,21 +382,27 @@ public class CatalogueService
             throw new NotConfiguredException("searchPool is not set");
         }
         Analyzer analyzer = searchService.getAnalyzer(locale);
-        QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, SEARCH_FIELDS, analyzer);
-        parser.setDefaultOperator(Operator.AND);
+        QueryParser parser = new MultiFieldQueryParser(SearchConstants.LUCENE_VERSION, SEARCH_FIELDS, analyzer);
+        parser.setDefaultOperator(QueryParser.Operator.AND);
         Set<Long> uniqueIds = new HashSet<Long>();
-        Searcher searcher = null;
+        IndexSearcher searcher = null;
         try
         {
             Query query = parser.parse(queryString);
-            searcher = searchService.getSearchingFacility().getSearcher(
+            final Optional<IndexSearcher> optional = searchService.getSearchingFacility()
+                .getSearcher(
                 new PoolResource[] { searchPool }, coralSession.getUserSubject());
-            int numHits = searcher.maxDoc() > 0 ? searcher.maxDoc() : 1;
-            TopDocs hits = searcher.search(query, null, numHits);
-            for(ScoreDoc hit : hits.scoreDocs)
+            if(optional.isPresent())
             {
-                org.apache.lucene.document.Document doc = searcher.doc(hit.doc);
-                uniqueIds.add(Long.parseLong(doc.get(SearchConstants.FIELD_ID)));
+                searcher = optional.get();
+                int numHits = searcher.getIndexReader().maxDoc() > 0 ? searcher.getIndexReader()
+                    .maxDoc() : 1;
+                TopDocs hits = searcher.search(query, null, numHits);
+                for(ScoreDoc hit : hits.scoreDocs)
+                {
+                    org.apache.lucene.document.Document doc = searcher.doc(hit.doc);
+                    uniqueIds.add(Long.parseLong(doc.get(SearchConstants.FIELD_ID)));
+                }
             }
         }
         catch(Exception e)

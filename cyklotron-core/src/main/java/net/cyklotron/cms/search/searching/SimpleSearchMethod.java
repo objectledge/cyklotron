@@ -4,14 +4,14 @@ import java.util.Locale;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.DateTools;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.util.Version;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
 
+import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchService;
 
 /**
@@ -40,7 +40,7 @@ public class SimpleSearchMethod extends BaseSearchMethod
         if(query.length() > 0)
         {
             Analyzer analyzer = searchService.getAnalyzer(locale);
-            QueryParser parser = new MultiFieldQueryParser(Version.LUCENE_30, DEFAULT_FIELD_NAMES,
+            QueryParser parser = new MultiFieldQueryParser(SearchConstants.LUCENE_VERSION, DEFAULT_FIELD_NAMES,
                 analyzer);
             parser.setDateResolution(DateTools.Resolution.SECOND);
             return parser.parse(query);
