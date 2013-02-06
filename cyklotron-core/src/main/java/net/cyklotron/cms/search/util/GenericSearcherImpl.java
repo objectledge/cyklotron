@@ -36,4 +36,17 @@ public class GenericSearcherImpl<T extends Resource>
         }
     }
 
+    @Override
+    public Collection<String> getAllFieldNames()
+    {
+        try
+        {
+            return index.getAllFieldsNames();
+        }
+        catch(IOException e)
+        {
+            throw new BackendException("Error during fetching fieldNames from index", e);
+        }
+    }
+
 }
