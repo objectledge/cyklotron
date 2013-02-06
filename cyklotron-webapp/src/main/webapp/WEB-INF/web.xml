@@ -25,6 +25,11 @@
 	    <param-value>cmsDispatcher</param-value>
 	  </init-param>
 	</servlet>  
+
+    <servlet>
+      <servlet-name>content</servlet-name>
+      <servlet-class>org.objectledge.web.ContentServlet</servlet-class>
+    </servlet>
 	
 	<servlet>
 	  <servlet-name>files</servlet-name>
@@ -39,6 +44,16 @@
 		<servlet-name>ledge</servlet-name>
 		<url-pattern>/ledge/*</url-pattern>
 	</servlet-mapping>
+  
+    <servlet-mapping>
+        <servlet-name>content</servlet-name>
+        <url-pattern>/content/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>content</servlet-name>
+        <url-pattern>/files/*</url-pattern>
+    </servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>files</servlet-name>
