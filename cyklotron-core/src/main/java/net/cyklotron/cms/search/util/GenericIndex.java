@@ -5,13 +5,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.Fields;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.SearcherManager;
@@ -193,6 +198,22 @@ public class GenericIndex<T extends Resource>
         }
     }
 
+    Collection<String> getAllFieldsNames()
+        throws IOException
+    {
+        Fields fields = MultiFields.getFields(reader);
+        if(fields == null)
+        {
+            return Collections.emptyList();
+        }
+        Set<String> fieldNames = new HashSet<>();
+        for(String fieldName : fields)
+        {
+            fieldNames.add(fieldName);
+        }
+        return fieldNames;
+    }
+
     /**
      * Reindexed all resources. Operation can be cancelled by callback which receives progress
      * updates
@@ -201,7 +222,6 @@ public class GenericIndex<T extends Resource>
      * @return
      * @throws IOException
      */
-
     public synchronized void reindexAllCancellable(Cancellable callback)
         throws IOException
     {
