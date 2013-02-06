@@ -4,17 +4,17 @@ import java.io.IOException;
 
 import org.apache.lucene.analysis.TokenFilter;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.apache.lucene.util.Attribute;
 import org.apache.lucene.util.AttributeImpl;
 
-public class StemFilter
+public final class StemFilter
     extends TokenFilter
 {
     private final Stemmer stemmer;
 
-    private final TermAttribute termAtt;
+    private final CharTermAttribute charTermAttribute;
 
     private final PositionIncrementAttribute posIncAtt;
 
@@ -24,7 +24,7 @@ public class StemFilter
     {
         super(in);
         this.stemmer = stemmer;
-        termAtt = addAttribute(TermAttribute.class);
+        charTermAttribute = addAttribute(CharTermAttribute.class);
         posIncAtt = addAttribute(PositionIncrementAttribute.class);
         stateAtt = addAttribute(StateAttribute.class);
     }
@@ -35,10 +35,12 @@ public class StemFilter
     {
         if(stateAtt.getState() == State.ORIGINAL)
         {
+            // String original = charTermAttribute.toString();
             if(input.incrementToken())
             {
-                posIncAtt.setPositionIncrement(0);
-                stateAtt.setState(State.STEM);
+                // String afterIncrement = charTermAttribute.toString();
+                posIncAtt.setPositionIncrement(1);
+                    stateAtt.setState(State.STEM);
                 return true;
             }
             else
@@ -48,12 +50,11 @@ public class StemFilter
         }
         else
         {
-            String term = termAtt.term();
-            String s = stemmer.stem(term);
+            CharSequence s = stemmer.stem(charTermAttribute);
             // If not stemmed, don't waste the time adjusting the token.
-            if((s != null) && !s.equals(term))
+            if((s != null) && !s.equals(charTermAttribute))
             {
-                termAtt.setTermBuffer(s);
+                charTermAttribute.setEmpty().append(s);
             }
             posIncAtt.setPositionIncrement(1);
             stateAtt.setState(State.ORIGINAL);          
@@ -78,6 +79,7 @@ public class StemFilter
         extends AttributeImpl
         implements StateAttribute, Cloneable
     {
+        @SuppressWarnings("unused")
         private static final long serialVersionUID = 4003078802203028706L;
         
         private State state = State.ORIGINAL;

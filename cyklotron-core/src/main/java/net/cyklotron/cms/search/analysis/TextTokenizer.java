@@ -1,8 +1,7 @@
 /**
- * This source file was extracted from Lucene 3.0.0 sources in order to modify the tokenizer behavior.
+ * Copied from Lucene 4.0.0 sources. Origin was StandardTokenizer
  */
-
-/**
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -24,224 +23,212 @@ package net.cyklotron.cms.search.analysis;
 import java.io.IOException;
 import java.io.Reader;
 
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.standard.ClassicTokenizer;
+import org.apache.lucene.analysis.standard.StandardTokenizerInterface;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.PositionIncrementAttribute;
-import org.apache.lucene.analysis.tokenattributes.TermAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 import org.apache.lucene.util.AttributeSource;
 import org.apache.lucene.util.Version;
 
-/** A grammar-based tokenizer constructed with JFlex
- *
- * <p> This should be a good tokenizer for most European-language documents:
- *
+/**
+ * A grammar-based tokenizer constructed with JFlex.
+ * <p>
+ * As of Lucene version 3.1, this class implements the Word Break rules from the Unicode Text
+ * Segmentation algorithm, as specified in <a href="http://unicode.org/reports/tr29/">Unicode
+ * Standard Annex #29</a>.
+ * <p/>
+ * <p>
+ * Many applications have specific tokenizer needs. If this tokenizer does not suit your
+ * application, please consider copying this source code directory to your project and maintaining
+ * your own grammar-based tokenizer. <a name="version"/>
+ * <p>
+ * You must specify the required {@link Version} compatibility when creating StandardTokenizer:
  * <ul>
- *   <li>Splits words at punctuation characters, removing punctuation. However, a 
- *     dot that's not followed by whitespace is considered part of a token.
- *   <li>Splits words at hyphens, unless there's a number in the token, in which case
- *     the whole token is interpreted as a product number and is not split.
- *   <li>Recognizes email addresses and internet hostnames as one token.
- * </ul>
- *
- * <p>Many applications have specific tokenizer needs.  If this tokenizer does
- * not suit your application, please consider copying this source code
- * directory to your project and maintaining your own grammar-based tokenizer.
- *
- * <a name="version"/>
- * <p>You must specify the required {@link Version}
- * compatibility when creating StandardAnalyzer:
- * <ul>
- *   <li> As of 2.4, Tokens incorrectly identified as acronyms
- *        are corrected (see <a href="https://issues.apache.org/jira/browse/LUCENE-1068">LUCENE-1608</a>
+ * <li>As of 3.4, Hiragana and Han characters are no longer wrongly split from their combining
+ * characters. If you use a previous version number, you get the exact broken behavior for backwards
+ * compatibility.
+ * <li>As of 3.1, StandardTokenizer implements Unicode text segmentation. If you use a previous
+ * version number, you get the exact behavior of {@link ClassicTokenizer} for backwards
+ * compatibility.
  * </ul>
  */
 
-public final class TextTokenizer extends org.apache.lucene.analysis.Tokenizer {
-  /** A private instance of the JFlex-constructed scanner */
-  private final TextTokenizerImpl scanner;
+public final class TextTokenizer
+    extends Tokenizer
+{
+    /** A private instance of the JFlex-constructed scanner */
+    private StandardTokenizerInterface scanner;
 
-  public static final int ALPHANUM          = 0;
-  public static final int APOSTROPHE        = 1;
-  public static final int ACRONYM           = 2;
-  public static final int COMPANY           = 3;
-  public static final int EMAIL             = 4;
-  public static final int HOST              = 5;
-  public static final int NUM               = 6;
-  public static final int CJ                = 7;
+    public static final int ALPHANUM = 0;
 
-  /**
-   * @deprecated this solves a bug where HOSTs that end with '.' are identified
-   *             as ACRONYMs.
-   */
-  public static final int ACRONYM_DEP       = 8;
+    /** @deprecated (3.1) */
+    @Deprecated
+    public static final int APOSTROPHE = 1;
 
-  /** String token types that correspond to token type int constants */
-  public static final String [] TOKEN_TYPES = new String [] {
-    "<ALPHANUM>",
-    "<APOSTROPHE>",
-    "<ACRONYM>",
-    "<COMPANY>",
-    "<EMAIL>",
-    "<HOST>",
-    "<NUM>",
-    "<CJ>",
-    "<ACRONYM_DEP>"
-  };
+    /** @deprecated (3.1) */
+    @Deprecated
+    public static final int ACRONYM = 2;
 
-  private boolean replaceInvalidAcronym;
-    
-  private int maxTokenLength = StandardAnalyzer.DEFAULT_MAX_TOKEN_LENGTH;
+    /** @deprecated (3.1) */
+    @Deprecated
+    public static final int COMPANY = 3;
 
-  /** Set the max allowed token length.  Any token longer
-   *  than this is skipped. */
-  public void setMaxTokenLength(int length) {
-    this.maxTokenLength = length;
-  }
+    public static final int EMAIL = 4;
 
-  /** @see #setMaxTokenLength */
-  public int getMaxTokenLength() {
-    return maxTokenLength;
-  }
+    /** @deprecated (3.1) */
+    @Deprecated
+    public static final int HOST = 5;
 
-  /**
-   * Creates a new instance of the {@link org.apache.lucene.analysis.standard.StandardTokenizer}.  Attaches
-   * the <code>input</code> to the newly created JFlex scanner.
-   *
-   * @param input The input reader
-   *
-   * See http://issues.apache.org/jira/browse/LUCENE-1068
-   */
-  public TextTokenizer(Version matchVersion, Reader input) {
-    super();
-    this.scanner = new TextTokenizerImpl(input);
-    init(input, matchVersion);
-  }
+    public static final int NUM = 6;
 
-  /**
-   * Creates a new StandardTokenizer with a given {@link AttributeSource}. 
-   */
-  public TextTokenizer(Version matchVersion, AttributeSource source, Reader input) {
-    super(source);
-    this.scanner = new TextTokenizerImpl(input);
-    init(input, matchVersion);
-  }
+    /** @deprecated (3.1) */
+    @Deprecated
+    public static final int CJ = 7;
 
-  /**
-   * Creates a new StandardTokenizer with a given {@link org.apache.lucene.util.AttributeSource.AttributeFactory} 
-   */
-  public TextTokenizer(Version matchVersion, AttributeFactory factory, Reader input) {
-    super(factory);
-    this.scanner = new TextTokenizerImpl(input);
-    init(input, matchVersion);
-  }
+    /** @deprecated (3.1) */
+    @Deprecated
+    public static final int ACRONYM_DEP = 8;
 
-  private void init(Reader input, Version matchVersion) {
-    if (matchVersion.onOrAfter(Version.LUCENE_24)) {
-      replaceInvalidAcronym = true;
-    } else {
-      replaceInvalidAcronym = false;
+    public static final int SOUTHEAST_ASIAN = 9;
+
+    public static final int IDEOGRAPHIC = 10;
+
+    public static final int HIRAGANA = 11;
+
+    public static final int KATAKANA = 12;
+
+    public static final int HANGUL = 13;
+
+    /** String token types that correspond to token type int constants */
+    public static final String[] TOKEN_TYPES = new String[] { "<ALPHANUM>", "<APOSTROPHE>",
+                    "<ACRONYM>", "<COMPANY>", "<EMAIL>", "<HOST>", "<NUM>", "<CJ>",
+                    "<ACRONYM_DEP>", "<SOUTHEAST_ASIAN>", "<IDEOGRAPHIC>", "<HIRAGANA>",
+                    "<KATAKANA>", "<HANGUL>" };
+
+    private int maxTokenLength = TextAnalyzer.DEFAULT_MAX_TOKEN_LENGTH;
+
+    /**
+     * Set the max allowed token length. Any token longer than this is skipped.
+     */
+    public void setMaxTokenLength(int length)
+    {
+        this.maxTokenLength = length;
     }
-    this.input = input;    
-    termAtt = addAttribute(TermAttribute.class);
-    offsetAtt = addAttribute(OffsetAttribute.class);
-    posIncrAtt = addAttribute(PositionIncrementAttribute.class);
-    typeAtt = addAttribute(TypeAttribute.class);
-  }
 
-  // this tokenizer generates three attributes:
-  // offset, positionIncrement and type
-  private TermAttribute termAtt;
-  private OffsetAttribute offsetAtt;
-  private PositionIncrementAttribute posIncrAtt;
-  private TypeAttribute typeAtt;
+    /** @see #setMaxTokenLength */
+    public int getMaxTokenLength()
+    {
+        return maxTokenLength;
+    }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.apache.lucene.analysis.TokenStream#next()
-   */
-  @Override
-  public final boolean incrementToken() throws IOException {
-    clearAttributes();
-    int posIncr = 1;
+    /**
+     * Creates a new instance of the {@link org.apache.lucene.analysis.standard.TextTokenizer}.
+     * Attaches the <code>input</code> to the newly created JFlex scanner.
+     * 
+     * @param input The input reader See http://issues.apache.org/jira/browse/LUCENE-1068
+     */
+    public TextTokenizer(Version matchVersion, Reader input)
+    {
+        super(input);
+        init(matchVersion);
+    }
 
-    while(true) {
-      int tokenType = scanner.getNextToken();
+    /**
+     * Creates a new TextTokenizer with a given {@link AttributeSource}.
+     */
+    public TextTokenizer(Version matchVersion, AttributeSource source, Reader input)
+    {
+        super(source, input);
+        init(matchVersion);
+    }
 
-      if (tokenType == TextTokenizerImpl.YYEOF) {
-        return false;
-      }
+    /**
+     * Creates a new TextTokenizer with a given
+     * {@link org.apache.lucene.util.AttributeSource.AttributeFactory}
+     */
+    public TextTokenizer(Version matchVersion, AttributeFactory factory, Reader input)
+    {
+        super(factory, input);
+        init(matchVersion);
+    }
 
-      if (scanner.yylength() <= maxTokenLength) {
-        posIncrAtt.setPositionIncrement(posIncr);
-        scanner.getText(termAtt);
-        final int start = scanner.yychar();
-        offsetAtt.setOffset(correctOffset(start), correctOffset(start+termAtt.termLength()));
-        // This 'if' should be removed in the next release. For now, it converts
-        // invalid acronyms to HOST. When removed, only the 'else' part should
-        // remain.
-        if (tokenType == TextTokenizerImpl.ACRONYM_DEP) {
-          if (replaceInvalidAcronym) {
-            typeAtt.setType(TextTokenizerImpl.TOKEN_TYPES[TextTokenizerImpl.HOST]);
-            termAtt.setTermLength(termAtt.termLength() - 1); // remove extra '.'
-          } else {
-            typeAtt.setType(TextTokenizerImpl.TOKEN_TYPES[TextTokenizerImpl.ACRONYM]);
-          }
-        } else {
-          typeAtt.setType(TextTokenizerImpl.TOKEN_TYPES[tokenType]);
+    private final void init(Version matchVersion)
+    {
+        this.scanner = new TextTokenizerImpl(input);
+    }
+
+    // this tokenizer generates three attributes:
+    // term offset, positionIncrement and type
+    private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
+
+    private final OffsetAttribute offsetAtt = addAttribute(OffsetAttribute.class);
+
+    private final PositionIncrementAttribute posIncrAtt = addAttribute(PositionIncrementAttribute.class);
+
+    private final TypeAttribute typeAtt = addAttribute(TypeAttribute.class);
+
+    /*
+     * (non-Javadoc)
+     * @see org.apache.lucene.analysis.TokenStream#next()
+     */
+    @Override
+    public final boolean incrementToken()
+        throws IOException
+    {
+        clearAttributes();
+        int posIncr = 1;
+
+        while(true)
+        {
+            int tokenType = scanner.getNextToken();
+
+            if(tokenType == StandardTokenizerInterface.YYEOF)
+            {
+                return false;
+            }
+
+            if(scanner.yylength() <= maxTokenLength)
+            {
+                posIncrAtt.setPositionIncrement(posIncr);
+                scanner.getText(termAtt);
+                final int start = scanner.yychar();
+                offsetAtt.setOffset(correctOffset(start), correctOffset(start + termAtt.length()));
+                // This 'if' should be removed in the next release. For now, it converts
+                // invalid acronyms to HOST. When removed, only the 'else' part should
+                // remain.
+                if(tokenType == TextTokenizer.ACRONYM_DEP)
+                {
+                    typeAtt.setType(TextTokenizer.TOKEN_TYPES[TextTokenizer.HOST]);
+                    termAtt.setLength(termAtt.length() - 1); // remove extra '.'
+                }
+                else
+                {
+                    typeAtt.setType(TextTokenizer.TOKEN_TYPES[tokenType]);
+                }
+                return true;
+            }
+            else
+                // When we skip a too-long term, we still increment the
+                // position increment
+                posIncr++;
         }
-        return true;
-      } else
-        // When we skip a too-long term, we still increment the
-        // position increment
-        posIncr++;
     }
-  }
-  
-  @Override
-  public final void end() {
-    // set final offset
-    int finalOffset = correctOffset(scanner.yychar() + scanner.yylength());
-    offsetAtt.setOffset(finalOffset, finalOffset);
-  }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see org.apache.lucene.analysis.TokenStream#reset()
-   */
-  @Override
-  public void reset() throws IOException {
-    super.reset();
-    scanner.yyreset(input);
-  }
+    @Override
+    public final void end()
+    {
+        // set final offset
+        int finalOffset = correctOffset(scanner.yychar() + scanner.yylength());
+        offsetAtt.setOffset(finalOffset, finalOffset);
+    }
 
-  @Override
-  public void reset(Reader reader) throws IOException {
-    super.reset(reader);
-    reset();
-  }
-
-  /**
-   * Prior to https://issues.apache.org/jira/browse/LUCENE-1068, StandardTokenizer mischaracterized as acronyms tokens like www.abc.com
-   * when they should have been labeled as hosts instead.
-   * @return true if StandardTokenizer now returns these tokens as Hosts, otherwise false
-   *
-   * @deprecated Remove in 3.X and make true the only valid value
-   */
-  public boolean isReplaceInvalidAcronym() {
-    return replaceInvalidAcronym;
-  }
-
-  /**
-   *
-   * @param replaceInvalidAcronym Set to true to replace mischaracterized acronyms as HOST.
-   * @deprecated Remove in 3.X and make true the only valid value
-   *
-   * See https://issues.apache.org/jira/browse/LUCENE-1068
-   */
-  public void setReplaceInvalidAcronym(boolean replaceInvalidAcronym) {
-    this.replaceInvalidAcronym = replaceInvalidAcronym;
-  }
+    @Override
+    public void reset()
+        throws IOException
+    {
+        scanner.yyreset(input);
+    }
 }

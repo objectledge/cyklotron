@@ -11,11 +11,18 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.Term;
-import org.apache.lucene.index.TermEnum;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.index.LogDocMergePolicy;
+import org.apache.lucene.index.MultiFields;
+import org.apache.lucene.index.Terms;
+import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.NIOFSDirectory;
+import org.apache.lucene.util.BytesRef;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.session.CoralSession;
@@ -144,9 +151,23 @@ public class IndexingFacilityUtil
      */
     public Directory getIndexDirectory(IndexResource index) throws SearchException
     {
-        String path = index.getFilesLocation();
+        String path = index.getFilesLocation(); // relative to workdir
+        return createOrGetDirectoryUnderPath(path);
+    }
+
+    public Directory createOrGetDirectoryUnderPath(String path)
+        throws SearchException
+    {
         checkDirectory(path);
-        return new LedgeFSDirectory(fileSystem, path);
+        try
+        {
+            return new NIOFSDirectory(fileSystem.getFile(path));
+        }
+        catch(IOException e)
+        {
+            throw new SearchException(
+                "IndexingFacility: could not create NIOFSDirectory with path: '" + path + "'", e);
+        }
     }
 
     /**
@@ -158,8 +179,7 @@ public class IndexingFacilityUtil
     public Directory getTempIndexDirectory(IndexResource index) throws SearchException
     {
         String path = index.getFilesLocation() + System.nanoTime();
-        checkDirectory(path);
-        return new LedgeFSDirectory(fileSystem, path);
+        return createOrGetDirectoryUnderPath(path);
     }
 
     // IndexWriter management ----------------------------------------------------------------------
@@ -167,12 +187,12 @@ public class IndexingFacilityUtil
     /**
      * Opens an index writer and sets configured parameters.
      * 
-     * @param dir lucene direcotry with the index to be written
+     * @param dir lucene directory with the index to be written
      * @param index index resource representing the index
      * @param createIndex set to <code>true</code> if the index should be newly created (emptied)
-     * @param whileMsg a part of the exeception message to inform about preformed operation
+     * @param whileMsg a part of the exception message to inform about performed operation
      * @return the index writer
-     * @throws SearchException on problems with index writer opening 
+     * @throws SearchException on problems with index writer opening
      */
     public IndexWriter openIndexWriter(Directory dir, IndexResource index, boolean createIndex,
         String whileMsg)
@@ -180,13 +200,14 @@ public class IndexingFacilityUtil
     {
         try
         {
-            IndexWriter indexWriter = new IndexWriter(dir,
-                getAnalyzer(index), createIndex,
-                IndexWriter.MaxFieldLength.UNLIMITED);
-            indexWriter.setMergeFactor(mergeFactor);
-            indexWriter.setMaxBufferedDocs(minMergeDocs);
-            indexWriter.setMaxMergeDocs(maxMergeDocs);
-            return indexWriter;
+            IndexWriterConfig config = new IndexWriterConfig(SearchConstants.LUCENE_VERSION, getAnalyzer(index));
+            config.setMaxBufferedDocs(minMergeDocs);
+            config.setOpenMode(createIndex == true ? OpenMode.CREATE : OpenMode.APPEND);
+            final LogDocMergePolicy mergePolicy = new LogDocMergePolicy();
+            mergePolicy.setMergeFactor(mergeFactor);
+            mergePolicy.setMaxMergeDocs(maxMergeDocs);
+            config.setMergePolicy(mergePolicy);
+            return new IndexWriter(dir, config);
         }
         catch (IOException e)
         {
@@ -201,7 +222,10 @@ public class IndexingFacilityUtil
     {
         try
         {
-            return indexWriter.getReader().getCommitUserData();
+            final DirectoryReader open = DirectoryReader.open(indexWriter, false);
+            final Map<String, String> userData = open.getIndexCommit().getUserData();
+            open.close();
+            return userData;
         }
         catch(IOException e)
         {
@@ -240,7 +264,8 @@ public class IndexingFacilityUtil
         {
             if(userData != null)
             {
-                indexWriter.commit(userData);
+                indexWriter.setCommitData(userData);
+                indexWriter.commit();
             }
             else
             {
@@ -318,7 +343,7 @@ public class IndexingFacilityUtil
         try
         {
             Directory dir = getIndexDirectory(index);
-            return IndexReader.open(dir, false);
+            return DirectoryReader.open(dir);
         }
         catch (SearchException e)
         {
@@ -363,20 +388,19 @@ public class IndexingFacilityUtil
         IndexReader indexReader = openIndexReader(index, "getting indexed resources ids");
     
         // get index ids
-        Set ids = new HashSet();
+        Set<Long> ids = new HashSet<>();
         
         try
         {
-            TermEnum te = indexReader.terms();
-            while(te.next())
+            final Terms terms = MultiFields.getTerms(indexReader, SearchConstants.FIELD_ID);
+            if(terms != null)
             {
-                Term t = te.term();
-                if(t.field().equals(SearchConstants.FIELD_ID))
+                final TermsEnum termsEnum = terms.iterator(null);
+                while(termsEnum.next() != null)
                 {
-                    ids.add(Long.valueOf(t.text()));
+                    ids.add(Long.valueOf(termsEnum.term().utf8ToString()));
                 }
             }
-            te.close();
         }
         catch(IOException e)
         {
@@ -477,24 +501,23 @@ public class IndexingFacilityUtil
         IndexReader indexReader = openIndexReader(index, "getting duplicate indexed resources ids");
     
         // duplicate index ids
-        Set duplicateIds = new HashSet();
+        Set<Long> duplicateIds = new HashSet<>();
         
         try
         {
-            TermEnum te = indexReader.terms();
-            while(te.next())
+            final Terms terms = MultiFields.getTerms(indexReader, SearchConstants.FIELD_ID);
+            if(terms != null)
             {
-                Term t = te.term();
-                if(t.field().equals(SearchConstants.FIELD_ID))
+                final TermsEnum termsEnum = terms.iterator(null); // no reuse
+                BytesRef idTerm;
+                while((idTerm = termsEnum.next()) != null)
                 {
-                    Long tId = Long.valueOf(t.text());
-                    if(te.docFreq() > 1)
+                    if(termsEnum.docFreq() > 1)
                     {
-                        duplicateIds.add(tId);
+                        duplicateIds.add(Long.valueOf(idTerm.utf8ToString()));
                     }
                 }
             }
-            te.close();
         }
         catch(IOException e)
         {

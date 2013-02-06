@@ -3,13 +3,10 @@ package net.cyklotron.cms.search.internal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.MultiReader;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.MultiSearcher;
-import org.apache.lucene.search.Searcher;
 import org.apache.lucene.store.Directory;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.security.Subject;
@@ -20,11 +17,13 @@ import net.cyklotron.cms.search.PoolResource;
 import net.cyklotron.cms.search.SearchException;
 import net.cyklotron.cms.search.SearchingFacility;
 
+import com.google.common.base.Optional;
+
 /**
  * Implementation of Search Service
- *
+ * 
  * @author <a href="mailto:dgajda@caltha.pl">Damian Gajda</a>
- * @version $Id: SearchingFacilityImpl.java,v 1.6 2005-05-30 07:36:44 rafal Exp $
+ * @version $Id: SearchingFacilityImpl.java,v 1.7 2013-01-17 07:36:44 marek Exp $
  */
 public class SearchingFacilityImpl implements SearchingFacility
 {
@@ -48,9 +47,11 @@ public class SearchingFacilityImpl implements SearchingFacility
         this.indexingFacility = indexingFacility;
     }
 
-    public Searcher getSearcher(PoolResource[] pools, Subject subject) throws SearchException
+    @Override
+    public Optional<IndexSearcher> getSearcher(PoolResource[] pools, Subject subject)
+        throws SearchException
     {
-        List indexes = new ArrayList(pools.length * 8);
+        List<IndexResource> indexes = new ArrayList<>(pools.length * 8);
         for (int i = 0; i < pools.length; i++)
         {
             indexes.addAll(pools[i].getIndexes());
@@ -64,11 +65,11 @@ public class SearchingFacilityImpl implements SearchingFacility
     }
 
     @Override
-    public void returnSearcher(Searcher searcher)
+    public void returnSearcher(IndexSearcher searcher)
     {
         try
         {
-            searcher.close();
+            searcher.getIndexReader().close();
         }
         catch(IOException e)
         {
@@ -85,19 +86,20 @@ public class SearchingFacilityImpl implements SearchingFacility
     // implementation /////////////////////////////////////////////////////////////////////////////
 
 
-    private Searcher getSearcher(List indexes, Subject subject) throws SearchException
+    private Optional<IndexSearcher> getSearcher(List<IndexResource> indexes, Subject subject)
+        throws SearchException
     {
         boolean useOnlyPublic = (Subject.ANONYMOUS == subject.getId());
         
-        List searchers = new ArrayList(indexes.size());
-        for (int i = 0; i < indexes.size(); i++)
+        // List<IndexSearcher> searchers = new ArrayList<>(indexes.size());
+        List<IndexReader> indexReaders = new ArrayList<>(indexes.size());
+        for(IndexResource index : indexes)
         {
-            IndexResource index = (IndexResource) (indexes.get(i));
             if(!useOnlyPublic || (useOnlyPublic && index.getPublic()))
             {
                 try
                 {
-                    searchers.add(getSearcher(index));
+                    indexReaders.add(getIndexReader(index));
                 }
                 catch (IOException e)
                 {
@@ -107,28 +109,21 @@ public class SearchingFacilityImpl implements SearchingFacility
             }
         }
 
-        if(searchers.size() == 0)
+        if(indexReaders.size() == 0)
         {
-            return new NullSearcher();
+            return Optional.absent();
         }
         
-        try
-        {
-            Searcher[] searchables = new Searcher[searchers.size()];
-            searchables = (Searcher[]) (searchers.toArray(searchables));
-            Searcher searcher = new MultiSearcher(searchables);
-            return searcher;
-        }
-        catch (IOException e)
-        {
-            throw new SearchException("Cannot create mulisearcher", e);
-        }
+        MultiReader multiReader = new MultiReader(indexReaders.toArray(new IndexReader[indexReaders
+            .size()]));
+        return Optional.of(new IndexSearcher(multiReader));
     }
 
-    private Searcher getSearcher(IndexResource index) throws IOException, SearchException
+    private IndexReader getIndexReader(IndexResource indexResource)
+        throws SearchException, IOException
     {
-        Directory indexDirectory = indexingFacility.getIndexDirectory(index);
-        return new IndexSearcher(indexDirectory, true);        
+        Directory indexDirectory = indexingFacility.getIndexDirectory(indexResource);
+        return IndexReader.open(indexDirectory);
     }
 }
 
