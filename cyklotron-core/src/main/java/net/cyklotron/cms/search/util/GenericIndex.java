@@ -14,6 +14,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.store.Directory;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.store.Resource;
@@ -48,8 +49,6 @@ public class GenericIndex<T extends Resource>
 
     private IndexReader reader;
 
-    private IndexSearcher searcher;
-
     private IndexWriter writer;
 
     private final FromDocumentMapper<T> fromDocumentMapper;
@@ -57,6 +56,8 @@ public class GenericIndex<T extends Resource>
     private final ToDocumentMapper<T> toDocumentMapper;
 
     private final ResourceProvider<T> resourceProvider;
+
+    private SearcherManager searcherManager;
 
     GenericIndex(FileSystem fileSystem, Logger logger, String indexPath,
         AnalyzerProvider analyzerProvider, FromDocumentMapper<T> fromDocumentMapper,
@@ -72,7 +73,7 @@ public class GenericIndex<T extends Resource>
         this.writer = getWriter();
         this.toDocumentMapper = toDocumentMapper;
         this.fromDocumentMapper = fromDocumentMapper;
-        searcher = new IndexSearcher(reader);
+        this.searcherManager = new SearcherManager(writer, false, null);
     }
 
     protected IndexWriter getWriter()
