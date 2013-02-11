@@ -1152,10 +1152,7 @@ public class DocumentNodeResourceImpl
     // @extends structure.navigation_node
     // @import java.util.Set
     // @import org.dom4j.Document    
-    // @import net.cyklotron.cms.CmsDataFactory
-    // @import net.cyklotron.cms.site.SiteService
     // @import net.cyklotron.cms.structure.NavigationNodeResourceImpl
-    // @import net.cyklotron.cms.structure.StructureService
     // @import net.cyklotron.cms.structure.StructureException
     // @import org.objectledge.context.Context
     // @import org.objectledge.coral.session.CoralSession
