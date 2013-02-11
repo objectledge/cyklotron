@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class CategoryQueryDto
 {
 
-    private long id;
+    private String id;
 
     private String name;
 
@@ -31,19 +31,19 @@ public class CategoryQueryDto
     private static CategoryQueryDto toDto(CategoryQueryResource categoryQueryResource)
     {
         CategoryQueryDto categoryQueryDto = new CategoryQueryDto();
-        categoryQueryDto.id = categoryQueryResource.getId();
+        categoryQueryDto.id = categoryQueryResource.getIdString();
         categoryQueryDto.name = categoryQueryResource.getName();
         categoryQueryDto.query = categoryQueryResource.getQuery();
         categoryQueryDto.longQuery = categoryQueryResource.getLongQuery();
         return categoryQueryDto;
     }
 
-    public long getId()
+    public String getId()
     {
         return id;
     }
 
-    public void setId(long id)
+    public void setId(String id)
     {
         this.id = id;
     }
