@@ -1,9 +1,12 @@
 package net.cyklotron.cms.organizations;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
+
+import net.cyklotron.cms.documents.DocumentNodeResource;
 
 public interface OrganizationRegistryService
 {
@@ -32,5 +35,9 @@ public interface OrganizationRegistryService
      * @return contents of the feed.
      */
     public String getOrganizationNewsFeed(Parameters parameters)
+        throws ProcessingException;
+
+    Collection<DocumentNodeResource> getOrganizationNewestDocuments(Parameters parameters,
+        int limit, int offset)
         throws ProcessingException;
 }

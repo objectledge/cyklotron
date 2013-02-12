@@ -1,10 +1,13 @@
 package net.cyklotron.cms.organizations;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
+
+import net.cyklotron.cms.documents.DocumentNodeResource;
 
 public class DummyOrganizationRegistryService
     implements OrganizationRegistryService
@@ -27,5 +30,13 @@ public class DummyOrganizationRegistryService
         throws ProcessingException
     {
         return "";
+    }
+
+    @Override
+    public Collection<DocumentNodeResource> getOrganizationNewestDocuments(Parameters parameters,
+        int limit, int offset)
+        throws ProcessingException
+    {
+        return null;
     }
 }
