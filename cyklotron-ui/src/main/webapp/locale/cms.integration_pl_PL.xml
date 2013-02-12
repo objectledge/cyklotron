@@ -9,10 +9,18 @@
       </prefix>
     </prefix>
     
+    <prefix name="bazy">
+    	<prefix name="organizations">
+    		<prefix name="organization">
+    			<value>organizacja</value>
+    		</prefix>
+    	</prefix>
+    </prefix>
+    
     <prefix name="cms">
       <prefix name="root">
         <value>węzeł główny systemu</value>
-      </prefix>      
+      </prefix>    
       <prefix name="files">
         <prefix name="directory">
           <value>katalog</value>
@@ -55,6 +63,9 @@
       <prefix name="poll">
         <prefix name="poll">
           <value>sondaż</value>
+        </prefix>
+        <prefix name="vote">
+        	<value>głosowanie</value>
         </prefix>
       </prefix>      
     </prefix>
