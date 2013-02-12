@@ -52,14 +52,11 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.web.HttpContext;
 
-import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.internal.DocumentRenderingHelper;
 import net.cyklotron.cms.documents.internal.RequestLinkRenderer;
 import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureException;
-import net.cyklotron.cms.structure.StructureService;
 import org.dom4j.Document;
 
 /**
