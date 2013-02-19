@@ -42,7 +42,7 @@ import net.cyklotron.cms.search.analysis.AnalyzerProvider;
  * @author Marek Lewandowski
  * @param <T> concrete resource type
  */
-public class GenericIndex<T extends Resource>
+public class GenericIndex<T extends Resource, U>
     implements Closeable
 {
 
@@ -56,7 +56,7 @@ public class GenericIndex<T extends Resource>
 
     private IndexWriter writer;
 
-    private final FromDocumentMapper<T> fromDocumentMapper;
+    private final FromDocumentMapper<U> fromDocumentMapper;
 
     private final ToDocumentMapper<T> toDocumentMapper;
 
@@ -65,7 +65,7 @@ public class GenericIndex<T extends Resource>
     private SearcherManager searcherManager;
 
     GenericIndex(FileSystem fileSystem, Logger logger, String indexPath,
-        AnalyzerProvider analyzerProvider, FromDocumentMapper<T> fromDocumentMapper,
+        AnalyzerProvider analyzerProvider, FromDocumentMapper<U> fromDocumentMapper,
  ToDocumentMapper<T> toDocumentMapper,
         ResourceProvider<T> resourceProvider, Directory directory)
         throws IOException
@@ -249,14 +249,14 @@ public class GenericIndex<T extends Resource>
         }
     }
 
-    public Collection<T> search(PerformSearch performSearch)
+    public Collection<U> search(PerformSearch performSearch)
         throws IOException
     {
         IndexSearcher searcher = searcherManager.acquire();
         try
         {
             Collection<Document> results = performSearch.doSearch(searcher);
-            Collection<T> resources = new ArrayList<>();
+            Collection<U> resources = new ArrayList<>();
             for(Document document : results)
             {
                 resources.add(fromDocumentMapper.fromDocument(document));

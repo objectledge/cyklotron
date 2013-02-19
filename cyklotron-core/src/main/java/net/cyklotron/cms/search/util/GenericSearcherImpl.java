@@ -12,18 +12,18 @@ import org.objectledge.coral.store.Resource;
  * @author Marek Lewandowski
  * @param <T> type of resource
  */
-public class GenericSearcherImpl<T extends Resource>
-    implements GenericSearch<T>
+public class GenericSearcherImpl<T extends Resource, U>
+    implements GenericSearch<U>
 {
-    private final GenericIndex<T> index;
+    private final GenericIndex<T, U> index;
 
-    public GenericSearcherImpl(GenericIndex<T> index)
+    public GenericSearcherImpl(GenericIndex<T, U> index)
     {
         this.index = index;
     }
 
     @Override
-    public Collection<T> search(PerformSearch performSearch)
+    public Collection<U> search(PerformSearch performSearch)
     {
         try
         {
