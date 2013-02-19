@@ -28,6 +28,7 @@
     <parameter/>
     <parameter/>
     <parameter/>
+    <parameter/>
   </component>
   
   <component class="org.objectledge.database.SequenceIdGenerator">
