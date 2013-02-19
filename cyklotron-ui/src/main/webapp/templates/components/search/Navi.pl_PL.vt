@@ -5,4 +5,5 @@
   #linkCell('' 'Konfiguracja aplikacji' $link.view('search.EditConfiguration'))
   #linkCell('' 'Indeksy' $link.view('search.IndexList'))
   #linkCell('' 'Zestawy wyszukiwania' $link.view('search.PoolList'))
+  #linkCell('' 'Reindeksacja dokumentów' $link.view('search.ReindexDocuments'))
 #genericNaviTrailer()
