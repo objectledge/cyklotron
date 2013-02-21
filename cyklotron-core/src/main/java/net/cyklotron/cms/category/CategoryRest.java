@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -22,6 +23,7 @@ public class CategoryRest
 {
     private final CoralSessionFactory coralSessionFactory;
 
+    @Inject
     public CategoryRest(CoralSessionFactory coralSessionFactory)
     {
         this.coralSessionFactory = coralSessionFactory;

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 import javax.annotation.Nullable;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -34,6 +35,7 @@ public class CategoryQueryRest
 
     private final CoralSessionFactory coralSessionFactory;
 
+    @Inject
     public CategoryQueryRest(CoralSessionFactory coralSessionFactory)
     {
         this.coralSessionFactory = coralSessionFactory;
