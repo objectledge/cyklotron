@@ -4,12 +4,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.collections.comparators.ReverseComparator;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
-import org.objectledge.coral.datatypes.DateAttributeHandler;
+import org.objectledge.coral.datatypes.AttributeHandlerBase;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.security.Permission;
@@ -120,55 +122,53 @@ public class EditorialTasks
             Permission redactorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify_own");
             Permission editorPermission = coralSession.getSecurity().getUniquePermission("cms.structure.modify");
             
-            String query;
-            if(ownerId < 0)
+            String query = "FIND RESOURCE FROM structure.navigation_node WHERE site = "
+                + site.getIdString();
+            String proposedChangesQuery = "FIND RESOURCE FROM documents.document_node WHERE site = "
+                + site.getIdString();
+
+            if(ownerId >= 0)
             {
-                query = "FIND RESOURCE FROM structure.navigation_node WHERE site = "+site.getIdString();
+                query = query + " AND owner = " + ownerId;
+                proposedChangesQuery = proposedChangesQuery + " AND owner = " + ownerId;
+                templatingContext.put("owner", coralSession.getSecurity().getSubject(ownerId));
             }
-            else
-            {
-                query = "FIND RESOURCE FROM structure.navigation_node WHERE site = "+site.getIdString()+
-                        " AND owner = "+ownerId;
-                templatingContext.put("owner",coralSession.getSecurity().getSubject(ownerId));                        
-            }
-            String publishedNodesQuery = query;
             
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_MONTH, -offset);
-            SimpleDateFormat df = new SimpleDateFormat(DateAttributeHandler.DATE_TIME_FORMAT);
+            SimpleDateFormat df = new SimpleDateFormat(AttributeHandlerBase.DATE_TIME_FORMAT);
             query = query + " AND creation_time > '" + df.format(calendar.getTime()) + "'";
 
             Resource publishedState = coralSession.getStore().getUniqueResourceByPath(
                 "/cms/workflow/automata/structure.navigation_node/states/published");
-            publishedNodesQuery = publishedNodesQuery + " AND state = "+publishedState.getIdString(); 
+            proposedChangesQuery = proposedChangesQuery + " AND state = "
+                + publishedState.getIdString() + " AND DEFINED proposedContent";
             
             QueryResults results = coralSession.getQuery().
                 executeQuery(query);
-            Resource[] nodes = results.getArray(1);
            
-            QueryResults publishedNodeResults = coralSession.getQuery().executeQuery(
-                publishedNodesQuery);
-            Resource[] publishedNodes = publishedNodeResults.getArray(1);
+            QueryResults proposedChangesResults = coralSession.getQuery().executeQuery(
+                proposedChangesQuery);
 
-            List assignedNodes = new ArrayList();
-            List takenNodes = new ArrayList();
-            List lockedNodes = new ArrayList();
-            List rejectedNodes = new ArrayList();
-            List newNodes = new ArrayList();
-            List preparedNodes = new ArrayList();
-            List expiredNodes = new ArrayList();
-            List unclassifiedNodes = new ArrayList();
-            List proposedNodes = new ArrayList();
-            List unpublishedProposedNodes = new ArrayList();
+            List<NavigationNodeResource> assignedNodes = new ArrayList<>();
+            List<NavigationNodeResource> takenNodes = new ArrayList<>();
+            List<NavigationNodeResource> lockedNodes = new ArrayList<>();
+            List<NavigationNodeResource> rejectedNodes = new ArrayList<>();
+            List<NavigationNodeResource> newNodes = new ArrayList<>();
+            List<NavigationNodeResource> preparedNodes = new ArrayList<>();
+            List<NavigationNodeResource> expiredNodes = new ArrayList<>();
+            List<NavigationNodeResource> unclassifiedNodes = new ArrayList<>();
+            List<NavigationNodeResource> proposedNodes = new ArrayList<>();
+            List<NavigationNodeResource> unpublishedProposedNodes = new ArrayList<>();
             
             Resource homePage = getHomePage();
             Resource[] parents = coralSession.getStore().
                 getResource(homePage,MoveToWaitingRoom.WAITING_ROOM_NAME);
             Resource waitingRoom = parents.length == 1 ? parents[0] : null;
             
-            for(int i = 0; i < nodes.length; i++)
+            for(QueryResults.Row row : results)
             {
-                NavigationNodeResource node = (NavigationNodeResource)nodes[i];
+                NavigationNodeResource node = (NavigationNodeResource)row.get();
                 // hide documents in waiting room
                 if(waitingRoom != null)
                 {
@@ -269,40 +269,30 @@ public class EditorialTasks
                 }
             }
             
-            for(int i = 0; i < publishedNodes.length; i++)
+            for(QueryResults.Row row : proposedChangesResults)
             {
-                NavigationNodeResource node = (NavigationNodeResource)publishedNodes[i];
+                NavigationNodeResource node = (NavigationNodeResource)row.get();
                 if(subject.hasPermission(node, redactorPermission))
                 {
                     if(subject.equals(node.getOwner()) || subject.hasPermission(node, editorPermission))
                     {
-                        if(((DocumentNodeResource)node).isProposedContentDefined())
-                        {
-                              proposedNodes.add(node);
-                        }
+                        proposedNodes.add(node);
                     }
                 }    
             }
             
-            CreationTimeComparator pc = new CreationTimeComparator();
+            @SuppressWarnings("unchecked")
+            Comparator<NavigationNodeResource> pc = new ReverseComparator(
+                new CreationTimeComparator<NavigationNodeResource>());
             Collections.sort(assignedNodes, pc);
-            Collections.reverse(assignedNodes);
             Collections.sort(takenNodes, pc);
-            Collections.reverse(takenNodes);
             Collections.sort(lockedNodes, pc);
-            Collections.reverse(lockedNodes);
             Collections.sort(rejectedNodes, pc);
-            Collections.reverse(rejectedNodes);
             Collections.sort(newNodes, pc);
-            Collections.reverse(newNodes);
             Collections.sort(preparedNodes, pc);
-            Collections.reverse(preparedNodes);
             Collections.sort(expiredNodes, pc);
-            Collections.reverse(expiredNodes);
             Collections.sort(proposedNodes,pc);
-            Collections.reverse(proposedNodes);
             Collections.sort(unpublishedProposedNodes, pc);
-            Collections.reverse(unpublishedProposedNodes);
             if(structureService.isShowUnclassifiedNodes())
             {
                 Collections.sort(unclassifiedNodes, pc);
