@@ -1,0 +1,10 @@
+#genericScreenHeader('REINDEKSACJA DOKUMENTÓW')
+
+$component.embed('longops.OperationsProgress', [['operationCode','bazy.search.ReindexAll']])
+
+<a href="$link.view('search.ReindexDocuments').action('search.ReindexAll')">Kliknij aby włączyć reindeksację</a>
+
+<p>Po kliknięciu powinien pojawić się pasek postępu operacji. Kliknięcie drugi raz podczas gdy operacja jest w trakcie nic nie da.</p>
+
+#genericScreenTrailer()
+
