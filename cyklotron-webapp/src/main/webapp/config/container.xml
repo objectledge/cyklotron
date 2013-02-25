@@ -194,7 +194,8 @@
   <component class="org.objectledge.web.mvc.tools.UserAgentToolFactory"/>
   <component class="net.cyklotron.cms.CmsToolFactory"/>
   <component class="net.cyklotron.cms.category.CategoryToolFactory"/>
-  <component class="net.cyklotron.cms.files.FilesToolFactory"/>
+  <component class-key="net.cyklotron.cms.files.FilesToolFactory"
+  			 class="net.cyklotron.cms.files.FilesToolFactoryImpl"/>
   <component class="net.cyklotron.cms.security.SecurityToolFactory"/>
   <component class="net.cyklotron.util.WorkflowToolFactory"/>
   <component class="org.objectledge.forms.FormToolFactory"/>
