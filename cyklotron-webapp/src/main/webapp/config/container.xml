@@ -132,6 +132,10 @@
   <!-- coral -->
 
   <container key="coralContainer"/>
+  
+  <component class-key="org.objectledge.coral.web.rest.CoralPermissionChecker"
+            class="org.objectledge.coral.web.rest.CoralPermissionCheckerImpl"/>
+  
 
   <component class-key="org.objectledge.coral.Instantiator"
              class="org.objectledge.coral.PicoInstantiator">
