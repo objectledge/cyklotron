@@ -33,10 +33,9 @@ public class DummyOrganizationRegistryService
     }
 
     @Override
-    public Collection<DocumentNodeResource> getOrganizationNewestDocuments(Parameters parameters,
-        int limit, int offset)
+    public Collection<DocumentNodeResource> getOrganizationNewestDocuments(Parameters parameters, int limit, int offset)
         throws ProcessingException
     {
-        return null;
+        return Collections.emptyList();
     }
 }
