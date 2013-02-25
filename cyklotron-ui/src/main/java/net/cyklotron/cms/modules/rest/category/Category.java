@@ -1,4 +1,4 @@
-package net.cyklotron.cms.category;
+package net.cyklotron.cms.modules.rest.category;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,13 +18,15 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 
+import net.cyklotron.cms.category.CategoryResource;
+
 @Path("/category")
-public class CategoryRest
+public class Category
 {
     private final CoralSessionFactory coralSessionFactory;
 
     @Inject
-    public CategoryRest(CoralSessionFactory coralSessionFactory)
+    public Category(CoralSessionFactory coralSessionFactory)
     {
         this.coralSessionFactory = coralSessionFactory;
     }

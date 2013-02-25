@@ -1,4 +1,4 @@
-package net.cyklotron.cms.category;
+package net.cyklotron.cms.modules.rest.category;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,6 +6,8 @@ import java.util.Collection;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang3.Validate;
+
+import net.cyklotron.cms.category.CategoryResource;
 
 @XmlRootElement(name = "categoryDto")
 public class CategoryDto

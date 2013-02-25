@@ -1,9 +1,11 @@
-package net.cyklotron.cms.category.query;
+package net.cyklotron.cms.modules.rest.category.query;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlRootElement;
+
+import net.cyklotron.cms.category.query.CategoryQueryResource;
 
 @XmlRootElement
 public class CategoryQueryDto

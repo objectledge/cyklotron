@@ -1,4 +1,4 @@
-package net.cyklotron.cms.category.query;
+package net.cyklotron.cms.modules.rest.category.query;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,19 +24,20 @@ import org.objectledge.coral.query.QueryResults.Row;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 
+import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.site.SiteResource;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 
 @Path("/category/query")
-public class CategoryQueryRest
+public class CategoryQuery
 {
 
     private final CoralSessionFactory coralSessionFactory;
 
     @Inject
-    public CategoryQueryRest(CoralSessionFactory coralSessionFactory)
+    public CategoryQuery(CoralSessionFactory coralSessionFactory)
     {
         this.coralSessionFactory = coralSessionFactory;
     }
