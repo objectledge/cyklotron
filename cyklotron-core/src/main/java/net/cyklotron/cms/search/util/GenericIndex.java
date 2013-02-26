@@ -112,10 +112,10 @@ public class GenericIndex<T extends Resource, U>
             writer.updateDocument(identifier, document);
             writer.commit();
         }
-        catch(IOException e)
+        catch(RuntimeException | IOException e)
         {
-            logger.error("Failed to update resource " + resource, e);
             writer.rollback();
+            throw e;
         }
     }
 
@@ -135,12 +135,11 @@ public class GenericIndex<T extends Resource, U>
             writer.addDocuments(documents);
             writer.commit();
         }
-        catch(IOException e)
+        catch(RuntimeException | IOException e)
         {
-            logger.error("Failed to update resources " + resources, e);
             writer.rollback();
+            throw e;
         }
-
     }
 
     /**
@@ -153,19 +152,19 @@ public class GenericIndex<T extends Resource, U>
         throws IOException
     {
         writer.prepareCommit();
-        for(T resource : resources)
+        try
         {
-            try
+            for(T resource : resources)
             {
                 writer.updateDocument(toDocumentMapper.getIdentifier(resource),
                     toDocumentMapper.toDocument(resource));
                 writer.commit();
             }
-            catch(IOException e)
-            {
-                logger.error("Failed to update resources " + resources, e);
-                writer.rollback();
-            }
+        }
+        catch(RuntimeException | IOException e)
+        {
+            writer.rollback();
+            throw e;
         }
     }
     
@@ -195,9 +194,10 @@ public class GenericIndex<T extends Resource, U>
             }
             writer.commit();
         }
-        catch(IOException e)
+        catch(RuntimeException | IOException | MalformedQueryException e)
         {
             writer.rollback();
+            throw e;
         }
     }
 
@@ -246,9 +246,10 @@ public class GenericIndex<T extends Resource, U>
             }
             writer.commit();
         }
-        catch(IOException e)
+        catch(RuntimeException | IOException | MalformedQueryException e)
         {
             writer.rollback();
+            throw e;
         }
     }
 
