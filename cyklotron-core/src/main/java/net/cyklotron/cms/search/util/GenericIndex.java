@@ -54,15 +54,13 @@ public class GenericIndex<T extends Resource, U>
 
     private Analyzer analyzer;
 
-    private IndexReader reader;
-
-    private IndexWriter writer;
-
     private final FromDocumentMapper<U> fromDocumentMapper;
 
     private final ToDocumentMapper<T> toDocumentMapper;
 
     private final ResourceProvider resourceProvider;
+
+    private final IndexWriterConfig iwConf;
 
     private SearcherManager searcherManager;
 
@@ -75,18 +73,16 @@ public class GenericIndex<T extends Resource, U>
         this.directory = directory;
         this.resourceProvider = resourceProvider;
         this.analyzer = analyzerProvider.getAnalyzer();
-        this.reader = DirectoryReader.open(directory);
-        this.writer = getWriter();
         this.toDocumentMapper = toDocumentMapper;
         this.fromDocumentMapper = fromDocumentMapper;
-        this.searcherManager = new SearcherManager(writer, false, null);
+        iwConf = new IndexWriterConfig(SearchConstants.LUCENE_VERSION, analyzer);
+        this.searcherManager = new SearcherManager(directory, null);
     }
 
-    protected IndexWriter getWriter()
+    private IndexWriter getWriter()
         throws IOException
     {
-        IndexWriterConfig conf = new IndexWriterConfig(SearchConstants.LUCENE_VERSION, analyzer);
-        return new IndexWriter(directory, conf);
+        return new IndexWriter(directory, iwConf);
     }
 
     /**
@@ -106,16 +102,19 @@ public class GenericIndex<T extends Resource, U>
     {
         Term identifier = toDocumentMapper.getIdentifier(resource);
         Document document = toDocumentMapper.toDocument(resource);
-        writer.prepareCommit();
-        try
+        try(IndexWriter writer = getWriter())
         {
-            writer.updateDocument(identifier, document);
-            writer.commit();
-        }
-        catch(RuntimeException | IOException e)
-        {
-            writer.rollback();
-            throw e;
+            writer.prepareCommit();
+            try
+            {
+                writer.updateDocument(identifier, document);
+                writer.commit();
+            }
+            catch(RuntimeException | IOException e)
+            {
+                writer.rollback();
+                throw e;
+            }
         }
     }
 
@@ -128,17 +127,20 @@ public class GenericIndex<T extends Resource, U>
     public synchronized void addAll(Collection<T> resources)
         throws IOException
     {
-        writer.prepareCommit();
-        Collection<Document> documents = getDocuments(resources);
-        try
+        try(IndexWriter writer = getWriter())
         {
-            writer.addDocuments(documents);
-            writer.commit();
-        }
-        catch(RuntimeException | IOException e)
-        {
-            writer.rollback();
-            throw e;
+            writer.prepareCommit();
+            Collection<Document> documents = getDocuments(resources);
+            try
+            {
+                writer.addDocuments(documents);
+                writer.commit();
+            }
+            catch(RuntimeException | IOException e)
+            {
+                writer.rollback();
+                throw e;
+            }
         }
     }
 
@@ -151,20 +153,23 @@ public class GenericIndex<T extends Resource, U>
     public synchronized void updateAll(Collection<T> resources)
         throws IOException
     {
-        writer.prepareCommit();
-        try
+        try(IndexWriter writer = getWriter())
         {
-            for(T resource : resources)
+            writer.prepareCommit();
+            try
             {
-                writer.updateDocument(toDocumentMapper.getIdentifier(resource),
-                    toDocumentMapper.toDocument(resource));
-                writer.commit();
+                for(T resource : resources)
+                {
+                    writer.updateDocument(toDocumentMapper.getIdentifier(resource),
+                        toDocumentMapper.toDocument(resource));
+                    writer.commit();
+                }
             }
-        }
-        catch(RuntimeException | IOException e)
-        {
-            writer.rollback();
-            throw e;
+            catch(RuntimeException | IOException e)
+            {
+                writer.rollback();
+                throw e;
+            }
         }
     }
     
@@ -180,39 +185,46 @@ public class GenericIndex<T extends Resource, U>
     public synchronized void reindexAll()
         throws IOException, IllegalStateException, MalformedQueryException
     {
-        writer.prepareCommit();
-        try
+        try(IndexWriter writer = getWriter())
         {
-            writer.deleteAll();
-            for(QueryResults.Row row : resourceProvider.runQuery())
+            writer.prepareCommit();
+            try
             {
-                Document document = toDocumentMapper.toDocument((T)row.get());
-                if(document != null)
+                writer.deleteAll();
+                for(QueryResults.Row row : resourceProvider.runQuery())
                 {
-                    writer.addDocument(document);
+                    Document document = toDocumentMapper.toDocument((T)row.get());
+                    if(document != null)
+                    {
+                        writer.addDocument(document);
+                    }
                 }
+                writer.commit();
             }
-            writer.commit();
-        }
-        catch(RuntimeException | IOException | MalformedQueryException e)
-        {
-            writer.rollback();
-            throw e;
+            catch(RuntimeException | IOException | MalformedQueryException e)
+            {
+                writer.rollback();
+                throw e;
+            }
         }
     }
 
     Collection<String> getAllFieldsNames()
         throws IOException
     {
-        Fields fields = MultiFields.getFields(reader);
-        if(fields == null)
+        try(IndexReader reader = DirectoryReader.open(directory))
         {
-            return Collections.emptyList();
-        }
-        Set<String> fieldNames = new HashSet<>();
-        for(String fieldName : fields)
-        {
-            fieldNames.add(fieldName);
+            Fields fields = MultiFields.getFields(reader);
+            if(fields == null)
+            {
+                return Collections.emptyList();
+            }
+            Set<String> fieldNames = new HashSet<>();
+            for(String fieldName : fields)
+            {
+                fieldNames.add(fieldName);
+            }
+            return fieldNames;
         }
         return fieldNames;
     }
@@ -228,29 +240,32 @@ public class GenericIndex<T extends Resource, U>
     public synchronized void reindexAllCancellable(Cancellable callback)
         throws IOException
     {
-        writer.prepareCommit();
-        try
-        {
-            writer.deleteAll();
-            for(QueryResults.Row row : resourceProvider.runQuery())
-            {
-                Document document = toDocumentMapper.toDocument((T)row.get());
-                if(document != null)
-                {
-                    writer.addDocument(document);
-                }
-                if(callback.isCancelled())
-                {
-                    throw new IOException("Rollback");
-                }
-            }
-            writer.commit();
-        }
-        catch(RuntimeException | IOException | MalformedQueryException e)
-        {
-            writer.rollback();
-            throw e;
-        }
+        try(IndexWriter writer = getWriter())
+        {    
+        	writer.prepareCommit();
+        	try
+        	{
+            	writer.deleteAll();
+            	for(QueryResults.Row row : resourceProvider.runQuery())
+            	{
+                	Document document = toDocumentMapper.toDocument((T)row.get());	
+                	if(document != null)
+                	{
+                    	writer.addDocument(document);
+                	}
+                	if(callback.isCancelled())
+                	{
+                    	throw new IOException("Rollback");
+                	}
+            	}
+            	writer.commit();
+        	}
+        	catch(RuntimeException | IOException | MalformedQueryException e)
+        	{
+            	writer.rollback();
+            	throw e;
+        	}
+    	}
     }
 
     public Collection<U> search(PerformSearch performSearch)
@@ -291,14 +306,6 @@ public class GenericIndex<T extends Resource, U>
     public void close()
         throws IOException
     {
-        if(writer != null)
-        {
-            writer.close();
-        }
-        if(reader != null)
-        {
-            reader.close();
-        }
         directory.close();
     }
 }
