@@ -2,6 +2,7 @@ package net.cyklotron.cms.search.util;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -22,10 +23,20 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.store.Directory;
 import org.jcontainer.dna.Logger;
+import org.objectledge.authentication.UserManager;
+import org.objectledge.context.Context;
 import org.objectledge.coral.query.MalformedQueryException;
 import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
+import org.objectledge.longops.LongRunningOperation;
+import org.objectledge.longops.LongRunningOperationRegistry;
+import org.objectledge.longops.LongRunningOperationSecurityCallback;
+import org.objectledge.longops.OperationCancelledException;
+import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.threads.Task;
 
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.analysis.AnalyzerProvider;
@@ -226,46 +237,84 @@ public class GenericIndex<T extends Resource, U>
             }
             return fieldNames;
         }
-        return fieldNames;
     }
 
-    /**
-     * Reindexed all resources. Operation can be cancelled by callback which receives progress
-     * updates
-     * 
-     * @param resources
-     * @return
-     * @throws IOException
-     */
-    public synchronized void reindexAllCancellable(Cancellable callback)
-        throws IOException
+    public Task createReindexTask(final String code, final String description,
+        final Principal requestor, final LongRunningOperationSecurityCallback securityCallback,
+        final CoralSessionFactory coralSessionFactory,
+        final LongRunningOperationRegistry longRunningOperationRegistry,
+        final UserManager userManager)
     {
-        try(IndexWriter writer = getWriter())
-        {    
-        	writer.prepareCommit();
-        	try
-        	{
-            	writer.deleteAll();
-            	for(QueryResults.Row row : resourceProvider.runQuery())
-            	{
-                	Document document = toDocumentMapper.toDocument((T)row.get());	
-                	if(document != null)
-                	{
-                    	writer.addDocument(document);
-                	}
-                	if(callback.isCancelled())
-                	{
-                    	throw new IOException("Rollback");
-                	}
-            	}
-            	writer.commit();
-        	}
-        	catch(RuntimeException | IOException | MalformedQueryException e)
-        	{
-            	writer.rollback();
-            	throw e;
-        	}
-    	}
+        return new Task()
+            {
+                @Override
+                public void process(Context context)
+                    throws ProcessingException
+                {
+                    try(CoralSession coralSession = coralSessionFactory.getRootSession())
+                    {
+                        final LongRunningOperation operation = longRunningOperationRegistry
+                            .register(code, description, requestor, 0, securityCallback);
+                        try
+                        {
+                            synchronized(GenericIndex.this)
+                            {
+                                QueryResults rset = resourceProvider.runQuery();
+                                int total = rset.rowCount();
+                                int counter = 0;
+                                try(IndexWriter writer = getWriter())
+                                {
+                                    writer.prepareCommit();
+                                    try
+                                    {
+                                        writer.deleteAll();
+                                        for(QueryResults.Row row : rset)
+                                        {
+                                            Document document = toDocumentMapper.toDocument((T)row
+                                                .get());
+                                            if(document != null)
+                                            {
+                                                writer.addDocument(document);
+                                            }
+                                            longRunningOperationRegistry.update(operation,
+                                                counter++, total);
+                                        }
+                                        writer.commit();
+                                    }
+                                    catch(RuntimeException | IOException
+                                                    | OperationCancelledException e)
+                                    {
+                                        writer.rollback();
+                                        throw e;
+                                    }
+                                }
+                            }
+                        }
+                        catch(IOException e)
+                        {
+                            logger.error("operation " + code + " has failed", e);
+                        }
+                        catch(OperationCancelledException e)
+                        {
+                            logger.info("operation " + code + " has been cancelled");
+                        }
+                        finally
+                        {
+                            longRunningOperationRegistry.unregister(operation);
+                        }
+                    }
+                    catch(MalformedQueryException e)
+                    {
+                        logger.error("unexpected MalformedQueryException", e);
+                    }
+                }
+
+                @Override
+                public String getName()
+                {
+                    return code;
+                }
+            };
     }
 
     public Collection<U> search(PerformSearch performSearch)
