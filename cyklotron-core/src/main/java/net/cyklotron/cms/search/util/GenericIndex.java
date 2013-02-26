@@ -25,6 +25,8 @@ import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.query.MalformedQueryException;
+import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.filesystem.FileSystem;
 
@@ -63,14 +65,13 @@ public class GenericIndex<T extends Resource, U>
 
     private final ToDocumentMapper<T> toDocumentMapper;
 
-    private final ResourceProvider<T> resourceProvider;
+    private final ResourceProvider resourceProvider;
 
     private SearcherManager searcherManager;
 
     GenericIndex(FileSystem fileSystem, Logger logger, String indexPath,
         AnalyzerProvider analyzerProvider, FromDocumentMapper<U> fromDocumentMapper,
-        ToDocumentMapper<T> toDocumentMapper, ResourceProvider<T> resourceProvider,
-        Directory directory)
+        ToDocumentMapper<T> toDocumentMapper, ResourceProvider resourceProvider, Directory directory)
         throws IOException
     {
         this.logger = logger;
@@ -203,17 +204,19 @@ public class GenericIndex<T extends Resource, U>
      * @param resources
      * @return
      * @throws IOException
+     * @throws MalformedQueryException
+     * @throws IllegalStateException
      */
     public synchronized void reindexAll()
-        throws IOException
+        throws IOException, IllegalStateException, MalformedQueryException
     {
         writer.prepareCommit();
         try
         {
             writer.deleteAll();
-            for(T resource : resourceProvider)
+            for(QueryResults.Row row : resourceProvider.runQuery())
             {
-                Document document = toDocumentMapper.toDocument(resource);
+                Document document = toDocumentMapper.toDocument((T)row.get());
                 if(document != null)
                 {
                     writer.addDocument(document);
@@ -258,9 +261,9 @@ public class GenericIndex<T extends Resource, U>
         try
         {
             writer.deleteAll();
-            for(T resource : resourceProvider)
+            for(QueryResults.Row row : resourceProvider.runQuery())
             {
-                Document document = toDocumentMapper.toDocument(resource);
+                Document document = toDocumentMapper.toDocument((T)row.get());
                 if(document != null)
                 {
                     writer.addDocument(document);
