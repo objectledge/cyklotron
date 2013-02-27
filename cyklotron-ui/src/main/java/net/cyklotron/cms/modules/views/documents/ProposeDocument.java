@@ -299,20 +299,22 @@ public class ProposeDocument
             // refill parameters in case we are coming back failed validation
             Parameters screenConfig = getScreenConfig();
             ProposedDocumentData data = new ProposedDocumentData(screenConfig, logger);
-            if(parameters.getBoolean("form_loaded", false))
-            {
-                data.fromParameters(parameters, coralSession);
-            }
-            else
+            data.fromParameters(parameters, coralSession);
+            if(!parameters.getBoolean("form_loaded", false))
             {
                 long organizationId = parameters.getLong("organizationId", -1L);
                 if(organizationId > 0)
                 {
                     Organization organization = this.organizationsRegistry
                         .getOrganization(organizationId);
-                    List<OrganizationData> organizations = new ArrayList<OrganizationData>();
-                    organizations.add(new OrganizationData(organization));
-                    data.setOrganizations(organizations);
+                    if(organization != null)
+                    {
+                        List<OrganizationData> organizationDataList = new ArrayList<OrganizationData>();
+                        OrganizationData organizationData = new OrganizationData();
+                        organizationData.fromOrganization(organization);
+                        organizationDataList.add(organizationData);
+                        data.setOrganizations(organizationDataList);
+                    }
                 }
             }
             data.toTemplatingContext(templatingContext);
