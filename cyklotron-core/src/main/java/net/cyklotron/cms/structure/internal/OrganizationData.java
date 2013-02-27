@@ -39,31 +39,6 @@ public class OrganizationData
 
     private String id = "";
 
-    public OrganizationData()
-    {
-
-    }
-
-    public OrganizationData(Organization organization)
-    {
-
-        Class orgClass = organization.getClass();
-        Class thisClass = this.getClass();
-
-        for(Field field : thisClass.getFields())
-        {
-            try
-            {
-                field.set(this, orgClass.getField(field.getName()).get(organization));
-            }
-            catch(IllegalArgumentException | IllegalAccessException | NoSuchFieldException
-                            | SecurityException e)
-            {
-                // Do nothing
-            }
-        }
-    }
-
     public static OrganizationData get(List<OrganizationData> organizations, int index)
     {
         if(index < organizations.size())
@@ -94,6 +69,23 @@ public class OrganizationData
         email = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_email", "")));
         www = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_www", "")));
         id = stripTags(DocumentMetadataHelper.dec(parameters.get(prefix + "_id", "0")));
+    }
+    
+    public void fromOrganization(Organization organization)
+    {
+        if(organization != null)
+        {
+            name = organization.getName();
+            province = organization.getProvince();
+            postCode = organization.getPostCode();
+            city = organization.getCity();
+            street = organization.getStreet();
+            phone = organization.getTel();
+            fax = organization.getFax();
+            email = organization.getEmail();
+            www = organization.getUrl();
+            id = organization.getId().toString();
+        }
     }
 
     public static List<OrganizationData> fromParameters(Parameters parameters)
