@@ -32,7 +32,7 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
 #result_inline_message('results.structure')
 
 <form name="propose_document" method="post" enctype="multipart/form-data" action="$formAction">
-
+<input type="hidden" name="form_loaded" value="true"/>
 <table border="0" class="genericScreen" width="100%" cellspacing="0">
   <input type="hidden" name="name" value="$format_date.pattern("yyyyMMddHHmmssSSSS").format($format_date.now())">
   <tr>
