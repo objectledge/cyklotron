@@ -4,6 +4,7 @@ import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.selectFirstText;
 import static net.cyklotron.cms.structure.internal.ProposedDocumentData.stripTags;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
 
 import net.cyklotron.cms.documents.DocumentMetadataHelper;
+import net.cyklotron.cms.organizations.Organization;
 
 public class OrganizationData
 {
@@ -36,6 +38,31 @@ public class OrganizationData
     private String www = "";
 
     private String id = "";
+
+    public OrganizationData()
+    {
+
+    }
+
+    public OrganizationData(Organization organization)
+    {
+
+        Class orgClass = organization.getClass();
+        Class thisClass = this.getClass();
+
+        for(Field field : thisClass.getFields())
+        {
+            try
+            {
+                field.set(this, orgClass.getField(field.getName()).get(organization));
+            }
+            catch(IllegalArgumentException | IllegalAccessException | NoSuchFieldException
+                            | SecurityException e)
+            {
+                // Do nothing
+            }
+        }
+    }
 
     public static OrganizationData get(List<OrganizationData> organizations, int index)
     {
@@ -141,12 +168,14 @@ public class OrganizationData
 
     public Node toMeta()
     {
-        return elm("organization", elm("name", name), elm("address", elm("street", street), elm(
-            "postcode", postCode), elm("city", city), elm("province", province)),
-            elm("tel", phone), elm("fax", fax), elm("e-mail", email), elm("url", www), elm("id", id
-                .trim().length() > 0 ? id : "0"));
+        return elm(
+            "organization",
+            elm("name", name),
+            elm("address", elm("street", street), elm("postcode", postCode), elm("city", city),
+                elm("province", province)), elm("tel", phone), elm("fax", fax),
+            elm("e-mail", email), elm("url", www), elm("id", id.trim().length() > 0 ? id : "0"));
     }
-    
+
     public static String getOrganizationIds(List<OrganizationData> organizations)
     {
         StringBuilder buff = new StringBuilder();
