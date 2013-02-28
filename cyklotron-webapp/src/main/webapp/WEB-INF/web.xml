@@ -6,45 +6,46 @@
     <listener>
         <listener-class>org.objectledge.web.LedgeServletContextListener</listener-class>
     </listener>
-    
+
     <!-- 
          context parameter named "root" may be used to select local filesystem root directory 
          when not defined, work area assigned by the servlet container will be used instead.
     -->
+
     <context-param> 
         <description>LedgeContainer config path</description> 
         <param-name>configPath</param-name> 
         <param-value>/config</param-value> 
     </context-param>
-    
+
 	<servlet>
-	  <servlet-name>ledge</servlet-name>
-	  <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
-	  <init-param>
-	    <param-name>dispatcher</param-name>
-	    <param-value>cmsDispatcher</param-value>
-	  </init-param>
-	</servlet>  
+		<servlet-name>ledge</servlet-name>
+		<servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
+        <init-param>
+            <param-name>dispatcher</param-name>
+            <param-value>cmsDispatcher</param-value>
+        </init-param>
+	</servlet>
 
     <servlet>
-      <servlet-name>content</servlet-name>
-      <servlet-class>org.objectledge.web.ContentServlet</servlet-class>
+        <servlet-name>content</servlet-name>
+        <servlet-class>org.objectledge.web.ContentServlet</servlet-class>
     </servlet>
-	
-	<servlet>
-	  <servlet-name>rest</servlet-name>
-	  <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
-	  <init-param>
-	    <param-name>dispatcher</param-name>
-	    <param-value>restDispatcher</param-value>
-	  </init-param>
-	</servlet>
+
+    <servlet>
+        <servlet-name>rest</servlet-name>
+        <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
+        <init-param>
+            <param-name>dispatcher</param-name>
+            <param-value>restDispatcher</param-value>
+        </init-param>
+    </servlet>
   
 	<servlet-mapping>
 		<servlet-name>ledge</servlet-name>
 		<url-pattern>/ledge/*</url-pattern>
 	</servlet-mapping>
-  
+
     <servlet-mapping>
         <servlet-name>content</servlet-name>
         <url-pattern>/content/*</url-pattern>
@@ -55,11 +56,11 @@
         <url-pattern>/files/*</url-pattern>
     </servlet-mapping>
 
-	<servlet-mapping>
-		<servlet-name>rest</servlet-name>
-		<url-pattern>/rest/*</url-pattern>
-	</servlet-mapping>
-	
+    <servlet-mapping>
+        <servlet-name>rest</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+
 	<session-config>
 		<session-timeout>30</session-timeout>
 	</session-config>
