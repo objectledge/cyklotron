@@ -19,7 +19,10 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.NumericRangeQuery;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SearcherManager;
+import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.store.Resource;
@@ -66,8 +69,8 @@ public class GenericIndex<T extends Resource, U>
 
     GenericIndex(FileSystem fileSystem, Logger logger, String indexPath,
         AnalyzerProvider analyzerProvider, FromDocumentMapper<U> fromDocumentMapper,
- ToDocumentMapper<T> toDocumentMapper,
-        ResourceProvider<T> resourceProvider, Directory directory)
+        ToDocumentMapper<T> toDocumentMapper, ResourceProvider<T> resourceProvider,
+        Directory directory)
         throws IOException
     {
         this.logger = logger;
@@ -118,12 +121,38 @@ public class GenericIndex<T extends Resource, U>
         }
     }
 
+    public U getResource(Long id)
+    {
+        try
+        {
+            Query query = NumericRangeQuery.newLongRange("id", id, id, true, true);
+            return singleResult(searcherManager.acquire().search(query, 1));
+        }
+        catch(Exception e)
+        {
+            logger.error("search error", e);
+            return null;
+        }
+    }
+
+    protected U singleResult(TopDocs result)
+        throws IOException
+    {
+        if(result.totalHits == 1)
+        {
+            return fromDocumentMapper.fromDocument(searcherManager.acquire().doc(
+                result.scoreDocs[0].doc));
+        }
+        return null;
+    }
+
     /**
      * Adds new resources to index.
      * 
      * @param resources
      * @throws IOException
      */
+
     public synchronized void addAll(Collection<T> resources)
         throws IOException
     {
@@ -167,7 +196,7 @@ public class GenericIndex<T extends Resource, U>
             }
         }
     }
-    
+
     /**
      * Reindexes all resources. Deletes all documents and adds them again
      * 
@@ -281,6 +310,11 @@ public class GenericIndex<T extends Resource, U>
             }
         }
         return documents;
+    }
+
+    public Analyzer getAnalyzer()
+    {
+        return analyzer;
     }
 
     @Override
