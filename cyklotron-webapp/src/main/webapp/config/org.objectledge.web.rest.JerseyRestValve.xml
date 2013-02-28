@@ -26,7 +26,10 @@
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
 --> 
-
 <config>
-  <response pattern=".*" status="200" type="text/plain">Hello world!!!</response>
+  <packages>
+    <package>net.cyklotron.cms.modules.rest</package>
+  </packages>
+  <init-parameters>
+  </init-parameters>
 </config>

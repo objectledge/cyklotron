@@ -32,7 +32,7 @@
     </servlet>
 	
 	<servlet>
-	  <servlet-name>files</servlet-name>
+	  <servlet-name>rest</servlet-name>
 	  <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
 	  <init-param>
 	    <param-name>dispatcher</param-name>
@@ -56,8 +56,8 @@
     </servlet-mapping>
 
 	<servlet-mapping>
-		<servlet-name>files</servlet-name>
-		<url-pattern>/rr/*</url-pattern>
+		<servlet-name>rest</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
 	</servlet-mapping>
 	
 	<session-config>

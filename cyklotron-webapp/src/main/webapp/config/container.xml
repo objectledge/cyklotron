@@ -132,10 +132,9 @@
   <!-- coral -->
 
   <container key="coralContainer"/>
-  
+
   <component class-key="org.objectledge.coral.web.rest.CoralPermissionChecker"
             class="org.objectledge.coral.web.rest.CoralPermissionCheckerImpl"/>
-  
 
   <component class-key="org.objectledge.coral.Instantiator"
              class="org.objectledge.coral.PicoInstantiator">
@@ -161,6 +160,11 @@
   <component class="org.objectledge.im.InstantMessaging"/>
   <component class-key="org.objectledge.web.captcha.CaptchaService"
              class="org.objectledge.web.captcha.ReCaptchaCaptchaServiceImpl"/>
+  <component class-key="org.objectledge.authentication.api.ServerApiRestrictionsProvider"
+  			 class="org.objectledge.authentication.api.ServerApiRestrictionsProviderImpl"/>
+  <component class="org.objectledge.upload.FileUpload"/>    
+  <component class-key="org.objectledge.table.TableStateManager"
+             class="org.objectledge.table.TableStateManagerImpl"/>
   
   <!-- // mvc components ////////////////////////////////////////////////////////////// -->
   <!-- mvc basics -->
@@ -224,12 +228,10 @@
       <parameter class-key="org.objectledge.web.captcha.CaptchaToolFactory"/>
       <parameter class-key="org.objectledge.authentication.sso.SingleSignOnToolFactory"/>
     </sequence>
-  </component>      
-  <component class="org.objectledge.upload.FileUpload"/>    
-  <component class-key="org.objectledge.table.TableStateManager"
-             class="org.objectledge.table.TableStateManagerImpl"/>
+  </component>
 
   <!-- // valves ////////////////////////////////////////////////////////////////////// -->
+  
   <component class="org.objectledge.web.ContentTypeInitializerValve"/>
   <component class="org.objectledge.encodings.RequestParametersHTMLEntityDecoderValve"/>
   <component class="org.objectledge.encodings.MVCResultsHTMLEntityEncoderValve"/>
@@ -337,13 +339,36 @@
     </sequence>
   </component>
   
+  <!-- // REST pipeline // -->
+  
+  <container key="forwardMeToParent"/>
+  <component class="org.objectledge.web.rest.JerseyRestValve">
+    <parameter key="forwardMeToParent" />
+    <parameter />
+    <parameter />
+    <parameter />
+    <parameter />
+    <sequence>
+      <!-- Add binders for @Inject -->
+    </sequence>
+    <sequence>
+   	  <!-- Jersey configuration hooks, register filters, features, properties etc. -->
+      <component class="org.objectledge.coral.web.rest.RegisterCoralFilters" />
+      <component class="org.objectledge.web.rest.RegisterAuthenticationFilter" />
+    </sequence>
+  </component>
+  
+  <component class="org.objectledge.web.rest.CompositeJacksonMapper">
+    <sequence>
+    </sequence>
+  </component>
+  
   <component key="restRenderingPipeline"
   			 class="org.objectledge.pipeline.SimplePipeline">
     <sequence>
-      <component class="org.objectledge.web.rest.JerseyRestValve"/>
+      <parameter class-key="org.objectledge.web.rest.JerseyRestValve"/>
     </sequence>      
-  </component>    
-  
+  </component>
 
   <!-- // dispatchers ///////////////////////////////////////////////////////////////////// -->
   
@@ -384,17 +409,13 @@
   </component>
     
   <!-- //// REST dispatcher //// -->
-  
-  <!-- <component key="restDispatcher"
-             class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">	
-	  <component class="org.objectledge.web.rest.JerseyRestValve"/>
-	  <component class-key="org.objectledge.context.Context"/>
-  </component> -->
-  
+
   <component key="restDispatcher"
               class="org.objectledge.web.dispatcher.PipelineHttpDispatcher">
-    <component key="RTVRest" class="org.objectledge.web.RequestTrackingValve">
-      <component key="CCVRest" class="org.objectledge.pipeline.ConcurrencyControlValve">
+    <component  key="org.objectledge.web.rest.RequestTrackingValve"
+                class="org.objectledge.web.RequestTrackingValve">
+      <component key="org.objectledge.web.rest.ConcurrencyControlValve"
+                 class="org.objectledge.pipeline.ConcurrencyControlValve">
         <component key="restErrorHandlingPipeline" class="org.objectledge.pipeline.ErrorHandlingPipeline">
             <parameter class-key="org.jcontainer.dna.Logger"/>
 		    <sequence>
@@ -421,7 +442,7 @@
     </component>
 	<parameter class-key="org.objectledge.context.Context"/>   
   </component>
-    
+
   <!-- // Cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
   
   <component class-key="net.cyklotron.cms.banner.BannerService"
@@ -495,6 +516,9 @@
   <component class="net.cyklotron.cms.search.internal.SearchServiceImpl$Statistics"/>
   <component class-key="net.cyklotron.cms.search.SearchService"
              class="net.cyklotron.cms.search.internal.SearchServiceImpl"/>
+  
+  <component class-key="net.cyklotron.cms.search.IndexingFacility"
+    class="net.cyklotron.cms.search.internal.IndexingFacilityImpl"/>
 
   <component class-key="net.cyklotron.cms.security.SecurityService"
              class="net.cyklotron.cms.security.internal.SecurityServiceImpl"/>
@@ -566,11 +590,10 @@
     <parameter/>
     <sequence>
     </sequence>
-  </component>             
+  </component>
 
   <component class-key="net.cyklotron.cms.search.util.IndexInitializer"
   	class="net.cyklotron.cms.search.util.IndexInitializerImpl"/>  
-	
 
   <component class-key="org.objectledge.forms.FormsService"
              class="org.objectledge.forms.internal.FormsServiceImpl"/>
@@ -584,20 +607,23 @@
   <component class-key="org.objectledge.messaging.MessagingFactory"
   			 class="org.objectledge.messaging.MessagingFactoryImpl"/>
 
-  <component class-key="net.cyklotron.cms.locations.LocationsProvider"
-  			 class="net.cyklotron.cms.locations.poland.PNALocationsProvider"/> 
-            
-  <component class-key="net.cyklotron.cms.locations.LocationDatabaseService"
-             class="net.cyklotron.cms.locations.internal.LocationDatabaseServiceImpl"/>   
-             
-  <component class-key="net.cyklotron.cms.organizations.OrganizationRegistryService"
-             class="net.cyklotron.cms.organizations.DummyOrganizationRegistryService"/>                        
-             
   <component class="net.cyklotron.cms.CmsDataFactory"/>
   
   <component class-key="net.cyklotron.cms.poll.PollService"
              class="net.cyklotron.cms.poll.internal.PollServiceImpl"/>
              
+  <component class-key="org.objectledge.longops.LongRunningOperationRegistry"
+             class="org.objectledge.longops.impl.LongRunningOperationRegistryImpl" />
+
+  <component class-key="net.cyklotron.cms.locations.LocationsProvider"
+  			 class="net.cyklotron.cms.locations.poland.PNALocationsProvider"/> 
+            
+  <component class-key="net.cyklotron.cms.locations.LocationDatabaseService"
+             class="net.cyklotron.cms.locations.internal.LocationDatabaseServiceImpl"/>
+             
+  <component class-key="net.cyklotron.cms.organizations.OrganizationRegistryService"
+             class="net.cyklotron.cms.organizations.DummyOrganizationRegistryService"/>
+
   <!-- remote management -->           
              
   <component class="net.cyklotron.cms.management.ErrorReportingService"/>             
@@ -630,4 +656,4 @@
   <component class="org.objectledge.statistics.StatisticsWriter"/>
   <component class="org.objectledge.statistics.MuninNode"/>
   
-</container>  
+</container>
