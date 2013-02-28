@@ -108,8 +108,8 @@ public class Forum
 
     private String buildQuery(Principal principal, int limit, int offset)
     {
-        return "FIND RESOURCE FROM " + MessageResource.CLASS_NAME + " WHERE created_by="
-            + principal.getName() + " LIMIT " + String.valueOf(limit) + " OFFSET "
+        return "FIND RESOURCE FROM " + MessageResource.CLASS_NAME + " WHERE created_by='"
+            + principal.getName() + "' LIMIT " + String.valueOf(limit) + " OFFSET "
             + String.valueOf(offset);
     }
 
