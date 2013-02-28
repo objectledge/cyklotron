@@ -133,16 +133,22 @@ public class GenericIndex<T extends Resource, U>
     }
 
     public U getResource(Long id)
+        throws IOException
     {
+        final IndexSearcher searcher = searcherManager.acquire();
         try
         {
             Query query = NumericRangeQuery.newLongRange("id", id, id, true, true);
-            return singleResult(searcherManager.acquire().search(query, 1));
+            return singleResult(searcher.search(query, 1));
         }
         catch(Exception e)
         {
             logger.error("search error", e);
             return null;
+        }
+        finally
+        {
+            searcherManager.release(searcher);
         }
     }
 
@@ -151,8 +157,15 @@ public class GenericIndex<T extends Resource, U>
     {
         if(result.totalHits == 1)
         {
-            return fromDocumentMapper.fromDocument(searcherManager.acquire().doc(
-                result.scoreDocs[0].doc));
+            final IndexSearcher searcher = searcherManager.acquire();
+            try
+            {
+                return fromDocumentMapper.fromDocument(searcher.doc(result.scoreDocs[0].doc));
+            }
+            finally
+            {
+                searcherManager.release(searcher);
+            }
         }
         return null;
     }
