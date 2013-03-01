@@ -129,7 +129,7 @@ public class Forum
         final NavigationNodeResource navigationNode = getNavigationNode(discussion, coralSession);
         final SiteResource site = navigationNode.getSite();
 
-        final StringBuilder urlBuilder = new StringBuilder();
+        final StringBuilder urlBuilder = new StringBuilder("//");
         urlBuilder.append(siteService.getPrimaryMapping(coralSession, site));
         urlBuilder.append("/x/");
         urlBuilder.append(navigationNode.getIdString());
