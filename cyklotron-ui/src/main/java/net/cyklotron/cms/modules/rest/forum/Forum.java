@@ -14,8 +14,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
-import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -24,26 +24,41 @@ import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.coral.web.rest.RequireAtLeastOneRole;
 import org.objectledge.coral.web.rest.RequireCoralRole;
 
+import net.cyklotron.cms.forum.CommentaryResource;
 import net.cyklotron.cms.forum.DiscussionResource;
 import net.cyklotron.cms.forum.MessageResource;
+import net.cyklotron.cms.site.SiteException;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
+/**
+ * Returns Posts for given user
+ * 
+ * @author Marek Lewandowski
+ */
 @Path("forum")
 public class Forum
 {
-
     private static final int LIMIT_OF_POSTS = 20;
 
     @Inject
     private CoralSessionFactory coralSessionFactory;
-    
+
     @Inject
     private UserManager userManager;
 
+    @Inject
+    private SiteService siteService;
+
     private Logger logger = Logger.getLogger(getClass());
+
+    private DateTimeFormatter dateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -66,26 +81,34 @@ public class Forum
 
                 for(QueryResults.Row row : results.getList())
                 {
-                    final MessageResource messageResource = MessageResource.class.cast(row.get());
-                    final DiscussionResource discussion = messageResource.getDiscussion();
-                    final Date creationTime = messageResource.getCreationTime();
-                    final MessageVisitor messageVisitor = new MessageVisitor(coralSession,
-                        anonymous, creationTime);
-                    messageVisitor.traverseDepthFirst(discussion);
-                    PostDto postDto = new PostDto();
-                    final DateTimeFormatter formatter = DateTimeFormat.fullTime();
-                    postDto.setCreatedAt(formatter.print(creationTime.getTime()));
-                    postDto.setLastReplyAt(formatter.print(messageVisitor.getLastReplyAt()
-                        .getTime()));
-                    postDto.setTitle(messageResource.getTitle());
-                    postDto.setReplies(messageVisitor.getPostCount());
-                    postDto.setUrl("SOME URL");
-                    posts.add(postDto);
+                    try
+                    {
+                        final MessageResource messageResource = MessageResource.class.cast(row
+                            .get());
+                        final DiscussionResource discussion = messageResource.getDiscussion();
+                        final Date creationTime = messageResource.getCreationTime();
+                        final MessageVisitor messageVisitor = new MessageVisitor(coralSession,
+                            anonymous, creationTime);
+                        messageVisitor.traverseDepthFirst(discussion);
+
+                        PostDto postDto = new PostDto();
+                        postDto.setCreatedAt(dateTimeFormatter.print(creationTime.getTime()));
+                        postDto.setLastReplyAt(dateTimeFormatter.print(messageVisitor
+                            .getLastReplyAt().getTime()));
+                        postDto.setTitle(messageResource.getTitle());
+                        postDto.setReplies(messageVisitor.getPostCount());
+                        postDto.setUrl(buildUrl(coralSession, messageResource, discussion));
+                        posts.add(postDto);
+                    }
+                    catch(SiteException e)
+                    {
+                        logger.error("Could not produce post", e);
+                    }
                 }
             }
             catch(AuthenticationException e)
             {
-                logger.error("Could not find user: '"+ user + "'", e);
+                logger.error("Could not find user: '" + user + "'", e);
             }
             catch(MalformedQueryException e)
             {
@@ -97,6 +120,47 @@ public class Forum
             }
         }
         return posts;
+    }
+
+    private String buildUrl(CoralSession coralSession, final MessageResource messageResource,
+        final DiscussionResource discussion)
+        throws EntityDoesNotExistException, SiteException
+    {
+        final NavigationNodeResource navigationNode = getNavigationNode(discussion, coralSession);
+        final SiteResource site = navigationNode.getSite();
+
+        final StringBuilder urlBuilder = new StringBuilder();
+        urlBuilder.append(siteService.getPrimaryMapping(coralSession, site));
+        urlBuilder.append("/x/");
+        urlBuilder.append(navigationNode.getIdString());
+        urlBuilder.append("?mid=");
+        urlBuilder.append(messageResource.getIdString());
+        urlBuilder.append("&state=message");
+        return urlBuilder.toString();
+    }
+
+    private NavigationNodeResource getNavigationNode(DiscussionResource discussion,
+        CoralSession coralSession)
+    {
+        final NavigationNodeResource forumNode = discussion.getForum().getForumNode();
+        if(discussion instanceof CommentaryResource)
+        {
+            final CommentaryResource commentary = CommentaryResource.class.cast(discussion);
+            try
+            {
+                final Resource resource = coralSession.getStore().getResource(
+                    commentary.getResourceId());
+                if(resource instanceof NavigationNodeResource)
+                {
+                    return NavigationNodeResource.class.cast(resource);
+                }
+            }
+            catch(EntityDoesNotExistException e)
+            {
+
+            }
+        }
+        return forumNode;
     }
 
     private Subject findAnonymousSubject(CoralSession coralSession)
