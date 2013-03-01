@@ -80,7 +80,11 @@
 	#if($cms_tool.isAppEnabled('bazy') || $block)      
       #linkCell('' 'BAZY' $siteLink.view('bazy.Configuration'))
       <td class="separator">|</td>
-    #end 
+	#end
+	#if($cms_tool.isAppEnabled('account') || $block)      
+      #linkCell('' 'KONTO' $siteLink.view('account.Configuration'))
+      <td class="separator">|</td>
+    #end  
     </tr>
   </table>
   #end
