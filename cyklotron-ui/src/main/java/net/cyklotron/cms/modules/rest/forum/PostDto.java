@@ -1,7 +1,7 @@
 package net.cyklotron.cms.modules.rest.forum;
 
 /**
- * DTO
+ * Names of fields matter. If you change them then postTable.js script needs to be changed as well.
  * 
  * @author Marek Lewandowski
  */
@@ -9,11 +9,11 @@ public class PostDto
 {
     private String title;
 
+    private int replies;
+
     private String url;
 
     private String createdAt;
-
-    private int replies;
 
     private String lastReplyAt;
 
