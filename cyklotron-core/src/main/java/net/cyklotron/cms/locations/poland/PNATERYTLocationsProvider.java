@@ -169,8 +169,9 @@ public class PNATERYTLocationsProvider
                 List<Location> locations = new ArrayList<>();
                 while(rs.next())
                 {
-                    String terc = rs.getString("woj") + rs.getString("pow")
-                        + rs.getString("gmi").trim() + rs.getString("rodz_gmi");
+                    String terc = rs.getString("woj") != null ? (rs.getString("woj")
+                        + rs.getString("pow") + rs.getString("gmi").trim() + rs
+                        .getString("rodz_gmi")) : "";
                     String area = rs.getString("miejscowość") == rs.getString("nazwa") ? rs
                         .getString("nazwa_rm") != null ? rs.getString("nazwa_rm") : "" : rs
                         .getString("nazwa");
