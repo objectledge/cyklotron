@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.web.rest.RequireCoralRole;
 
 import net.cyklotron.cms.category.CategoryResource;
 
@@ -33,6 +34,7 @@ public class Category
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RequireCoralRole("cms.administrator")
     public Response getCategories(@DefaultValue("All") @QueryParam("id") final List<String> ids)
         throws EntityDoesNotExistException
     {

@@ -26,7 +26,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.SubtreeVisitor;
-import org.objectledge.coral.web.rest.RequireAtLeastOneRole;
+import org.objectledge.coral.web.rest.RequireAny;
 import org.objectledge.coral.web.rest.RequireCoralRole;
 
 import net.cyklotron.cms.forum.CommentaryResource;
@@ -62,8 +62,8 @@ public class Forum
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RequireAtLeastOneRole({ @RequireCoralRole("cms.administrator"),
-                    @RequireCoralRole("cms.registered") })
+    @RequireAny(roles = { @RequireCoralRole("cms.registered"),
+                    @RequireCoralRole("cms.administrator") })
     public Collection<PostDto> getUserPosts(@QueryParam("user") String user,
         @QueryParam("limit") @DefaultValue("20") int requestedLimit,
         @QueryParam("offset") @DefaultValue("0") int offset)
