@@ -2,6 +2,7 @@ package net.cyklotron.cms.locations.poland;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import org.objectledge.filesystem.FileSystem;
 import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 import org.objectledge.utils.Timer;
 
-import net.cyklotron.cms.files.util.CSVFileReader;
+import net.cyklotron.files.util.CSVReader;
 
 public class PNAProvider
 {
@@ -193,10 +194,11 @@ public class PNAProvider
         try(InputStream is = fileSystem.getInputStream(CACHE_DIRECTORY + CACHE_FILE))
         {
             Timer timer = new Timer();
-            CSVFileReader csvReader = new CSVFileReader(is, ENCODING, ';');
+            CSVReader csvReader = new CSVReader(new InputStreamReader(is, ENCODING), ';');
+            csvReader.readHeaders();
             Map<String, String> line;
             List<String[]> locations = new ArrayList<>();
-            while((line = csvReader.getNextLine()) != null)
+            while(!(line = csvReader.readMappedRecord()).isEmpty())
             {
                 String[] location = new String[7];
                 location[0] = line.get("PNA");

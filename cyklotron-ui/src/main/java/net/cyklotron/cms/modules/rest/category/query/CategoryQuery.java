@@ -46,22 +46,22 @@ public class CategoryQuery
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllForSite(@QueryParam("siteId") Long siteId)
     {
-        try(CoralSession session = coralSessionFactory.getCurrentSession())
+        CoralSession session = coralSessionFactory.getCurrentSession();
+        final Collection<CategoryQueryResource> categoryQueries = getAllCategoryQueries(session);
+        if(siteId != null)
         {
-            final Collection<CategoryQueryResource> categoryQueries = getAllCategoryQueries(session);
-            if(siteId != null)
+            SiteResource site;
+            try
             {
-                SiteResource site;
-                try
-                {
-                    site = getSiteResource(siteId, session);
-                }
-                catch(EntityDoesNotExistException e)
-                {
-                    return Response.status(Status.BAD_REQUEST).build();
-                }
-                final String siteName = site.getName();
-                final Collection<CategoryQueryResource> filtered = Collections2.filter(categoryQueries, new Predicate<CategoryQueryResource>()
+                site = getSiteResource(siteId, session);
+            }
+            catch(EntityDoesNotExistException e)
+            {
+                return Response.status(Status.BAD_REQUEST).build();
+            }
+            final String siteName = site.getName();
+            final Collection<CategoryQueryResource> filtered = Collections2.filter(categoryQueries,
+                new Predicate<CategoryQueryResource>()
                     {
                         @Override
                         public boolean apply(@Nullable CategoryQueryResource categoryQuery)
@@ -78,12 +78,11 @@ public class CategoryQuery
                             }
                         }
                     });
-                return Response.ok(CategoryQueryDto.toDtos(filtered)).build();
-            }
-            else
-            {
-                return Response.ok(CategoryQueryDto.toDtos(categoryQueries)).build();
-            }
+            return Response.ok(CategoryQueryDto.toDtos(filtered)).build();
+        }
+        else
+        {
+            return Response.ok(CategoryQueryDto.toDtos(categoryQueries)).build();
         }
     }
 

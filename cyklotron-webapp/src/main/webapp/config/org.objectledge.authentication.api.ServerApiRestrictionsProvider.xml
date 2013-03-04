@@ -25,8 +25,6 @@
  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)  
  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE  
  POSSIBILITY OF SUCH DAMAGE. 
---> 
-
-<config>
-  <response pattern=".*" status="200" type="text/plain">Hello world!</response>
+-->
+<config xmlns="http://objectledge.org/authentication/api/1.0">
 </config>
