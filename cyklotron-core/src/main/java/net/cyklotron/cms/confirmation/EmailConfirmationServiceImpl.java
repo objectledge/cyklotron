@@ -58,6 +58,8 @@ public class EmailConfirmationServiceImpl
 
     private final MailSystem mailSystem;
 
+    public static String EMAIL_CONFIRMATION_ROOT_NODE = "/cms/confirmationRequests";
+    
     public EmailConfirmationServiceImpl(CryptographyService cipherCryptographyService,
         MailSystem mailSystem)
     {
@@ -71,7 +73,7 @@ public class EmailConfirmationServiceImpl
         throws ConfirmationRequestException
     {
         Resource[] res = coralSession.getStore().getResourceByPath(
-            "/cms/confirmationRequests/" + cookie);
+            EMAIL_CONFIRMATION_ROOT_NODE + "/" + cookie);
         if(res.length > 0)
         {
             return (EmailConfirmationRequestResourceImpl)res[0];
@@ -143,7 +145,7 @@ public class EmailConfirmationServiceImpl
     {
         if(confirmationRoot == null)
         {
-            Resource res[] = coralSession.getStore().getResourceByPath("/cms/confirmationRequests");
+            Resource res[] = coralSession.getStore().getResourceByPath(EMAIL_CONFIRMATION_ROOT_NODE);
             if(res.length == 1)
             {
                 confirmationRoot = res[0];
