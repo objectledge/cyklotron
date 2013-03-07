@@ -1,0 +1,16 @@
+$viewEnclosureTool.top()
+
+<div data-category-popup-link="$link.view('category.ChooseCategories').set('reset-state',true)">
+	<form class="legacy-form">
+		<input type="hidden" class="category-names"/>
+		<input type="hidden" class="category-ids"/>
+	</form>
+	<button class="popup ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
+		<span class="ui-button-text" ng-transclude></span>
+	</button>
+	<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
+		<span class="ui-button-text">
+			<a ng-click="clearCategories()" href="">Wyczyść</a> 
+		</span>
+	</button>
+</div>
