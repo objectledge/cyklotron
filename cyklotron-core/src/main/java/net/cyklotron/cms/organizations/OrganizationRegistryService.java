@@ -1,5 +1,6 @@
 package net.cyklotron.cms.organizations;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,8 +23,10 @@ public interface OrganizationRegistryService
      * Retrieve organization data.
      * 
      * @return organization with specified id.
+     * @throws IOException
      */
-    public Organization getOrganization(long id);
+    public Organization getOrganization(long id)
+        throws IOException;
 
     /**
      * Returns the contents of RSS/Atom news feed for an organization.

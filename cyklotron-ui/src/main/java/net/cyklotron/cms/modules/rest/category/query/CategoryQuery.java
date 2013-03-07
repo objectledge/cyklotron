@@ -23,6 +23,7 @@ import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.query.QueryResults.Row;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.web.rest.RequireCoralRole;
 
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.site.SiteResource;
@@ -44,6 +45,7 @@ public class CategoryQuery
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RequireCoralRole("cms.administrator")
     public Response getAllForSite(@QueryParam("siteId") Long siteId)
     {
         CoralSession session = coralSessionFactory.getCurrentSession();
