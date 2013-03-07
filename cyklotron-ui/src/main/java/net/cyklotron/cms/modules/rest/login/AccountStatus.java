@@ -34,8 +34,9 @@ public class AccountStatus
         {
             userManager.setUserShadowFlag(account, BlockedReason.PASSWORD_EXPIRED.getCode().toString());
         }        
+        Long expiration = userManager.getUserPasswordExpirationDays(account);
         BlockedReason blockedReason = userManager.checkAccountFlag(account);       
-        AccountStatusDto result = new AccountStatusDto(uid, blockedReason.getShortReason());
+        AccountStatusDto result = new AccountStatusDto(uid, blockedReason.getShortReason(), expiration);
         return Response.ok(result).build();
     }
 }
