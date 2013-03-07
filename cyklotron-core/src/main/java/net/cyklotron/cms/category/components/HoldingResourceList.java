@@ -1,6 +1,8 @@
 package net.cyklotron.cms.category.components;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -121,7 +123,9 @@ extends DocumentResourceList
         throws ProcessingException
     {
         List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
-        filters.add(new StateFilter(new String[]{"published"}));
+        filters.addAll((Collection<? extends TableFilter<Resource>>)Arrays.asList(super
+            .getTableFilters(coralSession, config)));
+        filters.add(new StateFilter(new String[] { "published" }));
         return filters.toArray(new TableFilter[filters.size()]);
     }
 	
