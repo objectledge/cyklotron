@@ -59,6 +59,10 @@ function accountStatus(account)
 				  url : "$link.rootContent('rest/login')?uid=" + account,
 					dataType : "json",
 					success : function(data) {
+						if(data.expiration != 0)
+						{
+							alert('Hasło do konta wygasnie za ' + data.expiration + ' dni, po upływie tego czasu zostanie zablokowane'); 
+						}
 						logUserToSystem(data.accountStatus);
 					},
 					error: function(jqXHR, textStatus, errorThrown){		
