@@ -6,11 +6,14 @@ public class AccountStatusDto
     String uid;
     
     String accountStatus;
+    
+    Long expiration;
 
-    public AccountStatusDto(String uid, String accountStatus)
+    public AccountStatusDto(String uid, String accountStatus, Long expiration)
     {
         this.uid = uid;
         this.accountStatus = accountStatus;
+        this.expiration = expiration;
     }
 
     public String getUid()
@@ -31,6 +34,16 @@ public class AccountStatusDto
     public void setAccountStatus(String accountStatus)
     {
         this.accountStatus = accountStatus;
+    }
+
+    public Long getExpiration()
+    {
+        return expiration;
+    }
+
+    public void setExpiration(Long expiration)
+    {
+        this.expiration = expiration;
     }
    
 }

@@ -15,8 +15,8 @@ import javax.ws.rs.core.Response.Status;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.web.rest.RequireCoralRole;
 import org.objectledge.coral.store.Resource;
-
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.site.SiteResource;
 
@@ -37,6 +37,7 @@ public class CategoryQuery
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RequireCoralRole("cms.administrator")
     public Response getAllForSite(@QueryParam("siteId") Long siteId)
     {
         CoralSession session = coralSessionFactory.getCurrentSession();
