@@ -27,17 +27,25 @@ public class AccountStatus
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAccountStatus(@QueryParam("uid") String uid) throws AuthenticationException
+    public Response getAccountStatus(@QueryParam("uid") String uid)
     {
-        Principal account = userManager.getUserByLogin(uid);
-        if(userManager.isUserPasswordExpired(account))
+        try
         {
-            userManager.setUserShadowFlag(account, BlockedReason.PASSWORD_EXPIRED.getCode().toString());
-        }        
-        Long expiration = userManager.getUserPasswordExpirationDays(account);
-        BlockedReason blockedReason = userManager.checkAccountFlag(account);       
-        AccountStatusDto result = new AccountStatusDto(uid, blockedReason.getShortReason(), expiration);
-        return Response.ok(result).build();
+            Principal account = userManager.getUserByLogin(uid);
+            if(userManager.isUserPasswordExpired(account))
+            {
+                userManager.setUserShadowFlag(account, BlockedReason.PASSWORD_EXPIRED.getCode().toString());
+            }        
+            Long expiration = userManager.getUserPasswordExpirationDays(account);
+            BlockedReason blockedReason = userManager.checkAccountFlag(account);       
+            AccountStatusDto result = new AccountStatusDto(uid, blockedReason.getShortReason(), expiration);
+            return Response.ok(result).build();
+        }
+        catch(AuthenticationException e)
+        {
+            AccountStatusDto result = new AccountStatusDto(uid, "invalid_credentials", 0L);
+            return Response.ok(result).build();
+        }
     }
 }
 
