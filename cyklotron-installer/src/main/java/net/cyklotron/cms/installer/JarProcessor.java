@@ -44,9 +44,16 @@ public class JarProcessor
         {
             throw new IOException(overlay + " does not exist or is not a directory");
         }
-        unpackJar(source, workDir);
-        FileUtils.copyDirectory(overlay, workDir);
-        packJar(workDir, target);
+        try
+        {
+            unpackJar(source, workDir);
+            FileUtils.copyDirectory(overlay, workDir);
+            packJar(workDir, target);
+        }
+        finally
+        {
+            deleteContents(workDir);
+        }
     }
 
     public static void unpackJar(File zip, File targetDirectory)
