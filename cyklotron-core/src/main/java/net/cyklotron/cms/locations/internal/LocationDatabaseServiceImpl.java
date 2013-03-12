@@ -108,6 +108,14 @@ public class LocationDatabaseServiceImpl
     /**
      * {@inheritDoc}
      */
+    public List<Location> getAreas(String query, int limit)
+    {
+        return index.getAreas(query, limit);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<String> getAllTerms(String field)
     {
         return index.getAllTerms(field);
@@ -126,10 +134,20 @@ public class LocationDatabaseServiceImpl
         throws IOException
     {
         index.startUpdate();
-        for(Location location : locations)
+        try
         {
-            index.addItem(location);
+            for(Location location : locations)
+            {
+                index.addItem(location);
+            }
         }
-        index.endUpdate();
+        catch(Exception e)
+        {
+            logger.error("update failed", e);
+        }
+        finally
+        {
+            index.endUpdate();
+        }
     }
 }

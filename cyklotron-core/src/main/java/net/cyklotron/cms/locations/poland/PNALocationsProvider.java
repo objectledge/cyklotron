@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Sort;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 
@@ -151,5 +153,16 @@ public class PNALocationsProvider
         default:
             return EnumSet.noneOf(FieldOptions.class);
         }
+    }
+
+    public Term getFineGrainedLocationMarker()
+    {
+        return null;
+    }
+
+    @Override
+    public Sort getCoarseGrainedLocationSort()
+    {
+        return null;
     }
 }

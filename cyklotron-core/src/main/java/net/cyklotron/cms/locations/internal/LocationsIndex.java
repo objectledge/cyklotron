@@ -9,8 +9,10 @@ import java.util.Set;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.IntField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.TermQuery;
@@ -30,31 +32,36 @@ public class LocationsIndex
 
     private static final int MAX_RESULTS = 200000;
 
-    private final String[] fields;
-
-    private final Map<String, Set<FieldOptions>> fieldOptions = new HashMap<>();
+    private final LocationsProvider provider;
 
     public LocationsIndex(LocationsProvider provider, FileSystem fileSystem, Logger logger)
         throws IOException
     {
         super(fileSystem, logger, INDEX_PATH);
-        this.fields = provider.getFields();
-        for(String field : fields)
-        {
-            fieldOptions.put(field, provider.getOptions(field));
-        }
+        this.provider = provider;
     }
 
     @Override
     protected Document toDocument(Location item)
     {
         Document document = new Document();
-        for(String field : fields)
+        for(String field : provider.getFields())
         {
-            Set<FieldOptions> options = fieldOptions.get(field);
-            document.add(new Field(field, item.get(field), Field.Store.YES, options
-                .contains(FieldOptions.NOT_ANALYZED) ? Field.Index.NOT_ANALYZED
-                : Field.Index.ANALYZED));
+            Set<FieldOptions> options = provider.getOptions(field);
+            final String value = item.get(field);
+            if(value != null)
+            {
+                if(options.contains(FieldOptions.INTEGER))
+                {
+                    document.add(new IntField(field, Integer.parseInt(value), Field.Store.YES));
+                }
+                else
+                {
+                    document.add(new Field(field, value, Field.Store.YES, options
+                        .contains(FieldOptions.NOT_ANALYZED) ? Field.Index.NOT_ANALYZED
+                        : Field.Index.ANALYZED));
+                }
+            }
         }
         return document;
     }
@@ -63,11 +70,11 @@ public class LocationsIndex
     protected Location fromDocument(Document doc)
     {
         Map<String, String> entries = new HashMap<>();
-        for(String field : fields)
+        for(String field : provider.getFields())
         {
             entries.put(field, doc.get(field));
         }
-        return new Location(fields, entries);
+        return new Location(provider.getFields(), entries);
     }
 
     /**
@@ -97,9 +104,13 @@ public class LocationsIndex
         try
         {
             BooleanQuery query = new BooleanQuery();
-            for(String field : fields)
+            for(String field : provider.getFields())
             {
                 addClause(query, requestedField, field, fieldValues.get(field));
+            }
+            if(provider.getFineGrainedLocationMarker() != null)
+            {
+                query.add(new TermQuery(provider.getFineGrainedLocationMarker()), Occur.MUST);
             }
             Timer timer = new Timer();
             List<Location> results = results(getSearcher().search(query, MAX_RESULTS));
@@ -107,7 +118,43 @@ public class LocationsIndex
                 + timer.getElapsedMillis() + "ms");
             return results;
         }
-        catch(IOException e)
+        catch(Exception e)
+        {
+            logger.error("search error", e);
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Location> getAreas(String areaName, int limit)
+    {
+        try
+        {
+            BooleanQuery query = new BooleanQuery();
+            if(provider.getFineGrainedLocationMarker() != null)
+            {
+                query.add(new TermQuery(provider.getFineGrainedLocationMarker()), Occur.MUST_NOT);
+            }
+            List<Term> terms = analyze("areaName", areaName);
+            for(Term term : terms)
+            {
+                query.add(new PrefixQuery(term), BooleanClause.Occur.SHOULD);
+            }
+            Timer timer = new Timer();
+            List<Location> results;
+            if(provider.getCoarseGrainedLocationSort() != null)
+            {
+                results = results(getSearcher().search(query, Math.min(MAX_RESULTS, limit),
+                    provider.getCoarseGrainedLocationSort()));
+            }
+            else
+            {
+                results = results(getSearcher().search(query, Math.min(MAX_RESULTS, limit)));
+            }
+            logger.debug("query: " + query.toString() + " " + results.size() + " in "
+                + timer.getElapsedMillis() + "ms");
+            return results;
+        }
+        catch(Exception e)
         {
             logger.error("search error", e);
             return Collections.emptyList();
@@ -119,8 +166,16 @@ public class LocationsIndex
     {
         if(value != null && value.length() > 0)
         {
-            List<Term> terms = analyze(field, value);
-            if(fieldOptions.get(field).contains(FieldOptions.MULTI_TERM_SUBQUERY))
+            List<Term> terms;
+            if(provider.getOptions(field).contains(FieldOptions.NOT_ANALYZED))
+            {
+                terms = Collections.singletonList(new Term(field, value));
+            }
+            else
+            {
+                terms = analyze(field, value);
+            }
+            if(provider.getOptions(field).contains(FieldOptions.MULTI_TERM_SUBQUERY))
             {
                 BooleanQuery subQuery = new BooleanQuery();
                 for(Term term : terms)
