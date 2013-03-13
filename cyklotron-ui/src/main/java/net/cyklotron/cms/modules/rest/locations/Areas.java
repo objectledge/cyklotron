@@ -26,8 +26,8 @@ public class Areas
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Area> getMatchingLocations(@QueryParam("q") String query,
-    	@QueryParam("level") @DefaultValue("7") int level,
-        @QueryParam("limit") @DefaultValue("1000") int limit)
+        @QueryParam("level") @DefaultValue("7") int level,
+        @QueryParam("limit") @DefaultValue("20") int limit)
     {
         return toAreas(locationDatabaseService.getAreas(query, level, limit));
     }
@@ -65,9 +65,10 @@ public class Areas
             this.areaType = loc.get("areaType");
             this.terc = loc.get("terc");
             this.sym = loc.get("sym");
-            this.province = loc.get("province");
-            this.district = loc.get("district");
-            this.commune = loc.get("commune");
+            int level = Integer.parseInt(loc.get("areaLevel"));
+            this.province = (level > 2) ? loc.get("province") : null;
+            this.district = (level > 4) ? loc.get("district") : null;
+            this.commune = (level > 7) ? loc.get("commune") : null;
         }
 
         public String getAreaName()
