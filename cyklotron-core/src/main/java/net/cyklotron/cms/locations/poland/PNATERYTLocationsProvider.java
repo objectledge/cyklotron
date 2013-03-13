@@ -323,9 +323,8 @@ public class PNATERYTLocationsProvider
 
     public Sort getCoarseGrainedLocationSort()
     {
-        return new Sort(new SortField[] { new SortField("areaLevel", SortField.Type.INT),
-                        new SortField("areaRank", SortField.Type.STRING, true),
-                        new SortField("areaName", SortField.Type.STRING),
+        return new Sort(new SortField[] { SortField.FIELD_SCORE,
+                        new SortField("areaLevel", SortField.Type.INT),
                         new SortField("terc", SortField.Type.STRING) });
     }
 }
