@@ -38,9 +38,10 @@ public interface LocationDatabaseService
      * Searches for coarse-grained locations (areas) matching specific name prefix.
      * 
      * @param query name prefix.
+     * @param level maximum areaLevel to be matched
      * @return list of locations sorted by relevance.
      */
-    public List<Location> getAreas(String query, int limit);
+    public List<Location> getAreas(String query, int level, int limit);
 
     /**
      * Returns all terms in given field of location index.

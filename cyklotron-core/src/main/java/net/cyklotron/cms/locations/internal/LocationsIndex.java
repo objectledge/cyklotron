@@ -14,6 +14,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.TermQuery;
 import org.jcontainer.dna.Logger;
@@ -125,7 +126,7 @@ public class LocationsIndex
         }
     }
 
-    public List<Location> getAreas(String areaName, int limit)
+    public List<Location> getAreas(String areaName, int level, int limit)
     {
         try
         {
@@ -139,6 +140,15 @@ public class LocationsIndex
             {
                 query.add(new PrefixQuery(term), BooleanClause.Occur.SHOULD);
             }
+            if(level > 0)
+            {
+                BooleanQuery levelLimit = new BooleanQuery();
+                levelLimit.add(query, BooleanClause.Occur.MUST);
+                levelLimit.add(NumericRangeQuery.newIntRange("areaLevel", 0, level, true, true),
+                    BooleanClause.Occur.MUST);
+                query = levelLimit;
+            }
+
             Timer timer = new Timer();
             List<Location> results;
             if(provider.getCoarseGrainedLocationSort() != null)

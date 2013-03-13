@@ -26,9 +26,10 @@ public class Areas
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Area> getMatchingLocations(@QueryParam("q") String query,
+    	@QueryParam("level") @DefaultValue("7") int level,
         @QueryParam("limit") @DefaultValue("1000") int limit)
     {
-        return toAreas(locationDatabaseService.getAreas(query, limit));
+        return toAreas(locationDatabaseService.getAreas(query, level, limit));
     }
 
     private List<Area> toAreas(List<Location> locations)
