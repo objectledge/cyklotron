@@ -16,7 +16,11 @@ import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.PrefixQuery;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.search.spans.SpanNearQuery;
+import org.apache.lucene.search.spans.SpanQuery;
+import org.apache.lucene.search.spans.SpanTermQuery;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.utils.Timer;
@@ -136,9 +140,27 @@ public class LocationsIndex
                 query.add(new TermQuery(provider.getFineGrainedLocationMarker()), Occur.MUST_NOT);
             }
             List<Term> terms = analyze("areaName", areaName);
-            for(Term term : terms)
+            if(terms.size() == 1)
             {
-                query.add(new PrefixQuery(term), BooleanClause.Occur.SHOULD);
+                query.add(new PrefixQuery(terms.get(0)), BooleanClause.Occur.SHOULD);
+            }
+            else
+            {
+                BooleanQuery prefixQuery = new BooleanQuery();
+                for(Term term : terms)
+                {
+                    query.add(new PrefixQuery(term), BooleanClause.Occur.SHOULD);
+                }
+                prefixQuery.setBoost(0.25f);
+                query.add(prefixQuery, BooleanClause.Occur.SHOULD);
+                SpanQuery[] spans = new SpanQuery[terms.size()];
+                for(int i = 0; i < spans.length; i++)
+                {
+                    spans[i] = new SpanTermQuery(terms.get(i));
+                }
+                Query spanQuery = new SpanNearQuery(spans, 0, true);
+                spanQuery.setBoost(0.75f);
+                query.add(spanQuery, BooleanClause.Occur.SHOULD);
             }
             if(level > 0)
             {
