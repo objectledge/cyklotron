@@ -1,14 +1,12 @@
 package net.cyklotron.cms.category.components;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableFilter;
 
 import net.cyklotron.cms.CmsComponentData;
 import net.cyklotron.cms.CmsData;
@@ -18,9 +16,12 @@ import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteException;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.util.SiteFilter;
+import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
+
+import bak.pcj.set.LongSet;
 
 /**
  * This class contains logic of component which displays lists of resources assigned
@@ -86,32 +87,38 @@ public class ResourceList
 		return resClassNames;
     }
     
-	protected TableFilter[] getTableFilters(CoralSession coralSession, BaseResourceListConfiguration config)
-	throws ProcessingException
-	{
-        CmsData cmsData = cmsDataFactory.getCmsData(context);
+    @Override
+    public LongSet getIdSet(CoralSession coralSession, BaseResourceListConfiguration config)
+        throws ProcessingException
+    {
+        LongSet idSet = super.getIdSet(coralSession, config);
 
-        List tableFilters = new ArrayList(Arrays.asList(super.getTableFilters(coralSession, config)));
-        
-		CategoryQueryResource categoryQuery = getCategoryQueryRes(coralSession, config);
-		//  - filter out via site list
-		if(categoryQuery != null)
-		{
-			try
-			{
-				String[] siteNames = categoryQuery.getAcceptedSiteNames();
-				if(siteNames.length > 0)
-				{
-                    tableFilters.add(new SiteFilter(coralSession, siteNames, siteService));
-				}
-			}
-			catch (SiteException e)
-			{
-				throw new ProcessingException("illegal site name", e);
-			}
-		}
-		return (TableFilter[]) tableFilters.toArray(new TableFilter[tableFilters.size()]);
-	}
+        CategoryQueryResource categoryQuery = getCategoryQueryRes(coralSession, config);
+        List<SiteResource> acceptedSites = new ArrayList<>();
+        if(categoryQuery != null)
+        {
+            try
+            {
+                for(String siteName : categoryQuery.getAcceptedSiteNames())
+                {
+                    acceptedSites.add(siteService.getSite(coralSession, siteName));
+                }
+            }
+            catch(SiteException e)
+            {
+                throw new ProcessingException("illegal site name", e);
+            }
+            try
+            {
+                idSet = structureService.restrictNodeIdSet(acceptedSites, idSet, coralSession);
+            }
+            catch(StructureException e)
+            {
+                throw new ProcessingException(e);
+            }
+        }
+        return idSet;
+    }
 
     // implementation /////////////////////////////////////////////////////////////////////////////
     
