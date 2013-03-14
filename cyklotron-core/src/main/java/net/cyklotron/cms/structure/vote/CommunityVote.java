@@ -1,21 +1,22 @@
 package net.cyklotron.cms.structure.vote;
 
-import static java.lang.Math.max;
-
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
+import org.objectledge.coral.relation.MalformedRelationQueryException;
+import org.objectledge.coral.relation.ResourceIdentifierResolver;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.category.query.CategoryQueryException;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
@@ -66,28 +67,41 @@ public class CommunityVote
         }
 
         LongKeyMap documents = new LongKeyOpenHashMap();
-        LongSet docIds = structureService.getDocumentsValidAtOrAfter(cutoffDate, coralSession);
-        if(singleSite != null || categoryQuery != null)
+        LongSet docIds = null;
+        if(cutoffDate != null)
         {
-            docIds = restrictDocumentSet(categoryQuery, singleSite, docIds, coralSession);
+            docIds = structureService.getDocumentsValidAtOrAfter(cutoffDate, coralSession);
         }
-        LongIterator i = docIds.iterator();
-        while(i.hasNext())
+        if(singleSite != null)
         {
-            long id = i.next();
-            try
+            docIds = restrictDocumentSet(Collections.singletonList(singleSite), docIds,
+                coralSession);
+        }
+        if(categoryQuery != null)
+        {
+            docIds = restrictDocumentSet(categoryQuery, docIds, coralSession);
+        }
+        if(docIds != null)
+        {
+            LongIterator i = docIds.iterator();
+            while(i.hasNext())
             {
-                NavigationNodeResource document = (NavigationNodeResource)coralSession.getStore()
-                    .getResource(id);
-                documents.put(id, document);
-                for(SortHandler<? > handler : handlers.values())
+                long id = i.next();
+                try
                 {
-                    handler.process(id, document.getVotesPositive(0), document.getVotesNegative(0));
+                    NavigationNodeResource document = (NavigationNodeResource)coralSession
+                        .getStore().getResource(id);
+                    documents.put(id, document);
+                    for(SortHandler<?> handler : handlers.values())
+                    {
+                        handler.process(id, document.getVotesPositive(0),
+                            document.getVotesNegative(0));
+                    }
                 }
-            }
-            catch(EntityDoesNotExistException e)
-            {
-                // ignore
+                catch(EntityDoesNotExistException e)
+                {
+                    // ignore
+                }
             }
         }
 
@@ -115,72 +129,80 @@ public class CommunityVote
         return result;
     }
 
-    private LongSet restrictDocumentSet(CategoryQueryResource categoryQuery,
-        SiteResource singleSite, LongSet idSet, CoralSession coralSession)
+    private LongSet restrictDocumentSet(Collection<SiteResource> acceptedSites, LongSet idSet,
+        CoralSession coralSession)
         throws StructureException
     {
-        if(categoryQuery != null)
+        StringBuffer query = new StringBuffer();
+        query.append("MAP('structure.SiteDocs'){");
+        Iterator<SiteResource> i = acceptedSites.iterator();
+        while(i.hasNext())
         {
-            try
+            query.append(" RES(").append(i.next().getIdString()).append(") ");
+            if(i.hasNext())
             {
-                idSet = categoryService.forwardQueryIds(coralSession, categoryQuery.getQuery(), idSet);
-            }
-            catch(CategoryQueryException e)
-            {
-                throw new StructureException("failed to execute category query", e);
+                query.append("+ ");
             }
         }
-        Set<SiteResource> acceptedSites = new HashSet<SiteResource>();
-        if(singleSite != null)
+        query.append("};");
+        try
         {
-            acceptedSites.add(singleSite);
-        }
-        else if(categoryQuery != null)
-        {
-            String[] acceptedSiteNames = categoryQuery.getAcceptedSiteNames();
-            if(acceptedSiteNames != null && acceptedSiteNames.length > 0)
-            {
-                for(String acceptedSiteName : acceptedSiteNames)
+            return coralSession.getRelationQuery().queryIds(query.toString(),
+                new ResourceIdentifierResolver()
                 {
-                    SiteResource acceptedSite;
-                    try
+                    @Override
+                    public LongSet resolveIdentifier(String identifier)
+                        throws EntityDoesNotExistException
                     {
-                        acceptedSite = siteService.getSite(coralSession, acceptedSiteName);
-                        acceptedSites.add(acceptedSite);
+                        LongSet set = new LongOpenHashSet(1);
+                        set.add(Long.parseLong(identifier));
+                        return set;
                     }
-                    catch(SiteException e)
-                    {
-                        log.error("invalid accepted site " + acceptedSiteName
-                            + " in query definition" + categoryQuery.toString());
-                    }
+                }, idSet);
+        }
+        catch(MalformedRelationQueryException | EntityDoesNotExistException e)
+        {
+            throw new StructureException("failed to execute category query", e);
+        }
+    }
+
+    private LongSet restrictDocumentSet(CategoryQueryResource categoryQuery, LongSet idSet,
+        CoralSession coralSession)
+        throws StructureException
+    {
+        try
+        {
+            idSet = categoryService.forwardQueryIds(coralSession, categoryQuery.getQuery(), idSet);
+        }
+        catch(CategoryQueryException e)
+        {
+            throw new StructureException("failed to execute category query", e);
+        }
+
+        Set<SiteResource> acceptedSites = new HashSet<SiteResource>();
+        String[] acceptedSiteNames = categoryQuery.getAcceptedSiteNames();
+        if(acceptedSiteNames != null && acceptedSiteNames.length > 0)
+        {
+            for(String acceptedSiteName : acceptedSiteNames)
+            {
+                SiteResource acceptedSite;
+                try
+                {
+                    acceptedSite = siteService.getSite(coralSession, acceptedSiteName);
+                    acceptedSites.add(acceptedSite);
+                }
+                catch(SiteException e)
+                {
+                    log.error("invalid accepted site " + acceptedSiteName + " in query definition"
+                        + categoryQuery.toString());
                 }
             }
         }
+
         // no sites = all are accepted
         if(acceptedSites.size() > 0)
         {
-            LongIterator i = idSet.iterator();
-            LongSet result = new LongOpenHashSet(max(idSet.size(), 1));
-            while(i.hasNext())
-            {
-                try
-                {
-                    long id = i.next();
-                    Resource r = coralSession.getStore().getResource(id);
-                    if(r instanceof NavigationNodeResource)
-                    {
-                        if(acceptedSites.contains(((NavigationNodeResource)r).getSite()))
-                        {
-                            result.add(id);
-                        }                                    
-                    }
-                }
-                catch(EntityDoesNotExistException e)
-                {
-                    // ignore
-                }
-            }
-            idSet = result;
+            idSet = restrictDocumentSet(acceptedSites, idSet, coralSession);
         }        
         return idSet;
     }
