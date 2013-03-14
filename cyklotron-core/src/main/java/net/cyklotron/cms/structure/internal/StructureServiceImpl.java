@@ -116,6 +116,9 @@ public class StructureServiceImpl
     /** The relation for tracking existing aliases */
     public static final String DOCUMENT_ALIAS_RELATION = "structure.DocumentAliases";
     
+    /** Site -> Documents relation */
+    public static final String SITE_DOCUMENT_RELATION = "structure.SiteDocs";
+
     /** Home page preferences key for id of the node where propose document is deployed in the site */
     private static final String PROPOSE_DOCUMENT_NODE_KEY = "stucture.proposeDocumentNode";
 
@@ -262,13 +265,14 @@ public class StructureServiceImpl
         DocumentNodeResource node = null;
         try
         {
-            node = DocumentNodeResourceImpl.createDocumentNodeResource(
-                coralSession, name, parent, title, site, preferences);
+            node = DocumentNodeResourceImpl.createDocumentNodeResource(coralSession, name, parent,
+                title, site, preferences);
         }
         catch(ValueRequiredException e)
         {
             throw new StructureException("Required attribute value was not set.",e);
         }
+        addToSiteDocsRelation(node, site, coralSession);
         updateValidityStartCache(node);
         return node;
     }
@@ -315,6 +319,7 @@ public class StructureServiceImpl
         }
         updateNode(coralSession, node, name, true, subject);
         updateValidityStartCache(node);
+        addToSiteDocsRelation(node, parent.getSite(), coralSession);
         if(isWorkflowEnabled())
         {
             Permission permission = coralSession.getSecurity().getUniquePermission(
@@ -347,6 +352,24 @@ public class StructureServiceImpl
         }
         
         return node;
+    }
+
+    private void addToSiteDocsRelation(DocumentNodeResource node, SiteResource site,
+        CoralSession coralSession)
+        throws StructureException
+    {
+        try
+        {
+            Relation siteDocs = coralSession.getRelationManager().getRelation(
+                SITE_DOCUMENT_RELATION);
+            RelationModification mod = new RelationModification();
+            mod.add(site, node);
+            coralSession.getRelationManager().updateRelation(siteDocs, mod);
+        }
+        catch(EntityDoesNotExistException | AmbigousEntityNameException e)
+        {
+            throw new StructureException("relation update failed", e);
+        }
     }
 
     /**
@@ -384,14 +407,15 @@ public class StructureServiceImpl
                         + " aliases exist");
                 }
             }
+            Relation siteDocs = coralSession.getRelationManager().getRelation(
+                SITE_DOCUMENT_RELATION);
+            RelationModification mod = new RelationModification();
+            mod.remove(node.getSite(), node);
+            coralSession.getRelationManager().updateRelation(siteDocs, mod);
         }
-        catch(EntityDoesNotExistException e)
+        catch(EntityDoesNotExistException | AmbigousEntityNameException e)
         {
-            throw new StructureException("can't access " + DOCUMENT_ALIAS_RELATION, e);
-        }
-        catch(AmbigousEntityNameException e)
-        {
-            throw new StructureException("can't access " + DOCUMENT_ALIAS_RELATION, e);
+            throw new StructureException("relation update failed", e);
         }
 
         for(NodeDeletionListener listener : deletionListeners)
