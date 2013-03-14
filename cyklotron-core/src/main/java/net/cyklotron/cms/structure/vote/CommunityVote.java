@@ -1,21 +1,17 @@
 package net.cyklotron.cms.structure.vote;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.relation.MalformedRelationQueryException;
-import org.objectledge.coral.relation.ResourceIdentifierResolver;
 import org.objectledge.coral.session.CoralSession;
 
 import net.cyklotron.cms.category.query.CategoryQueryException;
@@ -31,7 +27,6 @@ import net.cyklotron.cms.structure.StructureService;
 import bak.pcj.LongIterator;
 import bak.pcj.map.LongKeyMap;
 import bak.pcj.map.LongKeyOpenHashMap;
-import bak.pcj.set.LongOpenHashSet;
 import bak.pcj.set.LongSet;
 
 public class CommunityVote
@@ -74,8 +69,8 @@ public class CommunityVote
         }
         if(singleSite != null)
         {
-            docIds = restrictDocumentSet(Collections.singletonList(singleSite), docIds,
-                coralSession);
+            docIds = structureService.restrictNodeIdSet(Collections.singletonList(singleSite),
+                docIds, coralSession);
         }
         if(categoryQuery != null)
         {
@@ -129,43 +124,6 @@ public class CommunityVote
         return result;
     }
 
-    private LongSet restrictDocumentSet(Collection<SiteResource> acceptedSites, LongSet idSet,
-        CoralSession coralSession)
-        throws StructureException
-    {
-        StringBuffer query = new StringBuffer();
-        query.append("MAP('structure.SiteDocs'){");
-        Iterator<SiteResource> i = acceptedSites.iterator();
-        while(i.hasNext())
-        {
-            query.append(" RES(").append(i.next().getIdString()).append(") ");
-            if(i.hasNext())
-            {
-                query.append("+ ");
-            }
-        }
-        query.append("};");
-        try
-        {
-            return coralSession.getRelationQuery().queryIds(query.toString(),
-                new ResourceIdentifierResolver()
-                {
-                    @Override
-                    public LongSet resolveIdentifier(String identifier)
-                        throws EntityDoesNotExistException
-                    {
-                        LongSet set = new LongOpenHashSet(1);
-                        set.add(Long.parseLong(identifier));
-                        return set;
-                    }
-                }, idSet);
-        }
-        catch(MalformedRelationQueryException | EntityDoesNotExistException e)
-        {
-            throw new StructureException("failed to execute category query", e);
-        }
-    }
-
     private LongSet restrictDocumentSet(CategoryQueryResource categoryQuery, LongSet idSet,
         CoralSession coralSession)
         throws StructureException
@@ -202,7 +160,7 @@ public class CommunityVote
         // no sites = all are accepted
         if(acceptedSites.size() > 0)
         {
-            idSet = restrictDocumentSet(acceptedSites, idSet, coralSession);
+            idSet = structureService.restrictNodeIdSet(acceptedSites, idSet, coralSession);
         }        
         return idSet;
     }
