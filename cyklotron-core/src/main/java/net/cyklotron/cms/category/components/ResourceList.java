@@ -20,6 +20,7 @@ import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.util.SiteFilter;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * This class contains logic of component which displays lists of resources assigned
@@ -31,18 +32,21 @@ import net.cyklotron.cms.util.SiteFilter;
 public class ResourceList
     extends BaseResourceList
 {
-	protected CategoryQueryService categoryQueryService;
+    protected final CategoryQueryService categoryQueryService;
     
     /** site service */
-    protected SiteService siteService;
+    protected final SiteService siteService;
+
+    protected final StructureService structureService;
 	
     public ResourceList(Context context, IntegrationService integrationService,
         CmsDataFactory cmsDataFactory,  CategoryQueryService categoryQueryService,
-        SiteService siteService)
+        SiteService siteService, StructureService structureService)
 	{
         super(context, integrationService, cmsDataFactory);
 		this.categoryQueryService = categoryQueryService;
         this.siteService = siteService;
+        this.structureService = structureService;
 	}
 
     public BaseResourceListConfiguration createConfig()
