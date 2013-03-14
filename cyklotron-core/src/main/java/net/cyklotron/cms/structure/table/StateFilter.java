@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.objectledge.table.TableFilter;
 
+import net.cyklotron.cms.workflow.StateResource;
 import net.cyklotron.cms.workflow.StatefulResource;
 
 /**
@@ -25,6 +26,7 @@ public class StateFilter<T extends StatefulResource>
 
     public boolean accept(StatefulResource resource)
     {
-        return allowedStatesNames.contains(resource.getState().getName());
+        final StateResource state = resource.getState();
+        return state != null && allowedStatesNames.contains(state.getName());
     }
 }
