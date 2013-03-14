@@ -1,5 +1,6 @@
 package net.cyklotron.cms.structure;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
@@ -341,4 +342,19 @@ public interface StructureService
      * @param listener the listener.
      */
     public void addNodeDeletionListener(NodeDeletionListener listener);
+
+    /**
+     * Intersects a set of navigation node ids with a set of sites. Only ids of the nodes that are
+     * contained in one of the given sites are retained in the returned set, unless the initial set
+     * is {@code null}. In this case, all nodes within given sites are returned.
+     * 
+     * @param acceptedSites a collection of sites.
+     * @param idSet initial set of ids, or {@code null} to return <em>all</em> nodes within given
+     *        sites.
+     * @param coralSession Coral sessions.
+     * @return a set of navigation node ids.
+     */
+    public LongSet restrictNodeIdSet(Collection<SiteResource> acceptedSites, LongSet idSet,
+        CoralSession coralSession)
+        throws StructureException;
 }

@@ -6,10 +6,12 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,8 +26,10 @@ import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.relation.MalformedRelationQueryException;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.relation.RelationModification;
+import org.objectledge.coral.relation.ResourceIdentifierResolver;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.schema.ResourceClass;
@@ -1146,6 +1150,44 @@ public class StructureServiceImpl
     public void addNodeDeletionListener(NodeDeletionListener listener)
     {
         deletionListeners.add(listener);
+    }
+
+    @Override
+    public LongSet restrictNodeIdSet(Collection<SiteResource> acceptedSites, LongSet idSet,
+        CoralSession coralSession)
+        throws StructureException
+    {
+        StringBuffer query = new StringBuffer();
+        query.append("MAP('" + SITE_DOCUMENT_RELATION + "'){");
+        Iterator<SiteResource> i = acceptedSites.iterator();
+        while(i.hasNext())
+        {
+            query.append(" RES(").append(i.next().getIdString()).append(") ");
+            if(i.hasNext())
+            {
+                query.append("+ ");
+            }
+        }
+        query.append("};");
+        try
+        {
+            return coralSession.getRelationQuery().queryIds(query.toString(),
+                new ResourceIdentifierResolver()
+                    {
+                        @Override
+                        public LongSet resolveIdentifier(String identifier)
+                            throws EntityDoesNotExistException
+                        {
+                            LongSet set = new LongOpenHashSet(1);
+                            set.add(Long.parseLong(identifier));
+                            return set;
+                        }
+                    }, idSet);
+        }
+        catch(MalformedRelationQueryException | EntityDoesNotExistException e)
+        {
+            throw new StructureException("failed to execute category query", e);
+        }
     }
 }
 
