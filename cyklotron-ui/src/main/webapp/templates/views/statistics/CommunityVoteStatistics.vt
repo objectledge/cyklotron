@@ -6,7 +6,7 @@
 #set($sortDirectionOptions = ['ASC','DESC'])
 #set($resultPageSizeOptions = [20, 50, 100])
 #set($defaultResultPageSize = '50')
-#set($noCuttoffDateOffset = '7300')
+#set($noCuttoffDateOffset = '0')
 ##
 ## i18n
 ##
