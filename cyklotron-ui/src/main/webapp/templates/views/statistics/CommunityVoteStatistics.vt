@@ -29,7 +29,7 @@ $table.getColumn('validity_start').set('width','20%')##
 $table.getColumn('creator_name').set('width','17%')##
 $table.getColumn('votesPositive').set('width','1%')##
 $table.getColumn('votesNegative').set('width','1%')##
-#set($tableLink = $filesLink.set('tableId',$table.getId()))
+#set($tableLink = $link.set('tableId',$table.getId()))
 ##
 ## header
 ##
@@ -37,13 +37,21 @@ $table.getColumn('votesNegative').set('width','1%')##
 ##
 ## parameters 
 ##
-<div align="right">
 <form name="form1" method="POST" action="$link">
+<div align="right">
+	<script type="text/javascript">
+    function send(action)
+    {
+        document.form1.action = action;
+        document.form1.submit();
+    }
+	</script>
 	$strings.cutoffDateOffset
 	<select name="cutoffDateOffset">
-	    <option value="$noCuttoffDateOffset"#if(==7300)#selected($noCuttoffDateOffset.equals($currentCutoffDateOffset))>[ $strings.noRestriction ]</option>
 	#foreach($offset in $cuttoffDateOffsetOptions)
-		<option value="$offset"#selected($offset.equals($currentCutoffDateOffset))>$offset</option>
+		<option value="$offset"#selected($offset.equals($currentCutoffDateOffset))>
+			#if($offset == '0') b/o #else $offset #end
+		</option>
 	#end
 	</select>
 	$strings.days,
@@ -71,7 +79,6 @@ $table.getColumn('votesNegative').set('width','1%')##
 	#end	
 	</select>
 	<input type="submit" value="$strings.show"/>
-</form>
 </div>
 ##
 ## data table
@@ -88,7 +95,7 @@ $table.getColumn('votesNegative').set('width','1%')##
 			#set($position = $table.rows.indexOf($row) + 1) 
 			<td>$position</td>
 			<td>$row.object.title</td>
-			<td>$format_date.style('date').format($row.object.validityStart)</td>
+			<td>#if($row.object.validityStart)$format_date.style('date').format($row.object.validityStart)#else&nbsp;#end</td>
 			<td>
 			#if($cms_tool.getUserData($row.object.createdBy).login == 'anonymous')
 				$strings.anonymous <i>$row.object.getFieldValue('authors')</i>
@@ -111,12 +118,13 @@ $table.getColumn('votesNegative').set('width','1%')##
 	<tfoot>
 		<tr>			
     		<td colspan="6" align="center">
-        		#tableView_pager($table $tableLink)
-        		#tableView_pageSizeChooser($table $tableLink $resultPageSizeOptions)
+        		#tableView_pager_Submit($table $tableLink 'send')
+        		#tableView_pageSizeChooser_Submit($table $tableLink $resultPageSizeOptions 'send')
     		</td>
 		</tr>
     </tfoot>
 </table>
+</form>
 ##
 ## footer
 ##
