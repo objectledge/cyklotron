@@ -423,9 +423,7 @@
 			  <parameter class-key="org.objectledge.coral.session.CoralSessionInitValve"/>      		      
 			  <parameter key="restRenderingPipeline"/>
 		    </sequence>
-			<sequence>
-		      <parameter class-key="org.objectledge.web.ContentTypeInitializerValve"/>
-		    </sequence>
+			<sequence />
 			<sequence>
 		      <parameter class-key="org.objectledge.coral.session.CoralSessionCleanupValve"/>	
 		      <parameter class-key="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/> 

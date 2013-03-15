@@ -1,4 +1,5 @@
 $pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink('script/Login.js')##
 #if($ssoTool.active)
 $pageTool.addScriptLink('script/SingleSignOn.js')##
 #end
@@ -23,7 +24,51 @@ function enableLoadingForm(enable) {
 }
 
 #end
+
 J(document).ready(function() {
+	 $('input[rel=authenticate]').keydown(function() {
+	 	if (event.keyCode == 13) { 
+		try
+		{
+	 	sso.login(J('#login').val(), J('#password').val(), function(status) {
+			logUserToSystem(status);
+        });
+		}catch(e)
+		{
+		  accountStatus(J('#login').val());
+		}
+	}
+    });
+	
+function logUserToSystem(status)
+{
+            if(status == 'success' || status == 'OK') {
+                J("#loginform").submit();
+            } else {		
+				J("#resultInfo").empty();
+						alert(loginError(status))
+            }
+}
+
+function accountStatus(account)
+	{
+		var queries = '';
+		jQuery.ajax({
+				  url : "$link.rootContent('rest/login')?uid=" + account,
+					dataType : "json",
+					success : function(data) {
+						if(data.expiration != 0)
+						{
+							alert('Hasło do konta wygasnie za ' + data.expiration + ' dni, po upływie tego czasu zostanie zablokowane'); 
+						}
+						logUserToSystem(data.accountStatus);
+					},
+					error: function(jqXHR, textStatus, errorThrown){		
+						logUserToSystem('internal_error');
+					},				 
+		    });		
+	}
+
 #if($ssoTool.active)
     J('#loading').ajaxStart(function() {
         enableLoadingForm(false);
@@ -33,27 +78,21 @@ J(document).ready(function() {
     });
 
     var sso = new SSO('$ssoTool.baseUrl');
-#if(!$ssoTool.loggedIn)    
     sso.migrateSession(function(status) {
-        if(status == 'success') {
-            J("#loginform").submit();
-        }
+	 if(status == 'success') {
+         logUserToSystem(status);
+	 }
     });
-
-#end    
+	
     J('#submitbutton').click(function() {
         sso.login(J('#login').val(), J('#password').val(), function(status) {
-            if(status == 'success') {
-                J("#loginform").submit();
-            } else {
-                alert('niepoprawny login lub hasło');
-            }
+               logUserToSystem(status);
         });
     });
 
 #else
     J('#submitbutton').click(function() {
-        J("#loginform").submit();
+		accountStatus(J('#login').val());      
     });
 
 #end        

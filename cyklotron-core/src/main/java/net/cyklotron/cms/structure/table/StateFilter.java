@@ -6,15 +6,15 @@ import java.util.Set;
 
 import org.objectledge.table.TableFilter;
 
-import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.workflow.StatefulResource;
 
 /**
  * DocumentNodeResource state filter
  * 
  * @author lukasz
  */
-public class StateFilter
-    implements TableFilter
+public class StateFilter<T extends StatefulResource>
+    implements TableFilter<T>
 {
     private final Set<String> allowedStatesNames;
 
@@ -23,14 +23,8 @@ public class StateFilter
         allowedStatesNames = new HashSet<String>(Arrays.asList(states));
     }
 
-    public boolean accept(Object object)
+    public boolean accept(StatefulResource resource)
     {
-        if(!(object instanceof DocumentNodeResource))
-        {
-            return false;
-        }
-
-        DocumentNodeResource node = (DocumentNodeResource)object;
-        return allowedStatesNames.contains(node.getState().getName());
+        return allowedStatesNames.contains(resource.getState().getName());
     }
 }

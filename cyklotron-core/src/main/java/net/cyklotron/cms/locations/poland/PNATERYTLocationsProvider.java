@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.jcontainer.dna.Logger;
 import org.objectledge.database.Database;
 import org.objectledge.filesystem.FileSystem;
@@ -51,7 +54,8 @@ public class PNATERYTLocationsProvider
      * </ul>
      */
     public static final String[] FIELDS = { "postCode", "sym", "terc", "street", "area", "city",
-                    "commune", "district", "province" };
+                    "commune", "district", "province", "areaName", "areaType", "areaLevel",
+                    "areaRank" };
 
     private final Logger logger;
 
@@ -65,6 +69,8 @@ public class PNATERYTLocationsProvider
 
     private final FileSystem fileSystem;
 
+    private final Map<String, Set<FieldOptions>> options = new HashMap<>();
+
     public PNATERYTLocationsProvider(Logger logger, FileSystem fileSystem, HTMLService htmlService,
         Database database)
     {
@@ -73,6 +79,11 @@ public class PNATERYTLocationsProvider
         this.database = database;
         pnaProvider = new PNAProvider(fileSystem, logger);
         tercProvider = new TERCProvider(logger, fileSystem, htmlService, database);
+
+        options.put("postCode", EnumSet.of(FieldOptions.NOT_ANALYZED));
+        options.put("areaType", EnumSet.of(FieldOptions.NOT_ANALYZED));
+        options.put("areaLevel", EnumSet.of(FieldOptions.INTEGER));
+        options.put("street", EnumSet.noneOf(FieldOptions.class));
     }
 
     private void writeDB(List<String[]> content)
@@ -164,13 +175,15 @@ public class PNATERYTLocationsProvider
         try(Connection conn = database.getConnection(); Statement stmt = conn.createStatement())
         {
             Timer timer = new Timer();
+            List<Location> locations = new ArrayList<>();
             try(ResultSet rs = stmt.executeQuery("SELECT * FROM locations_vpna"))
             {
-                List<Location> locations = new ArrayList<>();
+                int i = 0;
                 while(rs.next())
                 {
-                    String terc = rs.getString("woj") + rs.getString("pow")
-                        + rs.getString("gmi").trim() + rs.getString("rodz_gmi");
+                    String terc = rs.getString("woj") != null ? (rs.getString("woj")
+                        + rs.getString("pow") + rs.getString("gmi").trim() + rs
+                        .getString("rodz_gmi")) : "";
                     String area = rs.getString("miejscowość") == rs.getString("nazwa") ? rs
                         .getString("nazwa_rm") != null ? rs.getString("nazwa_rm") : "" : rs
                         .getString("nazwa");
@@ -188,13 +201,39 @@ public class PNATERYTLocationsProvider
                     fieldValues.put("terc", terc);
                     fieldValues.put("sym", sym);
                     fieldValues.put("postCode", rs.getString("pna"));
-
+                    fieldValues.put("areaType", "okręg pocztowy");
                     locations.add(new Location(FIELDS, fieldValues));
+                    i++;
                 }
-                logger.info("READ " + locations.size() + " items from locations_vpna DB in "
+                logger.info("READ " + i + " postal regions from locations_vpna view in "
                     + timer.getElapsedSeconds() + "s");
-                return locations;
             }
+            try(ResultSet rs = stmt.executeQuery("SELECT * FROM locations_varea"))
+            {
+                int i = 0;
+                while(rs.next())
+                {
+                    Map<String, String> fieldValues = new HashMap<>();
+                    fieldValues.put("areaName", rs.getString("nazwa"));
+                    fieldValues.put("province", rs.getString("województwo"));
+                    fieldValues.put("district", rs.getString("powiat"));
+                    fieldValues.put("commune", rs.getString("gmina"));
+                    fieldValues.put("city", rs.getString("miejscowość"));
+                    final String terc = rs.getString("terc");
+                    final String sym = rs.getString("sym");
+                    final int level = terc.length() + (sym != null ? 1 : 0);
+                    fieldValues.put("terc", terc);
+                    fieldValues.put("sym", sym);
+                    fieldValues.put("areaType", rs.getString("typ"));
+                    fieldValues.put("areaRank", rs.getString("rm"));
+                    fieldValues.put("areaLevel", Integer.toString(level));
+                    locations.add(new Location(FIELDS, fieldValues));
+                    i++;
+                }
+                logger.info("READ " + i + " administrative aras from locations_varea view in "
+                    + timer.getElapsedSeconds() + "s");
+            }
+            return locations;
         }
         catch(SQLException e)
         {
@@ -274,14 +313,18 @@ public class PNATERYTLocationsProvider
     @Override
     public Set<FieldOptions> getOptions(String field)
     {
-        switch(field)
-        {
-        case "postCode":
-            return EnumSet.of(FieldOptions.NOT_ANALYZED);
-        case "street":
-            return EnumSet.of(FieldOptions.MULTI_TERM_SUBQUERY);
-        default:
-            return EnumSet.noneOf(FieldOptions.class);
-        }
+        return options.containsKey(field) ? options.get(field) : EnumSet.noneOf(FieldOptions.class);
+    }
+
+    public Term getFineGrainedLocationMarker()
+    {
+        return new Term("areaType", "okręg pocztowy");
+    }
+
+    public Sort getCoarseGrainedLocationSort()
+    {
+        return new Sort(new SortField[] { SortField.FIELD_SCORE,
+                        new SortField("areaLevel", SortField.Type.INT),
+                        new SortField("terc", SortField.Type.STRING) });
     }
 }

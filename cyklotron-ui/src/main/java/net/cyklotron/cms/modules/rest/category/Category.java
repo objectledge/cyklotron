@@ -56,13 +56,11 @@ public class Category
         throws EntityDoesNotExistException
     {
         Collection<CategoryResource> categories = new ArrayList<>(ids.size());
-        try(CoralSession session = coralSessionFactory.getCurrentSession())
+        CoralSession session = coralSessionFactory.getCurrentSession();
+        for(String id : ids)
         {
-            for(String id : ids)
-            {
-                categories.add(session.getStore().getResource(Long.valueOf(id),
-                    CategoryResource.class));
-            }
+            categories
+                .add(session.getStore().getResource(Long.valueOf(id), CategoryResource.class));
         }
         return categories;
     }

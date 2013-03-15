@@ -3,6 +3,9 @@ package net.cyklotron.cms.locations;
 import java.util.Collection;
 import java.util.Set;
 
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Sort;
+
 public interface LocationsProvider
 {
     /**
@@ -25,6 +28,18 @@ public interface LocationsProvider
     public Set<FieldOptions> getOptions(String field);
 
     /**
+     * Returns fine-grained location record marker. Fine grained locations MUST have this term,
+     * coarse grained locations (areas) MUST NOT have this term. When {@code null} is returned, all
+     * locations are considered to be fine grained.
+     */
+    public Term getFineGrainedLocationMarker();
+
+    /**
+     * Returns sort order provider for coarse grained locations (areas).
+     */
+    public Sort getCoarseGrainedLocationSort();
+
+    /**
      * Return all locations in the database, updated from source.
      * 
      * @return TODO
@@ -43,6 +58,9 @@ public interface LocationsProvider
      */
     public enum FieldOptions
     {
+        /** Field is an integer number */
+        INTEGER,
+
         /** Field should be treated as single token. */
         NOT_ANALYZED,
 

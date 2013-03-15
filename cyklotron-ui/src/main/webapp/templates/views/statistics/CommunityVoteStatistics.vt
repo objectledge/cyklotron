@@ -6,6 +6,7 @@
 #set($sortDirectionOptions = ['ASC','DESC'])
 #set($resultPageSizeOptions = [20, 50, 100])
 #set($defaultResultPageSize = '50')
+#set($noCuttoffDateOffset = '7300')
 ##
 ## i18n
 ##
@@ -40,6 +41,7 @@ $table.getColumn('votesNegative').set('width','1%')##
 <form name="form1" method="POST" action="$link">
 	$strings.cutoffDateOffset
 	<select name="cutoffDateOffset">
+	    <option value="$noCuttoffDateOffset"#if(==7300)#selected($noCuttoffDateOffset.equals($currentCutoffDateOffset))>[ $strings.noRestriction ]</option>
 	#foreach($offset in $cuttoffDateOffsetOptions)
 		<option value="$offset"#selected($offset.equals($currentCutoffDateOffset))>$offset</option>
 	#end
