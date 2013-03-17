@@ -49,4 +49,16 @@ public class GenericSearcherImpl<T extends Resource, U>
         }
     }
 
+    @Override
+    public <R> R useSearcher(SearcherUser<R> searcherUser)
+    {
+        try
+        {
+            return index.useSearcher(searcherUser);
+        }
+        catch(IOException e)
+        {
+            throw new BackendException("Error during searching", e);
+        }
+    }
 }

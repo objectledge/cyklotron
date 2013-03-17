@@ -404,4 +404,19 @@ public class GenericIndex<T extends Resource, U>
     {
         directory.close();
     }
+
+    public <R> R useSearcher(SearcherUser<R> searcherUser)
+        throws IOException
+    {
+        IndexSearcher searcher = searcherManager.acquire();
+        try
+        {
+            return searcherUser.useSearcher(searcher);
+        }
+        finally
+        {
+            searcherManager.release(searcher);
+        }
+
+    }
 }
