@@ -15,11 +15,11 @@ import org.objectledge.parameters.directory.DirectoryParameters;
  */
 public class UserUtils
 {
-    public static List filteredUserList(CoralSession coralSession, UserManager userManager, 
-        String show, String search)
+    public static List<Subject> filteredUserList(CoralSession coralSession,
+        UserManager userManager, String show, String search)
     {
         Subject[] subjects = coralSession.getSecurity().getSubject();
-        ArrayList filtered = new ArrayList();
+        List<Subject> filtered = new ArrayList<>();
         if((show == null && search == null) || (show != null && show.equals("all")))
         {
             for(int i=0; i<subjects.length; i++)
