@@ -7,6 +7,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.authentication.UserManager;
+import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
@@ -24,6 +25,7 @@ import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
 import org.objectledge.table.comparator.ListComparator;
+import org.objectledge.table.comparator.NumericStringComparator;
 import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
@@ -39,9 +41,10 @@ public class UserList
 {
     protected UserManager userManager;
 
-    protected TableColumn[] columns;
+    @SuppressWarnings("unchecked")
+    protected TableColumn<List<String>>[] columns = new TableColumn[5];
 
-    protected List letters;
+    protected List<String> letters = new ArrayList<>();
 
     public UserList(Context context, Logger logger, PreferencesService preferencesService,
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager, UserManager userManager)
@@ -50,19 +53,18 @@ public class UserList
         this.userManager = userManager;
         try
         {
-            columns = new TableColumn[5];
-            columns[0] = new TableColumn("uid", new ListComparator(1));
-            columns[1] = new TableColumn("name", new ListComparator(3));
-            columns[2] = new TableColumn("locality", new ListComparator(4));
-            columns[3] = new TableColumn("country", new ListComparator(5));
-            columns[4] = new TableColumn("filler", null);
+            columns[0] = new TableColumn<List<String>>("subjectId", new ListComparator<String>(1,
+                new NumericStringComparator()));
+            columns[1] = new TableColumn<List<String>>("uid", new ListComparator<String>(2));
+            columns[2] = new TableColumn<List<String>>("dn", new ListComparator<String>(3));
+            columns[3] = new TableColumn<List<String>>("cn", new ListComparator<String>(4));
+            columns[4] = new TableColumn<List<String>>("mail", new ListComparator<String>(5));
         }
         catch(TableException e)
         {
             throw new ComponentInitializationError("failed to initialize column data", e);
         }
         // this is way silly
-        letters = new ArrayList();
         for(int i=(int)'A'; i<(int)'Z'; i++)
         {
             letters.add(new String(new char[] {(char)i}));
@@ -81,7 +83,8 @@ public class UserList
             templatingContext.put("show", show);
             templatingContext.put("search", search);
 
-            List filtered = UserUtils.filteredUserList(coralSession, userManager, show, search);
+            List<Subject> filtered = UserUtils.filteredUserList(coralSession, userManager, show,
+                search);
             
             // TODO: furure enhansement idea for more than one permission and
             // role filter.
@@ -108,10 +111,9 @@ public class UserList
                 String roleName = parameters.get("role","");
                 role = coralSession.getSecurity().getUniqueRole(roleName);
             }
-            
 
-
-            ArrayList processed = new ArrayList();
+            List<List<String>> processed = new ArrayList<>();
+            int pos = 0;
             for(int i=0; i<filtered.size(); i++)
             {
                 Subject user = (Subject)filtered.get(i);
@@ -124,21 +126,30 @@ public class UserList
                 {
                     continue;
                 }
-                Parameters pc = new DirectoryParameters(userManager.getPersonalData(new DefaultPrincipal(user.getName())));
-                String[] classes = pc.getStrings("objectClass");
-                for(int j=0; j<classes.length; j++)
+                try(DirectoryParameters pc = new DirectoryParameters(
+                    userManager.getPersonalData(new DefaultPrincipal(user.getName()))))
                 {
-                    if(classes[j].equals("cyklotronPerson"))
+                    String[] classes = pc.getStrings("objectClass");
+                    for(int j=0; j<classes.length; j++)
                     {
-                        ArrayList userData = new ArrayList();
-                        userData.add(user.getIdObject());
-                        userData.add(pc.get("uid"));
-                        userData.add(user.getName());
-                        userData.add(pc.get("cn",""));
-                        userData.add(pc.get("l",""));
-                        userData.add(pc.get("c",""));
-                        processed.add(userData);
+                        if(classes[j].equals("inetOrgPerson"))
+                        {
+                            List<String> userData = new ArrayList<>();
+                            userData.add(Integer.toString(pos++));
+                            userData.add(user.getIdString());
+                            userData.add(pc.get("uid"));
+                            userData.add(user.getName());
+                            userData.add(pc.get("cn", ""));
+                            userData.add(firstOrBlank(pc.getStrings("mail")));
+                            processed.add(userData);
+                        }
                     }
+                }
+                catch(UserUnknownException e)
+                {
+                    logger.error(user.getName()
+                        + " is present in Coral but missing from user directory");
+                    continue;
                 }
             }
             templatingContext.put("users", processed);
@@ -156,9 +167,17 @@ public class UserList
                (search != null && !search.equals(prevSearch)))
             {
                 state.setCurrentPage(1);
+                state.setSortColumnName("uid");
             }
-            TableModel model = new ListTableModel(processed, columns);
-            templatingContext.put("table", new TableTool(state, null, model));
+            TableModel<List<String>> model = new ListTableModel<List<String>>(processed, columns)
+                {
+                    @Override
+                    public String getId(String parent, List<String> child)
+                    {
+                        return child.get(0);
+                    }
+                };
+            templatingContext.put("table", new TableTool<List<String>>(state, null, model));
 
             templatingContext.put("letters", letters);
         }
@@ -172,6 +191,18 @@ public class UserList
             {
                 throw new ProcessingException("failed to load user list", e);
             }
+        }
+    }
+
+    private static String firstOrBlank(String[] vals)
+    {
+        if(vals != null && vals.length >= 1)
+        {
+            return vals[0];
+        }
+        else
+        {
+            return "";
         }
     }
 }
