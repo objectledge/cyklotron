@@ -1,7 +1,6 @@
 package net.cyklotron.cms.modules.views.security;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -13,6 +12,7 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.authentication.UserManager;
+import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.RoleAssignment;
 import org.objectledge.coral.security.Subject;
@@ -89,8 +89,16 @@ public class MemberList
                 Map<String, Object> memberDesc = new HashMap<String, Object>();
                 memberDesc.put("id", member.getIdObject());
                 memberDesc.put("login", userManager.getLogin(member.getName()));
-                Parameters pc = new DirectoryParameters(userManager.getPersonalData(new DefaultPrincipal(member.getName())));
-                memberDesc.put("name", pc.get("cn", ""));
+                try
+                {
+                    Parameters pc = new DirectoryParameters(userManager.getPersonalData(new DefaultPrincipal(member.getName())));
+                    memberDesc.put("name", pc.get("cn", ""));
+                    memberDesc.put("missing", false);
+                }
+                catch(UserUnknownException e)
+                {
+                    memberDesc.put("missing", true);
+                }
                 if(member.hasRole(site.getTeamMember()))
                 {
                     memberDesc.put("team_member", Boolean.TRUE);
