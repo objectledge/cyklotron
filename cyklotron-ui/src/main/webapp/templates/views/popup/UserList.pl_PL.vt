@@ -77,10 +77,9 @@ function select(index)
 <br/>
 
 $table.getColumn('uid').set('label', 'Login')
-$table.getColumn('name').set('label', 'Imię i nazwisko')
-$table.getColumn('locality').set('label', 'Miasto')
-$table.getColumn('country').set('label', 'Państwo')
-#set($columnOrder = ['uid','name','locality','country'])
+$table.getColumn('cn').set('label', 'Imię i nazwisko')
+$table.getColumn('mail').set('label', 'E-mail')
+#set($columnOrder = ['uid','cn','mail'])
 #set($tableLink = $link.set('tableId',$table.getId()))
 #if($show)
   #set($tableLink = $tableLink.set('show',$show).set('prev_show',$show))
@@ -97,10 +96,9 @@ $table.getColumn('country').set('label', 'Państwo')
 #set($odd = $velocityCount % 2)
 #set($index = $velocityCount - 1)
 <tr class="row$odd">
-  <td><a href="javascript:select($index)">$row.object.get(1)</a></td>
-  <td nowrap>$row.object.get(3)</td>
+  <td><a href="javascript:select($index)">$row.object.get(2)</a></td>
   <td nowrap>$row.object.get(4)</td>
-  <td nowrap>$i18n.usePrefix("countries").get($row.object.get(5).toUpperCase())</td>
+  <td nowrap>$row.object.get(5)</td>
 </tr>
 #end
 <tr><td colspan="4" align="center" class="bottomLine">
