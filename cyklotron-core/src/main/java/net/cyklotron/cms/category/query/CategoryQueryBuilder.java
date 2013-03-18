@@ -30,6 +30,23 @@ public class CategoryQueryBuilder
 
     private String query = "";
 
+    public enum Operator
+    {
+        REQUIRED(" * "), OPTIONAL(" + ");
+
+        private final String operator;
+
+        Operator(String str)
+        {
+            operator = str;
+        }
+
+        String getOperator()
+        {
+            return operator;
+        }
+    }
+
     /**
      * Builds a category query from a ResourceSelectionState.
      * 
@@ -124,6 +141,46 @@ public class CategoryQueryBuilder
             }
         }
         this.query = query.toString();
+    }
+
+    private static String joinParts(List<String> queries, String operator, boolean close)
+    {
+        StringBuilder query = new StringBuilder();
+        final Iterator<String> iterator = queries.iterator();
+        while(iterator.hasNext())
+        {
+            final String queryPart = iterator.next();
+            query.append(queryPart);
+            if(iterator.hasNext())
+            {
+                query.append(operator);
+            }
+            else if(close)
+            {
+                query.append(";");
+            }
+        }
+        return query.toString();
+    }
+    
+    public CategoryQueryBuilder()
+    {
+    }
+
+    public String createQueryPart(Set<String> categoriesIds, Operator operator)
+        throws ProcessingException
+    {
+        return new QueryPart(operator.getOperator(), categoriesIds).getPart();
+    }
+
+    public static String joinPartsLeaveOpen(List<String> queryParts, Operator operator)
+    {
+        return joinParts(queryParts, operator.getOperator(), false);
+    }
+
+    public static String joinPartsAndClose(List<String> queryParts, Operator operator)
+    {
+        return joinParts(queryParts, operator.getOperator(), true);
     }
 
     /**
