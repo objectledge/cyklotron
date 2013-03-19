@@ -51,6 +51,6 @@ public class ResourceList
         CmsData cmsData, Parameters parameters)
     {
         return new net.cyklotron.cms.category.components.ResourceList(context, integrationService,
-            cmsDataFactory, categoryQueryService, siteService);
+            cmsDataFactory, categoryQueryService, siteService, structureService);
     }
 }

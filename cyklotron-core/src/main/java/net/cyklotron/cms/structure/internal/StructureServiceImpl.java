@@ -6,10 +6,12 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,8 +26,10 @@ import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.relation.MalformedRelationQueryException;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.relation.RelationModification;
+import org.objectledge.coral.relation.ResourceIdentifierResolver;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.CircularDependencyException;
 import org.objectledge.coral.schema.ResourceClass;
@@ -116,6 +120,9 @@ public class StructureServiceImpl
     /** The relation for tracking existing aliases */
     public static final String DOCUMENT_ALIAS_RELATION = "structure.DocumentAliases";
     
+    /** Site -> Documents relation */
+    public static final String SITE_DOCUMENT_RELATION = "structure.SiteDocs";
+
     /** Home page preferences key for id of the node where propose document is deployed in the site */
     private static final String PROPOSE_DOCUMENT_NODE_KEY = "stucture.proposeDocumentNode";
 
@@ -262,13 +269,14 @@ public class StructureServiceImpl
         DocumentNodeResource node = null;
         try
         {
-            node = DocumentNodeResourceImpl.createDocumentNodeResource(
-                coralSession, name, parent, title, site, preferences);
+            node = DocumentNodeResourceImpl.createDocumentNodeResource(coralSession, name, parent,
+                title, site, preferences);
         }
         catch(ValueRequiredException e)
         {
             throw new StructureException("Required attribute value was not set.",e);
         }
+        addToSiteDocsRelation(node, site, coralSession);
         updateValidityStartCache(node);
         return node;
     }
@@ -315,6 +323,7 @@ public class StructureServiceImpl
         }
         updateNode(coralSession, node, name, true, subject);
         updateValidityStartCache(node);
+        addToSiteDocsRelation(node, parent.getSite(), coralSession);
         if(isWorkflowEnabled())
         {
             Permission permission = coralSession.getSecurity().getUniquePermission(
@@ -347,6 +356,24 @@ public class StructureServiceImpl
         }
         
         return node;
+    }
+
+    private void addToSiteDocsRelation(DocumentNodeResource node, SiteResource site,
+        CoralSession coralSession)
+        throws StructureException
+    {
+        try
+        {
+            Relation siteDocs = coralSession.getRelationManager().getRelation(
+                SITE_DOCUMENT_RELATION);
+            RelationModification mod = new RelationModification();
+            mod.add(site, node);
+            coralSession.getRelationManager().updateRelation(siteDocs, mod);
+        }
+        catch(EntityDoesNotExistException | AmbigousEntityNameException e)
+        {
+            throw new StructureException("relation update failed", e);
+        }
     }
 
     /**
@@ -384,14 +411,15 @@ public class StructureServiceImpl
                         + " aliases exist");
                 }
             }
+            Relation siteDocs = coralSession.getRelationManager().getRelation(
+                SITE_DOCUMENT_RELATION);
+            RelationModification mod = new RelationModification();
+            mod.remove(node.getSite(), node);
+            coralSession.getRelationManager().updateRelation(siteDocs, mod);
         }
-        catch(EntityDoesNotExistException e)
+        catch(EntityDoesNotExistException | AmbigousEntityNameException e)
         {
-            throw new StructureException("can't access " + DOCUMENT_ALIAS_RELATION, e);
-        }
-        catch(AmbigousEntityNameException e)
-        {
-            throw new StructureException("can't access " + DOCUMENT_ALIAS_RELATION, e);
+            throw new StructureException("relation update failed", e);
         }
 
         for(NodeDeletionListener listener : deletionListeners)
@@ -1122,6 +1150,44 @@ public class StructureServiceImpl
     public void addNodeDeletionListener(NodeDeletionListener listener)
     {
         deletionListeners.add(listener);
+    }
+
+    @Override
+    public LongSet restrictNodeIdSet(Collection<SiteResource> acceptedSites, LongSet idSet,
+        CoralSession coralSession)
+        throws StructureException
+    {
+        StringBuffer query = new StringBuffer();
+        query.append("MAP('" + SITE_DOCUMENT_RELATION + "'){");
+        Iterator<SiteResource> i = acceptedSites.iterator();
+        while(i.hasNext())
+        {
+            query.append(" RES(").append(i.next().getIdString()).append(") ");
+            if(i.hasNext())
+            {
+                query.append("+ ");
+            }
+        }
+        query.append("};");
+        try
+        {
+            return coralSession.getRelationQuery().queryIds(query.toString(),
+                new ResourceIdentifierResolver()
+                    {
+                        @Override
+                        public LongSet resolveIdentifier(String identifier)
+                            throws EntityDoesNotExistException
+                        {
+                            LongSet set = new LongOpenHashSet(1);
+                            set.add(Long.parseLong(identifier));
+                            return set;
+                        }
+                    }, idSet);
+        }
+        catch(MalformedRelationQueryException | EntityDoesNotExistException e)
+        {
+            throw new StructureException("failed to execute category query", e);
+        }
     }
 }
 
