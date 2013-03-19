@@ -25,7 +25,6 @@ import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
 import org.objectledge.table.comparator.ListComparator;
-import org.objectledge.table.comparator.NumericStringComparator;
 import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
@@ -53,8 +52,7 @@ public class UserList
         this.userManager = userManager;
         try
         {
-            columns[0] = new TableColumn<List<String>>("subjectId", new ListComparator<String>(1,
-                new NumericStringComparator()));
+            columns[0] = new TableColumn<List<String>>("subjectId", new ListComparator<String>(1));
             columns[1] = new TableColumn<List<String>>("uid", new ListComparator<String>(2));
             columns[2] = new TableColumn<List<String>>("dn", new ListComparator<String>(3));
             columns[3] = new TableColumn<List<String>>("cn", new ListComparator<String>(4));
