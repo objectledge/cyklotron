@@ -47,11 +47,6 @@ $pageTool.addScriptLink('script/CMSPopups.js')
     </td>
   </tr>
 
-  <input type="hidden" name="postalAddress1" value="ul. Nazwa ulicy 1 / 1">
-  <input type="hidden" name="postalCode" value="00-000">
-  <input type="hidden" name="l" value="Miasto">
-  <input type="hidden" name="c" value="Kraj">
-
 </table>
 
 #genericScreenTrailer()
