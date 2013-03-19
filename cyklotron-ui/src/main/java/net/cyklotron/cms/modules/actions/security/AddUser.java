@@ -6,25 +6,19 @@
  */
 package net.cyklotron.cms.modules.actions.security;
 
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.regex.Pattern;
 
+import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
-import javax.naming.directory.DirContext;
-import javax.naming.directory.ModificationItem;
+import javax.naming.directory.BasicAttributes;
 
 import org.jcontainer.dna.Logger;
-import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.authentication.UserAlreadyExistsException;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
-import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Role;
-import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -54,7 +48,6 @@ public class AddUser extends BaseSecurityAction
      */
     public void execute(Context context, Parameters parameters, MVCContext mvcContext, TemplatingContext templatingContext, HttpContext httpContext, CoralSession coralSession) throws ProcessingException
     {
-        
         Parameters param = parameters;
 
         String uid = param.get("uid","");
@@ -98,24 +91,11 @@ public class AddUser extends BaseSecurityAction
         }
 
         String dn = userManager.createDN(param);
-        AuthenticationContext authenticationContext = 
-            AuthenticationContext.getAuthenticationContext(context);
-		Principal principal = null;
+
         try
         {
-            Subject admin = coralSession.getUserSubject();
-            if(!authenticationContext.isUserAuthenticated())
-            {
-                admin = coralSession.getSecurity().getSubject(Subject.ROOT);
-            }
-            principal = addUser(uid, password, coralSession);
-        }
-        catch(ProcessingException e)
-        {
-            logger.error("User adding exception stage 1: ",e);
-            templatingContext.put("result","exception");
-            templatingContext.put("trace", new StackTrace(e));
-            return;
+            Attributes attrs = buildAttributes(param);
+            userManager.createAccount(uid, password, false, attrs);
         }
         catch(UserAlreadyExistsException e)
         {
@@ -130,25 +110,6 @@ public class AddUser extends BaseSecurityAction
             templatingContext.put("trace", new StackTrace(e));
             return;
         }
-        
-        try
-        {
-            DirContext ctx = userManager.getPersonalData(principal);
-            List temp = buildModificationItems(param, false, null);
-            temp.add(new ModificationItem(DirContext.ADD_ATTRIBUTE,
-                                          new BasicAttribute("objectClass", "cyklotronPerson")));
-            ModificationItem[] items = new ModificationItem[temp.size()];
-            temp.toArray(items);
-            ctx.modifyAttributes("", items);
-			//personalDataService.reloadContainer(dn);
-        }
-        catch(Exception e)
-        {
-            logger.error("User adding exception stage 2: ",e);
-            templatingContext.put("result","exception");
-            templatingContext.put("trace",new StackTrace(e));
-            return;
-        }
        
         templatingContext.put("result","user_added_successfully");        
     }
@@ -158,21 +119,13 @@ public class AddUser extends BaseSecurityAction
         String givenName = param.get("givenName","");
         String sn = param.get("sn","");
 
-        String c = param.get("c","");
-        String l = param.get("l","");
-        String postalAddress1 = param.get("postalAddress1","");
-        String postalCode = param.get("postalCode","");
-        int birthDay = param.getInt("birthDay",-1);
-        int birthMonth = param.getInt("birthMonth",-1);
-        int birthYear = param.getInt("birthYear",-1);
+        String postalAddress1 = param.get("postalAddress1", "");
+        String postalCode = param.get("postalCode", "");
+        String l = param.get("l", "");
+        String c = param.get("c", "");
 
-        if(!isDateValid(birthDay, birthMonth, birthYear))
-        {
-            return "invalid_date";
-        }
-
-        if(givenName.equals("") || sn.equals("") || postalAddress1.equals("") || 
-           postalCode.equals("") || l.equals("") || c.equals(""))
+        if(givenName.equals("") || sn.equals("") || !postalAddress1.equals("")
+            && (postalCode.equals("") || l.equals("") || c.equals("")))
         {
             return "required_field_missing";
         }
@@ -180,41 +133,9 @@ public class AddUser extends BaseSecurityAction
         return null;
     }
 
-    protected boolean isDateValid(int day, int month, int year)
+    protected Attributes buildAttributes(Parameters param)
     {
-        if(day + month + year == -3 && day * month * year == -1)
-        {
-            // unset date is ok
-            return true;
-        }
-        if(day < 1 || day > 31 || month < 1 || month > 12 || year < 1)
-        {
-            return false;
-        }
-        if(year < 1000 || year > 3000)
-        {
-            return false;
-        }
-        Calendar time = Calendar.getInstance();
-        time.set(Calendar.YEAR, year);
-        time.set(Calendar.MONTH,month-1);
-        time.set(Calendar.DAY_OF_MONTH,day);
-        time.set(Calendar.SECOND,0);
-        time.set(Calendar.MILLISECOND,0);
-        time.set(Calendar.HOUR_OF_DAY,0);
-        time.set(Calendar.MINUTE,0);
-        // checks whether month was incremented due to extra days in month
-        if(time.get(Calendar.MONTH)!=(month-1))
-        {
-            return false;
-        }
-        return true;
-    }
-
-    protected List buildModificationItems(Parameters param, boolean update, String localMail)
-    {
-        int mode = update ? DirContext.REPLACE_ATTRIBUTE : DirContext.ADD_ATTRIBUTE;
-
+        Attributes attrs = new BasicAttributes();
         String givenName = param.get("givenName","");
         String sn = param.get("sn","");
 
@@ -223,214 +144,61 @@ public class AddUser extends BaseSecurityAction
         String postalAddress1 = param.get("postalAddress1","");
         String postalCode = param.get("postalCode","");
 
-        String sex = param.get("sex","");
-        int birthDay = param.getInt("birthDay",-1);
-        int birthMonth = param.getInt("birthMonth",-1);
-        int birthYear = param.getInt("birthYear",-1);
-        String profession = param.get("profession","");
-        String businessCategory = param.get("businessCategory","");
-        String educationLevel = param.get("educationLevel","");
-        String hobby = param.get("hobby","");
-
         String telephoneNumber = param.get("telephoneNumber","");
-        String altMail = param.get("altMail","");
         String mail = param.get("mail","");
         String homePage = param.get("homePage","");
 
         // composite fields
         String cn = givenName + " " + sn;
-        String postalAddress = postalAddress1 + " $ " + postalCode + " " + l + " $ " + c;
-        String birthDate = getLDAPDate(birthDay, birthMonth, birthYear);
+        String postalAddress = "";
+        if(postalAddress1.length() > 0)
+        {
+            postalAddress = postalAddress1 + " $ " + postalCode + " " + l + " $ " + c;
+        }
 
-        List temp = new ArrayList();
-        // required fields
-        temp.add(new ModificationItem(mode, new BasicAttribute("givenName", givenName)));
-        temp.add(new ModificationItem(mode, new BasicAttribute("sn", sn)));
-        temp.add(new ModificationItem(mode, new BasicAttribute("cn", cn)));
-        temp.add(new ModificationItem(mode, new BasicAttribute("postalAddress", postalAddress)));
-        temp.add(new ModificationItem(mode, new BasicAttribute("postalCode", postalCode)));
-        temp.add(new ModificationItem(mode, new BasicAttribute("l", l)));
-        temp.add(new ModificationItem(mode, new BasicAttribute("c", c)));
+        if(homePage.length() > 0)
+        {
+            try
+            {
+                homePage = URLEncoder.encode(homePage, "UTF-8") + " Home page";
+            }
+            catch(UnsupportedEncodingException e)
+            {
+                throw new RuntimeException("UTF-8 not supported");
+            }
+        }
+
+        // fields required by inetOrgPerson
+        attrs.put("sn", sn);
+        attrs.put("cn", cn);
+
         // optional fields
-        if(!sex.equals(""))
-        {
-            temp.add(new ModificationItem(mode, new BasicAttribute("sex", sex)));
-        }
-        else
-        {
-            if(update)
-            {
-                temp.add(new ModificationItem(mode, new BasicAttribute("sex")));
-            }
-        }
-        if(birthDate != null && !birthDate.equals(""))
-        {
-            temp.add(new ModificationItem(mode, new BasicAttribute("birthDate", birthDate)));
-        }
-        else
-        {
-            if(update)
-            {
-                temp.add(new ModificationItem(mode, new BasicAttribute("birthDate")));
-            }
-        }
-        if(!profession.equals(""))
-        {
-            temp.add(new ModificationItem(mode, new BasicAttribute("profession", profession)));
-        }
-        else
-        {
-            if(update)
-            {
-                temp.add(new ModificationItem(mode, new BasicAttribute("profession")));
-            }
-        }
-        if(!businessCategory.equals(""))
-        {
-            temp.add(new ModificationItem(mode, new BasicAttribute("businessCategory",
-                businessCategory)));
-        }
-        else
-        {
-            if(update)
-            {
-                temp.add(new ModificationItem(mode, new BasicAttribute("businessCategory")));
-            }
-        }
-        if(!educationLevel.equals(""))
-        {
-            temp.add(new ModificationItem(mode,
-                new BasicAttribute("educationLevel", educationLevel)));
-        }
-        else
-        {
-            if(update)
-            {
-                temp.add(new ModificationItem(mode, new BasicAttribute("educationLevel")));
-            }
-        }
-        if(!hobby.equals(""))
-        {
-            temp.add(new ModificationItem(mode, new BasicAttribute("hobby")));
-        }
-        else
-        {
-            if(update)
-            {
-                temp.add(new ModificationItem(mode, new BasicAttribute("hobby")));
-            }
-        }
-        if(!telephoneNumber.equals(""))
-        {
-            temp.add(new ModificationItem(mode, new BasicAttribute("telephoneNumber",
-                telephoneNumber)));
-        }
-        else
-        {
-            if(update)
-            {
-                temp.add(new ModificationItem(mode, new BasicAttribute("telephoneNumber")));
-            }
-        }
-        if(!homePage.equals(""))
-        {
-            temp.add(new ModificationItem(mode, new BasicAttribute("homePage", homePage)));
-        }
-        else
-        {
-            if(update)
-            {
-                temp.add(new ModificationItem(mode, new BasicAttribute("homePage")));
-            }
-        }
-        // mail addresses
-        List altMailList = new ArrayList();
-        if(!altMail.equals(""))
-        {
-            BasicAttribute attr = new BasicAttribute("altMail");
-            StringTokenizer st = new StringTokenizer(altMail, ";, ");
-            while(st.hasMoreTokens())
-            {
-                String t = st.nextToken();
-                attr.add(t);
-                altMailList.add(t);
-            }
-            temp.add(new ModificationItem(mode, attr));
-        }
-        else
-        {
-            if(update)
-            {
-                temp.add(new ModificationItem(mode, new BasicAttribute("altMail")));
-            }
-        }
+        maybePut("givenName", givenName, attrs);
+        maybePut("postalAddress", postalAddress, attrs);
+        maybePut("postalCode", postalCode, attrs);
+        maybePut("l", l, attrs);
+
+        maybePut("telephoneNumber", telephoneNumber, attrs);
+        maybePut("labeledURI", homePage, attrs);
+
         if(!mail.equals(""))
         {
-            BasicAttribute mailAttr;
-            if(localMail == null && altMailList.size() == 0)
+            BasicAttribute mailAttr = new BasicAttribute("mail");
+            for(String addr : mail.split(";"))
             {
-                mailAttr = new BasicAttribute("mail");
+                mailAttr.add(addr.trim());
             }
-            else
-            {
-                if(!mail.equals(localMail) && !altMailList.contains(mail))
-                {
-                    mail = (String)altMailList.get(0);
-                }
-                mailAttr = new BasicAttribute("mail", mail);
-            }
-            temp.add(new ModificationItem(mode, mailAttr));
+            attrs.put("mail", mailAttr);
         }
-        else
-        {
-            if(altMailList.size() > 0)
-            {
-                temp
-                    .add(new ModificationItem(mode, new BasicAttribute("mail", altMailList.get(0))));
-            }
-            else
-            {
-                if(update)
-                {
-                    temp.add(new ModificationItem(mode, new BasicAttribute("mail")));
-                }
-            }
-        }
-        return temp;
+        return attrs;
     }
 
-    protected String getLDAPDate(int day, int month, int year)
+    private void maybePut(String name, String value, Attributes attrs)
     {
-        if(day + month + year == -3 && day * month * year == -1)
+        if(value.length() > 0)
         {
-            return null;
+            attrs.put(name, value);
         }
-        StringBuilder buff = new StringBuilder();
-        if(year < 10)
-        {
-            buff.append('0');
-        }
-        if(year < 100)
-        {
-            buff.append('0');
-        }
-        if(year < 1000)
-        {
-            buff.append('0');
-        }
-        buff.append(year);
-        if(month < 10)
-        {
-            buff.append('0');
-        }
-        buff.append(month);
-        if(day < 10)
-        {
-            buff.append('0');
-        } 
-        buff.append(day);
-        buff.append("000000Z");
-        return buff.toString();
     }
 
     private final Pattern UID_PATTERN = Pattern.compile("[a-z0-9-_.@]+");
@@ -439,13 +207,6 @@ public class AddUser extends BaseSecurityAction
     {        
         return UID_PATTERN.matcher(uid).matches();
     }
-    
-    protected Principal addUser(String login, String password, CoralSession coralSession) 
-	    throws ProcessingException, Exception
-	{
-	    Principal principal = userManager.createAccount(login, password);
-		return principal;
-	}
     
     public boolean checkAccessRights(Context context)
 	    throws ProcessingException
