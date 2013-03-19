@@ -58,6 +58,7 @@ extends ResourceList
     public LongSet getIdSet(CoralSession coralSession, BaseResourceListConfiguration config)
         throws ProcessingException
     {
+        LongSet idSet = super.getIdSet(coralSession, config);
         CmsData cmsData = cmsDataFactory.getCmsData(context);
 
         int offset = ((DocumentResourceListConfiguration) config).getPublicationTimeOffset();
@@ -69,13 +70,23 @@ extends ResourceList
             calendar.add(Calendar.DAY_OF_MONTH, -offset);            
             try
             {
-                return structureService.getDocumentsValidAtOrAfter(calendar.getTime(), coralSession);
+                final LongSet validDocumentsSet = structureService.getDocumentsValidAtOrAfter(
+                    calendar.getTime(), coralSession);
+                if(idSet != null)
+                {
+                    idSet.retainAll(validDocumentsSet);
+                    return idSet;
+                }
+                else
+                {
+                    return validDocumentsSet;
+                }
             }
             catch(StructureException e)
             {
                throw new ProcessingException(e);
             }
         }
-        return null;
+        return idSet;
     }    
 }
