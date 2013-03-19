@@ -130,7 +130,7 @@ public class LocationsIndex
         }
     }
 
-    public List<Location> getAreas(String areaName, int level, int limit)
+    public List<Location> getAreas(String areaName, String enclosingArea, int level, int limit)
     {
         try
         {
@@ -170,7 +170,14 @@ public class LocationsIndex
                     BooleanClause.Occur.MUST);
                 query = levelLimit;
             }
-
+            if(enclosingArea.length() > 0)
+            {
+                BooleanQuery enclosingAreaQuery = new BooleanQuery();
+                enclosingAreaQuery.add(query, BooleanClause.Occur.MUST);
+                enclosingAreaQuery.add(new PrefixQuery(new Term("terc", enclosingArea)),
+                    BooleanClause.Occur.MUST);
+                query = enclosingAreaQuery;
+            }
             Timer timer = new Timer();
             List<Location> results;
             if(provider.getCoarseGrainedLocationSort() != null)
