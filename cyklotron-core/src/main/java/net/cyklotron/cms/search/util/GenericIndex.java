@@ -417,6 +417,14 @@ public class GenericIndex<T extends Resource, U>
         {
             searcherManager.release(searcher);
         }
+    }
 
+    public int getTotalNumberOfDocuments()
+        throws IOException
+    {
+        try(IndexReader reader = DirectoryReader.open(directory))
+        {
+            return reader.numDocs();
+        }
     }
 }
