@@ -68,7 +68,7 @@ $subjectTable.getColumn('mail').set('label', 'E-mail')
     <input type="checkbox" name="selected_subject_id" value="$row.object.id"#if($assignedSubjects.contains($row.object)) checked#end/>  
   </td>
   <td>
-     #personal_data($row.object 'uid' '&nbsp')
+     $cms_tool.getUserData($row.object).login
   </td>
   <td>
      #personal_data($row.object 'sn' '&nbsp;')
