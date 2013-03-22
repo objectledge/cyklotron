@@ -4,12 +4,14 @@ import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.DefaultPrincipal;
 import org.objectledge.authentication.UserManager;
+import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.context.Context;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.directory.DirectoryParameters;
 
@@ -128,7 +130,15 @@ public class UserData
     {
     	if(personalData == null)
     	{
-    		personalData = new DirectoryParameters(userManager.getPersonalData(new DefaultPrincipal(subject.getName()))); 
+    		try
+            {
+                personalData = new DirectoryParameters(userManager.getPersonalData(new DefaultPrincipal(subject.getName())));
+            }
+            catch(UserUnknownException e)
+            {
+                log.error("user " + subject.getName() + " missing from LDAP");
+                return new DefaultParameters();
+            } 
     	}
         return personalData;
     }
