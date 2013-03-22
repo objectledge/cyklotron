@@ -70,7 +70,14 @@
 
 #macro(personal_data $subject $property $default)
 #set($userData = $cms_tool.getUserData($subject))##
-$userData.getPersonalData().get($property,$default)
+#set($vals = $userData.getPersonalData().getStrings($property))
+#if($vals.length == 0)
+$default
+#else
+#foreach($val in $vals)
+$val #if($velocityCount < $vals.length), #end	
+#end
+#end
 #end
 
 #macro(command_bar $buttons)
