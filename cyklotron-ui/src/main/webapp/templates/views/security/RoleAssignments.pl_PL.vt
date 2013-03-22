@@ -56,7 +56,7 @@ $subjectTable.getColumn('givenName').set('label', 'Imię')
 $subjectTable.getColumn('sn').set('label', 'Nazwisko')
 $subjectTable.getColumn('mail').set('label', 'E-mail')
 #set($columnOrder = ['sel', 'uid', 'givenName', 'sn', 'mail'])
-#set($subjectTableLink = $link.set('tableId',$subjectTable.getId()).set('popup',$parameters.get('popup','false')))
+#set($subjectTableLink = $link.set('role_id', $role.id).set('tableId',$subjectTable.getId()).set('popup',$parameters.get('popup','false')))
 <tr>
     #tableView_header($subjectTable $subjectTableLink $columnOrder)
 </tr>
