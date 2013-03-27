@@ -95,7 +95,7 @@ cykloModule.directive('categoryChooser', [function ()
     };
 }]);
 
-cykloModule.directive('cykloUpload', [function(){
+cykloModule.directive('cykloUpload', ['$q', function($q){
 	
 	return {
 		restrict : 'EA',
@@ -103,13 +103,13 @@ cykloModule.directive('cykloUpload', [function(){
 		replace : true,
 		scope: { 
 			uploadUrl :'=',
-			fileName : '@'
+			fileName : '@',
+			valid :'='
 		},
 		controller : function($scope, $element){
 			this.uploadFile = function()
 			{
-				console.log('uploading file');
-				console.log('uploading phase | uploadUrl'); console.log($scope.uploadUrl);
+				var deferred = $q.defer();
 				var inputFile = $('input[type="file"]', $element).get(0);
 				var oData = new FormData();
 				oData.append($scope.fileName, inputFile.files[0]);
@@ -117,15 +117,16 @@ cykloModule.directive('cykloUpload', [function(){
 				var oReq = new XMLHttpRequest();
 				oReq.open("POST", $scope.uploadUrl, true);
 				oReq.onload = function(oEvent) {
-					if (oReq.status == 200) {
-						console.log("Uploaded!");
+					if (oReq.status >= 200 && oReq.status < 300) {
+						deferred.resolve();
 					} else {
-						console.log("Error " + oReq.status + " occurred uploading your file.<br \/>");
+						deferred.reject();
 					}
+					$scope.$apply();
 				};
-				console.log('sending form data:'); console.log(oData);
 				
-				oReq.send(oData);	
+				oReq.send(oData);
+				$scope.$emit('UploadingFile', deferred.promise)
 			};
 			
 			this.show = function()
@@ -136,8 +137,9 @@ cykloModule.directive('cykloUpload', [function(){
 		template : '<div><input name="{{fileName}}" type="file" style="display:none"><div ng-transclude></div></div>',
 		link : function(scope, element, attrs)
 		{
+			scope.valid = false;
 			var $upload = $('input[type="file"]', element); 
-			console.log('link phase | uploadUrl'); console.log(scope.uploadUrl);
+
 			scope.clickUpload = function()
 			{
 				$upload.click();
@@ -146,8 +148,9 @@ cykloModule.directive('cykloUpload', [function(){
 			$upload.change(function(){
 				var fileList = this.files; 
 				scope.fileReady = true;
+				scope.valid = true;
+				
 				scope.$apply();
-				console.log(fileList);
 			});
 		}
 	};
