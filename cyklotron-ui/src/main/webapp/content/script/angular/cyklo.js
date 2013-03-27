@@ -94,3 +94,92 @@ cykloModule.directive('categoryChooser', [function ()
         }
     };
 }]);
+
+cykloModule.directive('cykloUpload', [function(){
+	
+	return {
+		restrict : 'EA',
+		transclude : true,
+		replace : true,
+		scope: { 
+			uploadUrl :'=',
+			fileName : '@'
+		},
+		controller : function($scope, $element){
+			this.uploadFile = function()
+			{
+				console.log('uploading file');
+				console.log('uploading phase | uploadUrl'); console.log($scope.uploadUrl);
+				var inputFile = $('input[type="file"]', $element).get(0);
+				var oData = new FormData();
+				oData.append($scope.fileName, inputFile.files[0]);
+				console.log(oData); 
+				var oReq = new XMLHttpRequest();
+				oReq.open("POST", $scope.uploadUrl, true);
+				oReq.onload = function(oEvent) {
+					if (oReq.status == 200) {
+						console.log("Uploaded!");
+					} else {
+						console.log("Error " + oReq.status + " occurred uploading your file.<br \/>");
+					}
+				};
+				console.log('sending form data:'); console.log(oData);
+				
+				oReq.send(oData);	
+			};
+			
+			this.show = function()
+			{
+				$('input[type="file"]', $element).click();
+			};
+		},
+		template : '<div><input name="{{fileName}}" type="file" style="display:none"><div ng-transclude></div></div>',
+		link : function(scope, element, attrs)
+		{
+			var $upload = $('input[type="file"]', element); 
+			console.log('link phase | uploadUrl'); console.log(scope.uploadUrl);
+			scope.clickUpload = function()
+			{
+				$upload.click();
+			}
+			
+			$upload.change(function(){
+				var fileList = this.files; 
+				scope.fileReady = true;
+				scope.$apply();
+				console.log(fileList);
+			});
+		}
+	};
+}]);
+
+
+cykloModule.directive('cykloUploadSubmit', [function(){	
+	return {
+		require : "^cykloUpload",
+		link : function(scope, element, attrs, cykloUploadCtrl)
+		{
+			element.bind('click', function(){
+				cykloUploadCtrl.uploadFile();
+			});
+			
+			scope.$on('UploadSubmit', function(event){
+				console.log('got upload submit event');
+				cykloUploadCtrl.uploadFile();
+			});
+		}
+	}
+}]);
+
+cykloModule.directive('cykloUploadShow', [function(){
+	return {
+		require : "^cykloUpload",
+		link : function(scope, element, attrs, cykloUploadCtrl)
+		{
+			element.bind('click', function(){
+				cykloUploadCtrl.show();
+			});
+		
+		}
+	}
+}]);
