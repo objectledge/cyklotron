@@ -362,6 +362,7 @@ public class GenericIndex<T extends Resource, U>
     public Collection<U> search(PerformSearch performSearch)
         throws IOException
     {
+        searcherManager.maybeRefresh();
         IndexSearcher searcher = searcherManager.acquire();
         try
         {
