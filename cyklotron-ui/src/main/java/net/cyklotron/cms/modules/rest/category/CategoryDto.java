@@ -56,7 +56,7 @@ public class CategoryDto
         return categoriesDtos;
     }
 
-    private static CategoryDto create(CategoryResource category)
+    public static CategoryDto create(CategoryResource category)
     {
         CategoryDto categoryDto = new CategoryDto();
         categoryDto.name = category.getName();
