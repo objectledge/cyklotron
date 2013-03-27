@@ -58,7 +58,7 @@ $subjectTable.getColumn('mail').set('label', 'E-mail')
 #set($columnOrder = ['sel', 'uid', 'givenName', 'sn', 'mail'])
 #set($subjectTableLink = $link.set('tableId',$subjectTable.getId()).set('popup',$parameters.get('popup','false')))
 <tr>
-    #tableView_header($subjectTable $subjectTableLink $columnOrder)
+    #tableView_header_Submit($subjectTable $subjectTableLink $columnOrder 'sendUrl')
 </tr>
 #foreach($row in $subjectTable.rows)
 #set($odd = $velocityCount % 2) 
@@ -68,13 +68,13 @@ $subjectTable.getColumn('mail').set('label', 'E-mail')
     <input type="checkbox" name="selected_subject_id" value="$row.object.id"#if($assignedSubjects.contains($row.object)) checked#end/>  
   </td>
   <td>
-     #personal_data($row.object 'uid' '&nbsp')
-  </td>
-  <td>
-     #personal_data($row.object 'sn' '&nbsp;')
+     $cms_tool.getUserData($row.object).login
   </td>
   <td>
      #personal_data($row.object 'givenName' '&nbsp;')
+  </td>
+  <td>
+     #personal_data($row.object 'sn' '&nbsp;')
   </td>
   <td>
      #personal_data($row.object 'mail' '&nbsp;')
@@ -89,7 +89,6 @@ $subjectTable.getColumn('mail').set('label', 'E-mail')
     <a href="javascript:sendUrl('$link.view('security.RoleAssignments')')">Filter</a>
   </td>
 </tr>
-</form>
 </table>
 
 #macro(group_row $group $groupName)
@@ -132,7 +131,7 @@ $subjectTable.getColumn('mail').set('label', 'E-mail')
   #set($columnOrder = ['sel','element'])
   #set($groupTableLink = $link.set('tableId',$groupTable.getId()).set('popup',$parameters.get('popup','false')))
   <tr>
-    #tableView_header($groupTable $groupTableLink $columnOrder)
+    #tableView_header_Submit($groupTable $groupTableLink $columnOrder 'sendUrl')
   </tr>
   #foreach($row in $groupTable.rows)
   #set($odd = $velocityCount % 2) 
@@ -174,5 +173,4 @@ $subjectTable.getColumn('mail').set('label', 'E-mail')
 </table>
 
 </form>
-
 #command_bar([["$link.view('security.RoleMembers').set('role_id',$role.role.id)",'Users in the system'],['javascript:send();','Save']])
