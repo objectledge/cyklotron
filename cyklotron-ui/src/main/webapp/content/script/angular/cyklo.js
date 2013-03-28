@@ -17,7 +17,7 @@
 
 var cykloModule = angular.module("cyklo", []);
 
-cykloModule.directive('categoryChooser', [function ()
+cykloModule.directive('categoryChooser', ['$q', function ($q)
 {
 	window.CATEGORY_CHOOSER_SEPARATOR = '/ ';
 	
@@ -86,11 +86,13 @@ cykloModule.directive('categoryChooser', [function ()
                 });
             });
             
-            if(_.size(scope.categories) > 0)
-        	{
-            	var idsOnly = _.map(scope.categories, function(category){ return category.id; }).join(' ');
-            	$categoriesIds.val(idsOnly);
-        	}
+            scope.$watch('categories', function(cat){
+            	if($categoriesIds.val().length == 0)
+            	{
+            		var idsOnly = _.map(cat, function(category){ return category.id; }).join(' ');            		
+            		$categoriesIds.val(idsOnly);
+            	}
+            }, true)
         }
     };
 }]);
@@ -104,7 +106,8 @@ cykloModule.directive('cykloUpload', ['$q', function($q){
 		scope: { 
 			uploadUrl :'=',
 			fileName : '@',
-			valid :'='
+			valid :'=',
+			method : '='
 		},
 		controller : function($scope, $element){
 			this.uploadFile = function()
@@ -115,7 +118,7 @@ cykloModule.directive('cykloUpload', ['$q', function($q){
 				oData.append($scope.fileName, inputFile.files[0]);
 				console.log(oData); 
 				var oReq = new XMLHttpRequest();
-				oReq.open("POST", $scope.uploadUrl, true);
+				oReq.open($scope.method, $scope.uploadUrl, true);
 				oReq.onload = function(oEvent) {
 					if (oReq.status >= 200 && oReq.status < 300) {
 						deferred.resolve();
