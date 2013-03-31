@@ -7,6 +7,8 @@ import org.apache.commons.lang3.Validate;
 
 import net.cyklotron.cms.category.CategoryResource;
 
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+
 public class CategoryDto
 {
     String id;
@@ -63,6 +65,12 @@ public class CategoryDto
         categoryDto.id = category.getIdString();
         categoryDto.path = category.getPath();
         return categoryDto;
+    }
+
+    @JsonAnySetter
+    public void ignoreAny(String key, Object value)
+    {
+        // ignore
     }
 
 }
