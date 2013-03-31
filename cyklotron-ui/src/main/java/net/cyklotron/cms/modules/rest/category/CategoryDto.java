@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.commons.lang3.Validate;
+import org.objectledge.coral.datatypes.ResourceList;
 
 import net.cyklotron.cms.category.CategoryResource;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+@JsonInclude(Include.NON_NULL)
 public class CategoryDto
 {
     String id;
@@ -71,6 +75,24 @@ public class CategoryDto
     public void ignoreAny(String key, Object value)
     {
         // ignore
+    }
+
+    public static Collection<CategoryDto> createNoPath(ResourceList<CategoryResource> categories)
+    {
+        Validate.notNull(categories);
+        Collection<CategoryDto> categoriesDtos = new ArrayList<>(categories.size());
+        for(CategoryResource category : categories)
+        {
+            categoriesDtos.add(noPath(category));
+        }
+        return categoriesDtos;
+    }
+
+    private static CategoryDto noPath(CategoryResource category)
+    {
+        final CategoryDto dto = create(category);
+        dto.setPath(null);
+        return dto;
     }
 
 }
