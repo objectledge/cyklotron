@@ -473,7 +473,20 @@ public class IntegrationServiceImpl
     public ResourceClassResource getResourceClass(CoralSession coralSession, String name)
     {
         loadCache(coralSession, false);
-        return resourceClassesByNameCache.get(name);
+        return name.matches("\\d+") ? getResourceClassById(name) : resourceClassesByNameCache
+            .get(name);
+    }
+
+    private ResourceClassResource getResourceClassById(String id)
+    {
+        for(ResourceClassResource candidate : resourceClassesByNameCache.values())
+        {
+            if(candidate.getIdString().equals(id))
+            {
+                return candidate;
+            }
+        }
+        return null;
     }
 
     /**

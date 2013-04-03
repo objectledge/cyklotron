@@ -97,7 +97,7 @@ public abstract class BaseCategoryQueryAddUpdate
 			parsedQuery.getRequiredIdentifiers()));
 		query.setOptionalCategoryIdentifiers(CategoryQueryUtil.joinCategoryIdentifiers(
 			parsedQuery.getOptionalIdentifiers()));
-		query.setAcceptedResourceClasses(CategoryQueryUtil.getNames(coralSession,
+        query.setAcceptedResourceClasses(CategoryQueryUtil.getIds(coralSession,
 			queryData.getResourceClassSelection(),"accepted"));
         query.update();
     }

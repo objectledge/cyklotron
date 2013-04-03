@@ -62,23 +62,22 @@ public class CategoryQueryUtil
 		}
 	}
 
-    public static String getNames(CoralSession coralSession, ResourceSelectionState selection, String state)
+    public static String getIds(CoralSession coralSession, ResourceSelectionState selection,
+        String state)
         throws ProcessingException
     {
         try
         {
-            Map requiredMap = selection.getIds(state);
+            Map<Long, ?> requiredMap = selection.getIds(state);
             StringBuilder sb = new StringBuilder();
-            Iterator i = requiredMap.keySet().iterator();
-            while (i.hasNext())
+            Iterator<Long> i = requiredMap.keySet().iterator();
+            while(i.hasNext())
             {
-                Long id = (Long)i.next();
-                Resource res = coralSession.getStore().getResource(id.longValue());
-                sb.append(res.getName()).append(' ');
-            }
-            if(sb.length() > 1)
-            {
-                sb.setLength(sb.length() - 1);
+                sb.append(i.next());
+                if(i.hasNext())
+                {
+                    sb.append(' ');
+                }
             }
             return sb.toString();
         }
