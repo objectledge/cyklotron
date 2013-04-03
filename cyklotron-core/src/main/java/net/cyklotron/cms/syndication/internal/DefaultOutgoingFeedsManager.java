@@ -23,7 +23,6 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.filter.ResourceClassFilter;
 import org.objectledge.encodings.HTMLEntityEncoder;
 import org.objectledge.filesystem.FileSystem;
-import org.objectledge.filesystem.UnsupportedCharactersInFilePathException;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -38,18 +37,6 @@ import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
 import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
-
-import com.sun.syndication.feed.synd.SyndCategory;
-import com.sun.syndication.feed.synd.SyndCategoryImpl;
-import com.sun.syndication.feed.synd.SyndContent;
-import com.sun.syndication.feed.synd.SyndContentImpl;
-import com.sun.syndication.feed.synd.SyndEntry;
-import com.sun.syndication.feed.synd.SyndEntryImpl;
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.feed.synd.SyndFeedImpl;
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.SyndFeedOutput;
-import com.sun.syndication.io.WireFeedOutput;
 
 import net.cyklotron.cms.CmsTool;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
@@ -82,6 +69,18 @@ import net.cyklotron.cms.util.CmsResourceListTableModel;
 import net.cyklotron.cms.util.OfflineLinkRenderingService;
 import net.cyklotron.cms.util.ProtectedValidityFilter;
 import net.cyklotron.cms.util.SiteFilter;
+
+import com.sun.syndication.feed.synd.SyndCategory;
+import com.sun.syndication.feed.synd.SyndCategoryImpl;
+import com.sun.syndication.feed.synd.SyndContent;
+import com.sun.syndication.feed.synd.SyndContentImpl;
+import com.sun.syndication.feed.synd.SyndEntry;
+import com.sun.syndication.feed.synd.SyndEntryImpl;
+import com.sun.syndication.feed.synd.SyndFeed;
+import com.sun.syndication.feed.synd.SyndFeedImpl;
+import com.sun.syndication.io.FeedException;
+import com.sun.syndication.io.SyndFeedOutput;
+import com.sun.syndication.io.WireFeedOutput;
 
 /**
  * Implementation of OutgoingFeedsManager.
@@ -291,7 +290,8 @@ implements OutgoingFeedsManager
             throw e;
         }
         List<TableFilter> filters = new ArrayList<TableFilter>(5);
-        filters.add(new ResourceClassFilter(coralSession.getSchema().getResourceClass(DocumentNodeResource.CLASS_NAME)));
+        filters.add(new ResourceClassFilter(Collections.singleton(coralSession.getSchema()
+            .getResourceClass(DocumentNodeResource.CLASS_NAME)), false));
         Subject anonymousSubject = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
         filters.add(new ProtectedValidityFilter(coralSession, anonymousSubject, new Date()));
         if(feed.getOffset() > 0)
