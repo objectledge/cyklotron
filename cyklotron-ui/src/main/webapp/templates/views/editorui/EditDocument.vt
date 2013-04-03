@@ -86,7 +86,7 @@ function gotoDocument(url, docid) {
 // organizations / events autocomplete
 jQuery(document).ready(function()
 {
-   initEditDocumentAutocomplete(5, '$link.view('organizations.JsonOrganizations')', '$link.view('locations.JsonLocations')', true);
+   initEditDocumentAutocomplete(5, '$link.view('organizations.JsonOrganizations')', '$link.view('locations.JsonLocations')', false);
 });
                                                                                                                                                          
 // -->
