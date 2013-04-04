@@ -133,8 +133,8 @@
 
   <container key="coralContainer"/>
 
-  <component class-key="org.objectledge.coral.web.rest.CoralPermissionChecker"
-            class="org.objectledge.coral.web.rest.CoralPermissionCheckerImpl"/>
+  <component class-key="org.objectledge.coral.web.rest.security.CoralPermissionChecker"
+            class="org.objectledge.coral.web.rest.security.CoralPermissionCheckerImpl"/>
 
   <component class-key="org.objectledge.coral.Instantiator"
              class="org.objectledge.coral.PicoInstantiator">
@@ -350,6 +350,7 @@
     <parameter />
     <sequence>
       <!-- Add binders for @Inject -->
+      <component class="org.objectledge.web.rest.I18nLocaleFactoryBinder"/>
     </sequence>
     <sequence>
    	  <!-- Jersey configuration hooks, register filters, features, properties etc. -->
@@ -361,8 +362,18 @@
   <component class="org.objectledge.web.rest.CompositeJacksonMapper">
     <sequence>
     </sequence>
+    <parameter/>
   </component>
   
+  <component class-key="org.objectledge.web.json.ObjectMapperProvider" 
+             class="org.objectledge.web.json.ObjectMapperProviderImpl"/>
+             
+  <component class-key="org.objectledge.i18n.LabelFinder"
+             class="org.objectledge.i18n.impl.LabelFinderImpl"/>
+  
+  <component class-key="org.objectledge.i18n.TranslationConverter"
+             class="org.objectledge.i18n.impl.TranslationConverterImpl"/>
+
   <component key="restRenderingPipeline"
   			 class="org.objectledge.pipeline.SimplePipeline">
     <sequence>
@@ -420,7 +431,8 @@
             <parameter class-key="org.jcontainer.dna.Logger"/>
 		    <sequence>
 		      <parameter key="simpleAuthenticationPipeline"/>
-			  <parameter class-key="org.objectledge.coral.session.CoralSessionInitValve"/>      		      
+			  <parameter class-key="org.objectledge.coral.session.CoralSessionInitValve"/>
+              <parameter class-key="org.objectledge.i18n.LocaleLoaderValve"/>      		      
 			  <parameter key="restRenderingPipeline"/>
 		    </sequence>
 			<sequence />
