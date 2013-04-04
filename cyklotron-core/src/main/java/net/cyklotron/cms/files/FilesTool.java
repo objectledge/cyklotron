@@ -221,6 +221,7 @@ public class FilesTool
                     try
                     {
                         path = "/"+URLEncoder.encode(parent.getName(), "UTF-8")+path;
+                        path = path.replace("+", "%20");
                     }
                     catch(UnsupportedEncodingException e)
                     {

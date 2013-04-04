@@ -130,6 +130,7 @@ public class GenericIndex<T extends Resource, U>
                 throw e;
             }
         }
+        searcherManager.maybeRefresh();
     }
 
     public U getResource(Long id)
@@ -195,6 +196,7 @@ public class GenericIndex<T extends Resource, U>
                 throw e;
             }
         }
+        searcherManager.maybeRefresh();
     }
 
     /**
@@ -224,6 +226,7 @@ public class GenericIndex<T extends Resource, U>
                 throw e;
             }
         }
+        searcherManager.maybeRefresh();
     }
 
     /**
@@ -260,6 +263,7 @@ public class GenericIndex<T extends Resource, U>
                 throw e;
             }
         }
+        searcherManager.maybeRefresh();
     }
 
     Collection<String> getAllFieldsNames()
@@ -330,6 +334,7 @@ public class GenericIndex<T extends Resource, U>
                                         throw e;
                                     }
                                 }
+                                searcherManager.maybeRefresh();
                             }
                         }
                         catch(IOException e)
