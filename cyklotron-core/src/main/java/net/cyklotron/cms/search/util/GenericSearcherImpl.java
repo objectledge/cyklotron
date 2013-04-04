@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.index.Term;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.store.Resource;
 
@@ -68,4 +69,18 @@ public class GenericSearcherImpl<T extends Resource, U>
     {
         return index.getAnalyzer();
     }
+
+    @Override
+    public Collection<Term> analyze(String fieldName, String value)
+    {
+        try
+        {
+            return index.analyze(fieldName, value);
+        }
+        catch(IOException e)
+        {
+            throw new BackendException("Error during analysis", e);
+        }
+    }
+
 }
