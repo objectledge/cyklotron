@@ -2,15 +2,19 @@ package net.cyklotron.cms.search.util;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.StringReader;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Fields;
@@ -432,5 +436,21 @@ public class GenericIndex<T extends Resource, U>
         {
             return reader.numDocs();
         }
+    }
+
+    Collection<Term> analyze(String fieldName, String value)
+        throws IOException
+    {
+        List<Term> tokens = new ArrayList<Term>();
+        TokenStream ts = analyzer.tokenStream(fieldName, new StringReader(value));
+        ts.reset();
+        CharTermAttribute charTermAttribute = ts.addAttribute(CharTermAttribute.class);
+        while(ts.incrementToken())
+        {
+            tokens.add(new Term(fieldName, charTermAttribute.toString()));
+        }
+        ts.end();
+        ts.close();
+        return tokens;
     }
 }
