@@ -3,6 +3,7 @@ package net.cyklotron.cms.search.util;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.lucene.analysis.Analyzer;
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.store.Resource;
 
@@ -60,5 +61,11 @@ public class GenericSearcherImpl<T extends Resource, U>
         {
             throw new BackendException("Error during searching", e);
         }
+    }
+
+    @Override
+    public Analyzer getAnalyzer()
+    {
+        return index.getAnalyzer();
     }
 }
