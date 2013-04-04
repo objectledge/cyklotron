@@ -101,8 +101,8 @@ public class PNATERYTLocationsProvider
 
                 int[] inserted;
                 try(PreparedStatement pstmt = conn
-                    .prepareStatement("INSERT INTO locations_pna(pna, miejscowość, ulica, "
-                        + "numery, gmina, powiat, województwo, nazwa, nazwa_pod, nazwa_rm) "
+                    .prepareStatement("INSERT INTO locations_pna(pna, \"miejscowość\", ulica, "
+                        + "numery, gmina, powiat, \"województwo\", nazwa, nazwa_pod, nazwa_rm) "
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
                 {
                     for(String[] row : content)

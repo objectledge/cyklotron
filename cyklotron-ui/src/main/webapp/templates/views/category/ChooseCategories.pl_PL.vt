@@ -26,7 +26,8 @@ function selectCategories()
     if( index == 0 ) {   
        values['name'] += $(this).attr('category_name').substring(9);
     } else {
-       values['name'] += ", " + $(this).attr('category_name').substring(9);
+       var separator = window.opener.CATEGORY_CHOOSER_SEPARATOR || ', ';
+       values['name'] += separator + $(this).attr('category_name').substring(9);
     }
     values['id'] +=  $(this).attr('id').substring(9) + " ";
   });
