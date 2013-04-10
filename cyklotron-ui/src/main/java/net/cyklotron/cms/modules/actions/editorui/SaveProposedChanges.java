@@ -47,6 +47,7 @@ import net.cyklotron.cms.modules.actions.structure.BaseAddEditNodeAction;
 import net.cyklotron.cms.modules.views.documents.BaseSkinableDocumentScreen;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.StructureException;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.internal.OrganizationData;
 import net.cyklotron.cms.structure.internal.ProposedDocumentData;
@@ -384,22 +385,17 @@ public class SaveProposedChanges
                     node.setProposedContent(null);
                 }
                 node.update();
+
+                if(node.getState().getName().equals("locked"))
+                {
+                    structureService.enterState(coralSession, node, "new",
+                        coralSession.getUserSubject());
+                }
             }
 
         }
-        catch(EntityDoesNotExistException e)
-        {
-            logger.error("excception", e);
-            templatingContext.put("result", "exception");
-            templatingContext.put("trace", new StackTrace(e));
-        }
-        catch(ValueRequiredException e)
-        {
-            logger.error("excception", e);
-            templatingContext.put("result", "exception");
-            templatingContext.put("trace", new StackTrace(e));
-        }
-        catch(HTMLException e)
+        catch(EntityDoesNotExistException | ValueRequiredException | HTMLException
+                        | StructureException e)
         {
             logger.error("excception", e);
             templatingContext.put("result", "exception");
