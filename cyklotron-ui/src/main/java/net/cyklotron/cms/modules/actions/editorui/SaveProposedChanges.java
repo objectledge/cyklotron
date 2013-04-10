@@ -388,7 +388,7 @@ public class SaveProposedChanges
 
                 if(node.getState().getName().equals("locked"))
                 {
-                    structureService.enterState(coralSession, node, "new",
+                    structureService.fireTransition(coralSession, node, "unlock",
                         coralSession.getUserSubject());
                 }
             }
