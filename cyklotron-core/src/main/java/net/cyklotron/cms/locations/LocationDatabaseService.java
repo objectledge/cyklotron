@@ -62,4 +62,13 @@ public interface LocationDatabaseService
      */
     public boolean exactMatchExists(String field, String value)
         throws IOException;
+
+    /**
+     * Returns most specific location enclosing both given locations.
+     * 
+     * @param location1 first location.
+     * @param location2 second location.
+     * @return most specific location enclosing both given locations.
+     */
+    public Location merge(Location location1, Location location2);
 }

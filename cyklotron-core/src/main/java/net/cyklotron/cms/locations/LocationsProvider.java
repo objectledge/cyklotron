@@ -1,6 +1,7 @@
 package net.cyklotron.cms.locations;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.lucene.index.Term;
@@ -40,6 +41,16 @@ public interface LocationsProvider
     public Sort getCoarseGrainedLocationSort();
 
     /**
+     * Compute properties appropriate for common enclosing location.
+     * 
+     * @param field field identifier;
+     * @param value1 value of the field in the first location.
+     * @param value2 value of the field in the second location.
+     * @param merged TODO
+     */
+    public void merge(String field, String value1, String value2, Map<String, String> merged);
+
+    /**
      * Return all locations in the database, updated from source.
      * 
      * @return TODO
@@ -65,6 +76,6 @@ public interface LocationsProvider
         NOT_ANALYZED,
 
         /** A subquery should be used for flexible matching of fields terms. */
-        MULTI_TERM_SUBQUERY
+        MULTI_TERM_SUBQUERY,
     }
 }

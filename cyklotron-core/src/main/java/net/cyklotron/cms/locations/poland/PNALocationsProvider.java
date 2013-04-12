@@ -165,4 +165,12 @@ public class PNALocationsProvider
     {
         return null;
     }
+
+    public void merge(String field, String value1, String value2, Map<String, String> merged)
+    {
+        if(value2.equals(value1))
+        {
+            merged.put(field, value1);
+        }
+    }
 }

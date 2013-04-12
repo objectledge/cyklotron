@@ -327,4 +327,49 @@ public class PNATERYTLocationsProvider
                         new SortField("areaLevel", SortField.Type.INT),
                         new SortField("terc", SortField.Type.STRING) });
     }
+
+    public void merge(String field, String value1, String value2, Map<String, String> merged)
+    {
+        if(field.equals("terc"))
+        {
+            String cs = commonSubstring(value1, value2);
+            mergedAreaDesc(cs, merged);
+        }
+        else if(value2.equals(value1))
+        {
+            merged.put(field, value1);
+        }
+    }
+
+    private String commonSubstring(String s1, String s2)
+    {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < s1.length() && i < s2.length() && s1.charAt(i) == s2.charAt(i); i++)
+        {
+            sb.append(s1.charAt(i));
+        }
+        return sb.toString();
+    }
+
+    private void mergedAreaDesc(String mergedValue, Map<String, String> entries)
+    {
+        if(mergedValue.length() == 7)
+        {
+            entries.put("areaLevel", "7");
+            entries.put("areaType", "gmina");
+            entries.put("terc", mergedValue);
+        }
+        else if(mergedValue.length() >= 4)
+        {
+            entries.put("areaLevel", "4");
+            entries.put("areaType", "powiat");
+            entries.put("terc", mergedValue.substring(0, 4));
+        }
+        else if(mergedValue.length() >= 2)
+        {
+            entries.put("areaLevel", "2");
+            entries.put("areaType", "województwo");
+            entries.put("terc", mergedValue.substring(0, 2));
+        }
+    }
 }

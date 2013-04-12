@@ -3,8 +3,10 @@ package net.cyklotron.cms.locations.internal;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.lucene.document.Document;
@@ -233,5 +235,52 @@ public class LocationsIndex
                 }
             }
         }
+    }
+
+    public Location merge(Location location1, Location location2)
+    {
+        return new Location(provider.getFields(), getMatchingEntries(location1, location2));
+    }
+
+    /**
+     * Return non empty matching fields map
+     * 
+     * @param location1 Location class
+     * @param location2 Location class
+     * @return <code>Map<String, String></code>
+     * @author lukasz
+     */
+    private Map<String, String> getMatchingEntries(Location location1, Location location2)
+    {
+        Map<String, String> matching = new HashMap<String, String>();
+        if(location1 != null)
+        {
+            Iterator<Entry<String, String>> i = location1.iterator();
+            if(location2 == null)
+            {
+                while(i.hasNext())
+                {
+                    Entry<String, String> e = i.next();
+                    if(e.getValue() != null && e.getValue().length() > 0)
+                    {
+                        matching.put(e.getKey(), e.getValue());
+                    }
+                }
+            }
+            else
+            {
+                while(i.hasNext())
+                {
+                    Entry<String, String> e = i.next();
+                    final String value1 = e.getValue();
+                    final String value2 = location2.get(e.getKey());
+                    if(value1 != null && value2 != null)
+                    {
+                        provider.merge(e.getKey(), value1, value2, matching);
+                    }
+                }
+            }
+        }
+        return matching;
     }
 }

@@ -130,6 +130,11 @@ public class LocationDatabaseServiceImpl
         return index.exactMatchExists(field, value);
     }
 
+    public Location merge(Location location1, Location location2)
+    {
+        return index.merge(location1, location2);
+    }
+
     private void load(Collection<Location> locations)
         throws IOException
     {
