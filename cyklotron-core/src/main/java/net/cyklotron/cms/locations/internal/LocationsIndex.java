@@ -132,7 +132,7 @@ public class LocationsIndex
         }
     }
 
-    public List<Location> getAreas(String areaName, String enclosingArea, int level, int limit)
+    public List<Location> getAreas(String areaName, String enclosingArea, int lmin, int lmax, int limit)
     {
         try
         {
@@ -164,11 +164,11 @@ public class LocationsIndex
                 spanQuery.setBoost(0.75f);
                 query.add(spanQuery, BooleanClause.Occur.SHOULD);
             }
-            if(level > 0)
+            if(lmin > 0 || lmax > 0)
             {
                 BooleanQuery levelLimit = new BooleanQuery();
                 levelLimit.add(query, BooleanClause.Occur.MUST);
-                levelLimit.add(NumericRangeQuery.newIntRange("areaLevel", 0, level, true, true),
+                levelLimit.add(NumericRangeQuery.newIntRange("areaLevel", lmin, lmax, true, true),
                     BooleanClause.Occur.MUST);
                 query = levelLimit;
             }

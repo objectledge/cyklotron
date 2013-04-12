@@ -108,9 +108,9 @@ public class LocationDatabaseServiceImpl
     /**
      * {@inheritDoc}
      */
-    public List<Location> getAreas(String query, String enclosingArea, int level, int limit)
+    public List<Location> getAreas(String query, String enclosingArea, int lmin, int lmax, int limit)
     {
-        return index.getAreas(query, enclosingArea, level, limit);
+        return index.getAreas(query, enclosingArea, lmin, lmax, limit);
     }
 
     /**

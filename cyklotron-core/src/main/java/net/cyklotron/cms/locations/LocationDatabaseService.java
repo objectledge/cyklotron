@@ -39,10 +39,11 @@ public interface LocationDatabaseService
      * 
      * @param query name prefix.
      * @param enclosingArea TODO
-     * @param level maximum areaLevel to be matched
+     * @param lmin minimum areaLevel to be matched
+     * @param lmax maximum areaLevel to be matched
      * @return list of locations sorted by relevance.
      */
-    public List<Location> getAreas(String query, String enclosingArea, int level, int limit);
+    public List<Location> getAreas(String query, String enclosingArea, int lmin, int lmax, int limit);
 
     /**
      * Returns all terms in given field of location index.
