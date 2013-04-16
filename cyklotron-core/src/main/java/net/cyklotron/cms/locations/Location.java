@@ -28,7 +28,6 @@
 
 package net.cyklotron.cms.locations;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -55,14 +54,6 @@ public class Location
     {
         this.fields = fields;
         this.entries = entries;
-        this.pkField = fields.length > 0 ? entries.get(fields[0]) : "";
-    }
-
-    public Location(Location location1, Location location2)
-    {
-        this.entries = getMatchingEntries(location1, location2);
-        this.fields = new String[entries.size()];
-        this.entries.keySet().toArray(this.fields);
         this.pkField = fields.length > 0 ? entries.get(fields[0]) : "";
     }
 
@@ -130,43 +121,4 @@ public class Location
         return buff.toString();
     }
 
-    /**
-     * Return non empty matching fields map
-     * 
-     * @param location1 Location class
-     * @param location2 Location class
-     * @return <code>Map<String, String></code>
-     * @author lukasz
-     */
-    private Map<String, String> getMatchingEntries(Location location1, Location location2)
-    {
-        Map<String, String> matching = new HashMap<String, String>();
-        if(location1 != null)
-        {
-            Iterator i = location1.iterator();
-            if(location2 == null)
-            {
-                while(i.hasNext())
-                {
-                    Entry<String, String> e = (Entry)i.next();
-                    if(e.getValue() != null)
-                    {
-                        matching.put(e.getKey(), e.getValue());
-                    }
-                }
-            }
-            else
-            {
-                while(i.hasNext())
-                {
-                    Entry<String, String> e = (Entry)i.next();
-                    if(e.getValue() != null && e.getValue().equals(location2.get(e.getKey())))
-                    {
-                        matching.put(e.getKey(), e.getValue());
-                    }
-                }
-            }
-        }
-        return matching;
-    }
 }

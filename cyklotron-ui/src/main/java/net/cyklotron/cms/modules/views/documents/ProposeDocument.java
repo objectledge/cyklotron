@@ -33,12 +33,15 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.organizations.Organization;
+import net.cyklotron.cms.organizations.OrganizationRegistryService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
+import net.cyklotron.cms.structure.internal.OrganizationData;
 import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.style.StyleService;
 import net.cyklotron.cms.workflow.AutomatonResource;
@@ -48,7 +51,7 @@ import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * Stateful screen for propose document application.
- *
+ * 
  * @author <a href="mailto:pablo@caltha.pl">Pawe� Potempski</a>
  * @version $Id: ProposeDocument.java,v 1.12 2008-11-04 17:14:48 rafal Exp $
  */
@@ -56,8 +59,12 @@ public class ProposeDocument
     extends BaseSkinableDocumentScreen
 {
     private final CategoryService categoryService;
+
     private final RelatedService relatedService;
+
     private final HTMLService htmlService;
+
+    private final OrganizationRegistryService organizationsRegistry;
 
     private final WorkflowService workflowService;
 
@@ -68,7 +75,8 @@ public class ProposeDocument
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         StructureService structureService, StyleService styleService, SkinService skinService,
         MVCFinder mvcFinder, TableStateManager tableStateManager, CategoryService categoryService,
-        RelatedService relatedService, HTMLService htmlService, WorkflowService workflowService)
+        RelatedService relatedService, HTMLService htmlService, WorkflowService workflowService,
+        OrganizationRegistryService ngoDatabaseService)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
@@ -76,14 +84,16 @@ public class ProposeDocument
         this.relatedService = relatedService;
         this.htmlService = htmlService;
         this.workflowService = workflowService;
+        this.organizationsRegistry = ngoDatabaseService;
     }
 
     @Override
-    public String getState() 
+    public String getState()
         throws ProcessingException
     {
-        // this method is called multiple times during rendering, so it makes sense to cache the evaluated state
-        String state = (String) context.getAttribute(getClass().getName()+".state");
+        // this method is called multiple times during rendering, so it makes sense to cache the
+        // evaluated state
+        String state = (String)context.getAttribute(getClass().getName() + ".state");
         if(state == null)
         {
             Parameters parameters = RequestParameters.getRequestParameters(context);
@@ -105,7 +115,7 @@ public class ProposeDocument
                     else
                     {
                         state = "Anonymous";
-                    }                   
+                    }
                 }
                 else
                 {
@@ -121,11 +131,11 @@ public class ProposeDocument
         }
         return state;
     }
-    
+
     @Override
     public boolean requiresAuthenticatedUser(Context context)
         throws Exception
-    {        
+    {
         return REQUIRES_AUTHENTICATED_USER.contains(getState());
     }
 
@@ -149,10 +159,11 @@ public class ProposeDocument
             Parameters requestParameters = context.getAttribute(RequestParameters.class);
             CoralSession coralSession = context.getAttribute(CoralSession.class);
             Subject userSubject = coralSession.getUserSubject();
-            if("AddDocument".equals(state) || "MyDocuments".equals(state) || "DocumentCategory".equals(state))
+            if("AddDocument".equals(state) || "MyDocuments".equals(state)
+                || "DocumentCategory".equals(state))
             {
                 Permission submitPermission = coralSession.getSecurity().getUniquePermission(
-                "cms.structure.submit");
+                    "cms.structure.submit");
                 CmsData cmsData = cmsDataFactory.getCmsData(context);
                 Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
                 long parentId = screenConfig.getLong("parent_id", -1L);
@@ -203,7 +214,7 @@ public class ProposeDocument
     {
 
     }
-    
+
     /**
      * Set main category for new document.
      */
@@ -223,7 +234,8 @@ public class ProposeDocument
     /**
      * Submitted documents list for an authenticated user.
      */
-    public void prepareMyDocuments(Context context) throws ProcessingException
+    public void prepareMyDocuments(Context context)
+        throws ProcessingException
     {
         try
         {
@@ -234,7 +246,8 @@ public class ProposeDocument
             String query = "FIND RESOURCE FROM documents.document_node WHERE created_by = "
                 + coralSession.getUserSubject().getIdString() + " AND site = "
                 + cmsData.getSite().getIdString();
-            List<Resource> myDocuments = (List<Resource>)coralSession.getQuery().executeQuery(query).getList(1);
+            List<Resource> myDocuments = (List<Resource>)coralSession.getQuery()
+                .executeQuery(query).getList(1);
 
             ResourceListTableModel<Resource> model = new ResourceListTableModel<Resource>(
                 myDocuments, i18nContext.getLocale());
@@ -250,23 +263,24 @@ public class ProposeDocument
 
             filters.add(new InverseFilter(new StateFilter(rejectedStates, true)));
 
-            TableState state = tableStateManager.getState(context, this.getClass().getName()+":MyDocuments");
+            TableState state = tableStateManager.getState(context, this.getClass().getName()
+                + ":MyDocuments");
             if(state.isNew())
             {
                 state.setTreeView(false);
                 state.setSortColumnName("creation.time");
                 state.setAscSort(false);
                 state.setPageSize(20);
-            }            
+            }
             templatingContext.put("table", new TableTool<Resource>(state, filters, model));
-            templatingContext.put("documentState", new DocumentStateTool(coralSession,logger));
+            templatingContext.put("documentState", new DocumentStateTool(coralSession, logger));
         }
         catch(Exception e)
         {
             throw new ProcessingException("internal errror", e);
         }
     }
-    
+
     /**
      * Propse a new document, either anonymously or as an authenitcated user.
      * 
@@ -282,34 +296,51 @@ public class ProposeDocument
         SiteResource site = getSite();
         try
         {
-            // refill parameters in case we are coming back failed validation            
+            // refill parameters in case we are coming back failed validation
             Parameters screenConfig = getScreenConfig();
-            ProposedDocumentData data = new ProposedDocumentData(screenConfig,logger);
+            ProposedDocumentData data = new ProposedDocumentData(screenConfig, logger);
             data.fromParameters(parameters, coralSession);
-            data.toTemplatingContext(templatingContext);            
+            if(!parameters.getBoolean("form_loaded", false))
+            {
+                long organizationId = parameters.getLong("organizationId", -1L);
+                if(organizationId > 0)
+                {
+                    Organization organization = this.organizationsRegistry
+                        .getOrganization(organizationId);
+                    if(organization != null)
+                    {
+                        List<OrganizationData> organizationDataList = new ArrayList<OrganizationData>();
+                        OrganizationData organizationData = new OrganizationData();
+                        organizationData.fromOrganization(organization);
+                        organizationDataList.add(organizationData);
+                        data.setOrganizations(organizationDataList);
+                    }
+                }
+            }
+            data.toTemplatingContext(templatingContext);
             prepareCategories(context, true);
             // resolve parent node in case template needs it for security check
             CmsData cmsData = cmsDataFactory.getCmsData(context);
             long parentId = screenConfig.getLong("parent_id", -1L);
             Resource parentNode = parentId != -1L ? NavigationNodeResourceImpl
                 .getNavigationNodeResource(coralSession, parentId) : cmsData.getNode();
-            templatingContext.put("parent_node", parentNode); 
-            templatingContext.put("add_captcha", screenConfig.getBoolean(
-                "add_captcha", false));
+            templatingContext.put("parent_node", parentNode);
+            templatingContext.put("add_captcha", screenConfig.getBoolean("add_captcha", false));
         }
         catch(Exception e)
         {
             screenError(getNode(), context, "Screen Error ", e);
         }
     }
-    
+
     /**
      * Edit a previously submitted document.
      * 
      * @param context
-     * @throws ProcessingException 
+     * @throws ProcessingException
      */
-    public void prepareEditDocument(Context context) throws ProcessingException
+    public void prepareEditDocument(Context context)
+        throws ProcessingException
     {
         Parameters parameters = RequestParameters.getRequestParameters(context);
         CoralSession coralSession = context.getAttribute(CoralSession.class);
@@ -317,9 +348,10 @@ public class ProposeDocument
         try
         {
             long docId = parameters.getLong("doc_id");
-            DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId);
+            DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(
+                coralSession, docId);
             templatingContext.put("doc", node);
-            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig(),logger);
+            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig(), logger);
             if(parameters.getBoolean("form_loaded", false))
             {
                 data.fromParameters(parameters, coralSession);
@@ -338,7 +370,7 @@ public class ProposeDocument
             }
             data.toTemplatingContext(templatingContext);
             prepareCategories(context, true);
-        } 
+        }
         catch(Exception e)
         {
             screenError(getNode(), context, "Internal Error", e);
@@ -363,7 +395,7 @@ public class ProposeDocument
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(
                 coralSession, docId);
             templatingContext.put("doc", node);
-            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig(),logger);
+            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig(), logger);
             if(parameters.getBoolean("form_loaded", false))
             {
                 data.fromParameters(parameters, coralSession);

@@ -4,7 +4,7 @@
   <parent>
     <artifactId>cyklotron-common</artifactId>
     <groupId>org.cyklotron</groupId>
-    <version>2.24.10</version>
+    <version>2.25.0</version>
     <relativePath>../cyklotron-common</relativePath>
   </parent>
   <artifactId>cyklotron-core</artifactId>
@@ -77,6 +77,22 @@
       <artifactId>lucene-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-analyzers-common</artifactId>
+	</dependency>
+	<dependency>
+	  <groupId>org.apache.lucene</groupId>
+  	  <artifactId>lucene-queryparser</artifactId>
+	</dependency>
+	<dependency>
+      <groupId>org.apache.lucene</groupId>
+	  <artifactId>lucene-analyzers-stempel</artifactId>
+	</dependency>
+	<dependency>
+       <groupId>org.apache.lucene</groupId>
+       <artifactId>lucene-analyzers-icu</artifactId>
+    </dependency>
+    <dependency>
       <groupId>rome</groupId>
       <artifactId>rome</artifactId>
     </dependency>
@@ -125,16 +141,6 @@
       <artifactId>tika-parsers</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.getopt.stempel</groupId>
-      <artifactId>stempel</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>lucene</groupId>
-          <artifactId>lucene</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
     	<groupId>org.apache.activemq</groupId>
     	<artifactId>activemq-all</artifactId>
     	<version>5.6.0</version>
@@ -150,6 +156,21 @@
       <artifactId>nekohtml</artifactId>
       <scope>test</scope>
     </dependency>
+	<dependency>
+      <groupId>org.easytesting</groupId>
+      <artifactId>fest-assert</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+   	  <groupId>org.mockito</groupId>
+ 	  <artifactId>mockito-all</artifactId>
+  	   <scope>test</scope>
+	</dependency>
+	  <dependency>
+	    <groupId>org.apache.commons</groupId>
+  	    <artifactId>commons-lang3</artifactId>
+	  </dependency>	
+    
   </dependencies>
   <build>
     <resources>
@@ -172,7 +193,7 @@
         <artifactId>coral-maven2-plugin</artifactId>
         <version>${versions.coral}</version>
         <configuration>
-          <sourcesList>src/main/rml-sources-gen.list</sourcesList>
+          <sourcesList>rml.list</sourcesList>
           <packageIncludes>net.cyklotron.*</packageIncludes>
         </configuration>
         <executions>

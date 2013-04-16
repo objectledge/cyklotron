@@ -1,16 +1,22 @@
 <?xml version="1.0"?>
 <!DOCTYPE web-app
     PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
-    "http://java.sun.com/j2ee/dtds/web-app_2.2.dtd">
+    "http://java.sun.com/j2ee/dtds/web-app_2.5.dtd">
 <web-app>
+    <listener>
+        <listener-class>org.objectledge.web.LedgeServletContextListener</listener-class>
+    </listener>
+
 	<context-param>
 		<param-name>root</param-name>
 		<param-value>${project.build.directory}/../workdir</param-value>
 	</context-param>
-  
-    <listener>
-        <listener-class>org.objectledge.web.LedgeServletContextListener</listener-class>
-    </listener>
+
+    <context-param> 
+        <description>LedgeContainer config path</description> 
+        <param-name>configPath</param-name> 
+        <param-value>/config</param-value> 
+    </context-param>
 
 	<servlet>
 		<servlet-name>ledge</servlet-name>
@@ -20,9 +26,14 @@
             <param-value>cmsDispatcher</param-value>
         </init-param>
 	</servlet>
-  
+
     <servlet>
-        <servlet-name>REST</servlet-name>
+        <servlet-name>content</servlet-name>
+        <servlet-class>org.objectledge.web.ContentServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>rest</servlet-name>
         <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
         <init-param>
             <param-name>dispatcher</param-name>
@@ -30,16 +41,11 @@
         </init-param>
     </servlet>
   
-    <servlet>
-        <servlet-name>content</servlet-name>
-        <servlet-class>org.objectledge.web.ContentServlet</servlet-class>
-    </servlet>
-
 	<servlet-mapping>
 		<servlet-name>ledge</servlet-name>
 		<url-pattern>/ledge/*</url-pattern>
 	</servlet-mapping>
-	    
+
     <servlet-mapping>
         <servlet-name>content</servlet-name>
         <url-pattern>/content/*</url-pattern>
@@ -49,10 +55,10 @@
         <servlet-name>content</servlet-name>
         <url-pattern>/files/*</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
-        <servlet-name>REST</servlet-name>
-        <url-pattern>/rr/*</url-pattern>
+        <servlet-name>rest</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
 
 	<session-config>

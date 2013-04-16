@@ -1,0 +1,5 @@
+
+ECHO ' - renaming';
+
+ALTER SUBJECT root SET NAME 'uid=root,${usersBaseDN}';
+ALTER SUBJECT anonymous SET NAME 'uid=anonymous,${usersBaseDN}';

@@ -1,0 +1,26 @@
+$pageTool.setDoctype('HTML5')
+$pageTool.addStyleLink('bootstrap/css/bootstrap-responsive.css')##
+$pageTool.addStyleLink('bootstrap/css/bootstrap.css')##
+$pageTool.addStyleLink('bootstrap/css/bootstrap-custom.css')##
+$pageTool.addStyleLink('bootstrap/css/docs.css')##
+$pageTool.addScriptLink('http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.js')##
+$pageTool.addScriptLink('bootstrap/js/bootstrap.js')##
+##
+<div class="container-fluid">
+  <div class="row-fluid">#socket('top_main')</div>
+  <div class="row-fluid">#socket('sub_page_top_small')</div>
+  <div class="row-fluid">
+    <div class="span2">
+      #socket('left_column_first')
+      #socket('sub_page_left_column_second')
+    </div>
+    <div class="span10"> 
+	  #socket('sub_page_right_column_main') 
+	</div>
+  </div>
+  <div class="row-fluid">
+    <div class="offset2 span10"> 
+	  #socket('right_column_bottom')
+    </div>
+  </div>
+</div> 

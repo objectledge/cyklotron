@@ -4,7 +4,7 @@
   <parent>
     <artifactId>cyklotron-common</artifactId>
     <groupId>org.cyklotron</groupId>
-    <version>2.24.10</version>
+    <version>2.25.0</version>
     <relativePath>../cyklotron-common</relativePath>
   </parent>
   <artifactId>cyklotron-ui</artifactId>
@@ -18,12 +18,12 @@
     <dependency>
       <groupId>org.objectledge</groupId>
       <artifactId>ledge-web</artifactId>
-      <classifier>classes</classifier>      
+      <classifier>classes</classifier>
     </dependency>
     <dependency>
       <groupId>org.objectledge</groupId>
       <artifactId>ledge-forms</artifactId>
-      <classifier>classes</classifier>      
+      <classifier>classes</classifier>
     </dependency>
     <dependency>
       <groupId>org.objectledge.coral</groupId>
@@ -45,7 +45,11 @@
     <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-core</artifactId>
-    </dependency>    
+    </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

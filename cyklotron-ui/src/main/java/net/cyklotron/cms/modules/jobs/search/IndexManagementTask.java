@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.store.Directory;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.session.CoralSession;
@@ -141,14 +141,15 @@ public class IndexManagementTask
         boolean reindex = false;
         int numDocs = 0;
         long numChanges = 0L;
-        IndexReader reader = null;
+        DirectoryReader reader = null;
         try
         {
-            reindex = !IndexReader.indexExists(luceneDirectory);
+            reindex = !DirectoryReader.indexExists(luceneDirectory);
             if(!reindex)
             {
-                reader = IndexReader.open(luceneDirectory, false);
-                numChanges = IndexingFacilityUtil.getChangeCounter(reader.getCommitUserData());
+                reader = DirectoryReader.open(luceneDirectory);
+                numChanges = IndexingFacilityUtil.getChangeCounter(reader.getIndexCommit()
+                    .getUserData());
                 numDocs = reader.numDocs();
                 reindex = numDocs == 0;
             }

@@ -78,7 +78,7 @@ public class PNATERCLocationProviderTest
                     provider.fromSource();
                 }
                 Map<Integer, Integer> rowCount = new HashMap<>();
-                for(int i = 1; i <= 6; i++)
+                for(int i = 1; i <= 7; i++)
                 {
                     rowCount.put(i, 0);
                 }

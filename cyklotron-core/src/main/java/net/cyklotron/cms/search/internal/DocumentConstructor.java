@@ -256,14 +256,24 @@ public class DocumentConstructor
     /**
      * Create a lucene document from an given indexable resource and set branch field in it.
      * 
-     * @return the lucene document or <code>null</code> if all the document fields were empty.
+     * @return the lucene document or <code>null</code> if all the document fields were empty, or
+     *         document creation failed.
      */
     public Document createDocument(CoralSession coralSession, IndexableResource node,
         Resource branch)
     {
-        Document doc = createDocument(coralSession, node);
-        setBranchField(doc, branch);
-        return doc;
+        Document doc;
+        try
+        {
+            doc = createDocument(coralSession, node);
+            setBranchField(doc, branch);
+            return doc;
+        }
+        catch(Exception e)
+        {
+            logger.error("failed to create Lucene document for resource " + node, e);
+            return null;
+        }
     }
 
     // implementation //////////////////////////////////////////////////////////////////////////////

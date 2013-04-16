@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <system_email>${mail_systemAccount}</system_email>
+  <sessions>
+    <session name="smtp">
+      <property name="smtp.host">${mail_smtp_host}</property>
+      <property name="transport.protocol">smtp</property>
+    </session>
+  </sessions>  
+</config>

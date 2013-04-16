@@ -108,6 +108,14 @@ public class LocationDatabaseServiceImpl
     /**
      * {@inheritDoc}
      */
+    public List<Location> getAreas(String query, String enclosingArea, int lmin, int lmax, int limit)
+    {
+        return index.getAreas(query, enclosingArea, lmin, lmax, limit);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public List<String> getAllTerms(String field)
     {
         return index.getAllTerms(field);
@@ -122,14 +130,29 @@ public class LocationDatabaseServiceImpl
         return index.exactMatchExists(field, value);
     }
 
+    public Location merge(Location location1, Location location2)
+    {
+        return index.merge(location1, location2);
+    }
+
     private void load(Collection<Location> locations)
         throws IOException
     {
         index.startUpdate();
-        for(Location location : locations)
+        try
         {
-            index.addItem(location);
+            for(Location location : locations)
+            {
+                index.addItem(location);
+            }
         }
-        index.endUpdate();
+        catch(Exception e)
+        {
+            logger.error("update failed", e);
+        }
+        finally
+        {
+            index.endUpdate();
+        }
     }
 }

@@ -35,6 +35,17 @@ public interface LocationDatabaseService
     public List<Location> getLocations(String requestedField, Map<String, String> fieldValues);
 
     /**
+     * Searches for coarse-grained locations (areas) matching specific name prefix.
+     * 
+     * @param query name prefix.
+     * @param enclosingArea TODO
+     * @param lmin minimum areaLevel to be matched
+     * @param lmax maximum areaLevel to be matched
+     * @return list of locations sorted by relevance.
+     */
+    public List<Location> getAreas(String query, String enclosingArea, int lmin, int lmax, int limit);
+
+    /**
      * Returns all terms in given field of location index.
      * 
      * @param field name of the requested field.
@@ -52,4 +63,13 @@ public interface LocationDatabaseService
      */
     public boolean exactMatchExists(String field, String value)
         throws IOException;
+
+    /**
+     * Returns most specific location enclosing both given locations.
+     * 
+     * @param location1 first location.
+     * @param location2 second location.
+     * @return most specific location enclosing both given locations.
+     */
+    public Location merge(Location location1, Location location2);
 }

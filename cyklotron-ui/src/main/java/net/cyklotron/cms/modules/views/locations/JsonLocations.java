@@ -18,12 +18,12 @@ import org.objectledge.table.TableStateManager;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.json.AbstractJsonView;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.locations.Location;
 import net.cyklotron.cms.locations.LocationDatabaseService;
 import net.cyklotron.cms.preferences.PreferencesService;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
 
 /**
  * The screen for serving files.
@@ -106,8 +106,8 @@ public class JsonLocations
 
         for(Location location : locations)
         {
-            Location matchnigLocation = new Location(location, uniqueLocations.get(location
-                .get(requestedField)));
+            Location matchnigLocation = locationDatabaseService.merge(location,
+                uniqueLocations.get(location.get(requestedField)));
             uniqueLocations.put(location.get(requestedField), matchnigLocation);
         }
         limit = Math.min(limit, uniqueLocations.size());

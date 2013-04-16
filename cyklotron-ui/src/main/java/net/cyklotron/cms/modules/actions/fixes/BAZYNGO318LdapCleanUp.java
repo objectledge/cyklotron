@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.naming.NameClassPair;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -20,10 +19,6 @@ import javax.naming.directory.ModificationItem;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.modules.actions.BaseCMSAction;
-import net.cyklotron.cms.structure.StructureService;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -34,6 +29,10 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.modules.actions.BaseCMSAction;
+import net.cyklotron.cms.structure.StructureService;
 
 public class BAZYNGO318LdapCleanUp
     extends BaseCMSAction
@@ -73,6 +72,7 @@ public class BAZYNGO318LdapCleanUp
             SearchControls ctls = new SearchControls();
             String filter = "(objectClass=cyklotronPerson)";
             ctls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+            ctls.setCountLimit(limitOfEntries);
             // Search for objects using the filter
             NamingEnumeration<SearchResult> answer = dirContext.search("", filter, ctls);
             int proccessedCount = -1;
@@ -89,6 +89,7 @@ public class BAZYNGO318LdapCleanUp
                 Attributes userAttributes = userDirContext.getAttributes("");
                 Attribute snAttr = userAttributes.get("sn");
                 Attribute cnAttr = userAttributes.get("cn");
+                Attribute gnAttr = userAttributes.get("gn");
                 if(snAttr != null && cnAttr != null)
                 {
                     Attributes attrs = new BasicAttributes(true); // case-ignore
@@ -99,6 +100,7 @@ public class BAZYNGO318LdapCleanUp
                     attrs.put(objclass);
                     attrs.put(snAttr);
                     attrs.put(cnAttr);
+                    attrs.put(gnAttr);
 
                     javax.naming.Context newContext = dirContext.createSubcontext(newRdn, attrs);
                     processUser(userContext, newContext); // contexts are closed after processing

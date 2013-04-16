@@ -134,8 +134,8 @@ $pageTool.addStyleLink('style/cms-component-wrapper.css')##
 	$pageTool.addStyleLink('style/cms-component-wrapper.css')##
     <div class="cms-component-wrapper-errors">Błąd</div><!--
 #foreach($message in $cms_data.component.errorMessages)##
-$message.trace 
-
+$message.message
+$message.trace
 #end-->  
 #else$component_gen_result#end
 ##

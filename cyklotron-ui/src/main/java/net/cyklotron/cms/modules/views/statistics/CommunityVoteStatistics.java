@@ -92,13 +92,17 @@ public class CommunityVoteStatistics
             long categoryQueryId = parameters.getLong("categoryQuery", -1L);
             templatingContext.put("categoryQuery", categoryQueryId);
 
-            Calendar cal = new GregorianCalendar();
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            cal.set(Calendar.DAY_OF_MONTH, -cutoffDateOffset);
-            Date cutoffDate = cal.getTime();
+            Date cutoffDate = null;
+            if(cutoffDateOffset > 0)
+            {
+                Calendar cal = new GregorianCalendar();
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                cal.set(Calendar.MILLISECOND, 0);
+                cal.set(Calendar.DAY_OF_MONTH, -cutoffDateOffset);
+                cutoffDate = cal.getTime();
+            }
             SortOrder primarySortOrder = SortOrder.valueOf(primarySort);
             Comparator<NavigationNodeResource> secondarySortOrderComparator = model.getColumn(
                 secondarySortOrder).getComparator();

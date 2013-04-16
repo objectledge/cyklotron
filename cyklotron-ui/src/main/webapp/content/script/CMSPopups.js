@@ -48,7 +48,15 @@ function selectCategories(attribute, form, element, baseLink, selected_element, 
 {
    baseLink += "&selected=" + document.getElementById(selected_element).value;
    baseLink += "&res_class_name=" + res_class_name;
-   window.propertySelector = new PropertySelector(attribute, form, element);
+   window.propertySelector = new PropertySelector(attribute, form, element, {
+	   beforeValuesSet : function(propertySelector){ /* do nothing */ },
+	   afterValuesSet : function(propertySelector){ 
+		   if(jQuery)
+		   {
+			   jQuery(document.getElementById(selected_element)).change();
+		   }
+	   } 
+   });
    getWinPopup('ChooseCategory').open(baseLink, 350, 0.9, 'right');
 }
 

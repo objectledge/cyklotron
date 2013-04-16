@@ -41,7 +41,7 @@ public class TERCProviderTest
             {
                 assertMinCount(stmt, "locations_terc", 400);
                 assertMinCount(stmt, "locations_simc", 100000);
-                assertMinCount(stmt, "locations_wmrodz", 40);
+                assertMinCount(stmt, "locations_wmrodz", 10);
             }
         }
     }

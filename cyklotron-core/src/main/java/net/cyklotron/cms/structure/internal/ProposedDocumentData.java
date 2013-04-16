@@ -885,6 +885,11 @@ public class ProposedDocumentData
         this.eventEnd = eventEnd;
     }
 
+    public void setOrganizations(List<OrganizationData> organizations)
+    {
+        this.organizations = organizations;
+    }
+
     public void setSelectedCategories(Set<CategoryResource> selectedCategories)
     {
         this.selectedCategories = selectedCategories;

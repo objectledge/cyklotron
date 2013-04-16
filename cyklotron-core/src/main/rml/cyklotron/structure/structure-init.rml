@@ -570,9 +570,8 @@ CREATE RESOURCE 'document_view'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/documents/components'
 ATTRIBUTES (
-  componentName = 'documents.DocumentView',
-##  configurationView = 'documents.DocumentViewConf',
-  aggregationSourceView = 'documents.DocumentViewAggregationSource'
+  componentName = 'documents.DocumentView'
+##  configurationView = 'documents.DocumentViewConf'
 );
 
 CREATE RESOURCE 'print_document'
