@@ -40,6 +40,23 @@ public interface OrganizationRegistryService
     public String getOrganizationNewsFeed(Parameters parameters)
         throws ProcessingException;
 
+    /**
+     * Check if the request parameters contain organization a valid organization id parameter.
+     * 
+     * @param parameters
+     * @return true if the parameter is present, is a number and points to an existing organization.
+     */
+    public boolean checkOranizationId(Parameters parameters);
+
+    /**
+     * Returns newest documents related to the organization.
+     * 
+     * @param parameters request parameters.
+     * @param limit size of the paging window.
+     * @param offset offset of the paging window.
+     * @return a collection of 0 .. limit documents
+     * @throws ProcessingException
+     */
     Collection<DocumentNodeResource> getOrganizationNewestDocuments(Parameters parameters,
         int limit, int offset)
         throws ProcessingException;

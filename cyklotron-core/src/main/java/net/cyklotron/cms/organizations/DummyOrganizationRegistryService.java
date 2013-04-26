@@ -32,6 +32,11 @@ public class DummyOrganizationRegistryService
         return "";
     }
 
+    public boolean checkOranizationId(Parameters parameters)
+    {
+        return true;
+    }
+
     @Override
     public Collection<DocumentNodeResource> getOrganizationNewestDocuments(Parameters parameters, int limit, int offset)
         throws ProcessingException
