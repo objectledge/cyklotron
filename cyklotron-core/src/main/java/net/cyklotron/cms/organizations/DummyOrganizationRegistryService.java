@@ -39,7 +39,7 @@ public class DummyOrganizationRegistryService
 
     @Override
     public Collection<DocumentNodeResource> getOrganizationNewestDocuments(long organizationId,
-        int limit, int offset)
+        int maxAgeDays, int limit, int offset)
         throws ProcessingException
     {
         return Collections.emptyList();
