@@ -57,7 +57,7 @@ public interface OrganizationRegistryService
      * @return a collection of 0 .. limit documents
      * @throws ProcessingException
      */
-    Collection<DocumentNodeResource> getOrganizationNewestDocuments(Parameters parameters,
-        int limit, int offset)
+    Collection<DocumentNodeResource> getOrganizationNewestDocuments(long organizationId, int limit,
+        int offset)
         throws ProcessingException;
 }
