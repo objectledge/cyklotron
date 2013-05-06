@@ -9,6 +9,7 @@ import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.TableConstants;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
@@ -148,9 +149,19 @@ public abstract class BaseResourceList
      * @param parameters */
     protected void setupPaging(BaseResourceListConfiguration config, TableState state, Parameters parameters)
     {
-        // number of shown resources
-        state.setCurrentPage(1);
-        state.setPageSize(config.getMaxResNumber());
+        if(state.isNew())
+        {
+            state.setPageSize(config.getMaxResNumber());
+            state.setCurrentPage(1);
+        }
+
+        // WARN: duplicate setPage action
+        if(parameters.isDefined(TableConstants.TABLE_ID_PARAM_KEY)
+            && parameters.getInt(TableConstants.TABLE_ID_PARAM_KEY) == state.getId()
+            && parameters.isDefined(TableConstants.PAGE_NO_PARAM_KEY))
+        {
+            state.setCurrentPage(parameters.getInt(TableConstants.PAGE_NO_PARAM_KEY));
+        }
     }
     
 	/** Returns a table mode specific for this resource list subclass. */
