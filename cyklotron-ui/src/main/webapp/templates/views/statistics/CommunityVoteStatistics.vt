@@ -1,7 +1,7 @@
 ##
 ## option settings
 ##
-#set($cuttoffDateOffsetOptions = ['7', '14', '30', '60', '90', '365'])
+#set($cuttoffDateOffsetOptions = ['7', '14', '30', '60', '90', '365', '0'])
 #set($defaultSecondarySort = 'priority.validity.start/ASC')
 #set($sortDirectionOptions = ['ASC','DESC'])
 #set($resultPageSizeOptions = [20, 50, 100])
