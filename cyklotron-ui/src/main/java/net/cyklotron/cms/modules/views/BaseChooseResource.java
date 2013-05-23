@@ -18,7 +18,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.ParentsVisitor;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.CoralTableModel;
-import org.objectledge.coral.table.ResourceListTableModel;
+import org.objectledge.coral.table.ResourceTreeTableModel;
 import org.objectledge.coral.table.comparator.NameComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -141,7 +141,7 @@ public abstract class BaseChooseResource
                     visitor.traverseBreadthFirst(r);
                 }
                 resources.addAll(ancestors);
-                model = new ResourceListTableModel<Resource>(new ArrayList<Resource>(resources),
+                model = new ResourceTreeTableModel<Resource>(new ArrayList<Resource>(resources),
                     i18nContext.getLocale());
 
                 allExpanded = true;
