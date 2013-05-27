@@ -137,6 +137,27 @@ public class GenericIndex<T extends Resource, U>
         searcherManager.maybeRefresh();
     }
 
+    public synchronized void delete(T resource)
+        throws IOException
+    {
+        Term identifier = toDocumentMapper.getIdentifier(resource);
+        try(IndexWriter writer = getWriter())
+        {
+            writer.prepareCommit();
+            try
+            {
+                writer.deleteDocuments(identifier);
+                writer.commit();
+            }
+            catch(RuntimeException | IOException e)
+            {
+                writer.rollback();
+                throw e;
+            }
+        }
+        searcherManager.maybeRefresh();
+    }
+
     public U getResource(Long id)
         throws IOException
     {
