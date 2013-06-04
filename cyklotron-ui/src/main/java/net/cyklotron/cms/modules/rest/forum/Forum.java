@@ -125,7 +125,7 @@ public class Forum
         return posts;
     }
 
-    private String buildUrl(CoralSession coralSession, final MessageResource messageResource,
+    protected String buildUrl(CoralSession coralSession, final MessageResource messageResource,
         final DiscussionResource discussion)
         throws EntityDoesNotExistException, SiteException
     {
