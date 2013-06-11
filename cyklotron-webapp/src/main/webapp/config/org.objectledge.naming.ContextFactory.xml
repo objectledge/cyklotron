@@ -33,24 +33,12 @@
     					class-key="org.objectledge.database.persistence.Persistence"/>
     <property name="java.naming.provider.url" value="ou=people,o=ngo,c=pl"/>
   </context>
-   
-  <context name="ngo" initial_factory="org.objectledge.naming.db.DatabaseInitialDirContextFactory">
-    <component-property name="org.objectledge.database.persistence.Persistence"
-              class-key="org.objectledge.database.persistence.Persistence"/>
-    <property name="java.naming.provider.url" value="o=ngo,c=pl"/>
-  </context>   
 <!--
   <context name="people" initial_factory="com.sun.jndi.ldap.LdapCtxFactory">
-    <property name="java.naming.provider.url" value="ldap://actaea.caltha.pl/ou=people,o=ngo,c=pl"/>
+    <property name="java.naming.provider.url" value="ldap://ngo.pl/ou=people,o=ngo,c=pl"/>
     <property name="java.naming.security.authentication" value="simple"/>
     <property name="java.naming.security.principal" value="cn=admin,o=ngo,c=pl"/>
     <property name="java.naming.security.credentials" value="12345"/>
   </context>  
-  <context name="ngo" initial_factory="com.sun.jndi.ldap.LdapCtxFactory">
-    <property name="java.naming.provider.url" value="ldap://actaea.caltha.pl/o=ngo,c=pl"/>
-    <property name="java.naming.security.authentication" value="simple"/>
-    <property name="java.naming.security.principal" value="cn=admin,o=ngo,c=pl"/>
-    <property name="java.naming.security.credentials" value="12345"/>
-  </context>   
 -->
 </config>
