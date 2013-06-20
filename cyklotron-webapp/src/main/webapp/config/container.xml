@@ -452,6 +452,15 @@
     </component>
 	<parameter class-key="org.objectledge.context.Context"/>   
   </component>
+  
+  <!-- // URL rewriting /////////////////////////////////////////////////////////////////////// -->
+  
+  <component class-key="org.objectledge.web.rewrite.UrlRewriter"
+             class="net.cyklotron.cms.rewrite.UrlRewriteRegistryImpl">
+    <sequence>
+      <component class="net.cyklotron.cms.structure.internal.NavigationNodeUrlRewriteParticipant" />
+    </sequence>
+  </component>
 
   <!-- // Cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
   
