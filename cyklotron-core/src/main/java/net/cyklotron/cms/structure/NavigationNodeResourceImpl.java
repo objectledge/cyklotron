@@ -110,6 +110,9 @@ public class NavigationNodeResourceImpl
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
     private static AttributeDefinition<Integer> priorityDef;
 
+    /** The AttributeDefinition object for the <code>quickPath</code> attribute. */
+	private static AttributeDefinition<String> quickPathDef;
+
     /** The AttributeDefinition object for the <code>redactor</code> attribute. */
 	private static AttributeDefinition<Role> redactorDef;
 
@@ -953,6 +956,66 @@ public class NavigationNodeResourceImpl
     public boolean isPriorityDefined()
 	{
 	    return isDefined(priorityDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>quickPath</code> attribute.
+     *
+     * @return the value of the <code>quickPath</code> attribute.
+     */
+    public String getQuickPath()
+    {
+        return get(quickPathDef);
+    }
+    
+    /**
+     * Returns the value of the <code>quickPath</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>quickPath</code> attribute.
+     */
+    public String getQuickPath(String defaultValue)
+    {
+        return get(quickPathDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>quickPath</code> attribute.
+     *
+     * @param value the value of the <code>quickPath</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setQuickPath(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(quickPathDef, value);
+            }
+            else
+            {
+                unset(quickPathDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>quickPath</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>quickPath</code> attribute is defined.
+	 */
+    public boolean isQuickPathDefined()
+	{
+	    return isDefined(quickPathDef);
 	}
  
     /**

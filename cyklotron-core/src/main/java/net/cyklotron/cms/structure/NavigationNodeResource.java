@@ -346,6 +346,36 @@ public interface NavigationNodeResource
     public Parameters getPreferences();
    
     /**
+     * Returns the value of the <code>quickPath</code> attribute.
+     *
+     * @return the value of the the <code>quickPath</code> attribute.
+     */
+    public String getQuickPath();
+    
+    /**
+     * Returns the value of the <code>quickPath</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>quickPath</code> attribute.
+     */
+    public String getQuickPath(String defaultValue);
+
+    /**
+     * Sets the value of the <code>quickPath</code> attribute.
+     *
+     * @param value the value of the <code>quickPath</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setQuickPath(String value);   
+   
+	/**
+	 * Checks if the value of the <code>quickPath</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>quickPath</code> attribute is defined.
+	 */
+    public boolean isQuickPathDefined();
+ 
+    /**
      * Returns the value of the <code>redactor</code> attribute.
      *
      * @return the value of the the <code>redactor</code> attribute.
