@@ -172,7 +172,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
         r.lock();
         try
         {
-            return Collections.unmodifiableSet(cache.keySet());
+            return new HashSet<>(cache.keySet());
         }
         finally
         {
