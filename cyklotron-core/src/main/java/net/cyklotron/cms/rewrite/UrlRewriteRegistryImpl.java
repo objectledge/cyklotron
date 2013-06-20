@@ -32,7 +32,7 @@ public class UrlRewriteRegistryImpl
     @Override
     public boolean matches(RewriteInfo request)
     {
-        return allPaths.contains(request.getPathInfo());
+        return allPaths.contains(request.getServletPath());
     }
 
     @Override
@@ -103,11 +103,12 @@ public class UrlRewriteRegistryImpl
     @Override
     public RewriteInfo rewrite(RewriteInfo request)
     {
+        final String path = request.getServletPath();
         for(UrlRewriteParticipant participant : participants)
         {
-            if(participant.matches(request.getPathInfo()))
+            if(participant.matches(path))
             {
-                RewriteTarget target = participant.rewrite(request.getPathInfo());
+                RewriteTarget target = participant.rewrite(path);
                 if(target != null)
                 {
                     RewriteInfoBuilder builder = RewriteInfoBuilder.fromRewriteInfo(request);
