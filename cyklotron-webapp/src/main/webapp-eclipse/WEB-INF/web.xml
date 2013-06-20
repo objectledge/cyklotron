@@ -1,31 +1,29 @@
 <?xml version="1.0"?>
-<!DOCTYPE web-app
-    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
-    "http://java.sun.com/j2ee/dtds/web-app_2.5.dtd">
-<web-app>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     <listener>
         <listener-class>org.objectledge.web.LedgeServletContextListener</listener-class>
     </listener>
 
-	<context-param>
-		<param-name>root</param-name>
-		<param-value>${project.build.directory}/../workdir</param-value>
-	</context-param>
-
-    <context-param> 
-        <description>LedgeContainer config path</description> 
-        <param-name>configPath</param-name> 
-        <param-value>/config</param-value> 
+    <context-param>
+        <param-name>root</param-name>
+        <param-value>${project.build.directory}/../workdir</param-value>
     </context-param>
 
-	<servlet>
-		<servlet-name>ledge</servlet-name>
-		<servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
+    <context-param>
+        <description>LedgeContainer config path</description>
+        <param-name>configPath</param-name>
+        <param-value>/config</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>ledge</servlet-name>
+        <servlet-class>org.objectledge.web.LedgeServlet</servlet-class>
         <init-param>
             <param-name>dispatcher</param-name>
             <param-value>cmsDispatcher</param-value>
         </init-param>
-	</servlet>
+    </servlet>
 
     <servlet>
         <servlet-name>content</servlet-name>
@@ -40,11 +38,11 @@
             <param-value>restDispatcher</param-value>
         </init-param>
     </servlet>
-  
-	<servlet-mapping>
-		<servlet-name>ledge</servlet-name>
-		<url-pattern>/ledge/*</url-pattern>
-	</servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ledge</servlet-name>
+        <url-pattern>/ledge/*</url-pattern>
+    </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>content</servlet-name>
@@ -61,18 +59,8 @@
         <url-pattern>/rest/*</url-pattern>
     </servlet-mapping>
 
-	<session-config>
-		<session-timeout>30</session-timeout>
-	</session-config>
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
 
-	<!-- Added for XHTML support -->
-	<mime-mapping>
-		<extension>js</extension>
-		<mime-type>text/javascript</mime-type>
-	</mime-mapping>
-	<mime-mapping>
-		<extension>css</extension>
-		<mime-type>text/css</mime-type>
-	</mime-mapping>
-	<!-- -->
 </web-app>
