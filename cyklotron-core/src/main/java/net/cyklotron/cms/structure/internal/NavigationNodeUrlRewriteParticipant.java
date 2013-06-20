@@ -6,6 +6,7 @@ import java.util.List;
 import org.objectledge.coral.session.CoralSessionFactory;
 
 import net.cyklotron.cms.rewrite.ResourceBasedUrlRewriteParticipant;
+import net.cyklotron.cms.rewrite.RewriteTarget;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 public class NavigationNodeUrlRewriteParticipant

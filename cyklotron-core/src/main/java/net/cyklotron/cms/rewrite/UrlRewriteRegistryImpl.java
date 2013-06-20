@@ -14,7 +14,6 @@ import org.objectledge.web.rewrite.RewriteInfoBuilder;
 import org.objectledge.web.rewrite.UrlRewriter;
 
 import net.cyklotron.cms.ProtectedResource;
-import net.cyklotron.cms.rewrite.UrlRewriteParticipant.RewriteTarget;
 
 public class UrlRewriteRegistryImpl
     implements UrlRewriter, UrlRewriteRegistry
