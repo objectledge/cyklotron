@@ -1,6 +1,7 @@
 package net.cyklotron.cms.rewrite;
 
 import java.util.AbstractSet;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,10 +23,10 @@ public class UrlRewriteRegistryImpl
 
     private AbstractSet<String> allPaths = new AllPaths();
 
-    public UrlRewriteRegistryImpl(List<UrlRewriteParticipant> participants)
+    public UrlRewriteRegistryImpl(UrlRewriteParticipant[] participants)
     {
         super();
-        this.participants = participants;
+        this.participants = Arrays.asList(participants);
     }
 
     @Override
