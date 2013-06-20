@@ -102,7 +102,10 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
         {
             final long id = resource.getId();
             final String oldPath = (String)invCache.get(id);
-            cache.remove(oldPath);
+            if(oldPath != null)
+            {
+                cache.remove(oldPath);
+            }
             if(resource.isDefined(pathAttr))
             {
                 final String path = resource.get(pathAttr);
@@ -124,7 +127,10 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
         try
         {
             final String path = (String)invCache.remove(resource.getId());
-            cache.remove(path);
+            if(cache != null)
+            {
+                cache.remove(path);
+            }
         }
         finally
         {
