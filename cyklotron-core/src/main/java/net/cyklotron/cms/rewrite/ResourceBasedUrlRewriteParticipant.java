@@ -1,8 +1,8 @@
 package net.cyklotron.cms.rewrite;
 
 import java.lang.ref.WeakReference;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -194,6 +194,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
                 {
                     T resource = ref.get(coralSession);
                     resource.unset(pathAttr);
+                    resource.update();
                 }
                 catch(EntityDoesNotExistException e)
                 {
