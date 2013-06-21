@@ -25,6 +25,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
+import org.picocontainer.Startable;
 
 import net.cyklotron.cms.ProtectedResource;
 
@@ -33,7 +34,7 @@ import bak.pcj.map.LongKeyOpenHashMap;
 
 public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     implements ResourceCreationListener, ResourceDeletionListener, ResourceChangeListener,
-    UrlRewriteParticipant
+    Startable, UrlRewriteParticipant
 {
     private final ResourceClass<T> rc;
 
@@ -82,7 +83,6 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
             {
                 throw new Error(pathAttribute() + " must not be REQUIRED or READONLY");
             }
-            preloadCache(coralSession);
             coralSession.getEvent().addResourceCreationListener(this, rc);
             coralSession.getEvent().addResourceDeletionListener(this, rc);
             coralSession.getEvent().addResourceChangeListener(this, rc);
@@ -91,6 +91,22 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
         {
             throw new ComponentInitializationError("initialization failed", e);
         }
+    }
+
+    public void start()
+    {
+        try(CoralSession coralSession = coralSessionFactory.getRootSession())
+        {
+            preloadCache(coralSession);
+        }
+        catch(MalformedQueryException e)
+        {
+            throw new RuntimeException("unexpected", e);
+        }
+    }
+
+    public void stop()
+    {
     }
 
     @Override
