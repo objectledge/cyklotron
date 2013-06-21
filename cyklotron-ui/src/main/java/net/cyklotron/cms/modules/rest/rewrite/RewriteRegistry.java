@@ -16,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 
@@ -47,7 +46,6 @@ public class RewriteRegistry
     @Produces(MediaType.APPLICATION_JSON)
     public Response info()
     {
-        final CoralSession coralSession = coralSessionFactory.getCurrentSession();
         final Map<String, Map<SitePath, String>> info = registry.getRewriteInfo();
         Map<String, List<RewriteInfoItem>> info2 = Maps.transformValues(info,
             new Function<Map<SitePath, String>, List<RewriteInfoItem>>()
@@ -61,19 +59,9 @@ public class RewriteRegistry
                                     @Override
                                     public RewriteInfoItem apply(Entry<SitePath, String> input)
                                     {
-                                        final long siteId = input.getKey().getSiteId();
-                                        SiteResource site;
-                                        try
-                                        {
-                                            site = (SiteResource)coralSession.getStore()
-                                                .getResource(siteId);
-                                            return new RewriteInfoItem(site.getName(), input
-                                                .getKey().getPath(), input.getValue());
-                                        }
-                                        catch(EntityDoesNotExistException e)
-                                        {
-                                            throw new RuntimeException("invalid site id", e);
-                                        }
+                                        SiteResource site = input.getKey().getSite();
+                                        return new RewriteInfoItem(site.getName(), input.getKey()
+                                            .getPath(), input.getValue());
                                     }
                                 }));
                     }
@@ -90,7 +78,7 @@ public class RewriteRegistry
         final CoralSession coralSession = coralSessionFactory.getCurrentSession();
         final SiteResource site = siteService.getSite(coralSession, siteName);
 
-        boolean defined = registry.getPaths().contains(new SitePath(site.getId(), "/" + path));
+        boolean defined = registry.getPaths().contains(new SitePath(site, "/" + path));
         return Response.ok(Collections.singletonMap("defined", defined)).build();
     }
 
@@ -101,7 +89,7 @@ public class RewriteRegistry
     {
         final CoralSession coralSession = coralSessionFactory.getCurrentSession();
         final SiteResource site = siteService.getSite(coralSession, siteName);
-        final SitePath sitePath = new SitePath(site.getId(), "/" + path);
+        final SitePath sitePath = new SitePath(site, "/" + path);
 
         if(registry.getPaths().contains(sitePath))
         {

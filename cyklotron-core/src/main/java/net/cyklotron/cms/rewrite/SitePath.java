@@ -1,20 +1,22 @@
 package net.cyklotron.cms.rewrite;
 
+import net.cyklotron.cms.site.SiteResource;
+
 public class SitePath
 {
-    private final long siteId;
+    private final SiteResource site;
 
     private final String path;
 
-    public SitePath(long siteId, String path)
+    public SitePath(SiteResource site, String path)
     {
-        this.siteId = siteId;
+        this.site = site;
         this.path = path;
     }
 
-    public long getSiteId()
+    public SiteResource getSite()
     {
-        return siteId;
+        return site;
     }
 
     public String getPath()
@@ -28,7 +30,7 @@ public class SitePath
         final int prime = 31;
         int result = 1;
         result = prime * result + ((path == null) ? 0 : path.hashCode());
-        result = prime * result + (int)(siteId ^ (siteId >>> 32));
+        result = prime * result + ((site == null) ? 0 : site.hashCode());
         return result;
     }
 
@@ -49,7 +51,12 @@ public class SitePath
         }
         else if(!path.equals(other.path))
             return false;
-        if(siteId != other.siteId)
+        if(site == null)
+        {
+            if(other.site != null)
+                return false;
+        }
+        else if(!site.equals(other.site))
             return false;
         return true;
     }

@@ -142,7 +142,7 @@ public class UrlRewriteRegistryImpl
         {
             SiteResource site = siteService.getSiteByAlias(coralSession, request.getRequest()
                 .getServerName());
-            return new SitePath(site.getId(), request.getServletPath());
+            return new SitePath(site, request.getServletPath());
         }
         catch(Exception e)
         {
