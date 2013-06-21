@@ -53,7 +53,7 @@ public class RewriteRegistry
                     @Override
                     public List<RewriteInfoItem> apply(Map<SitePath, String> input)
                     {
-                        return new ArrayList<>(Collections2.transform(input.entrySet(),
+                        final ArrayList<RewriteInfoItem> list = new ArrayList<>(Collections2.transform(input.entrySet(),
                             new Function<Map.Entry<SitePath, String>, RewriteInfoItem>()
                                 {
                                     @Override
@@ -64,6 +64,8 @@ public class RewriteRegistry
                                             .getPath(), input.getValue());
                                     }
                                 }));
+                        Collections.sort(list);
+                        return list;
                     }
                 });
         return Response.ok(info2).build();
@@ -109,6 +111,7 @@ public class RewriteRegistry
     }
 
     public static class RewriteInfoItem
+        implements Comparable<RewriteInfoItem>
     {
         private final String site;
 
@@ -136,6 +139,13 @@ public class RewriteRegistry
         public String getTarget()
         {
             return target;
+        }
+
+        @Override
+        public int compareTo(RewriteInfoItem that)
+        {
+            int s = this.site.compareTo(that.site);
+            return s == 0 ? this.path.compareTo(that.path) : s;
         }
     }
 }
