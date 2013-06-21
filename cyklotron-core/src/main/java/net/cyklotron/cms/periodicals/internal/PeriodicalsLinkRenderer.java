@@ -165,7 +165,14 @@ public class PeriodicalsLinkRenderer
     
     public String getNodeURL(CoralSession coralSession, NavigationNodeResource node)
     {
-        return getApplicationURL(coralSession, node.getSite())+"x/"+node.getIdString();
+        if(node.getQuickPath() == null)
+        {
+            return getApplicationURL(coralSession, node.getSite()) + "x/" + node.getIdString();
+        }
+        else
+        {
+            return getContextURL(coralSession, node.getSite()) + node.getQuickPath();
+        }
     }
 
     protected String getContextURL(CoralSession coralSession, SiteResource site)
