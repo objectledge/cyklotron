@@ -7,6 +7,7 @@ import org.objectledge.coral.session.CoralSessionFactory;
 
 import net.cyklotron.cms.rewrite.ResourceBasedUrlRewriteParticipant;
 import net.cyklotron.cms.rewrite.RewriteTarget;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 public class NavigationNodeUrlRewriteParticipant
@@ -36,5 +37,11 @@ public class NavigationNodeUrlRewriteParticipant
     protected RewriteTarget getTarget(NavigationNodeResource resource)
     {
         return new RewriteTarget(resource, Collections.<String, List<String>> emptyMap());
+    }
+
+    @Override
+    protected SiteResource getSite(NavigationNodeResource resource)
+    {
+        return resource.getSite();
     }
 }

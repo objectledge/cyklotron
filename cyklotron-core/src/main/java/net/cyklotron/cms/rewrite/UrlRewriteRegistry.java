@@ -7,13 +7,13 @@ import net.cyklotron.cms.ProtectedResource;
 
 public interface UrlRewriteRegistry
 {
-    Set<String> getPaths();
+    Set<SitePath> getPaths();
 
-    void drop(String path);
+    void drop(SitePath path);
 
-    public Map<String, Map<String, String>> getRewriteInfo();
+    public Map<String, Map<SitePath, String>> getRewriteInfo();
 
-    String path(Object object);
+    SitePath path(Object object);
 
-    ProtectedResource guard(String path);
+    ProtectedResource guard(SitePath path);
 }

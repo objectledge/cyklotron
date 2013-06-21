@@ -9,22 +9,33 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.web.rewrite.RewriteInfo;
 import org.objectledge.web.rewrite.RewriteInfoBuilder;
 import org.objectledge.web.rewrite.UrlRewriter;
 
 import net.cyklotron.cms.ProtectedResource;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
 
 public class UrlRewriteRegistryImpl
     implements UrlRewriter, UrlRewriteRegistry
 {
     private final List<UrlRewriteParticipant> participants;
 
-    private AbstractSet<String> allPaths = new AllPaths();
+    private Set<SitePath> allPaths = new AllPaths();
 
-    public UrlRewriteRegistryImpl(UrlRewriteParticipant[] participants)
+    private final SiteService siteService;
+
+    private final CoralSessionFactory coralSessionFactory;
+
+    public UrlRewriteRegistryImpl(UrlRewriteParticipant[] participants, SiteService siteService,
+        CoralSessionFactory coralSessionFactory)
     {
         super();
+        this.siteService = siteService;
+        this.coralSessionFactory = coralSessionFactory;
         this.participants = Arrays.asList(participants);
     }
 
@@ -35,13 +46,13 @@ public class UrlRewriteRegistryImpl
     }
 
     @Override
-    public Set<String> getPaths()
+    public Set<SitePath> getPaths()
     {
         return allPaths;
     }
 
     @Override
-    public void drop(String path)
+    public void drop(SitePath path)
     {
         for(UrlRewriteParticipant participant : participants)
         {
@@ -50,14 +61,14 @@ public class UrlRewriteRegistryImpl
     }
 
     @Override
-    public Map<String, Map<String, String>> getRewriteInfo()
+    public Map<String, Map<SitePath, String>> getRewriteInfo()
     {
-        Map<String, Map<String, String>> info = new HashMap<>();
+        Map<String, Map<SitePath, String>> info = new HashMap<>();
         for(UrlRewriteParticipant participant : participants)
         {
-            Map<String, String> rewrites = new HashMap<>();
-            Set<String> paths = participant.getPaths();
-            for(String path : paths)
+            Map<SitePath, String> rewrites = new HashMap<>();
+            Set<SitePath> paths = participant.getPaths();
+            for(SitePath path : paths)
             {
                 rewrites.put(path, formatRewrite(participant.rewrite(path)));
             }
@@ -67,11 +78,11 @@ public class UrlRewriteRegistryImpl
     }
 
     @Override
-    public String path(Object object)
+    public SitePath path(Object object)
     {
         for(UrlRewriteParticipant participant : participants)
         {
-            String path = participant.path(object);
+            SitePath path = participant.path(object);
             if(path != null)
             {
                 return path;
@@ -102,7 +113,7 @@ public class UrlRewriteRegistryImpl
     @Override
     public RewriteInfo rewrite(RewriteInfo request)
     {
-        final String path = request.getServletPath();
+        final SitePath path = sitePath(request);
         for(UrlRewriteParticipant participant : participants)
         {
             if(participant.matches(path))
@@ -125,8 +136,22 @@ public class UrlRewriteRegistryImpl
         return request;
     }
 
+    private SitePath sitePath(RewriteInfo request)
+    {
+        try(CoralSession coralSession = coralSessionFactory.getRootSession())
+        {
+            SiteResource site = siteService.getSiteByAlias(coralSession, request.getRequest()
+                .getServerName());
+            return new SitePath(site.getId(), request.getServletPath());
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException("unable to map requested host to CMS site", e);
+        }
+    }
+
     @Override
-    public ProtectedResource guard(String path)
+    public ProtectedResource guard(SitePath path)
     {
         for(UrlRewriteParticipant participant : participants)
         {
@@ -139,16 +164,16 @@ public class UrlRewriteRegistryImpl
     }
 
     private final class AllPaths
-        extends AbstractSet<String>
+        extends AbstractSet<SitePath>
     {
         @Override
         public boolean contains(Object o)
         {
-            if(o instanceof String)
+            if(o instanceof SitePath)
             {
                 for(UrlRewriteParticipant participant : participants)
                 {
-                    if(participant.matches((String)o))
+                    if(participant.matches((SitePath)o))
                     {
                         return true;
                     }
@@ -158,12 +183,12 @@ public class UrlRewriteRegistryImpl
         }
 
         @Override
-        public Iterator<String> iterator()
+        public Iterator<SitePath> iterator()
         {
             final Iterator<UrlRewriteParticipant> i = participants.iterator();
-            return new Iterator<String>()
+            return new Iterator<SitePath>()
                 {
-                    private Iterator<String> j = i.hasNext() ? i.next().getPaths().iterator()
+                    private Iterator<SitePath> j = i.hasNext() ? i.next().getPaths().iterator()
                         : null;
 
                     @Override
@@ -173,7 +198,7 @@ public class UrlRewriteRegistryImpl
                     }
 
                     @Override
-                    public String next()
+                    public SitePath next()
                     {
                         if(j != null)
                         {

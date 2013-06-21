@@ -8,15 +8,15 @@ public interface UrlRewriteParticipant
 {
     String getName();
 
-    boolean matches(String path);
+    boolean matches(SitePath path);
 
-    Set<String> getPaths();
+    Set<SitePath> getPaths();
 
-    void drop(String path);
+    void drop(SitePath path);
 
-    RewriteTarget rewrite(String path);
+    RewriteTarget rewrite(SitePath path);
 
-    String path(Object object);
+    SitePath path(Object object);
 
-    ProtectedResource guard(String path);
+    ProtectedResource guard(SitePath path);
 }

@@ -28,6 +28,7 @@ import org.objectledge.coral.store.ValueRequiredException;
 import org.picocontainer.Startable;
 
 import net.cyklotron.cms.ProtectedResource;
+import net.cyklotron.cms.site.SiteResource;
 
 import bak.pcj.map.LongKeyMap;
 import bak.pcj.map.LongKeyOpenHashMap;
@@ -38,7 +39,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
 {
     private final ResourceClass<T> rc;
 
-    private final Map<String, ResourceRef<T>> cache = new HashMap<>();
+    private final Map<SitePath, ResourceRef<T>> cache = new HashMap<>();
 
     private final LongKeyMap invCache = new LongKeyOpenHashMap();
 
@@ -60,7 +61,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
             if(res.isDefined(pathAttr))
             {
                 String path = res.get(pathAttr);
-                cache.put(path, new ResourceRef<T>(res));
+                cache.put(new SitePath(getSite(res).getId(), path), new ResourceRef<T>(res));
                 invCache.put(res.getId(), path);
             }
         }
@@ -110,7 +111,6 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void resourceChanged(Resource resource, Subject subject)
     {
         w.lock();
@@ -125,7 +125,9 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
             if(resource.isDefined(pathAttr))
             {
                 final String path = resource.get(pathAttr);
-                cache.put(path, new ResourceRef<T>((T)resource));
+                @SuppressWarnings("unchecked")
+                final T res = (T)resource;
+                cache.put(new SitePath(getSite(res).getId(), path), new ResourceRef<T>(res));
                 invCache.put(id, path);
             }
         }
@@ -154,7 +156,6 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void resourceCreated(Resource resource)
     {
@@ -164,7 +165,9 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
             if(resource.isDefined(pathAttr))
             {
                 final String path = resource.get(pathAttr);
-                cache.put(path, new ResourceRef<T>((T)resource));
+                @SuppressWarnings("unchecked")
+                final T res = (T)resource;
+                cache.put(new SitePath(getSite(res).getId(), path), new ResourceRef<T>(res));
                 invCache.put(resource.getId(), path);
             }
         }
@@ -175,7 +178,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     }
 
     @Override
-    public boolean matches(String path)
+    public boolean matches(SitePath path)
     {
         r.lock();
         try
@@ -189,7 +192,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     }
 
     @Override
-    public Set<String> getPaths()
+    public Set<SitePath> getPaths()
     {
         r.lock();
         try
@@ -203,7 +206,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     }
 
     @Override
-    public void drop(String path)
+    public void drop(SitePath path)
     {
         w.lock();
         try
@@ -235,7 +238,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     }
 
     @Override
-    public RewriteTarget rewrite(String path)
+    public RewriteTarget rewrite(SitePath path)
     {
         r.lock();
         try
@@ -263,18 +266,18 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     }
 
     @Override
-    public String path(Object object)
+    public SitePath path(Object object)
     {
         if(rc.getJavaClass().isAssignableFrom(object.getClass()))
         {
             @SuppressWarnings("unchecked")
             long id = ((T)object).getId();
-            return (String)invCache.get(id);
+            return (SitePath)invCache.get(id);
         }
         return null;
     }
 
-    public ProtectedResource guard(String path)
+    public ProtectedResource guard(SitePath path)
     {
         r.lock();
         try
@@ -307,6 +310,8 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     protected abstract String pathAttribute();
 
     protected abstract RewriteTarget getTarget(T resource);
+
+    protected abstract SiteResource getSite(T resource);
 
     private class ResourceRef<R extends Resource>
     {

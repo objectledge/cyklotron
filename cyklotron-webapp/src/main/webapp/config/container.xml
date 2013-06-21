@@ -460,6 +460,8 @@
     <sequence>
       <component class="net.cyklotron.cms.structure.internal.NavigationNodeUrlRewriteParticipant" />
     </sequence>
+    <parameter />
+    <parameter />
   </component>
 
   <!-- // Cyklotron stuff ///////////////////////////////////////////////////////////////////// -->    
