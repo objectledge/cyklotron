@@ -42,7 +42,7 @@ public class UrlRewriteRegistryImpl
     @Override
     public boolean matches(RewriteInfo request)
     {
-        return allPaths.contains(request.getServletPath());
+        return allPaths.contains(sitePath(request));
     }
 
     @Override
