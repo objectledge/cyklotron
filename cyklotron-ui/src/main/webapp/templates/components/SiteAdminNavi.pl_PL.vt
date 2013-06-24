@@ -98,6 +98,9 @@
       #linkCell('' 'DOKUMENTY' $siteLink.view('structure.NaviInfo'))
       #linkCell('' '(OBIEG)' $siteLink.view('structure.EditorialTasks'))
       #linkCell('' '(STOPKI)' $siteLink.view('documents.FootersList').set('reset','true'))
+	  #if($cms_tool.isAppEnabled('quickpath'))
+	    #linkCell('' '(ŚCIEŻKI)' $siteLink.view('structure.QuickPath'))
+	  #end
       <td class="separator">|</td>
       #linkCell('' 'KATEGORIE' $siteLink.view('category.CategoryList'))
       <td class="separator">|</td>

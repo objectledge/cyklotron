@@ -91,6 +91,9 @@
       #linkCell('' 'DOCUMENTS' $siteLink.view('structure.NaviInfo'))
       #linkCell('' '(WORKFLOW)' $siteLink.view('structure.EditorialTasks'))
       #linkCell('' '(FOOTERS)' $siteLink.view('documents.FootersList').set('reset','true'))
+	  #if($cms_tool.isAppEnabled('quickpath'))
+	    #linkCell('' '(QUICKPATH)' $siteLink.view('structure.QuickPath'))
+	  #end
       <td class="separator">|</td>
       #linkCell('' 'CATEGORIES' $siteLink.view('category.CategoryList'))
       <td class="separator">|</td>

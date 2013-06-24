@@ -1193,6 +1193,10 @@
         </prefix>
       </prefix>
     </prefix>
-  </prefix>    
+  </prefix>
+  
+  <prefix name="quickpath">
+    <item name="name">Przyjazne ścieżki</item>
+  </prefix>
   
 </strings>
