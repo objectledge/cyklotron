@@ -16,7 +16,6 @@ import org.objectledge.web.WebConfigurator;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.tools.LinkToolFactoryImpl;
 
-import net.cyklotron.cms.rewrite.UrlRewriteRegistry;
 import net.cyklotron.cms.site.SiteService;
 
 /**
@@ -30,21 +29,17 @@ public class CmsLinkToolFactory
 {
     private CmsDataFactory cmsDataFactory;
 
-    private final UrlRewriteRegistry urlRewriteRegistry;
-
     private final SiteService siteSevice;
 
     private final CoralSessionFactory coralSessionFactory;
 
     public CmsLinkToolFactory(Configuration config, Context context,
-        WebConfigurator webConfigurator, CmsDataFactory cmsDataFactory,
-        UrlRewriteRegistry urlRewriteRegistry, SiteService siteSevice,
+        WebConfigurator webConfigurator, CmsDataFactory cmsDataFactory, SiteService siteSevice,
         CoralSessionFactory coralSessionFactory)
         throws ConfigurationException
     {
         super(config, context, webConfigurator);
         this.cmsDataFactory = cmsDataFactory;
-        this.urlRewriteRegistry = urlRewriteRegistry;
         this.siteSevice = siteSevice;
         this.coralSessionFactory = coralSessionFactory;
     }
@@ -58,8 +53,7 @@ public class CmsLinkToolFactory
         MVCContext mvcContext = MVCContext.getMVCContext(context);
         RequestParameters requestParameters = RequestParameters.getRequestParameters(context);
         return new CmsLinkTool(httpContext, context, mvcContext, requestParameters,
-            linkToolConfiguration, cmsDataFactory, urlRewriteRegistry, siteSevice,
-            coralSessionFactory);
+            linkToolConfiguration, cmsDataFactory, siteSevice, coralSessionFactory);
     }
 
 }
