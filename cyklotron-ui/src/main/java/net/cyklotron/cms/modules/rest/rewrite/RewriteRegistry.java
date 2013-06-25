@@ -1,10 +1,10 @@
 package net.cyklotron.cms.modules.rest.rewrite;
 
-import java.util.ArrayList;
+import static com.google.common.collect.Collections2.filter;
+import static com.google.common.collect.Collections2.transform;
+
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
@@ -20,6 +20,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 
 import net.cyklotron.cms.ProtectedResource;
+import net.cyklotron.cms.rewrite.RewriteEntry;
 import net.cyklotron.cms.rewrite.SitePath;
 import net.cyklotron.cms.rewrite.UrlRewriteRegistry;
 import net.cyklotron.cms.site.SiteException;
@@ -27,8 +28,7 @@ import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 
 import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Maps;
+import com.google.common.base.Predicate;
 
 @Path("/rewriteRegistry")
 public class RewriteRegistry
@@ -43,32 +43,30 @@ public class RewriteRegistry
     private SiteService siteService;
 
     @GET
+    @Path("{site}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response info()
+    public Response info(@PathParam("site") final String siteName)
     {
-        final Map<String, Map<SitePath, String>> info = registry.getRewriteInfo();
-        Map<String, List<RewriteInfoItem>> info2 = Maps.transformValues(info,
-            new Function<Map<SitePath, String>, List<RewriteInfoItem>>()
+        final Collection<RewriteEntry> info = registry.getRewriteInfo();
+        final Collection<RewriteEntry> siteInfo = transform(
+            filter(info, new Predicate<RewriteEntry>()
                 {
                     @Override
-                    public List<RewriteInfoItem> apply(Map<SitePath, String> input)
+                    public boolean apply(RewriteEntry input)
                     {
-                        final ArrayList<RewriteInfoItem> list = new ArrayList<>(Collections2.transform(input.entrySet(),
-                            new Function<Map.Entry<SitePath, String>, RewriteInfoItem>()
-                                {
-                                    @Override
-                                    public RewriteInfoItem apply(Entry<SitePath, String> input)
-                                    {
-                                        SiteResource site = input.getKey().getSite();
-                                        return new RewriteInfoItem(site.getName(), input.getKey()
-                                            .getPath(), input.getValue());
-                                    }
-                                }));
-                        Collections.sort(list);
-                        return list;
+                        return input.getSite().equals(siteName);
+                    }
+                }), new Function<RewriteEntry, RewriteEntry>()
+                {
+                    @Override
+                    public RewriteEntry apply(RewriteEntry input)
+                    {
+                        return new RewriteEntry(input.getProvider(), input.getSite(), input
+                            .getPath().replace("/", "__"), input.getTarget(), input
+                            .getDescription());
                     }
                 });
-        return Response.ok(info2).build();
+        return Response.ok(siteInfo).build();
     }
 
     @GET
@@ -80,7 +78,7 @@ public class RewriteRegistry
         final CoralSession coralSession = coralSessionFactory.getCurrentSession();
         final SiteResource site = siteService.getSite(coralSession, siteName);
 
-        boolean defined = registry.getPaths().contains(new SitePath(site, "/" + path));
+        boolean defined = registry.getPaths().contains(new SitePath(site, path.replace("__", "/")));
         return Response.ok(Collections.singletonMap("defined", defined)).build();
     }
 
@@ -91,7 +89,7 @@ public class RewriteRegistry
     {
         final CoralSession coralSession = coralSessionFactory.getCurrentSession();
         final SiteResource site = siteService.getSite(coralSession, siteName);
-        final SitePath sitePath = new SitePath(site, "/" + path);
+        final SitePath sitePath = new SitePath(site, path.replace("__", "/"));
 
         if(registry.getPaths().contains(sitePath))
         {
@@ -107,45 +105,6 @@ public class RewriteRegistry
         else
         {
             return Response.status(Status.NOT_FOUND).build();
-        }
-    }
-
-    public static class RewriteInfoItem
-        implements Comparable<RewriteInfoItem>
-    {
-        private final String site;
-
-        private final String path;
-
-        private final String target;
-
-        public RewriteInfoItem(String site, String path, String target)
-        {
-            this.site = site;
-            this.path = path;
-            this.target = target;
-        }
-
-        public String getSite()
-        {
-            return site;
-        }
-
-        public String getPath()
-        {
-            return path;
-        }
-
-        public String getTarget()
-        {
-            return target;
-        }
-
-        @Override
-        public int compareTo(RewriteInfoItem that)
-        {
-            int s = this.site.compareTo(that.site);
-            return s == 0 ? this.path.compareTo(that.path) : s;
         }
     }
 }
