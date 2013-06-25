@@ -1,8 +1,9 @@
 package net.cyklotron.cms.rewrite;
 
 import java.util.AbstractSet;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -61,20 +62,14 @@ public class UrlRewriteRegistryImpl
     }
 
     @Override
-    public Map<String, Map<SitePath, String>> getRewriteInfo()
+    public Collection<RewriteEntry> getRewriteInfo()
     {
-        Map<String, Map<SitePath, String>> info = new HashMap<>();
+        Collection<RewriteEntry> infos = new ArrayList<>();
         for(UrlRewriteParticipant participant : participants)
         {
-            Map<SitePath, String> rewrites = new HashMap<>();
-            Set<SitePath> paths = participant.getPaths();
-            for(SitePath path : paths)
-            {
-                rewrites.put(path, formatRewrite(participant.rewrite(path)));
-            }
-            info.put(participant.getName(), rewrites);
+            infos.addAll(participant.getRewriteInfo());
         }
-        return info;
+        return infos;
     }
 
     @Override
@@ -89,25 +84,6 @@ public class UrlRewriteRegistryImpl
             }
         }
         return null;
-    }
-
-    private String formatRewrite(RewriteTarget rewrite)
-    {
-        StringBuilder b = new StringBuilder();
-        b.append("/ledge/x/").append(rewrite.getNode().getIdString());
-        Map<String, List<String>> params = rewrite.getParameters();
-        if(params.size() > 0)
-        {
-            b.append('?');
-            for(Map.Entry<String, List<String>> entry : params.entrySet())
-            {
-                for(String value : entry.getValue())
-                {
-                    b.append(entry.getKey()).append('=').append(value);
-                }
-            }
-        }
-        return b.toString();
     }
 
     @Override

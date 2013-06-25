@@ -1,6 +1,8 @@
 package net.cyklotron.cms.rewrite;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -206,6 +208,35 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     }
 
     @Override
+    public Collection<RewriteEntry> getRewriteInfo()
+    {
+        r.lock();
+        try(CoralSession coralSession = coralSessionFactory.getRootSession())
+        {
+            Collection<RewriteEntry> infos = new ArrayList<>(cache.size());
+            for(Map.Entry<SitePath, ResourceRef<T>> entry : cache.entrySet())
+            {
+                try
+                {
+                    final SitePath sitePath = entry.getKey();
+                    final T resource = entry.getValue().get(coralSession);
+                    infos.add(new RewriteEntry(getName(), sitePath.getSite().getName(), sitePath
+                        .getPath(), formatRewrite(getTarget(resource)), getDescription(resource)));
+                }
+                catch(EntityDoesNotExistException e)
+                {
+                    // resource deleted concurrently - ignore
+                }
+            }
+            return infos;
+        }
+        finally
+        {
+            r.unlock();
+        }
+    }
+
+    @Override
     public void drop(SitePath path)
     {
         w.lock();
@@ -311,7 +342,28 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
 
     protected abstract RewriteTarget getTarget(T resource);
 
+    protected abstract String getDescription(T resource);
+
     protected abstract SiteResource getSite(T resource);
+
+    private String formatRewrite(RewriteTarget rewrite)
+    {
+        StringBuilder b = new StringBuilder();
+        b.append("/ledge/x/").append(rewrite.getNode().getIdString());
+        Map<String, List<String>> params = rewrite.getParameters();
+        if(params.size() > 0)
+        {
+            b.append('?');
+            for(Map.Entry<String, List<String>> entry : params.entrySet())
+            {
+                for(String value : entry.getValue())
+                {
+                    b.append(entry.getKey()).append('=').append(value);
+                }
+            }
+        }
+        return b.toString();
+    }
 
     private class ResourceRef<R extends Resource>
     {

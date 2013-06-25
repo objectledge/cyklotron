@@ -44,4 +44,10 @@ public class NavigationNodeUrlRewriteParticipant
     {
         return resource.getSite();
     }
+
+    @Override
+    protected String getDescription(NavigationNodeResource resource)
+    {
+        return resource.getTitle();
+    }
 }
