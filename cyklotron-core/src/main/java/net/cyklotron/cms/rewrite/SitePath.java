@@ -60,4 +60,10 @@ public class SitePath
             return false;
         return true;
     }
+
+    @Override
+    public String toString()
+    {
+        return site.getName() + path;
+    }
 }
