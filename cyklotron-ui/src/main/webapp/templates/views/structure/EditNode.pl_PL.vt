@@ -243,6 +243,14 @@ $cat.name#if($velocityCount < $categories.size()), #end
 </td>
 </tr>
 #end
+#if($cms_tool.isAppEnabled('quickpath'))
+<tr>
+<td align="right">przyjazna ścieżka</td>
+<td style="nob">
+<input type="text" name="quickpath" value="$!node.quickPath" style="width: 100%;" />
+</td>
+</tr>
+#end
 </table>
 </form>
 
