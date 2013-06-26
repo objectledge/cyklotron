@@ -63,8 +63,9 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
             if(res.isDefined(pathAttr))
             {
                 String path = res.get(pathAttr);
-                cache.put(new SitePath(getSite(res), path), new ResourceRef<T>(res));
-                invCache.put(res.getId(), path);
+                final SitePath sitePath = new SitePath(getSite(res), path);
+                cache.put(sitePath, new ResourceRef<T>(res));
+                invCache.put(res.getId(), sitePath);
             }
         }
     }
@@ -119,18 +120,19 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
         try
         {
             final long id = resource.getId();
-            final String oldPath = (String)invCache.get(id);
-            if(oldPath != null)
+            final SitePath oldSitePath = (SitePath)invCache.get(id);
+            if(oldSitePath != null)
             {
-                cache.remove(oldPath);
+                cache.remove(oldSitePath);
             }
             if(resource.isDefined(pathAttr))
             {
                 final String path = resource.get(pathAttr);
                 @SuppressWarnings("unchecked")
                 final T res = (T)resource;
-                cache.put(new SitePath(getSite(res), path), new ResourceRef<T>(res));
-                invCache.put(id, path);
+                final SitePath sitePath = new SitePath(getSite(res), path);
+                cache.put(sitePath, new ResourceRef<T>(res));
+                invCache.put(id, sitePath);
             }
         }
         finally
@@ -146,10 +148,10 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
         w.lock();
         try
         {
-            final String path = (String)invCache.remove(resource.getId());
+            final SitePath sitePath = (SitePath)invCache.remove(resource.getId());
             if(cache != null)
             {
-                cache.remove(path);
+                cache.remove(sitePath);
             }
         }
         finally
@@ -169,8 +171,9 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
                 final String path = resource.get(pathAttr);
                 @SuppressWarnings("unchecked")
                 final T res = (T)resource;
-                cache.put(new SitePath(getSite(res), path), new ResourceRef<T>(res));
-                invCache.put(resource.getId(), path);
+                final SitePath sitePath = new SitePath(getSite(res), path);
+                cache.put(sitePath, new ResourceRef<T>(res));
+                invCache.put(resource.getId(), sitePath);
             }
         }
         finally
