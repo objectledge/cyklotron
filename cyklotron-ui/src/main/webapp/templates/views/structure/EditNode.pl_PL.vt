@@ -1,5 +1,6 @@
-
-$pageTool.addScriptLink("script/xmlhttp.js") 
+$pageTool.addScriptLink("//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.1/jquery.min.js")
+$pageTool.addScriptLink("script/xmlhttp.js")
+$pageTool.addScriptLink("script/quickpath/Validate.js")
 ##
 
 #macro(reassign $object)
@@ -25,39 +26,49 @@ $pageTool.addScriptLink("script/xmlhttp.js")
 #set($nodeLink = $link.set('node_id',$node.id))
 ##
 ##
-<script type="text/javascript">                                                                                                                              
-<!--                                                                                                                                                         
+<script type="text/javascript">
+
 function gotoDocument(url, docid) {
- xmlhttp.open("HEAD", "${link.view('documents.EditDocument').unset('site_id').set('from_list','true')}&node_id=" + docid,true);
- xmlhttp.onreadystatechange=function() {
- if (xmlhttp.readyState==4) {
-     if (xmlhttp.status==200) {
-        window.open(url + docid);
-     }
-     else if (xmlhttp.status==404) alert("Dokument o tym numerze nie istnieje. ")
-  else alert("Status is "+xmlhttp.status + " " + docid);
-  }
- }
- xmlhttp.send(null);
+    xmlhttp.open("HEAD",
+        "${link.view('documents.EditDocument').unset('site_id').set('from_list','true')}&node_id="
+            + docid, true);
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+            if (xmlhttp.status == 200) {
+                window.open(url + docid);
+            } else if (xmlhttp.status == 404)
+                alert("Dokument o tym numerze nie istnieje. ");
+            else
+                alert("Status is " + xmlhttp.status + " " + docid);
+        }
+    };
+    xmlhttp.send(null);
 }
 
-function categorizeDocument(url,docid)
-{
- xmlhttp.open("HEAD", "${link.view('documents.EditDocument').unset('site_id').set('from_list','true')}&node_id=" + docid,true);
- xmlhttp.onreadystatechange=function() {
- if (xmlhttp.readyState==4){
-     if (xmlhttp.status==200)
-     {
-        getWinPopup('categorization').open(url +"&res_id=" + docid,  350, 0.9, 'right');
-        void(0);
-     }
-     else if (xmlhttp.status==404) alert("Dokument o tym numerze nie istnieje. ")
-  else alert("Status is "+xmlhttp.status + " " + docid);
-  }
- }
- xmlhttp.send(null);
+function categorizeDocument(url, docid) {
+    xmlhttp.open("HEAD",
+        "${link.view('documents.EditDocument').unset('site_id').set('from_list','true')}&node_id="
+            + docid, true);
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+            if (xmlhttp.status == 200) {
+                getWinPopup('categorization').open(url + "&res_id=" + docid, 350, 0.9, 'right');
+                void (0);
+            } else if (xmlhttp.status == 404)
+                alert("Dokument o tym numerze nie istnieje. ");
+            else
+                alert("Status is " + xmlhttp.status + " " + docid);
+        }
+    };
+    xmlhttp.send(null);
 }
-// -->
+
+jQuery(document).ready(function() {
+#if($cms_tool.isAppEnabled('quickpath'))
+    quickPathValidation("$link.rootContent('/rest/rewriteRegistry')", 
+		"$i18n.locale", "$site.name", jQuery("#quickpath"),	jQuery("#quickpath-feedback"));
+#end		
+});
 </script>
 
 <table width="100%" class="genericScreen" cellspacing="0">
@@ -247,7 +258,8 @@ $cat.name#if($velocityCount < $categories.size()), #end
 <tr>
 <td align="right">przyjazna ścieżka</td>
 <td style="nob">
-<input type="text" name="quickpath" value="$!node.quickPath" style="width: 100%;" />
+<span id="quickpath-feedback">&nbsp;</span>
+<input type="text" name="quickpath" id="quickpath" value="$!node.quickPath" style="width: 100%;" />
 </td>
 </tr>
 #end
