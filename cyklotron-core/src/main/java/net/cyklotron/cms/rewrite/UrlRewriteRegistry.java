@@ -9,11 +9,17 @@ public interface UrlRewriteRegistry
 {
     Set<SitePath> getPaths();
 
-    void drop(SitePath path);
-
     Collection<RewriteEntry> getRewriteInfo();
 
-    SitePath path(Object object);
+    boolean canHandle(Object object);
+
+    public void create(String path, Object object)
+        throws UnsupportedClassException, PathInUseException;
+
+    SitePath path(Object object)
+        throws UnsupportedClassException;
+
+    void drop(SitePath path);
 
     ProtectedResource guard(SitePath path);
 }

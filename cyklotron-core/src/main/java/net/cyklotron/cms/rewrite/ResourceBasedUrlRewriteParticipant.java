@@ -25,6 +25,7 @@ import org.objectledge.coral.schema.UnknownAttributeException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.picocontainer.Startable;
@@ -114,26 +115,33 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     }
 
     @Override
-    public void resourceChanged(Resource resource, Subject subject)
+    public void resourceChanged(Resource object, Subject subject)
     {
         w.lock();
         try
         {
+            @SuppressWarnings("unchecked")
+            final T resource = (T)object;
             final long id = resource.getId();
             final SitePath oldSitePath = (SitePath)invCache.get(id);
-            if(oldSitePath != null)
+            final String newPath = resource.get(pathAttr);
+            if((oldSitePath == null && newPath != null)
+                || (oldSitePath != null && newPath == null)
+                || (oldSitePath != null && newPath != null && (!oldSitePath.getPath().equals(
+                    newPath) || !oldSitePath.getSite().equals(getSite(resource)))))
             {
-                cache.remove(oldSitePath);
+                if(oldSitePath != null)
+                {
+                    cache.remove(oldSitePath);
+                }
+                if(resource.isDefined(pathAttr))
+                {
+                    final SitePath sitePath = new SitePath(getSite(resource), newPath);
+                    cache.put(sitePath, new ResourceRef<T>(resource));
+                    invCache.put(id, sitePath);
+                }
             }
-            if(resource.isDefined(pathAttr))
-            {
-                final String path = resource.get(pathAttr);
-                @SuppressWarnings("unchecked")
-                final T res = (T)resource;
-                final SitePath sitePath = new SitePath(getSite(res), path);
-                cache.put(sitePath, new ResourceRef<T>(res));
-                invCache.put(id, sitePath);
-            }
+
         }
         finally
         {
@@ -240,6 +248,50 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     }
 
     @Override
+    public void create(String path, Object object)
+        throws UnsupportedClassException, PathInUseException
+    {
+        if(canHandle(object))
+        {
+            @SuppressWarnings("unchecked")
+            T resource = (T)object;
+            SitePath sitePath = new SitePath(getSite(resource), path);
+            w.lock();
+            try
+            {
+                if(!cache.containsKey(sitePath))
+                {
+                    try(CoralSession coralSession = coralSessionFactory.getRootSession())
+                    {
+                        resource.set(pathAttr, path);
+                        resource.update();
+                    }
+                    catch(UnknownAttributeException | ModificationNotPermitedException
+                                    | ValueRequiredException e)
+                    {
+                        throw new RuntimeException("unexpected", e);
+                    }
+                    cache.put(sitePath, new ResourceRef<T>(resource));
+                    invCache.put(resource.getId(), sitePath);
+                }
+                else
+                {
+                    throw new PathInUseException(path.toString() + " is already in use");
+                }
+            }
+            finally
+            {
+                w.unlock();
+            }
+        }
+        else
+        {
+            throw new UnsupportedClassException(getClass().getName() + " can't handle "
+                + object.getClass().getName());
+        }
+    }
+
+    @Override
     public void drop(SitePath path)
     {
         w.lock();
@@ -301,14 +353,25 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
 
     @Override
     public SitePath path(Object object)
+        throws UnsupportedClassException
     {
-        if(rc.getJavaClass().isAssignableFrom(object.getClass()))
+        if(canHandle(object))
         {
             @SuppressWarnings("unchecked")
             long id = ((T)object).getId();
             return (SitePath)invCache.get(id);
         }
-        return null;
+        else
+        {
+            throw new UnsupportedClassException(getClass().getName() + " can't handle "
+                + object.getClass().getName());
+        }
+    }
+
+    @Override
+    public boolean canHandle(Object object)
+    {
+        return rc.getJavaClass().isAssignableFrom(object.getClass());
     }
 
     public ProtectedResource guard(SitePath path)

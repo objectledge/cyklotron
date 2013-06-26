@@ -9,17 +9,23 @@ public interface UrlRewriteParticipant
 {
     String getName();
 
-    boolean matches(SitePath path);
-
     Set<SitePath> getPaths();
 
     Collection<RewriteEntry> getRewriteInfo();
 
-    void drop(SitePath path);
+    boolean matches(SitePath path);
 
     RewriteTarget rewrite(SitePath path);
 
-    SitePath path(Object object);
+    boolean canHandle(Object object);
+
+    public void create(String path, Object object)
+        throws UnsupportedClassException, PathInUseException;
+
+    SitePath path(Object object)
+        throws UnsupportedClassException;
+
+    void drop(SitePath path);
 
     ProtectedResource guard(SitePath path);
 }

@@ -20,7 +20,9 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FileResourceImpl;
+import net.cyklotron.cms.rewrite.PathInUseException;
 import net.cyklotron.cms.rewrite.SitePath;
+import net.cyklotron.cms.rewrite.UnsupportedClassException;
 import net.cyklotron.cms.rewrite.UrlRewriteRegistry;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
@@ -122,7 +124,20 @@ public class UpdateNode
                 }
                 else
                 {
-                    node.setQuickPath(quickPath);
+                    try
+                    {
+                        urlRewriteRegistry.create(quickPath, node);
+                    }
+                    catch(UnsupportedClassException e)
+                    {
+                        throw new ProcessingException(e);
+                    }
+                    catch(PathInUseException e)
+                    {
+                        route(mvcContext, templatingContext, getViewName(),
+                            "quickpath_already_in_use");
+                        return;
+                    }
                 }
             }
         }

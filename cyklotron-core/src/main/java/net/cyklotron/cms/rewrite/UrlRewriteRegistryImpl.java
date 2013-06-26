@@ -53,6 +53,34 @@ public class UrlRewriteRegistryImpl
     }
 
     @Override
+    public boolean canHandle(Object object)
+    {
+        for(UrlRewriteParticipant participant : participants)
+        {
+            if(participant.canHandle(object))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void create(String path, Object object)
+        throws UnsupportedClassException, PathInUseException
+    {
+        for(UrlRewriteParticipant participant : participants)
+        {
+            if(participant.canHandle(object))
+            {
+                participant.create(path, object);
+                return;
+            }
+        }
+        throw new UnsupportedClassException("can't handle " + object.getClass().getName());
+    }
+
+    @Override
     public void drop(SitePath path)
     {
         for(UrlRewriteParticipant participant : participants)
@@ -74,16 +102,16 @@ public class UrlRewriteRegistryImpl
 
     @Override
     public SitePath path(Object object)
+        throws UnsupportedClassException
     {
         for(UrlRewriteParticipant participant : participants)
         {
-            SitePath path = participant.path(object);
-            if(path != null)
+            if(participant.canHandle(object))
             {
-                return path;
+                return participant.path(object);
             }
         }
-        return null;
+        throw new UnsupportedClassException("can't handle " + object.getClass().getName());
     }
 
     @Override
