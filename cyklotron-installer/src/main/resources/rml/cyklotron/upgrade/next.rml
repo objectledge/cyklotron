@@ -1,2 +1,15 @@
 ALTER RESOURCE CLASS 'structure.navigation_node'
 ADD ATTRIBUTE string quickPath;
+
+CREATE RESOURCE 'quickpath'
+RESOURCE CLASS 'integration.application'
+PARENT '/cms/applications'
+ATTRIBUTES (
+  applicationName = 'cms',
+  vendor = 'caltha.pl',
+  version = '1.0-dev',
+  priority = 14,
+  enabled = true,
+  required = false
+);
+
