@@ -13,6 +13,7 @@
 <stringAttribute key="org.sonatype.m2e.webby.containerHome" value="${env_var:TOMCAT_HOME}"/>
 <stringAttribute key="org.sonatype.m2e.webby.containerId" value="tomcat7x"/>
 <intAttribute key="org.sonatype.m2e.webby.containerPort" value="8080"/>
+<intAttribute key="org.sonatype.m2e.webby.containerTimeout" value="60"/>
 <stringAttribute key="org.sonatype.m2e.webby.containerType" value="installed"/>
 <stringAttribute key="org.sonatype.m2e.webby.contextName" value="cyklotron"/>
 <stringAttribute key="org.sonatype.m2e.webby.logLevel" value="medium"/>
