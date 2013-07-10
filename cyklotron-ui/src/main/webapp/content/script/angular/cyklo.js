@@ -121,7 +121,7 @@ cykloModule.directive('cykloUpload', ['$q', function($q){
 				oReq.open($scope.method, $scope.uploadUrl, true);
 				oReq.onload = function(oEvent) {
 					if (oReq.status >= 200 && oReq.status < 300) {
-						deferred.resolve();
+						deferred.resolve(oReq.response);
 					} else {
 						deferred.reject();
 					}
