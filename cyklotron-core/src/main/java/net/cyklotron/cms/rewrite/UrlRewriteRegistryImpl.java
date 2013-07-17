@@ -4,6 +4,7 @@ import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,9 @@ public class UrlRewriteRegistryImpl
     @Override
     public boolean matches(RewriteInfo request)
     {
-        return allPaths.contains(sitePath(request));
+        final SitePath path = sitePath(request);
+        final Map<SitePath, UrlRewriteParticipant> potentialMatches = potentialMatches(path);
+        return !potentialMatches.isEmpty();
     }
 
     @Override
@@ -118,26 +121,55 @@ public class UrlRewriteRegistryImpl
     public RewriteInfo rewrite(RewriteInfo request)
     {
         final SitePath path = sitePath(request);
-        for(UrlRewriteParticipant participant : participants)
+        final Map<SitePath, UrlRewriteParticipant> potentialMatches = potentialMatches(path);
+        if(potentialMatches.size() > 0)
         {
-            if(participant.matches(path))
+            final SitePath match = longestMatch(potentialMatches.keySet());
+            final UrlRewriteParticipant participant = potentialMatches.get(match);
+            final RewriteTarget target = participant.rewrite(match);
+            final String remainingPathInfo = request.getServletPath().length() > match.getPath()
+                .length() ? request.getServletPath().substring(match.getPath().length()) : "";
+            if(target != null)
             {
-                RewriteTarget target = participant.rewrite(path);
-                if(target != null)
-                {
-                    RewriteInfoBuilder builder = RewriteInfoBuilder.fromRewriteInfo(request);
+                RewriteInfoBuilder builder = RewriteInfoBuilder.fromRewriteInfo(request);
 
-                    builder.withServletPath("/ledge").withPathInfo(
-                        "/x/" + target.getNode().getIdString());
-                    for(Map.Entry<String, List<String>> entry : target.getParameters().entrySet())
-                    {
-                        builder.withFormParameter(entry.getKey(), entry.getValue());
-                    }
-                    return builder.build();
+                builder.withServletPath("/ledge").withPathInfo(
+                    "/x/" + target.getNode().getIdString() + remainingPathInfo);
+                for(Map.Entry<String, List<String>> entry : target.getParameters().entrySet())
+                {
+                    builder.withFormParameter(entry.getKey(), entry.getValue());
                 }
+                return builder.build();
             }
         }
         return request;
+    }
+
+    private Map<SitePath, UrlRewriteParticipant> potentialMatches(SitePath path)
+    {
+        Map<SitePath, UrlRewriteParticipant> results = new HashMap<>();
+        for(UrlRewriteParticipant participant : participants)
+        {
+            Collection<SitePath> matches = participant.potentialMatches(path);
+            for(SitePath match : matches)
+            {
+                results.put(match, participant);
+            }
+        }
+        return results;
+    }
+
+    private SitePath longestMatch(Set<SitePath> matches)
+    {
+        SitePath longest = null;
+        for(SitePath match : matches)
+        {
+            if(longest == null || match.getPath().length() > longest.getPath().length())
+            {
+                longest = match;
+            }
+        }
+        return longest;
     }
 
     private SitePath sitePath(RewriteInfo request)

@@ -17,6 +17,8 @@ public interface UrlRewriteParticipant
 
     RewriteTarget rewrite(SitePath path);
 
+    Collection<SitePath> potentialMatches(SitePath path);
+
     boolean canHandle(Object object);
 
     public void create(String path, Object object)

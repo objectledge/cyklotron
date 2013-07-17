@@ -202,6 +202,29 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
         {
             r.unlock();
         }
+    }    
+    
+    @Override
+    public Collection<SitePath> potentialMatches(SitePath path)
+    {
+        r.lock();
+        try
+        {
+            Collection<SitePath> results = new ArrayList<SitePath>();
+            for(SitePath candidate : cache.keySet())
+            {
+                if(candidate.getSite().equals(path.getSite())
+                    && path.getPath().startsWith(candidate.getPath()))
+                {
+                    results.add(candidate);
+                }
+            }
+            return results;
+        }
+        finally
+        {
+            r.unlock();
+        }
     }
 
     @Override
