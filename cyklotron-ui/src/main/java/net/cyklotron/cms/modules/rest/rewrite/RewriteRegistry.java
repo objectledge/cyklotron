@@ -4,7 +4,8 @@ import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Collections2.transform;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
@@ -21,6 +22,7 @@ import org.objectledge.coral.session.CoralSessionFactory;
 
 import net.cyklotron.cms.ProtectedResource;
 import net.cyklotron.cms.rewrite.RewriteEntry;
+import net.cyklotron.cms.rewrite.RewriteTarget;
 import net.cyklotron.cms.rewrite.SitePath;
 import net.cyklotron.cms.rewrite.UrlRewriteRegistry;
 import net.cyklotron.cms.site.SiteException;
@@ -78,8 +80,14 @@ public class RewriteRegistry
         final CoralSession coralSession = coralSessionFactory.getCurrentSession();
         final SiteResource site = siteService.getSite(coralSession, siteName);
 
-        boolean defined = registry.getPaths().contains(new SitePath(site, path.replace("__", "/")));
-        return Response.ok(Collections.singletonMap("defined", defined)).build();
+        RewriteTarget target = registry.target(new SitePath(site, path.replace("__", "/")));
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("defined", Boolean.valueOf(target != null));
+        if(target != null)
+        {
+            resp.put("target", registry.toUrl(target));
+        }
+        return Response.ok(resp).build();
     }
 
     @DELETE
