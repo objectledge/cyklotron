@@ -8,7 +8,6 @@ scriptLoader.loadCommon('WinPopup.js');
 
 function openWinPopup(name, url)
 {
-    getWinPopup(name).open(url, 600, 400, 'center middle');
+    getWinPopup(name).open(url, 700, 500, 'center middle');
     document._popupMenuSingleton.hideMenu();
 }
-
