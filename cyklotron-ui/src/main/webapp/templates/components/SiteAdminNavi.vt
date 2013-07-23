@@ -47,6 +47,7 @@
     #end
     #if($cms_tool.isAppEnabled('forum') || $block)    
       #linkCell('' 'FORUM' $siteLink.view('forum.DiscussionList').set('fid',$cms_tool.getApplication("forum").getId()))
+      #linkCell('' '(MODERATION)' $siteLink.view('forum.ModeratorTasks'))    
       <td class="separator">|</td>
     #end
     #if($cms_tool.isAppEnabled('banner') || $block)      
