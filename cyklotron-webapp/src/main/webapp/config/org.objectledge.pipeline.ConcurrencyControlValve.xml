@@ -29,4 +29,6 @@
 
 <config>
   <limit>10</limit>
+  <timeout>30</timeout>
+  <privilegedTimeout>45</privilegedTimeout>  
 </config>
