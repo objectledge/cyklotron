@@ -257,6 +257,7 @@
   <component class="org.objectledge.coral.session.CoralSessionVerificationValve"/>
   <component class="org.objectledge.coral.session.CoralSessionDiagnosticsValve"/>
   <component class="net.cyklotron.cms.CmsDataInitializerValve"/>
+  <component class="net.cyklotron.cms.CmsPrivilegedSessionValve"/>
   <component class="org.objectledge.web.mvc.security.PolicyCheckingValve"/>
   <component class="org.objectledge.web.SessionDurationValve">
      <parameter value="1800"/>
@@ -309,6 +310,7 @@
     <sequence>
       <parameter class-key="net.cyklotron.cms.modules.hooks.CmsDomainHook"/>
       <parameter class-key="net.cyklotron.cms.CmsDataInitializerValve"/>
+      <parameter class-key="net.cyklotron.cms.CmsPrivilegedSessionValve"/>
       <parameter class-key="org.objectledge.templating.tools.ContextToolPopulatorValve"/>
       <parameter class-key="net.cyklotron.cms.CmsBuilderExecutorValve"/>
     </sequence>      
