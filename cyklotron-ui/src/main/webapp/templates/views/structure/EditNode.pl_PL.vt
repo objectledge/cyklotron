@@ -248,16 +248,16 @@ $cat.name#if($velocityCount < $categories.size()), #end
 
 ## COMMAND BAR
 $pageTool.addStyleLink('style/action-buttons.css')##
-<div class="action-buttons">
+<div id="action-buttons-1" class="action-buttons">
   <div class="additional">
 <div style="margin-bottom:5px;"><a href="$link.unsetView().unset('site_id').set('x',$node.id).action('SetBrowseMode').set('mode','preview')" target="_podglad">Podgląd strony</a></div>
   </div>
 
   <div class="modification">
 <div style="margin-bottom:5px;">
-<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.NaviInfo')#N${node.id}');">##
+<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.NaviInfo').fragment("N$node.id")');">##
 Zapisz</a> |
-<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditNode')');">##
+<a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('structure.EditNode').fragment('action-buttons-1')');">##
 Zapisz i zostań</a> |
 #if(!$isAlias)
 <a href="javascript:fSub('$nodeLink.action('structure.UpdateNode').view('documents.EditDocument').set('from_list',true).set('return_view','structure.NaviInfo')');">##
