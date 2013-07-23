@@ -31,6 +31,10 @@ function submitConfig(targetWindowName, sourceFormName, targetFormName, fieldNam
     //alert(config);
     targetForm.elements['config'].value = config;
     window.opener.name = targetWindowName;
+    var scope = targetForm.elements['scope'].value || null;
+    if(scope) {
+    	targetForm.action = targetForm.action + "#" + scope + "-component";
+    }
     targetForm.submit();
     window.close();
 }
