@@ -8,7 +8,6 @@ import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
 import org.objectledge.authentication.sso.SingleSignOnService;
 import org.objectledge.context.Context;
-import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.modules.actions.authentication.BaseAuthenticationAction;
 import org.objectledge.parameters.Parameters;
@@ -85,9 +84,6 @@ public class CMSLogin
                         logger.debug("User account expired " + login);
                         principal = null;
                     }
-                    else{
-                        httpContext.clearSessionAttributes();
-                    }
                 }
                 else
                 {
@@ -100,6 +96,7 @@ public class CMSLogin
                 logger.debug("unknown username " + login);
                 principal = null;
             }
+            httpContext.clearSessionAttributes();
             AuthenticationContext authenticationContext = AuthenticationContext
                 .getAuthenticationContext(context);
             boolean authenticated;

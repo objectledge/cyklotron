@@ -1,0 +1,49 @@
+$pageTool.addScriptLink('//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js')
+$pageTool.addScriptLink('//cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.5/angular.min.js')
+$pageTool.addScriptLink('//cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.5/angular-resource.min.js')
+$pageTool.addScriptLink('script/view/structure/QuickPath.js')
+
+<script>
+var QuickPathConfig = {
+   endpoint: "$link.rootContent('/rest/rewriteRegistry')",
+   site: "$cmsData.site.name"
+}
+</script>
+
+#macro(header $predicate $label)
+<th>
+	<a href="" ng-click="predicate = '$predicate'; reverse =! reverse">$label</a>
+	<img ng-show="predicate == '$predicate' && !reverse" src="$link.content('images/tree/down.gif')" border="0" />
+	<img ng-show="predicate == '$predicate' && reverse" src="$link.content('images/tree/up.gif')" border="0" />
+</th>
+#end
+
+#genericScreenHeader("PRZYJAZNE ŚCIEŻKI")
+
+<div ng-app="QuickPathApp" ng-controller="QuickPathCtrl">
+    <div align="right">
+    	<label>Wyszukiwarka: <input ng-model="query"></label>
+    </div>	
+	<table class="genericItemList" width="100%">
+		<thead>
+    		<tr>
+    			#header('path' 'Ścieżka')
+    			#header('target' 'Obiekt docelowy')
+    			#header('provider' 'Typ Obiektu')
+    			#header('description' 'Nazwa / Tytuł')
+    			<th>Akcje</th>
+    		</tr>
+        </thead>
+		<tbody>
+    		<tr ng-repeat="entry in entries | filter:query | orderBy:predicate:reverse">
+    			<td>{{entry.path | underscoresToSlash}}</td>
+    			<td>{{entry.target}}</td>
+    			<td>{{entry.provider | providerName}}</td>
+    			<td>{{entry.description}}</td>
+    			<td><button ng-click="deleteEntry(entry)">usuń</button></td>
+    		</tr>
+		</tbody>
+	</table>
+</div>
+
+#genericScreenTrailer()

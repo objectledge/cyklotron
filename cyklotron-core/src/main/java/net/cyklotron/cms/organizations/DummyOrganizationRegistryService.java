@@ -8,6 +8,7 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.site.SiteResource;
 
 public class DummyOrganizationRegistryService
     implements OrganizationRegistryService
@@ -32,8 +33,14 @@ public class DummyOrganizationRegistryService
         return "";
     }
 
+    public boolean checkOranizationId(Parameters parameters)
+    {
+        return true;
+    }
+
     @Override
-    public Collection<DocumentNodeResource> getOrganizationNewestDocuments(Parameters parameters, int limit, int offset)
+    public Collection<DocumentNodeResource> getOrganizationNewestDocuments(long organizationId,
+        int maxAgeDays, Collection<SiteResource> sites, int limit, int offset)
         throws ProcessingException
     {
         return Collections.emptyList();

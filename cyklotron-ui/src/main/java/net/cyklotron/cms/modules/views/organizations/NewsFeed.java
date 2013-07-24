@@ -3,6 +3,8 @@ package net.cyklotron.cms.modules.views.organizations;
 import java.io.Writer;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.objectledge.context.Context;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -39,13 +41,19 @@ public class NewsFeed
         {           
             HttpContext httpContext = context.getAttribute(HttpContext.class);
             RequestParameters parameters = context.getAttribute(RequestParameters.class);
-            
-            httpContext.setContentType("text/xml");
-            httpContext.getResponse().addDateHeader("Last-Modified", (new Date()).getTime());
-            httpContext.setEncoding("UTF-8");
-            Writer writer = httpContext.getPrintWriter();
-            writer.write(organizationRegistry.getOrganizationNewsFeed(parameters));
-            writer.close();
+            if(organizationRegistry.checkOranizationId(parameters))
+            {
+                httpContext.setContentType("text/xml");
+                httpContext.getResponse().addDateHeader("Last-Modified", (new Date()).getTime());
+                httpContext.setEncoding("UTF-8");
+                Writer writer = httpContext.getPrintWriter();
+                writer.write(organizationRegistry.getOrganizationNewsFeed(parameters));
+                writer.close();
+            }
+            else
+            {
+                httpContext.getResponse().sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
         }
         catch(Exception e)
         {

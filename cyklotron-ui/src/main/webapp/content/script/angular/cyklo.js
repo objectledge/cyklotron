@@ -33,7 +33,8 @@ cykloModule.directive('categoryChooser', ['$q', function ($q)
         {
             // set form id
             var formId = 'form-' + scope.$id;
-            var form = iElement.find('form.legacy-form').attr('id', formId);
+            iElement.find('form.legacy-form').attr('id', formId);
+            
             // set categories names ID
             var categoriesNamesID = 'categories-names' + scope.$id;
             var $categoriesNames = iElement.find('input.category-names').attr('id', categoriesNamesID);
@@ -92,7 +93,7 @@ cykloModule.directive('categoryChooser', ['$q', function ($q)
             		var idsOnly = _.map(cat, function(category){ return category.id; }).join(' ');            		
             		$categoriesIds.val(idsOnly);
             	}
-            }, true)
+            }, true);
         }
     };
 }]);
@@ -116,12 +117,11 @@ cykloModule.directive('cykloUpload', ['$q', function($q){
 				var inputFile = $('input[type="file"]', $element).get(0);
 				var oData = new FormData();
 				oData.append($scope.fileName, inputFile.files[0]);
-				console.log(oData); 
 				var oReq = new XMLHttpRequest();
 				oReq.open($scope.method, $scope.uploadUrl, true);
 				oReq.onload = function(oEvent) {
 					if (oReq.status >= 200 && oReq.status < 300) {
-						deferred.resolve();
+						deferred.resolve(oReq.response);
 					} else {
 						deferred.reject();
 					}
@@ -129,7 +129,7 @@ cykloModule.directive('cykloUpload', ['$q', function($q){
 				};
 				
 				oReq.send(oData);
-				$scope.$emit('UploadingFile', deferred.promise)
+				$scope.$emit('UploadingFile', deferred.promise);
 			};
 			
 			this.show = function()
@@ -146,7 +146,7 @@ cykloModule.directive('cykloUpload', ['$q', function($q){
 			scope.clickUpload = function()
 			{
 				$upload.click();
-			}
+			};
 			
 			$upload.change(function(){
 				var fileList = this.files; 
@@ -170,11 +170,10 @@ cykloModule.directive('cykloUploadSubmit', [function(){
 			});
 			
 			scope.$on('UploadSubmit', function(event){
-				console.log('got upload submit event');
 				cykloUploadCtrl.uploadFile();
 			});
 		}
-	}
+	};
 }]);
 
 cykloModule.directive('cykloUploadShow', [function(){
@@ -187,5 +186,5 @@ cykloModule.directive('cykloUploadShow', [function(){
 			});
 		
 		}
-	}
+	};
 }]);

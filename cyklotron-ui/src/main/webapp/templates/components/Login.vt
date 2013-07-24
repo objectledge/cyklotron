@@ -61,10 +61,13 @@ J(document).ready(function() {
     J('#login').focus();
 });
 </script>
-#if($ssoTool.active)
+#if($originalView)
 #set($loginLink = $link.view($originalView))
-#else
-#set($loginLink = $link.view($originalView).action("authentication.Login"))
+#elseif($node)
+#set($loginLink = $link.setNode($node))
+#end	
+#if(!$ssoTool.active)
+#set($loginLink = $loginLink.action("authentication.Login"))
 #end
 ##
 #foreach($key in $parametersTool.parameterNames)

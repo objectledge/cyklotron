@@ -1,5 +1,7 @@
 package net.cyklotron.cms;
 
+import java.security.Principal;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.DefaultPrincipal;
@@ -76,6 +78,16 @@ public class UserData
     public Subject getSubject()
     {
         return subject;
+    }
+
+    /**
+     * Returns subject's name wrapped in a java.security.Principal
+     * 
+     * @return
+     */
+    public Principal getPrincipal()
+    {
+        return new DefaultPrincipal(subject.getName());
     }
 
     /**

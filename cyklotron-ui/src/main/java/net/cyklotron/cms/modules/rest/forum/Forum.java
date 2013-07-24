@@ -28,6 +28,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.SubtreeVisitor;
 import org.objectledge.coral.web.rest.RequireAny;
 import org.objectledge.coral.web.rest.RequireCoralRole;
+import org.objectledge.encodings.HTMLEntityDecoder;
 
 import net.cyklotron.cms.forum.CommentaryResource;
 import net.cyklotron.cms.forum.DiscussionResource;
@@ -59,6 +60,8 @@ public class Forum
     private Logger logger = Logger.getLogger(getClass());
 
     private DateTimeFormatter dateTimeFormatter = ISODateTimeFormat.dateTimeNoMillis();
+
+    private final HTMLEntityDecoder decoder = new HTMLEntityDecoder();
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -95,7 +98,7 @@ public class Forum
                         postDto.setCreatedAt(dateTimeFormatter.print(creationTime.getTime()));
                         postDto.setLastReplyAt(dateTimeFormatter.print(messageVisitor
                             .getLastReplyAt().getTime()));
-                        postDto.setTitle(messageResource.getTitle());
+                        postDto.setTitle(decoder.decode(messageResource.getTitle()));
                         postDto.setReplies(messageVisitor.getPostCount());
                         postDto.setUrl(buildUrl(coralSession, messageResource, discussion));
                         posts.add(postDto);
@@ -122,7 +125,7 @@ public class Forum
         return posts;
     }
 
-    private String buildUrl(CoralSession coralSession, final MessageResource messageResource,
+    protected String buildUrl(CoralSession coralSession, final MessageResource messageResource,
         final DiscussionResource discussion)
         throws EntityDoesNotExistException, SiteException
     {

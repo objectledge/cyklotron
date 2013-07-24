@@ -11,10 +11,13 @@ public class ResourceProvider
 
     private final String resourceName;
 
-    public ResourceProvider(CoralSessionFactory coralSessionFactory, String resourceName)
+    private final String predicate;
+
+    public ResourceProvider(CoralSessionFactory coralSessionFactory, String resourceName, String predicate)
     {
         this.coralSessionFactory = coralSessionFactory;
         this.resourceName = resourceName;
+        this.predicate = predicate;
     }
 
     /**
@@ -28,7 +31,12 @@ public class ResourceProvider
     public QueryResults runQuery()
         throws IllegalStateException, MalformedQueryException
     {
-        return coralSessionFactory.getCurrentSession().getQuery()
-            .executeQuery("FIND RESOURCE FROM " + resourceName);
+        StringBuilder query = new StringBuilder();
+        query.append("FIND RESOURCE FROM ").append(resourceName);
+        if(predicate != null)
+        {
+            query.append(" WHERE ").append(predicate);
+        }
+        return coralSessionFactory.getCurrentSession().getQuery().executeQuery(query.toString());
     }
 }

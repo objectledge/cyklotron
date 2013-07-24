@@ -47,6 +47,7 @@
     #end
     #if($cms_tool.isAppEnabled('forum') || $block)      
       #linkCell('' 'FORUM' $siteLink.view('forum.DiscussionList').set('fid',$cms_tool.getApplication("forum").getId()))
+      #linkCell('' '(MODERACJA)' $siteLink.view('forum.ModeratorTasks'))
       <td class="separator">|</td>
     #end      
     #if($cms_tool.isAppEnabled('banner') || $block)      
@@ -98,6 +99,9 @@
       #linkCell('' 'DOKUMENTY' $siteLink.view('structure.NaviInfo'))
       #linkCell('' '(OBIEG)' $siteLink.view('structure.EditorialTasks'))
       #linkCell('' '(STOPKI)' $siteLink.view('documents.FootersList').set('reset','true'))
+	  #if($cms_tool.isAppEnabled('quickpath'))
+	    #linkCell('' '(ŚCIEŻKI)' $siteLink.view('structure.QuickPath'))
+	  #end
       <td class="separator">|</td>
       #linkCell('' 'KATEGORIE' $siteLink.view('category.CategoryList'))
       <td class="separator">|</td>

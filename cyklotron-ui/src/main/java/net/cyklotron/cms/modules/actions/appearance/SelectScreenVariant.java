@@ -67,7 +67,7 @@ public class SelectScreenVariant
 		boolean variantExists = false;
 		for(int i=0; i<variants.length; i++)
 		{
-			if(variants[i].getName().equals(currentVariant))
+            if(variants[i].getName().equals(newVariant))
 			{
 				variantExists = true;
 				break;

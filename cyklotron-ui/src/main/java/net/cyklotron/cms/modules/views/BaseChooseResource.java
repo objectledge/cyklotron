@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -13,10 +15,11 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.query.MalformedQueryException;
 import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.ParentsVisitor;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.table.CoralTableModel;
+import org.objectledge.coral.table.ResourceTreeTableModel;
 import org.objectledge.coral.table.comparator.NameComparator;
-import org.objectledge.coral.table.filter.ResourceSetFilter;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
@@ -44,7 +47,6 @@ import net.cyklotron.cms.integration.ResourceClassResource;
 import net.cyklotron.cms.integration.ResourceClassResourceImpl;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.util.CmsPathFilter;
 import net.cyklotron.cms.util.CmsResourceClassFilter;
 import net.cyklotron.cms.util.ProtectedViewFilter;
@@ -55,9 +57,9 @@ public abstract class BaseChooseResource
 {
     /** integration service */
     protected FilesService filesService;
-    
+
     protected IntegrationService integrationService;
-    
+
     protected ResourceClassResource resourceClassResource = null;
 
     public BaseChooseResource(Context context, Logger logger,
@@ -78,32 +80,34 @@ public abstract class BaseChooseResource
         initResClassChooser(templatingContext, coralSession, parameters);
 
         long resId = parameters.getLong("res_id", -1L);
-        
+
         // lata
         boolean resetState = parameters.getBoolean("reset", false);
-        boolean allExpanded = false;        
+        boolean allExpanded = false;
         try
         {
             SiteResource site = getCmsData().getSite();
-            
+
             Resource resource = null;
             try
             {
                 resource = coralSession.getStore().getResource(resId);
                 templatingContext.put("resource", resource);
             }
-            catch(EntityDoesNotExistException e) { }           
-            
+            catch(EntityDoesNotExistException e)
+            {
+            }
+
             String[] classes = resourceClassResource.getAggregationParentClassesList();
             String[] paths = resourceClassResource.getAggregationTargetPathsList();
 
             TableState state = getState(site, resetState, coralSession, resource);
-            
-            TableModel<Resource> model = new CoralTableModel(coralSession, i18nContext.getLocale());
-            
+
+            TableModel<Resource> model = new CoralTableModel<Resource>(coralSession,
+                i18nContext.getLocale());
             templatingContext.put("res_class_filter", new CmsResourceClassFilter(coralSession,
                 integrationService, new String[] { resourceClassResource.getName() }));
-            
+
             ArrayList<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
             filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             filters.add(new SeeableFilter());
@@ -113,14 +117,33 @@ public abstract class BaseChooseResource
             if(search.length() != 0)
             {
                 String query = "FIND RESOURCE FROM " + resourceClassResource.getName()
-                                + " WHERE name LIKE_NC '%" + search + "%'";
+                    + " WHERE name LIKE_NC '%" + search + "%'";
                 if(resourceClassResource.getName().equals("documents.document_node"))
                 {
-                   query += " OR title LIKE_NC '%" + search + "%'";
+                    query += " OR title LIKE_NC '%" + search + "%'";
                 }
-                
+
                 QueryResults results = coralSession.getQuery().executeQuery(query);
-                filters.add(new ResourceSetFilter(results.getList(1), true));
+
+                final Set<Resource> resources = new HashSet<>(results.getList(1));
+                final Set<Resource> ancestors = new HashSet<>();
+                ParentsVisitor visitor = new ParentsVisitor()
+                    {
+                        // accessed through reflection
+                        @SuppressWarnings("unused")
+                        public void visit(Resource rr)
+                        {
+                            ancestors.add(rr);
+                        }
+                    };
+                for(Resource r : resources)
+                {
+                    visitor.traverseBreadthFirst(r);
+                }
+                resources.addAll(ancestors);
+                model = new ResourceTreeTableModel<Resource>(new ArrayList<Resource>(resources),
+                    i18nContext.getLocale());
+
                 allExpanded = true;
             }
             state.setAllExpanded(allExpanded);
@@ -141,7 +164,8 @@ public abstract class BaseChooseResource
         }
     }
 
-    private void initResClassChooser(TemplatingContext templatingContext, CoralSession coralSession, Parameters parameters)
+    private void initResClassChooser(TemplatingContext templatingContext,
+        CoralSession coralSession, Parameters parameters)
         throws ProcessingException
     {
         // resource class chooser
@@ -150,7 +174,7 @@ public abstract class BaseChooseResource
         List appList = new ArrayList();
         Map map = new HashMap();
         long defaultResourceClassId = -1;
-        for (int i = 0; i < apps.length; i++)
+        for(int i = 0; i < apps.length; i++)
         {
             if(apps[i].getEnabled())
             {
@@ -159,7 +183,7 @@ public abstract class BaseChooseResource
                     coralSession, apps[i]);
                 ArrayList resClassesList = new ArrayList();
                 CmsData cmsData = cmsDataFactory.getCmsData(context);
-                for (int j = 0; j < resClasses.length; j++)
+                for(int j = 0; j < resClasses.length; j++)
                 {
                     if(isResourceClassSupported(resClasses[j])
                         && integrationService.isApplicationEnabled(coralSession, cmsData.getSite(),
@@ -179,26 +203,28 @@ public abstract class BaseChooseResource
         Collections.sort(appList, new PriorityComparator());
         templatingContext.put("apps", appList);
         templatingContext.put("apps_map", map);
-        
+
         long resClassResId = parameters.getLong("res_class_id", defaultResourceClassId);
         templatingContext.put("res_class_id", resClassResId);
         try
         {
-            resourceClassResource = ResourceClassResourceImpl
-                .getResourceClassResource(coralSession, resClassResId);
+            resourceClassResource = ResourceClassResourceImpl.getResourceClassResource(
+                coralSession, resClassResId);
         }
         catch(EntityDoesNotExistException e)
         {
             throw new ProcessingException(e);
         }
     }
-    
+
     protected abstract boolean isResourceClassSupported(ResourceClassResource rClass);
-    
+
     protected abstract String getStateName();
-    
-    protected TableState getState(SiteResource site, boolean resetState, CoralSession coralSession, Resource resource) throws ProcessingException, FilesException
-    {        
+
+    protected TableState getState(SiteResource site, boolean resetState, CoralSession coralSession,
+        Resource resource)
+        throws ProcessingException, FilesException
+    {
         String rootId = Long.toString(site.getId());
         TableState state = tableStateManager.getState(context, getStateName());
         if(state.isNew())
@@ -233,7 +259,7 @@ public abstract class BaseChooseResource
                 }
             }
         }
-        
+
         return state;
     }
 

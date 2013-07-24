@@ -1211,6 +1211,11 @@
         </prefix>
       </prefix>
     </prefix>
-  </prefix>    
+  </prefix>
+  
+  <prefix name="quickpath">
+    <item name="name">Quick Path</item>
+  </prefix>
+    
   
 </strings>

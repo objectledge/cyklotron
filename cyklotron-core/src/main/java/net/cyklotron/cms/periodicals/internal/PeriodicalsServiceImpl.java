@@ -387,7 +387,7 @@ public class PeriodicalsServiceImpl
         {
             PublicationTimeResource pt = publicationTimes[i];
             recentScheduledPublicationTime = getScheduledPublicationTimeBefore(
-                pt.getDayOfMonth(-1), pt.getHour(-1), pt.getDayOfWeek(-1), time);
+                pt.getDayOfMonth(-1), pt.getDayOfWeek(-1), pt.getHour(-1), time);
             
             buff.append("most recent publication time for {");
             if(pt.getDayOfMonth(-1) != -1)
@@ -457,7 +457,7 @@ public class PeriodicalsServiceImpl
         return scheduledTimePassedSinceLastPublish && afterMinimalPublicationDate;
     }
     
-    public static long getScheduledPublicationTimeBefore(int day, int hour, int weekDay, Date date)
+    public static long getScheduledPublicationTimeBefore(int day, int weekDay, int hour, Date date)
     {
         Calendar now = Calendar.getInstance();
         now.setTime(date);

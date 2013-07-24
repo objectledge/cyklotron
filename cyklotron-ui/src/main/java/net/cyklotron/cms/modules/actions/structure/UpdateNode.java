@@ -20,6 +20,10 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FileResourceImpl;
+import net.cyklotron.cms.rewrite.PathInUseException;
+import net.cyklotron.cms.rewrite.SitePath;
+import net.cyklotron.cms.rewrite.UnsupportedClassException;
+import net.cyklotron.cms.rewrite.UrlRewriteRegistry;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.style.StyleResource;
@@ -35,12 +39,16 @@ import net.cyklotron.cms.style.StyleService;
 public class UpdateNode
     extends BaseAddEditNodeAction
 {
+    private final UrlRewriteRegistry urlRewriteRegistry;
+
     public UpdateNode(Logger logger, StructureService structureService,
-        CmsDataFactory cmsDataFactory, StyleService styleService)
+        CmsDataFactory cmsDataFactory, StyleService styleService,
+        UrlRewriteRegistry urlRewriteRegistry)
     {
         super(logger, structureService, cmsDataFactory, styleService);
-        
+        this.urlRewriteRegistry = urlRewriteRegistry;
     }
+
     /**
      * Performs the action.
      */
@@ -67,6 +75,7 @@ public class UpdateNode
         int priority = parameters.getInt("priority", structureService.getDefaultPriority());
         priority = structureService.getAllowedPriority(coralSession, node, subject, priority);
 		long thumbnailId = parameters.getLong("thumbnail_id", -1);
+        String quickPath = parameters.get("quickpath", "");
         // action setup
         long styleId = parameters.getLong("style_id", -1);
         StyleResource style = null;
@@ -95,6 +104,41 @@ public class UpdateNode
             {
                 route(mvcContext, templatingContext, getViewName(), "navi_name_repeated");
                 return;
+            }
+        }
+
+        // quickpath
+        if(!node.getQuickPath("").equals(quickPath))
+        {
+            if(quickPath.equals(""))
+            {
+                node.setQuickPath(null);
+            }
+            else
+            {
+                SitePath sitePath = new SitePath(node.getSite(), quickPath);
+                if(urlRewriteRegistry.getPaths().contains(sitePath))
+                {
+                    route(mvcContext, templatingContext, getViewName(), "quickpath_already_in_use");
+                    return;
+                }
+                else
+                {
+                    try
+                    {
+                        urlRewriteRegistry.create(quickPath, node);
+                    }
+                    catch(UnsupportedClassException e)
+                    {
+                        throw new ProcessingException(e);
+                    }
+                    catch(PathInUseException e)
+                    {
+                        route(mvcContext, templatingContext, getViewName(),
+                            "quickpath_already_in_use");
+                        return;
+                    }
+                }
             }
         }
 
