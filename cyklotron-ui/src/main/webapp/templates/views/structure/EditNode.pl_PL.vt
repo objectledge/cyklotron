@@ -304,7 +304,7 @@ Edytuj</a> |
 ##if(($user_data.hasPermission($node, 'cms.structure.accept'))||($user_data.hasPermission($node, 'cms.structure.modify')))
 
 #if($user_data.hasPermission($node, 'cms.structure.modify'))
-<a href="$nodeLink.action('structure.workflow.ForcePublication')">Wymuś publikację</a> |
+<a href="$nodeLink.action('structure.workflow.ForcePublication').fragment('action-buttons-1')">Wymuś publikację</a> |
 #elseif($user_data.hasPermission($node, 'cms.structure.accept') && $cms_tool.sharingWorkgroupPeers.contains($node.owner))
 <a href="$nodeLink.action('structure.workflow.ForcePublication').view('structure.EditorialTasks')">Wymuś publikację i przejdz do obiegu</a> |
 #end

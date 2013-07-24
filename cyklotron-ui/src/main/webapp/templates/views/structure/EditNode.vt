@@ -305,7 +305,7 @@ Edit</a> |
 ##if(($user_data.hasPermission($node, 'cms.structure.accept'))||($user_data.hasPermission($node, 'cms.structure.modify')))
 
 #if($user_data.hasPermission($node, 'cms.structure.modify'))
-<a href="$nodeLink.action('structure.workflow.ForcePublication')">Force publication</a> |
+<a href="$nodeLink.action('structure.workflow.ForcePublication').fragment('action-buttons-1')">Force publication</a> |
 #elseif($user_data.hasPermission($node, 'cms.structure.accept') && $cms_tool.sharingWorkgroupPeers.contains($node.owner))
 <a href="$nodeLink.action('structure.workflow.ForcePublication').view('structure.EditorialTasks')">Force publication and go to workflow</a> |
 #end
