@@ -18,12 +18,14 @@ import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
-public class CommunityVotes extends SkinableCMSComponent
+public class CommunityVotes
+    extends SkinableCMSComponent
 {
     private final PollService pollService;
 
     public CommunityVotes(Context context, Logger logger, Templating templating,
-        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder, PollService pollService)
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        PollService pollService)
     {
         super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
         this.pollService = pollService;
@@ -35,9 +37,9 @@ public class CommunityVotes extends SkinableCMSComponent
         CoralSession coralSession)
         throws ProcessingException
     {
-        NavigationNodeResource node = cmsDataFactory.getCmsData(context).getNode();        
+        NavigationNodeResource node = cmsDataFactory.getCmsData(context).getNode();
         templatingContext.put("voteBaseUrl", pollService.getVoteBaseUrl(httpContext));
-        templatingContext.put("positive", node.getVotesPositive(0));
-        templatingContext.put("negative", node.getVotesNegative(0));
+        templatingContext.put("positive", (node != null) ? node.getVotesPositive(0) : 0);
+        templatingContext.put("negative", (node != null) ? node.getVotesNegative(0) : 0);
     }
 }
