@@ -31,9 +31,9 @@ function submitConfig(targetWindowName, sourceFormName, targetFormName, fieldNam
     //alert(config);
     targetForm.elements['config'].value = config;
     window.opener.name = targetWindowName;
-    var scope = targetForm.elements['scope'].value || null;
+    var scope = targetForm.elements['scope'] || null;
     if(scope) {
-    	targetForm.action = targetForm.action + "#" + scope + "-component";
+    	targetForm.action = targetForm.action + "#" + scope.value + "-component";
     }
     targetForm.submit();
     window.close();
