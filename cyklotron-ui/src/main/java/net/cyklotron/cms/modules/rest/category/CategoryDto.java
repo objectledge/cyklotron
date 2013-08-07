@@ -51,7 +51,7 @@ public class CategoryDto
         this.path = path;
     }
 
-    public static Collection<CategoryDto> create(Collection<CategoryResource> categories)
+    public static Collection<CategoryDto> create(Collection<? extends CategoryResource> categories)
     {
         Validate.notNull(categories);
         Collection<CategoryDto> categoriesDtos = new ArrayList<>(categories.size());
@@ -77,7 +77,8 @@ public class CategoryDto
         // ignore
     }
 
-    public static Collection<CategoryDto> createNoPath(ResourceList<CategoryResource> categories)
+    public static Collection<CategoryDto> createNoPath(
+        ResourceList<? extends CategoryResource> categories)
     {
         Validate.notNull(categories);
         Collection<CategoryDto> categoriesDtos = new ArrayList<>(categories.size());

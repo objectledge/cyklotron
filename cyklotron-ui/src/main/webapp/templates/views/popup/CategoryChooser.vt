@@ -8,9 +8,7 @@ $viewEnclosureTool.top()
 	<button class="popup ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
 		<span class="ui-button-text" ng-transclude></span>
 	</button>
-	<button class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
-		<span class="ui-button-text">
-			<a ng-click="clearCategories()" href="">Wyczyść</a> 
-		</span>
+	<button ng-click="clearCategories()" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false">
+		<span class="ui-button-text">Wyczyść</span>
 	</button>
 </div>
