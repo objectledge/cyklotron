@@ -30,18 +30,20 @@ function enableLoadingForm(enable) {
 
 J(document).ready(function() {
 	 $('input[rel=authenticate]').keydown(function() {
-	 	if (event.keyCode == 13) { 
-		try
-		{
-	 	sso.login(J('#login').val(), J('#password').val(), function(status) {
-			logUserToSystem(status);
-        });
-		}catch(e)
-		{
-		  accountStatus(J('#login').val());
+	 	  if (event.keyCode == 13) { 
+#if($ssoTool.active)
+	 	      sso.login(J('#login').val(), J('#password').val(), function(status) {
+			      if(status == 'success' || status == 'OK') {
+			          accountStatus(J('#login').val());
+			      } else {
+				      alert(loginError(status));
+				  }
+              });
+#else
+		      accountStatus(J('#login').val());
+#end		  
 		}
-	}
-    });
+	});
 	
 function logUserToSystem(status)
 {
@@ -88,7 +90,11 @@ function accountStatus(account)
 	
     J('#submitbutton').click(function() {
         sso.login(J('#login').val(), J('#password').val(), function(status) {
-               logUserToSystem(status);
+    	    if(status == 'success' || status == 'OK') {
+	            accountStatus(J('#login').val());
+	        } else {
+		        alert(loginError(status));
+		    }
         });
     });
 
