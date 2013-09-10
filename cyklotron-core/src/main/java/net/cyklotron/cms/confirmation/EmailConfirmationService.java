@@ -66,6 +66,17 @@ public interface EmailConfirmationService
         throws ConfirmationRequestException;
 
     /**
+     * Find a subscription change request with a specific payload. This is useful for finding
+     * requested email for a specific user.
+     * 
+     * @param cookie the magic cookie recieved form the user.
+     * @return the request object, or null if invalid.
+     */
+    public EmailConfirmationRequestResource getEmailConfirmationRequestByPayload(
+        CoralSession coralSession, String payload)
+        throws ConfirmationRequestException;
+
+    /**
      * Discard a subscription change request.
      * 
      * @param cookie the magic cookie recieved form the user.
