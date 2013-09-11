@@ -54,7 +54,7 @@ function quickPathValidation(endpoint, locale, site, inputElem, feedbackElem) {
         ajaxRequest = $.ajax(endpoint + "/" + site + "/" + curValue.replace(/\//g, "__"), {
             dataType : "json",
             success : function(data) {
-                if (data.defined) {
+                if (data.defined && data.exact) {
                     feedback("IN_USE");
                 } else {
                     feedback("OK");

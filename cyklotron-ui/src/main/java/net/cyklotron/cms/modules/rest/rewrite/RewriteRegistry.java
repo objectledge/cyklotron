@@ -80,12 +80,14 @@ public class RewriteRegistry
         final CoralSession coralSession = coralSessionFactory.getCurrentSession();
         final SiteResource site = siteService.getSite(coralSession, siteName);
 
-        RewriteTarget target = registry.target(new SitePath(site, path.replace("__", "/")));
+        final String rPath = path.replace("__", "/");
+        RewriteTarget target = registry.target(new SitePath(site, rPath));
         Map<String, Object> resp = new HashMap<>();
         resp.put("defined", Boolean.valueOf(target != null));
         if(target != null)
         {
             resp.put("target", registry.toUrl(target));
+            resp.put("exact", target.getPath().getPath().equals(rPath));
         }
         return Response.ok(resp).build();
     }

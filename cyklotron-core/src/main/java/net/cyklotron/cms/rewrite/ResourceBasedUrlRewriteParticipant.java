@@ -255,7 +255,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
                     final SitePath sitePath = entry.getKey();
                     final T resource = entry.getValue().get(coralSession);
                     infos.add(new RewriteEntry(getName(), sitePath.getSite().getName(), sitePath
-                        .getPath(), formatRewrite(getTarget(resource)), getDescription(resource)));
+                        .getPath(), formatRewrite(getTarget(resource, sitePath)), getDescription(resource)));
                 }
                 catch(EntityDoesNotExistException e)
                 {
@@ -358,7 +358,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
                 {
                     ResourceRef<T> ref = cache.get(path);
                     T resource = ref.get(coralSession);
-                    return getTarget(resource);
+                    return getTarget(resource, path);
                 }
                 catch(EntityDoesNotExistException e)
                 {
@@ -429,7 +429,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
 
     protected abstract String pathAttribute();
 
-    protected abstract RewriteTarget getTarget(T resource);
+    protected abstract RewriteTarget getTarget(T resource, SitePath sitePath);
 
     protected abstract String getDescription(T resource);
 
