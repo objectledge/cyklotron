@@ -283,4 +283,19 @@ public class LocationsIndex
         }
         return matching;
     }
+
+    public Location getExactMatch(String field, String value)
+    {
+        try
+        {
+            List<Location> locs = results(getSearcher().search(
+                new TermQuery(new Term(field, value)), 2));
+            return locs.size() == 1 ? locs.get(0) : null;
+        }
+        catch(Exception e)
+        {
+            logger.error("search error", e);
+            return null;
+        }
+    }
 }

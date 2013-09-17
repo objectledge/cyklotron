@@ -65,6 +65,16 @@ public interface LocationDatabaseService
         throws IOException;
 
     /**
+     * Returns the exact match for given field value, or {@code null} when none or multiple matches
+     * exist.
+     * 
+     * @param field name of the requested field.
+     * @param value field value.
+     * @return a Location object when single exact match exists.
+     */
+    public Location getExactMatch(String field, String value);
+
+    /**
      * Returns most specific location enclosing both given locations.
      * 
      * @param location1 first location.
