@@ -13,10 +13,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.web.rest.RequireCoralRole;
 
 import net.cyklotron.cms.category.CategoryResource;
@@ -63,5 +65,40 @@ public class Category
                 .add(session.getStore().getResource(Long.valueOf(id), CategoryResource.class));
         }
         return categories;
+    }
+
+    @Path("/subtree")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSubtree(@QueryParam("root") long rootId,
+        @DefaultValue("1024") @QueryParam("depth") int depth)
+    {
+        CoralSession session = coralSessionFactory.getCurrentSession();
+        try
+        {
+            CategoryResource root = session.getStore().getResource(rootId, CategoryResource.class);
+            List<CategoryResource> categories = new ArrayList<>();
+            collectSubtree(root, depth, categories);
+            return Response.ok(CategoryDto.create(categories)).build();
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+    }
+
+    private void collectSubtree(Resource parent, int depth, List<CategoryResource> categories)
+    {
+        for(Resource child : parent.getChildren())
+        {
+            if(child instanceof CategoryResource)
+            {
+                categories.add((CategoryResource)child);
+            }
+            if(depth > 1)
+            {
+                collectSubtree(child, depth - 1, categories);
+            }
+        }
     }
 }
