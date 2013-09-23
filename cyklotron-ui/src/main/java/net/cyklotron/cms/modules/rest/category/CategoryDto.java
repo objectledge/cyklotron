@@ -21,6 +21,8 @@ public class CategoryDto
 
     String path;
 
+    String style;
+
     public String getId()
     {
         return id;
@@ -51,6 +53,16 @@ public class CategoryDto
         this.path = path;
     }
 
+    public String getStyle()
+    {
+        return style;
+    }
+
+    public void setStyle(String style)
+    {
+        this.style = style;
+    }
+
     public static Collection<CategoryDto> create(Collection<? extends CategoryResource> categories)
     {
         Validate.notNull(categories);
@@ -68,6 +80,7 @@ public class CategoryDto
         categoryDto.name = category.getName();
         categoryDto.id = category.getIdString();
         categoryDto.path = category.getPath();
+        categoryDto.style = category.getUiStyle();
         return categoryDto;
     }
 
