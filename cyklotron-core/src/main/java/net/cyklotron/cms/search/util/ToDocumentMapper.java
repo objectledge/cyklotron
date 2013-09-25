@@ -21,4 +21,12 @@ public interface ToDocumentMapper<T extends Resource>
      * @return Term which is the id of this document
      */
     Term getIdentifier(T resource);
+
+    /**
+     * Returns term which uniquely identifies a document
+     * 
+     * @param document identifier
+     * @return Term which is the id of this document
+     */
+    Term getIdentifier(String identifier);
 }
