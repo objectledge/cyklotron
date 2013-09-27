@@ -289,11 +289,14 @@ public class ProposeDocument
                 BufferedImage targetImage = null;
                 try
                 {
-                    targetImage = Scalr.resize(srcImage, Scalr.Method.AUTOMATIC,
-                        Scalr.Mode.AUTOMATIC, maxSize, maxSize);
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    ImageIO.write(targetImage, "jpeg", baos);
-                    return baos.toByteArray();
+                    if(srcImage.getWidth() > maxSize || srcImage.getHeight() > maxSize)
+                    {
+                        targetImage = Scalr.resize(srcImage, Scalr.Method.AUTOMATIC,
+                            Scalr.Mode.AUTOMATIC, maxSize, maxSize);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ImageIO.write(targetImage, "jpeg", baos);
+                        return baos.toByteArray();
+                    }
                 }
                 finally
                 {
