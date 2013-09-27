@@ -209,7 +209,7 @@ public class ProposeDocument
                 node.setSequence(getMaxSequence(coralSession, parent));
                 assignCategories(data, coralSession, node, parentCategories);
                 uploadAndAttachFiles(node, data,
-                    screenConfig.getInt("attachemnt_images_max_size", -1), coralSession);
+                    screenConfig.getInt("attachemnt_images_max_size", -1), coralSession, context);
                 setState(coralSession, subject, node);
                 setOwner(node, context);
                 structureService.updateNode(coralSession, node, data.getName(), true, subject);
@@ -235,7 +235,7 @@ public class ProposeDocument
     }
 
     private void uploadAndAttachFiles(DocumentNodeResource node, ProposedDocumentData data,
-        int maxSize, CoralSession coralSession)
+        int maxSize, CoralSession coralSession, Context context)
         throws ProcessingException
     {
         try
@@ -250,7 +250,7 @@ public class ProposeDocument
                     if(file != null)
                     {
                         String description = data.getAttachmentDescription(i);
-                        byte[] contents = resizeIfNecessary(file, maxSize);
+                        byte[] contents = resizeIfNecessary(file, maxSize, context);
                         final ByteArrayInputStream contentsIs = new ByteArrayInputStream(contents);
                         String contentType = filesService.detectMimeType(contentsIs,
                             file.getFileName());
@@ -274,11 +274,11 @@ public class ProposeDocument
         }
     }
 
-    private byte[] resizeIfNecessary(UploadContainer uploadContainer, int maxSize)
+    private byte[] resizeIfNecessary(UploadContainer uploadContainer, int maxSize, Context context)
         throws IOException, IllegalArgumentException, ImagingOpException, ProcessingException
     {
         byte[] srcBytes = IOUtils.toByteArray(uploadContainer.getInputStream());
-        if(maxSize > 0)
+        if(maxSize > 0 && !checkAdministrator(context))
         {
             final ByteArrayInputStream is = new ByteArrayInputStream(srcBytes);
             String contentType = filesService.detectMimeType(is, uploadContainer.getFileName());
