@@ -545,9 +545,15 @@ public class CmsTool
     }
     
     public Resource getResource(long id)
-    	throws Exception
     {
-		return getCoralSession().getStore().getResource(id);    	
+		try
+        {
+            return getCoralSession().getStore().getResource(id);
+        }
+        catch(EntityDoesNotExistException e)
+        {
+            return null;
+        }    	
     }
     
     
