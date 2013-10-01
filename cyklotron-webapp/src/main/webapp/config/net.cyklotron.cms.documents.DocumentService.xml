@@ -51,4 +51,7 @@
     <defaultLinkClass>keyword</defaultLinkClass>
   </keywords>
   <htmlCleanupProfile>proposeDocument</htmlCleanupProfile>
+  <preferredImageSizes>
+    <large>1200</large>
+  </preferredImageSizes>
 </config>
