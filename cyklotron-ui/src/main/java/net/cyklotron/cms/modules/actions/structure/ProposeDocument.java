@@ -43,6 +43,7 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
@@ -82,11 +83,14 @@ public class ProposeDocument
     
     private final UserManager userManager;
 
+    private final DocumentService documentService;
+
     public ProposeDocument(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService, CategoryService categoryService,
         FileUpload uploadService, FilesService filesService,
         CoralSessionFactory coralSessionFactory, RelatedService relatedService,
-        HTMLService htmlService, CaptchaService captchaService, UserManager userManager)
+        HTMLService htmlService, CaptchaService captchaService, UserManager userManager,
+        DocumentService documentService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
         this.categoryService = categoryService;
@@ -97,6 +101,7 @@ public class ProposeDocument
         this.htmlService = htmlService;
         this.captchaService = captchaService;
         this.userManager = userManager;
+        this.documentService = documentService;
     }
 
     /**
@@ -208,8 +213,10 @@ public class ProposeDocument
                 data.toNode(node);
                 node.setSequence(getMaxSequence(coralSession, parent));
                 assignCategories(data, coralSession, node, parentCategories);
+                final int maxSize = screenConfig.getInt("attachemnt_images_max_size",
+                    documentService.getPreferredImageSizes().getLarge());
                 uploadAndAttachFiles(node, data,
-                    screenConfig.getInt("attachemnt_images_max_size", -1), coralSession);
+                    maxSize, coralSession);
                 setState(coralSession, subject, node);
                 setOwner(node, context);
                 structureService.updateNode(coralSession, node, data.getName(), true, subject);
