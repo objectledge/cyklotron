@@ -282,6 +282,40 @@ public class FilesTool
         }
     }
     
+    /**
+     * Returns a link for loading resized image.
+     * <P>
+     * When either w or h parameter is negative, the image will be scaled to fit the other
+     * dimension, while preserving image aspect ratio. When both parameters are positive, image will
+     * be scaled to fit the dimensions exactly.
+     * </p>
+     * 
+     * @param resource
+     * @param w desired width of the image.
+     * @param h desired height of the image.
+     */
+    public String getResized(Resource resource, int w, int h)
+        throws FilesException
+    {
+        if(!(resource instanceof FileResource))
+        {
+            throw new FilesException("Resource is not the instance of cms.files.file class");
+        }
+        TemplatingContext tContext = (TemplatingContext)context
+            .getAttribute(TemplatingContext.class);
+        LinkTool link = (LinkTool)tContext.get("link");
+        link = link.view("files.Resized").set("file_id", resource.getId());
+        if(w > 0)
+        {
+            link = link.add("w", w);
+        }
+        if(h > 0)
+        {
+            link = link.add("h", h);
+        }
+        return link.toString();
+    }
+
     private CoralSession getCoralSession(Context context)
     {
         return (CoralSession)context.getAttribute(CoralSession.class);

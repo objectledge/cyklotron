@@ -8,7 +8,6 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
-import org.objectledge.coral.store.Resource;
 
 import net.cyklotron.cms.site.SiteResource;
 
@@ -251,5 +250,23 @@ public interface FilesService
      * @throws IOException
      */
     public void replaceFile(FileResource file, InputStream uploadedInputStream)
+        throws IOException;
+
+    /**
+     * Returns the path of resized image.
+     * <P>
+     * When either w or h parameter is negative, the image will be scaled to fit the other
+     * dimension, while preserving image aspect ratio. When both parameters are positive, image will
+     * be scaled to fit the dimensions exactly.
+     * </p>
+     * 
+     * @param file source file.
+     * @param w desired width of the image.
+     * @param h desired height of the image.
+     * @return ledge files ystem path to the resized image.
+     * @throws IOException when both dimensions are negative, file is not an image or an IO error
+     *         occurs.
+     */
+    public String resizeImage(FileResource file, int w, int h)
         throws IOException;
 }
