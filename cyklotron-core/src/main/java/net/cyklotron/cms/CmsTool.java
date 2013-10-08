@@ -19,6 +19,7 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.i18n.I18nContext;
+import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
@@ -354,6 +355,47 @@ public class CmsTool
     public Parameters getCombinedNodePreferences(NavigationNodeResource node) 
     {
         return preferencesService.getCombinedNodePreferences(getCoralSession(), node);
+    }
+
+    /**
+     * Retrieve configuration of an arbitrary component.
+     * 
+     * @param node node where the component is located.
+     * @param socketName socket name where the component is located.
+     * @return configuration of the component.
+     */
+    public Parameters getComponentConfig(NavigationNodeResource node, String socketName)
+    {
+        Parameters config;
+        final CoralSession coralSession = getCoralSession();
+        final Parameters systemPreferences = preferencesService.getSystemPreferences(coralSession);
+        boolean global = systemPreferences.isDefined("component." + socketName + ".class");
+        if(global)
+        {
+            config = new SingleValueParameters(systemPreferences);
+        }
+        else
+        {
+            config = new SingleValueParameters(preferencesService.getCombinedNodePreferences(
+                coralSession, node));
+        }
+
+        final String app = config.get("component." + socketName + ".app", null);
+        if(app != null && app.length() != 0)
+        {
+            final String clazz = config.get("component." + socketName + ".class", null).replace(
+                ',', '.');
+            if(clazz != null && clazz.length() != 0)
+            {
+                if(app != null && clazz != null)
+                {
+                    final String configurationPrefix = "component." + socketName + ".config." + app
+                        + "." + clazz + ".";
+                    return new SingleValueParameters(config.getChild(configurationPrefix));
+                }
+            }
+        }
+        return new DefaultParameters();
     }
 
     // resource lookup (?) ///////////////////////////////////////////////////
