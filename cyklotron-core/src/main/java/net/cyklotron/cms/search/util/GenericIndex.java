@@ -24,9 +24,9 @@ import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.MultiFields;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SearcherManager;
+import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.Directory;
 import org.jcontainer.dna.Logger;
@@ -158,13 +158,13 @@ public class GenericIndex<T extends Resource, U>
         searcherManager.maybeRefresh();
     }
 
-    public U getResource(Long id)
+    public U getResource(String id)
         throws IOException
     {
         final IndexSearcher searcher = searcherManager.acquire();
         try
         {
-            Query query = NumericRangeQuery.newLongRange("id", id, id, true, true);
+            Query query = new TermQuery(toDocumentMapper.getIdentifier(id));
             return singleResult(searcher.search(query, 1));
         }
         catch(Exception e)

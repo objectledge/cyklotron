@@ -97,28 +97,24 @@ public interface DocumentService
     public HTMLContentFilter getContentFilter(DocumentNodeResource doc, LinkRenderer linkRenderer,
         CoralSession coralSession);
 
-/*    public long[] getEmbededImageResourceIds(DocumentNodeResource doc)
-    throws DocumentException;
+    /*
+     * public long[] getEmbededImageResourceIds(DocumentNodeResource doc) throws DocumentException;
+     * public long[] getLinkedDocumentResourceIds(DocumentNodeResource doc) throws
+     * DocumentException; public void replaceEmbeddedImageResourceIds(DocumentNodeResource doc,
+     * long[] srcIds, long destId) throws DocumentException; public void
+     * replaceLinkedDocumentResourceIds(DocumentNodeResource doc, long[] srcIds, long destId) throws
+     * DocumentException; public void removeEmbeddedImageResources(DocumentNodeResource doc, long[]
+     * ids) throws DocumentException; public void removeLinkedDocumentResources(DocumentNodeResource
+     * doc, long[] ids) throws DocumentException; public void
+     * addRelatedDocumentResources(DocumentNodeResource doc, long[] relatedDocIds) throws
+     * DocumentException; public void removeRelatedDocumentResources(DocumentNodeResource doc,
+     * long[] relatedDocIds) throws DocumentException;
+     */
 
-    public long[] getLinkedDocumentResourceIds(DocumentNodeResource doc)
-    throws DocumentException;
-
-    public void replaceEmbeddedImageResourceIds(DocumentNodeResource doc, long[] srcIds, long destId)
-    throws DocumentException;
-
-    public void replaceLinkedDocumentResourceIds(DocumentNodeResource doc, long[] srcIds, long destId)
-    throws DocumentException;
-
-    public void removeEmbeddedImageResources(DocumentNodeResource doc, long[] ids)
-    throws DocumentException;
-
-    public void removeLinkedDocumentResources(DocumentNodeResource doc, long[] ids)
-    throws DocumentException;
-
-    public void addRelatedDocumentResources(DocumentNodeResource doc, long[] relatedDocIds)
-    throws DocumentException;
-
-    public void removeRelatedDocumentResources(DocumentNodeResource doc, long[] relatedDocIds)
-    throws DocumentException;
-*/    
+    /**
+     * Returns preferred image sizes.
+     * 
+     * @return preferred image sizes.
+     */
+    public PreferredImageSizes getPreferredImageSizes();
 }

@@ -1,5 +1,6 @@
 package net.cyklotron.cms.files.internal;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -7,8 +8,11 @@ import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.imageio.ImageIO;
+
 import org.apache.tika.Tika;
 import org.apache.tika.metadata.Metadata;
+import org.imgscalr.Scalr;
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -49,6 +53,10 @@ public class FilesServiceImpl
     private static final String FILES_ROOT_DIR_NAME = "files";
 
     private static final String DEFAULT_MIME_TYPE = "application/octet-stream";
+
+    // instance variables ////////////////////////////////////////////////////
+    
+    private static final String RESIZED_IMAGE_CACHE_DIR = "/files/resized/";
 
     /** logging facility */
     private Logger log;
@@ -771,6 +779,76 @@ public class FilesServiceImpl
         output.close();
         input.close();
         return total;
+    }
+
+    private String cacheDirectory(FileResource file)
+        throws IOException
+    {
+        final String id = file.getIdString();
+        String dirName = RESIZED_IMAGE_CACHE_DIR
+            + ("0" + id).substring(id.length() - 1, id.length() + 1);
+        if(!fileSystem.exists(dirName))
+        {
+            fileSystem.mkdirs(dirName);
+        }
+        return dirName;
+    }
+
+    @Override
+    public String resizeImage(FileResource file, int w, int h)
+        throws IOException
+    {
+        if(w == -1 && h == -1)
+        {
+            throw new IOException("at least one of w and h parameters must be positive");
+        }
+
+        InputStream is = getInputStream(file);
+        String contentType = detectMimeType(is, file.getName());
+        if(!contentType.startsWith("image/"))
+        {
+            throw new IOException(file.toString() + " is not an image: " + contentType
+                + " detected");
+        }
+
+        is.reset();
+        BufferedImage srcImage = ImageIO.read(is);
+        try
+        {
+            if(h == -1)
+            {
+                h = (int)(srcImage.getHeight() * ((float)w / srcImage.getWidth()));
+            }
+            if(w == -1)
+            {
+                w = (int)(srcImage.getWidth() * ((float)h / srcImage.getHeight()));
+            }
+            String path = cacheDirectory(file) + "/" + file.getIdString()
+                + String.format("_%d_%d.png", w, h);
+            if(!fileSystem.exists(path)
+                || fileSystem.lastModified(path) < fileSystem.lastModified(getPath(file)))
+            {
+                String tempPath = path + "-" + Thread.currentThread().getName();
+                BufferedImage targetImage = Scalr.resize(srcImage, Scalr.Method.AUTOMATIC,
+                    Scalr.Mode.FIT_EXACT, w, h);
+                try
+                {
+                    OutputStream os = fileSystem.getOutputStream(tempPath);
+                    ImageIO.write(targetImage, "png", os);
+                    os.close();
+                    fileSystem.rename(tempPath, path);
+                }
+                finally
+                {
+                    targetImage.flush();
+                }
+            }
+            return path;
+        }
+        finally
+        {
+            srcImage.flush();
+        }
     }
 }
 

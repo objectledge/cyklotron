@@ -230,5 +230,26 @@ oFCKeditor.config.language = '$i18nContext.getLocale()';
 //-->
 </script>
 #end
+
+#macro(plural $n $formString $lang)
+#set($forms = $formString.split("\|"))
+#if($lang == 'pl')
+#if($n == 1)
+$n $forms.get(0)##
+#elseif($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20))
+$n $forms.get(1)##
+#else
+$n $forms.get(2)##
+#end
+#elseif($lang == 'en')
+#if($n == 1)
+$n $forms.get(0)##
+#else
+$n $forms.get(1)##	
+#end	
+#else
+$n $forms.get(0)##	
+#end	
+#end	
     
   

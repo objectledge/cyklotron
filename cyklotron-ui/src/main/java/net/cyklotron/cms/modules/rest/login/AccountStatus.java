@@ -40,11 +40,14 @@ public class AccountStatus
                     .toString());
             }
             Parameters params = new DirectoryParameters(userManager.getPersonalData(account));
-            String email = params.get("mail", "");
+            String[] emails = params.getStrings("mail");
             BlockedReason blockedReason = userManager.checkAccountFlag(account);
-            if(userManager.isEmailDuplicated(email))
+            for(String email : emails)
             {
-                blockedReason = BlockedReason.ACCOUNT_EMAIL_DUPLICATED;
+                if(userManager.isEmailDuplicated(email))
+                {
+                    blockedReason = BlockedReason.ACCOUNT_EMAIL_DUPLICATED;
+                }
             }
             Long expiration = userManager.getUserPasswordExpirationDays(account);
             AccountStatusDto result = new AccountStatusDto(uid, blockedReason.getShortReason(),

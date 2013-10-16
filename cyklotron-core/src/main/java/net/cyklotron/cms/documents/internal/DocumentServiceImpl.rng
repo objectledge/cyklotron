@@ -59,4 +59,13 @@
       <text/>
     </element>
   </optional>
+  <optional>
+    <element name="preferredImageSizes">
+      <!-- Images uploaded trough ProposeDocument application will be scaled down to this size. 
+           Maybe overridden in specific screen configuration -->
+      <element name="large">
+        <text/>
+      </element>
+    </element>
+  </optional>
 </element>

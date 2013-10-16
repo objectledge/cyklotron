@@ -80,9 +80,14 @@ public class ProposeDocumentConf
                 templatingContext.put("attachments_max_count", fileCount);
             }
             int fileSize = screenConfig.getInt("attachments_max_size", -1);
-            if(fileCount != -1)
+            int imageSize = screenConfig.getInt("attachemnt_images_max_size", -1);
+            if(fileSize != -1)
             {
                 templatingContext.put("attachments_max_size", fileSize);
+            }
+            if(imageSize != -1)
+            {
+                templatingContext.put("attachemnt_images_max_size", imageSize);
             }
             String formats = screenConfig.get(
                 "attachments_allowed_formats", "jpg gif doc rtf pdf xls");

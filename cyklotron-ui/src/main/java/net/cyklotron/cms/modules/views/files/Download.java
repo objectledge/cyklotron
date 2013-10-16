@@ -35,16 +35,16 @@ public class Download
     implements SecurityChecking
 {
     /** The logging service. */
-    Logger logger;
+    protected Logger logger;
     
     /** Mail service for checking MIME types */
-    MailSystem mailService;
+    protected MailSystem mailService;
     
     /** The files service. */
-    FilesService filesService;
+    protected FilesService filesService;
     
     /** file download */
-    private FileDownload fileDownload;
+    protected FileDownload fileDownload;
  
     public Download(Context context, Logger logger, PreferencesService preferencesService,
         CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
@@ -114,7 +114,8 @@ public class Download
     
     // impl /////////////////////////////////////////////////////////////////////////////////////
     
-    private FileResource getFile(Context context) throws ProcessingException
+    protected FileResource getFile(Context context)
+        throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
         Parameters parameters = RequestParameters.getRequestParameters(context);

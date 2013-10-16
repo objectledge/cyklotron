@@ -129,6 +129,7 @@
       <item name="attachments_dir">files upload location</item>
       <item name="attachments_max_count">maximum number of files</item>
       <item name="attachments_max_size">maximum size of files (kB)</item>
+      <item name="attachemnt_images_max_size">maximum extent of image attachment (px)</item>
       <item name="attachments_allowed_formats">allowed formats</item>
       <item name="parent">target location of the new documents</item>
       <item name="owner_login">choose owner</item>

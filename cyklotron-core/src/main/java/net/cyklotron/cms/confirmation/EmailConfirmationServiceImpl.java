@@ -37,6 +37,8 @@ import javax.mail.internet.InternetAddress;
 
 import org.objectledge.ComponentInitializationError;
 import org.objectledge.coral.entity.EntityInUseException;
+import org.objectledge.coral.query.MalformedQueryException;
+import org.objectledge.coral.query.QueryResults;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.mail.LedgeMessage;
@@ -77,6 +79,33 @@ public class EmailConfirmationServiceImpl
         if(res.length > 0)
         {
             return (EmailConfirmationRequestResourceImpl)res[0];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    // inherit doc
+    public EmailConfirmationRequestResource getEmailConfirmationRequestByPayload(
+        CoralSession coralSession, String payload)
+        throws ConfirmationRequestException
+    {
+        QueryResults results;
+        try
+        {
+            results = coralSession.getQuery().executeQuery(
+                "FIND RESOURCE FROM " + EmailConfirmationRequestResource.CLASS_NAME
+                    + " WHERE data = '" + payload + "'");
+        }
+        catch(MalformedQueryException e)
+        {
+            throw new ConfirmationRequestException("internal error", e);
+        }
+        Resource[] res = results.getArray(1);
+        if(res.length > 0)
+        {
+            return (EmailConfirmationRequestResource)res[0];
         }
         else
         {

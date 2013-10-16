@@ -7,14 +7,12 @@ import org.objectledge.authentication.UserInUseException;
 import org.objectledge.authentication.UserManagementParticipant;
 import org.objectledge.authentication.UserUnknownException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
-import org.objectledge.coral.entity.EntityInUseException;
 import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.RoleAssignment;
 import org.objectledge.coral.security.SecurityException;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
-import org.objectledge.pipeline.ProcessingException;
 
 public class CyklotronUserManagementParticipant
     implements UserManagementParticipant
@@ -65,7 +63,11 @@ public class CyklotronUserManagementParticipant
                 coralSession.getSecurity().revoke(role.getRole(), subject);
             }
         }
-        catch(EntityDoesNotExistException | IllegalArgumentException | SecurityException e)
+        catch(EntityDoesNotExistException e)
+        {
+            // principal does not have an associated Coral subject - nothing to clean up here.
+        }
+        catch(IllegalArgumentException | SecurityException e)
         {
             throw new UserUnknownException("Failed to lookup coral subject", e);
         }

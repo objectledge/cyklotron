@@ -47,6 +47,7 @@ import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.documents.FooterResource;
 import net.cyklotron.cms.documents.LinkRenderer;
+import net.cyklotron.cms.documents.PreferredImageSizes;
 import net.cyklotron.cms.documents.keywords.KeywordResource;
 import net.cyklotron.cms.documents.keywords.KeywordsHTMLConententFilter;
 import net.cyklotron.cms.site.SiteResource;
@@ -96,6 +97,8 @@ public class DocumentServiceImpl
     private final CategoryService categoryService;
 
     private final HTMLService htmlService;
+
+    private final PreferredImageSizes imageSizes;
 
     /** Performs document service initialisationin in a following order:
      *  <ul>
@@ -165,6 +168,9 @@ public class DocumentServiceImpl
             .getChild("excludedClasses").getValue().split(" "));
         keywordsDefaultLinkClass = config.getChild("keywords").getChild("defaultLinkClass")
             .getValue();
+
+        imageSizes = new PreferredImageSizes(config.getChild("preferredImageSizes")
+            .getChild("large").getValueAsInteger(-1));
     }
     
     public void start()
@@ -627,5 +633,11 @@ public class DocumentServiceImpl
             return new KeywordsHTMLConententFilter(keywords, keywordsExcludedElements,
                 keywordsExcludedClasses, keywordsDefaultLinkClass, linkRenderer, coralSession);
         }
+    }
+
+    @Override
+    public PreferredImageSizes getPreferredImageSizes()
+    {
+        return imageSizes;
     }
 }
