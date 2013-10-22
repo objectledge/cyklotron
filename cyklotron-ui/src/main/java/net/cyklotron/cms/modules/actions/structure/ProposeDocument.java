@@ -1,17 +1,5 @@
 package net.cyklotron.cms.modules.actions.structure;
 
-import static net.cyklotron.cms.structure.internal.ProposedDocumentData.getAttachmentName;
-
-import java.awt.image.BufferedImage;
-import java.awt.image.ImagingOpException;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
-import org.apache.activemq.util.ByteArrayInputStream;
-import org.apache.tika.io.IOUtils;
-import org.imgscalr.Scalr;
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationException;
 import org.objectledge.authentication.UserManager;
@@ -32,7 +20,6 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
-import org.objectledge.upload.UploadContainer;
 import org.objectledge.utils.StackTrace;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.captcha.CaptchaService;
@@ -65,13 +52,9 @@ import net.cyklotron.cms.style.StyleService;
  */
 
 public class ProposeDocument
-    extends BaseAddEditNodeAction
+    extends BaseProposeDocumentAction
 {
     private CategoryService categoryService;
-
-    private final FileUpload uploadService;
-
-    private final FilesService filesService;
 
     private final CoralSessionFactory coralSessionFactory;
 
@@ -92,10 +75,8 @@ public class ProposeDocument
         HTMLService htmlService, CaptchaService captchaService, UserManager userManager,
         DocumentService documentService)
     {
-        super(logger, structureService, cmsDataFactory, styleService);
+        super(logger, structureService, cmsDataFactory, styleService, filesService, uploadService);
         this.categoryService = categoryService;
-        this.uploadService = uploadService;
-        this.filesService = filesService;
         this.coralSessionFactory = coralSessionFactory;
         this.relatedService = relatedService;
         this.htmlService = htmlService;
@@ -253,21 +234,10 @@ public class ProposeDocument
                 DirectoryResource dir = data.getAttachmenDirectory(coralSession);
                 for (int i = 0; i < data.getAttachmentsMaxCount(); i++)
                 {
-                    UploadContainer file = data.getAttachmentContainer(i, uploadService);
-                    if(file != null)
+                    FileResource attachment = createAttachment(data, i, dir, maxSize, coralSession);
+                    if(attachment != null)
                     {
-                        String description = data.getAttachmentDescription(i);
-                        byte[] contents = resizeIfNecessary(file, maxSize);
-                        final ByteArrayInputStream contentsIs = new ByteArrayInputStream(contents);
-                        String contentType = filesService.detectMimeType(contentsIs,
-                            file.getFileName());
-                        contentsIs.reset();
-                        FileResource f = filesService.createFile(coralSession,
-                            getAttachmentName(file.getFileName()), contentsIs, contentType, null,
-                            dir);
-                        f.setDescription(description);
-                        f.update();
-                        attachments.add(f);
+                        attachments.add(attachment);
                     }
                 }
                 relatedService.setRelatedTo(coralSession, node, attachments.toArray(new Resource[attachments.size()])); 
@@ -279,43 +249,6 @@ public class ProposeDocument
         {
             throw new ProcessingException("problem while processing attachments", e);
         }
-    }
-
-    private byte[] resizeIfNecessary(UploadContainer uploadContainer, int maxSize)
-        throws IOException, IllegalArgumentException, ImagingOpException, ProcessingException
-    {
-        byte[] srcBytes = IOUtils.toByteArray(uploadContainer.getInputStream());
-        if(maxSize > 0)
-        {
-            final ByteArrayInputStream is = new ByteArrayInputStream(srcBytes);
-            String contentType = filesService.detectMimeType(is, uploadContainer.getFileName());
-            if(contentType.startsWith("image/"))
-            {
-                is.reset();
-                BufferedImage srcImage = ImageIO.read(is);
-                BufferedImage targetImage = null;
-                try
-                {
-                    if(srcImage.getWidth() > maxSize || srcImage.getHeight() > maxSize)
-                    {
-                        targetImage = Scalr.resize(srcImage, Scalr.Method.AUTOMATIC,
-                            Scalr.Mode.AUTOMATIC, maxSize, maxSize);
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ImageIO.write(targetImage, "jpeg", baos);
-                        return baos.toByteArray();
-                    }
-                }
-                finally
-                {
-                    srcImage.flush();
-                    if(targetImage != null)
-                    {
-                        targetImage.flush();
-                    }
-                }
-            }
-        }
-        return srcBytes;
     }
 
     private void setState(CoralSession coralSession, Subject subject, DocumentNodeResource node)
@@ -439,12 +372,6 @@ public class ProposeDocument
             }
         }
         return sequence;
-    }
-
-    @Override
-    protected String getViewName()
-    {
-        return "";
     }
 
     @Override
