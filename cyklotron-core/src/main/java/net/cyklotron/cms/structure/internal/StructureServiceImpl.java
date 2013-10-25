@@ -1157,6 +1157,10 @@ public class StructureServiceImpl
         CoralSession coralSession)
         throws StructureException
     {
+        if(acceptedSites == null || acceptedSites.isEmpty())
+        {
+            return idSet;
+        }
         StringBuffer query = new StringBuffer();
         query.append("MAP('" + SITE_DOCUMENT_RELATION + "'){");
         Iterator<SiteResource> i = acceptedSites.iterator();
