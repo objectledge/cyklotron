@@ -26,7 +26,7 @@ function enableLoadingForm(enable) {
 #end
 
 J(document).ready(function() {
-	 $('input[rel=authenticate]').keydown(function() {
+	 $('.login-input').keydown(function(event) {
 	 	  if (event.keyCode == 13) { 
 #if($ssoTool.active)
 	 	      sso.login(J('#login').val(), J('#password').val(), function(status) {

@@ -124,18 +124,12 @@ public class CalendarAllRangeQuery extends Query
             // get lowest non null date in index
             final Terms terms = MultiFields.getTerms(indexReader, lowerTerm.field());
             final TermsEnum termsEnum = terms.iterator(null);
-            // Get last term. TODO validate that this is lowest
-            BytesRef term = null;
-            while(termsEnum.next() != null)
-            {
-                term = termsEnum.term();
-            }
-
-            // TermEnum te = indexReader.terms(new Term(lowerTerm.field(), ""));
             // enumeration contains all terms in the document sorted lexicographically by
             // field name then term content. it is positioned on the term greater than requested,
             // so when no terms for the field are present enumeration points to a different field's 
             // term or null if the requested term was the farthest in the index
+            termsEnum.seekCeil(new Term(lowerTerm.field(), "19700101").bytes());
+            BytesRef term = termsEnum.next();
             if(term != null)
             {
                 String lowestDateText = term.utf8ToString();
@@ -156,7 +150,8 @@ public class CalendarAllRangeQuery extends Query
         }
         catch(ParseException e)
         {
-            throw new RuntimeException("Could not rewrite calendar range query", e);
+            log.error("Could not rewrite calendar range query", e);
+            return 1;
         }
 
         // get current date - this estimates highest date in index, because
