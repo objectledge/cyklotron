@@ -150,7 +150,8 @@ public class CalendarAllRangeQuery extends Query
         }
         catch(ParseException e)
         {
-            throw new RuntimeException("Could not rewrite calendar range query", e);
+            log.error("Could not rewrite calendar range query", e);
+            return 1;
         }
 
         // get current date - this estimates highest date in index, because
