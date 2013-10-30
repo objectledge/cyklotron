@@ -20,6 +20,7 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
@@ -35,14 +36,17 @@ public class UpdateRemovalRequest
 
     private final HTMLService htmlService;
 
+    private final DocumentService documentService;
+
     public UpdateRemovalRequest(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService, CategoryService categoryService,
-        RelatedService relatedService, HTMLService htmlService)
+        RelatedService relatedService, HTMLService htmlService, DocumentService documentService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
         this.categoryService = categoryService;
         this.relatedService = relatedService;
         this.htmlService = htmlService;
+        this.documentService = documentService;
     }
 
     @Override
@@ -60,7 +64,8 @@ public class UpdateRemovalRequest
             {
                 CmsData cmsData = cmsDataFactory.getCmsData(context);
                 Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
-                ProposedDocumentData data = new ProposedDocumentData(screenConfig,logger);
+                ProposedDocumentData data = new ProposedDocumentData(screenConfig,
+                    documentService.getPreferredImageSizes(), logger);
                 if(node.isProposedContentDefined())
                 {
                     data.fromProposal(node, coralSession);

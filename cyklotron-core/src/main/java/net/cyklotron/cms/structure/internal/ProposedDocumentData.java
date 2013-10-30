@@ -40,6 +40,7 @@ import net.cyklotron.cms.category.CategoryResourceImpl;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentMetadataHelper;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.PreferredImageSizes;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.DirectoryResourceImpl;
 import net.cyklotron.cms.files.FileResource;
@@ -148,9 +149,10 @@ public class ProposedDocumentData
 
     protected Logger logger;
 
-    public ProposedDocumentData(Parameters configuration, Logger logger)
+    public ProposedDocumentData(Parameters configuration, PreferredImageSizes imageSizes,
+        Logger logger)
     {
-        setConfiguration(configuration);
+        setConfiguration(configuration, imageSizes);
         this.logger = logger;
     }
 
@@ -160,7 +162,7 @@ public class ProposedDocumentData
         // remember to call setConfiguration later
     }
 
-    public void setConfiguration(Parameters configuration)
+    public void setConfiguration(Parameters configuration, PreferredImageSizes imageSizes)
     {
         calendarTree = configuration.getBoolean("calendar_tree", true);
         inheritCategories = configuration.getBoolean("inherit_categories", true);

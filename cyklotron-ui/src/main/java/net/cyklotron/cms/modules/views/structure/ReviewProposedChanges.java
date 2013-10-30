@@ -36,6 +36,7 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.modules.views.documents.BaseSkinableDocumentScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
@@ -57,17 +58,21 @@ public class ReviewProposedChanges
 
     private HTMLService htmlService;
 
+    private final DocumentService documentService;
+
     public ReviewProposedChanges(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, StructureService structureService,
         StyleService styleService, SiteService siteService, RelatedService relatedService,
-        UserManager userManager, CategoryService categoryService, HTMLService htmlService)
+        UserManager userManager, CategoryService categoryService, HTMLService htmlService,
+        DocumentService documentService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         structureService, styleService, siteService, relatedService);
         this.userManager = userManager;
         this.categoryService = categoryService;
         this.htmlService = htmlService;
+        this.documentService = documentService;
     }
 
     @Override
@@ -109,8 +114,8 @@ public class ReviewProposedChanges
 
             proposedData.fromProposal(node, coralSession);
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());
-            proposedData.setConfiguration(screenConfig);
-            publishedData.setConfiguration(screenConfig);
+            proposedData.setConfiguration(screenConfig, documentService.getPreferredImageSizes());
+            publishedData.setConfiguration(screenConfig, documentService.getPreferredImageSizes());
             publishedData.fromNode(node, categoryService, relatedService, coralSession);
 
             NameComparator<CategoryResource> comparator = new NameComparator<CategoryResource>(

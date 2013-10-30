@@ -68,7 +68,8 @@ public class UpdateProposedDocument
 
             CmsData cmsData = cmsDataFactory.getCmsData(context);
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
-            ProposedDocumentData data = new ProposedDocumentData(screenConfig,logger);
+            ProposedDocumentData data = new ProposedDocumentData(screenConfig,
+                documentService.getPreferredImageSizes(), logger);
             data.fromParameters(parameters, coralSession);
             data.setOrigin(cmsData.getNode());
 

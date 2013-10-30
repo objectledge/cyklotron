@@ -33,6 +33,7 @@ import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.organizations.Organization;
 import net.cyklotron.cms.organizations.OrganizationRegistryService;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -71,12 +72,14 @@ public class ProposeDocument
     private final List<String> REQUIRES_AUTHENTICATED_USER = Arrays.asList("MyDocuments",
         "EditDocument", "RemovalRequest", "RedactorsNote");
 
+    private final DocumentService documentService;
+
     public ProposeDocument(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         StructureService structureService, StyleService styleService, SkinService skinService,
         MVCFinder mvcFinder, TableStateManager tableStateManager, CategoryService categoryService,
         RelatedService relatedService, HTMLService htmlService, WorkflowService workflowService,
-        OrganizationRegistryService ngoDatabaseService)
+        OrganizationRegistryService ngoDatabaseService, DocumentService documentService)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
@@ -85,6 +88,7 @@ public class ProposeDocument
         this.htmlService = htmlService;
         this.workflowService = workflowService;
         this.organizationsRegistry = ngoDatabaseService;
+        this.documentService = documentService;
     }
 
     @Override
@@ -298,7 +302,8 @@ public class ProposeDocument
         {
             // refill parameters in case we are coming back failed validation
             Parameters screenConfig = getScreenConfig();
-            ProposedDocumentData data = new ProposedDocumentData(screenConfig, logger);
+            ProposedDocumentData data = new ProposedDocumentData(screenConfig,
+                documentService.getPreferredImageSizes(), logger);
             data.fromParameters(parameters, coralSession);
             if(!parameters.getBoolean("form_loaded", false))
             {
@@ -351,7 +356,8 @@ public class ProposeDocument
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(
                 coralSession, docId);
             templatingContext.put("doc", node);
-            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig(), logger);
+            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig(),
+                documentService.getPreferredImageSizes(), logger);
             if(parameters.getBoolean("form_loaded", false))
             {
                 data.fromParameters(parameters, coralSession);
@@ -395,7 +401,8 @@ public class ProposeDocument
             DocumentNodeResource node = DocumentNodeResourceImpl.getDocumentNodeResource(
                 coralSession, docId);
             templatingContext.put("doc", node);
-            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig(), logger);
+            ProposedDocumentData data = new ProposedDocumentData(getScreenConfig(),
+                documentService.getPreferredImageSizes(), logger);
             if(parameters.getBoolean("form_loaded", false))
             {
                 data.fromParameters(parameters, coralSession);

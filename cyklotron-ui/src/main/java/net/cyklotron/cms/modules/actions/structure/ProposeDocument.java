@@ -105,7 +105,8 @@ public class ProposeDocument
         try
         {
             // get parameters
-            ProposedDocumentData data = new ProposedDocumentData(screenConfig,logger);
+            ProposedDocumentData data = new ProposedDocumentData(screenConfig,
+                documentService.getPreferredImageSizes(), logger);
             data.fromParameters(parameters, coralSession);
 
             // check required parameters
