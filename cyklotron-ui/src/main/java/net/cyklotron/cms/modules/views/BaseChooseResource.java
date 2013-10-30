@@ -111,7 +111,6 @@ public abstract class BaseChooseResource
             ArrayList<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
             filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             filters.add(new SeeableFilter());
-            filters.add(new CmsPathFilter(site, paths));
             String search = parameters.get("search", "");
             templatingContext.put("search", search);
             if(search.length() != 0)
@@ -145,6 +144,10 @@ public abstract class BaseChooseResource
                     i18nContext.getLocale());
 
                 allExpanded = true;
+            }
+            else
+            {
+                filters.add(new CmsPathFilter(site, paths));
             }
             state.setAllExpanded(allExpanded);
             TableTool<Resource> helper = new TableTool<Resource>(state, filters, model);
