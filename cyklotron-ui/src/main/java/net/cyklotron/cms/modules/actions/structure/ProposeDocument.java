@@ -181,6 +181,7 @@ public class ProposeDocument
                     // add navigation node
                     node = structureService.addDocumentNode(coralSession, data.getName(), data.getTitle(),
                         parent, subject);
+                    setState(coralSession, subject, node);
                 }
                 catch(NavigationNodeAlreadyExistException e)
                 {
@@ -189,7 +190,7 @@ public class ProposeDocument
                 }
             }
 
-            if(valid)
+            if(valid && node != null)
             {
                 data.toNode(node);
                 node.setSequence(getMaxSequence(coralSession, parent));
@@ -198,7 +199,6 @@ public class ProposeDocument
                     documentService.getPreferredImageSizes().getLarge());
                 uploadAndAttachFiles(node, data,
                     maxSize, coralSession);
-                setState(coralSession, subject, node);
                 setOwner(node, context);
                 structureService.updateNode(coralSession, node, data.getName(), true, subject);
                 
