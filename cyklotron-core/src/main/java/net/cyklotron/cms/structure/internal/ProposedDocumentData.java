@@ -7,6 +7,10 @@ import static net.cyklotron.cms.documents.DocumentMetadataHelper.elm;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.selectFirstText;
 import static net.cyklotron.cms.documents.DocumentMetadataHelper.textToDom4j;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.ImagingOpException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,8 +22,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.imageio.IIOException;
+import javax.imageio.ImageIO;
+
+import org.apache.activemq.util.ByteArrayInputStream;
+import org.apache.tika.io.IOUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.imgscalr.Scalr;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
@@ -45,6 +55,7 @@ import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.DirectoryResourceImpl;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FileResourceImpl;
+import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.related.RelatedService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
@@ -127,6 +138,12 @@ public class ProposedDocumentData
 
     private List<Resource> attachments;
 
+    private List<String> attachmentNames;
+
+    private List<String> attachmentTypes;
+
+    private List<byte[]> attachmentContents;
+
     private List<String> attachmentDescriptions;
 
     private boolean removalRequested;
@@ -144,6 +161,8 @@ public class ProposedDocumentData
     private boolean clearOrganizationIfNotMatch;
 
     private String cleanupProfile;
+
+    private int imageMaxSize;
 
     private static final String DEFAULT_CLENAUP_PROFILE = "proposeDocument";
 
@@ -177,6 +196,7 @@ public class ProposedDocumentData
         addDocumentVisualEditor = configuration.getBoolean("add_document_visual_editor", false);
         clearOrganizationIfNotMatch = configuration.getBoolean("clear_org_if_not_match", false);
         cleanupProfile = configuration.get("cleanup_profile", DEFAULT_CLENAUP_PROFILE);
+        imageMaxSize = configuration.getInt("attachemnt_images_max_size", imageSizes.getLarge());
     }
 
     public void fromParameters(Parameters parameters, CoralSession coralSession)
@@ -238,6 +258,9 @@ public class ProposedDocumentData
                     attachments.add(FileResourceImpl.getFileResource(coralSession, fileId));
                 }
             }
+            attachmentContents = new ArrayList<>(attachmentsMaxCount);
+            attachmentTypes = new ArrayList<>(attachmentsMaxCount);
+            attachmentNames = new ArrayList<>(attachmentsMaxCount);
         }
     }
 
@@ -567,7 +590,8 @@ public class ProposedDocumentData
         return true;
     }
 
-    public boolean isFileUploadValid(CoralSession coralSession, FileUpload fileUpload)
+    public boolean isFileUploadValid(CoralSession coralSession, FileUpload fileUpload,
+        FilesService filesService)
         throws ProcessingException
     {
         boolean valid = true;
@@ -596,7 +620,7 @@ public class ProposedDocumentData
                 {
                     try
                     {
-                        UploadContainer uploadedFile = getAttachmentContainer(i, fileUpload);
+                        UploadContainer uploadedFile = fileUpload.getContainer("attachment_" + (i + 1));
                         if(uploadedFile != null)
                         {
                             if(uploadedFile.getSize() > attachmentsMaxSize * 1024)
@@ -614,6 +638,12 @@ public class ProposedDocumentData
                                 valid = false;
                                 break fileCheck;
                             }
+
+                            if(!isAttachmentValid(i, uploadedFile, filesService))
+                            {
+                                valid = false;
+                                break fileCheck;
+                            }
                         }
                     }
                     catch(UploadLimitExceededException e)
@@ -626,6 +656,75 @@ public class ProposedDocumentData
             }
         }
         return valid;
+    }
+
+    private boolean isAttachmentValid(int index, UploadContainer uploadedFile,
+        FilesService filesService)
+    {
+        try
+        {
+            byte[] srcBytes = IOUtils.toByteArray(uploadedFile.getInputStream());
+            final ByteArrayInputStream is = new ByteArrayInputStream(srcBytes);
+            String contentType = filesService.detectMimeType(is, uploadedFile.getFileName());
+            if(imageMaxSize != 0 && contentType.startsWith("image/"))
+            {
+                is.reset();
+                BufferedImage srcImage = ImageIO.read(is);
+                BufferedImage targetImage = null;
+                try
+                {
+                    if(srcImage.getWidth() > imageMaxSize || srcImage.getHeight() > imageMaxSize)
+                    {
+                        targetImage = Scalr.resize(srcImage, Scalr.Method.AUTOMATIC,
+                            Scalr.Mode.AUTOMATIC, imageMaxSize, imageMaxSize);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ImageIO.write(targetImage, "jpeg", baos);
+                        add(attachmentContents, index, baos.toByteArray());
+                        contentType = "image/jpeg";
+                    }
+                }
+                finally
+                {
+                    srcImage.flush();
+                    if(targetImage != null)
+                    {
+                        targetImage.flush();
+                    }
+                }
+            }
+            else
+            {
+                add(attachmentContents, index, srcBytes);
+            }
+            add(attachmentTypes, index, contentType);
+            add(attachmentNames, index,
+                ProposedDocumentData.getAttachmentName(uploadedFile.getFileName()));
+            return true;
+        }
+        catch(ImagingOpException | IllegalArgumentException e)
+        {
+            validationFailure = "image_resize_failed";
+        }
+        catch(IIOException e)
+        {
+            validationFailure = "image_format_error";
+        }
+        catch(IOException e)
+        {
+            validationFailure = "attachment_processing_error";
+        }
+        return false;
+    }
+
+    // adds element at the specified position filling unused leading position with nulls if
+    // necessary
+    private <T> void add(List<T> list, int i, T item)
+    {
+        while(list.size() < i)
+        {
+            list.add(null);
+        }
+        list.add(i, item);
     }
 
     // getters for configuration
@@ -791,10 +890,24 @@ public class ProposedDocumentData
         return attachmentDescriptions;
     }
 
-    public UploadContainer getAttachmentContainer(int index, FileUpload fileUpload)
-        throws UploadLimitExceededException
+    public byte[] getAttachmentContents(int index)
     {
-        return fileUpload.getContainer("attachment_" + (index + 1));
+        return attachmentContents.get(index);
+    }
+
+    public String getAttachmentType(int index)
+    {
+        return attachmentTypes.get(index);
+    }
+
+    public String getAttachmentName(int index)
+    {
+        return attachmentNames.get(index);
+    }
+
+    public int getNewAttachmentsCount()
+    {
+        return attachmentContents.size();
     }
 
     public List<Resource> getCurrentAttachments()
