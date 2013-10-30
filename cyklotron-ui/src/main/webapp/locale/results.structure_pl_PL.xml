@@ -148,6 +148,10 @@
     <prefix name="parent_node_misconfigured">
       <value>Lokalizacja docelowa dokumentu nie jest skonfigurowana na serwerze</value>
     </prefix>
+    <item name="invalid_captcha_verification">Błąd weryfikacji kodu CAPTCHA</item>
+    <item name="image_format_error">Uszkodzony plik lub nierozpoznany format pliku graficznego</item>
+    <item name="image_resize_failed">Błąd skalowania pliku graficznego</item>
+    <item name="attachment_processing_error">Błąd przetwarzania załącznika</item>
     <item name="login_parameters_missing">Wystąpił błąd w formularzu logowania</item>
     <item name="login_failed">Błędna nazwa użytkownika lub hasło</item>
     <item name="login_successful">Logowanie poprawne</item> 
