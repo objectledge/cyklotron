@@ -797,7 +797,7 @@ public class ProposedDocumentData
         return fileUpload.getContainer("attachment_" + (index + 1));
     }
 
-    public List<Resource> getAttachments()
+    public List<Resource> getCurrentAttachments()
     {
         return attachments;
     }

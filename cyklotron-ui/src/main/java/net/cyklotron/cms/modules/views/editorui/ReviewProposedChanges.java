@@ -327,17 +327,17 @@ public class ReviewProposedChanges
 
             if(proposedData.isAttachmentsEnabled())
             {
-                if(!equals(proposedData.getAttachments(), publishedData.getAttachments())
+                if(!equals(proposedData.getCurrentAttachments(), publishedData.getCurrentAttachments())
                     || !equals(proposedData.getAttachmentDescriptions(), publishedData
                         .getAttachmentDescriptions()))
                 {
                     // Create a map of sequences for attachments descriptions
                     Map<Long, Sequence<DetailElement<String>>> attachmentsDesc = new HashMap<Long, Sequence<DetailElement<String>>>();
 
-                    for(Resource attachment : publishedData.getAttachments())
+                    for(Resource attachment : publishedData.getCurrentAttachments())
                     {
-                        int proposedAttachIn = proposedData.getAttachments().indexOf(attachment);
-                        int publishedAttachIn = publishedData.getAttachments().indexOf(attachment);
+                        int proposedAttachIn = proposedData.getCurrentAttachments().indexOf(attachment);
+                        int publishedAttachIn = publishedData.getCurrentAttachments().indexOf(attachment);
 
                         if(proposedAttachIn != -1 && publishedAttachIn != -1)
                         {
@@ -353,11 +353,11 @@ public class ReviewProposedChanges
                                 Splitter.WORD_BOUNDARY_SPLITTER));
                         }
                     }
-                    for(Resource attachment : proposedData.getAttachments())
+                    for(Resource attachment : proposedData.getCurrentAttachments())
                     {
                         if(!attachmentsDesc.containsKey(attachment.getId()))
                         {
-                            int proposedAttachIn = proposedData.getAttachments()
+                            int proposedAttachIn = proposedData.getCurrentAttachments()
                                 .indexOf(attachment);
                             attachmentsDesc.put(attachment.getId(), DiffUtil.diff(proposedData
                                 .getAttachmentDescription(proposedAttachIn), "",
@@ -366,9 +366,9 @@ public class ReviewProposedChanges
                     }
 
                     templatingContext.put("attachmentsDesc", attachmentsDesc);
-                    templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
+                    templatingContext.put("proposedDocAttachments", proposedData.getCurrentAttachments());
                     templatingContext
-                        .put("publishedDocAttachments", publishedData.getAttachments());
+                        .put("publishedDocAttachments", publishedData.getCurrentAttachments());
 
                     isDocEquals = false;
                 }

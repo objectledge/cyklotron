@@ -329,8 +329,8 @@ public class SaveProposedChanges
                     Relation relation = relatedService.getRelation(coralSession);
                     RelationModification modification = new RelationModification();
 
-                    List<Resource> publishedDocAttachments = publishedData.getAttachments();
-                    List<Resource> proposedDocAttachments = proposedData.getAttachments();
+                    List<Resource> publishedDocAttachments = publishedData.getCurrentAttachments();
+                    List<Resource> proposedDocAttachments = proposedData.getCurrentAttachments();
 
                     List<Resource> toRemove = new ArrayList<Resource>(publishedDocAttachments);
                     List<Resource> toAdd = new ArrayList<Resource>(proposedDocAttachments);
@@ -358,7 +358,7 @@ public class SaveProposedChanges
                 }
                 else if(parameters.get("docAttachments", "").equals("reject"))
                 {
-                    proposedData.setAttachments(publishedData.getAttachments());
+                    proposedData.setAttachments(publishedData.getCurrentAttachments());
                 }
                 if(!parameters.get("redactors_note", "").equals(node.getRedactorsNote()))
                 {
