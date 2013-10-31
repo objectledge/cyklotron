@@ -30,7 +30,7 @@
       <value>Brak wymaganego parametru.</value>
     </prefix>
     <prefix name="updated_successfully">
-      <value>Zmiany w prenumeracie zapisano pomyślnie.</value>
+      <value>Zmiany w newsletterze zapisano pomyślnie.</value>
     </prefix>
     <prefix name="address_missing">
       <value>Wpisz adres e-mail.</value>
