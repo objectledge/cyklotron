@@ -124,9 +124,6 @@
     <prefix name="invalid_html">
       <value>'Content' field contains unwanted chars.</value>
     </prefix>
-    <prefix name="invalid_captcha_verification">
-      <value>incorrect Captcha string.</value>
-    </prefix>
     <prefix name="updated_successfully">
       <value>Updated successfully.</value>
     </prefix>
