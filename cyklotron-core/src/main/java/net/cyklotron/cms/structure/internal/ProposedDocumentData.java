@@ -669,7 +669,15 @@ public class ProposedDocumentData
             if(imageMaxSize != 0 && contentType.startsWith("image/"))
             {
                 is.reset();
-                BufferedImage srcImage = ImageIO.read(is);
+                BufferedImage srcImage;
+                try
+                {
+                    srcImage = ImageIO.read(is);
+                }
+                catch(Exception e)
+                {
+                    throw new IIOException("image reading error", e);
+                }
                 BufferedImage targetImage = null;
                 try
                 {
