@@ -68,7 +68,8 @@ public class UpdateProposedDocument
 
             CmsData cmsData = cmsDataFactory.getCmsData(context);
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
-            ProposedDocumentData data = new ProposedDocumentData(screenConfig,logger);
+            ProposedDocumentData data = new ProposedDocumentData(screenConfig,
+                documentService.getPreferredImageSizes(), logger);
             data.fromParameters(parameters, coralSession);
             data.setOrigin(cmsData.getNode());
 
@@ -80,7 +81,7 @@ public class UpdateProposedDocument
             }
 
             // file upload - checking
-            if(valid && !data.isFileUploadValid(coralSession, uploadService))
+            if(valid && !data.isFileUploadValid(coralSession, uploadService, filesService))
             {
                 valid = false;
                 templatingContext.put("result", data.getValidationFailure());
@@ -89,15 +90,12 @@ public class UpdateProposedDocument
             if(valid && data.isAttachmentsEnabled())
             {
                 DirectoryResource dir = data.getAttachmenDirectory(coralSession);
-                final int maxSize = screenConfig.getInt("attachemnt_images_max_size",
-                    documentService.getPreferredImageSizes().getLarge());
-                for(int i = data.getAttachments().size(); i < data.getAttachmentsMaxCount(); i++)
+                for(int i = 0; i < data.getNewAttachmentsCount()
+                    && data.getCurrentAttachments().size() + i < data.getAttachmentsMaxCount(); i++)
                 {
-                    FileResource attachment = createAttachment(data, i, dir, maxSize, coralSession);
-                    if(attachment != null)
-                    {
-                        data.addAttachment(attachment);
-                    }
+                    FileResource attachment = createAttachment(data, data.getCurrentAttachments()
+                        .size() + i, dir, coralSession);
+                    data.addAttachment(attachment);
                 }
 
                 Set<Resource> publishedAttachments = new HashSet<Resource>(Arrays

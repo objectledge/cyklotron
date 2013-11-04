@@ -36,6 +36,7 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.modules.views.documents.BaseSkinableDocumentScreen;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
@@ -57,17 +58,21 @@ public class ReviewProposedChanges
 
     private HTMLService htmlService;
 
+    private final DocumentService documentService;
+
     public ReviewProposedChanges(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, StructureService structureService,
         StyleService styleService, SiteService siteService, RelatedService relatedService,
-        UserManager userManager, CategoryService categoryService, HTMLService htmlService)
+        UserManager userManager, CategoryService categoryService, HTMLService htmlService,
+        DocumentService documentService)
     {
         super(context, logger, preferencesService, cmsDataFactory, tableStateManager,
                         structureService, styleService, siteService, relatedService);
         this.userManager = userManager;
         this.categoryService = categoryService;
         this.htmlService = htmlService;
+        this.documentService = documentService;
     }
 
     @Override
@@ -109,8 +114,8 @@ public class ReviewProposedChanges
 
             proposedData.fromProposal(node, coralSession);
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());
-            proposedData.setConfiguration(screenConfig);
-            publishedData.setConfiguration(screenConfig);
+            proposedData.setConfiguration(screenConfig, documentService.getPreferredImageSizes());
+            publishedData.setConfiguration(screenConfig, documentService.getPreferredImageSizes());
             publishedData.fromNode(node, categoryService, relatedService, coralSession);
 
             NameComparator<CategoryResource> comparator = new NameComparator<CategoryResource>(
@@ -321,17 +326,17 @@ public class ReviewProposedChanges
 
             if(proposedData.isAttachmentsEnabled())
             {
-                if(!equals(proposedData.getAttachments(), publishedData.getAttachments())
+                if(!equals(proposedData.getCurrentAttachments(), publishedData.getCurrentAttachments())
                     || !equals(proposedData.getAttachmentDescriptions(), publishedData
                         .getAttachmentDescriptions()))
                 {
                     // Create a map of sequences for attachments descriptions
                     Map<Long, Sequence<DetailElement<String>>> attachmentsDesc = new HashMap<Long, Sequence<DetailElement<String>>>();
 
-                    for(Resource attachment : publishedData.getAttachments())
+                    for(Resource attachment : publishedData.getCurrentAttachments())
                     {
-                        int proposedAttachIn = proposedData.getAttachments().indexOf(attachment);
-                        int publishedAttachIn = publishedData.getAttachments().indexOf(attachment);
+                        int proposedAttachIn = proposedData.getCurrentAttachments().indexOf(attachment);
+                        int publishedAttachIn = publishedData.getCurrentAttachments().indexOf(attachment);
 
                         if(proposedAttachIn != -1 && publishedAttachIn != -1)
                         {
@@ -347,11 +352,11 @@ public class ReviewProposedChanges
                                 Splitter.WORD_BOUNDARY_SPLITTER));
                         }
                     }
-                    for(Resource attachment : proposedData.getAttachments())
+                    for(Resource attachment : proposedData.getCurrentAttachments())
                     {
                         if(!attachmentsDesc.containsKey(attachment.getId()))
                         {
-                            int proposedAttachIn = proposedData.getAttachments()
+                            int proposedAttachIn = proposedData.getCurrentAttachments()
                                 .indexOf(attachment);
                             attachmentsDesc.put(attachment.getId(), DiffUtil.diff(proposedData
                                 .getAttachmentDescription(proposedAttachIn), "",
@@ -360,9 +365,9 @@ public class ReviewProposedChanges
                     }
 
                     templatingContext.put("attachmentsDesc", attachmentsDesc);
-                    templatingContext.put("proposedDocAttachments", proposedData.getAttachments());
+                    templatingContext.put("proposedDocAttachments", proposedData.getCurrentAttachments());
                     templatingContext
-                        .put("publishedDocAttachments", publishedData.getAttachments());
+                        .put("publishedDocAttachments", publishedData.getCurrentAttachments());
 
                     isDocEquals = false;
                 }

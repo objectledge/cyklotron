@@ -41,6 +41,7 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
+import net.cyklotron.cms.documents.DocumentService;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.modules.actions.structure.BaseAddEditNodeAction;
@@ -68,14 +69,18 @@ public class SaveProposedChanges
 
     private RelatedService relatedService;
 
+    private final DocumentService documentService;
+
     public SaveProposedChanges(Logger logger, StructureService structureService,
         CmsDataFactory cmsDataFactory, StyleService styleService, CategoryService categoryService,
         FileUpload uploadService, FilesService filesService,
-        CoralSessionFactory coralSessionFactory, RelatedService relatedService)
+        CoralSessionFactory coralSessionFactory, RelatedService relatedService,
+        DocumentService documentService)
     {
         super(logger, structureService, cmsDataFactory, styleService);
         this.categoryService = categoryService;
         this.relatedService = relatedService;
+        this.documentService = documentService;
     }
 
     /**
@@ -100,7 +105,8 @@ public class SaveProposedChanges
                 ProposedDocumentData publishedData = new ProposedDocumentData(logger);
                 proposedData.fromProposal(node, coralSession);
                 Parameters screenConfig = cmsData.getEmbeddedScreenConfig(proposedData.getOrigin());
-                proposedData.setConfiguration(screenConfig);
+                proposedData.setConfiguration(screenConfig,
+                    documentService.getPreferredImageSizes());
 
                 if(parameters.get("title", "").equals("accept"))
                 {
@@ -333,7 +339,8 @@ public class SaveProposedChanges
                     coralSession.getRelationManager().updateRelation(relation, modification);
                 }
 
-                publishedData.setConfiguration(screenConfig);
+                publishedData.setConfiguration(screenConfig,
+                    documentService.getPreferredImageSizes());
                 publishedData.fromNode(node, categoryService, relatedService, coralSession);
 
                 if(parameters.get("docAttachments", "").equals("accept"))
@@ -341,8 +348,8 @@ public class SaveProposedChanges
                     Relation relation = relatedService.getRelation(coralSession);
                     RelationModification modification = new RelationModification();
 
-                    List<Resource> publishedDocAttachments = publishedData.getAttachments();
-                    List<Resource> proposedDocAttachments = proposedData.getAttachments();
+                    List<Resource> publishedDocAttachments = publishedData.getCurrentAttachments();
+                    List<Resource> proposedDocAttachments = proposedData.getCurrentAttachments();
 
                     List<Resource> toRemove = new ArrayList<Resource>(publishedDocAttachments);
                     List<Resource> toAdd = new ArrayList<Resource>(proposedDocAttachments);
@@ -370,7 +377,7 @@ public class SaveProposedChanges
                 }
                 else if(parameters.get("docAttachments", "").equals("reject"))
                 {
-                    proposedData.setAttachments(publishedData.getAttachments());
+                    proposedData.setAttachments(publishedData.getCurrentAttachments());
                 }
                 if(!parameters.get("redactors_note", "").equals(node.getRedactorsNote()))
                 {

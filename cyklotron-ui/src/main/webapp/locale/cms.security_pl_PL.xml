@@ -116,6 +116,9 @@
         <prefix name="team_member">
           <value>Członek zespołu</value>
         </prefix>
+        <prefix name="user">
+          <value>Zwykły użytkownik serwisu</value>
+        </prefix>
         <prefix name="senior_editor">
           <value>Samodzielny redaktor</value>
         </prefix>

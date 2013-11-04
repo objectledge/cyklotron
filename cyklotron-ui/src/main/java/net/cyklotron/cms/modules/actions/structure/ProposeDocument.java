@@ -105,7 +105,8 @@ public class ProposeDocument
         try
         {
             // get parameters
-            ProposedDocumentData data = new ProposedDocumentData(screenConfig,logger);
+            ProposedDocumentData data = new ProposedDocumentData(screenConfig,
+                documentService.getPreferredImageSizes(), logger);
             data.fromParameters(parameters, coralSession);
 
             // check required parameters
@@ -116,7 +117,7 @@ public class ProposeDocument
             }
         
             // file upload - checking
-            if(valid && !data.isFileUploadValid(coralSession, uploadService))
+            if(valid && !data.isFileUploadValid(coralSession, uploadService, filesService))
             {
                 valid = false;
                 templatingContext.put("result", data.getValidationFailure());
@@ -181,6 +182,7 @@ public class ProposeDocument
                     // add navigation node
                     node = structureService.addDocumentNode(coralSession, data.getName(), data.getTitle(),
                         parent, subject);
+                    setState(coralSession, subject, node);
                 }
                 catch(NavigationNodeAlreadyExistException e)
                 {
@@ -189,16 +191,12 @@ public class ProposeDocument
                 }
             }
 
-            if(valid)
+            if(valid && node != null)
             {
                 data.toNode(node);
                 node.setSequence(getMaxSequence(coralSession, parent));
                 assignCategories(data, coralSession, node, parentCategories);
-                final int maxSize = screenConfig.getInt("attachemnt_images_max_size",
-                    documentService.getPreferredImageSizes().getLarge());
-                uploadAndAttachFiles(node, data,
-                    maxSize, coralSession);
-                setState(coralSession, subject, node);
+                uploadAndAttachFiles(node, data, coralSession);
                 setOwner(node, context);
                 structureService.updateNode(coralSession, node, data.getName(), true, subject);
                 
@@ -223,24 +221,23 @@ public class ProposeDocument
     }
 
     private void uploadAndAttachFiles(DocumentNodeResource node, ProposedDocumentData data,
-        int maxSize, CoralSession coralSession)
+        CoralSession coralSession)
         throws ProcessingException
     {
         try
         {
             if(data.isAttachmentsEnabled())
             {
-                ResourceList<FileResource> attachments = new ResourceList<FileResource>(coralSessionFactory);
+                ResourceList<FileResource> attachments = new ResourceList<FileResource>(
+                    coralSessionFactory);
                 DirectoryResource dir = data.getAttachmenDirectory(coralSession);
-                for (int i = 0; i < data.getAttachmentsMaxCount(); i++)
+                for(int i = 0; i < data.getNewAttachmentsCount(); i++)
                 {
-                    FileResource attachment = createAttachment(data, i, dir, maxSize, coralSession);
-                    if(attachment != null)
-                    {
-                        attachments.add(attachment);
-                    }
+                    FileResource attachment = createAttachment(data, i, dir, coralSession);
+                    attachments.add(attachment);
                 }
-                relatedService.setRelatedTo(coralSession, node, attachments.toArray(new Resource[attachments.size()])); 
+                relatedService.setRelatedTo(coralSession, node,
+                    attachments.toArray(new Resource[attachments.size()]));
                 node.setRelatedResourcesSequence(attachments);
                 node.update();
             }
@@ -297,9 +294,8 @@ public class ProposeDocument
         }
     }
 
-    private void setOwner(NavigationNodeResource node,
-        Context context)
-    throws ProcessingException
+    private void setOwner(NavigationNodeResource node, Context context)
+        throws ProcessingException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);
         Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
