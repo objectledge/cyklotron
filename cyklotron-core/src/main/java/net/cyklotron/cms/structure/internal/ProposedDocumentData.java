@@ -666,6 +666,7 @@ public class ProposedDocumentData
             byte[] srcBytes = IOUtils.toByteArray(uploadedFile.getInputStream());
             final ByteArrayInputStream is = new ByteArrayInputStream(srcBytes);
             String contentType = filesService.detectMimeType(is, uploadedFile.getFileName());
+            byte[] targetBytes = srcBytes;
             if(imageMaxSize != 0 && contentType.startsWith("image/"))
             {
                 is.reset();
@@ -687,7 +688,8 @@ public class ProposedDocumentData
                             Scalr.Mode.AUTOMATIC, imageMaxSize, imageMaxSize);
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         ImageIO.write(targetImage, "jpeg", baos);
-                        add(attachmentContents, index, baos.toByteArray());
+                        baos.flush();
+                        targetBytes = baos.toByteArray();
                         contentType = "image/jpeg";
                     }
                 }
@@ -700,10 +702,7 @@ public class ProposedDocumentData
                     }
                 }
             }
-            else
-            {
-                add(attachmentContents, index, srcBytes);
-            }
+            add(attachmentContents, index, targetBytes);
             add(attachmentTypes, index, contentType);
             add(attachmentNames, index,
                 ProposedDocumentData.getAttachmentName(uploadedFile.getFileName()));
