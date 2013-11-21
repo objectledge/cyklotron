@@ -90,11 +90,10 @@ public class UpdateProposedDocument
             if(valid && data.isAttachmentsEnabled())
             {
                 DirectoryResource dir = data.getAttachmenDirectory(coralSession);
-                for(int i = 0; i < data.getNewAttachmentsCount()
-                    && data.getCurrentAttachments().size() + i < data.getAttachmentsMaxCount(); i++)
+                for(int i = data.getCurrentAttachments().size(); i < data.getNewAttachmentsCount()
+                    && i < data.getAttachmentsMaxCount(); i++)
                 {
-                    FileResource attachment = createAttachment(data, data.getCurrentAttachments()
-                        .size() + i, dir, coralSession);
+                    FileResource attachment = createAttachment(data, i, dir, coralSession);
                     data.addAttachment(attachment);
                 }
 
@@ -104,7 +103,8 @@ public class UpdateProposedDocument
                 for(long id : parameters.getLongs("remove_attachment"))
                 {
                     FileResource file = data.removeAttachment(id, coralSession);
-                    if(!publishedAttachments.contains(file) && !node.getThumbnail().equals(file))
+                    if(!publishedAttachments.contains(file)
+                        && (node.getThumbnail() == null || !node.getThumbnail().equals(file)))
                     {
                         filesService.deleteFile(coralSession, file);
                     }
