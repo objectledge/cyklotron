@@ -249,6 +249,21 @@ public abstract class AbstractIndex<T>
         updateThread = null;
     }
 
+    public synchronized void cancelUpdate()
+    {
+        try
+        {
+            writer.rollback();
+            writer.close();
+        }
+        catch(IOException e)
+        {
+            logger.error("error while cancelling index update", e);
+        }
+        writer = null;
+        updateThread = null;
+    }
+
     /**
      * Checks whether a Location exists with given field exactly matching a value.
      * 

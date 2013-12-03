@@ -153,14 +153,12 @@ public class LocationDatabaseServiceImpl
             {
                 index.addItem(location);
             }
+            index.endUpdate();
         }
         catch(Exception e)
         {
+            index.cancelUpdate();
             logger.error("update failed", e);
-        }
-        finally
-        {
-            index.endUpdate();
         }
     }
 }

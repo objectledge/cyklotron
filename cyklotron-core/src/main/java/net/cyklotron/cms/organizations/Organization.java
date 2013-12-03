@@ -36,6 +36,8 @@ public class Organization
 
     private String province;
 
+    private String county;
+
     private String city;
 
     private String street;
@@ -50,12 +52,20 @@ public class Organization
 
     private String email;
 
-    public Organization(long id, String name, String province, String city, String street,
-        String postCode, String tel, String fax, String url, String email)
+    private String nip;
+
+    private String regon;
+
+    private String krs;
+
+    public Organization(long id, String name, String province, String county, String city,
+        String street, String postCode, String tel, String fax, String url, String email,
+        String nip, String regon, String krs)
     {
         this.id = id;
         this.name = name;
         this.province = province;
+        this.county = county;
         this.city = city;
         this.street = street;
         this.postCode = postCode;
@@ -63,12 +73,15 @@ public class Organization
         this.fax = fax;
         this.url = url;
         this.email = email;
+        this.nip = nip;
+        this.regon = regon;
+        this.krs = krs;
     }
 
-    public Organization(long id, String name, String province, String city, String street,
-        String postCode)
+    public Organization(long id, String name, String province, String county, String city,
+        String street, String postCode)
     {
-        this(id, name, province, city, street, postCode, "", "", "", "");
+        this(id, name, province, county, city, street, postCode, "", "", "", "", "", "", "");
     }
 
     public Long getId()
@@ -94,6 +107,16 @@ public class Organization
     public void setProvince(String province)
     {
         this.province = province;
+    }
+
+    public String getCounty()
+    {
+        return county;
+    }
+
+    public void setCounty(String county)
+    {
+        this.county = county;
     }
 
     public String getCity()
@@ -164,5 +187,35 @@ public class Organization
     public void setEmail(String email)
     {
         this.email = email;
+    }
+
+    public String getNip()
+    {
+        return nip;
+    }
+
+    public void setNip(String nip)
+    {
+        this.nip = nip;
+    }
+
+    public String getRegon()
+    {
+        return regon;
+    }
+
+    public void setRegon(String regon)
+    {
+        this.regon = regon;
+    }
+
+    public String getKrs()
+    {
+        return krs;
+    }
+
+    public void setKrs(String krs)
+    {
+        this.krs = krs;
     }
 }
