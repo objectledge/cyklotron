@@ -26,7 +26,14 @@ public class DocumentStateTool
         ProposedDocumentData data = new ProposedDocumentData(logger);
         if(doc.isProposedContentDefined())
         {
-            data.fromProposal(doc, coralSession);
+            try
+            {
+                data.fromProposal(doc, coralSession);
+            }
+            catch(Exception e)
+            {
+                return "DAMAEGED";
+            }
             if(data.isRemovalRequested())
             {
                 return "REMOVE_REQUEST";
