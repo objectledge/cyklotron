@@ -284,7 +284,8 @@ function showResponse2(req) {
   "REJECTED" : "Odrzucony",
   "PENDING" : "Oczekujący na publikację", 
   "UPDATE_REQUEST" : "Zgłoszono zmiany", 
-  "REMOVE_REQUEST" : "Zgłoszono do usunięcia"})	
+  "REMOVE_REQUEST" : "Zgłoszono do usunięcia",
+  "DAMAGED" : "Uszkodzony"})	
   
 <table width="100%" class="genericItemTask" cellspacing="0" id="T$tasks_id">
 ##  <tr> 
@@ -334,7 +335,7 @@ function showResponse2(req) {
  <td><nobr>$format_date.format($task.creationTime) </nobr></td> 
  <td>#cms_personal_credentials($task.createdBy)</td>
  <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor) </td>
- <td>$stateMap.get($state)</td>
+ <td#if($state == 'DAMAGED') style='color: red;'#end>$stateMap.get($state)</td>
  <td>
  #if($isSeniorEditor)
   #if($state == 'REMOVE_REQUEST')

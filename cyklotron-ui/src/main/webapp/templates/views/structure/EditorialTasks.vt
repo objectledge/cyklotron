@@ -312,7 +312,8 @@ function showResponse2(req) {
   "REJECTED" : "Rejected",
   "PENDING" : "Pending", 
   "UPDATE_REQUEST" : "Changes requested", 
-  "REMOVE_REQUEST" : "Removal requested"})
+  "REMOVE_REQUEST" : "Removal requested",
+  "DAMAGED": "Damaged"})
 	
 <table width="100%" class="genericItemTask" cellspacing="0" id="T$tasks_id">
 ##  <tr> 
@@ -367,7 +368,7 @@ function showResponse2(req) {
  <td><nobr>$format_date.format($task.creationTime) </nobr></td>
  <td>#cms_personal_credentials($task.createdBy)</td> 
  <td>#cms_personal_credentials($task.owner)##, ##cms_personal_credentials($task.last_editor) </td>
- <td>$stateMap.get($state)</td>
+ <td#if($state == 'DAMAGED') style='color: red;'#end>$stateMap.get($state)</td>
  <td>
   #if($state == 'REMOVE_REQUEST')
     <div id="cat1_$task.id"><a href="$link.view('structure.ReviewProposedChanges').set('doc_id', $task.id).set('remove_request', 1)">Show proposal</a></div>
