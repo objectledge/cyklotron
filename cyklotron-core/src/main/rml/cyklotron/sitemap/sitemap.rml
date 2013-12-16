@@ -1,5 +1,5 @@
 CREATE RESOURCE CLASS 'cms.sitemap.configuration'
-JAVA CLASS 'net.cyklotron.cms.sitemap.internal.SitemapConfiguration'
+JAVA CLASS 'net.cyklotron.cms.sitemap.internal.SitemapConfigurationImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
 DB TABLE 'cms_sitemap_configuration'
 SUPERCLASSES ( 'coral.Node' )
