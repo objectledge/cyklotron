@@ -93,6 +93,7 @@ public class SitemapWriter
                 {
                     end(batch);
                     batch = startBatch(index, workDir, ++seq, compress);
+                    cnt = 0;
                 }
                 writeItem(batch, item);
             }
