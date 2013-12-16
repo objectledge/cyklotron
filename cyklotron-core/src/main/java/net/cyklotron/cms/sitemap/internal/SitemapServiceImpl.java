@@ -102,10 +102,13 @@ public class SitemapServiceImpl
                                     "unable to generate site map for site %s because primary virtual host is not set",
                                     site.getName()));
                             }
-                            SitemapWriter sw = new SitemapWriter(fileSystem, basePath, domain,
-                                config.getCompress());
-                            sw.write(itemIterator(site, domain, config.getParticipantsConfig(),
-                                coralSession));
+                            else
+                            {
+                                SitemapWriter sw = new SitemapWriter(fileSystem, basePath, domain,
+                                    config.getCompress());
+                                sw.write(itemIterator(site, domain, config.getParticipantsConfig(),
+                                    coralSession));
+                            }
                         }
                         catch(Exception e)
                         {
