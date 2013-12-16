@@ -1199,4 +1199,9 @@
     <item name="name">Przyjazne ścieżki</item>
   </prefix>
   
+  <prefix name="sitemap">
+    <item name="name">Mapa serwisu</item>
+    <item name="description">Generowanie plików sitemap.xml dla silników wyszukiwania.</item>
+  </prefix>
+  
 </strings>
