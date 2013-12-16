@@ -24,6 +24,6 @@ ATTRIBUTES (
   vendor = 'caltha.pl',
   version = '1.0',
   priority = 5,
-  enabled = false,
+  enabled = true,
   required = false
 );
