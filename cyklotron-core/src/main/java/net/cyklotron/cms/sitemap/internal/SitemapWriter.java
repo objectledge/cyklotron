@@ -193,7 +193,7 @@ public class SitemapWriter
                 xsw.writeCharacters(image.getUri().toASCIIString());
                 xsw.writeEndElement();
 
-                if(image.getCaption() != null)
+                if(image.getCaption() != null && image.getCaption().trim().length() > 0)
                 {
                     xsw.writeStartElement(SITEMAP_IMAGE_NS, "caption");
                     xsw.writeCharacters(image.getCaption());
