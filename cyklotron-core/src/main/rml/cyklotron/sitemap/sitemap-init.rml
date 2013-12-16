@@ -1,3 +1,11 @@
+CREATE RESOURCE 'sitemaps'
+RESOURCE CLASS 'cms.sitemap.configuration'
+PARENT '/cms'
+ATTRIBUTES (
+  providerConfig = '@empty',
+  compress = 'false'
+);
+
 CREATE RESOURCE 'sitemap'
 RESOURCE CLASS 'integration.application'
 PARENT '/cms/applications'

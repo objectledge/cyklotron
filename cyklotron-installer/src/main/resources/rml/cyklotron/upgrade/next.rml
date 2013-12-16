@@ -1,3 +1,21 @@
+CREATE RESOURCE CLASS 'cms.sitemap.configuration'
+JAVA CLASS 'net.cyklotron.cms.sitemap.internal.SitemapConfiguration'
+HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
+DB TABLE 'cms_sitemap_configuration'
+SUPERCLASSES ( 'coral.Node' )
+ATTRIBUTES (
+  REQUIRED parameters providerConfig,
+  REQUIRED boolean compress
+);
+
+CREATE RESOURCE 'sitemaps'
+RESOURCE CLASS 'cms.sitemap.configuration'
+PARENT '/cms'
+ATTRIBUTES (
+  providerConfig = '@empty',
+  compress = 'false'
+);
+
 CREATE RESOURCE 'sitemap'
 RESOURCE CLASS 'integration.application'
 PARENT '/cms/applications'
