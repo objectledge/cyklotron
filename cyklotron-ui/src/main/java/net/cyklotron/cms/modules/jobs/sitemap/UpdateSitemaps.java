@@ -1,13 +1,11 @@
 package net.cyklotron.cms.modules.jobs.sitemap;
 
-import org.objectledge.context.Context;
-import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.pipeline.Valve;
+import org.objectledge.scheduler.Job;
 
 import net.cyklotron.cms.sitemap.SitemapService;
 
 public class UpdateSitemaps
-    implements Valve
+    extends Job
 {
     private final SitemapService sitemapService;
 
@@ -17,8 +15,7 @@ public class UpdateSitemaps
     }
 
     @Override
-    public void process(Context context)
-        throws ProcessingException
+    public void run(String[] arguments)
     {
         sitemapService.generateSitemaps();
     }
