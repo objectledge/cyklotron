@@ -134,7 +134,7 @@ public class SitemapWriter
         OutputStream os;
         if(compress)
         {
-            os = new GZIPOutputStream(fileSystem.getOutputStream(path + filename));
+            os = new GZIPOutputStream(fileSystem.getOutputStream(path + filename), true);
         }
         else
         {
