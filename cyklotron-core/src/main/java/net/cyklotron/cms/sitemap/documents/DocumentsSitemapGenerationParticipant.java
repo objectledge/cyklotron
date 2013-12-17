@@ -72,9 +72,7 @@ public class DocumentsSitemapGenerationParticipant
 
             final String uriScheme = site.getRequiresSecureChannel() ? "https" : "http";
 
-            final String pattern = parameters.get(domain, "/x/{id}").replace("{id}", "%d");
-
-            final String uriPattern = uriScheme + "://" + domain + pattern;
+            final String uriPattern = parameters.get(domain, "/x/{id}").replace("{id}", "%d");
 
             return new Iterator<SitemapItem>()
                 {
@@ -111,7 +109,16 @@ public class DocumentsSitemapGenerationParticipant
                     {
                         try
                         {
-                            return new URI(String.format(uriPattern, doc.getId()));
+                            if(doc.isQuickPathDefined())
+                            {
+                                return new URI(linkRenderer.getAbsoluteURL(coralSession, site,
+                                    doc.getQuickPath()));
+                            }
+                            else
+                            {
+                                return new URI(linkRenderer.getApplicationURL(coralSession, site)
+                                    + String.format(uriPattern, doc.getId()));
+                            }
                         }
                         catch(URISyntaxException e)
                         {
