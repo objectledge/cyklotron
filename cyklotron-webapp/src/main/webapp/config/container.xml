@@ -647,6 +647,20 @@
              
   <component class-key="net.cyklotron.cms.organizations.OrganizationRegistryService"
              class="net.cyklotron.cms.organizations.DummyOrganizationRegistryService"/>
+             
+  <component class="net.cyklotron.cms.sitemap.documents.DocumentsSitemapGenerationParticipant"/>
+  
+  <component class-key="net.cyklotron.cms.sitemap.SitemapService" 
+             class="net.cyklotron.cms.sitemap.internal.SitemapServiceImpl">
+   <sequence>
+     <parameter class-key="net.cyklotron.cms.sitemap.documents.DocumentsSitemapGenerationParticipant"/>
+   </sequence>
+   <parameter/>
+   <parameter/>
+   <parameter/>
+   <parameter/>
+   <parameter/>
+  </component>              
 
   <!-- remote management -->           
              
