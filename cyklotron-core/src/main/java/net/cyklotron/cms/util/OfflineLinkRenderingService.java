@@ -263,8 +263,7 @@ public class OfflineLinkRenderingService
     }
     
     
-    public String getViewURL(CoralSession coralSession, SiteResource site,
-        String view,
+    public String getViewURL(CoralSession coralSession, SiteResource site, String view,
         Parameters pathinfoParameters, Parameters queryStringParameters)
     {
         StringBuilder buff = new StringBuilder();
@@ -278,14 +277,14 @@ public class OfflineLinkRenderingService
         }
 
         
-        List pathInfoParameterNames = new ArrayList();
+        List<String> pathInfoParameterNames = new ArrayList<>();
         if(pathinfoParameters != null)
         {
             pathInfoParameterNames = Arrays.asList(pathinfoParameters.getParameterNames());
             Collections.sort(pathInfoParameterNames);
         }
 
-        List queryParameterNames = new ArrayList();
+        List<String> queryParameterNames = new ArrayList<>();
         if(queryStringParameters != null)
         {
             queryParameterNames = Arrays.asList(queryStringParameters.getParameterNames());
