@@ -158,7 +158,7 @@ public class SitemapServiceImpl
                 @Override
                 public boolean hasNext()
                 {
-                    if(inner == null)
+                    if(inner == null || !inner.hasNext())
                     {
                         if(outer.hasNext())
                         {
