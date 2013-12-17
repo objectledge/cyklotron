@@ -164,7 +164,7 @@ public class OfflineLinkRenderingService
             
             StringBuilder sb = new StringBuilder();
             sb.append(getContextURL(coralSession, site));
-            sb.append("files/");
+            sb.append("/files/");
             sb.append(site.getName());
             sb.append("/");
             sb.append(rootDirectory.getName());
@@ -189,7 +189,7 @@ public class OfflineLinkRenderingService
 
             StringBuilder sb = new StringBuilder();
             sb.append(getApplicationURL(coralSession, site));
-            sb.append("view/files.Download?");
+            sb.append("/view/files.Download?");
             sb.append("path=").append(path).append('&');
             sb.append("file_id=").append(file.getIdString());
             return sb.toString();
@@ -203,14 +203,14 @@ public class OfflineLinkRenderingService
     
     public String getCommonResourceURL(CoralSession coralSession, SiteResource site, String path)
     {
-        return getContextURL(coralSession, site) + "content/default/" + path;
+        return getContextURL(coralSession, site) + "/content/default/" + path;
     }
     
     public String getNodeURL(CoralSession coralSession, NavigationNodeResource node)
     {
         if(node.getQuickPath() == null)
         {
-            return getApplicationURL(coralSession, node.getSite()) + "x/" + node.getIdString();
+            return getApplicationURL(coralSession, node.getSite()) + "/x/" + node.getIdString();
         }
         else
         {
@@ -272,7 +272,7 @@ public class OfflineLinkRenderingService
         buff.append(getApplicationURL(coralSession, site));
         if(view != null && !view.equals(""))
         {
-            buff.append(webConfigurator.getViewToken());
+            buff.append('/').append(webConfigurator.getViewToken());
             buff.append('/').append(view);
         }
 
