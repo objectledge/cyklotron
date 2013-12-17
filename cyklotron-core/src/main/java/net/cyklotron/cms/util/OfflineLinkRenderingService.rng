@@ -37,6 +37,11 @@
     </element>
   </optional>
   <optional>
+    <element name="securePort">
+      <text/>
+    </element>
+  </optional>  
+  <optional>
     <element name="context">
       <text/>
     </element>
