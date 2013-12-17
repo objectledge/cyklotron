@@ -236,7 +236,7 @@ public class OfflineLinkRenderingService
         return buff.toString();
     }
     
-    protected String getApplicationURL(CoralSession coralSession, SiteResource site)
+    public String getApplicationURL(CoralSession coralSession, SiteResource site)
     {
         StringBuilder buff = new StringBuilder();
         buff.append(getContextURL(coralSession, site));
