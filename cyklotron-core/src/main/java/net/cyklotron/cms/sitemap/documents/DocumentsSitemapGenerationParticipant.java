@@ -5,7 +5,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -24,6 +23,7 @@ import net.cyklotron.cms.sitemap.RetrievalException;
 import net.cyklotron.cms.sitemap.SitemapGenerationParticipant;
 import net.cyklotron.cms.sitemap.SitemapImage;
 import net.cyklotron.cms.sitemap.SitemapItem;
+import net.cyklotron.cms.sitemap.SitemapResourceIterator;
 import net.cyklotron.cms.util.OfflineLinkRenderingService;
 
 public class DocumentsSitemapGenerationParticipant
@@ -74,33 +74,17 @@ public class DocumentsSitemapGenerationParticipant
 
             final String uriPattern = parameters.get(domain, "/x/{id}").replace("{id}", "%d");
 
-            return new Iterator<SitemapItem>()
+            return new SitemapResourceIterator<DocumentNodeResource>(rowIterator,
+                            DocumentNodeResource.class, log)
                 {
-                    private SitemapItem next;
-
-                    private boolean done = false;
-
-                    private SitemapItem fetchNext()
+                    protected SitemapItem item(DocumentNodeResource doc)
+                        throws RetrievalException
                     {
-                        while(rowIterator.hasNext())
+                        if(doc.canView(coralSession, anon))
                         {
-                            DocumentNodeResource doc = (DocumentNodeResource)rowIterator.next()
-                                .get();
-                            try
-                            {
-                                SitemapItem item = item(doc);
-                                if(item != null)
-                                {
-                                    return item;
-                                }
-                            }
-                            catch(RetrievalException e)
-                            {
-                                log.error("failed to generate site map item for document #"
-                                    + doc.getIdString());
-                            }
+                            return new SitemapItem(doc.getId(), docUri(doc),
+                                doc.getCustomModificationTime(), null, images(doc));
                         }
-                        done = true;
                         return null;
                     }
 
@@ -164,52 +148,6 @@ public class DocumentsSitemapGenerationParticipant
                             }
                         }
                         return images;
-                    }
-
-                    private SitemapItem item(DocumentNodeResource doc)
-                        throws RetrievalException
-                    {
-                        if(doc.canView(coralSession, anon))
-                        {
-                            return new SitemapItem(doc.getId(), docUri(doc),
-                                doc.getCustomModificationTime(), null, images(doc));
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    public boolean hasNext()
-                    {
-                        if(next == null && !done)
-                        {
-                            next = fetchNext();
-                        }
-                        return next != null;
-                    }
-
-                    @Override
-                    public SitemapItem next()
-                    {
-                        if(next == null && !done)
-                        {
-                            next = fetchNext();
-                        }
-                        if(next == null)
-                        {
-                            throw new NoSuchElementException();
-                        }
-                        else
-                        {
-                            SitemapItem tmp = next;
-                            next = null;
-                            return tmp;
-                        }
-                    }
-
-                    @Override
-                    public void remove()
-                    {
-                        throw new UnsupportedOperationException();
                     }
                 };
         }
