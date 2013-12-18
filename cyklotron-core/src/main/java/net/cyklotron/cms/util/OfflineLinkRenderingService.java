@@ -41,9 +41,9 @@ public class OfflineLinkRenderingService
     public static final int HTTPS_PORT_DEFAULT = 443;
     
     /** context parameter default value. */
-    public static final String CONTEXT_DEFAULT = "/";
+    public static final String CONTEXT_DEFAULT = "";
     
-    /** servletAndApp defaault value. */
+    /** servletAndApp default value. */
     public static final String SERVLET_DEFAULT = "";
     
     // instance variables ///////////////////////////////////////////////////
