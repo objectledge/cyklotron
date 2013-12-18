@@ -70,9 +70,8 @@ public class DocumentsSitemapGenerationParticipant
 
             final Iterator<QueryResults.Row> rowIterator = results.iterator();
 
-            final String uriScheme = site.getRequiresSecureChannel() ? "https" : "http";
-
-            final String uriPattern = parameters.get(domain, "/x/{id}").replace("{id}", "%d");
+            final String uriPattern = parameters.get(site.getName(), "/x/{id}").replace("{id}",
+                "%d");
 
             return new SitemapResourceIterator<DocumentNodeResource>(rowIterator,
                             DocumentNodeResource.class, log)
