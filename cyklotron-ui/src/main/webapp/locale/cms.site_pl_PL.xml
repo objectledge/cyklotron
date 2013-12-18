@@ -1,0 +1,27 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="SitemapSettings">
+    <prefix name="heading">
+      <item name="global">Ustawienia globalne</item>
+      <item name="participants">Ustawienia generatorów</item>
+    </prefix>    
+    <prefix name="label">
+      <item name="basePath">Ścieżka bazowa</item>
+      <item name="compress">Kompresja</item>
+    </prefix>
+    <prefix name="description">    
+      <item name="basePath">Katalog w którym będą generowane mapy serwisu, względem katalogu roboczego cyklotrona. Jeśli nie jest ustawiona, mapy nie będą generowane.</item>
+      <item name="compress">Kompresja gzip plików wynikowych.</item>
+    </prefix>
+    <prefix name="button">
+      <item name="save">Zapisz</item>
+    </prefix>
+    <prefix name="participants">
+      <prefix name="documents">
+        <item name="name">Dokumenty</item>
+        <item name="description">
+          Wzorce do generowania URLi dokumentów w poszczególnych serwisach. Przykład: wiadomosci.ngo.pl=/wiadomosci/{id}.html Jeśli nie ustawione, używany jest wzorzec /x/{id}
+        </item>
+      </prefix>
+    </prefix>
+  </prefix>
+</strings>

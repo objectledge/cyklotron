@@ -1,0 +1,52 @@
+#genericScreenHeader('MAPY SERWISÓW')
+  
+#result_inline_message('results.site')
+#set($ui_heading = $i18n.usePrefix("cms.${parametersTool.view}.heading"))
+#set($ui_label = $i18n.usePrefix("cms.${parametersTool.view}.label"))
+#set($ui_description = $i18n.usePrefix("cms.${parametersTool.view}.description"))
+
+
+<form name="form1" method="POST" action="$link.action('site.UpdateSitemapSettings')">
+<table width="100%" class="genericScreen" cellspacing="0">
+	<tr>
+		<th colspan="2">$ui_heading.global</th>
+	</tr>
+	<tr>
+        <td align="right"><label for="basePath"><b>$ui_label.basePath:</b></label></td>
+        <td width="90%">
+		    <input type="text" name="basePath" id="basePath" value="$!config.basePath" maxlength="150" style="width:100%">
+		    <p>$ui_description.basePath</p>
+        </td>
+    </tr>
+	<tr>
+        <td align="right"><label for="compress"><b>$ui_label.compress:</b></label></td>
+        <td width="90%">
+		    <input type="checkbox" name="compress" id="compress" value="true" #if($config.compress)checked#end/>
+		    <p>$ui_description.compress</p>
+        </td>
+    </tr>
+</table>
+
+<br/>
+
+<table width="100%" class="genericScreen" cellspacing="0">
+	<tr>
+		<th colspan="2">$ui_heading.participants</th>
+	</tr>
+#foreach($participant in $partipantsConfig.keySet())
+	#set($key = "config_$participant")
+	#set($ui_participant = $i18n.usePrefix("cms.${parametersTool.view}.participants.${participant}"))
+	<tr>
+        <td align="right"><label for="$key"><b>$ui_participant.name:</b></label></td>
+        <td width="90%">
+            <textarea name="$key" id="$key" rows="5" style="width: 100%;">$partipantsConfig.get($participant)</textarea>
+			<p>$ui_participant.description</p>
+        </td>
+	</tr>
+#end
+</table>	
+</form>
+
+#command_bar([['javascript:document.form1.submit();','Zapisz']])
+
+#genericScreenTrailer()

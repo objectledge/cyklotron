@@ -22,7 +22,10 @@
       #linkCell('' 'LISTA SERWERÓW WIRTUALNYCH' $link.view('site.VirtualSiteList'))
       #if($site)
         #linkCell('' 'DODAJ SERWER WIRTUALNY' $link.view('site.AddVirtualSite'))
-      #end
+	  #end
+	  #if(!$site)
+		#linkCell('' 'MAPY SERWISÓW' $link.view('site.SitemapSettings'))
+	  #end
     #genericNaviTrailer()
   
 
