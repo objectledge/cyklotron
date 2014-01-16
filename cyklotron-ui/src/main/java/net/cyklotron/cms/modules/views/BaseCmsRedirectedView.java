@@ -15,15 +15,6 @@
 // 
 package net.cyklotron.cms.modules.views;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.site.SiteException;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.skins.SkinException;
-import net.cyklotron.cms.skins.SkinService;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.pipeline.ProcessingException;
@@ -35,6 +26,15 @@ import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.EnclosingView;
+
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteException;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.skins.SkinException;
+import net.cyklotron.cms.skins.SkinService;
 
 /**
  * A default view.
@@ -119,12 +119,6 @@ public class BaseCmsRedirectedView extends AbstractBuilder
             {
                 //ignore it!
             }
-            templatingContext.put("doopa",view);
-            // elementy do fixa:
-            // klasa
-            // dla kazdego sajtu zalozyc wezel system_screens pod skinem
-            //
-            //
         }
         return super.build(newTemplate, embeddedBuildResults); 
     }
