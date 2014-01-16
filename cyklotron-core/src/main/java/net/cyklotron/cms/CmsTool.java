@@ -1,7 +1,10 @@
 package net.cyklotron.cms;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.jcontainer.dna.Logger;
@@ -18,6 +21,8 @@ import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.comparator.AttributeComparator;
+import org.objectledge.coral.table.comparator.MultiAttributeComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
@@ -665,6 +670,33 @@ public class CmsTool
         throws ProcessingException
     {
         return cmsDataFactory.getCmsData(context).isApplicationEnabled(appName);
+    }
+
+    public List<Resource> sort(String rClassName, String dirName, List<String> attrNames,
+        List<Resource> resources)
+    {
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
+        I18nContext i18n = context.getAttribute(I18nContext.class);
+        ResourceClass<Resource> rc = (ResourceClass<Resource>)integrationService.getResourceClass(
+            coralSession, integrationService.getResourceClass(coralSession, rClassName));
+        AttributeComparator.Direction dir = dirName.equals("ASC") ? AttributeComparator.Direction.ASC
+            : AttributeComparator.Direction.DESC;
+        final String[] attrs = attrNames.toArray(new String[attrNames.size()]);
+        sort(rc, dir, i18n.get(), attrs, resources);
+        return resources;
+    }
+
+    public List<Resource> sort(String rClassName, String dirName, List<String> attrNames,
+        Resource[] resources)
+    {
+        return sort(rClassName, dirName, attrNames, Arrays.asList(resources));
+    }
+
+    private <T extends Resource> void sort(ResourceClass<T> rc, AttributeComparator.Direction dir,
+        Locale locale, String[] attrNames, List<T> resources)
+    {
+        Comparator<T> c = new MultiAttributeComparator<>(rc, locale, dir, attrNames);
+        Collections.sort(resources, c);
     }
 }
 
