@@ -26,7 +26,6 @@ import net.cyklotron.cms.skins.SkinService;
 
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
@@ -79,7 +78,6 @@ public class BaseCmsRedirectedView extends AbstractBuilder
     public String build(Template template, String embeddedBuildResults)
         throws BuildException, ProcessingException
     {
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);
         MVCContext mvcContext = MVCContext.getMVCContext(context);
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
@@ -99,22 +97,6 @@ public class BaseCmsRedirectedView extends AbstractBuilder
             catch(SiteException e)
             {
                 //ignore it!
-            }
-        }
-        if(site == null)
-        {
-            Parameters systemPreferences = preferencesService.getSystemPreferences(coralSession); 
-            String globalComponentsDataSiteName = systemPreferences.get("globalComponentsData",null);
-            if(globalComponentsDataSiteName != null)
-            {
-                try
-                {
-                    site = siteService.getSite(coralSession,globalComponentsDataSiteName); 
-                }
-                catch(SiteException e)
-                {
-                    // ignore it!
-                }
             }
         }
         Template newTemplate = template;
