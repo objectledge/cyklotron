@@ -102,7 +102,7 @@ public class BaseCmsRedirectedView extends AbstractBuilder
         Template newTemplate = template;
         if(site != null)
         {
-            String view = mvcContext.getView();
+            String view = viewToSystemScreen(mvcContext.getView());
             try
             {
                 String skin = skinService.getCurrentSkin(coralSession, site);
@@ -123,6 +123,11 @@ public class BaseCmsRedirectedView extends AbstractBuilder
         return super.build(newTemplate, embeddedBuildResults); 
     }
     
+    protected String viewToSystemScreen(String view)
+    {
+        return view;
+    }
+
     /**
      * {@inheritDoc}
      */
