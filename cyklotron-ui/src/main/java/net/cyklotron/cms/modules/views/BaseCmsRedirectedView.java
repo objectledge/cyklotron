@@ -109,6 +109,7 @@ public class BaseCmsRedirectedView extends AbstractBuilder
                 if(skinService.hasSystemScreenTemplate(coralSession, site, skin, view))
                 {
                     newTemplate = skinService.getSystemScreenTemplate(coralSession, site, skin, view);
+                    context.setAttribute("CmsViewOverride", true);
                 }
             }
             catch(SkinException e)
@@ -133,6 +134,13 @@ public class BaseCmsRedirectedView extends AbstractBuilder
      */
     public EnclosingView getEnclosingView(String thisViewName)
     {
-        return new EnclosingView("Page");
+        if(context.getAttribute("CmsViewOverride") != null)
+        {
+            return new EnclosingView("Page");
+        }
+        else
+        {
+            return EnclosingView.DEFAULT;
+        }
     }
 }
