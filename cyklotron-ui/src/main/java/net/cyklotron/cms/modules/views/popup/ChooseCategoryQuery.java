@@ -27,11 +27,11 @@ import net.cyklotron.cms.site.SiteResource;
  * @author <a href="pablo@caltha.pl">Pawel Potempski</a>
  * @version $Id: ChooseCategoryQueryPool.java,v 1.3 2005-01-26 09:00:36 pablo Exp $
  */
-public class ChooseCategoryQueryPool extends BaseCMSScreen
+public class ChooseCategoryQuery extends BaseCMSScreen
 {
     protected CategoryQueryService categoryQueryService;
     
-    public ChooseCategoryQueryPool(org.objectledge.context.Context context, Logger logger,
+    public ChooseCategoryQuery(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         TableStateManager tableStateManager, CategoryQueryService categoryQueryService)
     {
@@ -45,13 +45,12 @@ public class ChooseCategoryQueryPool extends BaseCMSScreen
         SiteResource site = getSite();
         try
         {
-            Resource queryPoolRoot = categoryQueryService.getCategoryQueryPoolRoot(coralSession,
-                site);
+            Resource queryRoot = categoryQueryService.getCategoryQueryRoot(coralSession, site);
             TableState state = tableStateManager.getState(context,
-                "cms:category,query,CategoryQueryPoolList:" + site.getIdString());
+                "cms:category,query,CategoryQueryList:" + site.getIdString());
             if(state.isNew())
             {
-                state.setRootId(queryPoolRoot.getIdString());
+                state.setRootId(queryRoot.getIdString());
                 state.setTreeView(false);
                 state.setShowRoot(false);
             }
