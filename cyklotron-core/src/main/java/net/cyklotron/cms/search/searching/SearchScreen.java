@@ -278,7 +278,7 @@ public class SearchScreen
 
     
     private TableTool<LuceneSearchHit> getHitsTable(CoralSession coralSession, SearchMethod method,
-        TableState state, List<TableFilter<LuceneSearchHit>> filters,
+        TableState state, List<TableFilter<? super LuceneSearchHit>> filters,
         TableModel<LuceneSearchHit> model, LuceneSearchHandler searchHandler,
         CategoryQueryBuilder queryBuilder)
         throws TableException, SearchingException

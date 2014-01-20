@@ -134,7 +134,7 @@ public class CalendarEvents
                 templatingContext.put("queries", queryPool.getQueries());
             }
 
-            List<TableFilter<LuceneSearchHit>> filters = new ArrayList<TableFilter<LuceneSearchHit>>();
+            List<TableFilter<? super LuceneSearchHit>> filters = new ArrayList<>();
             TableFilter<LuceneSearchHit> filter = new HitsViewPermissionFilter<LuceneSearchHit>(
                 coralSession.getUserSubject(), coralSession);
             filters.add(filter);

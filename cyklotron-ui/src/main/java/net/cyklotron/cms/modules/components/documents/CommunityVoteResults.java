@@ -11,20 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.category.query.CategoryQueryResource;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.modules.components.SkinableCMSComponent;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.skins.SkinService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.structure.StructureException;
-import net.cyklotron.cms.structure.vote.CommunityVote;
-import net.cyklotron.cms.structure.vote.SortOrder;
-import net.cyklotron.cms.util.CmsResourceListTableModel;
-import net.cyklotron.cms.util.ProtectedValidityViewFilter;
-
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -32,7 +18,6 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
@@ -43,6 +28,19 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.finders.MVCFinder;
+
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
+import net.cyklotron.cms.integration.IntegrationService;
+import net.cyklotron.cms.modules.components.SkinableCMSComponent;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.skins.SkinService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.vote.CommunityVote;
+import net.cyklotron.cms.structure.vote.SortOrder;
+import net.cyklotron.cms.util.CmsResourceListTableModel;
+import net.cyklotron.cms.util.ProtectedValidityViewFilter;
 
 public class CommunityVoteResults
     extends SkinableCMSComponent
@@ -137,8 +135,8 @@ public class CommunityVoteResults
             TableFilter<NavigationNodeResource> filter = new ProtectedValidityViewFilter<NavigationNodeResource>(
                 coralSession, cmsData, coralSession.getUserSubject());
 
-            List<TableFilter<NavigationNodeResource>> tableFilters = Collections
-                .singletonList(filter);
+            List<TableFilter<? super NavigationNodeResource>> tableFilters = new ArrayList<>();
+            tableFilters.add(filter);
 
             List<String> sortOrderNames = new ArrayList<String>(primarySortOrders.size());
 

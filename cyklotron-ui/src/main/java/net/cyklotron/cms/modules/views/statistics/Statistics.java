@@ -2,7 +2,6 @@ package net.cyklotron.cms.modules.views.statistics;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +25,6 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.BeanTableColumn;
 import org.objectledge.table.InverseFilter;
-import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
@@ -344,7 +342,7 @@ public class Statistics extends CategoryList
                     teamState.setSortColumnName("subject");
                     teamState.setPageSize(0);
                 }
-                List<TableFilter<StatisticsItem>> filters = new ArrayList<TableFilter<StatisticsItem>>();
+                List<TableFilter<? super StatisticsItem>> filters = new ArrayList<>();
                 filters.add(teamMemberFilter);
                 TableTool<StatisticsItem> teamTable = new TableTool<StatisticsItem>(teamState,
                     filters, model);

@@ -108,7 +108,7 @@ public abstract class BaseChooseResource
             templatingContext.put("res_class_filter", new CmsResourceClassFilter(coralSession,
                 integrationService, new String[] { resourceClassResource.getName() }));
 
-            ArrayList<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
+            ArrayList<TableFilter<? super Resource>> filters = new ArrayList<>();
             filters.add(new ProtectedViewFilter(coralSession, coralSession.getUserSubject()));
             filters.add(new SeeableFilter());
             String search = parameters.get("search", "");
