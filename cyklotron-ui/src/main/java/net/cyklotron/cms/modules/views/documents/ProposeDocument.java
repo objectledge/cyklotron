@@ -346,8 +346,16 @@ public class ProposeDocument
             ids.add(r.getId());
         }
 
-        String catQuery = includeQuery.getQuery().replace(";", "")
-            + siteClause(includeQuery, coralSession) + ";";
+        String catQuery;
+        if(includeQuery.getQuery("").trim().length() > 0)
+        {
+            catQuery = includeQuery.getQuery().replace(";", "") + " * "
+                + siteClause(includeQuery, coralSession) + ";";
+        }
+        else
+        {
+            catQuery = siteClause(includeQuery, coralSession) + ";";
+        }
 
         final ResourceIdentifierResolver resolver = getResolver(coralSession);
 
@@ -374,9 +382,9 @@ public class ProposeDocument
         throws SiteException
     {
         StringBuilder buff = new StringBuilder();
-        if(query.isAcceptedSitesDefined())
+        if(query.isAcceptedSitesDefined() && query.getAcceptedSites().trim().length() > 0)
         {
-            buff.append(" * MAP('structure.SiteDocs') { ");
+            buff.append("MAP('structure.SiteDocs') { ");
             String[] siteNames = query.getAcceptedSiteNames();
             for(int i = 0; i < siteNames.length; i++)
             {
