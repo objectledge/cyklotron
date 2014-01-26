@@ -660,7 +660,9 @@
    <parameter/>
    <parameter/>
    <parameter/>
-  </component>              
+  </component>
+  
+  <component class="net.cyklotron.cms.modules.views.documents.MyDocumentsImpl"/>  
 
   <!-- remote management -->           
              
