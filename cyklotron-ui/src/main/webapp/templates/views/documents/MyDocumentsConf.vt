@@ -1,0 +1,98 @@
+#set($ui_strings = $i18n.usePrefix("cms.structure.MyDocumentsConf.strings"))
+#set($ui_labels = $i18n.usePrefix("cms.structure.MyDocumentsConf.labels"))
+#set($ui_buttons = $i18n.usePrefix("cms.structure.MyDocumentsConf.buttons"))
+#set($from_component = true)
+#set($save_action = "$link.unsetView().action('structure.UpdatePreferences').set('x',$node.id)")
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+$pageTool.addScriptLink('script/CMSPopups.js')##
+$pageTool.addStyleLink('style/action-buttons.css')##
+#genericScreenHeader($ui_strings.get('title'))
+<script type="text/javascript">
+var fieldNames = new Array( "header", "sort_column", "sort_dir", "page_size", "more_node_id",
+							"include_query_id", "exclude_query_id");
+function sendConfig()
+{
+    document.form1.action = "$save_action";
+    document.form1.target = "cyklotron_document_calendar_config_${cms_data.node.id}";
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+
+function clearResource(name, prop)
+{
+	document.form1[name + '_id'] = -1;
+	document.form1[name + '_' + prop] = '';
+}
+</script>
+<form name="form1" method="post" action="">
+  <input type="hidden" name="node_id" value="$node.id">
+  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="config" value="" />
+  <table border="0" class="genericScreen" width="100%">
+	<tr>
+      <td align="right">$ui_labels.header</td>
+  	  <td>
+	    <input type="text" name="header" style="width: 100%;" value="$htmlEncoder.encodeAttribute($config.get(header, ''))" />
+	  </td>
+	</tr>
+	<tr>
+      <td>$ui_labels.sortMethod</td>
+      <td>
+		<select size="1" name="sort_column">
+          #set($opts = [["numer sekwencyjny strony", "sequence"], ["tytuł strony", "title"], ["nazwa systemowa", "name"], ["początek ważności", "validity.start"], ["koniec ważności", "validity.end"], ["czas utworzenia", "creation.time"], ["czas modyfikacji", "modification.time"], ["priorytet", "priority"], ["priorytet i czas publikacji", "priority.validity.start"]])
+          #options($opts $config.get("sort_column", "creation.time"))
+        </select>
+        <select size="1" name="sort_dir">
+          #set($opts = [["rosnąco", true], ["malejąco", false]])
+          #options($opts $config.getBoolean(sort_dir, false))
+        </select>
+	  </td>
+    </tr>
+	<tr>
+	  <td>$ui_labels.pageSize</td>
+	  <td>
+		<select size="1" name="page_size">
+          #set($opts = [["nieograniczona", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7], ["8", 8], ["9", 9], ["10", 10], ["11", 11], ["12", 12], ["13", 13], ["14", 14], ["15", 15]])
+          #options($opts $config.getInt("page_size", 5))
+        </select>
+	  </td>
+	</tr>
+	<tr>
+	  <td>$ui_labels.moreNode</td>
+      <td>
+        <input type="hidden" name="more_node_id" value="$!more_node_id" />
+        <input type="text" style="width: 100%;" readonly="readonly" name="more_node_path" value="$!htmlEncoder.encodeAttribute($!more_node_path)"/>
+        <a href="#select_node('id relative_path' $more_node_id 'form1' 'more_node_id more_node_path')">$ui_buttons.choose</a>
+		<a href="javascript:clearResource('more_node', 'path')">$ui_buttons.clear</a>
+	  </td>
+	</tr>
+    <tr>
+   	  <td align="right">$ui_labels.include_query</td>
+	  <td>
+        <input type="text" name="include_query_name" style="width:100%;" value="$!include_query.name" maxlength="150" readonly= "readonly" />
+        <input type="hidden" name="include_query_id" value="$!include_query.id"/>
+        <a href="#select_category_query('name id' 'form1' 'include_query_name include_query_id')">$ui_buttons.choose</a>
+	    <a href="javascript:clearResource('include_query', 'name')">$ui_buttons.clear</a>
+	    <p>$ui_strings.include_query_info</p>
+      </td>
+    </tr>
+    <tr>
+	  <td align="right">$ui_labels.exclude_query</td>
+	  <td>
+        <input type="text" name="exclude_query_name" style="width:100%;" value="$!exclude_query.name" maxlength="150" readonly= "readonly" />
+        <input type="hidden" name="exclude_query_id" value="$!exclude_query.id"/>
+        <a href="#select_category_query('name id' 'form1' 'exclude_query_name exclude_query_id')">$ui_buttons.choose</a>
+	    <a href="javascript:clearResource('exclude_query', 'name')">$ui_buttons.clear</a>
+	    <p>$ui_strings.exclude_query_info</p>
+      </td>
+    </tr> 	
+  </table>
+</form>
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+  <div class="modification">
+  <a href="javascript:sendConfig()">$ui_buttons.save</a>
+  <a href="javascript:window.close();">$ui_buttons.cancel</a>
+  </div>
+</div>
+#genericScreenTrailer()

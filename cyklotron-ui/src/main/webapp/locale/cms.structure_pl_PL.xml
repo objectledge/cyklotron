@@ -16,6 +16,33 @@
       <item name="cancel">Anuluj</item>
     </prefix>
   </prefix>
+
+  <prefix name="MyDocumentsConf">
+    <prefix name="strings">
+      <item name="title">Konfiguracja kompoentu "Moje dokumenty"</item>
+      <item name="exclude_query_info">Zapytanie wykluczające dokumenty z zestawu pokazywanych dokumentów.
+        Jeśli nie wybrane, pokazywane są wszystkie dokumenty wybrane zapytaniem powyżej.
+      </item>  
+      <item name="include_query_info">Zapytanie określające zestaw pokazywanych dokumentów.
+        Jeśli nie wybrane, pokazwyane są wszysktie dokumenty dodane przez użytkownika do bieżącego
+        serwisu.
+      </item>
+    </prefix>
+    <prefix name="labels">
+      <item name="header">Nagłówek (linia tytułowa) komponentu</item>
+      <item name="sortMethod">Sposób sortowania</item>
+      <item name="pageSize">Ilośc pokazywanych dokumentów (początkowy rozmiar strony)</item>
+      <item name="moreNode">Strona do które prowadzi link "Więcej"</item>
+      <item name="include_query">Wybierz dokumenty</item>
+      <item name="exclude_query">Wyklucz dokumenty</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="choose">wybierz</item>
+      <item name="clear">wyczyść</item>
+      <item name="save">zapisz</item>
+      <item name="cancel">anuluj</item>
+    </prefix>
+  </prefix>
   
   <prefix name="workflow">
     <prefix name="MoveToWaitingRoom">
