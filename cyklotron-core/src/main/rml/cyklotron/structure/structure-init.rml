@@ -621,6 +621,14 @@ ATTRIBUTES (
   configurationView = 'documents.CommunityVoteResultsConf'
 );
 
+CREATE RESOURCE 'my_documents'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.MyDocuments',
+  configurationView = 'documents.MyDocumentsConf'
+);
+
 CREATE RESOURCE 'screens'
 RESOURCE CLASS 'node'
 PARENT '/cms/applications/documents';

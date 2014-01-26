@@ -192,6 +192,10 @@
         according to criteria based on community vote results.
         </item>
       </prefix>
+      <prefix name="my_documents">
+        <item name="name">My documents</item>
+        <item name="description">Displays documents contributed to the site by an authenticated user.</item>
+      </prefix>
     </prefix>
     <prefix name="description">
       <value>Base module</value>

@@ -28,3 +28,11 @@ ATTRIBUTES (
   enabled = true,
   required = false
 );
+
+CREATE RESOURCE 'my_documents'
+RESOURCE CLASS 'integration.component'
+PARENT '/cms/applications/documents/components'
+ATTRIBUTES (
+  componentName = 'documents.MyDocuments',
+  configurationView = 'documents.MyDocumentsConf'
+);
