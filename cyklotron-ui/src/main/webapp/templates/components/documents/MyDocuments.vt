@@ -1,0 +1,25 @@
+#set($stateMap = {
+  "PUBLISHED" : "Published",
+  "REJECTED" : "Rejected",
+  "PENDING" : "Pending", 
+  "UPDATE_REQUEST" : "Changes requested", 
+  "REMOVE_REQUEST" : "Removal requested"}
+)
+#set($amp = '&')
+<div class="myDocuments">
+  #if($header)	
+    <h4>$header</h4>
+  #end
+  <ul>
+    #foreach($row in $table.rows)
+      <li>
+        <a class="doc" href="$link.setNode($row.object)">$row.object.title</a>
+        <span class="docCreationDate">$format_date.format($row.object.creationTime)</span>
+        <span class="docStatus">$stateMap.get($documentState.getState($row.object))</span>
+      </li>
+    #end	
+  </ul>
+  #if($moreNode)
+    <a class="more" href="$link.setNode($moreNode)">More ${amp}raquo;</a>	
+  #end	
+</div>
