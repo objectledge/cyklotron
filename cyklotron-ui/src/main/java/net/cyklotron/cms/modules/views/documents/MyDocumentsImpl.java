@@ -28,6 +28,7 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.query.RmlWhereClause;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -86,14 +87,15 @@ public class MyDocumentsImpl
         return filters;
     }
 
-    public TableModel<DocumentNodeResource> siteBasedModel(CmsData cmsData, Locale locale)
+    public TableModel<DocumentNodeResource> siteBasedModel(CmsData cmsData, Locale locale,
+        Set<RmlWhereClause> whereClauseSet)
         throws MalformedQueryException, TableException
     {
         CoralSession coralSession = coralSessionFactory.getCurrentSession();
 
-        String query = "FIND RESOURCE FROM documents.document_node WHERE created_by = "
-            + coralSession.getUserSubject().getIdString() + " AND site = "
-            + cmsData.getSite().getIdString();
+        whereClauseSet.add(new RmlWhereClause("site", cmsData.getSite().getIdString()));
+        String whereClause = RmlWhereClause.getWhereClause(whereClauseSet);
+        String query = "FIND RESOURCE FROM documents.document_node" + whereClause;
 
         List<DocumentNodeResource> myDocuments = (List<DocumentNodeResource>)coralSession
             .getQuery().executeQuery(query).getList(1);
@@ -102,14 +104,14 @@ public class MyDocumentsImpl
     }
 
     public TableModel<DocumentNodeResource> queryBasedModel(CategoryQueryResource includeQuery,
-        CategoryQueryResource excludeQuery, CmsData cmsData, Locale locale)
+        CategoryQueryResource excludeQuery, CmsData cmsData, Locale locale,
+        Set<RmlWhereClause> whereClauseSet)
         throws SiteException, MalformedQueryException, MalformedRelationQueryException,
         EntityDoesNotExistException, TableException
     {
         CoralSession coralSession = coralSessionFactory.getCurrentSession();
-
-        String resQuery = "FIND RESOURCE FROM documents.document_node WHERE created_by = "
-            + coralSession.getUserSubject().getIdString();
+        String whereClause = RmlWhereClause.getWhereClause(whereClauseSet);
+        String resQuery = "FIND RESOURCE FROM documents.document_node" + whereClause;
 
         QueryResults qr = coralSession.getQuery().executeQuery(resQuery);
         LongSet ids = new LongOpenHashSet(qr.rowCount());

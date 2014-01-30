@@ -1,6 +1,8 @@
 package net.cyklotron.cms.modules.components.documents;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -22,6 +24,7 @@ import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.query.RmlWhereClause;
 import net.cyklotron.cms.modules.components.BaseCMSComponent;
 import net.cyklotron.cms.modules.views.documents.DocumentStateTool;
 import net.cyklotron.cms.modules.views.documents.MyDocumentsImpl;
@@ -56,17 +59,19 @@ public class MyDocuments
                 .getQueryResource("include", config);
             CategoryQueryResource excludeQuery = myDocumentsImpl
                 .getQueryResource("exclude", config);
+            Set<RmlWhereClause> whereClauseSet = new HashSet<RmlWhereClause>();
+            whereClauseSet.add(new RmlWhereClause("created_by", coralSession.getUserSubject()
+                .getIdString()));
 
             TableModel<DocumentNodeResource> model;
-
             if(includeQuery == null)
             {
-                model = myDocumentsImpl.siteBasedModel(cmsData, i18nContext.get());
+                model = myDocumentsImpl.siteBasedModel(cmsData, i18nContext.get(), whereClauseSet);
             }
             else
             {
                 model = myDocumentsImpl.queryBasedModel(includeQuery, excludeQuery, cmsData,
-                    i18nContext.get());
+                    i18nContext.get(), whereClauseSet);
             }
 
             List<TableFilter<? super DocumentNodeResource>> filters = myDocumentsImpl
