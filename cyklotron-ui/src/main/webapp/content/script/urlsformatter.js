@@ -37,9 +37,18 @@ function convertProposeDocumentUrlFileds(maxOrgs)
   
   for(var index=1; index<=maxOrgs;index++)
   { 
-	convertUrlFiled(document.getElementById('organization_'+ index + '_www'));
-	convertEmailFiled(document.getElementById('organization_'+ index + '_email'));
+    if(document.getElementById('organization_'+ index + '_www')) {	  
+    	convertUrlFiled(document.getElementById('organization_'+ index + '_www'));
+    }
+    if(document.getElementById('organization_'+ index + '_email')) {
+    	convertEmailFiled(document.getElementById('organization_'+ index + '_email'));
+    }
   }
-  convertUrlFiled(document.getElementById('source_url'));
-  convertEmailFiled(document.getElementById('proposer_email'));
+  
+  if(document.getElementById('source_url')) {
+	  convertUrlFiled(document.getElementById('source_url'));
+  }
+  if(document.getElementById('proposer_email')) {
+	  convertEmailFiled(document.getElementById('proposer_email'));
+  }
 }
