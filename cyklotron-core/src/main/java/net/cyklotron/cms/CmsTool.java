@@ -21,7 +21,7 @@ import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.comparator.AttributeComparator;
+import org.objectledge.coral.table.comparator.Direction;
 import org.objectledge.coral.table.comparator.MultiAttributeComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.DefaultParameters;
@@ -679,8 +679,8 @@ public class CmsTool
         I18nContext i18n = context.getAttribute(I18nContext.class);
         ResourceClass<Resource> rc = (ResourceClass<Resource>)integrationService.getResourceClass(
             coralSession, integrationService.getResourceClass(coralSession, rClassName));
-        AttributeComparator.Direction dir = dirName.equals("ASC") ? AttributeComparator.Direction.ASC
-            : AttributeComparator.Direction.DESC;
+        Direction dir = dirName.equals("ASC") ? Direction.ASC
+            : Direction.DESC;
         final String[] attrs = attrNames.toArray(new String[attrNames.size()]);
         sort(rc, dir, i18n.get(), attrs, resources);
         return resources;
@@ -692,7 +692,7 @@ public class CmsTool
         return sort(rClassName, dirName, attrNames, Arrays.asList(resources));
     }
 
-    private <T extends Resource> void sort(ResourceClass<T> rc, AttributeComparator.Direction dir,
+    private <T extends Resource> void sort(ResourceClass<T> rc, Direction dir,
         Locale locale, String[] attrNames, List<T> resources)
     {
         Comparator<T> c = new MultiAttributeComparator<>(rc, locale, dir, attrNames);
