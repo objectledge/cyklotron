@@ -21,12 +21,12 @@ import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.comparator.Direction;
 import org.objectledge.coral.table.comparator.MultiAttributeComparator;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.DefaultParameters;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
+import org.objectledge.table.comparator.Direction;
 import org.objectledge.templating.TemplatingContext;
 
 import net.cyklotron.cms.category.CategoryService;
