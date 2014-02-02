@@ -28,7 +28,6 @@ import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.documents.query.RmlWhereClause;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
@@ -88,15 +87,16 @@ public class MyDocumentsImpl
     }
 
     public TableModel<DocumentNodeResource> siteBasedModel(CmsData cmsData, Locale locale,
-        Set<RmlWhereClause> whereClauseSet)
+        String whereClause)
         throws MalformedQueryException, TableException
     {
         CoralSession coralSession = coralSessionFactory.getCurrentSession();
-
-        whereClauseSet.add(new RmlWhereClause("site", cmsData.getSite().getIdString()));
-        String whereClause = RmlWhereClause.getWhereClause(whereClauseSet);
-        String query = "FIND RESOURCE FROM documents.document_node" + whereClause;
-
+        if(!whereClause.isEmpty())
+        {
+            whereClause = " AND " + whereClause;
+        }
+        String query = "FIND RESOURCE FROM documents.document_node WHERE site ="
+            + cmsData.getSite().getIdString() + whereClause;
         List<DocumentNodeResource> myDocuments = (List<DocumentNodeResource>)coralSession
             .getQuery().executeQuery(query).getList(1);
 
@@ -104,13 +104,15 @@ public class MyDocumentsImpl
     }
 
     public TableModel<DocumentNodeResource> queryBasedModel(CategoryQueryResource includeQuery,
-        CategoryQueryResource excludeQuery, CmsData cmsData, Locale locale,
-        Set<RmlWhereClause> whereClauseSet)
+        CategoryQueryResource excludeQuery, CmsData cmsData, Locale locale, String whereClause)
         throws SiteException, MalformedQueryException, MalformedRelationQueryException,
         EntityDoesNotExistException, TableException
     {
         CoralSession coralSession = coralSessionFactory.getCurrentSession();
-        String whereClause = RmlWhereClause.getWhereClause(whereClauseSet);
+        if(!whereClause.isEmpty())
+        {
+            whereClause = " WHERE " + whereClause;
+        }
         String resQuery = "FIND RESOURCE FROM documents.document_node" + whereClause;
 
         QueryResults qr = coralSession.getQuery().executeQuery(resQuery);

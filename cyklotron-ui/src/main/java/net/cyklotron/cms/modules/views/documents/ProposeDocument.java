@@ -2,9 +2,7 @@ package net.cyklotron.cms.modules.views.documents;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
@@ -33,7 +31,6 @@ import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
 import net.cyklotron.cms.documents.DocumentService;
-import net.cyklotron.cms.documents.query.RmlWhereClause;
 import net.cyklotron.cms.organizations.Organization;
 import net.cyklotron.cms.organizations.OrganizationRegistryService;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -248,19 +245,17 @@ public class ProposeDocument
                 screenConfig);
             CategoryQueryResource excludeQuery = myDocumentsImpl.getQueryResource("exclude",
                 screenConfig);
-            Set<RmlWhereClause> whereClauseSet = new HashSet<RmlWhereClause>();
-            whereClauseSet.add(new RmlWhereClause("created_by", coralSession.getUserSubject()
-                .getIdString()));
+            String whereClause = "created_by = " + coralSession.getUserSubject().getIdString();
 
             TableModel<DocumentNodeResource> model;
             if(includeQuery == null)
             {
-                model = myDocumentsImpl.siteBasedModel(cmsData, i18nContext.get(), whereClauseSet);
+                model = myDocumentsImpl.siteBasedModel(cmsData, i18nContext.get(), whereClause);
             }
             else
             {
                 model = myDocumentsImpl.queryBasedModel(includeQuery, excludeQuery, cmsData,
-                    i18nContext.get(), whereClauseSet);
+                    i18nContext.get(), whereClause);
             }
 
             List<TableFilter<? super DocumentNodeResource>> filters = myDocumentsImpl

@@ -24,7 +24,6 @@ import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.documents.query.RmlWhereClause;
 import net.cyklotron.cms.modules.components.BaseCMSComponent;
 import net.cyklotron.cms.modules.views.documents.DocumentStateTool;
 import net.cyklotron.cms.modules.views.documents.MyDocumentsImpl;
@@ -59,19 +58,17 @@ public class MyDocuments
                 .getQueryResource("include", config);
             CategoryQueryResource excludeQuery = myDocumentsImpl
                 .getQueryResource("exclude", config);
-            Set<RmlWhereClause> whereClauseSet = new HashSet<RmlWhereClause>();
-            whereClauseSet.add(new RmlWhereClause("created_by", coralSession.getUserSubject()
-                .getIdString()));
+            String whereClause = "created_by = " + coralSession.getUserSubject().getIdString();
 
             TableModel<DocumentNodeResource> model;
             if(includeQuery == null)
             {
-                model = myDocumentsImpl.siteBasedModel(cmsData, i18nContext.get(), whereClauseSet);
+                model = myDocumentsImpl.siteBasedModel(cmsData, i18nContext.get(), whereClause);
             }
             else
             {
                 model = myDocumentsImpl.queryBasedModel(includeQuery, excludeQuery, cmsData,
-                    i18nContext.get(), whereClauseSet);
+                    i18nContext.get(), whereClause);
             }
 
             List<TableFilter<? super DocumentNodeResource>> filters = myDocumentsImpl
