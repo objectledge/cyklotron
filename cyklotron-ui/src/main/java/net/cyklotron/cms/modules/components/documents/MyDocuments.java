@@ -1,8 +1,6 @@
 package net.cyklotron.cms.modules.components.documents;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -19,32 +17,33 @@ import org.objectledge.templating.Templating;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.MVCContext;
+import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.modules.components.BaseCMSComponent;
+import net.cyklotron.cms.modules.components.SkinableCMSComponent;
 import net.cyklotron.cms.modules.views.documents.DocumentStateTool;
 import net.cyklotron.cms.modules.views.documents.MyDocumentsImpl;
+import net.cyklotron.cms.skins.SkinService;
 
 public class MyDocuments
-    extends BaseCMSComponent
+    extends SkinableCMSComponent
 {
     private final MyDocumentsImpl myDocumentsImpl;
 
     private final TableStateManager tableStateManager;
 
     public MyDocuments(Context context, Logger logger, Templating templating,
-        CmsDataFactory cmsDataFactory, TableStateManager tableStateManager,
-        MyDocumentsImpl myDocumentsImpl)
+        CmsDataFactory cmsDataFactory, SkinService skinService, MVCFinder mvcFinder,
+        TableStateManager tableStateManager, MyDocumentsImpl myDocumentsImpl)
     {
-        super(context, logger, templating, cmsDataFactory);
+        super(context, logger, templating, cmsDataFactory, skinService, mvcFinder);
         this.tableStateManager = tableStateManager;
         this.myDocumentsImpl = myDocumentsImpl;
     }
 
-    @Override
     public void process(Parameters parameters, MVCContext mvcContext,
         TemplatingContext templatingContext, HttpContext httpContext, I18nContext i18nContext,
         CoralSession coralSession)
