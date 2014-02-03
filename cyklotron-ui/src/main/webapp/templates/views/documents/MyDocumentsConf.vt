@@ -31,7 +31,7 @@ function clearResource(name, prop)
 	<tr>
       <td align="right">$ui_labels.header</td>
   	  <td>
-	    <input type="text" name="header" style="width: 100%;" value="$htmlEncoder.encodeAttribute($config.get(header, ''))" />
+	    <input type="text" name="header" style="width: 100%;" value="$htmlEncoder.encodeAttribute($config.get('header', ''))" />
 	  </td>
 	</tr>
 	<tr>
