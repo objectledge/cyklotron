@@ -25,7 +25,7 @@ function clearResource(name, prop)
 </script>
 <form name="form1" method="post" action="">
   <input type="hidden" name="node_id" value="$node.id">
-  <input type="hidden" name="scope" value="$instance">
+  <input type="hidden" name="scope" value="$parameters.get('component_instance')">
   <input type="hidden" name="config" value="" />
   <table border="0" class="genericScreen" width="100%">
 	<tr>
