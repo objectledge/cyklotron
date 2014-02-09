@@ -116,7 +116,7 @@ public class MyDocumentsImpl
         String resQuery = "FIND RESOURCE FROM documents.document_node" + whereClause;
 
         QueryResults qr = coralSession.getQuery().executeQuery(resQuery);
-        LongSet ids = new LongOpenHashSet(Math.min(1, qr.rowCount()));
+        LongSet ids = new LongOpenHashSet(Math.max(1, qr.rowCount()));
         for(QueryResults.Row r : qr.getList())
         {
             ids.add(r.getId());
@@ -218,7 +218,7 @@ public class MyDocumentsImpl
                     {
                         CategoryResource[] categories = categoryService.getSubCategories(
                             coralSession, (CategoryResource)res, true);
-                        ids = new LongOpenHashSet(Math.min(1, categories.length));
+                        ids = new LongOpenHashSet(Math.max(1, categories.length));
                         for(int i = 0; i < categories.length; i++)
                         {
                             ids.add(categories[i].getId());
