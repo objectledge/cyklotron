@@ -2,26 +2,22 @@ package net.cyklotron.cms.modules.views.documents;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.authentication.AuthenticationContext;
 import org.objectledge.context.Context;
-import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Permission;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.ResourceListTableModel;
 import org.objectledge.html.HTMLService;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
-import org.objectledge.table.InverseFilter;
 import org.objectledge.table.TableFilter;
+import org.objectledge.table.TableModel;
 import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
@@ -31,6 +27,7 @@ import org.objectledge.web.mvc.finders.MVCFinder;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
 import net.cyklotron.cms.documents.DocumentService;
@@ -38,17 +35,12 @@ import net.cyklotron.cms.organizations.Organization;
 import net.cyklotron.cms.organizations.OrganizationRegistryService;
 import net.cyklotron.cms.preferences.PreferencesService;
 import net.cyklotron.cms.related.RelatedService;
-import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.skins.SkinService;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
 import net.cyklotron.cms.structure.StructureService;
 import net.cyklotron.cms.structure.internal.OrganizationData;
 import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 import net.cyklotron.cms.style.StyleService;
-import net.cyklotron.cms.workflow.AutomatonResource;
-import net.cyklotron.cms.workflow.StateFilter;
-import net.cyklotron.cms.workflow.StateResource;
-import net.cyklotron.cms.workflow.WorkflowService;
 
 /**
  * Stateful screen for propose document application.
@@ -67,28 +59,29 @@ public class ProposeDocument
 
     private final OrganizationRegistryService organizationsRegistry;
 
-    private final WorkflowService workflowService;
-
     private final List<String> REQUIRES_AUTHENTICATED_USER = Arrays.asList("MyDocuments",
         "EditDocument", "RemovalRequest", "RedactorsNote");
 
     private final DocumentService documentService;
 
+    private final MyDocumentsImpl myDocumentsImpl;
+
     public ProposeDocument(org.objectledge.context.Context context, Logger logger,
         PreferencesService preferencesService, CmsDataFactory cmsDataFactory,
         StructureService structureService, StyleService styleService, SkinService skinService,
         MVCFinder mvcFinder, TableStateManager tableStateManager, CategoryService categoryService,
-        RelatedService relatedService, HTMLService htmlService, WorkflowService workflowService,
-        OrganizationRegistryService ngoDatabaseService, DocumentService documentService)
+        RelatedService relatedService, HTMLService htmlService,
+        OrganizationRegistryService ngoDatabaseService, DocumentService documentService,
+        MyDocumentsImpl myDocumentsImpl)
     {
         super(context, logger, preferencesService, cmsDataFactory, structureService, styleService,
                         skinService, mvcFinder, tableStateManager);
         this.categoryService = categoryService;
         this.relatedService = relatedService;
         this.htmlService = htmlService;
-        this.workflowService = workflowService;
         this.organizationsRegistry = ngoDatabaseService;
         this.documentService = documentService;
+        this.myDocumentsImpl = myDocumentsImpl;
     }
 
     @Override
@@ -246,26 +239,27 @@ public class ProposeDocument
             I18nContext i18nContext = context.getAttribute(I18nContext.class);
             TemplatingContext templatingContext = context.getAttribute(TemplatingContext.class);
             CmsData cmsData = cmsDataFactory.getCmsData(context);
+            Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
             CoralSession coralSession = context.getAttribute(CoralSession.class);
-            String query = "FIND RESOURCE FROM documents.document_node WHERE created_by = "
-                + coralSession.getUserSubject().getIdString() + " AND site = "
-                + cmsData.getSite().getIdString();
-            List<Resource> myDocuments = (List<Resource>)coralSession.getQuery()
-                .executeQuery(query).getList(1);
+            CategoryQueryResource includeQuery = myDocumentsImpl.getQueryResource("include",
+                screenConfig);
+            CategoryQueryResource excludeQuery = myDocumentsImpl.getQueryResource("exclude",
+                screenConfig);
+            String whereClause = "created_by = " + coralSession.getUserSubject().getIdString();
 
-            ResourceListTableModel<Resource> model = new ResourceListTableModel<Resource>(
-                myDocuments, i18nContext.getLocale());
+            TableModel<DocumentNodeResource> model;
+            if(includeQuery == null)
+            {
+                model = myDocumentsImpl.siteBasedModel(cmsData, i18nContext.get(), whereClause);
+            }
+            else
+            {
+                model = myDocumentsImpl.queryBasedModel(includeQuery, excludeQuery, cmsData,
+                    i18nContext.get(), whereClause);
+            }
 
-            List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
-            ResourceClass navigationNodeClass = coralSession.getSchema().getResourceClass(
-                "structure.navigation_node");
-            Resource cmsRoot = coralSession.getStore().getUniqueResourceByPath("/cms");
-            AutomatonResource automaton = workflowService.getPrimaryAutomaton(coralSession,
-                cmsRoot, navigationNodeClass);
-            Set<StateResource> rejectedStates = new HashSet<StateResource>();
-            rejectedStates.add(workflowService.getState(coralSession, automaton, "expired"));
-
-            filters.add(new InverseFilter(new StateFilter(rejectedStates, true)));
+            List<TableFilter<? super DocumentNodeResource>> filters = myDocumentsImpl
+                .excludeStatesFilter("expired");
 
             TableState state = tableStateManager.getState(context, this.getClass().getName()
                 + ":MyDocuments");
@@ -276,7 +270,8 @@ public class ProposeDocument
                 state.setAscSort(false);
                 state.setPageSize(20);
             }
-            templatingContext.put("table", new TableTool<Resource>(state, filters, model));
+            templatingContext.put("table", new TableTool<DocumentNodeResource>(state, filters,
+                model));
             templatingContext.put("documentState", new DocumentStateTool(coralSession, logger));
         }
         catch(Exception e)
@@ -297,7 +292,6 @@ public class ProposeDocument
         Parameters parameters = RequestParameters.getRequestParameters(context);
         CoralSession coralSession = context.getAttribute(CoralSession.class);
         TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
-        SiteResource site = getSite();
         try
         {
             // refill parameters in case we are coming back failed validation

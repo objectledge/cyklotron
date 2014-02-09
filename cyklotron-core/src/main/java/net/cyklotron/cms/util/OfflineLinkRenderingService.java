@@ -34,13 +34,16 @@ public class OfflineLinkRenderingService
 {
     // constants ////////////////////////////////////////////////////////////
     
-    /** port default value. */
-    public static final int PORT_DEFAULT = 80;
+    /** HTTP port default value. */
+    public static final int HTTP_PORT_DEFAULT = 80;
+
+    /** HTTPS port default value. */
+    public static final int HTTPS_PORT_DEFAULT = 443;
     
     /** context parameter default value. */
-    public static final String CONTEXT_DEFAULT = "/";
+    public static final String CONTEXT_DEFAULT = "";
     
-    /** servletAndApp defaault value. */
+    /** servletAndApp default value. */
     public static final String SERVLET_DEFAULT = "";
     
     // instance variables ///////////////////////////////////////////////////
@@ -53,7 +56,10 @@ public class OfflineLinkRenderingService
     private String serverName;
 
     /** server port to use. "80" by default. */
-    private int port;
+    private int httpPort;
+
+    /** server port to use, when site requires secure channel. "443" by default. */
+    private int httpsPort;
     
     /** context name. "/" by default. */
     private String context;
@@ -76,7 +82,8 @@ public class OfflineLinkRenderingService
         {
             throw new ComponentInitializationError("failed to configure the component", e);
         } 
-        port = config.getChild("port").getValueAsInteger(PORT_DEFAULT);
+        httpPort = config.getChild("port").getValueAsInteger(HTTP_PORT_DEFAULT);
+        httpsPort = config.getChild("securePort").getValueAsInteger(HTTPS_PORT_DEFAULT);
         context = config.getChild("context").getValue(CONTEXT_DEFAULT);
         servletAndApp = config.getChild("servlet").getValue(SERVLET_DEFAULT);
     }
@@ -157,7 +164,7 @@ public class OfflineLinkRenderingService
             
             StringBuilder sb = new StringBuilder();
             sb.append(getContextURL(coralSession, site));
-            sb.append("files/");
+            sb.append("/files/");
             sb.append(site.getName());
             sb.append("/");
             sb.append(rootDirectory.getName());
@@ -182,7 +189,7 @@ public class OfflineLinkRenderingService
 
             StringBuilder sb = new StringBuilder();
             sb.append(getApplicationURL(coralSession, site));
-            sb.append("view/files.Download?");
+            sb.append("/view/files.Download?");
             sb.append("path=").append(path).append('&');
             sb.append("file_id=").append(file.getIdString());
             return sb.toString();
@@ -196,14 +203,14 @@ public class OfflineLinkRenderingService
     
     public String getCommonResourceURL(CoralSession coralSession, SiteResource site, String path)
     {
-        return getContextURL(coralSession, site) + "content/default/" + path;
+        return getContextURL(coralSession, site) + "/content/default/" + path;
     }
     
     public String getNodeURL(CoralSession coralSession, NavigationNodeResource node)
     {
         if(node.getQuickPath() == null)
         {
-            return getApplicationURL(coralSession, node.getSite()) + "x/" + node.getIdString();
+            return getApplicationURL(coralSession, node.getSite()) + "/x/" + node.getIdString();
         }
         else
         {
@@ -214,29 +221,26 @@ public class OfflineLinkRenderingService
     protected String getContextURL(CoralSession coralSession, SiteResource site)
     {
         StringBuilder buff = new StringBuilder();
-        buff.append("http://")
-            .append(getServer(coralSession, site));
-        if(port != 80)
+        final boolean secure = site.getRequiresSecureChannel();
+        buff.append(secure ? "https" : "http").append(":");
+        buff.append("//").append(getServer(coralSession, site));
+        if(!secure && httpPort != HTTP_PORT_DEFAULT)
         {
-            buff.append(':')
-                .append(port);
+            buff.append(':').append(httpPort);
+        }
+        if(secure && httpsPort != HTTPS_PORT_DEFAULT)
+        {
+            buff.append(':').append(httpsPort);
         }
         buff.append(context);
         return buff.toString();
     }
     
-    protected String getApplicationURL(CoralSession coralSession, SiteResource site)
+    public String getApplicationURL(CoralSession coralSession, SiteResource site)
     {
         StringBuilder buff = new StringBuilder();
-        buff.append("http://")
-            .append(getServer(coralSession, site));
-        if(port != 80)
-        {
-            buff.append(':')
-                .append(port);
-        }
-        buff.append(context)
-            .append(servletAndApp);
+        buff.append(getContextURL(coralSession, site));
+        buff.append(servletAndApp);
         return buff.toString();
     }    
 
@@ -259,8 +263,7 @@ public class OfflineLinkRenderingService
     }
     
     
-    public String getViewURL(CoralSession coralSession, SiteResource site,
-        String view,
+    public String getViewURL(CoralSession coralSession, SiteResource site, String view,
         Parameters pathinfoParameters, Parameters queryStringParameters)
     {
         StringBuilder buff = new StringBuilder();
@@ -269,19 +272,19 @@ public class OfflineLinkRenderingService
         buff.append(getApplicationURL(coralSession, site));
         if(view != null && !view.equals(""))
         {
-            buff.append(webConfigurator.getViewToken());
+            buff.append('/').append(webConfigurator.getViewToken());
             buff.append('/').append(view);
         }
 
         
-        List pathInfoParameterNames = new ArrayList();
+        List<String> pathInfoParameterNames = new ArrayList<>();
         if(pathinfoParameters != null)
         {
             pathInfoParameterNames = Arrays.asList(pathinfoParameters.getParameterNames());
             Collections.sort(pathInfoParameterNames);
         }
 
-        List queryParameterNames = new ArrayList();
+        List<String> queryParameterNames = new ArrayList<>();
         if(queryStringParameters != null)
         {
             queryParameterNames = Arrays.asList(queryStringParameters.getParameterNames());

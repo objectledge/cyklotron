@@ -22,7 +22,10 @@
       #linkCell('' 'VIRTUAL SERVERS' $link.view('site.VirtualSiteList'))
       #if($site)
         #linkCell('' 'ADD VIRTUAL SERVER' $link.view('site.AddVirtualSite'))
-      #end
+	  #end
+	  #if(!$site)
+		#linkCell('' 'SITE MAPS' $link.view('site.SitemapSettings'))
+	  #end	  
     #genericNaviTrailer()
   
 

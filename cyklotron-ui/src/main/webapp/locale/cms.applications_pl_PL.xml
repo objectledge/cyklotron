@@ -193,6 +193,10 @@
         według kryteriów opartych o głosy oddane przez użytkowników.
         </item>
       </prefix>
+      <prefix name="my_documents">
+        <item name="name">Moje Dokumenty</item>
+        <item name="description">Wyświetla dokumenty dodane do systemu przez zalogowanego użytkownika.</item>
+      </prefix>
     </prefix>
     <prefix name="description">
       <value>Moduł podstawowy</value>
@@ -1197,6 +1201,11 @@
   
   <prefix name="quickpath">
     <item name="name">Przyjazne ścieżki</item>
+  </prefix>
+  
+  <prefix name="sitemap">
+    <item name="name">Mapa serwisu</item>
+    <item name="description">Generowanie plików sitemap.xml dla silników wyszukiwania.</item>
   </prefix>
   
 </strings>

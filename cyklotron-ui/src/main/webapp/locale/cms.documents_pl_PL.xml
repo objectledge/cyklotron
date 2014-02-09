@@ -139,10 +139,18 @@
       <item name="clear_org_if_not_match">wyczyść dane autopodpowiadania jeśli nie ma zgodności nazwy organizacji</item>
       <item name="add_captcha">dodaj weryfikację Captcha</item>
       <item name="cleanup_profile">profil czyszczenia HTML</item>
+      <item name="include_query">Wybierz dokumenty</item>
+      <item name="include_query_info">Zapytanie określające zestaw dokumentów pokazywanych na ekranie "Moje Dokumenty". 
+        Jeśli nie wybrane, pokazwyane są wszysktie dokumenty dodane przez użytkownika do bieżącego serwisu.</item>
+      <item name="exclude_query">Wyklucz dokumenty</item>
+      <item name="exclude_query_info">Zapytanie wykluczające dokumenty z zestawu dokumentów pokazywanych na ekranie "Moje Dokumenty".
+        Jeśli nie wybrane, pokazywane są wszystkie dokumenty wybrane zapytaniem powyżej.</item>  
     </prefix>
     <prefix name="buttons">
       <item name="save">Zapisz</item>
       <item name="cancel">Anuluj</item>
+      <item name="select">wybierz</item>
+      <item name="clear">wyczyść</item>
     </prefix>
   </prefix>
   <prefix name="CommunityVoteResultsConf">

@@ -45,11 +45,13 @@ public class ChooseCategoryQueryPool extends BaseCMSScreen
         SiteResource site = getSite();
         try
         {
-            Resource queryRoot = categoryQueryService.getCategoryQueryPoolRoot(coralSession, site);
-            TableState state = tableStateManager.getState(context, "cms:category,query,CategoryQueryPoolList:"+site.getIdString());
+            Resource queryPoolRoot = categoryQueryService.getCategoryQueryPoolRoot(coralSession,
+                site);
+            TableState state = tableStateManager.getState(context,
+                "cms:category,query,CategoryQueryPoolList:" + site.getIdString());
             if(state.isNew())
             {
-                state.setRootId(queryRoot.getIdString());
+                state.setRootId(queryPoolRoot.getIdString());
                 state.setTreeView(false);
                 state.setShowRoot(false);
             }

@@ -68,7 +68,7 @@ public abstract class BaseRoleScreen
         state.setSortColumnName("name");
         state.setRootId(rootId);
         state.setExpanded(rootId);
-        List<TableFilter<Resource>> filters = new ArrayList<TableFilter<Resource>>();
+        List<TableFilter<? super Resource>> filters = new ArrayList<>();
         if(site != null)
         {
             filters.add(new TableFilter<Resource>()

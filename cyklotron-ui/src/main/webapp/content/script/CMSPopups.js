@@ -38,6 +38,12 @@ function selectCategoryQueryPool(attribute, form, element, baseLink)
   getWinPopup('ChooseCategoryQueryPool').open(baseLink, 800, 400, 'center middle');
 }
 
+function selectCategoryQuery(attribute, form, element, baseLink)
+{
+  window.propertySelector = new PropertySelector(attribute, form, element);
+  getWinPopup('ChooseCategoryQuery').open(baseLink, 800, 400, 'center middle');
+}
+
 function selectCategory(attribute, form, element, baseLink)
 {
   window.propertySelector = new PropertySelector(attribute, form, element);

@@ -15,18 +15,8 @@
 // 
 package net.cyklotron.cms.modules.views;
 
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.CmsDataFactory;
-import net.cyklotron.cms.preferences.PreferencesService;
-import net.cyklotron.cms.site.SiteException;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.skins.SkinException;
-import net.cyklotron.cms.skins.SkinService;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.Template;
 import org.objectledge.templating.TemplateNotFoundException;
@@ -36,6 +26,15 @@ import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.builders.AbstractBuilder;
 import org.objectledge.web.mvc.builders.BuildException;
 import org.objectledge.web.mvc.builders.EnclosingView;
+
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteException;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.skins.SkinException;
+import net.cyklotron.cms.skins.SkinService;
 
 /**
  * A default view.
@@ -79,7 +78,6 @@ public class BaseCmsRedirectedView extends AbstractBuilder
     public String build(Template template, String embeddedBuildResults)
         throws BuildException, ProcessingException
     {
-        TemplatingContext templatingContext = TemplatingContext.getTemplatingContext(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);
         MVCContext mvcContext = MVCContext.getMVCContext(context);
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
@@ -101,32 +99,17 @@ public class BaseCmsRedirectedView extends AbstractBuilder
                 //ignore it!
             }
         }
-        if(site == null)
-        {
-            Parameters systemPreferences = preferencesService.getSystemPreferences(coralSession); 
-            String globalComponentsDataSiteName = systemPreferences.get("globalComponentsData",null);
-            if(globalComponentsDataSiteName != null)
-            {
-                try
-                {
-                    site = siteService.getSite(coralSession,globalComponentsDataSiteName); 
-                }
-                catch(SiteException e)
-                {
-                    // ignore it!
-                }
-            }
-        }
         Template newTemplate = template;
         if(site != null)
         {
-            String view = mvcContext.getView();
+            String view = viewToSystemScreen(mvcContext.getView());
             try
             {
                 String skin = skinService.getCurrentSkin(coralSession, site);
                 if(skinService.hasSystemScreenTemplate(coralSession, site, skin, view))
                 {
                     newTemplate = skinService.getSystemScreenTemplate(coralSession, site, skin, view);
+                    context.setAttribute("CmsViewOverride", true);
                 }
             }
             catch(SkinException e)
@@ -137,21 +120,27 @@ public class BaseCmsRedirectedView extends AbstractBuilder
             {
                 //ignore it!
             }
-            templatingContext.put("doopa",view);
-            // elementy do fixa:
-            // klasa
-            // dla kazdego sajtu zalozyc wezel system_screens pod skinem
-            //
-            //
         }
         return super.build(newTemplate, embeddedBuildResults); 
     }
     
+    protected String viewToSystemScreen(String view)
+    {
+        return view;
+    }
+
     /**
      * {@inheritDoc}
      */
     public EnclosingView getEnclosingView(String thisViewName)
     {
-        return new EnclosingView("Page");
+        if(context.getAttribute("CmsViewOverride") != null)
+        {
+            return new EnclosingView("Page");
+        }
+        else
+        {
+            return EnclosingView.DEFAULT;
+        }
     }
 }

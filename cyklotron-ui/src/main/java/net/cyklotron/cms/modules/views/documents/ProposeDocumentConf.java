@@ -3,6 +3,7 @@ package net.cyklotron.cms.modules.views.documents;
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.html.HTMLService;
 import org.objectledge.i18n.I18nContext;
 import org.objectledge.parameters.Parameters;
@@ -14,6 +15,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.CmsDataFactory;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.files.DirectoryResource;
 import net.cyklotron.cms.files.DirectoryResourceImpl;
 import net.cyklotron.cms.modules.views.BaseCMSScreen;
@@ -123,10 +125,34 @@ public class ProposeDocumentConf
             templatingContext.put("cleanup_profile", screenConfig.get("cleanup_profile", ""));
             templatingContext.put("available_cleanup_profiles",
                 htmlService.availableCleanupProfiles());
+
+            addQueryObject("include", screenConfig, coralSession, templatingContext);
+            addQueryObject("exclude", screenConfig, coralSession, templatingContext);
         }
         catch(Exception e)
         {
             throw new ProcessingException("Exception occurred", e);
+        }
+    }
+
+    private void addQueryObject(String name, Parameters screenConfig, CoralSession coralSession,
+        TemplatingContext templatingContext)
+    {
+        long includeQueryId = screenConfig.getLong(name + "_query_id", -1l);
+        if(includeQueryId != -1l)
+        {
+            try
+            {
+                Resource includeQuery = coralSession.getStore().getResource(includeQueryId);
+                if(includeQuery instanceof CategoryQueryResource)
+                {
+                    templatingContext.put(name + "_query", includeQuery);
+                }
+            }
+            catch(EntityDoesNotExistException e)
+            {
+                // welp, query must have been deleted
+            }
         }
     }
 }

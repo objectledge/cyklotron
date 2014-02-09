@@ -161,7 +161,7 @@ public class RoleAssignments
             state.setTreeView(false);
             state.setPageSize(20);
         }
-        List<TableFilter<Subject>> filters = new ArrayList<TableFilter<Subject>>();
+        List<TableFilter<? super Subject>> filters = new ArrayList<>();
         String filterPattern = parameters.get("filter", "");
         if(filterPattern.length() > 0)
         {

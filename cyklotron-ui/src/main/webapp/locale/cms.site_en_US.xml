@@ -1,0 +1,27 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="SitemapSettings">
+    <prefix name="heading">
+      <item name="global">Global settings</item>
+      <item name="participants">Generator settings</item>
+    </prefix>    
+    <prefix name="label">
+      <item name="basePath">Base path</item>
+      <item name="compress">Compression</item>
+    </prefix>
+    <prefix name="description">    
+      <item name="basePath">Directory within Cyklotron working directory where sitemap files will be generated. Generation is disabled when not set.</item>
+      <item name="compress">GZIP compression of the ouptpu files.</item>
+    </prefix>
+    <prefix name="button">
+      <item name="save">Save</item>
+    </prefix>
+    <prefix name="participants">
+      <prefix name="documents">
+        <item name="name">Documents</item>
+        <item name="description">
+          Patterns for generating URLs of documents in specific sites. Example: wiadomosci.ngo.pl=/wiadomosci/{id}.html When not set, pattern /x/{id} is used.
+        </item>
+      </prefix>
+    </prefix>
+  </prefix>
+</strings>

@@ -17,6 +17,29 @@
     </prefix>
   </prefix>
   
+  <prefix name="MyDocumentsConf">
+    <prefix name="strings">
+      <item name="title">"My Documents" component configuration</item>
+      <item name="include_query_info">Query for narrowing down the list of documents shown.
+        When not selected, all documents added by the user to the current site are shown.</item>
+      <item name="exclude_query_info">Query for excluding documents from the list selected by the query above.</item>      
+    </prefix>
+    <prefix name="labels">
+      <item name="header">Component title line</item>
+      <item name="sortMethod">Sort method</item>
+      <item name="pageSize">Number of documents shown (initial page size)</item>
+      <item name="moreNode">Target node for the "More" link</item>
+      <item name="include_query">Select documents</item>
+      <item name="exclude_query">Exclude documents</item>
+    </prefix>
+    <prefix name="buttons">
+      <item name="choose">choose</item>
+      <item name="clear">clear</item>
+      <item name="save">save</item>
+      <item name="cancel">cancel</item>
+    </prefix>
+  </prefix>
+  
   <prefix name="workflow">
     <prefix name="MoveToWaitingRoom">
       <prefix name="strings">

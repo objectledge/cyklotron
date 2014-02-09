@@ -141,8 +141,10 @@ public class CommunityVoteStatistics
                 tableState.setTreeView(false);
                 tableState.setPageSize(50);
             }
+            List<TableFilter<? super NavigationNodeResource>> filters = new ArrayList<>();
+            filters.add(filter);
             TableTool<NavigationNodeResource> tableTool = new TableTool<NavigationNodeResource>(
-                tableState, Collections.singletonList(filter), tableModel);
+                tableState, filters, tableModel);
             templatingContext.put("table", tableTool);
             
             List<String> availablePrimarySortOrders = new ArrayList<String>();

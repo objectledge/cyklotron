@@ -12,12 +12,19 @@ $pageTool.addScriptLink('script/CMSPopups.js')##
 <!--
 var fieldNames = new Array( "parent_id", "category_id_1", "category_id_2", "inherit_categories", "calendar_tree", "attachments_enabled", 
                             "attachments_dir_id", "attachments_max_count", "attachments_max_size", "attachemnt_images_max_size", "attachments_allowed_formats", "owner_login",
-                            "editing_enabled", "category_depth", "add_document_visual_editor", "clear_org_if_not_match", "add_captcha", "cleanup_profile" );
+                            "editing_enabled", "category_depth", "add_document_visual_editor", "clear_org_if_not_match", "add_captcha", "cleanup_profile",
+							"include_query_id", "exclude_query_id");
 function sendConfig()
 {
     document.form1.action = "$save_action";
     document.form1.target = "cyklotron_document_calendar_config_${cms_data.node.id}";
     submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+
+function clearQuery(name)
+{
+	document.form1[name + '_query_id'] = -1;
+	document.form1[name + '_query_name'] = '';
 }
 //-->
 </script>
@@ -122,6 +129,26 @@ function sendConfig()
     #end		
 	</select></td>
   </tr>
+  <tr>
+	<td align="right">$ui_labels.get('include_query')</td>
+	<td>
+      <input type="text" name="include_query_name" style="width:100%;" value="$!include_query.name" maxlength="150" readonly= "readonly" />
+      <input type="hidden" name="include_query_id" value="$!include_query.id"/>
+      <a href="#select_category_query('name id' 'form1' 'include_query_name include_query_id')">$ui_buttons.get('select')</a>
+	  <a href="javascript:clearQuery('include')">$ui_buttons.get('clear')</a>
+	  <p>$ui_labels.get('include_query_info')</p>
+    </td>
+  </tr>
+  <tr>
+	<td align="right">$ui_labels.get('exclude_query')</td>
+	<td>
+      <input type="text" name="exclude_query_name" style="width:100%;" value="$!exclude_query.name" maxlength="150" readonly= "readonly" />
+      <input type="hidden" name="exclude_query_id" value="$!exclude_query.id"/>
+      <a href="#select_category_query('name id' 'form1' 'exclude_query_name exclude_query_id')">$ui_buttons.get('select')</a>
+	  <a href="javascript:clearQuery('exclude')">$ui_buttons.get('clear')</a>
+	  <p>$ui_labels.get('exclude_query_info')</p>
+    </td>
+  </tr>  
 </table>
 </form>
 
