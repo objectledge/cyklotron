@@ -8,14 +8,27 @@ public class AccountStatusDto
     String accountStatus;
     
     Long expiration;
-
-    public AccountStatusDto(String uid, String accountStatus, Long expiration)
+    
+    boolean hasMultipleEmailAddresses;
+    
+    public AccountStatusDto(String uid, String accountStatus, Long expiration, boolean hasMultipleEmailAddresses)
     {
         this.uid = uid;
         this.accountStatus = accountStatus;
         this.expiration = expiration;
+        this.hasMultipleEmailAddresses = hasMultipleEmailAddresses;
     }
 
+    public boolean isHasMultipleEmailAddresses()
+    {
+        return hasMultipleEmailAddresses;
+    }
+
+    public void setHasMultipleEmailAddresses(boolean hasMultipleEmailAddresses)
+    {
+        this.hasMultipleEmailAddresses = hasMultipleEmailAddresses;
+    }
+    
     public String getUid()
     {
         return uid;

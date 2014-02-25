@@ -37,15 +37,17 @@ public class AccountStatus
                 userManager.setUserShadowFlag(account, BlockedReason.PASSWORD_EXPIRED.getCode()
                     .toString());
             }
+
             BlockedReason blockedReason = userManager.checkAccountFlag(account);
             Long expiration = userManager.getUserPasswordExpirationDays(account);
+            boolean hasMultipleEmailAddresses = userManager.hasMultipleEmailAddresses(account);
             AccountStatusDto result = new AccountStatusDto(uid, blockedReason.getShortReason(),
-                expiration);
+                expiration, hasMultipleEmailAddresses);
             return Response.ok(result).build();
         }
         catch(AuthenticationException e)
         {
-            AccountStatusDto result = new AccountStatusDto(uid, "invalid_credentials", 0L);
+            AccountStatusDto result = new AccountStatusDto(uid, "invalid_credentials", 0L, false);
             return Response.ok(result).build();
         }
     }

@@ -96,7 +96,7 @@ public class EmailConfirmationServiceImpl
         {
             results = coralSession.getQuery().executeQuery(
                 "FIND RESOURCE FROM " + EmailConfirmationRequestResource.CLASS_NAME
-                    + " WHERE data = '" + payload + "'");
+                    + " WHERE data = '" + payload + "' ORDER BY creation_time DESC");
         }
         catch(MalformedQueryException e)
         {
