@@ -57,6 +57,8 @@ public class DocumentRenderingHelper
     private DocumentNodeResource doc;
     /** owner document's content's DOM */
     private Document contentDom;
+    /** owner document's proposedContent's DOM */
+    private Document proposedContentDom;
     /** owner document's metadata's DOM */
     private Document metaDom;
     /** owner document's keywords  */
@@ -239,6 +241,21 @@ public class DocumentRenderingHelper
         return metaDom;
     }
 
+    public Document getProposedContentDom()
+        throws HTMLException
+    {
+        if(proposedContentDom == null)
+        {
+            String meta = doc.getProposedContent();
+            if(meta != null && meta.length() > 0)
+            {
+                meta = entityDecoder.decodeXML(meta);
+                proposedContentDom = DocumentMetadataHelper.textToDom4j(meta);
+            }
+        }
+        return proposedContentDom;
+    }
+    
     // utility methods /////////////////////////////////////////////////////////////////////////////
 
     private boolean isPageBreak(Node n)
