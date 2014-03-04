@@ -37,6 +37,8 @@ public class DocumentTool
     private HashMap contentData = new HashMap();
     /** cache for xpath expressions executed on metadata DOM */
     private HashMap metaData = new HashMap();
+    /** cache for xpath expressions executed on proposedContent DOM */
+    private HashMap proposedContentData = new HashMap();
     
     // initialisation ///////////////////////////////////////////////////////
     
@@ -141,6 +143,32 @@ public class DocumentTool
         return docRenderer.getKeywords();
     }
 
+    /**
+     * Returns the value of selected data from <code>proposedContent</code> attribute.
+     *
+     * @return selected value from the <code>proposedContent</code> attribute.
+     */
+    public List getProposedContentNodes(String xPathExpression)
+        throws HTMLException
+    {
+        List nodes = (List)proposedContentData.get(xPathExpression);
+        if(nodes == null)
+        {
+            Document proposalDom = docRenderer.getProposedContentDom();
+            if(proposalDom == null)
+            {
+                nodes = new ArrayList();
+            }
+            else
+            {
+                nodes = proposalDom.selectNodes(xPathExpression);
+            }
+            proposedContentData.put(xPathExpression, nodes);
+        }
+        return nodes;     
+    }
+    
+    
     /**
      * Returns the value of selected data from <code>meta</code> attribute.
      *
