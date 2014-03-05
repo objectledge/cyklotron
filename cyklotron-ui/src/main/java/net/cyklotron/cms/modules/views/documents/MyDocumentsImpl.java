@@ -158,7 +158,7 @@ public class MyDocumentsImpl
         return new ResourceListTableModel<DocumentNodeResource>(documentList, locale);
     }
 
-    public LongSet queryPoolBasedModel(CategoryQueryPoolResource queryPool, String whereClause)
+    public LongSet queryPoolBasedSet(CategoryQueryPoolResource queryPool, String whereClause)
         throws SiteException, MalformedQueryException, MalformedRelationQueryException,
         EntityDoesNotExistException, TableException
     {
