@@ -1,6 +1,8 @@
 package net.cyklotron.cms.modules.views.documents;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -10,6 +12,7 @@ import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.query.MalformedQueryException;
 import org.objectledge.coral.query.QueryResults;
+import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.relation.MalformedRelationQueryException;
 import org.objectledge.coral.relation.ResourceIdentifierResolver;
 import org.objectledge.coral.schema.ResourceClass;
@@ -26,6 +29,7 @@ import org.objectledge.table.TableModel;
 import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.site.SiteException;
@@ -152,6 +156,44 @@ public class MyDocumentsImpl
         }
 
         return new ResourceListTableModel<DocumentNodeResource>(documentList, locale);
+    }
+
+    public LongSet queryPoolBasedModel(CategoryQueryPoolResource queryPool, String whereClause)
+        throws SiteException, MalformedQueryException, MalformedRelationQueryException,
+        EntityDoesNotExistException, TableException
+    {
+        CoralSession coralSession = coralSessionFactory.getCurrentSession();
+        if(!whereClause.isEmpty())
+        {
+            whereClause = " WHERE " + whereClause;
+        }
+        String resQuery = "FIND RESOURCE FROM documents.document_node" + whereClause;
+
+        QueryResults qr = coralSession.getQuery().executeQuery(resQuery);
+        LongSet ids = new LongOpenHashSet(Math.max(1, qr.rowCount()));
+        for(QueryResults.Row r : qr.getList())
+        {
+            ids.add(r.getId());
+        }
+
+        String catQuery = "";
+        LongSet included = new LongOpenHashSet(Math.max(1, qr.rowCount()));
+        final ResourceIdentifierResolver resolver = getResolver(coralSession);
+        for(CategoryQueryResource query : (List<CategoryQueryResource>)queryPool.getQueries())
+        {
+            if(query.getQuery("").trim().length() > 0)
+            {
+                catQuery = query.getQuery().replace(";", "") + " * "
+                    + siteClause(query, coralSession) + ";";
+            }
+            else
+            {
+                catQuery = siteClause(query, coralSession) + ";";
+            }
+            included.addAll(coralSession.getRelationQuery().queryIds(catQuery, resolver, ids));
+        }
+        ids.retainAll(included);
+        return ids;
     }
 
     private String siteClause(CategoryQueryResource query, CoralSession coralSession)
