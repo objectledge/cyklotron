@@ -53,6 +53,7 @@ import bak.pcj.set.LongSet;
  * @author rafal.krzewski@caltha.pl
  */
 public class MyDocumentsImpl
+    implements MyDocuments
 {
     private final CoralSessionFactory coralSessionFactory;
 
