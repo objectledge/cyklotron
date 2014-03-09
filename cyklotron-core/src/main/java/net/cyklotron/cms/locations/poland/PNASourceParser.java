@@ -2,7 +2,6 @@ package net.cyklotron.cms.locations.poland;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
@@ -17,7 +16,7 @@ public class PNASourceParser
 {
     private final FileSystem fileSystem;
 
-    private List<String[]> content = new ArrayList<String[]>();
+    private List<String[]> contents;
 
     private String[] headings;
 
@@ -32,7 +31,7 @@ public class PNASourceParser
         Reader r = fileSystem.getReader(sourceLocation, "CP1250");
         CSVReader cr = new CSVReader(r, ';');
         headings = cr.readHeaders().toArray(new String[0]);
-        content = Lists.transform(cr.readData(), new Function<List<String>, String[]>()
+        contents = Lists.transform(cr.readData(), new Function<List<String>, String[]>()
             {
                 @Override
                 public String[] apply(List<String> input)
@@ -47,8 +46,8 @@ public class PNASourceParser
         return headings;
     }
 
-    public List<String[]> getContent()
+    public List<String[]> getContents()
     {
-        return content;
+        return contents;
     }
 }
