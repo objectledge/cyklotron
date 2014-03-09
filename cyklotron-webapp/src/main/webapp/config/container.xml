@@ -206,6 +206,7 @@
   <component class="org.objectledge.forms.FormToolFactory"/>
   <component class="org.objectledge.web.captcha.CaptchaToolFactory"/>
   <component class="org.objectledge.authentication.sso.SingleSignOnToolFactory"/>
+  <component class="org.objectledge.upload.UploadToolFactory"/>
 
   <component class="org.objectledge.templating.tools.ContextTools">
     <sequence>
@@ -228,6 +229,7 @@
       <parameter class-key="org.objectledge.forms.FormToolFactory"/>      
       <parameter class-key="org.objectledge.web.captcha.CaptchaToolFactory"/>
       <parameter class-key="org.objectledge.authentication.sso.SingleSignOnToolFactory"/>
+      <parameter class-key="org.objectledge.upload.UploadToolFactory"/>
     </sequence>
   </component>
 
