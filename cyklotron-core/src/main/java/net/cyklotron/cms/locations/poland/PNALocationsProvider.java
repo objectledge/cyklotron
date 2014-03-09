@@ -42,8 +42,6 @@ public class PNALocationsProvider
 
     private final Logger logger;
 
-    private final FileSystem fileSystem;
-
     private final PNAProvider pnaProvider;
 
     private List<Location> cachedLocations = null;
@@ -51,7 +49,6 @@ public class PNALocationsProvider
     public PNALocationsProvider(Logger logger, FileSystem fileSystem)
     {
         this.logger = logger;
-        this.fileSystem = fileSystem;
         pnaProvider = new PNAProvider(fileSystem, logger);
     }
 
@@ -69,7 +66,7 @@ public class PNALocationsProvider
         }
         catch(IOException e)
         {
-            logger.error("failed to parse source file " + PNAProvider.SOURCE_FILE, e);
+            logger.error("failed to parse source file ", e);
         }
     }
 
@@ -102,21 +99,7 @@ public class PNALocationsProvider
     {
         if(cachedLocations == null)
         {
-            if(fileSystem.exists(PNAProvider.CACHE_DIRECTORY + PNAProvider.CACHE_FILE))
-            {
-                try
-                {
-                    makeLocations(pnaProvider.parseCache());
-                }
-                catch(IOException e)
-                {
-                    logger.error("failed to parse cache file " + PNAProvider.CACHE_FILE, e);
-                }
-            }
-            else
-            {
-                fromSource();
-            }
+            parseSource();
         }
         return cachedLocations;
     }
@@ -124,14 +107,7 @@ public class PNALocationsProvider
     @Override
     public Collection<Location> fromSource()
     {
-        if(pnaProvider.downloadSource())
-        {
-            parseSource();
-        }
-        else if(fileSystem.exists(PNAProvider.CACHE_DIRECTORY + PNAProvider.CACHE_FILE))
-        {
-            fromCache();
-        }
+        parseSource();
         return cachedLocations;
     }
 

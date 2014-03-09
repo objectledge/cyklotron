@@ -1,0 +1,117 @@
+PNA;NAZWA JEDNOSTKI ORGANIZACYJNEJ;MIEJSCOWOå∆;ULICA;NR;GMINA;POWIAT;WOJEW”DZTWO
+00-940;Poczta Polska SpÛ≥ka Akcyjna Centrala;Warszawa;Stawki;2;Warszawa;Warszawa;mazowieckie
+00-941;CIT Centrala;Warszawa;åwiÍtokrzyska;31/33;Warszawa;Warszawa;mazowieckie
+00-941;CI Centrala;Warszawa;åwiÍtokrzyska;31/33;Warszawa;Warszawa;mazowieckie
+00-941;CL Centrala;Warszawa;åwiÍtokrzyska;31/33;Warszawa;Warszawa;mazowieckie
+40-940;COF Centrala;Katowice;Oddzia≥Ûw M≥odzieøy PowstaÒczej Pl.;7;Katowice;Katowice;úlπskie
+00-940;CR Centrala;Warszawa;Stawki;2;Warszawa;Warszawa;mazowieckie
+00-686;CUK Centrala;Warszawa;åwiÍtej Barbary;4;Warszawa;Warszawa;mazowieckie
+00-940;CZZL Centrala;Warszawa;Stawki;2;Warszawa;Warszawa;mazowieckie
+15-959;CI Oddzia≥ Regionalny w Bia≥ymstoku;Bia≥ystok;Kolejowa;26;Bia≥ystok;Bia≥ystok;podlaskie
+80-940;CI Oddzia≥ Regionalny w GdaÒsku;GdaÒsk;Targ Rakowy;7/8;GdaÒsk;GdaÒsk;pomorskie
+40-940;CI Oddzia≥ Regionalny w Katowicach;Katowice;Oddzia≥Ûw M≥odzieøy PowstaÒczej Pl.;7;Katowice;Katowice;úlπskie
+30-093;CI Oddzia≥ Regionalny w Krakowie;KrakÛw;Bronowicka;44;KrakÛw;KrakÛw;ma≥opolskie
+20-900;CI Oddzia≥ Regionalny w Lublinie;Lublin;Moritza Wac≥awa;2;Lublin;Lublin;lubelskie
+90-940;CI Oddzia≥ Regionalny w £odzi;£Ûdü;Koúciuszki Tadeusza Al.;5/7;£Ûdü;£Ûdü;≥Ûdzkie
+60-943;CI Oddzia≥ Regionalny w Poznaniu;PoznaÒ;G≥ogowska;17;PoznaÒ;PoznaÒ;wielkopolskie
+70-940;CI Oddzia≥ Regionalny w Szczecinie;Szczecin;Niepodleg≥oúci Al.;41/42;Szczecin;Szczecin;zachodniopomorskie
+00-941;CI Oddzia≥ Regionalny w Warszawie;Warszawa;åwiÍtokrzyska;31/33;Warszawa;Warszawa;mazowieckie
+50-940;CI Oddzia≥ Regionalny we Wroc≥awiu;Wroc≥aw;PowstaÒcÛw ålπskich;134;Wroc≥aw;Wroc≥aw;dolnoúlπskie
+85-700;CL Oddzia≥ Regionalny w Bydgoszczy;Bydgoszcz;Gajowa;99;Bydgoszcz;Bydgoszcz;kujawsko-pomorskie
+85-700;CL Oddzia≥ Terenowy w Bydgoszczy;Bydgoszcz;Gajowa;99;Bydgoszcz;Bydgoszcz;kujawsko-pomorskie
+86-300;CL Oddzia≥ Terenowy w Grudziπdzu;Grudziπdz;£yskowskiego Ignacego;39/41;Grudziπdz;Grudziπdz;kujawsko-pomorskie
+88-100;CL Oddzia≥ Terenowy w Inowroc≥awiu;Inowroc≥aw;Dojazdowa;1;Inowroc≥aw;inowroc≥awski;kujawsko-pomorskie
+87-100;CL Oddzia≥ Terenowy w Toruniu;ToruÒ;Polna;17;ToruÒ;ToruÒ;kujawsko-pomorskie
+87-800;CL Oddzia≥ Terenowy we W≥oc≥awku;W≥oc≥awek;Polna;7/9;W≥oc≥awek;W≥oc≥awek;kujawsko-pomorskie
+80-952;CL Oddzia≥ Regionalny w GdaÒsku;GdaÒsk;PartyzantÛw;70;GdaÒsk;GdaÒsk;pomorskie
+82-300;CL Oddzia≥ Terenowy w Elblπgu;Elblπg;Skrzydlata;13;Elblπg;Elblπg;warmiÒsko-mazurskie
+80-952;CL Oddzia≥ Terenowy w GdaÒsku;GdaÒsk;PartyzantÛw;70;GdaÒsk;GdaÒsk;pomorskie
+81-061;CL Oddzia≥ Terenowy w Gdyni;Gdynia;Hutnicza;36A;Gdynia;Gdynia;pomorskie
+40-555;CL Oddzia≥ Regionalny w Katowicach;Katowice;Rolna;7;Katowice;Katowice;úlπskie
+43-301;CL Oddzia≥ Terenowy w Bielsku-Bia≥ej;Bielsko-Bia≥a;Czechowicka;43;Bielsko-Bia≥a;Bielsko-Bia≥a;úlπskie
+41-906;CL Oddzia≥ Terenowy w Bytomiu;Bytom;Wroc≥awska;69;Bytom;Bytom;úlπskie
+42-200;CL Oddzia≥ Terenowy w CzÍstochowie;CzÍstochowa;èrÛdlana;6;CzÍstochowa;CzÍstochowa;úlπskie
+40-555;CL Oddzia≥ Terenowy w Katowicach;Katowice;Rolna;7;Katowice;Katowice;úlπskie
+45-125;CL Oddzia≥ Terenowy w Opolu;Opole;Sk≥adowa;2;Opole;Opole;opolskie
+31-553;CL Oddzia≥ Regionalny w Krakowie;KrakÛw;CystersÛw;21;KrakÛw;KrakÛw;ma≥opolskie
+38-200;CL Oddzia≥ Terenowy w Jaúle;Jas≥o;Towarowa;35;Jas≥o;jasielski;podkarpackie
+31-553;CL Oddzia≥ Terenowy w Krakowie;KrakÛw;CystersÛw;21;KrakÛw;KrakÛw;ma≥opolskie
+33-300;CL Oddzia≥ Terenowy w Nowym Sπczu;Nowy Sπcz;åniadeckich;13;Nowy Sπcz;Nowy Sπcz;ma≥opolskie
+37-700;CL Oddzia≥ Terenowy w Przemyúlu;Przemyúl;Wernyhory;23;Przemyúl;Przemyúl;podkarpackie
+35-083;CL Oddzia≥ Terenowy w Rzeszowie;RzeszÛw;Matuszczaka Adama;5;RzeszÛw;RzeszÛw;podkarpackie
+33-100;CL Oddzia≥ Terenowy w Tarnowie;TarnÛw;Jastruna Mieczys≥awa;3;TarnÛw;TarnÛw;ma≥opolskie
+20-954;CL Oddzia≥ Regionalny w Lublinie;Lublin;SierpiÒskiego Seweryna;26;Lublin;Lublin;lubelskie
+21-500;CL Oddzia≥ Terenowy w Bia≥ej Podlaskiej;Bia≥a Podlaska;£omaska;43D;Bia≥a Podlaska;Bia≥a Podlaska;lubelskie
+25-313;CL Oddzia≥ Terenowy w Kielcach;Kielce;Lotnicza;18;Kielce;Kielce;úwiÍtokrzyskie
+20-900;CL Oddzia≥ Terenowy w Lublinie;Lublin;Moritza Wac≥awa;2;Lublin;Lublin;lubelskie
+27-400;CL Oddzia≥ Terenowy w Ostrowcu åwiÍtokrzyskim;Ostrowiec åwiÍtokrzyski;KiliÒskiego Jana;47B;Ostrowiec åwiÍtokrzyski;ostrowiecki;úwiÍtokrzyskie
+26-600;CL Oddzia≥ Terenowy w Radomiu;Radom;Wierzbicka;80C;Radom;Radom;mazowieckie
+22-400;CL Oddzia≥ Terenowy w Zamoúciu;ZamoúÊ;Namys≥owskiego Karola;6;ZamoúÊ;ZamoúÊ;lubelskie
+94-945;CL Oddzia≥ Regionalny w £odzi;£Ûdü;Obywatelska;121/129;£Ûdü;£Ûdü;≥Ûdzkie
+94-104;CL Oddzia≥ Terenowy w £odzi;£Ûdü;Obywatelska;121/129;£Ûdü;£Ûdü;≥Ûdzkie
+10-417;CL Oddzia≥ Regionalny w Olsztynie;Olsztyn;Towarowa;4;Olsztyn;Olsztyn;warmiÒsko-mazurskie
+15-900;CL Oddzia≥ Terenowy w Bia≥ymstoku;Bia≥ystok;Kolejowa;26;Bia≥ystok;Bia≥ystok;podlaskie
+19-300;CL Oddzia≥ Terenowy w E≥ku;E≥k;Suwalska;4;E≥k;e≥cki;warmiÒsko-mazurskie
+10-417;CL Oddzia≥ Terenowy w Olsztynie;Olsztyn;Towarowa;4;Olsztyn;Olsztyn;warmiÒsko-mazurskie
+60-900;CL Oddzia≥ Regionalny w Poznaniu;Komorniki;Polna;120;Komorniki;poznaÒski;wielkopolskie
+66-400;CL Oddzia≥ Terenowy w Gorzowie Wielkopolskim;GorzÛw Wielkopolski;JagielloÒczyka Kazimierza;4;GorzÛw Wielkopolski;GorzÛw Wielkopolski;lubuskie
+62-800;CL Oddzia≥ Terenowy w Kaliszu;Kalisz;Zamkowa;18/20;Kalisz;Kalisz;wielkopolskie
+60-900;CL Oddzia≥ Terenowy w Poznaniu;Komorniki;Polna;120;Komorniki;poznaÒski;wielkopolskie
+65-900;CL Oddzia≥ Terenowy w Zielonej GÛrze;Zielona GÛra;Elektronowa;1;Zielona GÛra;Zielona GÛra;lubuskie
+70-661;CL Oddzia≥ Regionalny w Szczecinie;Szczecin;GdaÒska;15a;Szczecin;Szczecin;zachodniopomorskie
+75-211;CL Oddzia≥ Terenowy w Koszalinie;Koszalin;BohaterÛw Warszawy;3;Koszalin;Koszalin;zachodniopomorskie
+76-200;CL Oddzia≥ Terenowy w S≥upsku;S≥upsk;Stwosza Wita;14;S≥upsk;S≥upsk;pomorskie
+73-110;CL Oddzia≥ Terenowy w Stargardzie SzczeciÒskim;Stargard SzczeciÒski;Okrzei Stefana;16;Stargard SzczeciÒski;stargardzki;zachodniopomorskie
+70-661;CL Oddzia≥ Terenowy w Szczecinie;Szczecin;GdaÒska;15a;Szczecin;Szczecin;zachodniopomorskie
+03-450;CL Oddzia≥ Regionalny w Warszawie;Warszawa;Ratuszowa;7/9;Warszawa;Warszawa;mazowieckie
+06-400;CL Oddzia≥ Terenowy w Ciechanowie;CiechanÛw;Gostkowska;39a;CiechanÛw;ciechanowski;mazowieckie
+07-400;CL Oddzia≥ Terenowy w Ostro≥Íce;Ostro≥Íka;Targowa;19;Ostro≥Íka;Ostro≥Íka;mazowieckie
+09-401;CL Oddzia≥ Terenowy w P≥ocku;P≥ock;Przemys≥owa;19;P≥ock;P≥ock;mazowieckie
+08-110;CL Oddzia≥ Terenowy w Siedlcach;Siedlce;Brzeska;124;Siedlce;Siedlce;mazowieckie
+01-105;CL Oddzia≥ Terenowy w Warszawie;Warszawa;SowiÒskiego JÛzefa;28;Warszawa;Warszawa;mazowieckie
+03-450;CL Oddzia≥ Terenowy w Warszawie;Warszawa;Ratuszowa;7/9;Warszawa;Warszawa;mazowieckie
+50-900;CL Oddzia≥ Regionalny we Wroc≥awiu;Wroc≥aw;Ibn Siny Awicenny;21;Wroc≥aw;Wroc≥aw;dolnoúlπskie
+58-500;CL Oddzia≥ Terenowy w Jeleniej GÛrze;Jelenia GÛra;SpÛ≥dzielcza;43;Jelenia GÛra;Jelenia GÛra;dolnoúlπskie
+57-300;CL Oddzia≥ Terenowy w K≥odzku;K≥odzko;Objazdowa;14;K≥odzko;k≥odzki;dolnoúlπskie
+59-220;CL Oddzia≥ Terenowy w Legnicy;Legnica;PoznaÒska;50;Legnica;Legnica;dolnoúlπskie
+50-900;CL Oddzia≥ Terenowy we Wroc≥awiu;Wroc≥aw;Ibn Siny Awicenny;21;Wroc≥aw;Wroc≥aw;dolnoúlπskie
+80-801;CUK Oddzia≥ Regionalny w GdaÒsku;Gdynia;10 Lutego;10;Gdynia;Gdynia;pomorskie
+40-555;CUK Oddzia≥ Regionalny w Katowicach;Katowice;Rolna;7;Katowice;Katowice;úlπskie
+30-900;CUK Oddzia≥ Regionalny w Krakowie;KrakÛw;Prokocimska;6;KrakÛw;KrakÛw;ma≥opolskie
+90-900;CUK Oddzia≥ Regionalny w £odzi;£Ûdü;W≥Ûkniarzy Al.;227;£Ûdü;£Ûdü;≥Ûdzkie
+60-943;CUK Oddzia≥ Regionalny w Poznaniu;PoznaÒ;G≥ogowska;17;PoznaÒ;PoznaÒ;wielkopolskie
+00-941;CUK Oddzia≥ Regionalny w Warszawie;Warszawa;åwiÍtokrzyska;31/33;Warszawa;Warszawa;mazowieckie
+15-900;WÍze≥ Ekspedycyjno-Rozdzielczy w Bia≥ymstoku;Bia≥ystok;Kolejowa;15;Bia≥ystok;Bia≥ystok;podlaskie
+25-900;WÍze≥ Ekspedycyjno-Rozdzielczy w Kielcach;Kielce;Niepodleg≥oúci Pl.;2;Kielce;Kielce;úwiÍtokrzyskie
+60-900;WÍze≥ Ekspedycyjno-Rozdzielczy w Komornikach;Komorniki;Polna;120;Komorniki;poznaÒski;wielkopolskie
+30-900;WÍze≥ Ekspedycyjno-Rozdzielczy w Krakowie;KrakÛw;Prokocimska;6;KrakÛw;KrakÛw;ma≥opolskie
+85-900;WÍze≥ Ekspedycyjno-Rozdzielczy w Lisim Ogonie;Lisi Ogon;Pocztowa;12;Bia≥e B≥ota;bydgoski;kujawsko-pomorskie
+20-900;WÍze≥ Ekspedycyjno-Rozdzielczy w Lublinie;Lublin;Moritza Wac≥awa;2;Lublin;Lublin;lubelskie
+90-900;WÍze≥ Ekspedycyjno-Rozdzielczy w £odzi;£Ûdü;W≥Ûkniarzy Al.;227;£Ûdü;£Ûdü;≥Ûdzkie
+10-900;WÍze≥ Ekspedycyjno-Rozdzielczy w Olsztynie;Olsztyn;PartyzantÛw;39;Olsztyn;Olsztyn;warmiÒsko-mazurskie
+80-900;WÍze≥ Ekspedycyjno-Rozdzielczy w Pruszczu GdaÒskim;Pruszcz GdaÒski;Handlowa;4;Pruszcz GdaÒski;gdaÒski;pomorskie
+35-900;WÍze≥ Ekspedycyjno-Rozdzielczy Rudna Ma≥a;Rudna Ma≥a;;47 M;G≥ogÛw Ma≥opolski;rzeszowski;podkarpackie
+70-900;WÍze≥ Ekspedycyjno-Rozdzielczy w Szczecinie;Szczecin;Dworcowa;20 b;Szczecin;Szczecin;zachodniopomorskie
+00-900;WÍze≥ Ekspedycyjno-Rozdzielczy w Warszawie;Warszawa;£πczyny;8;Warszawa;Warszawa;mazowieckie
+50-900;WÍze≥ Ekspedycyjno-Rozdzielczy we Wroc≥awiu;Wroc≥aw;Ibn Siny Awicenny;21;Wroc≥aw;Wroc≥aw;dolnoúlπskie
+41-850;WÍze≥ Ekspedycyjno-Rozdzielczy w Zabrzu;Zabrze;MieløyÒskiego Macieja;5;Zabrze;Zabrze;úlπskie
+15-100;Region Sieci Bia≥ystok;Bia≥ystok;I Armii Wojska Polskiego;8 A;Bia≥ystok;Bia≥ystok;podlaskie
+85-001;Region Sieci Bydgoszcz;Bydgoszcz;JagielloÒska;6;Bydgoszcz;Bydgoszcz;kujawsko-pomorskie
+80-940;Region Sieci GdaÒsk;GdaÒsk;Targ Rakowy;7/8;GdaÒsk;GdaÒsk;pomorskie
+66-400;Region Sieci GorzÛw Wielkopolski;GorzÛw Wielkopolski;JagielloÒczyka Kazimierza;4;GorzÛw Wielkopolski;GorzÛw Wielkopolski;lubuskie
+40-001;Region Sieci Katowice;Katowice;Pocztowa;9;Katowice;Katowice;úlπskie
+25-001;Region Sieci Kielce;Kielce;Niepodleg≥oúci Pl.;2;Kielce;Kielce;úwiÍtokrzyskie
+30-940;Region Sieci KrakÛw;KrakÛw;Grochowska;2;KrakÛw;KrakÛw;ma≥opolskie
+20-001;Region Sieci Lublin;Lublin;Krakowskie Przedmieúcie;50;Lublin;Lublin;lubelskie
+90-001;Region Sieci £Ûdü;£Ûdü;Tuwima Juliana;38;£Ûdü;£Ûdü;≥Ûdzkie
+10-001;Region Sieci Olsztyn;Olsztyn;PieniÍønego Seweryna;21;Olsztyn;Olsztyn;warmiÒsko-mazurskie
+45-076;Region Sieci Opole;Opole;Krakowska;46;Opole;Opole;opolskie
+60-942;Region Sieci PoznaÒ;PoznaÒ;Koúciuszki Tadeusza;77;PoznaÒ;PoznaÒ;wielkopolskie
+35-959;Region Sieci RzeszÛw;RzeszÛw;Asnyka Adama;9;RzeszÛw;RzeszÛw;podkarpackie
+70-405;Region Sieci Szczecin;Szczecin;Niepodleg≥oúci Al.;41/42;Szczecin;Szczecin;zachodniopomorskie
+03-700;Region Sieci Warszawa-Miasto;Warszawa;Targowa;73;Warszawa;Warszawa;mazowieckie
+00-965;Region Sieci Warszawa-WojewÛdztwo;Warszawa;Towarowa;5;Warszawa;Warszawa;mazowieckie
+50-945;Region Sieci Wroc≥aw;Wroc≥aw;KrasiÒskiego Zygmunta;1;Wroc≥aw;Wroc≥aw;dolnoúlπskie
+85-940;Centrum Obs≥ugi Finansowej Bydgoszcz;Bydgoszcz;BernardyÒska;15;Bydgoszcz;Bydgoszcz;kujawsko-pomorskie
+41-902;Centrum Obs≥ugi Finansowej Bytom;Bytom;Karola Miarki;4;Bytom;Bytom;úlπskie
+95-042;Wydzia≥ NiedorÍczalnych Przesy≥ek;Koluszki;Kolejowa;4;Koluszki;≥Ûdzki wschodni;≥Ûdzkie
