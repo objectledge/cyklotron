@@ -284,10 +284,6 @@ public class PNATERYTLocationsProvider
             {
                 locations = pnaProvider.parseSource();
             }
-            else if(fileSystem.exists(PNAProvider.CACHE_DIRECTORY + PNAProvider.CACHE_FILE))
-            {
-                locations = pnaProvider.parseCache();
-            }
             if(locations != null)
             {
                 writeDB(locations);
