@@ -63,6 +63,7 @@ $viewEnclosureTool.top()
 ##TODO Add initial set of javascripts
 ## WARN end tag and space in between is for mozilla bugs
 #set($jslink = $link.sessionless())
+$jslink.parameters.remove()##
 <script type="text/javascript" src="$jslink.content('script/ScriptLoader.js')" ##
 charset="UTF-8"> </script>
 <script type="text/javascript">
