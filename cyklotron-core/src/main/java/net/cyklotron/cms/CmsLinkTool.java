@@ -190,7 +190,7 @@ public class CmsLinkTool
                 {
                     throw new RuntimeException("No site selected");
                 }
-                if(curSite.equals(node.getSite()))
+                if(curSite.equals(node.getSite()) && !isAbsolute())
                 {
                     return link;
                 }
