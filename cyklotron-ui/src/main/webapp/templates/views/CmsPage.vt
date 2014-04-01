@@ -60,6 +60,10 @@ $pageTool.addNameMeta('keywords', $node.keywords)##
 #foreach($meta in $pageTool.propertyMetas)
   <meta property="$meta.property" content="$meta.content">
 #end
+## canonical link
+#if($pageTool.canonicalLink)
+  <link rel="canonical" href="$pageTool.canonicalLink" />
+#end
   <link rel="stylesheet" type="text/css" href="$link.skinResource('style.css')">
 #foreach($styleLink in $pageTool.styleLinks)
   <link rel="$styleLink.rel" type="text/css" #if($styleLink.media) media="$styleLink.media"#end
