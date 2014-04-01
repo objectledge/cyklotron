@@ -178,38 +178,45 @@ public class CmsLinkTool
             {
                 link = this;
             }
-            final CmsData cmsData = cmsDataFactory.getCmsData(context);
-            SiteResource curSite = cmsData.getSite();
-            if(curSite == null)
+            if(getHost() == null)
             {
-                curSite = cmsData.getGlobalComponentsDataSite();
-            }
-            if(curSite == null)
-            {
-                throw new RuntimeException("No site selected");
-            }
-            if(curSite.equals(node.getSite()))
-            {
-                return link;
+                final CmsData cmsData = cmsDataFactory.getCmsData(context);
+                SiteResource curSite = cmsData.getSite();
+                if(curSite == null)
+                {
+                    curSite = cmsData.getGlobalComponentsDataSite();
+                }
+                if(curSite == null)
+                {
+                    throw new RuntimeException("No site selected");
+                }
+                if(curSite.equals(node.getSite()))
+                {
+                    return link;
+                }
+                else
+                {
+                    try
+                    {
+                        final CoralSession coralSession = coralSessionFactory.getCurrentSession();
+                        final String primaryHostName = siteService.getPrimaryMapping(coralSession,
+                            node.getSite());
+                        return link.host(primaryHostName);
+                    }
+                    catch(IllegalStateException e)
+                    {
+                        throw new RuntimeException("cannot access CoralSession", e);
+                    }
+                    catch(SiteException e)
+                    {
+                        throw new RuntimeException("cannot determine primary domain name for site"
+                            + node.getSite().getName(), e);
+                    }
+                }
             }
             else
             {
-                try
-                {
-                    final CoralSession coralSession = coralSessionFactory.getCurrentSession();
-                    final String primaryHostName = siteService.getPrimaryMapping(coralSession,
-                        node.getSite());
-                    return link.host(primaryHostName);
-                }
-                catch(IllegalStateException e)
-                {
-                    throw new RuntimeException("cannot access CoralSession", e);
-                }
-                catch(SiteException e)
-                {
-                    throw new RuntimeException("cannot determine primary domain name for site"
-                        + node.getSite().getName(), e);
-                }
+                return link;
             }
         }
         catch(ProcessingException e)
