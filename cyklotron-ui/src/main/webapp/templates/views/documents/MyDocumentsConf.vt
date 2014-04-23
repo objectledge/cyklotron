@@ -43,7 +43,7 @@ function clearResource(name, prop)
         </select>
         <select size="1" name="sort_dir">
           #set($opts = [["rosnąco", true], ["malejąco", false]])
-          #options($opts $config.getBoolean(sort_dir, false))
+          #options($opts $config.getBoolean("sort_dir", false))
         </select>
 	  </td>
     </tr>
