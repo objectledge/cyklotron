@@ -1,25 +1,22 @@
 package net.cyklotron.cms.modules.views.documents;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import org.objectledge.context.Context;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.query.MalformedQueryException;
 import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.datatypes.ResourceList;
 import org.objectledge.coral.relation.MalformedRelationQueryException;
 import org.objectledge.coral.relation.ResourceIdentifierResolver;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
-import org.objectledge.coral.table.ResourceListTableModel;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.table.InverseFilter;
 import org.objectledge.table.TableException;
@@ -32,9 +29,11 @@ import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.util.CmsResourceListTableModel;
 import net.cyklotron.cms.workflow.AutomatonResource;
 import net.cyklotron.cms.workflow.StateFilter;
 import net.cyklotron.cms.workflow.StateResource;
@@ -63,9 +62,16 @@ public class MyDocumentsImpl
 
     private final WorkflowService workflowService;
 
-    public MyDocumentsImpl(CoralSessionFactory coralSessionFactory,
-        CategoryService categoryService, SiteService siteService, WorkflowService workflowService)
+    private final Context context;
+
+    private final IntegrationService integrationService;
+
+    public MyDocumentsImpl(Context context, CoralSessionFactory coralSessionFactory,
+        CategoryService categoryService, IntegrationService integrationService,
+        SiteService siteService, WorkflowService workflowService)
     {
+        this.context = context;
+        this.integrationService = integrationService;
         this.coralSessionFactory = coralSessionFactory;
         this.categoryService = categoryService;
         this.siteService = siteService;
@@ -105,7 +111,8 @@ public class MyDocumentsImpl
         List<DocumentNodeResource> myDocuments = (List<DocumentNodeResource>)coralSession
             .getQuery().executeQuery(query).getList(1);
 
-        return new ResourceListTableModel<DocumentNodeResource>(myDocuments, locale);
+        return new CmsResourceListTableModel<DocumentNodeResource>(context, integrationService,
+            myDocuments, locale);
     }
 
     public TableModel<DocumentNodeResource> queryBasedModel(CategoryQueryResource includeQuery,
@@ -156,7 +163,8 @@ public class MyDocumentsImpl
             documentList.add((DocumentNodeResource)coralSession.getStore().getResource(i.next()));
         }
 
-        return new ResourceListTableModel<DocumentNodeResource>(documentList, locale);
+        return new CmsResourceListTableModel<DocumentNodeResource>(context, integrationService,
+            documentList, locale);
     }
 
     public LongSet queryPoolBasedSet(CategoryQueryPoolResource queryPool, String whereClause)
