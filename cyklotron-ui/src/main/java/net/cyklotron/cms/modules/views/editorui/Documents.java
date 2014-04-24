@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,9 +12,7 @@ import org.objectledge.authentication.UserManager;
 import org.objectledge.context.Context;
 import org.objectledge.coral.datatypes.DateAttributeHandler;
 import org.objectledge.coral.query.QueryResults;
-import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.security.Permission;
-import org.objectledge.coral.security.Role;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -89,7 +86,6 @@ public class Documents
         
 
         SiteResource site = getSite();
-        HashSet<Long> classifiedNodes = new HashSet<Long>();
         try
         {
             if(ownerLogin.length()> 0)
@@ -146,14 +142,14 @@ public class Documents
                 publishedNodesQuery);
             Resource[] publishedNodes = publishedNodeResults.getArray(1);
 
-            List assignedNodes = new ArrayList();
-            List takenNodes = new ArrayList();
-            List lockedNodes = new ArrayList();
-            List rejectedNodes = new ArrayList();
-            List preparedNodes = new ArrayList();
-            List expiredNodes = new ArrayList();
-            List proposedNodes = new ArrayList();
-            List unpublishedProposedNodes = new ArrayList();
+            List<NavigationNodeResource> assignedNodes = new ArrayList<>();
+            List<NavigationNodeResource> takenNodes = new ArrayList<>();
+            List<NavigationNodeResource> lockedNodes = new ArrayList<>();
+            List<NavigationNodeResource> rejectedNodes = new ArrayList<>();
+            List<NavigationNodeResource> preparedNodes = new ArrayList<>();
+            List<NavigationNodeResource> expiredNodes = new ArrayList<>();
+            List<NavigationNodeResource> proposedNodes = new ArrayList<>();
+            List<NavigationNodeResource> unpublishedProposedNodes = new ArrayList<>();
             
             Resource homePage = getHomePage();
             Resource[] parents = coralSession.getStore().
@@ -219,12 +215,26 @@ public class Documents
                     }
                     if(state.equals("locked"))
                     {
-                        lockedNodes.add(node);
+                        if(((DocumentNodeResource)node).isProposedContentDefined())
+                        {
+                            unpublishedProposedNodes.add(node);
+                        }
+                        else
+                        {
+                            lockedNodes.add(node);
+                        }
                         continue;
                     }
                     if(state.equals("rejected"))
                     {
-                        rejectedNodes.add(node);
+                        if(((DocumentNodeResource)node).isProposedContentDefined())
+                        {
+                            unpublishedProposedNodes.add(node);
+                        }
+                        else
+                        {
+                            rejectedNodes.add(node);
+                        }
                         continue;
                     }
                 }
@@ -261,7 +271,7 @@ public class Documents
                 }
             }
             
-            CreationTimeComparator pc = new CreationTimeComparator();
+            CreationTimeComparator<NavigationNodeResource> pc = new CreationTimeComparator<>();
             Collections.sort(assignedNodes, pc);
             Collections.reverse(assignedNodes);
             Collections.sort(takenNodes, pc);
