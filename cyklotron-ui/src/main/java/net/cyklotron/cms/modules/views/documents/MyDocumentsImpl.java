@@ -94,6 +94,25 @@ public class MyDocumentsImpl
         filters.add(new InverseFilter<StatefulResource>(new StateFilter(rejectedStates, true)));
         return filters;
     }
+    
+    public List<TableFilter<? super DocumentNodeResource>> statesFilter(String... include)
+        throws EntityDoesNotExistException, AmbigousEntityNameException, WorkflowException
+    {
+        CoralSession coralSession = coralSessionFactory.getCurrentSession();
+        List<TableFilter<? super DocumentNodeResource>> filters = new ArrayList<>();
+        ResourceClass<?> navigationNodeClass = coralSession.getSchema().getResourceClass(
+            "structure.navigation_node");
+        Resource cmsRoot = coralSession.getStore().getUniqueResourceByPath("/cms");
+        AutomatonResource automaton = workflowService.getPrimaryAutomaton(coralSession, cmsRoot,
+            navigationNodeClass);
+        Set<StateResource> rejectedStates = new HashSet<StateResource>();
+        for(String inState : include)
+        {
+            rejectedStates.add(workflowService.getState(coralSession, automaton, inState));
+        }
+        filters.add(new StateFilter(rejectedStates, false));
+        return filters;
+    }
 
     public TableModel<DocumentNodeResource> siteBasedModel(CmsData cmsData, Locale locale,
         String whereClause)
