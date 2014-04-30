@@ -8,6 +8,16 @@ $table.getColumn('state').set('label', 'Stan')
 $table.getColumn('ops').set('label', 'Operacje')
 $table.getColumn('ops').set('title',  '99%')
 #set($columnOrder = ['creation.time', 'title', 'state', 'ops'])
+
+$pageTool.addScriptLink("script/documents/Hartbeat.js")##
+<script>
+   jQuery(document).ready(function()
+   {
+     var hartbeat = new Hartbeat();
+     hartbeat.start();
+   });
+</script>
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0" cellspacing="0">
   <tr>
     #tableView_header($table $tableLink $columnOrder)
