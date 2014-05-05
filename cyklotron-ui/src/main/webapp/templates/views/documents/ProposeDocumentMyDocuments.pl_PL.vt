@@ -18,6 +18,26 @@ $pageTool.addScriptLink("script/documents/Hartbeat.js")##
    });
 </script>
 
+#set($stateMap = {
+  "PUBLISHED" : "Opublikowany",
+  "REJECTED" : "Odrzucony",
+  "PENDING" : "Oczekujący na publikację", 
+  "UPDATE_REQUEST" : "Zgłoszono zmiany", 
+  "REMOVE_REQUEST" : "Zgłoszono do usunięcia"})
+
+<div>
+	<form name="form1" method="get" action="">
+		<input type="hidden" name="filter_states" value="true">
+		<span>filtruj po stanie dokumentów:</span>
+		<select multiple name="selected_states">
+			#foreach($key in $stateMap.keySet())
+			 <option value="$key" #if(!$filterStates || $selectedStates.contains($key)) selected="selected" #end>$stateMap.get($key)</option>
+			#end
+		</select>
+		<a href="document.form1.submit();">filtruj</a>
+	</form>
+</div>
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0" cellspacing="0">
   <tr>
     #tableView_header($table $tableLink $columnOrder)
@@ -27,12 +47,6 @@ $pageTool.addScriptLink("script/documents/Hartbeat.js")##
     <td colspan="$columnOrder.size()">Nie dodałeś / dodałaś jeszcze żadnych dokumentów.</td>
   </tr>
   #else
-  #set($stateMap = {
-  "PUBLISHED" : "Opublikowany",
-  "REJECTED" : "Odrzucony",
-  "PENDING" : "Oczekujący na publikację", 
-  "UPDATE_REQUEST" : "Zgłoszono zmiany", 
-  "REMOVE_REQUEST" : "Zgłoszono do usunięcia"})
   #foreach($row in $table.rows)
   #set($state = $documentState.getState($row.object))
   <tr> 

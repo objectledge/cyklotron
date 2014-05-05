@@ -239,6 +239,7 @@ public class ProposeDocument
             I18nContext i18nContext = context.getAttribute(I18nContext.class);
             TemplatingContext templatingContext = context.getAttribute(TemplatingContext.class);
             CmsData cmsData = cmsDataFactory.getCmsData(context);
+            Parameters parameters = RequestParameters.getRequestParameters(context);
             Parameters screenConfig = cmsData.getEmbeddedScreenConfig();
             CoralSession coralSession = context.getAttribute(CoralSession.class);
             CategoryQueryResource includeQuery = myDocumentsImpl.getQueryResource("include",
@@ -258,8 +259,13 @@ public class ProposeDocument
                     i18nContext.get(), whereClause);
             }
 
-            List<TableFilter<? super DocumentNodeResource>> filters = myDocumentsImpl
-                .excludeStatesFilter("expired");
+            List<TableFilter<? super DocumentNodeResource>> filters;
+            String[] selectedStates = parameters.getStrings("selected_states");
+            if(selectedStates.length > 0) { 
+                filters = myDocumentsImpl.statesFilter(selectedStates);
+            } else {
+                filters = myDocumentsImpl.excludeStatesFilter("expired");
+            }
 
             TableState state = tableStateManager.getState(context, this.getClass().getName()
                 + ":MyDocuments");
@@ -272,6 +278,8 @@ public class ProposeDocument
             }
             templatingContext.put("table", new TableTool<DocumentNodeResource>(state, filters,
                 model));
+            templatingContext.put("selectedStates", Arrays.asList(selectedStates));
+            templatingContext.put("filterStates",parameters.getBoolean("filter_states",false));
             templatingContext.put("documentState", new DocumentStateTool(coralSession, logger));
         }
         catch(Exception e)
