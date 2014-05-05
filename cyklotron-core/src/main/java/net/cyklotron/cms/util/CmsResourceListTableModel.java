@@ -1,8 +1,10 @@
 package net.cyklotron.cms.util;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import net.cyklotron.cms.PrioritizedResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -11,6 +13,8 @@ import net.cyklotron.cms.documents.table.EventStartComparator;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.table.PriorityAndValidityStartComparator;
+import net.cyklotron.cms.structure.table.StateComparator;
+import net.cyklotron.cms.structure.table.TitleComparator;
 import net.cyklotron.cms.structure.table.ValidityStartComparator;
 
 import org.objectledge.context.Context;
@@ -19,6 +23,7 @@ import org.objectledge.coral.table.ResourceListTableModel;
 import org.objectledge.coral.table.comparator.TimeComparator;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
+import org.objectledge.table.comparator.Direction;
 
 /**
  * Implementation of Table model for CMS resources
@@ -55,7 +60,7 @@ public class CmsResourceListTableModel<T extends Resource> extends ResourceListT
         throws TableException
     {
         TableColumn<T>[] cols = super.getColumns(locale, list);
-        TableColumn<?>[] newCols = new TableColumn[cols.length + 6];
+        TableColumn<?>[] newCols = new TableColumn[cols.length + 8];
         for(int i=0; i<cols.length; i++)
         {
             newCols[i] = cols[i];
@@ -73,6 +78,10 @@ public class CmsResourceListTableModel<T extends Resource> extends ResourceListT
                 TimeComparator.Direction.DESC));
         newCols[cols.length + 5] = new TableColumn<DocumentNodeResource>("event.end", new EventEndComparator(
             TimeComparator.Direction.ASC), new EventEndComparator(TimeComparator.Direction.DESC));
+        newCols[cols.length + 6] = new TableColumn<NavigationNodeResource>("title",
+            new TitleComparator(locale, Direction.ASC), new TitleComparator(locale, Direction.DESC));
+        newCols[cols.length + 7] = new TableColumn<NavigationNodeResource>("state",
+            new StateComparator(Direction.ASC), new StateComparator(Direction.DESC));
         return (TableColumn<T>[])newCols;
     }
 }
