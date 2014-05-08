@@ -258,13 +258,11 @@ public class ProposeDocument
                 model = myDocumentsImpl.queryBasedModel(includeQuery, excludeQuery, cmsData,
                     i18nContext.get(), whereClause);
             }
+            List<TableFilter<? super DocumentNodeResource>> filters = myDocumentsImpl.excludeStatesFilter("expired");
 
-            List<TableFilter<? super DocumentNodeResource>> filters;
             String[] selectedStates = parameters.getStrings("selected_states");
-            if(selectedStates.length > 0) { 
-                filters = myDocumentsImpl.statesFilter(selectedStates);
-            } else {
-                filters = myDocumentsImpl.excludeStatesFilter("expired");
+            if(selectedStates.length > 0) {
+                filters.add(new MyDocumentsStateFilter(coralSession, logger, selectedStates));
             }
 
             TableState state = tableStateManager.getState(context, this.getClass().getName()

@@ -17,14 +17,14 @@ import net.cyklotron.cms.workflow.StatefulResource;
 public class StateFilter<T extends StatefulResource>
     implements TableFilter<T>
 {
-    private final Set<String> allowedStatesNames;
+    protected Set<String> allowedStatesNames;
 
     public StateFilter(String[] states)
     {
         allowedStatesNames = new HashSet<String>(Arrays.asList(states));
     }
 
-    public boolean accept(StatefulResource resource)
+    public boolean accept(T resource)
     {
         final StateResource state = resource.getState();
         return state != null && allowedStatesNames.contains(state.getName());
