@@ -149,13 +149,15 @@ public class CmsLinkTool
         if(node != null)
         {
             final LinkTool hostLink = getHostLink(node);
+            final LinkTool link = node.getSite().getRequiresSecureChannel() ? hostLink.https()
+                : hostLink;
             if(node.getQuickPath() != null)
             {
-                return hostLink.rootContent(node.getQuickPath());
+                return link.rootContent(node.getQuickPath());
             }
             else
             {
-                return hostLink.unsetView().set("x", node.getIdString());
+                return link.unsetView().set("x", node.getIdString());
             }
         }
         else
@@ -168,16 +170,6 @@ public class CmsLinkTool
     {
         try
         {
-            LinkTool link;
-            HttpContext httpContext = context.getAttribute(HttpContext.class);
-            if(httpContext.getRequest().isSecure())
-            {
-                link = this.https();
-            }
-            else
-            {
-                link = this;
-            }
             if(getHost() == null)
             {
                 final CmsData cmsData = cmsDataFactory.getCmsData(context);
@@ -192,7 +184,7 @@ public class CmsLinkTool
                 }
                 if(curSite.equals(node.getSite()) && !isAbsolute())
                 {
-                    return link;
+                    return this;
                 }
                 else
                 {
@@ -201,7 +193,7 @@ public class CmsLinkTool
                         final CoralSession coralSession = coralSessionFactory.getCurrentSession();
                         final String primaryHostName = siteService.getPrimaryMapping(coralSession,
                             node.getSite());
-                        return link.host(primaryHostName);
+                        return this.host(primaryHostName);
                     }
                     catch(IllegalStateException e)
                     {
@@ -216,7 +208,7 @@ public class CmsLinkTool
             }
             else
             {
-                return link;
+                return this;
             }
         }
         catch(ProcessingException e)
