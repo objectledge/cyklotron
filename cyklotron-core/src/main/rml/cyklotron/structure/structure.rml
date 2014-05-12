@@ -63,6 +63,7 @@ date eventEnd,
 resource_list relatedResourcesSequence,
 text proposedContent,
 string organizationIds,
+string rejectedOrganizationIds,
 text redactorsNote
 );
 
