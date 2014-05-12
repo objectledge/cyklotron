@@ -300,9 +300,6 @@ public class MyDocumentsImpl
 
         private final Logger logger;
 
-        private final String[] MY_DOCUMENTS_STATES_ORDER = { "PUBLISHED", "REJECTED",
-                        "PENDING", "DAMAEGED", "UPDATE_REQUEST", "REMOVE_REQUEST" };
-
         public MyDocumentsResourceListTableModel(CoralSession coralSession, Logger logger,
             List<T> list, Locale locale)
             throws TableException
@@ -340,11 +337,11 @@ public class MyDocumentsImpl
             newCols[cols.length + 6] = new TableColumn<DocumentNodeResource>("title",
                 new TitleComparator(locale, Direction.ASC), new TitleComparator(locale,
                     Direction.DESC));
+            List<String> myDocumentsStateOrderList = Arrays.asList((new String[]{ "PUBLISHED", "REJECTED",
+                "PENDING", "DAMAEGED", "UPDATE_REQUEST", "REMOVE_REQUEST" }));            
             newCols[cols.length + 7] = new TableColumn<DocumentNodeResource>("state",
-                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger, Arrays
-                    .asList(MY_DOCUMENTS_STATES_ORDER), Direction.ASC),
-                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger, Arrays
-                    .asList(MY_DOCUMENTS_STATES_ORDER), Direction.DESC));
+                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger, myDocumentsStateOrderList, Direction.ASC),
+                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger, myDocumentsStateOrderList, Direction.DESC));
             return (TableColumn<T>[])newCols;
         }
     }
