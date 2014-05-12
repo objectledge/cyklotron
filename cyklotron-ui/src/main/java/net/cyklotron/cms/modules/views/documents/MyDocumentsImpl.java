@@ -314,32 +314,32 @@ public class MyDocumentsImpl
             throws TableException
         {
             TableColumn<T>[] cols = super.getColumns(locale, list);
-            TableColumn<?>[] newCols = new TableColumn[cols.length + 8];
+            TableColumn<?>[] newCols = new TableColumn[cols.length + 7];
             for(int i = 0; i < cols.length; i++)
             {
                 newCols[i] = cols[i];
             }
-            newCols[cols.length + 1] = new TableColumn<PrioritizedResource>("priority",
+            newCols[cols.length] = new TableColumn<PrioritizedResource>("priority",
                 new PriorityComparator<PrioritizedResource>());
-            newCols[cols.length + 2] = new TableColumn<NavigationNodeResource>("validity.start",
+            newCols[cols.length + 1] = new TableColumn<NavigationNodeResource>("validity.start",
                 new ValidityStartComparator(TimeComparator.Direction.ASC),
                 new ValidityStartComparator(TimeComparator.Direction.DESC));
-            newCols[cols.length + 3] = new TableColumn<NavigationNodeResource>(
+            newCols[cols.length + 2] = new TableColumn<NavigationNodeResource>(
                 "priority.validity.start", new PriorityAndValidityStartComparator(
                     TimeComparator.Direction.ASC), new PriorityAndValidityStartComparator(
                     TimeComparator.Direction.DESC));
-            newCols[cols.length + 4] = new TableColumn<DocumentNodeResource>("event.start",
+            newCols[cols.length + 3] = new TableColumn<DocumentNodeResource>("event.start",
                 new EventStartComparator(TimeComparator.Direction.ASC), new EventStartComparator(
                     TimeComparator.Direction.DESC));
-            newCols[cols.length + 5] = new TableColumn<DocumentNodeResource>("event.end",
+            newCols[cols.length + 4] = new TableColumn<DocumentNodeResource>("event.end",
                 new EventEndComparator(TimeComparator.Direction.ASC), new EventEndComparator(
                     TimeComparator.Direction.DESC));
-            newCols[cols.length + 6] = new TableColumn<DocumentNodeResource>("title",
+            newCols[cols.length + 5] = new TableColumn<NavigationNodeResource>("title",
                 new TitleComparator(locale, Direction.ASC), new TitleComparator(locale,
                     Direction.DESC));
             List<String> myDocumentsStateOrderList = Arrays.asList((new String[]{ "PUBLISHED", "REJECTED",
                 "PENDING", "DAMAEGED", "UPDATE_REQUEST", "REMOVE_REQUEST" }));            
-            newCols[cols.length + 7] = new TableColumn<DocumentNodeResource>("state",
+            newCols[cols.length + 6] = new TableColumn<DocumentNodeResource>("state",
                 new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger, myDocumentsStateOrderList, Direction.ASC),
                 new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger, myDocumentsStateOrderList, Direction.DESC));
             return (TableColumn<T>[])newCols;
