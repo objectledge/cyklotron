@@ -21,9 +21,9 @@ import net.cyklotron.cms.workflow.StatefulResource;
 public class StateComparator<T extends StatefulResource>
     implements Comparator<T>
 {
-    private final List<String> stateSortOrderList;
+    protected List<String> stateSortOrderList;
 
-    private final Direction direction;
+    protected Direction direction;
 
     public static String[] defaultStateSortOrderList = { "accepted", "assigned", "expired",
                     "locked", "new", "prepared", "published", "rejected", "taken" };
