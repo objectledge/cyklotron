@@ -97,7 +97,7 @@ public abstract class AbstractRenderer
     // initialization ///////////////////////////////////////////////////////
     
     public AbstractRenderer(Logger log, Templating templating, MailSystem mailSystem,
-        CategoryService categoryService, CategoryQueryService categoryQueryService,
+        CategoryQueryService categoryQueryService, CategoryService categoryService, 
         PeriodicalsService periodicalsService,
         PeriodicalsTemplatingService periodicalsTemplatingService, FilesService cmsFilesService,
         DateFormatter dateFormatter, IntegrationService integrationService, SiteService siteService)

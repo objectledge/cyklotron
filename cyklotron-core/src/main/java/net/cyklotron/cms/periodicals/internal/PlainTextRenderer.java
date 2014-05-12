@@ -11,6 +11,7 @@ import org.objectledge.i18n.DateFormatter;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.templating.Templating;
 
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -31,11 +32,11 @@ public class PlainTextRenderer extends AbstractRenderer
     public static final String RENDERER_NAME = "plain_text";    
     
     public PlainTextRenderer(Logger log, Templating templating, MailSystem mailSystem,
-        CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
+        CategoryQueryService categoryQueryService, CategoryService categoryService, PeriodicalsService periodicalsService,
         PeriodicalsTemplatingService periodicalsTemplatingService, FilesService cmsFilesService,
         DateFormatter dateFormatter, IntegrationService integrationService, SiteService siteService)
     {
-        super(log, templating, mailSystem, categoryQueryService, periodicalsService,
+        super(log, templating, mailSystem, categoryQueryService, categoryService, periodicalsService,
                         periodicalsTemplatingService, cmsFilesService, dateFormatter,
                         integrationService, siteService);
     }
