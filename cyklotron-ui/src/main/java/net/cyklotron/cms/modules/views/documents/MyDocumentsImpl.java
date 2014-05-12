@@ -62,20 +62,20 @@ import bak.pcj.set.LongSet;
  * @author rafal.krzewski@caltha.pl
  */
 public class MyDocumentsImpl
-{    
+{
     private final CoralSessionFactory coralSessionFactory;
 
     private final CategoryService categoryService;
 
     private Logger logger;
-    
+
     private final SiteService siteService;
-    
+
     private final WorkflowService workflowService;
 
     public MyDocumentsImpl(CoralSessionFactory coralSessionFactory,
-        CategoryService categoryService, Logger logger, 
-        SiteService siteService, WorkflowService workflowService)
+        CategoryService categoryService, Logger logger, SiteService siteService,
+        WorkflowService workflowService)
     {
         this.coralSessionFactory = coralSessionFactory;
         this.categoryService = categoryService;
@@ -188,7 +188,7 @@ public class MyDocumentsImpl
             documentList.add((DocumentNodeResource)coralSession.getStore().getResource(i.next()));
         }
 
-        return new MyDocumentsResourceListTableModel<DocumentNodeResource>(coralSession, logger, 
+        return new MyDocumentsResourceListTableModel<DocumentNodeResource>(coralSession, logger,
             documentList, locale);
     }
 
@@ -300,9 +300,8 @@ public class MyDocumentsImpl
 
         private final Logger logger;
 
-        private final List<String> MY_DOCUMENTS_STATES_ORDER = Arrays.asList(new String[] {
-                        "PUBLISHED", "REJECTED", "PENDING", "DAMAEGED", "UPDATE_REQUEST",
-                        "REMOVE_REQUEST" });
+        private final String[] MY_DOCUMENTS_STATES_ORDER = { "PUBLISHED", "REJECTED",
+                        "PENDING", "DAMAEGED", "UPDATE_REQUEST", "REMOVE_REQUEST" };
 
         public MyDocumentsResourceListTableModel(CoralSession coralSession, Logger logger,
             List<T> list, Locale locale)
@@ -342,10 +341,10 @@ public class MyDocumentsImpl
                 new TitleComparator(locale, Direction.ASC), new TitleComparator(locale,
                     Direction.DESC));
             newCols[cols.length + 7] = new TableColumn<DocumentNodeResource>("state",
-                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger,
-                    MY_DOCUMENTS_STATES_ORDER, Direction.ASC),
-                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger,
-                    MY_DOCUMENTS_STATES_ORDER, Direction.DESC));
+                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger, Arrays
+                    .asList(MY_DOCUMENTS_STATES_ORDER), Direction.ASC),
+                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger, Arrays
+                    .asList(MY_DOCUMENTS_STATES_ORDER), Direction.DESC));
             return (TableColumn<T>[])newCols;
         }
     }
