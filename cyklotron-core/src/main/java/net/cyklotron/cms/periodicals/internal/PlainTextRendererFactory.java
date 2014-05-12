@@ -30,9 +30,6 @@ public class PlainTextRendererFactory
     /** category query service. */
     protected CategoryQueryService categoryQueryService;
 
-    /** category service. */
-    protected CategoryService categoryService;
-
     /** file service. */
     protected FilesService cmsFilesService;
 
@@ -48,7 +45,7 @@ public class PlainTextRendererFactory
     private final MailSystem mailSystem;
 
     public PlainTextRendererFactory(Logger log, Templating templating, MailSystem mailSystem,
-        CategoryQueryService categoryQueryService, CategoryService categoryService,
+        CategoryQueryService categoryQueryService,
         FilesService cmsFilesService, DateFormatter dateFormatter,
         IntegrationService integrationService, SiteService siteService,
         PeriodicalsTemplatingService periodicalsTemplatingService)
@@ -57,7 +54,6 @@ public class PlainTextRendererFactory
         this.templating = templating;
         this.mailSystem = mailSystem;
         this.categoryQueryService = categoryQueryService;
-        this.categoryService = categoryService;
         this.cmsFilesService = cmsFilesService;
         this.dateFormatter = dateFormatter;
         this.siteService = siteService;
@@ -70,7 +66,7 @@ public class PlainTextRendererFactory
     public PeriodicalRenderer getRenderer(PeriodicalsService periodicalsService)
     {
         return new PlainTextRenderer(log, templating, mailSystem, categoryQueryService,
-            categoryService, periodicalsService, periodicalsTemplatingService, cmsFilesService,
+            periodicalsService, periodicalsTemplatingService, cmsFilesService,
             dateFormatter, integrationService, siteService);
     }
 

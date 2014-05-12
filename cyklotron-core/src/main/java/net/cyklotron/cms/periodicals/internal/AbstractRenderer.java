@@ -86,8 +86,6 @@ public abstract class AbstractRenderer
 
     private final MailSystem mailSystem;
     
-    private final CategoryService categoryService;
-    
     /** 'everyone' system role. */
     //protected Role anonymous;
     
@@ -97,7 +95,7 @@ public abstract class AbstractRenderer
     // initialization ///////////////////////////////////////////////////////
     
     public AbstractRenderer(Logger log, Templating templating, MailSystem mailSystem,
-        CategoryQueryService categoryQueryService, CategoryService categoryService, 
+        CategoryQueryService categoryQueryService,
         PeriodicalsService periodicalsService,
         PeriodicalsTemplatingService periodicalsTemplatingService, FilesService cmsFilesService,
         DateFormatter dateFormatter, IntegrationService integrationService, SiteService siteService)
@@ -106,7 +104,6 @@ public abstract class AbstractRenderer
         this.templating = templating;
         this.mailSystem = mailSystem;
         this.categoryQueryService = categoryQueryService;
-        this.categoryService = categoryService;
         this.periodicalsService = periodicalsService;
         this.periodicalsTemplatingService = periodicalsTemplatingService;
         this.cmsFilesService = cmsFilesService;
@@ -259,7 +256,6 @@ public abstract class AbstractRenderer
         context.put("contentFile", contentFile);
         context.put("link", periodicalsService.getLinkRenderer());
         context.put("coralSession", coralSession);
-        context.put("categoryService", categoryService);
         context.put("html_content_filter", new DiscardImagesHTMLContentFilter());
         context.put("string", new StringTool());
         context.put("queryResults", queryResults);
