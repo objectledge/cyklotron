@@ -11,6 +11,7 @@ import net.cyklotron.cms.CmsData;
 import net.cyklotron.cms.PrioritizedResource;
 import net.cyklotron.cms.category.CategoryResource;
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.documents.table.EventEndComparator;
@@ -62,6 +63,7 @@ import bak.pcj.set.LongSet;
  * @author rafal.krzewski@caltha.pl
  */
 public class MyDocumentsImpl
+    implements MyDocuments
 {
     private final CoralSessionFactory coralSessionFactory;
 
@@ -73,9 +75,8 @@ public class MyDocumentsImpl
 
     private final WorkflowService workflowService;
 
-    public MyDocumentsImpl(CoralSessionFactory coralSessionFactory,
-        CategoryService categoryService, Logger logger, SiteService siteService,
-        WorkflowService workflowService)
+    public MyDocumentsImpl(Logger logger, CoralSessionFactory coralSessionFactory,
+        CategoryService categoryService, SiteService siteService, WorkflowService workflowService)
     {
         this.coralSessionFactory = coralSessionFactory;
         this.categoryService = categoryService;
@@ -190,6 +191,44 @@ public class MyDocumentsImpl
 
         return new MyDocumentsResourceListTableModel<DocumentNodeResource>(coralSession, logger,
             documentList, locale);
+    }
+
+    public LongSet queryPoolBasedSet(CategoryQueryPoolResource queryPool, String whereClause)
+        throws SiteException, MalformedQueryException, MalformedRelationQueryException,
+        EntityDoesNotExistException, TableException
+    {
+        CoralSession coralSession = coralSessionFactory.getCurrentSession();
+        if(!whereClause.isEmpty())
+        {
+            whereClause = " WHERE " + whereClause;
+        }
+        String resQuery = "FIND RESOURCE FROM documents.document_node" + whereClause;
+
+        QueryResults qr = coralSession.getQuery().executeQuery(resQuery);
+        LongSet ids = new LongOpenHashSet(Math.max(1, qr.rowCount()));
+        for(QueryResults.Row r : qr.getList())
+        {
+            ids.add(r.getId());
+        }
+
+        String catQuery = "";
+        LongSet included = new LongOpenHashSet(Math.max(1, qr.rowCount()));
+        final ResourceIdentifierResolver resolver = getResolver(coralSession);
+        for(CategoryQueryResource query : (List<CategoryQueryResource>)queryPool.getQueries())
+        {
+            if(query.getQuery("").trim().length() > 0)
+            {
+                catQuery = query.getQuery().replace(";", "") + " * "
+                    + siteClause(query, coralSession) + ";";
+            }
+            else
+            {
+                catQuery = siteClause(query, coralSession) + ";";
+            }
+            included.addAll(coralSession.getRelationQuery().queryIds(catQuery, resolver, ids));
+        }
+        ids.retainAll(included);
+        return ids;
     }
 
     private String siteClause(CategoryQueryResource query, CoralSession coralSession)
@@ -337,11 +376,14 @@ public class MyDocumentsImpl
             newCols[cols.length + 5] = new TableColumn<NavigationNodeResource>("title",
                 new TitleComparator(locale, Direction.ASC), new TitleComparator(locale,
                     Direction.DESC));
-            List<String> myDocumentsStateOrderList = Arrays.asList((new String[]{ "PUBLISHED", "REJECTED",
-                "PENDING", "DAMAEGED", "UPDATE_REQUEST", "REMOVE_REQUEST" }));            
+            List<String> myDocumentsStateOrderList = Arrays
+                .asList((new String[] { "PUBLISHED", "REJECTED", "PENDING", "DAMAEGED",
+                                "UPDATE_REQUEST", "REMOVE_REQUEST" }));
             newCols[cols.length + 6] = new TableColumn<DocumentNodeResource>("state",
-                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger, myDocumentsStateOrderList, Direction.ASC),
-                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger, myDocumentsStateOrderList, Direction.DESC));
+                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger,
+                    myDocumentsStateOrderList, Direction.ASC),
+                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger,
+                    myDocumentsStateOrderList, Direction.DESC));
             return (TableColumn<T>[])newCols;
         }
     }
