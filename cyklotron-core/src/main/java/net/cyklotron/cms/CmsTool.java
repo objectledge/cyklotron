@@ -43,7 +43,9 @@ import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 import net.cyklotron.cms.structure.NavigationNodeResourceImpl;
+import net.cyklotron.cms.structure.table.StateComparator;
 import net.cyklotron.cms.util.IndexTitleComparator;
+import net.cyklotron.cms.workflow.StatefulResource;
 
 /**
  * A context tool used for cms application.
@@ -699,6 +701,12 @@ public class CmsTool
         String[] attrNames, List<T> resources)
     {
         Comparator<T> c = new MultiAttributeComparator<>(rc, locale, dirs, attrNames);
+        Collections.sort(resources, c);
+    }
+    
+    public <T extends StatefulResource> void sortByState(Direction direction, Set<String> stateSortOrder, List<StatefulResource> resources)
+    {
+        StateComparator<StatefulResource> c =  new StateComparator<>(stateSortOrder, direction);
         Collections.sort(resources, c);
     }
 }

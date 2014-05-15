@@ -5,6 +5,7 @@ import org.objectledge.i18n.DateFormatter;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.templating.Templating;
 
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.IntegrationService;
@@ -16,9 +17,8 @@ import net.cyklotron.cms.site.SiteService;
 
 /**
  * @author pablo@caltha.pl
- *
  */
-public class PlainTextRendererFactory 
+public class PlainTextRendererFactory
     implements PeriodicalRendererFactory
 {
     /** the logging facility. */
@@ -44,9 +44,8 @@ public class PlainTextRendererFactory
 
     private final MailSystem mailSystem;
 
-    
     public PlainTextRendererFactory(Logger log, Templating templating, MailSystem mailSystem,
-        CategoryQueryService categoryQueryService, 
+        CategoryQueryService categoryQueryService,
         FilesService cmsFilesService, DateFormatter dateFormatter,
         IntegrationService integrationService, SiteService siteService,
         PeriodicalsTemplatingService periodicalsTemplatingService)
@@ -60,18 +59,17 @@ public class PlainTextRendererFactory
         this.siteService = siteService;
         this.periodicalsTemplatingService = periodicalsTemplatingService;
     }
-    
-    
-    /** 
+
+    /**
      * {@inheritDoc}
      */
     public PeriodicalRenderer getRenderer(PeriodicalsService periodicalsService)
     {
-        return new PlainTextRenderer(log,templating, mailSystem,
-            categoryQueryService, periodicalsService, periodicalsTemplatingService,
-            cmsFilesService, dateFormatter, integrationService,siteService);
+        return new PlainTextRenderer(log, templating, mailSystem, categoryQueryService,
+            periodicalsService, periodicalsTemplatingService, cmsFilesService,
+            dateFormatter, integrationService, siteService);
     }
-    
+
     /**
      * {@inheritDoc}
      */

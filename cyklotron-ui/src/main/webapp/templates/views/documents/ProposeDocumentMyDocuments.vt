@@ -8,6 +8,36 @@ $table.getColumn('state').set('label', 'State')
 $table.getColumn('ops').set('label', 'Operations')
 $table.getColumn('ops').set('title',  '99%')
 #set($columnOrder = ['creation.time', 'title', 'state', 'ops'])
+
+$pageTool.addScriptLink("script/documents/Hartbeat.js")##
+<script>
+   jQuery(document).ready(function()
+   {
+     var hartbeat = new Hartbeat();
+     hartbeat.start();
+   });
+</script>
+
+#set($stateMap = {
+  "PUBLISHED" : "Published",
+  "REJECTED" : "Rejected",
+  "PENDING" : "Pending", 
+  "UPDATE_REQUEST" : "Changes requested", 
+  "REMOVE_REQUEST" : "Removal requested"})
+
+<div>
+	<form name="form1" method="get" action="">
+	    <input type="hidden" name="filter_states" value="true">
+		<span>document state filter:</span> 
+		<select multiple name="selected_states">
+			#foreach($key in $stateMap.keySet())
+			 <option value="$key" #if(!$filterStates || $selectedStates.contains($key)) selected="selected" #end>$stateMap.get($key)</option>
+			#end
+		</select>
+		<a href="document.form1.submit();">filter</a>
+	</form>
+</div>
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0" cellspacing="0">
   <tr>
     #tableView_header($table $tableLink $columnOrder)
@@ -17,12 +47,6 @@ $table.getColumn('ops').set('title',  '99%')
     <td colspan="$columnOrder.size()">You havent submitted any documents yet.</td>
   </tr>
   #else
-  #set($stateMap = {
-  "PUBLISHED" : "Published",
-  "REJECTED" : "Rejected",
-  "PENDING" : "Pending", 
-  "UPDATE_REQUEST" : "Changes requested", 
-  "REMOVE_REQUEST" : "Removal requested"})
   #foreach($row in $table.rows)
   #set($state = $documentState.getState($row.object))
   <tr> 

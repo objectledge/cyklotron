@@ -1,11 +1,37 @@
 package net.cyklotron.cms.modules.views.documents;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import net.cyklotron.cms.CmsData;
+import net.cyklotron.cms.PrioritizedResource;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.category.query.CategoryQueryPoolResource;
+import net.cyklotron.cms.category.query.CategoryQueryResource;
+import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.table.EventEndComparator;
+import net.cyklotron.cms.documents.table.EventStartComparator;
+import net.cyklotron.cms.site.SiteException;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.table.PriorityAndValidityStartComparator;
+import net.cyklotron.cms.structure.table.TitleComparator;
+import net.cyklotron.cms.structure.table.ValidityStartComparator;
+import net.cyklotron.cms.util.PriorityComparator;
+import net.cyklotron.cms.workflow.AutomatonResource;
+import net.cyklotron.cms.workflow.StateFilter;
+import net.cyklotron.cms.workflow.StateResource;
+import net.cyklotron.cms.workflow.StatefulResource;
+import net.cyklotron.cms.workflow.WorkflowException;
+import net.cyklotron.cms.workflow.WorkflowService;
+
+import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.query.MalformedQueryException;
@@ -16,29 +42,15 @@ import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.table.ResourceListTableModel;
+import org.objectledge.coral.table.comparator.TimeComparator;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.table.InverseFilter;
+import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
 import org.objectledge.table.TableFilter;
 import org.objectledge.table.TableModel;
-
-import org.objectledge.context.Context;
-import net.cyklotron.cms.CmsData;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.category.query.CategoryQueryResource;
-import net.cyklotron.cms.documents.DocumentNodeResource;
-import net.cyklotron.cms.integration.IntegrationService;
-import net.cyklotron.cms.site.SiteException;
-import net.cyklotron.cms.site.SiteResource;
-import net.cyklotron.cms.site.SiteService;
-import net.cyklotron.cms.util.CmsResourceListTableModel;
-import net.cyklotron.cms.workflow.AutomatonResource;
-import net.cyklotron.cms.workflow.StateFilter;
-import net.cyklotron.cms.workflow.StateResource;
-import net.cyklotron.cms.workflow.StatefulResource;
-import net.cyklotron.cms.workflow.WorkflowException;
-import net.cyklotron.cms.workflow.WorkflowService;
+import org.objectledge.table.comparator.Direction;
 
 import bak.pcj.LongIterator;
 import bak.pcj.set.LongOpenHashSet;
@@ -51,27 +63,24 @@ import bak.pcj.set.LongSet;
  * @author rafal.krzewski@caltha.pl
  */
 public class MyDocumentsImpl
+    implements MyDocuments
 {
     private final CoralSessionFactory coralSessionFactory;
 
     private final CategoryService categoryService;
 
+    private Logger logger;
+
     private final SiteService siteService;
 
     private final WorkflowService workflowService;
 
-    private final Context context;
-
-    private final IntegrationService integrationService;
-
-    public MyDocumentsImpl(Context context, CoralSessionFactory coralSessionFactory,
-        CategoryService categoryService, IntegrationService integrationService,
-        SiteService siteService, WorkflowService workflowService)
+    public MyDocumentsImpl(Logger logger, CoralSessionFactory coralSessionFactory,
+        CategoryService categoryService, SiteService siteService, WorkflowService workflowService)
     {
-        this.context = context;
-        this.integrationService = integrationService;
         this.coralSessionFactory = coralSessionFactory;
         this.categoryService = categoryService;
+        this.logger = logger;
         this.siteService = siteService;
         this.workflowService = workflowService;
     }
@@ -95,6 +104,25 @@ public class MyDocumentsImpl
         return filters;
     }
 
+    public List<TableFilter<? super DocumentNodeResource>> statesFilter(String... include)
+        throws EntityDoesNotExistException, AmbigousEntityNameException, WorkflowException
+    {
+        CoralSession coralSession = coralSessionFactory.getCurrentSession();
+        List<TableFilter<? super DocumentNodeResource>> filters = new ArrayList<>();
+        ResourceClass<?> navigationNodeClass = coralSession.getSchema().getResourceClass(
+            "structure.navigation_node");
+        Resource cmsRoot = coralSession.getStore().getUniqueResourceByPath("/cms");
+        AutomatonResource automaton = workflowService.getPrimaryAutomaton(coralSession, cmsRoot,
+            navigationNodeClass);
+        Set<StateResource> rejectedStates = new HashSet<StateResource>();
+        for(String inState : include)
+        {
+            rejectedStates.add(workflowService.getState(coralSession, automaton, inState));
+        }
+        filters.add(new StateFilter(rejectedStates, false));
+        return filters;
+    }
+
     public TableModel<DocumentNodeResource> siteBasedModel(CmsData cmsData, Locale locale,
         String whereClause)
         throws MalformedQueryException, TableException
@@ -109,7 +137,8 @@ public class MyDocumentsImpl
         List<DocumentNodeResource> myDocuments = (List<DocumentNodeResource>)coralSession
             .getQuery().executeQuery(query).getList(1);
 
-        return new CmsResourceListTableModel<DocumentNodeResource>(context, integrationService, myDocuments, locale);
+        return new MyDocumentsResourceListTableModel<DocumentNodeResource>(coralSession, logger,
+            myDocuments, locale);
     }
 
     public TableModel<DocumentNodeResource> queryBasedModel(CategoryQueryResource includeQuery,
@@ -160,7 +189,46 @@ public class MyDocumentsImpl
             documentList.add((DocumentNodeResource)coralSession.getStore().getResource(i.next()));
         }
 
-        return new CmsResourceListTableModel<DocumentNodeResource>(context, integrationService, documentList, locale);
+        return new MyDocumentsResourceListTableModel<DocumentNodeResource>(coralSession, logger,
+            documentList, locale);
+    }
+
+    public LongSet queryPoolBasedSet(CategoryQueryPoolResource queryPool, String whereClause)
+        throws SiteException, MalformedQueryException, MalformedRelationQueryException,
+        EntityDoesNotExistException, TableException
+    {
+        CoralSession coralSession = coralSessionFactory.getCurrentSession();
+        if(!whereClause.isEmpty())
+        {
+            whereClause = " WHERE " + whereClause;
+        }
+        String resQuery = "FIND RESOURCE FROM documents.document_node" + whereClause;
+
+        QueryResults qr = coralSession.getQuery().executeQuery(resQuery);
+        LongSet ids = new LongOpenHashSet(Math.max(1, qr.rowCount()));
+        for(QueryResults.Row r : qr.getList())
+        {
+            ids.add(r.getId());
+        }
+
+        String catQuery = "";
+        LongSet included = new LongOpenHashSet(Math.max(1, qr.rowCount()));
+        final ResourceIdentifierResolver resolver = getResolver(coralSession);
+        for(CategoryQueryResource query : (List<CategoryQueryResource>)queryPool.getQueries())
+        {
+            if(query.getQuery("").trim().length() > 0)
+            {
+                catQuery = query.getQuery().replace(";", "") + " * "
+                    + siteClause(query, coralSession) + ";";
+            }
+            else
+            {
+                catQuery = siteClause(query, coralSession) + ";";
+            }
+            included.addAll(coralSession.getRelationQuery().queryIds(catQuery, resolver, ids));
+        }
+        ids.retainAll(included);
+        return ids;
     }
 
     private String siteClause(CategoryQueryResource query, CoralSession coralSession)
@@ -259,5 +327,64 @@ public class MyDocumentsImpl
             }
         }
         return null;
+    }
+
+    /**
+     * Implementation of Table model for hand weighted CMS resources
+     */
+    public class MyDocumentsResourceListTableModel<T extends Resource>
+        extends ResourceListTableModel<T>
+    {
+        private final CoralSession coralSession;
+
+        private final Logger logger;
+
+        public MyDocumentsResourceListTableModel(CoralSession coralSession, Logger logger,
+            List<T> list, Locale locale)
+            throws TableException
+        {
+            super(list, locale);
+            this.coralSession = coralSession;
+            this.logger = logger;
+            this.columns = getColumns(locale, list);
+        }
+
+        protected TableColumn<T>[] getColumns(Locale locale, List<T> list)
+            throws TableException
+        {
+            TableColumn<T>[] cols = super.getColumns(locale, list);
+            TableColumn<?>[] newCols = new TableColumn[cols.length + 7];
+            for(int i = 0; i < cols.length; i++)
+            {
+                newCols[i] = cols[i];
+            }
+            newCols[cols.length] = new TableColumn<PrioritizedResource>("priority",
+                new PriorityComparator<PrioritizedResource>());
+            newCols[cols.length + 1] = new TableColumn<NavigationNodeResource>("validity.start",
+                new ValidityStartComparator(TimeComparator.Direction.ASC),
+                new ValidityStartComparator(TimeComparator.Direction.DESC));
+            newCols[cols.length + 2] = new TableColumn<NavigationNodeResource>(
+                "priority.validity.start", new PriorityAndValidityStartComparator(
+                    TimeComparator.Direction.ASC), new PriorityAndValidityStartComparator(
+                    TimeComparator.Direction.DESC));
+            newCols[cols.length + 3] = new TableColumn<DocumentNodeResource>("event.start",
+                new EventStartComparator(TimeComparator.Direction.ASC), new EventStartComparator(
+                    TimeComparator.Direction.DESC));
+            newCols[cols.length + 4] = new TableColumn<DocumentNodeResource>("event.end",
+                new EventEndComparator(TimeComparator.Direction.ASC), new EventEndComparator(
+                    TimeComparator.Direction.DESC));
+            newCols[cols.length + 5] = new TableColumn<NavigationNodeResource>("title",
+                new TitleComparator(locale, Direction.ASC), new TitleComparator(locale,
+                    Direction.DESC));
+            List<String> myDocumentsStateOrderList = Arrays
+                .asList((new String[] { "PUBLISHED", "REJECTED", "PENDING", "DAMAEGED",
+                                "UPDATE_REQUEST", "REMOVE_REQUEST" }));
+            newCols[cols.length + 6] = new TableColumn<DocumentNodeResource>("state",
+                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger,
+                    myDocumentsStateOrderList, Direction.ASC),
+                new MyDocumentsStateComparator<DocumentNodeResource>(coralSession, logger,
+                    myDocumentsStateOrderList, Direction.DESC));
+            return (TableColumn<T>[])newCols;
+        }
     }
 }

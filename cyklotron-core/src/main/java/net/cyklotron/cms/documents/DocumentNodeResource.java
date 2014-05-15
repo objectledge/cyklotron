@@ -418,6 +418,36 @@ public interface DocumentNodeResource
     public boolean isRedactorsNoteDefined();
  
     /**
+     * Returns the value of the <code>rejectedOrganizationIds</code> attribute.
+     *
+     * @return the value of the the <code>rejectedOrganizationIds</code> attribute.
+     */
+    public String getRejectedOrganizationIds();
+    
+    /**
+     * Returns the value of the <code>rejectedOrganizationIds</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>rejectedOrganizationIds</code> attribute.
+     */
+    public String getRejectedOrganizationIds(String defaultValue);
+
+    /**
+     * Sets the value of the <code>rejectedOrganizationIds</code> attribute.
+     *
+     * @param value the value of the <code>rejectedOrganizationIds</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRejectedOrganizationIds(String value);   
+   
+	/**
+	 * Checks if the value of the <code>rejectedOrganizationIds</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>rejectedOrganizationIds</code> attribute is defined.
+	 */
+    public boolean isRejectedOrganizationIdsDefined();
+ 
+    /**
      * Returns the value of the <code>relatedResourcesSequence</code> attribute.
      *
      * @return the value of the the <code>relatedResourcesSequence</code> attribute.

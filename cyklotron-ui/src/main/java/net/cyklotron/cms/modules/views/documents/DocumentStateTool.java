@@ -11,6 +11,9 @@ import net.cyklotron.cms.structure.internal.ProposedDocumentData;
 
 public class DocumentStateTool
 {
+    public static final String[] DOCUMENT_STATES = { "DAMAEGED", "REMOVE_REQUEST",
+                    "UPDATE_REQUEST", "PUBLISHED", "REJECTED", "PENDING" };
+    
     private final CoralSession coralSession;
     
     protected Logger logger;

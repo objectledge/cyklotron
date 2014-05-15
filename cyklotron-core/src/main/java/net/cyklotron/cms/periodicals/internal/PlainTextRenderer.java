@@ -11,6 +11,7 @@ import org.objectledge.i18n.DateFormatter;
 import org.objectledge.mail.MailSystem;
 import org.objectledge.templating.Templating;
 
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.files.FilesService;
 import net.cyklotron.cms.integration.IntegrationService;

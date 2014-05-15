@@ -4,6 +4,7 @@ $pageTool.addScriptLink('script/jquery/ui/ui.widget.js')##
 $pageTool.addScriptLink('script/jquery/ui/ui.position.js')##
 $pageTool.addScriptLink('script/jquery/ui/ui.autocomplete.js')##
 $pageTool.addScriptLink('script/jquery/ui/plugin/jquery.autocomplete.js')##
+$pageTool.addScriptLink("script/documents/Hartbeat.js")##
 $pageTool.addScriptLink("script/ngodatabase/autocomplete.js")##
 $pageTool.addScriptLink("script/urlsformatter.js")##
 $pageTool.addStyleLink('script/jquery/themes/base/jquery.ui.base.css')##
@@ -18,6 +19,10 @@ $pageTool.addStyleLink('script/jquery/ui/plugin/jquery.autocomplete.css')##
    jQuery(document).ready(function()
    {
      initProposeDocumentAutocomplete(5, '$link.view('organizations.JsonOrganizations')', '$link.view('locations.JsonLocations')', $clear_org_if_not_match);
+#if(!$cms_tool.userData.isAnonymous())
+     var hartbeat = new Hartbeat();
+     hartbeat.start();
+#end
    });
    
    function formatUrlFileds()

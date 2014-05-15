@@ -22,6 +22,15 @@
 
 ## COMMAND BAR
 $pageTool.addStyleLink('style/action-buttons.css')##
+$pageTool.addScriptLink("script/documents/Hartbeat.js")##
+<script>
+   jQuery(document).ready(function()
+   {
+     var hartbeat = new Hartbeat();
+     hartbeat.start();
+   });
+</script>
+
 <div class="action-buttons">
   <div class="additional">
   </div>
@@ -31,6 +40,5 @@ $pageTool.addStyleLink('style/action-buttons.css')##
 #end
   </div>
 </div>
-
 
 #genericScreenTrailer()

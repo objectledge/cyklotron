@@ -32,6 +32,7 @@ import org.objectledge.templating.TemplatingContext;
 import org.objectledge.utils.StringUtils;
 import org.objectledge.web.mvc.tools.StringTool;
 
+import net.cyklotron.cms.category.CategoryService;
 import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
@@ -94,10 +95,10 @@ public abstract class AbstractRenderer
     // initialization ///////////////////////////////////////////////////////
     
     public AbstractRenderer(Logger log, Templating templating, MailSystem mailSystem,
-        CategoryQueryService categoryQueryService, PeriodicalsService periodicalsService,
-        PeriodicalsTemplatingService periodicalsTemplatingService,
-        FilesService cmsFilesService, DateFormatter dateFormatter,
-        IntegrationService integrationService, SiteService siteService)
+        CategoryQueryService categoryQueryService,
+        PeriodicalsService periodicalsService,
+        PeriodicalsTemplatingService periodicalsTemplatingService, FilesService cmsFilesService,
+        DateFormatter dateFormatter, IntegrationService integrationService, SiteService siteService)
     {
         this.log = log;
         this.templating = templating;

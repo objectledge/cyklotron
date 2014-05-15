@@ -110,6 +110,9 @@ public class DocumentNodeResourceImpl
     /** The AttributeDefinition object for the <code>redactorsNote</code> attribute. */
 	private static AttributeDefinition<String> redactorsNoteDef;
 
+    /** The AttributeDefinition object for the <code>rejectedOrganizationIds</code> attribute. */
+	private static AttributeDefinition<String> rejectedOrganizationIdsDef;
+
     /** The AttributeDefinition object for the <code>relatedResourcesSequence</code> attribute. */
 	private static AttributeDefinition<ResourceList> relatedResourcesSequenceDef;
 
@@ -962,6 +965,66 @@ public class DocumentNodeResourceImpl
     public boolean isRedactorsNoteDefined()
 	{
 	    return isDefined(redactorsNoteDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>rejectedOrganizationIds</code> attribute.
+     *
+     * @return the value of the <code>rejectedOrganizationIds</code> attribute.
+     */
+    public String getRejectedOrganizationIds()
+    {
+        return get(rejectedOrganizationIdsDef);
+    }
+    
+    /**
+     * Returns the value of the <code>rejectedOrganizationIds</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>rejectedOrganizationIds</code> attribute.
+     */
+    public String getRejectedOrganizationIds(String defaultValue)
+    {
+        return get(rejectedOrganizationIdsDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>rejectedOrganizationIds</code> attribute.
+     *
+     * @param value the value of the <code>rejectedOrganizationIds</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setRejectedOrganizationIds(String value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(rejectedOrganizationIdsDef, value);
+            }
+            else
+            {
+                unset(rejectedOrganizationIdsDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>rejectedOrganizationIds</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>rejectedOrganizationIds</code> attribute is defined.
+	 */
+    public boolean isRejectedOrganizationIdsDefined()
+	{
+	    return isDefined(rejectedOrganizationIdsDef);
 	}
  
     /**

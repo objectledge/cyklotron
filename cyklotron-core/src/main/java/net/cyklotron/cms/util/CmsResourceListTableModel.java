@@ -20,6 +20,7 @@ import org.objectledge.coral.table.comparator.TimeComparator;
 import org.objectledge.table.TableColumn;
 import org.objectledge.table.TableException;
 
+
 /**
  * Implementation of Table model for CMS resources
  *
