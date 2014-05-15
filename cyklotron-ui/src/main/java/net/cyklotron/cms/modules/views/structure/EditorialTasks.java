@@ -29,7 +29,6 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.modules.actions.structure.workflow.MoveToWaitingRoom;
 import net.cyklotron.cms.modules.views.documents.DocumentStateTool;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -139,10 +138,7 @@ public class EditorialTasks
             SimpleDateFormat df = new SimpleDateFormat(AttributeHandlerBase.DATE_TIME_FORMAT);
             query = query + " AND creation_time > '" + df.format(calendar.getTime()) + "'";
 
-            Resource publishedState = coralSession.getStore().getUniqueResourceByPath(
-                "/cms/workflow/automata/structure.navigation_node/states/published");
-            proposedChangesQuery = proposedChangesQuery + " AND state = "
-                + publishedState.getIdString() + " AND DEFINED proposedContent";
+            proposedChangesQuery = proposedChangesQuery + " AND DEFINED proposedContent";
             
             QueryResults results = coralSession.getQuery().
                 executeQuery(query);
@@ -188,62 +184,27 @@ public class EditorialTasks
                     {
                         if(state.equals("assigned"))
                         {
-                            if(((DocumentNodeResource)node).isProposedContentDefined())
-                            {
-                                unpublishedProposedNodes.add(node);
-                            }
-                            else
-                            {
-                                assignedNodes.add(node);
-                            }
+                            assignedNodes.add(node);
                             continue;
                         }
 						if(state.equals("prepared"))
 						{
-                            if(((DocumentNodeResource)node).isProposedContentDefined())
-                            {
-                                unpublishedProposedNodes.add(node);
-                            }
-                            else
-                            {
-                                preparedNodes.add(node);
-                            }
+                            preparedNodes.add(node);
                             continue;
 						}
                         if(state.equals("taken"))
                         {
-                            if(((DocumentNodeResource)node).isProposedContentDefined())
-                            {
-                                unpublishedProposedNodes.add(node);
-                            }
-                            else
-                            {
-                                takenNodes.add(node);
-                            }
+                            takenNodes.add(node);
                             continue;
                         }
                         if(state.equals("locked"))
                         {
-                            if(((DocumentNodeResource)node).isProposedContentDefined())
-                            {
-                                unpublishedProposedNodes.add(node);
-                            }
-                            else
-                            {
-                                lockedNodes.add(node);
-                            }
+                            lockedNodes.add(node);
                             continue;
                         }
                         if(state.equals("rejected"))
                         {
-                            if(((DocumentNodeResource)node).isProposedContentDefined())
-                            {
-                                unpublishedProposedNodes.add(node);
-                            }
-                            else
-                            {
-                                rejectedNodes.add(node);
-                            }
+                            rejectedNodes.add(node);
                             continue;
                         }
                     }
@@ -252,14 +213,7 @@ public class EditorialTasks
                 {
                     if(state.equals("new"))
                     {
-                        if(((DocumentNodeResource)node).isProposedContentDefined())
-                        {
-                            unpublishedProposedNodes.add(node);
-                        }
-                        else
-                        {
-                            newNodes.add(node);
-                        }
+                        newNodes.add(node);
                         continue;
                     }
                     if(state.equals("expired"))
@@ -283,7 +237,19 @@ public class EditorialTasks
                 {
                     if(subject.equals(node.getOwner()) || subject.hasPermission(node, editorPermission))
                     {
-                        proposedNodes.add(node);
+                        if(node.getState() == null)
+                        {
+                            continue;
+                        }
+                        String state = node.getState().getName();
+                        if(state.equals("published"))
+                        {
+                            proposedNodes.add(node);
+                        }
+                        else
+                        {
+                            unpublishedProposedNodes.add(node);
+                        }
                     }
                 }    
             }
