@@ -67,7 +67,7 @@ function accountStatus(account)
 					},
 					error: function(jqXHR, textStatus, errorThrown){		
 						logUserToSystem('internal_error');
-					},				 
+					}
 		    });		
 	}
 
