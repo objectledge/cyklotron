@@ -163,7 +163,8 @@
              class="org.objectledge.web.captcha.ReCaptchaCaptchaServiceImpl"/>
   <component class-key="org.objectledge.authentication.api.ServerApiRestrictionsProvider"
   			 class="org.objectledge.authentication.api.ServerApiRestrictionsProviderImpl"/>
-  <component class="org.objectledge.upload.FileUpload"/>    
+  <component class-key="org.objectledge.upload.FileUpload"
+             class="org.objectledge.upload.FileUploadImpl"/>    
   <component class-key="org.objectledge.table.TableStateManager"
              class="org.objectledge.table.TableStateManagerImpl"/>
   
