@@ -1,0 +1,2 @@
+ALTER RESOURCE CLASS documents.document_node 
+ADD ATTRIBUTE string rejectedOrganizationIds;
