@@ -94,6 +94,8 @@ public class ProposeDocumentConf
             String formats = screenConfig.get(
                 "attachments_allowed_formats", "jpg gif doc rtf pdf xls");
             templatingContext.put("attachments_allowed_formats", formats);
+            templatingContext.put("attachments_multi_upload",
+                screenConfig.getBoolean("attachments_multi_upload", false));
             templatingContext.put("inherit_categories", screenConfig.getBoolean("inherit_categories", false));
             templatingContext.put("calendar_tree", screenConfig.getBoolean("calendar_tree", false));
             long parentId = screenConfig.getLong("parent_id", -1L);

@@ -91,6 +91,8 @@ public class ProposedDocumentData
 
     private long attachmentDirId;
 
+    private boolean attachmentsMultiUpload;
+
     // form data
     private String name;
 
@@ -193,6 +195,7 @@ public class ProposedDocumentData
             "jpg gif doc rtf pdf xls");
         attachmentFormatList = Arrays.asList(attachmentsAllowedFormats.toLowerCase().split("\\s+"));
         attachmentDirId = configuration.getLong("attachments_dir_id", -1L);
+        attachmentsMultiUpload = configuration.getBoolean("attachments_multi_upload", false);
         addDocumentVisualEditor = configuration.getBoolean("add_document_visual_editor", false);
         clearOrganizationIfNotMatch = configuration.getBoolean("clear_org_if_not_match", false);
         cleanupProfile = configuration.get("cleanup_profile", DEFAULT_CLENAUP_PROFILE);
@@ -303,6 +306,7 @@ public class ProposedDocumentData
             templatingContext.put("attachments_remaining_count", remaining);
             templatingContext.put("attachments_max_size", attachmentsMaxSize);
             templatingContext.put("attachments_allowed_formats", attachmentsAllowedFormats);
+            templatingContext.put("attachments_multi_upload", attachmentsMultiUpload);
             templatingContext.put("current_attachments", attachments);
             // fill up with empty strings to make template logic more simple
             while(attachmentDescriptions.size() < attachmentsMaxCount)
