@@ -138,7 +138,10 @@ public class EditorialTasks
             SimpleDateFormat df = new SimpleDateFormat(AttributeHandlerBase.DATE_TIME_FORMAT);
             query = query + " AND creation_time > '" + df.format(calendar.getTime()) + "'";
 
-            proposedChangesQuery = proposedChangesQuery + " AND DEFINED proposedContent";
+            Resource expiredState = coralSession.getStore().getUniqueResourceByPath(
+                "/cms/workflow/automata/structure.navigation_node/states/expired");
+            proposedChangesQuery = proposedChangesQuery + " AND state != "
+                + expiredState.getIdString() + " AND DEFINED proposedContent";
             
             QueryResults results = coralSession.getQuery().
                 executeQuery(query);
