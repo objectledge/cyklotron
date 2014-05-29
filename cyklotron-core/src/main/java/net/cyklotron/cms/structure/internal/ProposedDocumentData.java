@@ -93,6 +93,8 @@ public class ProposedDocumentData
 
     private boolean attachmentsMultiUpload;
 
+    private int attachmentsThumbnailSize;
+   
     // form data
     private String name;
 
@@ -196,6 +198,7 @@ public class ProposedDocumentData
         attachmentFormatList = Arrays.asList(attachmentsAllowedFormats.toLowerCase().split("\\s+"));
         attachmentDirId = configuration.getLong("attachments_dir_id", -1L);
         attachmentsMultiUpload = configuration.getBoolean("attachments_multi_upload", false);
+        attachmentsThumbnailSize = configuration.getInt("attachments_thumbnails_size", 64);
         addDocumentVisualEditor = configuration.getBoolean("add_document_visual_editor", false);
         clearOrganizationIfNotMatch = configuration.getBoolean("clear_org_if_not_match", false);
         cleanupProfile = configuration.get("cleanup_profile", DEFAULT_CLENAUP_PROFILE);
@@ -307,6 +310,7 @@ public class ProposedDocumentData
             templatingContext.put("attachments_max_size", attachmentsMaxSize);
             templatingContext.put("attachments_allowed_formats", attachmentsAllowedFormats);
             templatingContext.put("attachments_multi_upload", attachmentsMultiUpload);
+            templatingContext.put("attachments_thumbnails_size", attachmentsThumbnailSize);
             templatingContext.put("current_attachments", attachments);
             // fill up with empty strings to make template logic more simple
             while(attachmentDescriptions.size() < attachmentsMaxCount)

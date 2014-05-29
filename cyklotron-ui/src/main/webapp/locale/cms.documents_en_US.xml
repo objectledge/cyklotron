@@ -132,6 +132,7 @@
       <item name="attachemnt_images_max_size">maximum extent of image attachment (px)</item>
       <item name="attachments_allowed_formats">allowed formats</item>
       <item name="attachments_multi_upload">asynchronous file upload</item>
+      <item name="attachments_thumbnails_size">thumbnail size for uploaded image</item>
       <item name="parent">target location of the new documents</item>
       <item name="owner_login">choose owner</item>
       <item name="editing_enabled">allow editing of own document by authors</item>

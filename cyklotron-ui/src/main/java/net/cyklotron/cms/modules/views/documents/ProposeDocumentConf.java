@@ -98,6 +98,8 @@ public class ProposeDocumentConf
                 screenConfig.getBoolean("attachments_multi_upload", false));
             templatingContext.put("inherit_categories", screenConfig.getBoolean("inherit_categories", false));
             templatingContext.put("calendar_tree", screenConfig.getBoolean("calendar_tree", false));
+            templatingContext.put("attachments_thumbnails_size",
+                screenConfig.getInt("attachments_thumbnails_size", 64));
             long parentId = screenConfig.getLong("parent_id", -1L);
             if(parentId != -1)
             {
