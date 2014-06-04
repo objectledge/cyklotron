@@ -603,8 +603,8 @@ public class ProposedDocumentData
         return true;
     }
 
-    public boolean isFileUploadValid(CoralSession coralSession, FileUpload fileUpload,
-        FilesService filesService)
+    public boolean isFileUploadValid(CoralSession coralSession, Parameters parameters,
+        FileUpload fileUpload, FilesService filesService)
         throws ProcessingException
     {
         boolean valid = true;
@@ -637,6 +637,9 @@ public class ProposedDocumentData
                     fileCheck: while(containers.hasNext() && i < attachmentsMaxCount)
                     {
                         UploadContainer container = containers.next();
+                        String description = parameters.get(
+                            "attachment_description_" + container.getName(), "");
+                        attachmentDescriptions.set(i, description);
                         if(!isAttachmentValid(i, container, filesService))
                         {
                             valid = false;
