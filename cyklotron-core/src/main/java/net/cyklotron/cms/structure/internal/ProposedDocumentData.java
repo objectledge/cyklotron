@@ -40,6 +40,7 @@ import org.objectledge.parameters.Parameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.upload.FileUpload;
+import org.objectledge.upload.UploadBucket;
 import org.objectledge.upload.UploadContainer;
 import org.objectledge.upload.UploadLimitExceededException;
 import org.objectledge.utils.StringUtils;
@@ -94,7 +95,9 @@ public class ProposedDocumentData
     private boolean attachmentsMultiUpload;
 
     private int attachmentsThumbnailSize;
-   
+
+    private String uploadBucketId;
+
     // form data
     private String name;
 
@@ -264,6 +267,7 @@ public class ProposedDocumentData
                     attachments.add(FileResourceImpl.getFileResource(coralSession, fileId));
                 }
             }
+            uploadBucketId = parameters.get("upload_bucket_id", "");
             attachmentContents = new ArrayList<>(attachmentsMaxCount);
             attachmentTypes = new ArrayList<>(attachmentsMaxCount);
             attachmentNames = new ArrayList<>(attachmentsMaxCount);
@@ -318,6 +322,7 @@ public class ProposedDocumentData
                 attachmentDescriptions.add("");
             }
             templatingContext.put("attachment_descriptions", DocumentMetadataHelper.enc(attachmentDescriptions));
+            templatingContext.put("upload_bucket_id", uploadBucketId);
         }
         templatingContext.put("editorial_note", DocumentMetadataHelper.enc(editorialNote));
         templatingContext.put("add_document_visual_editor", addDocumentVisualEditor);
@@ -624,41 +629,43 @@ public class ProposedDocumentData
             }
             if(valid)
             {
-                fileCheck: for(int i = attachments.size(); i < attachmentsMaxCount; i++)
+                if(attachmentsMultiUpload)
                 {
-                    try
+                    UploadBucket bucket = fileUpload.getBucket(uploadBucketId);
+                    Iterator<UploadContainer> containers = bucket.getContainers().iterator();
+                    int i = attachments.size();
+                    fileCheck: while(containers.hasNext() && i < attachmentsMaxCount)
                     {
-                        UploadContainer uploadedFile = fileUpload.getContainer("attachment_" + (i + 1));
-                        if(uploadedFile != null)
+                        UploadContainer container = containers.next();
+                        if(!isAttachmentValid(i, container, filesService))
                         {
-                            if(uploadedFile.getSize() > attachmentsMaxSize * 1024)
-                            {
-                                validationFailure = "attachment_size_exceeded";
-                                valid = false;
-                                break fileCheck;
-                            }
-                            String fileName = uploadedFile.getFileName();
-                            String fileExt = fileName.substring(fileName.lastIndexOf('.') + 1)
-                                .trim().toLowerCase();
-                            if(!attachmentFormatList.contains(fileExt))
-                            {
-                                validationFailure = "attachment_type_not_allowed";
-                                valid = false;
-                                break fileCheck;
-                            }
-
-                            if(!isAttachmentValid(i, uploadedFile, filesService))
-                            {
-                                valid = false;
-                                break fileCheck;
-                            }
+                            valid = false;
+                            break fileCheck;
                         }
                     }
-                    catch(UploadLimitExceededException e)
+                }
+                else
+                {
+                    fileCheck: for(int i = attachments.size(); i < attachmentsMaxCount; i++)
                     {
-                        validationFailure = "upload_size_exceeded"; // i18n
-                        valid = false;
-                        break fileCheck;
+                        try
+                        {
+                            UploadContainer uploadedFile = fileUpload.getContainer("attachment_" + (i + 1));
+                            if(uploadedFile != null)
+                            {
+                                if(!isAttachmentValid(i, uploadedFile, filesService))
+                                {
+                                    valid = false;
+                                    break fileCheck;
+                                }
+                            }
+                        }
+                        catch(UploadLimitExceededException e)
+                        {
+                            validationFailure = "upload_size_exceeded"; // i18n
+                            valid = false;
+                            break fileCheck;
+                        }
                     }
                 }
             }
@@ -669,6 +676,20 @@ public class ProposedDocumentData
     private boolean isAttachmentValid(int index, UploadContainer uploadedFile,
         FilesService filesService)
     {
+        if(uploadedFile.getSize() > attachmentsMaxSize * 1024)
+        {
+            validationFailure = "attachment_size_exceeded";
+            return false;
+        }
+
+        String fileName = uploadedFile.getFileName();
+        String fileExt = fileName.substring(fileName.lastIndexOf('.') + 1).trim().toLowerCase();
+        if(!attachmentFormatList.contains(fileExt))
+        {
+            validationFailure = "attachment_type_not_allowed";
+            return false;
+        }
+
         try
         {
             byte[] srcBytes = IOUtils.toByteArray(uploadedFile.getInputStream());
