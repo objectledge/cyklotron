@@ -96,6 +96,7 @@ public class UpdateProposedDocument
                     FileResource attachment = createAttachment(data, i, dir, coralSession);
                     data.addAttachment(attachment);
                 }
+                data.releaseUploadBucket(uploadService);
 
                 Set<Resource> publishedAttachments = new HashSet<Resource>(Arrays
                     .asList(relatedService.getRelatedTo(coralSession, node, node

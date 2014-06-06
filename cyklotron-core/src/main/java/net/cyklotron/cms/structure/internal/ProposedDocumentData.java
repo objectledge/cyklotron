@@ -755,6 +755,18 @@ public class ProposedDocumentData
         return false;
     }
 
+    public void releaseUploadBucket(FileUpload fileUpload)
+    {
+        if(attachmentsMultiUpload && uploadBucketId != null && uploadBucketId.trim().length() > 0)
+        {
+            UploadBucket bucket = fileUpload.getBucket(uploadBucketId);
+            if(bucket != null)
+            {
+                fileUpload.releaseBucket(bucket);
+            }
+        }
+    }
+
     // adds element at the specified position filling unused leading position with nulls if
     // necessary
     private <T> void add(List<T> list, int i, T item)
