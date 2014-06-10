@@ -128,13 +128,11 @@
       </td>
     </tr>
     #end
-    #if($maxQuestionKey == -1)
     <tr>
       <td colspan="3" class="actionlink">
         <a href="javascript:browserUtil.submitForm('form1','$pollLink.action('poll.AddQuestion')')">Dodaj pytanie</a>
       </td>
     </tr>
-    #end
   </table>
 
   <div>

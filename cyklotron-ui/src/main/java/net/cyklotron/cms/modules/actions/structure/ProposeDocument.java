@@ -117,7 +117,7 @@ public class ProposeDocument
             }
         
             // file upload - checking
-            if(valid && !data.isFileUploadValid(coralSession, uploadService, filesService))
+            if(valid && !data.isFileUploadValid(coralSession, parameters, uploadService, filesService))
             {
                 valid = false;
                 templatingContext.put("result", data.getValidationFailure());
@@ -240,6 +240,7 @@ public class ProposeDocument
                     attachments.toArray(new Resource[attachments.size()]));
                 node.setRelatedResourcesSequence(attachments);
                 node.update();
+                data.releaseUploadBucket(uploadService);
             }
         }
         catch(Exception e)

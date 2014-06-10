@@ -28,6 +28,7 @@
 --> 
 <config>
   <packages>
+    <package>org.objectledge.modules.rest</package>
     <package>net.cyklotron.cms.modules.rest</package>
   </packages>
   <init-parameters>
