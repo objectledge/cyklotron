@@ -81,8 +81,6 @@ public class ProposedDocumentData
     private boolean inheritCategories;
 
     private boolean attachmentsEnabled;
-    
-    private boolean attachmentsMultiUpload;
 
     private int attachmentsMaxCount;
 
@@ -196,7 +194,6 @@ public class ProposedDocumentData
         inheritCategories = configuration.getBoolean("inherit_categories", true);
 
         attachmentsEnabled = configuration.getBoolean("attachments_enabled", false);
-        attachmentsMultiUpload = configuration.getBoolean("attachments_multi_upload", false);
         attachmentsMaxCount = configuration.getInt("attachments_max_count", 0);
         attachmentsMaxSize = configuration.getInt("attachments_max_size", 0);
         attachmentsAllowedFormats = configuration.get("attachments_allowed_formats",
@@ -310,7 +307,6 @@ public class ProposedDocumentData
         if(attachmentsEnabled)
         {
             templatingContext.put("attachments_enabled", attachmentsEnabled);
-            templatingContext.put("attachments_multi_upload", attachmentsMultiUpload);
             templatingContext.put("attachments_max_count", attachmentsMaxCount);
             int remaining = attachmentsMaxCount - attachments.size();
             remaining = remaining >= 0 ? remaining : 0;
@@ -787,11 +783,6 @@ public class ProposedDocumentData
     public boolean isAttachmentsEnabled()
     {
         return attachmentsEnabled;
-    }
-    
-    public boolean isAttachmentsMultiUpload()
-    {
-        return attachmentsMultiUpload;
     }
 
     public int getAttachmentsMaxCount()
