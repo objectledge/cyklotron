@@ -134,7 +134,7 @@
     <item name="removal_request_submitted">Document removal request was submitted.</item>
     <item name="removal_request_withdrawn">Document removal request was withdrawn.</item>    
     <prefix name="attachment_size_exceeded">
-      <value>Maximum attachment file size exceeded</value>
+      <value>Maximum attachment file size exceeded. Please choose another file, or in case of images, resize it to make file smaller.</value>
     </prefix>
     <prefix name="attachment_type_not_allowed">
       <value>Attachment file type is not allowed</value>
