@@ -645,6 +645,7 @@ public class ProposedDocumentData
                             valid = false;
                             break fileCheck;
                         }
+                        i++;
                     }
                 }
                 else
@@ -737,7 +738,7 @@ public class ProposedDocumentData
             add(attachmentContents, index, targetBytes);
             add(attachmentTypes, index, contentType);
             add(attachmentNames, index,
-                ProposedDocumentData.getAttachmentName(uploadedFile.getFileName()));
+                ProposedDocumentData.getAttachmentName(uploadedFile.getFileName(), index));
             return true;
         }
         catch(ImagingOpException | IllegalArgumentException e)
@@ -1222,11 +1223,13 @@ public class ProposedDocumentData
         return content;
     }
 
-    public static String getAttachmentName(String fileName)
+    public static String getAttachmentName(String fileName, int index)
     {
         StringBuilder buff = new StringBuilder();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         buff.append(df.format(new Date())); // timestamp
+        buff.append("_"); // separator
+        buff.append(index); // form field or upload bucket slot index
         buff.append("_"); // separator
         fileName = StringUtils.iso1toUtf8(fileName);
         fileName = StringUtils.unaccentLatinChars(fileName); // unaccent accented latin characters
