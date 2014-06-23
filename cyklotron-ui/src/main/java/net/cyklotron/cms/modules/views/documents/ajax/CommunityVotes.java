@@ -14,6 +14,7 @@ import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 public class CommunityVotes
     extends AbstractJsonView
@@ -31,7 +32,7 @@ public class CommunityVotes
     }
 
     @Override
-    protected void buildJsonStream()
+    protected void buildJsonStream(JsonGenerator jsonGenerator)
         throws ProcessingException, JsonGenerationException, IOException
     {
         CmsData cmsData = cmsDataFactory.getCmsData(context);

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.parameters.Parameters;
@@ -38,11 +40,11 @@ public class JsonOrganizations
     }
 
     @Override
-    protected void buildJsonStream()
+    protected void buildJsonStream(JsonGenerator jsonGenerator)
         throws ProcessingException, JsonGenerationException, IOException
     {
         List<Organization> organizations = getRequestedOrganizations(context);
-        writeResponseValue(organizations);
+        writeResponseValue(jsonGenerator, organizations);
     }
     
     private List<Organization> getRequestedOrganizations(Context context)

@@ -24,6 +24,7 @@ import net.cyklotron.cms.locations.LocationDatabaseService;
 import net.cyklotron.cms.preferences.PreferencesService;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 /**
  * The screen for serving files.
@@ -55,11 +56,11 @@ public class JsonLocations
     }
 
     @Override
-    protected void buildJsonStream()
+    protected void buildJsonStream(JsonGenerator jsonGenerator)
         throws ProcessingException, JsonGenerationException, IOException
     {
-        LocationResponse lotationResponse = getFieldValues(context);
-        writeResponseValue(lotationResponse);
+        LocationResponse locationResponse = getFieldValues(context);
+        writeResponseValue(jsonGenerator, locationResponse);
     }
 
     private LocationResponse getFieldValues(Context context)
