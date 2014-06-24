@@ -552,7 +552,17 @@
 
   <component class-key="net.cyklotron.cms.site.SiteService"
              class="net.cyklotron.cms.site.internal.SiteServiceImpl"/>
-
+             
+  <component class="org.objectledge.web.cors.StaticCrossOriginRequestValidator" />
+  <component class="net.cyklotron.cms.site.internal.VirtualServerCrossOriginRequestValidator" />
+  <component class-key="org.objectledge.web.cors.CrossOriginRequestValidator"
+             class="org.objectledge.web.cors.CombinedCrossOriginRequestValidator">
+    <sequence>
+      <parameter class-key="org.objectledge.web.cors.StaticCrossOriginRequestValidator" />
+      <parameter class-key="net.cyklotron.cms.site.internal.VirtualServerCrossOriginRequestValidator" />
+    </sequence>
+  </component>
+  
   <component class="net.cyklotron.cms.util.OfflineLinkRenderingService"/>
 
   <component class-key="net.cyklotron.cms.syndication.SyndicationService"
