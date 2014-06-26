@@ -137,7 +137,7 @@
       <value>Przekroczono dopuszczalny rozmiar załącznika. Wybierz inny plik lub zmniejsz rozmiar pliku kompresując lub zmniejszając obrazek.</value>
     </prefix>
     <prefix name="attachment_type_not_allowed">
-      <value>Załaczniki tego typu są niedozwolone</value>
+      <value>Załączniki tego typu są niedozwolone</value>
     </prefix>
     <prefix name="attachment_dir_misconfigured">
       <value>Katalog załączników nie jest skonfigurowany</value>
