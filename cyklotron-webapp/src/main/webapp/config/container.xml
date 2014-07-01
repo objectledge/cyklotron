@@ -704,7 +704,8 @@
       <parameter class-key="org.objectledge.database.ThreadDataSource$Statistics"/>
       <parameter class-key="org.objectledge.web.RequestTrackingValve"/>
       <parameter class-key="org.objectledge.cache.CacheFactory"/>
-      <parameter class-key="net.cyklotron.cms.search.internal.SearchServiceImpl$Statistics"/>
+      <parameter class-key="net.cyklotron.cms.search.internal.SearchServiceImpl$Statistics"/>   
+      <parameter class-key="org.objectledge.coral.session.CoralSessionFactory" /> 
     </sequence>
   </component>
   <component class="org.objectledge.statistics.StatisticsWriter"/>
