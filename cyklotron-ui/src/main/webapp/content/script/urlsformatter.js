@@ -5,7 +5,7 @@ String.prototype.trim = function ()
 
 function formatUrlString(urls)
 {  
-    return "http://" + urls.replace(/http:\/\//ig,"").replace(/,s+/g," ").replace(/\s\s*/g," http://").trim();
+    return urls.replace(/,*\s+/g," ").replace(/^[^(http|\/\/)]/g,"http://").replace(/\s[^(http|\/\/)]/g," http://").trim();
 }
 
 function formatEmailString(emails)
