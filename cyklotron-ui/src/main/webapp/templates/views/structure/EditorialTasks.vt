@@ -321,7 +321,7 @@ function showResponse2(req) {
  <br/> $empty_text
   #else
 <tr> 
- <th colspan="5">
+ <th colspan="6">
  <p style="text-align: left; float: left; margin: 10px;">
    <a href="javascript:checkAllTasks('T$tasks_id')"> Select all section </a>
  </p>

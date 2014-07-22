@@ -1,4 +1,5 @@
-$pageTool.addScriptLink('script/jquery/jquery-latest.js')##
+$pageTool.addScriptLink('//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js')##
+$pageTool.addScriptLink('//cdnjs.cloudflare.com/ajax/libs/json2/20130526/json2.min.js')##
 #if($ssoTool.active)
 $pageTool.addScriptLink('script/SingleSignOn.js')##
 #end

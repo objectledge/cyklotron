@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -19,6 +18,9 @@ import net.cyklotron.cms.poll.PollResource;
 import net.cyklotron.cms.poll.PollService;
 import net.cyklotron.cms.poll.util.Answer;
 import net.cyklotron.cms.poll.util.Question;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
 
 /**
  * An AJAX/JSON view that provides poll results and requesting user's vote tracking status.
@@ -37,7 +39,7 @@ public class Poll
     }
 
     @Override
-    protected void buildJsonStream()
+    protected void buildJsonStream(JsonGenerator jsonGenerator)
         throws ProcessingException, JsonGenerationException, IOException
     {
         Parameters parameters = context.getAttribute(RequestParameters.class);
