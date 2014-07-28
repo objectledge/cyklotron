@@ -29,6 +29,7 @@ import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
 import net.cyklotron.cms.category.CategoryService;
+import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.modules.actions.structure.workflow.MoveToWaitingRoom;
 import net.cyklotron.cms.modules.views.documents.DocumentStateTool;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -177,6 +178,12 @@ public class EditorialTasks
                 	}
                 }
                 if(node.getState() == null)
+                {
+                    continue;
+                }
+                // documents with proposed changes are handled in elsewhere
+                if(node instanceof DocumentNodeResource
+                    && ((DocumentNodeResource)node).isProposedContentDefined())
                 {
                     continue;
                 }
