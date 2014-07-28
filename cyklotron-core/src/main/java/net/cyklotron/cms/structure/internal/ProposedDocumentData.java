@@ -16,6 +16,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -632,11 +634,22 @@ public class ProposedDocumentData
                 if(attachmentsMultiUpload)
                 {
                     UploadBucket bucket = fileUpload.getBucket(uploadBucketId);
-                    Iterator<UploadContainer> containers = bucket.getContainers().iterator();
+                    List<UploadContainer> containers = new ArrayList<>(bucket.getContainers());
+                    // sort containers by id
+                    Collections.sort(containers, new Comparator<UploadContainer>()
+                        {
+                            @Override
+                            public int compare(UploadContainer o1, UploadContainer o2)
+                            {
+                                return Integer.parseInt(o1.getName())
+                                    - Integer.parseInt(o2.getName());
+                            }
+                        });
+                    Iterator<UploadContainer> contIter = containers.iterator();
                     int i = attachments.size();
-                    fileCheck: while(containers.hasNext() && i < attachmentsMaxCount)
+                    fileCheck: while(contIter.hasNext() && i < attachmentsMaxCount)
                     {
-                        UploadContainer container = containers.next();
+                        UploadContainer container = contIter.next();
                         String description = parameters.get(
                             "attachment_description_" + container.getName(), "");
                         attachmentDescriptions.set(i, description);
