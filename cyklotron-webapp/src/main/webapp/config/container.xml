@@ -85,7 +85,9 @@
       <component class="org.objectledge.coral.security.CoralUserManagementParticipant"/>
       <component class="net.cyklotron.cms.security.internal.CyklotronUserManagementParticipant"/>
     </sequence>
-  </component>      
+  </component>
+  <component class-key="org.objectledge.authentication.identity.IdentityStore"
+             class="org.objectledge.authentication.identity.TransientIdentityStore" />
   <component class-key="org.objectledge.authentication.sso.SingleSignOnService"
              class="org.objectledge.authentication.sso.LocalSingleSignOnService" />      
              
