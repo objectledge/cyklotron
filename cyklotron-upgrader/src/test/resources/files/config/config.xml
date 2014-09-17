@@ -1,0 +1,34 @@
+<config>
+	<cyklotron>
+		<url>http://www.niepelnosprawni.pl</url>
+		<login>root</login>
+		<password>12345</password>
+		<proxy>
+			<host>integracje.caltha.pl</host>
+			<port>3128</port>
+			<credentials>
+				<login>test</login>
+				<password>12345</password>
+			</credentials>
+		</proxy>
+		<data>
+			<location>/srv/cyklotron/data</location>
+		</data>
+		<wars>
+			<location>/srv/cyklotron/wars</location>
+		</wars>
+	</cyklotron>
+	<tomcat>
+		<location>/srv/cyklotron/tomcat</location>
+	</tomcat>
+    <postgresql>
+		<host>127.0.0.1</host>
+		<port>5432</port>
+		<database>lcms</database>
+		<user>cyklotron</user>
+		<password>12345</password>
+	</postgresql>	
+	<logger>
+		<level>INFO</level>
+	</logger>
+</config>

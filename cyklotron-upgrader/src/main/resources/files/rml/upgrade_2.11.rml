@@ -1,0 +1,51 @@
+CREATE RESOURCE CLASS 'documents.document_alias'
+JAVA CLASS 'net.cyklotron.cms.documents.DocumentAliasResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'documents.document_node' )
+ATTRIBUTES (
+REQUIRED resource ( documents.document_node ) originalDocument 
+);
+
+CREATE RESOURCE 'documents.document_alias'
+RESOURCE CLASS 'integration.resource_class'
+PARENT '/cms/applications/structure/resources'
+ATTRIBUTES (
+  image = 'document_alias.png',
+  view = 'structure.NavigationNodeSearchResult',
+  editView = 'structure.GotoNode',
+  indexTitle = 'title',
+  indexDescription = 'abstract',
+  relatedSupported = false,
+  relatedQuickAddView = '',
+  pickerSupported = false,
+  categorizable = true,
+  indexableFields = 'keywords titleCalendar eventStart eventEnd lastRedactor lastEditor authors sources validityStart',  
+  aggregationTargetPaths = 'structure'
+);
+
+CREATE PERMISSION 'cms.structure.add_inbound_alias';
+
+ALTER RESOURCE CLASS 'structure.navigation_node'
+ADD PERMISSIONS (
+  'cms.structure.add_inbound_alias'
+);
+
+CREATE RESOURCE 'cms.structure.inbound_alias_creator'
+RESOURCE CLASS 'integration.schema_role'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
+ATTRIBUTES (
+  suffixAttributeName = 'id',
+  deletable = true,
+  recursive = true,
+  subtreeRole = true,
+  superRole = '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor'
+);
+
+CREATE RESOURCE 'cms.structure.add_inbound_alias'
+RESOURCE CLASS 'integration.schema_permission'
+PARENT '/cms/applications/structure/resources/structure.navigation_node/roles/cms.structure.administrator/cms.structure.editor/cms.structure.acceptor/cms.structure.redactor/cms.structure.inbound_alias_creator'
+ATTRIBUTES (
+  recursive = true
+);
+
+CREATE RELATION 'structure.DocumentAliases';

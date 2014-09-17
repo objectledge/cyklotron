@@ -1,0 +1,5 @@
+ALTER RESOURCE CLASS documents.document_node ADD ATTRIBUTE text redactorsNote;
+
+CREATE RESOURCE 'RedactorsNote'
+RESOURCE CLASS 'integration.screen_state'
+PARENT '/cms/applications/documents/screens/propose_document';
