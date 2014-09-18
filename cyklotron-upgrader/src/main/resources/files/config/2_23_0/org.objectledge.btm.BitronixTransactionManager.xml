@@ -26,10 +26,10 @@
 			<enableJdbc4ConnectionTest>true</enableJdbc4ConnectionTest>
 			<preparedStatementCacheSize>20</preparedStatementCacheSize>
 			<driverProperties>
-				<property name="serverName">{serverName}</property>
-				<property name="databaseName">{databaseName}</property>
-				<property name="user">{user}</property>
-				<property name="password">{password}</property>
+				<property name="serverName">${serverName}</property>
+				<property name="databaseName">${databaseName}</property>
+				<property name="user">${user}</property>
+				<property name="password">${password}</property>
 				<property name="prepareThreshold">100</property>
 			</driverProperties>
 		</connectionPool>

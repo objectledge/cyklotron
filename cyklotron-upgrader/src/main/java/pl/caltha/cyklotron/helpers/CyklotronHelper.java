@@ -198,28 +198,17 @@ public class CyklotronHelper {
 	 * @param fileName
 	 */
 	public void setConfig(String version, String fileName) {
-		setConfigWithParams(version, fileName, null);
-	}
-
-	/**
-	 * set BTM config file
-	 * 
-	 * @param version
-	 * @param fileName
-	 */
-	public void setBtmConfig(String version, String fileName) {
 		Map<String, String> toReplace = new HashMap<String, String>();
-		toReplace.put("{serverName}", config.getPostgresqlHost());
-		toReplace.put("{databaseName}", config.getPostgresqlDatabase());
-		toReplace.put("{user}", config.getPostgresqlUser());
-		toReplace.put("{password}", config.getPostgresqlPassword());
+		toReplace.put("${serverName}", config.getPostgresqlHost());
+		toReplace.put("${databaseName}", config.getPostgresqlDatabase());
+		toReplace.put("${user}", config.getPostgresqlUser());
+		toReplace.put("${password}", config.getPostgresqlPassword());
 		setConfigWithParams(version, fileName, toReplace);
 	}
 
 	/**
 	 * delete config file
 	 * 
-	 * @param version
 	 * @param fileName
 	 */
 	public void deleteConfig(String fileName) {
@@ -229,8 +218,6 @@ public class CyklotronHelper {
 	/**
 	 * make search folder backup
 	 * 
-	 * @param version
-	 * @param fileName
 	 */
 	public void backupSearchIndexes() {
 		Path dir = Paths.get(cyklotronDataLocation + "/data/search");
@@ -253,12 +240,8 @@ public class CyklotronHelper {
 	}
 
 	/**
-	 * function execute fix methods
+	 * All search reindexing
 	 * 
-	 * @param method
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 * @throws URISyntaxException
 	 */
 	public void executeReindexSearchMethod() throws ClientProtocolException,
 			IOException, URISyntaxException {
@@ -287,6 +270,7 @@ public class CyklotronHelper {
 	 * 
 	 * @param version
 	 * @param fileName
+	 * @param params
 	 */
 	private void setConfigWithParams(String version, String fileName,
 			Map<String, String> params) {

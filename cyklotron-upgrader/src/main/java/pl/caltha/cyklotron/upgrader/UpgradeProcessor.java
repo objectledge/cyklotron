@@ -454,7 +454,7 @@ public class UpgradeProcessor {
 			logger.info("Start upgrade to Cyklotron 2.23.0");
 			tomcatHelper.stop();
 			psqlHelper.executeSQL("upgrade_2.23.0.sql");
-			cyklotronHelper.setBtmConfig("2_23_0",
+			cyklotronHelper.setConfig("2_23_0",
 					"org.objectledge.btm.BitronixTransactionManager.xml");
 			cyklotronHelper
 					.deleteConfig("org.objectledge.database.XaPoolDataSource.xml");
