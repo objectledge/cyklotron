@@ -477,7 +477,7 @@ public class UpgradeProcessor {
 			psqlHelper.executeSQL("upgrade_2.24.16.sql");
 			tomcatHelper.deleteWebappRootDir();
 			tomcatHelper.setRootXml("cyklotron-2.24.16.war", "root", "false");
-			tomcatHelper.start();
+			tomcatHelper.startAndWait(25);
 			logger.info("Upgrade to Cyklotron 2.24.16 successful");
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
