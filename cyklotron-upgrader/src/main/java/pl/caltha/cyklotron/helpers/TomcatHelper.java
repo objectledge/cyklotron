@@ -24,6 +24,8 @@ public class TomcatHelper {
 
 	public static final String WEBAPPS_ROOT_DIR_PATH = "/webapps/ROOT";
 
+	private String cyklotronDataLocation;
+
 	private String cyklotronWarsLocation;
 
 	private String tomcatLocation;
@@ -31,8 +33,9 @@ public class TomcatHelper {
 	private Process tomcatProcess;
 
 	public TomcatHelper(UpgraderConfig config) {
-		tomcatLocation = config.getTomcatLocation();
+		cyklotronDataLocation = config.getCyklotronDataLocation();
 		cyklotronWarsLocation = config.getCyklotronWarsLocation();
+		tomcatLocation = config.getTomcatLocation();
 	}
 
 	/**
@@ -89,8 +92,10 @@ public class TomcatHelper {
 		String rootXMLcontent = ResourceHelper
 				.getResourceFileContent(ROOT_XML_TEMPLATE_PATH);
 		rootXMLcontent = rootXMLcontent
-				.replace("{docBase}", cyklotronWarsLocation + "/" + warName)
-				.replace("{name}", name).replace("{override}", override);
+				.replace("${docBase}", cyklotronWarsLocation + "/" + warName)
+				.replace("${name}", name)
+				.replace("${dataBase}", cyklotronDataLocation)
+				.replace("${override}", override);
 		if (rootXMLcontent != null) {
 			ResourceHelper.saveFile(rootXMLcontent, tomcatLocation
 					+ ROOT_XML_PATH);
