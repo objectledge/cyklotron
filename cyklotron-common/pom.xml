@@ -423,7 +423,7 @@
         </plugin>
         <plugin>
           <groupId>de.jflex</groupId>
-          <artifactId>maven-jflex-plugin</artifactId>
+          <artifactId>jflex-maven-plugin</artifactId>
           <version>1.5.0</version>
         </plugin>
         <plugin>
