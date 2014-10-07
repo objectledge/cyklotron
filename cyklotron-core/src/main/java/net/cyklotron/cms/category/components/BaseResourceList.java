@@ -151,9 +151,9 @@ public abstract class BaseResourceList
     {
         if(state.isNew())
         {
-            state.setPageSize(config.getMaxResNumber());
             state.setCurrentPage(1);
         }
+        state.setPageSize(config.getMaxResNumber());
 
         // WARN: duplicate setPage action
         if(parameters.isDefined(TableConstants.TABLE_ID_PARAM_KEY)
