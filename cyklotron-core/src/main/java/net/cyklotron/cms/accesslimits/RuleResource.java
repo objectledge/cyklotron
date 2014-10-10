@@ -26,86 +26,75 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-package net.cyklotron.cms.ratelimit;
+package net.cyklotron.cms.accesslimits;
 
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsNodeResource;
 
 /**
- * Defines the accessor methods of <code>cms.ratelimit.action</code> Coral resource class.
+ * Defines the accessor methods of <code>cms.accesslimits.rule</code> Coral resource class.
  *
  * @author Coral Maven plugin
  */
-public interface ActionResource
+public interface RuleResource
     extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 
     /** The name of the Coral resource class. */    
-    public static final String CLASS_NAME = "cms.ratelimit.action";
+    public static final String CLASS_NAME = "cms.accesslimits.rule";
 
     // public interface //////////////////////////////////////////////////////
- 
+	
     /**
-     * Returns the value of the <code>paramsOverride</code> attribute.
+     * Returns the value of the <code>priority</code> attribute.
      *
-     * @return the value of the the <code>paramsOverride</code> attribute.
+     * @return the value of the the <code>priority</code> attribute.
      */
-    public String getParamsOverride();
-    
-    /**
-     * Returns the value of the <code>paramsOverride</code> attribute.
-     *
-     * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>paramsOverride</code> attribute.
-     */
-    public String getParamsOverride(String defaultValue);
+    public int getPriority();
 
     /**
-     * Sets the value of the <code>paramsOverride</code> attribute.
+     * Sets the value of the <code>priority</code> attribute.
      *
-     * @param value the value of the <code>paramsOverride</code> attribute,
-     *        or <code>null</code> to remove value.
+     * @param value the value of the <code>priority</code> attribute.
      */
-    public void setParamsOverride(String value);   
-   
-	/**
-	 * Checks if the value of the <code>paramsOverride</code> attribute is defined.
-	 *
-	 * @return <code>true</code> if the value of the <code>paramsOverride</code> attribute is defined.
-	 */
-    public boolean isParamsOverrideDefined();
- 
-    /**
-     * Returns the value of the <code>viewOverride</code> attribute.
-     *
-     * @return the value of the the <code>viewOverride</code> attribute.
-     */
-    public String getViewOverride();
+    public void setPriority(int value);
     
     /**
-     * Returns the value of the <code>viewOverride</code> attribute.
+     * Returns the value of the <code>ruleDefinition</code> attribute.
      *
-     * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>viewOverride</code> attribute.
+     * @return the value of the the <code>ruleDefinition</code> attribute.
      */
-    public String getViewOverride(String defaultValue);
-
+    public String getRuleDefinition();
+ 
     /**
-     * Sets the value of the <code>viewOverride</code> attribute.
+     * Sets the value of the <code>ruleDefinition</code> attribute.
      *
-     * @param value the value of the <code>viewOverride</code> attribute,
-     *        or <code>null</code> to remove value.
+     * @param value the value of the <code>ruleDefinition</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
      */
-    public void setViewOverride(String value);   
-   
-	/**
-	 * Checks if the value of the <code>viewOverride</code> attribute is defined.
-	 *
-	 * @return <code>true</code> if the value of the <code>viewOverride</code> attribute is defined.
-	 */
-    public boolean isViewOverrideDefined();
-  
+    public void setRuleDefinition(String value)
+        throws ValueRequiredException;
+    
+    /**
+     * Returns the value of the <code>urlPattern</code> attribute.
+     *
+     * @return the value of the the <code>urlPattern</code> attribute.
+     */
+    public String getUrlPattern();
+ 
+    /**
+     * Sets the value of the <code>urlPattern</code> attribute.
+     *
+     * @param value the value of the <code>urlPattern</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
+     */
+    public void setUrlPattern(String value)
+        throws ValueRequiredException;
+     
     // @custom methods ///////////////////////////////////////////////////////
 }

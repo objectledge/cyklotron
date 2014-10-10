@@ -1,7 +1,7 @@
-ECHO ' - ratelimit';
+ECHO ' - accesslimits';
 
-CREATE RESOURCE CLASS 'cms.ratelimit.rule'
-JAVA CLASS 'net.cyklotron.cms.ratelimit.RuleResourceImpl'
+CREATE RESOURCE CLASS 'cms.accesslimits.rule'
+JAVA CLASS 'net.cyklotron.cms.accesslimits.RuleResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
 DB TABLE 'cms_ratelimit_rule'
 SUPERCLASSES ( 'node' )
@@ -11,8 +11,8 @@ ATTRIBUTES (
   REQUIRED integer priority 
 );
 
-CREATE RESOURCE CLASS 'cms.ratelimit.action'
-JAVA CLASS 'net.cyklotron.cms.ratelimit.ActionResourceImpl'
+CREATE RESOURCE CLASS 'cms.accesslimits.action'
+JAVA CLASS 'net.cyklotron.cms.accesslimits.ActionResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
 DB TABLE 'cms_ratelimit_action'
 SUPERCLASSES ( 'node' )

@@ -1,7 +1,7 @@
-# // data model /////////////////////////////////////////////////////////////
+# // accesslimits data model ////////////////////////////////////////////////
 
-CREATE RESOURCE CLASS 'cms.ratelimit.rule'
-JAVA CLASS 'net.cyklotron.cms.ratelimit.RuleResourceImpl'
+CREATE RESOURCE CLASS 'cms.accesslimits.rule'
+JAVA CLASS 'net.cyklotron.cms.accesslimits.RuleResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
 DB TABLE 'cms_ratelimit_rule'
 SUPERCLASSES ( 'node' )
@@ -11,8 +11,8 @@ ATTRIBUTES (
   REQUIRED integer priority 
 );
 
-CREATE RESOURCE CLASS 'cms.ratelimit.action'
-JAVA CLASS 'net.cyklotron.cms.ratelimit.ActionResourceImpl'
+CREATE RESOURCE CLASS 'cms.accesslimits.action'
+JAVA CLASS 'net.cyklotron.cms.accesslimits.ActionResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
 DB TABLE 'cms_ratelimit_action'
 SUPERCLASSES ( 'node' )
@@ -21,16 +21,16 @@ ATTRIBUTES (
   string paramsOverride
 );
 
-# // data storage ///////////////////////////////////////////////////////////
+# // accesslimits data storage //////////////////////////////////////////////
 
-CREATE RESOURCE 'ratelimit'
+CREATE RESOURCE 'accesslimits'
 RESOURCE CLASS 'node'
 PARENT '/cms';
 
 CREATE RESOURCE 'rules'
 RESOURCE CLASS 'node'
-PARENT '/cms/ratelimit';
+PARENT '/cms/accesslimits';
 
 CREATE RESOURCE 'actions'
 RESOURCE CLASS 'node'
-PARENT '/cms/ratelimit';
+PARENT '/cms/accesslimits';

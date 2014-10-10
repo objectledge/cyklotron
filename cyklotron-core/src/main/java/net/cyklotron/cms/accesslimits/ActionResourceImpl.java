@@ -26,10 +26,7 @@
 // POSSIBILITY OF SUCH DAMAGE. 
 // 
  
-package net.cyklotron.cms.ratelimit;
-
-import java.util.HashMap;
-import java.util.Map;
+package net.cyklotron.cms.accesslimits;
 
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -44,13 +41,13 @@ import org.objectledge.coral.store.ValueRequiredException;
 import net.cyklotron.cms.CmsNodeResourceImpl;
 
 /**
- * An implementation of <code>cms.ratelimit.rule</code> Coral resource class.
+ * An implementation of <code>cms.accesslimits.action</code> Coral resource class.
  *
  * @author Coral Maven plugin
  */
-public class RuleResourceImpl
+public class ActionResourceImpl
     extends CmsNodeResourceImpl
-    implements RuleResource
+    implements ActionResource
 {
     // class variables /////////////////////////////////////////////////////////
 
@@ -58,33 +55,30 @@ public class RuleResourceImpl
 	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
-    /** The AttributeDefinition object for the <code>priority</code> attribute. */
-    private static AttributeDefinition<Integer> priorityDef;
+    /** The AttributeDefinition object for the <code>paramsOverride</code> attribute. */
+	private static AttributeDefinition<String> paramsOverrideDef;
 
-    /** The AttributeDefinition object for the <code>ruleDefinition</code> attribute. */
-	private static AttributeDefinition<String> ruleDefinitionDef;
-
-    /** The AttributeDefinition object for the <code>urlPattern</code> attribute. */
-	private static AttributeDefinition<String> urlPatternDef;
+    /** The AttributeDefinition object for the <code>viewOverride</code> attribute. */
+	private static AttributeDefinition<String> viewOverrideDef;
 
     // initialization /////////////////////////////////////////////////////////
 
     /**
-     * Creates a blank <code>cms.ratelimit.rule</code> resource wrapper.
+     * Creates a blank <code>cms.accesslimits.action</code> resource wrapper.
      *
      * <p>This constructor should be used by the handler class only. Use 
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
      */
-    public RuleResourceImpl()
+    public ActionResourceImpl()
     {
     }
 
     // static methods ////////////////////////////////////////////////////////
 
     /**
-     * Retrieves a <code>cms.ratelimit.rule</code> resource instance from the store.
+     * Retrieves a <code>cms.accesslimits.action</code> resource instance from the store.
      *
      * <p>This is a simple wrapper of StoreService.getResource() method plus
      * the typecast.</p>
@@ -94,52 +88,49 @@ public class RuleResourceImpl
      * @return a resource instance.
      * @throws EntityDoesNotExistException if the resource with the given id does not exist.
      */
-    public static RuleResource getRuleResource(CoralSession session, long id)
+    public static ActionResource getActionResource(CoralSession session, long id)
         throws EntityDoesNotExistException
     {
         Resource res = session.getStore().getResource(id);
-        if(!(res instanceof RuleResource))
+        if(!(res instanceof ActionResource))
         {
             throw new IllegalArgumentException("resource #"+id+" is "+
                                                res.getResourceClass().getName()+
-                                               " not cms.ratelimit.rule");
+                                               " not cms.accesslimits.action");
         }
-        return (RuleResource)res;
+        return (ActionResource)res;
     }
 
     /**
-     * Creates a new <code>cms.ratelimit.rule</code> resource instance.
+     * Creates a new <code>cms.accesslimits.action</code> resource instance.
      *
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param priority the priority attribute
-     * @param ruleDefinition the ruleDefinition attribute
-     * @param urlPattern the urlPattern attribute
-     * @return a new RuleResource instance.
-     * @throws ValueRequiredException if one of the required attribues is undefined.
+     * @return a new ActionResource instance.
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
-    public static RuleResource createRuleResource(CoralSession session, String name, Resource
-        parent, int priority, String ruleDefinition, String urlPattern)
-        throws ValueRequiredException, InvalidResourceNameException
+    public static ActionResource createActionResource(CoralSession session, String name,
+        Resource parent)
+        throws InvalidResourceNameException
     {
         try
         {
-            ResourceClass<RuleResource> rc = session.getSchema().getResourceClass("cms.ratelimit.rule", RuleResource.class);
-			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
-            attrs.put(rc.getAttribute("priority"), Integer.valueOf(priority));
-            attrs.put(rc.getAttribute("ruleDefinition"), ruleDefinition);
-            attrs.put(rc.getAttribute("urlPattern"), urlPattern);
-            Resource res = session.getStore().createResource(name, parent, rc, attrs);
-            if(!(res instanceof RuleResource))
+            ResourceClass<ActionResource> rc = session.getSchema().getResourceClass("cms.accesslimits.action", ActionResource.class);
+		    Resource res = session.getStore().createResource(name, parent, rc,
+                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
+            if(!(res instanceof ActionResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
                                            res.getClass().getName());
             }
-            return (RuleResource)res;
+            return (ActionResource)res;
         }
         catch(EntityDoesNotExistException e)
+        {
+            throw new BackendException("incompatible schema change", e);
+        }
+        catch(ValueRequiredException e)
         {
             throw new BackendException("incompatible schema change", e);
         }
@@ -148,25 +139,44 @@ public class RuleResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>priority</code> attribute.
+     * Returns the value of the <code>paramsOverride</code> attribute.
      *
-     * @return the value of the <code>priority</code> attribute.
+     * @return the value of the <code>paramsOverride</code> attribute.
      */
-    public int getPriority()
+    public String getParamsOverride()
     {
-		return get(priorityDef).intValue();
+        return get(paramsOverrideDef);
+    }
+    
+    /**
+     * Returns the value of the <code>paramsOverride</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>paramsOverride</code> attribute.
+     */
+    public String getParamsOverride(String defaultValue)
+    {
+        return get(paramsOverrideDef, defaultValue);
     }    
 
     /**
-     * Sets the value of the <code>priority</code> attribute.
+     * Sets the value of the <code>paramsOverride</code> attribute.
      *
-     * @param value the value of the <code>priority</code> attribute.
+     * @param value the value of the <code>paramsOverride</code> attribute,
+     *        or <code>null</code> to remove value.
      */
-    public void setPriority(int value)
+    public void setParamsOverride(String value)
     {
         try
         {
-            set(priorityDef, Integer.valueOf(value));
+            if(value != null)
+            {
+                set(paramsOverrideDef, value);
+            }
+            else
+            {
+                unset(paramsOverrideDef);
+            }
         }
         catch(ModificationNotPermitedException e)
         {
@@ -177,82 +187,76 @@ public class RuleResourceImpl
             throw new BackendException("incompatible schema change",e);
         }
     }
-    
-    /**
-     * Returns the value of the <code>ruleDefinition</code> attribute.
-     *
-     * @return the value of the <code>ruleDefinition</code> attribute.
-     */
-    public String getRuleDefinition()
-    {
-        return get(ruleDefinitionDef);
-    }
+   
+	/**
+	 * Checks if the value of the <code>paramsOverride</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>paramsOverride</code> attribute is defined.
+	 */
+    public boolean isParamsOverrideDefined()
+	{
+	    return isDefined(paramsOverrideDef);
+	}
  
     /**
-     * Sets the value of the <code>ruleDefinition</code> attribute.
+     * Returns the value of the <code>viewOverride</code> attribute.
      *
-     * @param value the value of the <code>ruleDefinition</code> attribute.
-     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
-     *         value.
+     * @return the value of the <code>viewOverride</code> attribute.
      */
-    public void setRuleDefinition(String value)
-        throws ValueRequiredException
+    public String getViewOverride()
+    {
+        return get(viewOverrideDef);
+    }
+    
+    /**
+     * Returns the value of the <code>viewOverride</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>viewOverride</code> attribute.
+     */
+    public String getViewOverride(String defaultValue)
+    {
+        return get(viewOverrideDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>viewOverride</code> attribute.
+     *
+     * @param value the value of the <code>viewOverride</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setViewOverride(String value)
     {
         try
         {
             if(value != null)
             {
-                set(ruleDefinitionDef, value);
+                set(viewOverrideDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute ruleDefinition "+
-                                                 "is declared as REQUIRED");
+                unset(viewOverrideDef);
             }
         }
         catch(ModificationNotPermitedException e)
         {
             throw new BackendException("incompatible schema change",e);
         }
-    }
-    
-    /**
-     * Returns the value of the <code>urlPattern</code> attribute.
-     *
-     * @return the value of the <code>urlPattern</code> attribute.
-     */
-    public String getUrlPattern()
-    {
-        return get(urlPatternDef);
-    }
- 
-    /**
-     * Sets the value of the <code>urlPattern</code> attribute.
-     *
-     * @param value the value of the <code>urlPattern</code> attribute.
-     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
-     *         value.
-     */
-    public void setUrlPattern(String value)
-        throws ValueRequiredException
-    {
-        try
-        {
-            if(value != null)
-            {
-                set(urlPatternDef, value);
-            }
-            else
-            {
-                throw new ValueRequiredException("attribute urlPattern "+
-                                                 "is declared as REQUIRED");
-            }
-        }
-        catch(ModificationNotPermitedException e)
+        catch(ValueRequiredException e)
         {
             throw new BackendException("incompatible schema change",e);
         }
     }
-     
+   
+	/**
+	 * Checks if the value of the <code>viewOverride</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>viewOverride</code> attribute is defined.
+	 */
+    public boolean isViewOverrideDefined()
+	{
+	    return isDefined(viewOverrideDef);
+	}
+  
     // @custom methods ///////////////////////////////////////////////////////
 }
