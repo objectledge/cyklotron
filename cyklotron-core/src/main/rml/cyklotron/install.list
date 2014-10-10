@@ -48,4 +48,5 @@ rml/cyklotron/common/simple-portal-en.rml
 rml/cyklotron/periodicals/periodicals-init.rml
 rml/cyklotron/catalogue/catalogue-init.rml
 rml/cyklotron/sitemap/sitemap-init.rml
+rml/cyklotron/ratelimit/ratelimit-init.rml
 
