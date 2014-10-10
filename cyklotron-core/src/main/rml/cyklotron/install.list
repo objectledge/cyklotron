@@ -22,6 +22,7 @@ rml/cyklotron/syndication/syndication.rml
 rml/cyklotron/periodicals/periodicals.rml
 rml/cyklotron/catalogue/catalogue.rml
 rml/cyklotron/sitemap/sitemap.rml
+rml/cyklotron/ratelimit/ratelimit.rml
 
 rml/cyklotron/common/base-init.rml
 rml/cyklotron/integration/integration-init.rml

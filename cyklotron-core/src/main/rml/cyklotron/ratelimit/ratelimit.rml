@@ -1,4 +1,4 @@
-# // data model /////////////////////////////////////////////////////////////
+ECHO ' - ratelimit';
 
 CREATE RESOURCE CLASS 'cms.ratelimit.rule'
 JAVA CLASS 'net.cyklotron.cms.ratelimit.RuleResourceImpl'
