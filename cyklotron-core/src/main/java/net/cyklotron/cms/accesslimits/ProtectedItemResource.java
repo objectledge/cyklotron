@@ -34,49 +34,35 @@ import org.objectledge.coral.store.ValueRequiredException;
 import net.cyklotron.cms.CmsNodeResource;
 
 /**
- * Defines the accessor methods of <code>cms.accesslimits.rule</code> Coral resource class.
+ * Defines the accessor methods of <code>cms.accesslimits.protected_item</code> Coral resource class.
  *
  * @author Coral Maven plugin
  */
-public interface RuleResource
+public interface ProtectedItemResource
     extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 
     /** The name of the Coral resource class. */    
-    public static final String CLASS_NAME = "cms.accesslimits.rule";
+    public static final String CLASS_NAME = "cms.accesslimits.protected_item";
 
     // public interface //////////////////////////////////////////////////////
-	
-    /**
-     * Returns the value of the <code>priority</code> attribute.
-     *
-     * @return the value of the the <code>priority</code> attribute.
-     */
-    public int getPriority();
-
-    /**
-     * Sets the value of the <code>priority</code> attribute.
-     *
-     * @param value the value of the <code>priority</code> attribute.
-     */
-    public void setPriority(int value);
-    
-    /**
-     * Returns the value of the <code>ruleDefinition</code> attribute.
-     *
-     * @return the value of the the <code>ruleDefinition</code> attribute.
-     */
-    public String getRuleDefinition();
  
     /**
-     * Sets the value of the <code>ruleDefinition</code> attribute.
+     * Returns the value of the <code>urlPattern</code> attribute.
      *
-     * @param value the value of the <code>ruleDefinition</code> attribute.
+     * @return the value of the the <code>urlPattern</code> attribute.
+     */
+    public String getUrlPattern();
+ 
+    /**
+     * Sets the value of the <code>urlPattern</code> attribute.
+     *
+     * @param value the value of the <code>urlPattern</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setRuleDefinition(String value)
+    public void setUrlPattern(String value)
         throws ValueRequiredException;
      
     // @custom methods ///////////////////////////////////////////////////////

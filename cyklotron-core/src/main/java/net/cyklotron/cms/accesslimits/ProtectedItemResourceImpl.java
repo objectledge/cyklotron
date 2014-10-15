@@ -44,13 +44,13 @@ import org.objectledge.coral.store.ValueRequiredException;
 import net.cyklotron.cms.CmsNodeResourceImpl;
 
 /**
- * An implementation of <code>cms.accesslimits.rule</code> Coral resource class.
+ * An implementation of <code>cms.accesslimits.protected_item</code> Coral resource class.
  *
  * @author Coral Maven plugin
  */
-public class RuleResourceImpl
+public class ProtectedItemResourceImpl
     extends CmsNodeResourceImpl
-    implements RuleResource
+    implements ProtectedItemResource
 {
     // class variables /////////////////////////////////////////////////////////
 
@@ -58,30 +58,27 @@ public class RuleResourceImpl
 	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
-    /** The AttributeDefinition object for the <code>priority</code> attribute. */
-    private static AttributeDefinition<Integer> priorityDef;
-
-    /** The AttributeDefinition object for the <code>ruleDefinition</code> attribute. */
-	private static AttributeDefinition<String> ruleDefinitionDef;
+    /** The AttributeDefinition object for the <code>urlPattern</code> attribute. */
+	private static AttributeDefinition<String> urlPatternDef;
 
     // initialization /////////////////////////////////////////////////////////
 
     /**
-     * Creates a blank <code>cms.accesslimits.rule</code> resource wrapper.
+     * Creates a blank <code>cms.accesslimits.protected_item</code> resource wrapper.
      *
      * <p>This constructor should be used by the handler class only. Use 
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
      */
-    public RuleResourceImpl()
+    public ProtectedItemResourceImpl()
     {
     }
 
     // static methods ////////////////////////////////////////////////////////
 
     /**
-     * Retrieves a <code>cms.accesslimits.rule</code> resource instance from the store.
+     * Retrieves a <code>cms.accesslimits.protected_item</code> resource instance from the store.
      *
      * <p>This is a simple wrapper of StoreService.getResource() method plus
      * the typecast.</p>
@@ -91,48 +88,46 @@ public class RuleResourceImpl
      * @return a resource instance.
      * @throws EntityDoesNotExistException if the resource with the given id does not exist.
      */
-    public static RuleResource getRuleResource(CoralSession session, long id)
+    public static ProtectedItemResource getProtectedItemResource(CoralSession session, long id)
         throws EntityDoesNotExistException
     {
         Resource res = session.getStore().getResource(id);
-        if(!(res instanceof RuleResource))
+        if(!(res instanceof ProtectedItemResource))
         {
             throw new IllegalArgumentException("resource #"+id+" is "+
                                                res.getResourceClass().getName()+
-                                               " not cms.accesslimits.rule");
+                                               " not cms.accesslimits.protected_item");
         }
-        return (RuleResource)res;
+        return (ProtectedItemResource)res;
     }
 
     /**
-     * Creates a new <code>cms.accesslimits.rule</code> resource instance.
+     * Creates a new <code>cms.accesslimits.protected_item</code> resource instance.
      *
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param priority the priority attribute
-     * @param ruleDefinition the ruleDefinition attribute
-     * @return a new RuleResource instance.
+     * @param urlPattern the urlPattern attribute
+     * @return a new ProtectedItemResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
-    public static RuleResource createRuleResource(CoralSession session, String name, Resource
-        parent, int priority, String ruleDefinition)
+    public static ProtectedItemResource createProtectedItemResource(CoralSession session, String
+        name, Resource parent, String urlPattern)
         throws ValueRequiredException, InvalidResourceNameException
     {
         try
         {
-            ResourceClass<RuleResource> rc = session.getSchema().getResourceClass("cms.accesslimits.rule", RuleResource.class);
+            ResourceClass<ProtectedItemResource> rc = session.getSchema().getResourceClass("cms.accesslimits.protected_item", ProtectedItemResource.class);
 			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
-            attrs.put(rc.getAttribute("priority"), Integer.valueOf(priority));
-            attrs.put(rc.getAttribute("ruleDefinition"), ruleDefinition);
+            attrs.put(rc.getAttribute("urlPattern"), urlPattern);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
-            if(!(res instanceof RuleResource))
+            if(!(res instanceof ProtectedItemResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
                                            res.getClass().getName());
             }
-            return (RuleResource)res;
+            return (ProtectedItemResource)res;
         }
         catch(EntityDoesNotExistException e)
         {
@@ -143,65 +138,34 @@ public class RuleResourceImpl
     // public interface //////////////////////////////////////////////////////
  
     /**
-     * Returns the value of the <code>priority</code> attribute.
+     * Returns the value of the <code>urlPattern</code> attribute.
      *
-     * @return the value of the <code>priority</code> attribute.
+     * @return the value of the <code>urlPattern</code> attribute.
      */
-    public int getPriority()
+    public String getUrlPattern()
     {
-		return get(priorityDef).intValue();
-    }    
-
-    /**
-     * Sets the value of the <code>priority</code> attribute.
-     *
-     * @param value the value of the <code>priority</code> attribute.
-     */
-    public void setPriority(int value)
-    {
-        try
-        {
-            set(priorityDef, Integer.valueOf(value));
-        }
-        catch(ModificationNotPermitedException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-        catch(ValueRequiredException e)
-        {
-            throw new BackendException("incompatible schema change",e);
-        }
-    }
-    
-    /**
-     * Returns the value of the <code>ruleDefinition</code> attribute.
-     *
-     * @return the value of the <code>ruleDefinition</code> attribute.
-     */
-    public String getRuleDefinition()
-    {
-        return get(ruleDefinitionDef);
+        return get(urlPatternDef);
     }
  
     /**
-     * Sets the value of the <code>ruleDefinition</code> attribute.
+     * Sets the value of the <code>urlPattern</code> attribute.
      *
-     * @param value the value of the <code>ruleDefinition</code> attribute.
+     * @param value the value of the <code>urlPattern</code> attribute.
      * @throws ValueRequiredException if you attempt to set a <code>null</code> 
      *         value.
      */
-    public void setRuleDefinition(String value)
+    public void setUrlPattern(String value)
         throws ValueRequiredException
     {
         try
         {
             if(value != null)
             {
-                set(ruleDefinitionDef, value);
+                set(urlPatternDef, value);
             }
             else
             {
-                throw new ValueRequiredException("attribute ruleDefinition "+
+                throw new ValueRequiredException("attribute urlPattern "+
                                                  "is declared as REQUIRED");
             }
         }

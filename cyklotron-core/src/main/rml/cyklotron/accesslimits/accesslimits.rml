@@ -1,12 +1,20 @@
 ECHO ' - accesslimits';
 
+CREATE RESOURCE CLASS 'cms.accesslimits.protected_item'
+JAVA CLASS 'net.cyklotron.cms.accesslimits.ProtectedItemResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
+DB TABLE 'cms_ratelimit_protected_item'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED text urlPattern
+);
+
 CREATE RESOURCE CLASS 'cms.accesslimits.rule'
 JAVA CLASS 'net.cyklotron.cms.accesslimits.RuleResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
 DB TABLE 'cms_ratelimit_rule'
 SUPERCLASSES ( 'node' )
 ATTRIBUTES (
-  REQUIRED text urlPattern,
   REQUIRED text ruleDefinition,
   REQUIRED integer priority 
 );
