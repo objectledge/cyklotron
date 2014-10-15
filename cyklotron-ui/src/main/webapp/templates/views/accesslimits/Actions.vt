@@ -1,0 +1,4 @@
+$viewEnclosureTool.top()##
+#genericScreenHeader('Akcje')
+
+#genericScreenTrailer()

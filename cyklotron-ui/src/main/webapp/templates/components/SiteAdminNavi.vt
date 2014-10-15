@@ -22,6 +22,8 @@
       #linkCell('admin' 'GLOBAL STATISTICS' $link.view("statistics.Statistics").unset('site_id'))
       <td class="separator">|</td>
       #linkCell('admin' 'GLOBAL ROLES' $link.view('security.RoleList').unset('site_id'))
+      <td class="separator">|</td>
+      #linkCell('admin' 'ACCESS LIMITS' $link.view('accesslimits.Config').unset('site_id'))
       <td class="separator">|</td>      
       #linkCell('admin' 'SYSTEM' $link.view("system").unset('site_id'))
       <td class="separator">|</td>
