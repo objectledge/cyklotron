@@ -634,31 +634,40 @@ public class ProposedDocumentData
                 if(attachmentsMultiUpload)
                 {
                     UploadBucket bucket = fileUpload.getBucket(uploadBucketId);
-                    List<UploadContainer> containers = new ArrayList<>(bucket.getContainers());
-                    // sort containers by id
-                    Collections.sort(containers, new Comparator<UploadContainer>()
-                        {
+                    if(bucket != null)
+                    {
+                        List<UploadContainer> containers = new ArrayList<>(bucket.getContainers());
+                        // sort containers by id
+                        Collections.sort(containers, new Comparator<UploadContainer>()
+                            {
                             @Override
                             public int compare(UploadContainer o1, UploadContainer o2)
                             {
                                 return Integer.parseInt(o1.getName())
-                                    - Integer.parseInt(o2.getName());
+                                                - Integer.parseInt(o2.getName());
                             }
-                        });
-                    Iterator<UploadContainer> contIter = containers.iterator();
-                    int i = attachments.size();
-                    fileCheck: while(contIter.hasNext() && i < attachmentsMaxCount)
-                    {
-                        UploadContainer container = contIter.next();
-                        String description = parameters.get(
-                            "attachment_description_" + container.getName(), "");
-                        attachmentDescriptions.set(i, description);
-                        if(!isAttachmentValid(i, container, filesService))
+                            });
+                        Iterator<UploadContainer> contIter = containers.iterator();
+                        int i = attachments.size();
+                        fileCheck: while(contIter.hasNext() && i < attachmentsMaxCount)
                         {
-                            valid = false;
-                            break fileCheck;
-                        }
-                        i++;
+                            UploadContainer container = contIter.next();
+                            String description = parameters.get(
+                                "attachment_description_" + container.getName(), "");
+                            attachmentDescriptions.set(i, description);
+                            if(!isAttachmentValid(i, container, filesService))
+                            {
+                                valid = false;
+                                break fileCheck;
+                            }
+                            i++;
+                        }                        
+                    }
+                    else
+                    {
+                        validationFailure = "attachement_async_upload_failed";
+                        valid = false;
+                        logger.error("missing or invalid bucket id: " + uploadBucketId);
                     }
                 }
                 else
