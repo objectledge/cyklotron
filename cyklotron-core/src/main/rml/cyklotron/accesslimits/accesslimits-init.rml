@@ -1,0 +1,13 @@
+ECHO ' - accesslimits init data';
+
+CREATE RESOURCE 'accesslimits'
+RESOURCE CLASS 'node'
+PARENT '/cms';
+
+CREATE RESOURCE 'rules'
+RESOURCE CLASS 'node'
+PARENT '/cms/accesslimits';
+
+CREATE RESOURCE 'actions'
+RESOURCE CLASS 'node'
+PARENT '/cms/accesslimits';

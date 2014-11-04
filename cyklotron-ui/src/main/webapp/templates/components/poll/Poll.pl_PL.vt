@@ -14,6 +14,10 @@ $pageTool.addScriptLink('script/poll/Poll.js')##
  jQuery(document).ready(function(){ poll.fetch(); });
 </script>
 
+<style>
+ a#sendVote[disabled] { pointer-events: none; cursor: default; }
+</style>
+
 #set($component_instance = $cms_data.component.instanceName)
 #if($result_scope == "poll_$component_instance")
 #result_inline_message('results.poll')

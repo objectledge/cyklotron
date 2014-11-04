@@ -26,3 +26,4 @@ src/main/rml/cyklotron/syndication/syndication.rml
 src/main/rml/cyklotron/periodicals/periodicals.rml
 src/main/rml/cyklotron/catalogue/catalogue.rml
 src/main/rml/cyklotron/sitemap/sitemap.rml
+src/main/rml/cyklotron/accesslimits/accesslimits.rml

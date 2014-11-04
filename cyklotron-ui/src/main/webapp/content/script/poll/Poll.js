@@ -26,19 +26,11 @@ Poll.prototype.loadData = function(data, showResults)
 				
 				$("#voting").hide();
 				$("#results").show();
-			}else{
+			} else {
 
-				$("#sendVote").click(function(){ 
-                                    var answer_id = $("form[name='form_"+ poll.pollInstance +"'] input[type='radio']:checked").val();
-                                    var question_name = $("form[name='form_"+ poll.pollInstance +"'] input[type='radio']:checked").attr('name'); 
-                                    poll.vote(question_name, answer_id);
-                                });
-                                $("#showResults").click(function(){ poll.fetch(true); });
-
-                                $("#results").hide();
-	                			$("#voting").show();
+			    $("#results").hide();
+	            $("#voting").show();
 			}
-
 }
 
 Poll.prototype.fetch = function(showResults) {
@@ -52,11 +44,10 @@ Poll.prototype.fetch = function(showResults) {
 	});
 };
 
-
 Poll.prototype.vote = function(questionName, answerId){
 
-        var v_data = { pid : this.pollId, poll_instance : this.pollInstance, component_instance : this.pollInstance};
-        v_data[questionName] = answerId;
+    var v_data = { pid : this.pollId, poll_instance : this.pollInstance, component_instance : this.pollInstance};
+    v_data[questionName] = answerId;
 
 	$.ajax({
 		url : this.voteUrl, 
@@ -65,3 +56,25 @@ Poll.prototype.vote = function(questionName, answerId){
 		success : function(data) { poll.loadData(data, false); }
 	});
 };
+
+jQuery(document).ready(function(){ 
+
+	$("#sendVote").click(function() { 
+    	if($("form[name='form_"+ poll.pollInstance +"'] input[type='radio']:checked").size() > 0) { 
+    		var answer_id = $("form[name='form_"+ poll.pollInstance +"'] input[type='radio']:checked").val();
+    		var question_name = $("form[name='form_"+ poll.pollInstance +"'] input[type='radio']:checked").attr('name'); 
+    		poll.vote(question_name, answer_id);
+    	}
+	});
+
+	$("form[name='form_"+ poll.pollInstance +"'] input[type='radio']").click(function() {
+ 		$("#sendVote").removeAttr('disabled');
+	});
+
+	$("#showResults").click(function(){ poll.fetch(true); });
+
+	$("#sendVote").attr('disabled','disabled');
+	$("#results").hide();
+	$("#voting").show();
+
+});

@@ -22,6 +22,7 @@ rml/cyklotron/syndication/syndication.rml
 rml/cyklotron/periodicals/periodicals.rml
 rml/cyklotron/catalogue/catalogue.rml
 rml/cyklotron/sitemap/sitemap.rml
+rml/cyklotron/accesslimits/accesslimits.rml
 
 rml/cyklotron/common/base-init.rml
 rml/cyklotron/integration/integration-init.rml
@@ -47,4 +48,5 @@ rml/cyklotron/common/simple-portal-en.rml
 rml/cyklotron/periodicals/periodicals-init.rml
 rml/cyklotron/catalogue/catalogue-init.rml
 rml/cyklotron/sitemap/sitemap-init.rml
+rml/cyklotron/accesslimits/accesslimits-init.rml
 

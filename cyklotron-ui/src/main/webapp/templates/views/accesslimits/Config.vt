@@ -1,0 +1,7 @@
+$pageTool.addScriptLink('//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.js')
+$pageTool.addScriptLink('//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-route.js')
+$pageTool.addScriptLink('//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-resource.js')
+$pageTool.addScriptLink('script/view/accesslimits/Config.js')
+<div ng-app="ConfigApp" ng-controller="ConfigCtrl">
+	<div ng-view></div>
+</config>

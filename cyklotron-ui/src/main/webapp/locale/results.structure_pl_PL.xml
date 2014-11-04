@@ -54,6 +54,9 @@
     <prefix name="attachment_dir_misconfigured">
       <value>Powiadom administratora o tym problemie</value>
     </prefix>
+    <prefix name="attachement_async_upload_failed">
+      <value>Powiadom administratora o tym problemie</value>
+    </prefix>    
     <prefix name="parent_node_misconfigured">
       <value>Powiadom administratora o tym problemie</value>
     </prefix>
@@ -142,6 +145,9 @@
     <prefix name="attachment_dir_misconfigured">
       <value>Katalog załączników nie jest skonfigurowany</value>
     </prefix>
+    <prefix name="attachement_async_upload_failed">
+      <value>Wystąpił błąd zapisu załączników na serwerze</value>
+    </prefix>      
     <prefix name="parent_node_misconfigured">
 	<value>Lokalizacja dokumentu nie jest skonfigurowana</value>
     </prefix>

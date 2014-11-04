@@ -1,0 +1,2 @@
+ALTER RESOURCE CLASS 'structure.navigation_node'
+ADD ATTRIBUTE string quickPath;

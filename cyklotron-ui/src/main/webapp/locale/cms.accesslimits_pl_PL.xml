@@ -1,0 +1,13 @@
+<strings xmlns="http://objectledge.org/i18n/1.0">
+  <prefix name="navigation">
+    <item name="header">Ograniczenia dostępu</item>
+    <item name="actions">Akcje</item>
+    <item name="rules">Reguły</item>
+  </prefix>
+  <prefix name="actions">
+    <item name="header">Akcje</item>
+  </prefix>
+  <prefix name="rules">
+    <item name="header">Reguły</item>
+  </prefix>
+</strings>

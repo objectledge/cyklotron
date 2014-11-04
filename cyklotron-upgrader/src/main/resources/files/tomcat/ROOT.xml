@@ -1,0 +1,8 @@
+<Context docBase="${docBase}"
+     path=""
+     reloadable="true"
+     useNaming="false"
+     autoDeploy="true"
+     allowLinking="true">
+     <Parameter name="${name}" value="${dataBase}" override="${override}" />
+</Context>
