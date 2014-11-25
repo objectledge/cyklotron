@@ -49,6 +49,8 @@ public class Rules
 
     private final UriInfo uriInfo;
 
+    private static final Object ITEM_NAME_LOCK = new Object();
+
     @Inject
     public Rules(CoralSessionFactory coralSessionFactory, UriInfo uriInfo)
     {
@@ -81,10 +83,15 @@ public class Rules
 
         try
         {
-            Resource parent = coralSession.getStore().getUniqueResourceByPath(RULES_ROOT);
-            String name = Integer.toString(parent.getChildren().length + 1); // I'm feeling lucky
-            ProtectedItemResource itemResource = ProtectedItemResourceImpl
-                .createProtectedItemResource(coralSession, name, parent, item.getUrlPattern());
+            String name;
+            ProtectedItemResource itemResource;
+            synchronized(ITEM_NAME_LOCK)
+            {
+                Resource parent = coralSession.getStore().getUniqueResourceByPath(RULES_ROOT);
+                name = nextName(parent.getChildren());
+                itemResource = ProtectedItemResourceImpl.createProtectedItemResource(coralSession,
+                    name, parent, item.getUrlPattern());
+            }
             int n = 1;
             for(RuleDao rule : item.getRules())
             {
@@ -100,6 +107,17 @@ public class Rules
             return Response.status(Status.INTERNAL_SERVER_ERROR)
                 .entity(new StackTrace(e).toString()).build();
         }
+    }
+
+    private String nextName(Resource[] children)
+    {
+        int max = 0;
+        for(Resource child : children)
+        {
+            int n = Integer.parseInt(child.getName());
+            max = n > max ? n : max;
+        }
+        return Integer.toString(max + 1);
     }
 
     @GET
@@ -229,7 +247,10 @@ public class Rules
             Resource res = coralSession.getStore().getResource(id);
             try
             {
-                coralSession.getStore().deleteTree(res);
+                synchronized(ITEM_NAME_LOCK)
+                {
+                    coralSession.getStore().deleteTree(res);
+                }
                 return Response.noContent().build();
             }
             catch(EntityInUseException e)
