@@ -1,6 +1,8 @@
 package net.cyklotron.cms.modules.rest.accesslimits;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -463,6 +465,15 @@ public class Rules
             this.ruleDefinition = ruleDefinition;
         }
 
+        private static final Comparator<RuleDao> BY_PRIORITY = new Comparator<RuleDao>()
+            {
+                @Override
+                public int compare(RuleDao o1, RuleDao o2)
+                {
+                    return o1.priority - o2.priority;
+                }
+            };
+
         public static List<RuleDao> create(Resource[] rules)
         {
             List<RuleDao> result = new ArrayList<RuleDao>(rules.length);
@@ -470,6 +481,7 @@ public class Rules
             {
                 result.add(new RuleDao((RuleResource)rule));
             }
+            Collections.sort(result, BY_PRIORITY);
             return result;
         }
     }
