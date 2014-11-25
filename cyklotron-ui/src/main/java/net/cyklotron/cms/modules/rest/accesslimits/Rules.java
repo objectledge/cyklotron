@@ -149,7 +149,8 @@ public class Rules
                     int n = cur.length + 1;
                     for(RuleDao rule : item.getRules())
                     {
-                        RuleResource curRule = getRuleResource(cur, rule.getId());
+                        RuleResource curRule = rule.getId() != null ? getRuleResource(cur,
+                            rule.getId()) : null;
                         if(curRule == null)
                         {
                             RuleResourceImpl.createRuleResource(coralSession,
@@ -360,9 +361,9 @@ public class Rules
         private String urlPattern;
 
         private List<RuleDao> rules;
-        
+
         public ProtectedItemDao()
-        {            
+        {
         }
 
         public ProtectedItemDao(ProtectedItemResource resource)
@@ -420,9 +421,9 @@ public class Rules
         private int priority;
 
         private String ruleDefinition;
-        
+
         public RuleDao()
-        {            
+        {
         }
 
         public RuleDao(RuleResource resource)
