@@ -360,6 +360,10 @@ public class Rules
         private String urlPattern;
 
         private List<RuleDao> rules;
+        
+        public ProtectedItemDao()
+        {            
+        }
 
         public ProtectedItemDao(ProtectedItemResource resource)
         {
@@ -416,6 +420,10 @@ public class Rules
         private int priority;
 
         private String ruleDefinition;
+        
+        public RuleDao()
+        {            
+        }
 
         public RuleDao(RuleResource resource)
         {
