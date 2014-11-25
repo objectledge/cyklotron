@@ -103,25 +103,25 @@ public class Rules
     }
 
     @GET
-    @Path("/items/{name}")
+    @Path("/items/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveProtectedItem(@PathParam("name") String name)
+    public Response retrieveProtectedItem(@PathParam("id") long id)
     {
         try
         {
-            Resource res = coralSession.getStore().getUniqueResourceByPath(RULES_ROOT + "/" + name);
+            Resource res = coralSession.getStore().getResource(id);
             return Response.ok(new ProtectedItemDao((ProtectedItemResource)res)).build();
         }
-        catch(EntityDoesNotExistException | AmbigousEntityNameException e)
+        catch(EntityDoesNotExistException | ClassCastException e)
         {
             return Response.status(Status.NOT_FOUND).build();
         }
     }
 
     @PUT
-    @Path("/items/{name}")
+    @Path("/items/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateProtectedItem(@PathParam("name") String name, ProtectedItemDao item)
+    public Response updateProtectedItem(@PathParam("id") long id, ProtectedItemDao item)
     {
         try
         {
@@ -134,8 +134,8 @@ public class Rules
 
         try
         {
-            ProtectedItemResource res = (ProtectedItemResource)coralSession.getStore()
-                .getUniqueResourceByPath(RULES_ROOT + "/" + name);
+            ProtectedItemResource res = (ProtectedItemResource)coralSession.getStore().getResource(
+                id);
             try
             {
                 res.setUrlPattern(item.getUrlPattern());
@@ -190,7 +190,7 @@ public class Rules
                     .entity(new StackTrace(e).toString()).build();
             }
         }
-        catch(EntityDoesNotExistException | AmbigousEntityNameException | ClassCastException e)
+        catch(EntityDoesNotExistException | ClassCastException e)
         {
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -221,12 +221,12 @@ public class Rules
     }
 
     @DELETE
-    @Path("/items/{name}")
-    public Response deleteProtectedItem(@PathParam("name") String name)
+    @Path("/items/{id}")
+    public Response deleteProtectedItem(@PathParam("id") long id)
     {
         try
         {
-            Resource res = coralSession.getStore().getUniqueResourceByPath(RULES_ROOT + "/" + name);
+            Resource res = coralSession.getStore().getResource(id);
             try
             {
                 coralSession.getStore().deleteTree(res);
@@ -238,7 +238,7 @@ public class Rules
                     .entity(new StackTrace(e).toString()).build();
             }
         }
-        catch(EntityDoesNotExistException | AmbigousEntityNameException e)
+        catch(EntityDoesNotExistException | ClassCastException e)
         {
             return Response.status(Status.NOT_FOUND).build();
         }
