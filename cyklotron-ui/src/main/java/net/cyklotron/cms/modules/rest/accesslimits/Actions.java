@@ -56,6 +56,23 @@ public class Actions
         return Response.ok(ActionDto.create(actions)).build();
     }
 
+    @GET
+    @Path("{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAction(@PathParam("name") String name)
+    {
+        try
+        {
+            ActionResource current = (ActionResource)coralSession.getStore()
+                .getUniqueResourceByPath(ACTIONS_ROOT + "/" + name);
+            return Response.ok(new ActionDto(current)).build();
+        }
+        catch(EntityDoesNotExistException | AmbigousEntityNameException e)
+        {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createAction(ActionDto action)
