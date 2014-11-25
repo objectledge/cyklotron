@@ -40,6 +40,8 @@ public class Actions
     private final CoralSession coralSession;
 
     private final UriInfo uriInfo;
+    
+    private static final Object ACTION_NAME_LOCK = new Object();
 
     @Inject
     public Actions(CoralSessionFactory coralSessionFactory, UriInfo uriInfo)
@@ -80,12 +82,23 @@ public class Actions
         try
         {
             Resource parent = coralSession.getStore().getUniqueResourceByPath(ACTIONS_ROOT);
-            ActionResource res = ActionResourceImpl.createActionResource(coralSession,
-                action.getName(), parent);
-            res.setViewOverride(action.getViewOverride());
-            res.setParamsOverride(action.getParamsOverride());
-            res.update();
-            return Response.created(uriInfo.getRequestUri().resolve(action.getName())).build();
+            synchronized(ACTION_NAME_LOCK)
+            {
+                if(!actionExists(action.getName(), parent.getChildren()))
+                {
+                    ActionResource res = ActionResourceImpl.createActionResource(coralSession,
+                        action.getName(), parent);
+                    res.setViewOverride(action.getViewOverride());
+                    res.setParamsOverride(action.getParamsOverride());
+                    res.update();
+                    return Response.created(uriInfo.getRequestUri().resolve(action.getName()))
+                        .build();
+                }
+                else
+                {
+                    return Response.status(Status.CONFLICT).build();
+                }
+            }       
         }
         catch(InvalidResourceNameException | EntityDoesNotExistException
                         | AmbigousEntityNameException e)
@@ -93,6 +106,18 @@ public class Actions
             return Response.status(Status.INTERNAL_SERVER_ERROR)
                 .entity(new StackTrace(e).toString()).build();
         }
+    }
+
+    private boolean actionExists(String name, Resource[] children)
+    {
+        for(Resource child : children)
+        {
+            if(child.getName().equals(name))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     @PUT
@@ -128,7 +153,10 @@ public class Actions
         {
             ActionResource current = (ActionResource)coralSession.getStore()
                 .getUniqueResourceByPath(ACTIONS_ROOT + "/" + name);
-            coralSession.getStore().deleteResource(current);
+            synchronized(ACTION_NAME_LOCK)
+            {
+                coralSession.getStore().deleteResource(current);
+            }
             return Response.noContent().build();
         }
         catch(EntityDoesNotExistException e)
