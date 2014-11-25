@@ -426,6 +426,15 @@ public class Rules
             this.rules = rules;
         }
 
+        private static final Comparator<ProtectedItemDao> BY_ID = new Comparator<ProtectedItemDao>()
+            {
+                @Override
+                public int compare(ProtectedItemDao o1, ProtectedItemDao o2)
+                {
+                    return o1.id > o2.id ? 1 : (o1.id < o2.id ? -1 : 0);
+                }
+            };
+
         public static List<ProtectedItemDao> create(Resource[] items)
         {
             List<ProtectedItemDao> result = new ArrayList<ProtectedItemDao>(items.length);
@@ -433,6 +442,7 @@ public class Rules
             {
                 result.add(new ProtectedItemDao((ProtectedItemResource)item));
             }
+            Collections.sort(result, BY_ID);
             return result;
         }
     }
