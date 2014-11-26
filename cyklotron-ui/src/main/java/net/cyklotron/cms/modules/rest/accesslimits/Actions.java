@@ -2,6 +2,8 @@ package net.cyklotron.cms.modules.rest.accesslimits;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -40,7 +42,7 @@ public class Actions
     private final CoralSession coralSession;
 
     private final UriInfo uriInfo;
-    
+
     private static final Object ACTION_NAME_LOCK = new Object();
 
     @Inject
@@ -98,7 +100,7 @@ public class Actions
                 {
                     return Response.status(Status.CONFLICT).build();
                 }
-            }       
+            }
         }
         catch(InvalidResourceNameException | EntityDoesNotExistException
                         | AmbigousEntityNameException e)
@@ -220,6 +222,15 @@ public class Actions
             this.paramsOverride = paramsOverride;
         }
 
+        private static final Comparator<ActionDto> BY_NAME = new Comparator<ActionDto>()
+            {
+                @Override
+                public int compare(ActionDto o1, ActionDto o2)
+                {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            };
+
         public static Collection<ActionDto> create(Resource[] actions)
         {
             List<ActionDto> result = new ArrayList<ActionDto>(actions.length);
@@ -227,6 +238,7 @@ public class Actions
             {
                 result.add(new ActionDto((ActionResource)action));
             }
+            Collections.sort(result, BY_NAME);
             return result;
         }
     }
