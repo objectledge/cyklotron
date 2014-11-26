@@ -1,4 +1,86 @@
 $viewEnclosureTool.top()##
 #genericScreenHeader('Akcje')
-
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+  	<th width="10%">Nazwa</th>
+  	<th width="30%">Zmiana widoku</th>
+  	<th width="50%">Zmiana parametrów</th>
+  	<th width="10%">Operacje</th>
+  </tr>
+  <tr ng:repeat="action in actions track by action.name">
+    <td>{{action.name}}</td>
+    <td>{{action.viewOverride}}</td>
+    <td>{{action.paramsOverride}}</td>
+    <td class="operations">
+      <a href="" ng:click="edit(action)"><i class="fa fa-pencil"></i>Edytuj</a>
+      <a href="" ng:click="remove(action)"><i class="fa fa-trash"></i>Usuń</a>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">&nbsp;</td>
+    <td class="operations">
+    	<a href="" ng:click="add()"><i class="fa fa-plus"></i>Dodaj</a>
+    </td>
+  </td>
+</table>
 #genericScreenTrailer()
+<script type="text/ng-template" id="remove.html">
+  <div class="modal-header">
+    <h3 class="modal-title">Uwaga!</h3>
+  </div>
+  <div class="modal-body">
+    <p>Czy na pewno chcesz usunąć akcję {{action.name}}?</p>
+    <p>Reguły używające tej akcji przestaną działać (będą ignorowane).</p>
+  </div>
+  <div class="modal-footer">
+    <a href="" ng:click="remove(action, $close)"><i class="fa fa-check"></i>Tak</a>
+    <a href="" ng:click="$dismiss()"><i class="fa fa-times"></i>Nie</a>
+  </div>
+</script>
+<script type="text/ng-template" id="edit.html">
+  <div class="modal-header">
+    <h3 ng:show="mode == 'add'" class="modal-title">Dodawanie nowej akcji</h3>
+    <h3 ng:show="mode == 'edit'" class="modal-title">Edycja akcji "{{action.name}}"</h3>
+  </div>
+  <div class="modal-body">
+    <form name="edit">
+      <table class="form" cellspacing="0">
+        <tr ng:if="mode == 'add'">
+          <td width="20%"><label>Nazwa</label></td>
+          <td>
+          	<input type="text" name="viewOverride" ng:model="action.name">
+          	<p class="hint">
+          		Nazwa akcji używana w treści reguł.
+          	</p>
+          </td>
+        </tr>
+        <tr>
+        	<td><label>Zmiana widoku</label></td>
+        	<td>	
+        		<input type="text" name="viewOverride" ng:model="action.viewOverride">
+        		<p class="hint">
+        			Widok, który powinien być wyświetlony jeśli reguła zostanie zastosowana. Jeśli pole jest puste widok nie będzie zmieniony.
+        		</p>
+        	</td>
+        </tr>
+        <tr>
+        	<td><label>Zmiana parametrów</label></td>
+        	<td>
+        		<input type="text" name="paramsOverride" ng:model="action.paramsOverride">
+        		<p class="hint">
+        			Zmiany parametrów, który powinny być wykonane jeśli reguła zostanie zastosowana. Pole ma format analogiczny 
+        			do query string URL: <i>nazwa</i><b>=</b><i>wartość</i>(<b>&amp;</b><i>nazwa</i><b>=</b><i>wartość</i>)*.
+        			Jeśli <i>wartość</i> jest pusta, parametr zostanie usunięty, jeśli zaczyna się od znaku <b>$</b> to zostanie 
+        			skopiowana wartość parametru oryginalnego zapytania o podanej nazwie, w przeciwnym wypadku parametr zostanie 
+        			zastąpiony podaną wartością. Inne parametry zapytania HTTP nie wymienione w regule pozostaną bez zmian.
+        		</p>
+        	</td>
+        </tr>        
+      </table>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <a href="" ng:click="save(action, $close)"><i class="fa fa-floppy-o"></i>Zapisz</a>
+    <a href="" ng:click="$dismiss()"><i class="fa fa-times"></i>Anuluj</a>
+  </div>
+</script>
