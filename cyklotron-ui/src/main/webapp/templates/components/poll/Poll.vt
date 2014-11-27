@@ -36,6 +36,7 @@ $pageTool.addScriptLink('script/poll/Poll.js')##
   <form name="form_$component_instance" method="post" action="$cmsLink.action("poll.RespondPoll")" class="defaultForm">
   <input type="hidden" name="pid" value="$poll.id">
   <input type="hidden" name="poll_instance" value="$component_instance">
+  <input type="hidden" name="questions_count" value="$questions.size()">
   <table class="defaultTable">
     <tr>
       <td align="left">

@@ -44,10 +44,12 @@ Poll.prototype.fetch = function(showResults) {
 	});
 };
 
-Poll.prototype.vote = function(questionName, answerId){
+Poll.prototype.vote = function(answers) {
 
-    var v_data = { pid : this.pollId, poll_instance : this.pollInstance, component_instance : this.pollInstance};
-    v_data[questionName] = answerId;
+        var v_data = answers || {};
+        v_data["pid"] = this.pollId;
+        v_data["poll_instance"] = this.pollInstance;
+        v_data["component_instance"] = this.pollInstance;
 
 	$.ajax({
 		url : this.voteUrl, 
@@ -60,15 +62,19 @@ Poll.prototype.vote = function(questionName, answerId){
 jQuery(document).ready(function(){ 
 
 	$("#sendVote").click(function() { 
-    	if($("form[name='form_"+ poll.pollInstance +"'] input[type='radio']:checked").size() > 0) { 
-    		var answer_id = $("form[name='form_"+ poll.pollInstance +"'] input[type='radio']:checked").val();
-    		var question_name = $("form[name='form_"+ poll.pollInstance +"'] input[type='radio']:checked").attr('name'); 
-    		poll.vote(question_name, answer_id);
+    	if($("form[name='form_"+ poll.pollInstance +"'] input[type='radio']:checked").size() == $("form[name='form_"+ poll.pollInstance +"'] input[name='questions_count']").val()) { 
+    		var answers = {};
+            $("form[name='form_"+ poll.pollInstance +"'] input[type='radio']:checked").each(function( i ) {
+               answers[$(this).attr('name')] = $(this).val();
+            });
+		    poll.vote(answers);
     	}
 	});
 
 	$("form[name='form_"+ poll.pollInstance +"'] input[type='radio']").click(function() {
- 		$("#sendVote").removeAttr('disabled');
+		if($("form[name='form_"+ poll.pollInstance +"'] input[type='radio']:checked").size() == $("form[name='form_"+ poll.pollInstance +"'] input[name='questions_count']").size()) {
+	 		$("#sendVote").removeAttr('disabled');
+	    }
 	});
 
 	$("#showResults").click(function(){ poll.fetch(true); });
