@@ -472,6 +472,20 @@ table.form label {
 	font-weight: bold;
 }
 
+/* validation */
+
+table.form input[type=text].ng-valid {
+	border-color: green;
+}
+
+table.form input[type=text].ng-invalid {
+	border-color: red;
+}
+
+table.form .error {
+	color: red;
+}
+
 a[disabled] {
 	pointer-events: none;
 	color: grey;
