@@ -146,3 +146,10 @@
 	margin-left: 10px;
 }
 
+.modal-footer .status {
+	float: left;
+}
+
+.modal-footer .status .error {
+	color: red;
+}

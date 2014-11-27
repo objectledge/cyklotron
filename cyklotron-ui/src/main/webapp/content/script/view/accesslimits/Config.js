@@ -51,11 +51,32 @@ configModule.controller("RulesCtrl", [ "$scope", function($scope) {
 
 } ]);
 
-configModule.controller("ActionsCtrl", [ "$scope", "$modal", "backend",
-		"actions", function($scope, $modal, backend, actions) {
+function runRequest(scope, func, success, error) {
+	scope.reqRunning = true;
+	scope.reqError = {};
+	func(function(value, headers) {
+		scope.reqRunning = false;
+		success(value, headers);
+	}, function(resp) {
+		scope.reqRunning = false;
+		scope.reqError[resp.status] = true;
+		if(_.isFunction(error)) {
+			error(resp);
+		}
+	})
+}
+
+configModule.controller("ActionsCtrl", [
+		"$scope",
+		"$modal",
+		"backend",
+		"actions",
+		function($scope, $modal, backend, actions) {
 			$scope.actions = actions;
 
 			$scope.add = function() {
+				$scope.reqRunning = false;
+				$scope.reqError = {};
 				$modal.open({
 					templateUrl : "accesslimits.EditAction",
 					size : "lg",
@@ -63,14 +84,13 @@ configModule.controller("ActionsCtrl", [ "$scope", "$modal", "backend",
 						mode : "add",
 						action : {},
 						save : function(action, $close) {
-							backend.actions.save(action, function() {
+							runRequest($scope, _.bind(backend.actions.save, {},
+									action), function() {
 								actions.push(action);
 								actions.sort(function(a, b) {
 									return a.name.localeCompare(b.name);
 								})
 								$close();
-							}, function(resp) {
-								alert(resp.status);
 							});
 						}
 					})
@@ -85,10 +105,8 @@ configModule.controller("ActionsCtrl", [ "$scope", "$modal", "backend",
 						mode : "edit",
 						action : action,
 						save : function(action, $close) {
-							action.$update(function() {
+							runRequesst($scope, _.bind(action.$update), function() {
 								$close();
-							}, function(resp) {
-								alert(resp.status);
 							});
 						}
 					})
@@ -102,13 +120,11 @@ configModule.controller("ActionsCtrl", [ "$scope", "$modal", "backend",
 					scope : angular.extend($scope, {
 						action : action,
 						remove : function(action, $close) {
-							action.$remove(function() {
+							runRequest($scope, _.bind(action.$remove), function() {
 								actions.splice(_.findIndex(actions, {
 									name : action.name
 								}), 1);
 								$close();
-							}, function(resp) {
-								alert(resp.status);
 							});
 						}
 					})

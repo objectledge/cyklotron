@@ -51,6 +51,14 @@ $viewEnclosureTool.top()##
     </table>
   </div>
   <div class="modal-footer">
+    <div class="status">
+      <i ng:show="reqRunning" class="fa fa-spinner fa-spin"></i>
+      <div class="error" ng:messages="reqError">
+        <div ng:message="409">Akcja o takiej nazwie już istnieje</div>
+        <div ng:message="500">Błąd serwera</div>
+        <div ng:message="0">Brak połączenia z serwerem</div>
+      </div>
+    </div>
     <a href="" ng:disabled="edit.$invalid" ng:click="save(action, $close)"><i class="fa fa-floppy-o"></i>Zapisz</a>
     <a href="" ng:click="$dismiss()"><i class="fa fa-times"></i>Anuluj</a>
   </div>
