@@ -43,10 +43,6 @@ configModule.config([ "$routeProvider", function($routeProvider) {
 	});
 } ]);
 
-configModule.controller("ConfigCtrl", [ "$scope", function($scope) {
-
-} ]);
-
 configModule.controller("RulesCtrl", [ "$scope", function($scope) {
 
 } ]);
@@ -60,7 +56,7 @@ function runRequest(scope, func, success, error) {
 	}, function(resp) {
 		scope.reqRunning = false;
 		scope.reqError[resp.status] = true;
-		if(_.isFunction(error)) {
+		if (_.isFunction(error)) {
 			error(resp);
 		}
 	})
@@ -105,27 +101,29 @@ configModule.controller("ActionsCtrl", [
 						mode : "edit",
 						action : action,
 						save : function(action, $close) {
-							runRequesst($scope, _.bind(action.$update), function() {
-								$close();
-							});
+							runRequest($scope, _.bind(action.$update, action),
+									function() {
+										$close();
+									});
 						}
 					})
 				});
 			};
 
-			$scope.remove = function(action) {
+			$scope.askRemove = function(action) {
 				$modal.open({
 					templateUrl : "accesslimits.RemoveAction",
 					size : "lg",
 					scope : angular.extend($scope, {
 						action : action,
 						remove : function(action, $close) {
-							runRequest($scope, _.bind(action.$remove), function() {
-								actions.splice(_.findIndex(actions, {
-									name : action.name
-								}), 1);
-								$close();
-							});
+							runRequest($scope, _.bind(action.$remove, action),
+									function() {
+										actions.splice(_.findIndex(actions, {
+											name : action.name
+										}), 1);
+										$close();
+									});
 						}
 					})
 				});

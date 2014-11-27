@@ -13,7 +13,7 @@ $viewEnclosureTool.top()##
     <td>{{action.paramsOverride}}</td>
     <td class="operations">
       <a href="" ng:click="edit(action)"><i class="fa fa-pencil"></i>Edytuj</a>
-      <a href="" ng:click="remove(action)"><i class="fa fa-trash"></i>Usuń</a>
+      <a href="" ng:click="askRemove(action)"><i class="fa fa-trash"></i>Usuń</a>
     </td>
   </tr>
   <tr>

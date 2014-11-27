@@ -18,6 +18,6 @@ $pageTool.addScriptLink('script/view/accesslimits/Config.js')
 		margin-right: 3px;
 	}
 </style>
-<div ng-app="ConfigApp" ng-controller="ConfigCtrl">
+<div ng-app="ConfigApp">
 	<div ng-view></div>
 </config>
