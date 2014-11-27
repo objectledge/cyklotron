@@ -1,0 +1,12 @@
+$viewEnclosureTool.top()##
+<div class="modal-header">
+  <h3 class="modal-title">Uwaga!</h3>
+</div>
+<div class="modal-body">
+  <p>Czy na pewno chcesz usunąć akcję {{action.name}}?</p>
+  <p>Reguły używające tej akcji przestaną działać (będą ignorowane).</p>
+</div>
+<div class="modal-footer">
+  <a href="" ng:click="remove(action, $close)"><i class="fa fa-check"></i>Tak</a>
+  <a href="" ng:click="$dismiss()"><i class="fa fa-times"></i>Nie</a>
+</div>

@@ -7,16 +7,15 @@ $pageTool.addStyleLink($link.content('style/cms-modal.css'))
 $pageTool.addStyleLink('//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css')
 $pageTool.addScriptLink('script/view/accesslimits/Config.js')
 <script>
-window.appBaseUri = "$link.rootContent('')";
+	window.appBaseUri = "$link.rootContent('')";
 </script>
 <style>
-.operations a {
-	margin-right: 10px;
-}
-i.fa {
-	margin-right: 3px;
-}
-
+	.operations a {
+		margin-right: 10px;
+	}
+	i.fa {
+		margin-right: 3px;
+	}
 </style>
 <div ng-app="ConfigApp" ng-controller="ConfigCtrl">
 	<div ng-view></div>

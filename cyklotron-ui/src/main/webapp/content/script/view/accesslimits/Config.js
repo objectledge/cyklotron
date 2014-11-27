@@ -57,7 +57,7 @@ configModule.controller("ActionsCtrl", [ "$scope", "$modal", "backend",
 
 			$scope.add = function() {
 				$modal.open({
-					templateUrl : "edit.html",
+					templateUrl : "accesslimits.EditAction",
 					size : "lg",
 					scope : angular.extend($scope, {
 						mode : "add",
@@ -79,7 +79,7 @@ configModule.controller("ActionsCtrl", [ "$scope", "$modal", "backend",
 
 			$scope.edit = function(action) {
 				$modal.open({
-					templateUrl : "edit.html",
+					templateUrl : "accesslimits.EditAction",
 					size : "lg",
 					scope : angular.extend($scope, {
 						mode : "edit",
@@ -97,7 +97,7 @@ configModule.controller("ActionsCtrl", [ "$scope", "$modal", "backend",
 
 			$scope.remove = function(action) {
 				$modal.open({
-					templateUrl : "remove.html",
+					templateUrl : "accesslimits.RemoveAction",
 					size : "lg",
 					scope : angular.extend($scope, {
 						action : action,
