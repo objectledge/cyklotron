@@ -445,6 +445,33 @@ table.genericLayoutTable td {
   border: none;
 }
 
+/* table-based layout for forms */
+
+table.form input[type=text] {
+	width: 100%;	
+}
+
+table.form textarea {
+	width: 100%;
+}
+
+table.form {
+	width: 100%;
+	border: 1px solid #AAA;
+}
+
+table.form td {
+	vertical-align: top;
+	border-right: 1px solid #646565;
+    border-bottom: 1px solid #646565;
+	padding: 5px;
+}
+
+table.form label {
+	text-align: right;
+	font-weight: bold;
+}
+
 /* structure special classes */
 .node-info,
 .node-info2,
