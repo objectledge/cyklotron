@@ -472,6 +472,11 @@ table.form label {
 	font-weight: bold;
 }
 
+a[disabled] {
+	pointer-events: none;
+	color: grey;
+}
+
 /* structure special classes */
 .node-info,
 .node-info2,
