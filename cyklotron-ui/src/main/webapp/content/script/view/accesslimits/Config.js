@@ -1,5 +1,5 @@
 var configModule = angular.module("ConfigApp", [ "ngResource", "ngRoute",
-		"ngMessages", "ui.bootstrap" ]);
+		"ngMessages", "ui.bootstrap", "ui.sortable" ]);
 
 configModule.factory("backend", [ "$window", "$resource",
 		function($window, $resource) {
