@@ -78,7 +78,7 @@ $viewEnclosureTool.top()##
         <div ng:message="0">Brak połączenia z serwerem</div>
       </div>
     </div>
-    <a href="" ng:disabled="edit.$invalid" ng:click="save(item, $close)"><i class="fa fa-floppy-o"></i>Zapisz</a>
+    <a href="" ng:disabled="edit.$invalid" ng:click="save($close)"><i class="fa fa-floppy-o"></i>Zapisz</a>
     <a href="" ng:click="$dismiss()"><i class="fa fa-times"></i>Anuluj</a>
   </div>
 </form>

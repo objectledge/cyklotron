@@ -126,13 +126,15 @@ configModule.controller("ActionsCtrl", [
 			};
 
 			$scope.edit = function(action) {
+				var editedAction = _.clone(action);
 				$modal.open({
 					templateUrl : "accesslimits.EditAction",
 					size : "lg",
 					scope : angular.extend($scope, {
 						mode : "edit",
-						action : action,
-						save : function(action, $close) {
+						action : editedAction,
+						save : function($close) {
+							_.assign(action, editedAction);
 							runRequest($scope, _.bind(action.$update, action),
 									function() {
 										$close();
@@ -201,15 +203,17 @@ configModule.controller("RulesCtrl", [
 			};
 
 			$scope.edit = function(item) {
+				var editedItem = _.clone(item);
 				$modal.open({
 					templateUrl : "accesslimits.EditItem",
 					size : "lg",
 					scope : angular.extend($scope, {
 						mode : "edit",
-						item : item,
+						item : editedItem,
 						editingRule : false,
 						addingRule : false,
-						save : function(item, $close) {
+						save : function($close) {
+							_.assign(item, editedItem);
 							runRequest($scope, _.bind(item.$update, item),
 									function() {
 										$close();
