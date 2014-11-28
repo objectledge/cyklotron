@@ -99,7 +99,8 @@ public class Rules
                     itemResource, n, rule.getRuleDefinition());
                 n++;
             }
-            return Response.created(uriInfo.getRequestUri().resolve(name)).build();
+            return Response.created(uriInfo.getRequestUri().resolve(itemResource.getIdString()))
+                .header("X-Item-Id", itemResource.getIdString()).build();
         }
         catch(EntityDoesNotExistException | AmbigousEntityNameException | ValueRequiredException
                         | InvalidResourceNameException e)

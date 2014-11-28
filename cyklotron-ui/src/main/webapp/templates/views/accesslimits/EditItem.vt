@@ -1,0 +1,84 @@
+$viewEnclosureTool.top()##
+<div class="modal-header">
+  <h3 ng:show="mode == 'add'" class="modal-title">Dodawanie nowego zasobu chronionego</h3>
+  <h3 ng:show="mode == 'edit'" class="modal-title">Edycja zasobu chronionego</h3>
+</div>
+<form name="edit">
+  <div class="modal-body">
+    <table class="form" cellspacing="0">
+      <tr>
+        <td width="120"><label>Wzorzec URL</label></td>
+        <td>
+          <input type="text" name="urlPattern" ng:model="item.urlPattern" required/>
+          <p class="hint">
+            Wzorzec w formacie zgodnym z <a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">java.util.regex.Pattern</a>.
+          </p>
+          <div class="error" ng:messages="edit.urlPattern.$error">
+            <div ng:message="required">Wartość wymagana</div>
+            <div ng:message="pattern">Nieprawidłowy format</div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><label>Reguły</label></td>
+        <td>          
+          <table class="form" cellspacing="0">
+            <tr ng:repeat="rule in item.rules">
+              <td width="10">
+                <i class="fa fa-reorder drag"></i>
+              </td>
+              <td>
+                <div ng:show="editingRule &amp;&amp; $index == editIndex">
+                  <input type="text" name="editRuleDef" ng:model="curRule.ruleDefinition" ng:required="editingRule"/>
+                </div>
+                <div ng:show="!editingRule || $index != editIndex">
+                  {{rule.ruleDefinition}}
+                </div>
+              </td>
+              <td width="120">
+                <div ng:show="editingRule &amp;&amp; $index == editIndex">
+                  <a href="" ng:click="updateRule()"><i class="fa fa-check"></i>Zatwierdź</a>
+                  <a href="" ng:click="revertRule()"><i class="fa fa-times"></i>Anuluj</a>
+                </div>
+                <div ng:show="!addingRule &amp;&amp; !editingRule">
+                  <a href="" ng:click="editRule(rule, $index)"><i class="fa fa-pencil"></i>Edytuj</a>
+                  <a href="" ng:click="removeRule($index)"><i class="fa fa-trash"></i>Usuń</a>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td width="10">
+                <i class="fa fa-plus"></i>
+              </td>
+              <td>
+                <div ng:show="addingRule">
+                  <input type="text" name="newRuleDef" ng:model="newRule.ruleDefinition" ng:required="addingRule"/>
+                </div>
+              </td>
+              <td width="120">
+                <div ng:show="!addingRule &amp;&amp; !editingRule">
+                  <a href="" ng:click="addRule()"><i class="fa fa-plus"></i>Dodaj</a>
+                </div>
+                <div ng:show="addingRule">
+                  <a href="" ng:click="confirmAddRule()"><i class="fa fa-check"></i>Zatwierdź</a>
+                  <a href="" ng:click="cancelAddRule()"><i class="fa fa-times"></i>Anuluj</a>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <div class="status">
+      <i ng:show="reqRunning" class="fa fa-spinner fa-spin"></i>
+      <div class="error" ng:messages="reqError">
+        <div ng:message="500">Błąd serwera</div>
+        <div ng:message="0">Brak połączenia z serwerem</div>
+      </div>
+    </div>
+    <a href="" ng:disabled="edit.$invalid" ng:click="save(item, $close)"><i class="fa fa-floppy-o"></i>Zapisz</a>
+    <a href="" ng:click="$dismiss()"><i class="fa fa-times"></i>Anuluj</a>
+  </div>
+</form>

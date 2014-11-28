@@ -17,6 +17,9 @@ $pageTool.addScriptLink('script/view/accesslimits/Config.js')
 	i.fa {
 		margin-right: 3px;
 	}
+	.drag {
+		cursor: move;
+	}
 </style>
 <div ng-app="ConfigApp">
 	<div ng-view></div>
