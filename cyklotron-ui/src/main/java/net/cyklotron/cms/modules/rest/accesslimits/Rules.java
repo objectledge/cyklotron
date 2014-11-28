@@ -78,7 +78,7 @@ public class Rules
         }
         catch(PatternSyntaxException | ParseException e)
         {
-            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+            return Response.status(Status.BAD_REQUEST).entity(new ErrorDao(e)).build();
         }
 
         try
@@ -148,7 +148,7 @@ public class Rules
         }
         catch(PatternSyntaxException | ParseException e)
         {
-            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+            return Response.status(Status.BAD_REQUEST).entity(new ErrorDao(e)).build();
         }
 
         try
@@ -515,6 +515,21 @@ public class Rules
             }
             Collections.sort(result, BY_PRIORITY);
             return result;
+        }
+    }
+    
+    public static class ErrorDao 
+    {
+        private final String message;
+        
+        public ErrorDao(Exception e)
+        {
+            this.message = e.getMessage();
+        }
+
+        public String getMessage()
+        {
+            return message;
         }
     }
 }

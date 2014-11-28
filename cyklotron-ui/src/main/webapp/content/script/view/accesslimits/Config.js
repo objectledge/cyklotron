@@ -126,6 +126,8 @@ configModule.controller("ActionsCtrl", [
 			};
 
 			$scope.edit = function(action) {
+				$scope.reqRunning = false;
+				$scope.reqError = {};
 				var editedAction = _.clone(action);
 				$modal.open({
 					templateUrl : "accesslimits.EditAction",
@@ -185,9 +187,9 @@ configModule.controller("RulesCtrl", [
 						},
 						editingRule : false,
 						addingRule : false,
-						save : function(item, $close) {
+						save : function($close) {
 							runRequest($scope, _.bind(backend.items.save, {},
-									item), function(data, headers) {
+									$scope.item), function(data, headers) {
 								backend.items.get({
 									itemId : headers("X-Item-Id")
 								}).$promise.then(function(newItem) {
@@ -203,6 +205,8 @@ configModule.controller("RulesCtrl", [
 			};
 
 			$scope.edit = function(item) {
+				$scope.reqRunning = false;
+				$scope.reqError = {};
 				var editedItem = _.clone(item);
 				$modal.open({
 					templateUrl : "accesslimits.EditItem",

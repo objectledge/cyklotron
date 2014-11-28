@@ -23,7 +23,7 @@ $viewEnclosureTool.top()##
         <td><label>Reguły</label></td>
         <td>          
           <table class="form" cellspacing="0" as:sortable ng:model="item.rules" style="border-bottom: none;">
-              <tr ng:repeat="rule in item.rules" as:sortable-item>
+              <tr ng:repeat="rule in item.rules track by $index" as:sortable-item>
                 <td width="14">
                   <i class="fa fa-reorder drag" as:sortable-item-handle></i>
                 </td>
@@ -80,6 +80,7 @@ $viewEnclosureTool.top()##
       <i ng:show="reqRunning" class="fa fa-spinner fa-spin"></i>
       <div class="error" ng:messages="reqError">
         <div ng:message="500">Błąd serwera</div>
+        <div ng:message="400">Nieprawidłowa definicja</div>
         <div ng:message="0">Brak połączenia z serwerem</div>
       </div>
     </div>
