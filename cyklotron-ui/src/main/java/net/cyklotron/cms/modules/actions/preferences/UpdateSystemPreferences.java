@@ -38,8 +38,7 @@ public class UpdateSystemPreferences
         String config = parameters.get("config","");
         try
         {
-            conf.remove();
-            conf.add(new DefaultParameters(config), true);
+            conf.set(new DefaultParameters(config));
         }
         catch(Exception e)
         {
