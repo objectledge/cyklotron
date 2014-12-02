@@ -9,14 +9,26 @@ $viewEnclosureTool.top()##
       <tr>
         <td width="120"><label>Wzorzec URL</label></td>
         <td>
-          <input type="text" name="urlPattern" ng:model="item.urlPattern" required/>
+          <input type="text" name="urlPattern" ng:model="item.urlPattern" required cfg:valid-url-pattern ng-model-options="{ debounce : { 'default' : 200, blur : 0 } }"/>
           <p class="hint">
             Wzorzec w formacie zgodnym z <a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">java.util.regex.Pattern</a>.
           </p>
-          <div class="error" ng:messages="edit.urlPattern.$error">
+          #macro(cfg_validation $ctrl $type)
+          <div class="error" ng:messages="edit.$ctrl#**#.$error">
             <div ng:message="required">Wartość wymagana</div>
-            <div ng:message="pattern">Nieprawidłowy format</div>
+            <div ng:message="$type">
+              <div ng:messages="edit.$ctrl#**#.validationStatus">
+                <div ng:message="200">
+                  Nieprawidłowy format
+                  <pre>{{edit.$ctrl#**#.validationError | wrap:72}}</pre>
+                </div>
+                <div ng:message="500">Błąd serwera</div>
+                <div ng:message="0">Brak połączenia z serwerem</div>
+              </div>
+            </div>
           </div>
+          #end
+          #cfg_validation('urlPattern' 'urlPattern')  
         </td>
       </tr>
       <tr>
@@ -29,7 +41,8 @@ $viewEnclosureTool.top()##
                 </td>
                 <td>
                   <div ng:show="editingRule &amp;&amp; $index == editIndex">
-                    <input type="text" name="editRuleDef" ng:model="curRule.ruleDefinition" ng:required="editingRule"/>
+                    <input type="text" name="editRuleDef" ng:model="curRule.ruleDefinition" ng:required="editingRule" cfg:valid-rule/>
+                    #cfg_validation('editRuleDef' 'rule')
                   </div>
                   <div ng:show="!editingRule || $index != editIndex">
                     {{rule.ruleDefinition}}
@@ -54,7 +67,8 @@ $viewEnclosureTool.top()##
               </td>
               <td>
                 <div ng:show="addingRule">
-                  <input type="text" name="newRuleDef" ng:model="newRule.ruleDefinition" ng:required="addingRule"/>
+                  <input type="text" name="newRuleDef" ng:model="newRule.ruleDefinition" ng:required="addingRule" cfg:valid-rule/>
+                  #cfg_validation('newRuleDef' 'rule')
                 </div>
                 <div ng:show="!addingRule">
                   &nbsp;

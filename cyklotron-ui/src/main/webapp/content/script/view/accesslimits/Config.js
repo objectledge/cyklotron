@@ -54,6 +54,62 @@ configModule.factory("backend", [ "$window", "$resource",
 			};
 		} ]);
 
+function customValidator(name, resource) {
+	configModule.directive(name, [
+			"$q",
+			"backend",
+			function($q, backend) {
+				return {
+					restrict : "A",
+					require : "ngModel",
+					link : function(scope, element, attr, ctrl) {
+						ctrl.$asyncValidators[resource] = function(modelValue,
+								viewValue) {
+							ctrl.validationStatus = {};
+							var deferred = $q.defer();
+							if(attr.required) {
+								backend.validate[resource]({
+									text : viewValue
+								}).$promise.then(function(response) {
+									if (response.valid) {
+										deferred.resolve(true);
+									} else {
+										ctrl.validationStatus[200] = true;
+										ctrl.validationError = response.error;
+										deferred.reject();
+									}
+								}, function(response) {
+									ctrl.validationStatus[response.status] = true;
+									deferred.reject();
+								});								
+							} else {
+								deferred.resolve(true); // field not required, skip validation
+							}
+							return deferred.promise;
+						};
+					}
+				};
+			} ]);
+}
+
+customValidator("cfgValidUrlPattern", "urlPattern");
+customValidator("cfgValidRule", "rule");
+
+configModule.filter("wrap", function() {
+	return function(input, width) {
+		var lines = input.split("\n");
+		var out = "";
+		_.forEach(lines, function(line) {
+			while(line.length > width) {
+				out += line.substring(0, width) + "\n";
+				line = line.substring(width);
+			}
+			out += line + "\n";
+		});
+		return out;
+	}
+})
+
 configModule.config([ "$routeProvider", function($routeProvider) {
 	$routeProvider.when("/rules", {
 		templateUrl : "accesslimits.Rules",
@@ -194,7 +250,7 @@ configModule.controller("RulesCtrl", [
 									itemId : headers("X-Item-Id")
 								}).$promise.then(function(newItem) {
 									items.push(newItem);
-									$close();									
+									$close();
 								}, function(resp) {
 									$scope.reqError[resp.status] = true;
 								});
@@ -279,7 +335,7 @@ configModule.controller("RulesCtrl", [
 			$scope.cancelAddRule = function() {
 				$scope.addingRule = false;
 			};
-			
+
 			$scope.removeRule = function(index) {
 				$scope.item.rules.splice(index, 1);
 			};
