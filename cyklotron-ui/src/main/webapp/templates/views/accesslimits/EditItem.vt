@@ -91,7 +91,7 @@ $viewEnclosureTool.top()##
   </div>
   <div class="modal-footer">
     <div class="status">
-      <i ng:show="reqRunning" class="fa fa-spinner fa-spin"></i>
+      <i ng:show="reqRunning || edit.$pending" class="fa fa-spinner fa-spin"></i>
       <div class="error" ng:messages="reqError">
         <div ng:message="500">Błąd serwera</div>
         <div ng:message="400">Nieprawidłowa definicja</div>
