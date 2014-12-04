@@ -6,6 +6,10 @@ configModule.factory("backend", [ "$window", "$resource",
 			var baseUrl = $window.appBaseUri + "/rest/accesslimits";
 			return {
 				actions : $resource(baseUrl + "/actions", {}, {
+					get : {
+						method : "GET",
+						url : baseUrl + "/actions/:name"
+					},
 					update : {
 						method : "PUT",
 						url : baseUrl + "/actions/:actionName",
@@ -170,11 +174,17 @@ configModule.controller("ActionsCtrl", [
 						save : function($close) {
 							runRequest($scope, _.bind(backend.actions.save, {},
 									$scope.action), function() {
-								actions.push($scope.action);
-								actions.sort(function(a, b) {
-									return a.name.localeCompare(b.name);
-								})
-								$close();
+								backend.actions.get({
+									name : $scope.action.name
+								}).$promise.then(function(newAction) {
+									actions.push(newAction);
+									actions.sort(function(a, b) {
+										return a.name.localeCompare(b.name);
+									});
+									$close();
+								}, function(resp) {
+									$scope.reqError[resp.status] = true;
+								});
 							});
 						}
 					})
