@@ -38,7 +38,7 @@ public class ActionRegistryImpl
                 }
             }
             ResourceClass<?> actionRc = coralSession.getSchema().getResourceClass(
-                ProtectedItemResource.CLASS_NAME);
+               ActionResource.CLASS_NAME);
             coralSession.getEvent().addResourceChangeListener(this, actionRc);
             coralSession.getEvent().addResourceCreationListener(this, actionRc);
             coralSession.getEvent().addResourceDeletionListener(this, actionRc);
