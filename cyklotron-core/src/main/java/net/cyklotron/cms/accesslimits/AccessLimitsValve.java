@@ -48,6 +48,7 @@ public class AccessLimitsValve
             {
                 log.info("Applying action " + actionName + " to client "
                     + requestInfo.getAddress().toString() + " requesting " + requestInfo.getPath());
+                action.get().apply(context);
             }
         }
     }
