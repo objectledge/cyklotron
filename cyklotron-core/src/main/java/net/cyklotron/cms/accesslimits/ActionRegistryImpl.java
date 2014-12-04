@@ -69,6 +69,6 @@ public class ActionRegistryImpl
     @Override
     public Optional<Action> getAction(String name)
     {
-        return Optional.fromNullable(actions.get(name));
+        return name != null ? Optional.fromNullable(actions.get(name)) : Optional.<Action> absent();
     }
 }
