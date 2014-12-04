@@ -50,7 +50,7 @@ $viewEnclosureTool.top()##
                 </td>
                 <td width="120">
                   <div ng:show="editingRule &amp;&amp; $index == editIndex">
-                    <a href="" ng:click="updateRule()"><i class="fa fa-check"></i>Zatwierdź</a>
+                    <a href="" ng:click="updateRule()" ng:disabled="edit.editRuleDef.$invalid"><i class="fa fa-check"></i>Zatwierdź</a>
                     <a href="" ng:click="revertRule()"><i class="fa fa-times"></i>Anuluj</a>
                   </div>
                   <div ng:show="!addingRule &amp;&amp; !editingRule">
@@ -79,7 +79,7 @@ $viewEnclosureTool.top()##
                   <a href="" ng:click="addRule()"><i class="fa fa-plus"></i>Dodaj</a>
                 </div>
                 <div ng:show="addingRule">
-                  <a href="" ng:click="confirmAddRule()"><i class="fa fa-check"></i>Zatwierdź</a>
+                  <a href="" ng:click="confirmAddRule()" ng:disabled="edit.newRuleDef.$invalid"><i class="fa fa-check"></i>Zatwierdź</a>
                   <a href="" ng:click="cancelAddRule()"><i class="fa fa-times"></i>Anuluj</a>
                 </div>
               </td>
