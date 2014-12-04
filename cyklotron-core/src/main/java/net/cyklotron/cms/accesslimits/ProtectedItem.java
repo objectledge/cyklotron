@@ -88,7 +88,7 @@ public class ProtectedItem
             List<Rule> newRules = new ArrayList<>(ruleDefs.size());
             for(RuleResource def : ruleDefs)
             {
-                rules.add(RuleFactory.getInstance().newRule(def.getId(), def.getRuleDefinition()));
+                newRules.add(RuleFactory.getInstance().newRule(def.getId(), def.getRuleDefinition()));
             }
             rules = Collections.unmodifiableList(newRules);
         }
