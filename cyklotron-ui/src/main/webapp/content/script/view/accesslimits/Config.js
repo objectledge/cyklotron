@@ -167,10 +167,10 @@ configModule.controller("ActionsCtrl", [
 					scope : angular.extend($scope, {
 						mode : "add",
 						action : {},
-						save : function(action, $close) {
+						save : function($close) {
 							runRequest($scope, _.bind(backend.actions.save, {},
-									action), function() {
-								actions.push(action);
+									$scope.action), function() {
+								actions.push($scope.action);
 								actions.sort(function(a, b) {
 									return a.name.localeCompare(b.name);
 								})
