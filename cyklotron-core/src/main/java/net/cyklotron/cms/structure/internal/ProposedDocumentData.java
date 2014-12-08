@@ -665,9 +665,14 @@ public class ProposedDocumentData
                     }
                     else
                     {
-                        validationFailure = "attachement_async_upload_failed";
-                        valid = false;
-                        logger.error("missing or invalid bucket id: " + uploadBucketId);
+                        int uploadedFilesCount = parameters.getInt("upload_bucket_size", -1);
+                        logger.error("missing or invalid bucket id: " + uploadBucketId + " with "
+                            + uploadedFilesCount + " uploaded files reported by browser");
+                        if(uploadedFilesCount != 0)
+                        {
+                            validationFailure = "attachement_async_upload_failed";
+                            valid = false;
+                        }
                     }
                 }
                 else
