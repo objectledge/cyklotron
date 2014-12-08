@@ -785,7 +785,7 @@ public class ProposedDocumentData
             UploadBucket bucket = fileUpload.getBucket(uploadBucketId);
             if(bucket != null)
             {
-                fileUpload.releaseBucket(bucket);
+                fileUpload.releaseBucket(bucket, "after use");
             }
         }
     }
