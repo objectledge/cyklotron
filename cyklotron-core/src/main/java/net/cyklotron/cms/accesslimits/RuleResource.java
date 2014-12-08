@@ -28,6 +28,8 @@
  
 package net.cyklotron.cms.accesslimits;
 
+import java.util.Comparator;
+
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
@@ -80,4 +82,14 @@ public interface RuleResource
         throws ValueRequiredException;
      
     // @custom methods ///////////////////////////////////////////////////////
+    
+    // @import java.util.Comparator
+    
+    static final Comparator<RuleResource> BY_PRIORITY = new Comparator<RuleResource>()
+        {
+            public int compare(RuleResource o1, RuleResource o2)
+            {
+                return o1.getPriority() - o2.getPriority();
+            }
+        };
 }

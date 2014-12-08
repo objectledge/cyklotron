@@ -1,0 +1,104 @@
+$viewEnclosureTool.top()##
+<div class="modal-header">
+  <h3 ng:show="mode == 'add'" class="modal-title">Dodawanie nowego zasobu chronionego</h3>
+  <h3 ng:show="mode == 'edit'" class="modal-title">Edycja zasobu chronionego</h3>
+</div>
+<form name="edit">
+  <div class="modal-body">
+    <table class="form" cellspacing="0">
+      <tr>
+        <td width="120"><label>Wzorzec URL</label></td>
+        <td>
+          <input type="text" name="urlPattern" ng:model="item.urlPattern" required cfg:valid-url-pattern ng-model-options="{ debounce : { 'default' : 200, blur : 0 } }"/>
+          <p class="hint">
+            Wzorzec w formacie zgodnym z <a href="http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html">java.util.regex.Pattern</a>.
+          </p>
+          #macro(cfg_validation $ctrl $type)
+          <div class="error" ng:messages="edit.$ctrl#**#.$error">
+            <div ng:message="required">Wartość wymagana</div>
+            <div ng:message="$type">
+              <div ng:messages="edit.$ctrl#**#.validationStatus">
+                <div ng:message="200">
+                  Nieprawidłowy format
+                  <pre>{{edit.$ctrl#**#.validationError | wrap:72}}</pre>
+                </div>
+                <div ng:message="500">Błąd serwera</div>
+                <div ng:message="0">Brak połączenia z serwerem</div>
+              </div>
+            </div>
+          </div>
+          #end
+          #cfg_validation('urlPattern' 'urlPattern')  
+        </td>
+      </tr>
+      <tr>
+        <td><label>Reguły</label></td>
+        <td>          
+          <table class="form" cellspacing="0" as:sortable ng:model="item.rules" style="border-bottom: none;">
+              <tr ng:repeat="rule in item.rules track by $index" as:sortable-item>
+                <td width="14">
+                  <i class="fa fa-reorder drag" as:sortable-item-handle></i>
+                </td>
+                <td>
+                  <div ng:show="editingRule &amp;&amp; $index == editIndex">
+                    <input type="text" name="editRuleDef" ng:model="curRule.ruleDefinition" ng:required="editingRule" cfg:valid-rule/>
+                    #cfg_validation('editRuleDef' 'rule')
+                  </div>
+                  <div ng:show="!editingRule || $index != editIndex">
+                    {{rule.ruleDefinition}}
+                  </div>
+                </td>
+                <td width="120">
+                  <div ng:show="editingRule &amp;&amp; $index == editIndex">
+                    <a href="" ng:click="updateRule()" ng:disabled="edit.editRuleDef.$invalid"><i class="fa fa-check"></i>Zatwierdź</a>
+                    <a href="" ng:click="revertRule()"><i class="fa fa-times"></i>Anuluj</a>
+                  </div>
+                  <div ng:show="!addingRule &amp;&amp; !editingRule">
+                    <a href="" ng:click="editRule(rule, $index)"><i class="fa fa-pencil"></i>Edytuj</a>
+                    <a href="" ng:click="removeRule($index)"><i class="fa fa-trash"></i>Usuń</a>
+                  </div>
+                </td>
+              </tr>
+          </table>
+          <table class="form" cellspacing="0" style="border-top: none;">
+            <tr>
+              <td width="14">
+                <i class="fa fa-plus"></i>
+              </td>
+              <td>
+                <div ng:show="addingRule">
+                  <input type="text" name="newRuleDef" ng:model="newRule.ruleDefinition" ng:required="addingRule" cfg:valid-rule/>
+                  #cfg_validation('newRuleDef' 'rule')
+                </div>
+                <div ng:show="!addingRule">
+                  &nbsp;
+                </div>
+              </td>
+              <td width="120">
+                <div ng:show="!addingRule &amp;&amp; !editingRule">
+                  <a href="" ng:click="addRule()"><i class="fa fa-plus"></i>Dodaj</a>
+                </div>
+                <div ng:show="addingRule">
+                  <a href="" ng:click="confirmAddRule()" ng:disabled="edit.newRuleDef.$invalid"><i class="fa fa-check"></i>Zatwierdź</a>
+                  <a href="" ng:click="cancelAddRule()"><i class="fa fa-times"></i>Anuluj</a>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <div class="status">
+      <i ng:show="reqRunning || edit.$pending" class="fa fa-spinner fa-spin"></i>
+      <div class="error" ng:messages="reqError">
+        <div ng:message="500">Błąd serwera</div>
+        <div ng:message="400">Nieprawidłowa definicja</div>
+        <div ng:message="0">Brak połączenia z serwerem</div>
+      </div>
+    </div>
+    <a href="" ng:disabled="edit.$invalid" ng:click="save($close)"><i class="fa fa-floppy-o"></i>Zapisz</a>
+    <a href="" ng:click="$dismiss()"><i class="fa fa-times"></i>Anuluj</a>
+  </div>
+</form>

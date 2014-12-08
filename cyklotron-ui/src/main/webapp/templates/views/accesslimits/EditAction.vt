@@ -1,0 +1,65 @@
+$viewEnclosureTool.top()##
+<div class="modal-header">
+  <h3 ng:show="mode == 'add'" class="modal-title">Dodawanie nowej akcji</h3>
+  <h3 ng:show="mode == 'edit'" class="modal-title">Edycja akcji "{{action.name}}"</h3>
+</div>
+<form name="edit">
+  <div class="modal-body">
+    <table class="form" cellspacing="0">
+      <tr ng:if="mode == 'add'">
+        <td width="20%"><label>Nazwa</label></td>
+        <td>
+        	<input type="text" name="name" ng:model="action.name" required pattern="^[a-z]*$"/>
+        	<p class="hint">
+        		Nazwa akcji używana w treści reguł. Musi składać się z małych liter.
+        	</p>
+          <div class="error" ng:messages="edit.name.$error">
+            <div ng:message="required">Wartość wymagana</div>
+            <div ng:message="pattern">Nieprawidłowy format</div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+      	<td><label>Zmiana widoku</label></td>
+      	<td>	
+      		<input type="text" name="viewOverride" ng:model="action.viewOverride" pattern="^[A-Za-z0-9.]*$"/>
+      		<p class="hint">
+      			Widok, który powinien być wyświetlony jeśli reguła zostanie zastosowana. Jeśli pole jest puste widok nie będzie zmieniony.
+      		</p>
+          <div class="error" ng:messages="edit.viewOverride.$error">
+            <div ng:message="pattern">Nieprawidłowy format</div>
+          </div>
+      	</td>
+      </tr>
+      <tr>
+      	<td><label>Zmiana parametrów</label></td>
+      	<td>
+      		<input type="text" name="paramsOverride" ng:model="action.paramsOverride" 
+            pattern="^([a-z_]+=(\$[a-z_]+|[^ &amp;$]*))?(&amp;[a-z_]+=(\$[a-z_]+|[^ &amp;$]*))*$" />
+      		<p class="hint">
+      			Zmiany parametrów, który powinny być wykonane jeśli reguła zostanie zastosowana. Pole ma format analogiczny 
+      			do query string URL: <i>nazwa</i><b>=</b><i>wartość</i>(<b>&amp;</b><i>nazwa</i><b>=</b><i>wartość</i>)*.
+      			Jeśli <i>wartość</i> jest pusta, parametr zostanie usunięty, jeśli zaczyna się od znaku <b>$</b> to zostanie 
+      			skopiowana wartość parametru oryginalnego zapytania o podanej nazwie, w przeciwnym wypadku parametr zostanie 
+      			zastąpiony podaną wartością. Inne parametry zapytania HTTP nie wymienione w regule pozostaną bez zmian.
+      		</p>
+          <div class="error" ng:messages="edit.paramsOverride.$error">
+            <div ng:message="pattern">Nieprawidłowy format</div>
+          </div>          
+      	</td>
+      </tr>        
+    </table>
+  </div>
+  <div class="modal-footer">
+    <div class="status">
+      <i ng:show="reqRunning" class="fa fa-spinner fa-spin"></i>
+      <div class="error" ng:messages="reqError">
+        <div ng:message="409">Akcja o takiej nazwie już istnieje</div>
+        <div ng:message="500">Błąd serwera</div>
+        <div ng:message="0">Brak połączenia z serwerem</div>
+      </div>
+    </div>
+    <a href="" ng:disabled="edit.$invalid" ng:click="save($close)"><i class="fa fa-floppy-o"></i>Zapisz</a>
+    <a href="" ng:click="$dismiss()"><i class="fa fa-times"></i>Anuluj</a>
+  </div>
+</form>
