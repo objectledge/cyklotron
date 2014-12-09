@@ -13,15 +13,22 @@ public class RewriteTarget
 {
     private final SitePath path;
 
-    private final NavigationNodeResource node;
+    private final NavigationNodeResource targetNode;
+
+    private final String targetView;
 
     private final Map<String, List<String>> parameters;
 
-    public RewriteTarget(SitePath path, NavigationNodeResource node,
+    public RewriteTarget(SitePath path, String targetView, NavigationNodeResource targetNode,
         Map<String, List<String>> parameters)
     {
+        if(targetView == null && targetNode == null)
+        {
+            throw new IllegalArgumentException("either targetView or targetNode must be non-null");
+        }
         this.path = path;
-        this.node = node;
+        this.targetView = targetView;
+        this.targetNode = targetNode;
         this.parameters = parameters;
     }
 
@@ -30,38 +37,43 @@ public class RewriteTarget
         return path;
     }
 
-    public NavigationNodeResource getNode()
-    {
-        return node;
-    }
-
-    public Map<String, List<String>> getParameters()
-    {
-        return parameters;
-    }
-    
     public RewriteInfo rewrite(RewriteInfo request, String remainingPathInfo)
     {
         RewriteInfoBuilder builder = RewriteInfoBuilder.fromRewriteInfo(request);
 
-        builder.withServletPath("/ledge").withPathInfo(
-            "/x/" + this.getNode().getIdString() + remainingPathInfo);
-        for(Map.Entry<String, List<String>> entry : this.getParameters().entrySet())
+        builder.withServletPath("/ledge");
+        if(targetView != null)
+        {
+            builder.withPathInfo("/view/" + targetView + remainingPathInfo);
+        }
+        else
+        {
+            builder.withPathInfo("/x/" + targetNode.getIdString() + remainingPathInfo);
+        }
+
+        for(Map.Entry<String, List<String>> entry : parameters.entrySet())
         {
             builder.withFormParameter(entry.getKey(), entry.getValue());
         }
         return builder.build();
     }
-    
+
     public String getTargetUrl()
     {
         StringBuilder buff = new StringBuilder();
-        buff.append("/ledge/x/").append(this.getNode().getIdString());
-        if(this.getParameters().size() > 0)
+        buff.append("/ledge");
+        if(targetView != null)
+        {
+            buff.append("/view/").append(targetView);
+        }
+        else
+        {
+            buff.append("/x/").append(targetNode.getIdString());            
+        }
+        if(parameters.size() > 0)
         {
             buff.append('?');
-            Iterator<Map.Entry<String, List<String>>> i = this.getParameters().entrySet()
-                .iterator();
+            Iterator<Map.Entry<String, List<String>>> i = parameters.entrySet().iterator();
             while(i.hasNext())
             {
                 Map.Entry<String, List<String>> e = i.next();
