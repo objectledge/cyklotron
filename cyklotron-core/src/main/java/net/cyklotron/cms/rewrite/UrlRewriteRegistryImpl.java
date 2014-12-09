@@ -158,33 +158,6 @@ public class UrlRewriteRegistryImpl
         return null;
     }
 
-    @Override
-    public String toUrl(RewriteTarget target)
-    {
-        StringBuilder buff = new StringBuilder();
-        buff.append("/ledge/x/").append(target.getNode().getIdString());
-        if(target.getParameters().size() > 0)
-        {
-            buff.append('?');
-            Iterator<Map.Entry<String, List<String>>> i = target.getParameters().entrySet()
-                .iterator();
-            while(i.hasNext())
-            {
-                Map.Entry<String, List<String>> e = i.next();
-                Iterator<String> j = e.getValue().iterator();
-                while(j.hasNext())
-                {
-                    buff.append(e.getKey()).append('=').append(j.next());
-                    if(i.hasNext() || j.hasNext())
-                    {
-                        buff.append('&');
-                    }
-                }
-            }
-        }
-        return buff.toString();
-    }
-
     private Map<SitePath, UrlRewriteParticipant> potentialMatches(SitePath path)
     {
         Map<SitePath, UrlRewriteParticipant> results = new HashMap<>();

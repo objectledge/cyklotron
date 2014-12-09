@@ -257,7 +257,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
                     final SitePath sitePath = entry.getKey();
                     final T resource = entry.getValue().get(coralSession);
                     infos.add(new RewriteEntry(getName(), sitePath.getSite().getName(), sitePath
-                        .getPath(), formatRewrite(getTarget(resource, sitePath)), getDescription(resource)));
+                        .getPath(), getTarget(resource, sitePath).getTargetUrl(), getDescription(resource)));
                 }
                 catch(EntityDoesNotExistException e)
                 {
@@ -436,25 +436,6 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     protected abstract String getDescription(T resource);
 
     protected abstract SiteResource getSite(T resource);
-
-    private String formatRewrite(RewriteTarget rewrite)
-    {
-        StringBuilder b = new StringBuilder();
-        b.append("/ledge/x/").append(rewrite.getNode().getIdString());
-        Map<String, List<String>> params = rewrite.getParameters();
-        if(params.size() > 0)
-        {
-            b.append('?');
-            for(Map.Entry<String, List<String>> entry : params.entrySet())
-            {
-                for(String value : entry.getValue())
-                {
-                    b.append(entry.getKey()).append('=').append(value);
-                }
-            }
-        }
-        return b.toString();
-    }
 
     private class ResourceRef<R extends Resource>
     {

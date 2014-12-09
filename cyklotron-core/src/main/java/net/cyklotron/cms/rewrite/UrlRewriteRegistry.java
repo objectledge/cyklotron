@@ -13,8 +13,6 @@ public interface UrlRewriteRegistry
 
     RewriteTarget target(SitePath sitePath);
 
-    String toUrl(RewriteTarget target);
-
     boolean canHandle(Object object);
 
     public void create(String path, Object object)

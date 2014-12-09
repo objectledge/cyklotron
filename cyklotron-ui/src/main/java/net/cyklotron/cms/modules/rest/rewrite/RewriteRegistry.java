@@ -86,7 +86,7 @@ public class RewriteRegistry
         resp.put("defined", Boolean.valueOf(target != null));
         if(target != null)
         {
-            resp.put("target", registry.toUrl(target));
+            resp.put("target", target.getTargetUrl());
             resp.put("exact", target.getPath().getPath().equals(rPath));
         }
         return Response.ok(resp).build();
