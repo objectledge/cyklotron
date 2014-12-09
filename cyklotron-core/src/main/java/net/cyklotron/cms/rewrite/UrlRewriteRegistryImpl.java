@@ -14,7 +14,6 @@ import java.util.Set;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.web.rewrite.RewriteInfo;
-import org.objectledge.web.rewrite.RewriteInfoBuilder;
 import org.objectledge.web.rewrite.UrlRewriter;
 
 import net.cyklotron.cms.ProtectedResource;
@@ -131,15 +130,7 @@ public class UrlRewriteRegistryImpl
                 .length() ? request.getServletPath().substring(match.getPath().length()) : "";
             if(target != null)
             {
-                RewriteInfoBuilder builder = RewriteInfoBuilder.fromRewriteInfo(request);
-
-                builder.withServletPath("/ledge").withPathInfo(
-                    "/x/" + target.getNode().getIdString() + remainingPathInfo);
-                for(Map.Entry<String, List<String>> entry : target.getParameters().entrySet())
-                {
-                    builder.withFormParameter(entry.getKey(), entry.getValue());
-                }
-                return builder.build();
+                return target.rewrite(request, remainingPathInfo);
             }
         }
         return request;

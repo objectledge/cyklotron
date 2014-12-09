@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.objectledge.web.rewrite.RewriteInfo;
+import org.objectledge.web.rewrite.RewriteInfoBuilder;
+
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
 public class RewriteTarget
@@ -35,6 +38,19 @@ public class RewriteTarget
     public Map<String, List<String>> getParameters()
     {
         return parameters;
+    }
+    
+    public RewriteInfo rewrite(RewriteInfo request, String remainingPathInfo)
+    {
+        RewriteInfoBuilder builder = RewriteInfoBuilder.fromRewriteInfo(request);
+
+        builder.withServletPath("/ledge").withPathInfo(
+            "/x/" + this.getNode().getIdString() + remainingPathInfo);
+        for(Map.Entry<String, List<String>> entry : this.getParameters().entrySet())
+        {
+            builder.withFormParameter(entry.getKey(), entry.getValue());
+        }
+        return builder.build();
     }
     
     public String getTargetUrl()
