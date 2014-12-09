@@ -59,7 +59,9 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     {
         QueryResults results = coralSession.getQuery().executeQuery(
             "FIND RESOURCE FROM " + rc.getName() + " WHERE DEFINED " + pathAttribute());
-        for(T res : (List<T>)results.getList(1))
+        @SuppressWarnings("unchecked")
+        final List<T> resList = (List<T>)results.getList(1);
+        for(T res : resList)
         {
             if(res.isDefined(pathAttr))
             {
@@ -471,6 +473,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
             return id;
         }
 
+        @SuppressWarnings("unchecked")
         public R get(CoralSession coralSession)
             throws EntityDoesNotExistException
         {
