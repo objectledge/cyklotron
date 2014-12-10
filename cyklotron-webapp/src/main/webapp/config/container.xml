@@ -465,6 +465,7 @@
              class="net.cyklotron.cms.rewrite.UrlRewriteRegistryImpl">
     <sequence>
       <component class="net.cyklotron.cms.structure.internal.NavigationNodeUrlRewriteParticipant" />
+      <component class="net.cyklotron.cms.rewrite.toview.ViewBasedUrlRewriteParticipant" />
     </sequence>
     <parameter />
     <parameter />

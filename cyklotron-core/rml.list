@@ -27,3 +27,4 @@ src/main/rml/cyklotron/periodicals/periodicals.rml
 src/main/rml/cyklotron/catalogue/catalogue.rml
 src/main/rml/cyklotron/sitemap/sitemap.rml
 src/main/rml/cyklotron/accesslimits/accesslimits.rml
+src/main/rml/cyklotron/rewrite/rewrite.rml

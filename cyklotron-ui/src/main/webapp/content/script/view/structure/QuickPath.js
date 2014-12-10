@@ -9,7 +9,8 @@ quickPathModule.filter('underscoresToSlash', function() {
 quickPathModule.filter('providerName', function() {
    var providers = {
        NavigationNodeResource: 'dokument',
-       OrganizationResource: 'organizacja'
+       OrganizationResource: 'organizacja',
+       RewriteToViewResource : 'widok'
    };
    return function(input) {
        if(_.has(providers, input)) {
