@@ -64,7 +64,7 @@ public class VoteTrackingTest
         mockHttpServletRequest.stubs().method("getContextPath").withNoArguments()
             .will(returnValue("/"));
         mockHttpServletRequest.stubs().method("getServletPath").withNoArguments()
-            .will(returnValue("ledge"));
+            .will(returnValue(""));
         mockHttpSession.stubs().method("getAttribute").with(isA(String.class))
             .will(returnValue(null));
         mockHttpSession.stubs().method("setAttribute").with(isA(String.class), ANYTHING).isVoid();
