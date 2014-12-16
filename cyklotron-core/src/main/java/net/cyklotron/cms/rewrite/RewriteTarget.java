@@ -40,15 +40,14 @@ public class RewriteTarget
     public RewriteInfo rewrite(RewriteInfo request, String remainingPathInfo)
     {
         RewriteInfoBuilder builder = RewriteInfoBuilder.fromRewriteInfo(request);
-
-        builder.withServletPath("/ledge");
+        builder.withServletPath("/");
         if(targetView != null)
         {
-            builder.withPathInfo("/view/" + targetView + remainingPathInfo);
+            builder.withPathInfo("view/" + targetView + remainingPathInfo);
         }
         else
         {
-            builder.withPathInfo("/x/" + targetNode.getIdString() + remainingPathInfo);
+            builder.withPathInfo("x/" + targetNode.getIdString() + remainingPathInfo);
         }
 
         for(Map.Entry<String, List<String>> entry : parameters.entrySet())
@@ -61,7 +60,6 @@ public class RewriteTarget
     public String getTargetUrl()
     {
         StringBuilder buff = new StringBuilder();
-        buff.append("/ledge");
         if(targetView != null)
         {
             buff.append("/view/").append(targetView);
