@@ -30,6 +30,5 @@
 <config>
   <server>localhost</server>
   <port>8080</port>
-  <context>/cyklotron</context>
-  <servlet>/ledge</servlet>
+  <context>/</context>
 </config>
