@@ -110,21 +110,19 @@ public class RewriteToViewResourceImpl
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @param prefix the prefix attribute
      * @param targetView the targetView attribute
      * @return a new RewriteToViewResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static RewriteToViewResource createRewriteToViewResource(CoralSession session, String
-        name, Resource parent, String prefix, String targetView)
+        name, Resource parent, String targetView)
         throws ValueRequiredException, InvalidResourceNameException
     {
         try
         {
             ResourceClass<RewriteToViewResource> rc = session.getSchema().getResourceClass("cms.rewrite.to_view", RewriteToViewResource.class);
 			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
-            attrs.put(rc.getAttribute("prefix"), prefix);
             attrs.put(rc.getAttribute("targetView"), targetView);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof RewriteToViewResource))
@@ -151,16 +149,25 @@ public class RewriteToViewResourceImpl
     {
         return get(prefixDef);
     }
- 
+    
+    /**
+     * Returns the value of the <code>prefix</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>prefix</code> attribute.
+     */
+    public String getPrefix(String defaultValue)
+    {
+        return get(prefixDef, defaultValue);
+    }    
+
     /**
      * Sets the value of the <code>prefix</code> attribute.
      *
-     * @param value the value of the <code>prefix</code> attribute.
-     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
-     *         value.
+     * @param value the value of the <code>prefix</code> attribute,
+     *        or <code>null</code> to remove value.
      */
     public void setPrefix(String value)
-        throws ValueRequiredException
     {
         try
         {
@@ -170,16 +177,29 @@ public class RewriteToViewResourceImpl
             }
             else
             {
-                throw new ValueRequiredException("attribute prefix "+
-                                                 "is declared as REQUIRED");
+                unset(prefixDef);
             }
         }
         catch(ModificationNotPermitedException e)
         {
             throw new BackendException("incompatible schema change",e);
         }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
     }
-    
+   
+	/**
+	 * Checks if the value of the <code>prefix</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>prefix</code> attribute is defined.
+	 */
+    public boolean isPrefixDefined()
+	{
+	    return isDefined(prefixDef);
+	}
+ 
     /**
      * Returns the value of the <code>targetView</code> attribute.
      *

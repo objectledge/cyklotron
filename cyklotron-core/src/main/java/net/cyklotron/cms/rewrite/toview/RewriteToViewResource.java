@@ -54,17 +54,30 @@ public interface RewriteToViewResource
      * @return the value of the the <code>prefix</code> attribute.
      */
     public String getPrefix();
- 
+    
+    /**
+     * Returns the value of the <code>prefix</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>prefix</code> attribute.
+     */
+    public String getPrefix(String defaultValue);
+
     /**
      * Sets the value of the <code>prefix</code> attribute.
      *
-     * @param value the value of the <code>prefix</code> attribute.
-     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
-     *         value.
+     * @param value the value of the <code>prefix</code> attribute,
+     *        or <code>null</code> to remove value.
      */
-    public void setPrefix(String value)
-        throws ValueRequiredException;
-    
+    public void setPrefix(String value);   
+   
+	/**
+	 * Checks if the value of the <code>prefix</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>prefix</code> attribute is defined.
+	 */
+    public boolean isPrefixDefined();
+ 
     /**
      * Returns the value of the <code>targetView</code> attribute.
      *
