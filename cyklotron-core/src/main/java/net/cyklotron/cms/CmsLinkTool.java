@@ -13,6 +13,8 @@ import net.cyklotron.cms.site.SiteException;
 import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
+import net.cyklotron.cms.structure.StructureException;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * A link tool used for cms applications, supports site skinning.
@@ -37,6 +39,8 @@ public class CmsLinkTool
 
     private final CoralSessionFactory coralSessionFactory;
 
+    private StructureService structureService;
+
     /**
      * {@inheritDoc}
      */
@@ -45,7 +49,7 @@ public class CmsLinkTool
         final CmsLinkTool cmsLinkTool = (CmsLinkTool)linkTool;
         return new CmsLinkTool(cmsLinkTool.httpContext, cmsLinkTool.context,
             cmsLinkTool.mvcContext, cmsLinkTool.requestParameters, cmsLinkTool.config,
-            cmsLinkTool.cmsDataFactory, cmsLinkTool.siteService,
+            cmsLinkTool.cmsDataFactory, cmsLinkTool.siteService, cmsLinkTool.structureService,
             cmsLinkTool.coralSessionFactory);
     }
 
@@ -62,13 +66,14 @@ public class CmsLinkTool
      */
     public CmsLinkTool(HttpContext httpContext, Context context, MVCContext mvcContext,
         RequestParameters requestParameters, LinkTool.Configuration config,
-        CmsDataFactory cmsDataFactory, SiteService siteService,
+        CmsDataFactory cmsDataFactory, SiteService siteService, StructureService structureService,
         CoralSessionFactory coralSessionFactory)
     {
         super(httpContext, mvcContext, requestParameters, config);
+        this.context = context;
         this.cmsDataFactory = cmsDataFactory;
         this.siteService = siteService;
-        this.context = context;
+        this.structureService = structureService;
         this.coralSessionFactory = coralSessionFactory;
     }
 
@@ -157,7 +162,23 @@ public class CmsLinkTool
             }
             else
             {
-                return link.unsetView().set("x", node.getIdString());
+                try
+                {
+                    final CoralSession coralSession = coralSessionFactory.getCurrentSession();
+                    if(structureService.getRootNode(coralSession, node.getSite()).equals(node))
+                    {
+                        return link.unsetView().unset("x");
+                    }
+                    else
+                    {
+                        return link.unsetView().set("x", node.getIdString());
+                    }
+                }
+                catch(IllegalStateException | StructureException e)
+                {
+                    throw new RuntimeException("cannot determine home page for site"
+                        + node.getSite().getName(), e);
+                }
             }
         }
         else
