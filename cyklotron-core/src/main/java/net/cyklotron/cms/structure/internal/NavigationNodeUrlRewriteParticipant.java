@@ -37,7 +37,7 @@ public class NavigationNodeUrlRewriteParticipant
     @Override
     protected RewriteTarget getTarget(NavigationNodeResource resource, SitePath sitePath)
     {
-        return new RewriteTarget(sitePath, resource, Collections.<String, List<String>> emptyMap());
+        return new RewriteTarget(sitePath, null, resource, Collections.<String, List<String>> emptyMap());
     }
 
     @Override

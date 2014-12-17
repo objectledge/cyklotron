@@ -14,7 +14,6 @@ import java.util.Set;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.web.rewrite.RewriteInfo;
-import org.objectledge.web.rewrite.RewriteInfoBuilder;
 import org.objectledge.web.rewrite.UrlRewriter;
 
 import net.cyklotron.cms.ProtectedResource;
@@ -131,15 +130,7 @@ public class UrlRewriteRegistryImpl
                 .length() ? request.getServletPath().substring(match.getPath().length()) : "";
             if(target != null)
             {
-                RewriteInfoBuilder builder = RewriteInfoBuilder.fromRewriteInfo(request);
-
-                builder.withServletPath("/ledge").withPathInfo(
-                    "/x/" + target.getNode().getIdString() + remainingPathInfo);
-                for(Map.Entry<String, List<String>> entry : target.getParameters().entrySet())
-                {
-                    builder.withFormParameter(entry.getKey(), entry.getValue());
-                }
-                return builder.build();
+                return target.rewrite(request, remainingPathInfo);
             }
         }
         return request;
@@ -156,33 +147,6 @@ public class UrlRewriteRegistryImpl
             return participant.rewrite(match);
         }
         return null;
-    }
-
-    @Override
-    public String toUrl(RewriteTarget target)
-    {
-        StringBuilder buff = new StringBuilder();
-        buff.append("/ledge/x/").append(target.getNode().getIdString());
-        if(target.getParameters().size() > 0)
-        {
-            buff.append('?');
-            Iterator<Map.Entry<String, List<String>>> i = target.getParameters().entrySet()
-                .iterator();
-            while(i.hasNext())
-            {
-                Map.Entry<String, List<String>> e = i.next();
-                Iterator<String> j = e.getValue().iterator();
-                while(j.hasNext())
-                {
-                    buff.append(e.getKey()).append('=').append(j.next());
-                    if(i.hasNext() || j.hasNext())
-                    {
-                        buff.append('&');
-                    }
-                }
-            }
-        }
-        return buff.toString();
     }
 
     private Map<SitePath, UrlRewriteParticipant> potentialMatches(SitePath path)

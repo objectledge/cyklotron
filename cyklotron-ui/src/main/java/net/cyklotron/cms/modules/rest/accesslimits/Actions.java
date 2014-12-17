@@ -2,6 +2,8 @@ package net.cyklotron.cms.modules.rest.accesslimits;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,6 +43,8 @@ public class Actions
 
     private final UriInfo uriInfo;
 
+    private static final Object ACTION_NAME_LOCK = new Object();
+
     @Inject
     public Actions(CoralSessionFactory coralSessionFactory, UriInfo uriInfo)
     {
@@ -56,6 +60,23 @@ public class Actions
         return Response.ok(ActionDto.create(actions)).build();
     }
 
+    @GET
+    @Path("{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response retrieveAction(@PathParam("name") String name)
+    {
+        try
+        {
+            ActionResource current = (ActionResource)coralSession.getStore()
+                .getUniqueResourceByPath(ACTIONS_ROOT + "/" + name);
+            return Response.ok(new ActionDto(current)).build();
+        }
+        catch(EntityDoesNotExistException | AmbigousEntityNameException e)
+        {
+            return Response.status(Status.NOT_FOUND).build();
+        }
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createAction(ActionDto action)
@@ -63,12 +84,23 @@ public class Actions
         try
         {
             Resource parent = coralSession.getStore().getUniqueResourceByPath(ACTIONS_ROOT);
-            ActionResource res = ActionResourceImpl.createActionResource(coralSession,
-                action.getName(), parent);
-            res.setViewOverride(action.getViewOverride());
-            res.setParamsOverride(action.getParamsOverride());
-            res.update();
-            return Response.created(uriInfo.getRequestUri().resolve(action.getName())).build();
+            synchronized(ACTION_NAME_LOCK)
+            {
+                if(!actionExists(action.getName(), parent.getChildren()))
+                {
+                    ActionResource res = ActionResourceImpl.createActionResource(coralSession,
+                        action.getName(), parent);
+                    res.setViewOverride(action.getViewOverride());
+                    res.setParamsOverride(action.getParamsOverride());
+                    res.update();
+                    return Response.created(uriInfo.getRequestUri().resolve(action.getName()))
+                        .build();
+                }
+                else
+                {
+                    return Response.status(Status.CONFLICT).build();
+                }
+            }
         }
         catch(InvalidResourceNameException | EntityDoesNotExistException
                         | AmbigousEntityNameException e)
@@ -76,6 +108,18 @@ public class Actions
             return Response.status(Status.INTERNAL_SERVER_ERROR)
                 .entity(new StackTrace(e).toString()).build();
         }
+    }
+
+    private boolean actionExists(String name, Resource[] children)
+    {
+        for(Resource child : children)
+        {
+            if(child.getName().equals(name))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     @PUT
@@ -111,7 +155,10 @@ public class Actions
         {
             ActionResource current = (ActionResource)coralSession.getStore()
                 .getUniqueResourceByPath(ACTIONS_ROOT + "/" + name);
-            coralSession.getStore().deleteResource(current);
+            synchronized(ACTION_NAME_LOCK)
+            {
+                coralSession.getStore().deleteResource(current);
+            }
             return Response.noContent().build();
         }
         catch(EntityDoesNotExistException e)
@@ -175,6 +222,15 @@ public class Actions
             this.paramsOverride = paramsOverride;
         }
 
+        private static final Comparator<ActionDto> BY_NAME = new Comparator<ActionDto>()
+            {
+                @Override
+                public int compare(ActionDto o1, ActionDto o2)
+                {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            };
+
         public static Collection<ActionDto> create(Resource[] actions)
         {
             List<ActionDto> result = new ArrayList<ActionDto>(actions.length);
@@ -182,6 +238,7 @@ public class Actions
             {
                 result.add(new ActionDto((ActionResource)action));
             }
+            Collections.sort(result, BY_NAME);
             return result;
         }
     }

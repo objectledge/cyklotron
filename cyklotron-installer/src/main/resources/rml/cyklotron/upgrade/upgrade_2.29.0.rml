@@ -1,0 +1,11 @@
+# // URL rewriting extension ///////////////////////////////////////////////
+
+CREATE RESOURCE CLASS 'cms.rewrite.to_view'
+JAVA CLASS 'net.cyklotron.cms.rewrite.toview.RewriteToViewResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
+DB TABLE 'cms_rewrite_to_view'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  string prefix,
+  REQUIRED string targetView
+);

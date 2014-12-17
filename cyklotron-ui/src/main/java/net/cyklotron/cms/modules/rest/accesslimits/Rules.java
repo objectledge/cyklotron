@@ -1,6 +1,8 @@
 package net.cyklotron.cms.modules.rest.accesslimits;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -47,6 +49,8 @@ public class Rules
 
     private final UriInfo uriInfo;
 
+    private static final Object ITEM_NAME_LOCK = new Object();
+
     @Inject
     public Rules(CoralSessionFactory coralSessionFactory, UriInfo uriInfo)
     {
@@ -74,15 +78,20 @@ public class Rules
         }
         catch(PatternSyntaxException | ParseException e)
         {
-            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+            return Response.status(Status.BAD_REQUEST).entity(new ErrorDao(e)).build();
         }
 
         try
         {
-            Resource parent = coralSession.getStore().getUniqueResourceByPath(RULES_ROOT);
-            String name = Integer.toString(parent.getChildren().length + 1); // I'm feeling lucky
-            ProtectedItemResource itemResource = ProtectedItemResourceImpl
-                .createProtectedItemResource(coralSession, name, parent, item.getUrlPattern());
+            String name;
+            ProtectedItemResource itemResource;
+            synchronized(ITEM_NAME_LOCK)
+            {
+                Resource parent = coralSession.getStore().getUniqueResourceByPath(RULES_ROOT);
+                name = nextName(parent.getChildren());
+                itemResource = ProtectedItemResourceImpl.createProtectedItemResource(coralSession,
+                    name, parent, item.getUrlPattern());
+            }
             int n = 1;
             for(RuleDao rule : item.getRules())
             {
@@ -90,7 +99,8 @@ public class Rules
                     itemResource, n, rule.getRuleDefinition());
                 n++;
             }
-            return Response.created(uriInfo.getRequestUri().resolve(name)).build();
+            return Response.created(uriInfo.getRequestUri().resolve(itemResource.getIdString()))
+                .header("X-Item-Id", itemResource.getIdString()).build();
         }
         catch(EntityDoesNotExistException | AmbigousEntityNameException | ValueRequiredException
                         | InvalidResourceNameException e)
@@ -100,26 +110,37 @@ public class Rules
         }
     }
 
+    private String nextName(Resource[] children)
+    {
+        int max = 0;
+        for(Resource child : children)
+        {
+            int n = Integer.parseInt(child.getName());
+            max = n > max ? n : max;
+        }
+        return Integer.toString(max + 1);
+    }
+
     @GET
-    @Path("/items/{name}")
+    @Path("/items/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveProtectedItem(@PathParam("name") String name)
+    public Response retrieveProtectedItem(@PathParam("id") long id)
     {
         try
         {
-            Resource res = coralSession.getStore().getUniqueResourceByPath(RULES_ROOT + "/" + name);
+            Resource res = coralSession.getStore().getResource(id);
             return Response.ok(new ProtectedItemDao((ProtectedItemResource)res)).build();
         }
-        catch(EntityDoesNotExistException | AmbigousEntityNameException e)
+        catch(EntityDoesNotExistException | ClassCastException e)
         {
             return Response.status(Status.NOT_FOUND).build();
         }
     }
 
     @PUT
-    @Path("/items/{name}")
+    @Path("/items/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateProtectedItem(@PathParam("name") String name, ProtectedItemDao item)
+    public Response updateProtectedItem(@PathParam("id") long id, ProtectedItemDao item)
     {
         try
         {
@@ -127,13 +148,13 @@ public class Rules
         }
         catch(PatternSyntaxException | ParseException e)
         {
-            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+            return Response.status(Status.BAD_REQUEST).entity(new ErrorDao(e)).build();
         }
 
         try
         {
-            ProtectedItemResource res = (ProtectedItemResource)coralSession.getStore()
-                .getUniqueResourceByPath(RULES_ROOT + "/" + name);
+            ProtectedItemResource res = (ProtectedItemResource)coralSession.getStore().getResource(
+                id);
             try
             {
                 res.setUrlPattern(item.getUrlPattern());
@@ -149,7 +170,8 @@ public class Rules
                     int n = cur.length + 1;
                     for(RuleDao rule : item.getRules())
                     {
-                        RuleResource curRule = getRuleResource(cur, rule.getId());
+                        RuleResource curRule = rule.getId() != null ? getRuleResource(cur,
+                            rule.getId()) : null;
                         if(curRule == null)
                         {
                             RuleResourceImpl.createRuleResource(coralSession,
@@ -187,7 +209,7 @@ public class Rules
                     .entity(new StackTrace(e).toString()).build();
             }
         }
-        catch(EntityDoesNotExistException | AmbigousEntityNameException | ClassCastException e)
+        catch(EntityDoesNotExistException | ClassCastException e)
         {
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -218,15 +240,18 @@ public class Rules
     }
 
     @DELETE
-    @Path("/items/{name}")
-    public Response deleteProtectedItem(@PathParam("name") String name)
+    @Path("/items/{id}")
+    public Response deleteProtectedItem(@PathParam("id") long id)
     {
         try
         {
-            Resource res = coralSession.getStore().getUniqueResourceByPath(RULES_ROOT + "/" + name);
+            Resource res = coralSession.getStore().getResource(id);
             try
             {
-                coralSession.getStore().deleteTree(res);
+                synchronized(ITEM_NAME_LOCK)
+                {
+                    coralSession.getStore().deleteTree(res);
+                }
                 return Response.noContent().build();
             }
             catch(EntityInUseException e)
@@ -235,7 +260,7 @@ public class Rules
                     .entity(new StackTrace(e).toString()).build();
             }
         }
-        catch(EntityDoesNotExistException | AmbigousEntityNameException e)
+        catch(EntityDoesNotExistException | ClassCastException e)
         {
             return Response.status(Status.NOT_FOUND).build();
         }
@@ -361,6 +386,10 @@ public class Rules
 
         private List<RuleDao> rules;
 
+        public ProtectedItemDao()
+        {
+        }
+
         public ProtectedItemDao(ProtectedItemResource resource)
         {
             this.id = resource.getId();
@@ -398,6 +427,15 @@ public class Rules
             this.rules = rules;
         }
 
+        private static final Comparator<ProtectedItemDao> BY_ID = new Comparator<ProtectedItemDao>()
+            {
+                @Override
+                public int compare(ProtectedItemDao o1, ProtectedItemDao o2)
+                {
+                    return o1.id > o2.id ? 1 : (o1.id < o2.id ? -1 : 0);
+                }
+            };
+
         public static List<ProtectedItemDao> create(Resource[] items)
         {
             List<ProtectedItemDao> result = new ArrayList<ProtectedItemDao>(items.length);
@@ -405,6 +443,7 @@ public class Rules
             {
                 result.add(new ProtectedItemDao((ProtectedItemResource)item));
             }
+            Collections.sort(result, BY_ID);
             return result;
         }
     }
@@ -416,6 +455,10 @@ public class Rules
         private int priority;
 
         private String ruleDefinition;
+
+        public RuleDao()
+        {
+        }
 
         public RuleDao(RuleResource resource)
         {
@@ -454,6 +497,15 @@ public class Rules
             this.ruleDefinition = ruleDefinition;
         }
 
+        private static final Comparator<RuleDao> BY_PRIORITY = new Comparator<RuleDao>()
+            {
+                @Override
+                public int compare(RuleDao o1, RuleDao o2)
+                {
+                    return o1.priority - o2.priority;
+                }
+            };
+
         public static List<RuleDao> create(Resource[] rules)
         {
             List<RuleDao> result = new ArrayList<RuleDao>(rules.length);
@@ -461,7 +513,23 @@ public class Rules
             {
                 result.add(new RuleDao((RuleResource)rule));
             }
+            Collections.sort(result, BY_PRIORITY);
             return result;
+        }
+    }
+    
+    public static class ErrorDao 
+    {
+        private final String message;
+        
+        public ErrorDao(Exception e)
+        {
+            this.message = e.getMessage();
+        }
+
+        public String getMessage()
+        {
+            return message;
         }
     }
 }

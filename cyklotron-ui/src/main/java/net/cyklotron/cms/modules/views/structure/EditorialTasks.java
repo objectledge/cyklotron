@@ -231,8 +231,8 @@ public class EditorialTasks
                         expiredNodes.add(node);
                         continue;
                     }
-                    if(showUnclassified && state.equals("published") && 
-                      (!classifiedNodes.contains(node.getId())))
+                    if(showUnclassified && (state.equals("published") || state.equals("accepted"))
+                        && (!classifiedNodes.contains(node.getId())))
                     {
                         unclassifiedNodes.add(node);
                         continue;

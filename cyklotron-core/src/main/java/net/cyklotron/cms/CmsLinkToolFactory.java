@@ -17,6 +17,7 @@ import org.objectledge.web.mvc.MVCContext;
 import org.objectledge.web.mvc.tools.LinkToolFactoryImpl;
 
 import net.cyklotron.cms.site.SiteService;
+import net.cyklotron.cms.structure.StructureService;
 
 /**
  * To change the template for this generated type comment go to Window - Preferences - Java - Code
@@ -33,14 +34,17 @@ public class CmsLinkToolFactory
 
     private final CoralSessionFactory coralSessionFactory;
 
+    private StructureService sturctureService;
+
     public CmsLinkToolFactory(Configuration config, Context context,
         WebConfigurator webConfigurator, CmsDataFactory cmsDataFactory, SiteService siteSevice,
-        CoralSessionFactory coralSessionFactory)
+        StructureService sturctureService, CoralSessionFactory coralSessionFactory)
         throws ConfigurationException
     {
         super(config, context, webConfigurator);
         this.cmsDataFactory = cmsDataFactory;
         this.siteSevice = siteSevice;
+        this.sturctureService = sturctureService;
         this.coralSessionFactory = coralSessionFactory;
     }
 
@@ -53,7 +57,8 @@ public class CmsLinkToolFactory
         MVCContext mvcContext = MVCContext.getMVCContext(context);
         RequestParameters requestParameters = RequestParameters.getRequestParameters(context);
         return new CmsLinkTool(httpContext, context, mvcContext, requestParameters,
-            linkToolConfiguration, cmsDataFactory, siteSevice, coralSessionFactory);
+            linkToolConfiguration, cmsDataFactory, siteSevice, sturctureService,
+            coralSessionFactory);
     }
 
 }

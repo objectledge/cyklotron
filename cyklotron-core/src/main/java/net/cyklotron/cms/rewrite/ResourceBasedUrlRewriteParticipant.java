@@ -59,7 +59,9 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
     {
         QueryResults results = coralSession.getQuery().executeQuery(
             "FIND RESOURCE FROM " + rc.getName() + " WHERE DEFINED " + pathAttribute());
-        for(T res : (List<T>)results.getList(1))
+        @SuppressWarnings("unchecked")
+        final List<T> resList = (List<T>)results.getList(1);
+        for(T res : resList)
         {
             if(res.isDefined(pathAttr))
             {
@@ -255,7 +257,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
                     final SitePath sitePath = entry.getKey();
                     final T resource = entry.getValue().get(coralSession);
                     infos.add(new RewriteEntry(getName(), sitePath.getSite().getName(), sitePath
-                        .getPath(), formatRewrite(getTarget(resource, sitePath)), getDescription(resource)));
+                        .getPath(), getTarget(resource, sitePath).getTargetUrl(), getDescription(resource)));
                 }
                 catch(EntityDoesNotExistException e)
                 {
@@ -435,25 +437,6 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
 
     protected abstract SiteResource getSite(T resource);
 
-    private String formatRewrite(RewriteTarget rewrite)
-    {
-        StringBuilder b = new StringBuilder();
-        b.append("/ledge/x/").append(rewrite.getNode().getIdString());
-        Map<String, List<String>> params = rewrite.getParameters();
-        if(params.size() > 0)
-        {
-            b.append('?');
-            for(Map.Entry<String, List<String>> entry : params.entrySet())
-            {
-                for(String value : entry.getValue())
-                {
-                    b.append(entry.getKey()).append('=').append(value);
-                }
-            }
-        }
-        return b.toString();
-    }
-
     private class ResourceRef<R extends Resource>
     {
         private final long id;
@@ -471,6 +454,7 @@ public abstract class ResourceBasedUrlRewriteParticipant<T extends Resource>
             return id;
         }
 
+        @SuppressWarnings("unchecked")
         public R get(CoralSession coralSession)
             throws EntityDoesNotExistException
         {

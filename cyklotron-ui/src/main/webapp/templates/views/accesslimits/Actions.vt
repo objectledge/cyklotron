@@ -1,4 +1,26 @@
 $viewEnclosureTool.top()##
 #genericScreenHeader('Akcje')
-
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+  	<th width="10%">Nazwa</th>
+  	<th width="30%">Zmiana widoku</th>
+  	<th width="50%">Zmiana parametrów</th>
+  	<th width="10%">Operacje</th>
+  </tr>
+  <tr ng:repeat="action in actions track by action.name">
+    <td>{{action.name}}</td>
+    <td>{{action.viewOverride}}</td>
+    <td>{{action.paramsOverride}}</td>
+    <td class="operations">
+      <a href="" ng:click="edit(action)"><i class="fa fa-pencil"></i>Edytuj</a>
+      <a href="" ng:click="askRemove(action)"><i class="fa fa-trash"></i>Usuń</a>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="3">&nbsp;</td>
+    <td class="operations">
+    	<a href="" ng:click="add()"><i class="fa fa-plus"></i>Dodaj</a>
+    </td>
+  </td>
+</table>
 #genericScreenTrailer()
