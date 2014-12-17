@@ -54,7 +54,7 @@ public class PeriodicalsLinkRenderer
     /** context name. "/" by default. */
     private final String context;
     
-    /** servlet name and application bit. "ledge/" by default. */
+    /** servlet name and application bit. Empty by default. */
     private final String servletAndApp;
     
     /** site service. */

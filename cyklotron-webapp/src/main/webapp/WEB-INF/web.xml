@@ -40,11 +40,6 @@
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>ledge</servlet-name>
-        <url-pattern>/ledge/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
         <servlet-name>content</servlet-name>
         <url-pattern>/content/*</url-pattern>
     </servlet-mapping>
@@ -57,6 +52,21 @@
     <servlet-mapping>
         <servlet-name>rest</servlet-name>
         <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ledge</servlet-name>
+        <url-pattern>/view/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ledge</servlet-name>
+        <url-pattern>/x/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>ledge</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
     <filter>

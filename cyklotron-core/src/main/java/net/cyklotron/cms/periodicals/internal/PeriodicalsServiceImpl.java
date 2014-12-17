@@ -120,7 +120,7 @@ public class PeriodicalsServiceImpl
     public static final String SERVLET_AND_APP_KEY = "servletAndApp";
     
     /** servletAndApp defaault value. */
-    public static final String SERVLET_AND_APP_DEFAULT = "ledge/";
+    public static final String SERVLET_AND_APP_DEFAULT = "";
     
     /** messages from parameter key. */
     public static final String MESSAGES_FROM_KEY = "messagesFrom";
@@ -157,7 +157,7 @@ public class PeriodicalsServiceImpl
     /** context name. "/" by default. */
     private String context;
     
-    /** servlet name and application bit. "ledge/" by default. */
+    /** servlet name and application bit. Empty by default. */
     private String servletAndApp;
     
     /** messages from address. */
