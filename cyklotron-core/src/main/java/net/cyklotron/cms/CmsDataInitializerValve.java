@@ -39,7 +39,6 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.templating.TemplatingContext;
-import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.preferences.PreferencesService;
@@ -119,9 +118,8 @@ public void process(Context context)
     }
 
     private boolean checkParameter(CoralSession coralSession, Parameters params, String name,
-        Class clazz)
+        Class<?> clazz)
     {
-        boolean xOk = false;
         if(params.isDefined(name))
         {
             String[] xss = params.getStrings(name);            
@@ -171,7 +169,7 @@ public void process(Context context)
         }
     }
 
-    private boolean nodeOfClass(CoralSession coralSession, long id, Class clazz)
+    private boolean nodeOfClass(CoralSession coralSession, long id, Class<?> clazz)
     {
         try
         {
