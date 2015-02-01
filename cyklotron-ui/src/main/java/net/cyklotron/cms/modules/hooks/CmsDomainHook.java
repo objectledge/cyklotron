@@ -7,54 +7,90 @@ import org.objectledge.parameters.RequestParameters;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
-import org.objectledge.web.mvc.MVCContext;
 
+import net.cyklotron.cms.NodeNotFoundException;
+import net.cyklotron.cms.preferences.PreferencesService;
+import net.cyklotron.cms.site.SiteException;
+import net.cyklotron.cms.site.SiteResource;
 import net.cyklotron.cms.site.SiteService;
 import net.cyklotron.cms.structure.NavigationNodeResource;
 
-public class CmsDomainHook implements Valve 
+public class CmsDomainHook
+    implements Valve
 {
-    /** site service  */
+    /** site service */
     private SiteService siteService;
 
-    public CmsDomainHook(SiteService siteService)
+    private Context context;
+
+    private PreferencesService preferencesService;
+
+    public CmsDomainHook(SiteService siteService, PreferencesService preferencesService,
+        Context context)
     {
         this.siteService = siteService;
+        this.preferencesService = preferencesService;
+        this.context = context;
     }
-    
+
     /**
-     * @inheritDoc{}  
+     * @inheritDoc{
      */
-    public void process(Context context) throws ProcessingException
+    public void process(Context context)
+        throws ProcessingException
     {
         Parameters parameters = RequestParameters.getRequestParameters(context);
         HttpContext httpContext = HttpContext.getHttpContext(context);
-        CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        if((parameters.get("view","").length() == 0 ||
-            parameters.get("view").equals("Default")) &&
-           !parameters.isDefined("x") &&
-           !parameters.isDefined("node_id") &&
-           !parameters.isDefined("site_id"))
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
+        try
         {
-            try
+            // if /view or /x is defined, do not interfere
+            final String serverName = httpContext.getRequest().getServerName();
+            if(!parameters.isDefined("view") && !parameters.isDefined("x"))
             {
-                NavigationNodeResource node = siteService.
-                    getDefaultNode(coralSession, httpContext.getRequest().getServerName());
-                if(node != null)
+                // if / of the server is requested, check if a corresponding virtual host is defined
+                final String servletPath = httpContext.getRequest().getServletPath();
+                if(servletPath == null || servletPath.equals("/"))
                 {
-                    parameters.set("x", node.getIdString());
-                    parameters.set("app", "cms");
+                    NavigationNodeResource homePage = siteService.getDefaultNode(coralSession,
+                        serverName);
+                    // redirect to virtual host's home page
+                    if(homePage != null)
+                    {
+                        parameters.set("x", homePage.getIdString());
+                        parameters.set("app", "cms");
+                    }
+                    else
+                    {
+                        throw new NodeNotFoundException("Page not found");
+                    }
                 }
+                // request contains unrecognized path info (no /x of /view present)
                 else
                 {
-                    MVCContext mvcContext = MVCContext.getMVCContext(context);
-                    mvcContext.setView("Report404");
+                    SiteResource site = siteService.getSiteByAlias(coralSession, serverName);
+                    if(site == null)
+                    {
+                        site = getDefaultSite();
+                    }
+                    parameters.set("site_id", site.getIdString());
+                    throw new NodeNotFoundException("Page not found");
                 }
             }
-            catch(Exception e)
-            {
-                throw new ProcessingException("failed to locate start page", e);
-            }
         }
+        catch(SiteException e)
+        {
+            throw new ProcessingException(e);
+        }
+    }
+
+    private SiteResource getDefaultSite()
+        throws SiteException
+    {
+        CoralSession coralSession = context.getAttribute(CoralSession.class);
+        Parameters systemPreferences = preferencesService.getSystemPreferences(coralSession);
+        String globalComponentsDataSiteName = systemPreferences.get("globalComponentsData", null);
+        return globalComponentsDataSiteName != null ? siteService.getSite(coralSession,
+            globalComponentsDataSiteName) : null;
     }
 }
