@@ -373,6 +373,42 @@ public class FilesTool
         return link.toString();
     }
 
+    /**
+     * Returns the path of resized image.
+     * <P>
+     * Return image resized to defined max width and is cropped to defined max height. 
+     * </P>
+     * 
+     * @param resource file source file.
+     * @param maxW desired max width of the image.
+     * @param maxH desired max height of the image.
+     * @return ledge files system path to the resized image.
+     * @throws FilesException
+     */
+    public String getFixedToWidth(Resource resource, int maxW, int maxH)
+        throws FilesException
+    {
+        return getResized(resource, maxW, maxH, "w", true, -1, -1);
+    }
+
+    /**
+     * Returns the path of resized image.
+     * <P>
+     * Return image resized to defined max height and is cropped to defined max width. 
+     * </P>
+     * 
+     * @param resource file source file.
+     * @param maxW desired max width of the image.
+     * @param maxH desired max height of the image.
+     * @return ledge files system path to the resized image.
+     * @throws FilesException
+     */
+    public String getFixedToHeight(Resource resource, int maxW, int maxH)
+        throws FilesException
+    {
+        return getResized(resource, maxW, maxH, "h", true, -1, -1);
+    }
+    
     private CoralSession getCoralSession(Context context)
     {
         return (CoralSession)context.getAttribute(CoralSession.class);
@@ -385,15 +421,15 @@ public class FilesTool
     
     public String getExtension(Resource resource)
     {
-    	int dot = resource.getName().lastIndexOf('.');
-		if(dot < 0)
-    	{
-    		return "";
-    	}
-    	else
-    	{
-    		return resource.getName().substring(dot+1);
-    	}
+        int dot = resource.getName().lastIndexOf('.');
+        if(dot < 0)
+        {
+            return "";
+        }
+        else
+        {
+            return resource.getName().substring(dot+1);
+        }
     }
 }
 
