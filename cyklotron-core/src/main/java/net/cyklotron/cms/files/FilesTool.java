@@ -315,6 +315,63 @@ public class FilesTool
         }
         return link.toString();
     }
+    
+    /**
+     * Returns the path of resized image.
+     * <P>
+     * When either w or h parameter is negative, the image will be scaled to fit the other
+     * dimension, while preserving image aspect ratio. When both parameters are positive, image will
+     * be scaled using rm method if rm param not set image will be scaled to fit the dimensions exactly. 
+     * If crop flag is positive image will be croped to defined dimension. Crop x and y position are parametrized.
+     * </p>
+     * @param resource file source file.
+     * @param w desired width of the image.
+     * @param h desired height of the image.
+     * @param rm resize method: f - fixed, a - automatic, w - fix_to_width, h - fix_to_height
+     * @param crop image crop flag  
+     * @param crop_x desired crop x position
+     * @param crop_y desired crop x position
+     * @return ledge files system path to the resized image.
+     * @throws IOException when both dimensions are negative, file is not an image or an IO error
+     *         occurs.
+     */
+    public String getResized(Resource resource, int w, int h, String rm, boolean crop, int crop_x, int crop_y)
+        throws FilesException
+    {
+        if(!(resource instanceof FileResource))
+        {
+            throw new FilesException("Resource is not the instance of cms.files.file class");
+        }
+        TemplatingContext tContext = (TemplatingContext)context
+            .getAttribute(TemplatingContext.class);
+        LinkTool link = (LinkTool)tContext.get("link");
+        link = link.view("files.Resized").set("file_id", resource.getId());
+        if(w > 0)
+        {
+            link = link.add("w", w);
+        }
+        if(h > 0)
+        {
+            link = link.add("h", h);
+        }
+        if(rm != null && !"f".equalsIgnoreCase(rm))
+        {
+            link = link.add("rm", rm.toLowerCase());
+        }
+        if(crop)
+        {
+            link = link.add("c", crop);
+        }
+        if(crop_x > -1)
+        {
+            link = link.add("c_x", crop_x);
+        }
+        if(crop_y > -1)
+        {
+            link = link.add("c_y", crop_y);
+        }
+        return link.toString();
+    }
 
     private CoralSession getCoralSession(Context context)
     {

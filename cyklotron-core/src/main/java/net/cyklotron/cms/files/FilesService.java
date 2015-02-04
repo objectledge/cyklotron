@@ -269,4 +269,27 @@ public interface FilesService
      */
     public String resizeImage(FileResource file, int w, int h)
         throws IOException;
+
+    /**
+     * Returns the path of resized image.
+     * <P>
+     * When either w or h parameter is negative, the image will be scaled to fit the other
+     * dimension, while preserving image aspect ratio. When both parameters are positive, image will
+     * be scaled using rm method if rm param not set image will be scaled to fit the dimensions exactly. 
+     * If crop flag is positive image will be croped to defined dimension. Crop x and y position are parametrized.
+     * </p>
+     * @param file source file.
+     * @param w desired width of the image.
+     * @param h desired height of the image.
+     * @param rm resize method: f - fixed, a - automatic, w - fix_to_width, h - fix_to_height
+     * @param crop image crop flag  
+     * @param crop_x desired crop x position
+     * @param crop_y desired crop x position
+     * @return ledge files ystem path to the resized image.
+     * @throws IOException when both dimensions are negative, file is not an image or an IO error
+     *         occurs.
+     */
+    public String resizeImage(FileResource file, int w, int h, String rm, boolean crop, int crop_w,
+        int crop_h)
+        throws IOException;
 }
