@@ -898,13 +898,15 @@ public class FilesServiceImpl
                 }
                 if(crop)
                 {
+                    w = Math.min(w, targetImage.getWidth());
                     if(crop_x == -1)
                     {
                         crop_x = ((targetImage.getWidth() - w) / 2);
                     }
+                    h = Math.min(h, targetImage.getHeight());
                     if(crop_y == -1)
                     {
-                        crop_y = ((targetImage.getWidth() - h) / 2);
+                        crop_y = ((targetImage.getHeight() - h) / 2);
                     }
                     targetImage = Scalr.crop(targetImage, crop_x, crop_y, w, h);
                 }
