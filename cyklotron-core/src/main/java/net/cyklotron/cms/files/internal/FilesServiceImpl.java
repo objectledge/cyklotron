@@ -905,7 +905,7 @@ public class FilesServiceImpl
                     }
                     if(crop_y == -1)
                     {
-                        crop_y = ((targetImage.getWidth() - h) / 2);
+                        crop_y = ((targetImage.getHeight() - h) / 2);
                     }
                     targetImage = Scalr.crop(targetImage, crop_x, crop_y, w, h);
                 }
