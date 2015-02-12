@@ -15,6 +15,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService.CaptchaApiVersion;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
@@ -170,6 +171,8 @@ public class Voting
 
             boolean addCaptcha = screenConfig.getBoolean("add_captcha", Boolean.FALSE);
             templatingContext.put("add_captcha", addCaptcha);
+            templatingContext.put("recaptcha_api_version", screenConfig.get(
+                "recaptcha_api_version", CaptchaApiVersion.getVersion("").toString()));
 
         }
         catch(PollException e)

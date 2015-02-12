@@ -32,6 +32,7 @@ import org.objectledge.table.TableTool;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.captcha.CaptchaService;
+import org.objectledge.web.captcha.CaptchaService.CaptchaApiVersion;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
@@ -422,6 +423,7 @@ public class Forum
             ForumResource forum = forumService.getForum(coralSession, getSite());
             templatingContext.put("add_captcha", captchaService.isCaptchaRequired(screenConfig,
                 coralSession.getUserPrincipal()));
+            templatingContext.put("recaptcha_api_version", captchaService.getApiVersion(screenConfig));
         }
         catch(EntityDoesNotExistException e)
         {

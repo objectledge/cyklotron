@@ -1,6 +1,7 @@
 package net.cyklotron.cms.modules.views.poll;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
@@ -22,6 +23,7 @@ import org.objectledge.table.TableTool;
 import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService.CaptchaApiVersion;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
@@ -77,6 +79,10 @@ public class VotingConf
             templatingContext.put("enable_results", enableResults);
             boolean addCaptcha = screenConfig.getBoolean("add_captcha", Boolean.FALSE);
             templatingContext.put("add_captcha", addCaptcha);
+            templatingContext.put("recaptcha_api_version", screenConfig.get(
+                "recaptcha_api_version", CaptchaApiVersion.getVersion("").toString()));
+            templatingContext.put("available_recaptcha_api_version",
+                Arrays.asList(CaptchaApiVersion.values()));
             
             long voteId = screenConfig.getLong("vote_id", -1);
             if(voteId != -1)

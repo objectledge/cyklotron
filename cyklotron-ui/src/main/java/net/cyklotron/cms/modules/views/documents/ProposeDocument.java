@@ -22,6 +22,7 @@ import org.objectledge.table.TableState;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.table.TableTool;
 import org.objectledge.templating.TemplatingContext;
+import org.objectledge.web.captcha.CaptchaService.CaptchaApiVersion;
 import org.objectledge.web.mvc.finders.MVCFinder;
 
 import net.cyklotron.cms.CmsData;
@@ -331,6 +332,8 @@ public class ProposeDocument
                 .getNavigationNodeResource(coralSession, parentId) : cmsData.getNode();
             templatingContext.put("parent_node", parentNode);
             templatingContext.put("add_captcha", screenConfig.getBoolean("add_captcha", false));
+            templatingContext.put("recaptcha_api_version", screenConfig.get(
+                "recaptcha_api_version", CaptchaApiVersion.getVersion("").toString()));
         }
         catch(Exception e)
         {

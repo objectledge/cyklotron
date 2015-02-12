@@ -93,7 +93,8 @@ $parent_content #end</textarea></td>
     <tr>
     <td><b>Captcha verification</b></td>
     <td>
-       $captcha.createCaptchaWidget()
+ 	 	#set($options = { "apiVersion" : "$recaptcha_api_version" })
+        $captcha.createCaptchaWidget($options)
     </td>
     </tr>
   #end
