@@ -1,17 +1,30 @@
 <?xml version="1.0"?>
 <config>
-  <widget>
-   <!-- generate apiKey: https://www.google.com/recaptcha/admin -->  
-   <publicKey>PUBLIC KEY</publicKey>
-   <privateKey>PRIVATE KEY</privateKey>
-   <options>
-    <option name="theme">white</option>
-   </options>
-  </widget>
-  <email>
-   <!-- generate apiKey: http://www.google.com/recaptcha/mailhide/apikey -->  
-   <publicKey>PUBLIC KEY</publicKey>
-   <privateKey>PRIVATE KEY</privateKey>
-   <title>Reveal this e-mail address</title>
-  </email>   
+	<apiVersionV1>
+		<widget>
+			<!-- generate apiKey: https://www.google.com/recaptcha/admin -->
+			<publicKey>PUBLIC KEY</publicKey>
+			<privateKey>PRIVATE KEY</privateKey>
+			<options>
+				<option name="theme">white</option>
+			</options>
+		</widget>
+		<email>
+			<!-- generate apiKey: http://www.google.com/recaptcha/mailhide/apikey -->
+			<publicKey>PUBLIC KEY</publicKey>
+			<privateKey>PRIVATE KEY</privateKey>
+			<title>Reveal this e-mail address</title>
+		</email>
+	</apiVersionV1>
+	<apiVersionV2>
+		<widget>
+			<!-- generate apiKey: https://www.google.com/recaptcha/admin -->
+			<publicKey>PUBLIC KEY</publicKey>
+			<privateKey>PRIVATE KEY</privateKey>
+			<options>
+				<option name="data-theme">white</option>
+				<option name="data-callback">captchaResponseCallback</option>
+			</options>
+		</widget>
+	</apiVersionV2>
 </config>
