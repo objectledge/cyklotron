@@ -428,6 +428,7 @@ public class Forum
             }
             templatingContext.put("add_captcha", captchaService.isCaptchaRequired(config,
                 coralSession.getUserSubject().getPrincipal()));
+            templatingContext.put("recaptcha_api_version", captchaService.getApiVersion(config));
         }
         catch(EntityDoesNotExistException e)
         {

@@ -13,7 +13,7 @@ $pageTool.addScriptLink('script/CMSPopups.js')##
 var fieldNames = new Array( "parent_id", "category_id_1", "category_id_2", "inherit_categories", "calendar_tree", "attachments_enabled", 
                             "attachments_dir_id", "attachments_max_count", "attachments_max_size", "attachemnt_images_max_size", "attachments_allowed_formats", 
 							"attachments_multi_upload", "attachments_thumbnails_size", "owner_login", "editing_enabled", "category_depth", "add_document_visual_editor", 
-							"clear_org_if_not_match", "add_captcha", "cleanup_profile", "include_query_id", "exclude_query_id");
+							"clear_org_if_not_match", "add_captcha", "recaptcha_api_version", "cleanup_profile", "include_query_id", "exclude_query_id");
 function sendConfig()
 {
     document.form1.action = "$save_action";
@@ -129,6 +129,14 @@ function clearQuery(name)
     <td align="right">$ui_labels.get('add_captcha')</td>
     <td><input type="checkbox" name="add_captcha" value="true"#if($add_captcha) checked#end></td>
   </tr>
+  <tr>
+    <td align="right">$ui_labels.get('recaptcha_api_version')</td>
+    <td><select name="recaptcha_api_version">
+    #foreach($recaptcha_api in $available_recaptcha_api_version)
+	  <option #if($recaptcha_api.toString() == $recaptcha_api_version) selected #end value="$recaptcha_api.toString()">$recaptcha_api.toString()</option>
+    #end
+	</select></td>
+  </tr>  
   <tr>
 	<td align="right">$ui_labels.get('cleanup_profile')</td>
 	<td><select name="cleanup_profile">

@@ -5,7 +5,7 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "vote_id", "enable_results", "add_captcha");
+var fieldNames = new Array( "vote_id", "enable_results", "add_captcha", "recaptcha_api_version");
 
 function sendConfig()
 {
@@ -29,6 +29,14 @@ function sendConfig()
    <td>Dodaj weryfikację Captcha</td>
    <td><input type="checkbox" name="add_captcha" value="true"#if($add_captcha) checked#end></td>
   </tr>
+  <tr>
+    <td align="right">Wybierz wersję Captcha</td>
+    <td><select name="recaptcha_api_version">
+    #foreach($recaptcha_api in $available_recaptcha_api_version)
+	  <option #if($recaptcha_api.toString() == $recaptcha_api_version) selected #end value="$recaptcha_api.toString()">$recaptcha_api.toString()</option>
+    #end
+	</select></td>
+  </tr>  
 </table>  
 <br/> 
 <table border="0" class="genericScreen" width="100%">

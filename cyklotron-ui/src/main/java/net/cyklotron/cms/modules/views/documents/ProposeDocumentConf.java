@@ -1,5 +1,7 @@
 package net.cyklotron.cms.modules.views.documents;
 
+import java.util.Arrays;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.session.CoralSession;
@@ -11,6 +13,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService.CaptchaApiVersion;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
@@ -125,10 +128,13 @@ public class ProposeDocumentConf
                     "clear_org_if_not_match", false));
             templatingContext.put("add_captcha", screenConfig.getBoolean(
                 "add_captcha", false));
+            templatingContext.put("recaptcha_api_version", screenConfig.get(
+                "recaptcha_api_version", CaptchaApiVersion.getVersion("").toString()));
 
             templatingContext.put("cleanup_profile", screenConfig.get("cleanup_profile", ""));
             templatingContext.put("available_cleanup_profiles",
                 htmlService.availableCleanupProfiles());
+            templatingContext.put("available_recaptcha_api_version", Arrays.asList(CaptchaApiVersion.values()));
 
             addQueryObject("include", screenConfig, coralSession, templatingContext);
             addQueryObject("exclude", screenConfig, coralSession, templatingContext);
