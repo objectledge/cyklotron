@@ -21,6 +21,7 @@ import org.objectledge.table.TableTool;
 import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService.CaptchaApiVersion;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
@@ -109,6 +110,9 @@ public class ForumConf
 
 			Parameters componentConfig = prepareComponentConfig(parameters, templatingContext);
 			templatingContext.put("componentConfig", componentConfig);
+            templatingContext.put("available_recaptcha_api_version",
+                Arrays.asList(CaptchaApiVersion.values()));
+			
 			long dId = componentConfig.getLong("did",-1);
 	        if(dId != -1)
 	        {

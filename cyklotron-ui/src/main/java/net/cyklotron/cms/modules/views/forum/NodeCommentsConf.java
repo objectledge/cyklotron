@@ -1,5 +1,7 @@
 package net.cyklotron.cms.modules.views.forum;
 
+import java.util.Arrays;
+
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
@@ -9,6 +11,7 @@ import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.table.TableStateManager;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService.CaptchaApiVersion;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsDataFactory;
@@ -47,5 +50,7 @@ public class NodeCommentsConf
     {
         templatingContext.put("componentConfig", prepareComponentConfig(parameters,
             templatingContext));
+        templatingContext.put("available_recaptcha_api_version",
+            Arrays.asList(CaptchaApiVersion.values()));
     }
 }

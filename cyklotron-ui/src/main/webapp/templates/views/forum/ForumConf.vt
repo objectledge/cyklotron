@@ -72,7 +72,7 @@ $object.name
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "did", "statefull", "captcha_verification");
+var fieldNames = new Array( "did", "statefull", "captcha_verification", "recaptcha_api_version");
 // -->
 </script>
 
@@ -103,6 +103,14 @@ var fieldNames = new Array( "did", "statefull", "captcha_verification");
     #options($opts $componentConfig.get('captcha_verification',''))
     </select></td>
   </tr>
+  <tr>
+    <td align="right">Select Captcha version</td>
+    <td><select name="recaptcha_api_version">
+    #foreach($recaptcha_api in $available_recaptcha_api_version)
+	  <option #if($recaptcha_api.toString() == $recaptcha_api_version) selected #end value="$recaptcha_api.toString()">$recaptcha_api.toString()</option>
+    #end
+	</select></td>
+  </tr>      
 </table>
 </form>
 
