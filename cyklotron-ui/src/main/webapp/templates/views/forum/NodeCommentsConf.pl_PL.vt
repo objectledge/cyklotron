@@ -19,7 +19,7 @@ $viewEnclosureTool.override('popup.Default')
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "use_screen", "viewType", "captcha_verification");
+var fieldNames = new Array( "use_screen", "viewType", "captcha_verification", "recaptcha_api_version");
 // -->
 </script>
 
@@ -45,6 +45,14 @@ var fieldNames = new Array( "use_screen", "viewType", "captcha_verification");
     #options($opts $componentConfig.get('captcha_verification', ''))
     </select></td>
 </tr>
+<tr>
+    <td align="right">Wybierz wersję Captcha</td>
+    <td><select name="recaptcha_api_version">
+    #foreach($recaptcha_api in $available_recaptcha_api_version)
+	  <option #if($recaptcha_api.toString() == $componentConfig.get('recaptcha_api_version','')) selected #end value="$recaptcha_api.toString()">$recaptcha_api.toString()</option>
+    #end
+	</select></td>
+</tr>     
 </table>
 
 </form>

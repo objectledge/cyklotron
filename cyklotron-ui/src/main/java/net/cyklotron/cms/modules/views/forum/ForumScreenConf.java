@@ -21,6 +21,7 @@ import org.objectledge.table.TableTool;
 import org.objectledge.table.generic.ListTableModel;
 import org.objectledge.templating.TemplatingContext;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.captcha.CaptchaService.CaptchaApiVersion;
 import org.objectledge.web.mvc.MVCContext;
 
 import net.cyklotron.cms.CmsData;
@@ -88,6 +89,8 @@ public class ForumScreenConf
             }
             TableModel model = new ListTableModel(Arrays.asList(discussions), columns);
             templatingContext.put("discussions_table", new TableTool(state, null, model));
+            templatingContext.put("available_recaptcha_api_version",
+                Arrays.asList(CaptchaApiVersion.values()));
 
 			Parameters screenConfig = getScreenConfig();
 			long dId = screenConfig.getLong("did",-1);
