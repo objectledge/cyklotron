@@ -140,6 +140,7 @@
       <item name="add_document_visual_editor">edytor wizualny na ekranie AddDocument</item>
       <item name="clear_org_if_not_match">wyczyść dane autopodpowiadania jeśli nie ma zgodności nazwy organizacji</item>
       <item name="add_captcha">dodaj weryfikację Captcha</item>
+      <item name="recaptcha_api_version">wybierz wersję Captcha</item>                  
       <item name="cleanup_profile">profil czyszczenia HTML</item>
       <item name="include_query">Wybierz dokumenty</item>
       <item name="include_query_info">Zapytanie określające zestaw dokumentów pokazywanych na ekranie "Moje Dokumenty". 
