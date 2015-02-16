@@ -1,0 +1,7 @@
+$viewEnclosureTool.top()##
+<div class="modal-header">
+</div>
+<form name="edit">
+  <div class="modal-body">
+  </div>
+</form>
