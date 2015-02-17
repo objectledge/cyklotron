@@ -348,12 +348,3 @@ ATTRIBUTES (
   performPermission = 'cms.link.links.administer',
   description = 'Pause active link.'
 );
-
-# canonical link rules
-
-CREATE RESOURCE 'canonicalLinkRules'
-RESOURCE CLASS 'node'
-PARENT '/cms'
-ATTRIBUTES (
-  description = 'Parent node of documents canonical links.'
-);

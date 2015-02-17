@@ -26,7 +26,6 @@
 	  #if(!$site)
 		#linkCell('' 'SITE MAPS' $link.view('site.SitemapSettings'))
 	  #end	  
-	  #linkCell('' 'CANONICAL LINK RULES' $link.view('canonicallinkrules.Config'))	  
     #genericNaviTrailer()
   
 

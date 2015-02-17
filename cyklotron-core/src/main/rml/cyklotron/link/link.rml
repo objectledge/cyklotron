@@ -58,15 +58,3 @@ ADD PERMISSIONS (
   'cms.link.links.administer',
   'cms.link.links.system'
 );
-
-# canonical link rules
-
-CREATE RESOURCE CLASS 'cms.canonical.link_canonical_rule'
-JAVA CLASS 'net.cyklotron.cms.canonical.LinkCanonicalRuleResourceImpl'
-HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
-ATTRIBUTES (
-integer priority,
-REQUIRED resource category,
-REQUIRED string linkPattern
-);
