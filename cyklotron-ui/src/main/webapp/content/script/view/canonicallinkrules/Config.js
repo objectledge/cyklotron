@@ -45,7 +45,7 @@ configModule.filter("wrap", function() {
 configModule.config([ "$routeProvider", function($routeProvider) {
     $routeProvider.when("/rules", {
         templateUrl : "canonicallinkrules.Rules",
-        controller : "ActionsCtrl",
+        controller : "RulesCtrl",
         resolve : {
             rules : [ "backend", function(backend) {
                 return backend.rules.query().$promise;
@@ -85,14 +85,14 @@ configModule.controller("RulesCtrl", [ "$scope", "$modal", "backend", "rules",
                 size : "lg",
                 scope : angular.extend($scope, {
                     mode : "add",
-                    action : {},
+                    rule : {},
                     save : function($close) {
                         runRequest($scope, _.bind(backend.rules.save, {}, $scope.rule), function() {
                             backend.rules.get({
-                                name : $scope.rule.name
+                                ruleId : headers("X-Rule-Id")
                             }).$promise.then(function(newRule) {
-                                actions.push(newRule);
-                                actions.sort(function(a, b) {
+                                rules.push(newRule);
+                                rules.sort(function(a, b) {
                                     return a.priority.localeCompare(b.priority);
                                 });
                                 $close();

@@ -1,7 +1,61 @@
 $viewEnclosureTool.top()##
 <div class="modal-header">
+  <h3 ng:show="mode == 'add'" class="modal-title">Dodawanie nowej reguły</h3>
+  <h3 ng:show="mode == 'edit'" class="modal-title">Edycja reguły "{{rule.name}}"</h3>
 </div>
 <form name="edit">
   <div class="modal-body">
+    <table class="form" cellspacing="0">
+      <tr ng:if="mode == 'add'">
+        <td width="20%"><label>Nazwa</label></td>
+        <td>
+        	<input type="text" name="name" ng:model="rule.name" required pattern="^[a-z]*$"/>
+        	<p class="hint">
+        		Nazwa reguły. Musi składać się z małych liter.
+        	</p>
+            <div class="error" ng:messages="edit.name.$error">
+              <div ng:message="required">Wartość wymagana</div>
+              <div ng:message="pattern">Nieprawidłowy format</div>
+            </div>
+        </td>
+      </tr>
+      <tr>
+      	<td><label>Kategoria</label></td>
+      	<td>	
+      		<input type="text" name="category" ng:model="rule.category" />
+      		<p class="hint">
+      			Wybierz kategorię, która będzie definiowała regułę linku kanonicznego.
+      		</p>
+            <div class="error" ng:messages="edit.category.$error">
+              <div ng:message="pattern">Nieprawidłowy format</div>
+            </div>
+      	</td>
+      </tr>
+      <tr>
+      	<td><label>Wzorzec linku kanonicznego</label></td>
+      	<td>
+      		<input type="text" name="linkPattern" ng:model="rule.linkPattern" />
+      		<p class="hint">
+				Wzorzec linku kanonicznego dla dokumnetów. Prawidłowy wzorzec powinien zawierać
+				zmieną %id pod którą będzie wprowadzony id dokumentu.  
+      		</p>
+          <div class="error" ng:messages="edit.category.$error">
+            <div ng:message="pattern">Nieprawidłowy format</div>
+          </div>          
+      	</td>
+      </tr>        
+    </table>
+  </div>
+  <div class="modal-footer">
+    <div class="status">
+      <i ng:show="reqRunning" class="fa fa-spinner fa-spin"></i>
+      <div class="error" ng:messages="reqError">
+        <div ng:message="409">Akcja o takiej nazwie już istnieje</div>
+        <div ng:message="500">Błąd serwera</div>
+        <div ng:message="0">Brak połączenia z serwerem</div>
+      </div>
+    </div>
+    <a href="" ng:disabled="edit.$invalid" ng:click="save($close)"><i class="fa fa-floppy-o"></i>Zapisz</a>
+    <a href="" ng:click="$dismiss()"><i class="fa fa-times"></i>Anuluj</a>
   </div>
 </form>

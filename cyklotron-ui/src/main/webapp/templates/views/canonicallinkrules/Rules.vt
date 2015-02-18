@@ -1,11 +1,13 @@
 $viewEnclosureTool.top()##
-#genericScreenHeader('Reguły')
+#genericScreenHeader('Reguły generowania linków katonicznych')
 <table width="100%" class="genericItemList" cellspacing="0">
   <tr>
-    <th width="90%">Reguły</th>
+    <th width="20%">kategoria</th>
+    <th width="70%">Reguły</th>
     <th width="10%">Operacje</th>
   </tr>
   <tr ng:repeat="rule in rules track by rule.priority">
+    <td>{{rule.category.name}}</td>
     <td>{{rule.linkPattern}}</td>
     <td class="operations">
       <a href="" ng:click="edit(rule)"><i class="fa fa-pencil"></i>Edytuj</a>
@@ -13,10 +15,11 @@ $viewEnclosureTool.top()##
     </td>
   </tr>
   <tr>
+    <td colspan="1">&nbsp;</td>  
     <td colspan="1">&nbsp;</td>
     <td class="operations">
       <a href="" ng:click="add()"><i class="fa fa-plus"></i>Dodaj</a>
     </td>
-  </td>
+  </tr>
 </table>
 #genericScreenTrailer()

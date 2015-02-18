@@ -89,20 +89,13 @@ public class Rules
                 CANONICAL_LINK_RULES_ROOT);
             synchronized(ACTION_NAME_LOCK)
             {
-                if(!actionExists(rule.getName(), parent.getChildren()))
-                {
-                    LinkCanonicalRuleResource res = LinkCanonicalRuleResourceImpl
-                        .createLinkCanonicalRuleResource(coralSession, rule.getName(), parent,
-                            rule.getCategory(), rule.getLinkPattern());
-                    res.setPriority(rule.getPriority());
-                    res.update();
-                    return Response.created(uriInfo.getRequestUri().resolve(rule.getName()))
-                        .build();
-                }
-                else
-                {
-                    return Response.status(Status.CONFLICT).build();
-                }
+                LinkCanonicalRuleResource linkRuleRes = LinkCanonicalRuleResourceImpl
+                    .createLinkCanonicalRuleResource(coralSession, rule.getName(), parent,
+                        rule.getCategory(), rule.getLinkPattern());
+                linkRuleRes.setPriority(rule.getPriority());
+                linkRuleRes.update();
+                return Response.created(uriInfo.getRequestUri().resolve(linkRuleRes.getIdString()))
+                    .header("X-Rule-Id", linkRuleRes.getIdString()).build();
             }
         }
         catch(InvalidResourceNameException | EntityDoesNotExistException
@@ -110,18 +103,6 @@ public class Rules
         {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getStackTrace()).build();
         }
-    }
-
-    private boolean actionExists(String name, Resource[] children)
-    {
-        for(Resource child : children)
-        {
-            if(child.getName().equals(name))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     @PUT
@@ -248,12 +229,12 @@ public class Rules
             this.priority = priority;
         }
 
-        private static final Comparator<LinkCanonicalRuleDto> BY_NAME = new Comparator<LinkCanonicalRuleDto>()
+        private static final Comparator<LinkCanonicalRuleDto> BY_PRIORITY = new Comparator<LinkCanonicalRuleDto>()
             {
                 @Override
                 public int compare(LinkCanonicalRuleDto o1, LinkCanonicalRuleDto o2)
                 {
-                    return o1.getName().compareTo(o2.getName());
+                    return o1.getPriority() - o2.getPriority();
                 }
             };
 
@@ -265,7 +246,7 @@ public class Rules
             {
                 result.add(new LinkCanonicalRuleDto((LinkCanonicalRuleResource)linkCanonical));
             }
-            Collections.sort(result, BY_NAME);
+            Collections.sort(result, BY_PRIORITY);
             return result;
         }
     }
