@@ -850,5 +850,84 @@ public class FilesServiceImpl
             srcImage.flush();
         }
     }
+    
+    @Override
+    public String resizeImage(FileResource file, int w, int h, String rm, boolean crop, int crop_x, int crop_y)
+        throws IOException
+    {
+        if(w == -1 && h == -1)
+        {
+            throw new IOException("at least one of w and h parameters must be positive");
+        }
+
+        InputStream is = getInputStream(file);
+        String contentType = detectMimeType(is, file.getName());
+        if(!contentType.startsWith("image/"))
+        {
+            throw new IOException(file.toString() + " is not an image: " + contentType
+                + " detected");
+        }
+
+        is.reset();
+        BufferedImage srcImage = ImageIO.read(is);
+        try
+        {
+            if(h == -1)
+            {
+                h = (int)(srcImage.getHeight() * ((float)w / srcImage.getWidth()));
+            }
+            if(w == -1)
+            {
+                w = (int)(srcImage.getWidth() * ((float)h / srcImage.getHeight()));
+            }
+            String path = cacheDirectory(file) + "/" + file.getIdString()
+                + String.format("_%d_%d_%s_%b_%d_%d.png", w, h, rm, crop, crop_x, crop_y);
+            if(!fileSystem.exists(path)
+                || fileSystem.lastModified(path) < fileSystem.lastModified(getPath(file)))
+            {
+                String tempPath = path + "-" + Thread.currentThread().getName();
+                BufferedImage targetImage = null;
+                if("w".equals(rm)) {
+                    targetImage = Scalr.resize(srcImage, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_WIDTH, w);
+                } else if("h".equals(rm)) {
+                    targetImage = Scalr.resize(srcImage, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_HEIGHT, h);
+                } else if("a".equals(rm)) {
+                    targetImage = Scalr.resize(srcImage, Scalr.Method.AUTOMATIC, Scalr.Mode.AUTOMATIC, w, h);
+                } else {
+                    targetImage = Scalr.resize(srcImage, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_EXACT, w, h);
+                }
+                if(crop)
+                {
+                    w = Math.min(w, targetImage.getWidth());
+                    if(crop_x == -1)
+                    {
+                        crop_x = ((targetImage.getWidth() - w) / 2);
+                    }
+                    h = Math.min(h, targetImage.getHeight());
+                    if(crop_y == -1)
+                    {
+                        crop_y = ((targetImage.getHeight() - h) / 2);
+                    }
+                    targetImage = Scalr.crop(targetImage, crop_x, crop_y, w, h);
+                }
+                try
+                {
+                    OutputStream os = fileSystem.getOutputStream(tempPath);
+                    ImageIO.write(targetImage, "png", os);
+                    os.close();
+                    fileSystem.rename(tempPath, path);
+                }
+                finally
+                {
+                    targetImage.flush();
+                }
+            }
+            return path;
+        }
+        finally
+        {
+            srcImage.flush();
+        }
+    }
 }
 

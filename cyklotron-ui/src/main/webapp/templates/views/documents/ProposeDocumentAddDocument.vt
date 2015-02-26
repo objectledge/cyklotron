@@ -350,7 +350,8 @@ $(document).ready(function() {
   <tr>
     <td>Captcha verification</td>
     <td>
-       $captcha.createCaptchaWidget()
+ 	 	#set($options = { "apiVersion" : "$recaptcha_api_version" })
+        $captcha.createCaptchaWidget($options)
     </td>
   </tr>
 #end 

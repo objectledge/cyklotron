@@ -422,6 +422,7 @@ public class Forum
             ForumResource forum = forumService.getForum(coralSession, getSite());
             templatingContext.put("add_captcha", captchaService.isCaptchaRequired(screenConfig,
                 coralSession.getUserPrincipal()));
+            templatingContext.put("recaptcha_api_version", captchaService.getApiVersion(screenConfig));
         }
         catch(EntityDoesNotExistException e)
         {

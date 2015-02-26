@@ -46,8 +46,20 @@ public class Resized
             Parameters parameters = context.getAttribute(RequestParameters.class);
             FileResource file = getFile(context);
             HttpContext httpContext = context.getAttribute(HttpContext.class);
-            String path = filesService.resizeImage(file, parameters.getInt("w", -1),
-                parameters.getInt("h", -1));
+            String path = "";
+            if(parameters.isDefined("rm") || parameters.isDefined("c")
+                || parameters.isDefined("c_x") || parameters.isDefined("c_y"))
+            {
+                path = filesService.resizeImage(file, parameters.getInt("w", -1),
+                    parameters.getInt("h", -1), parameters.get("rm", "f"),
+                    parameters.getBoolean("c", false), parameters.getInt("c_x", -1),
+                    parameters.getInt("c_y", -1));
+            }
+            else
+            {
+                path = filesService.resizeImage(file, parameters.getInt("w", -1),
+                    parameters.getInt("h", -1));
+            }
             long lastModified = fileSystem.lastModified(path);
             long ims = httpContext.getRequest().getDateHeader("If-Modified-Since");
             if(ims > 0 && lastModified <= ims)
