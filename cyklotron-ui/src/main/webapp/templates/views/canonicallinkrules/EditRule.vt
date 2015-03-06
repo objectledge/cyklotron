@@ -1,49 +1,76 @@
 $viewEnclosureTool.top()##
-<div class="modal-header">
-  <h3 ng:show="mode == 'add'" class="modal-title">Dodawanie nowej reguły</h3>
-  <h3 ng:show="mode == 'edit'" class="modal-title">Edycja reguły "{{rule.name}}"</h3>
-</div>
+
+<table width="100%" class="genericScreen ng-scope" cellspacing="0">
+ <tbody>
+    <tr>
+      <th ng:show="mode == 'add'" class="modal-title">Dodawanie nowej reguły</th>
+      <th ng:show="mode == 'edit'" class="modal-title">Edycja reguły "{{ rule.name }}"</th>
+    </tr>
+ </tbody>
+</table>
+
 <form name="edit">
   <div class="modal-body">
     <table class="form" cellspacing="0">
+     <tbody>
       <tr ng:if="mode == 'add'">
         <td width="20%"><label>Nazwa</label></td>
         <td>
-        	<input type="text" name="name" ng:model="rule.name" required pattern="^[a-z]*$"/>
+        	<input type="text" name="name" ng:model="rule.name" required pattern="^[a-zA-Z_]*$"/>
         	<p class="hint">
         		Nazwa reguły. Musi składać się z małych liter.
         	</p>
             <div class="error" ng:messages="edit.name.$error">
               <div ng:message="required">Wartość wymagana</div>
-              <div ng:message="pattern">Nieprawidłowy format</div>
+              <div ng:message="pattern">Nieprawidłowy format. Dozwolone znaki [a-zA-Z_].</div>
             </div>
         </td>
       </tr>
       <tr>
       	<td><label>Kategoria</label></td>
-      	<td>	
-      		<input type="text" name="category" ng:model="rule.category" />
+      	<td>
+            <input type="hidden" name="category" ng:model="rule.category.id" required />
+            <input type="text" value="{{ categories | categoryNames }}" readonly="readonly" ng-class="rule.category.id ? '' : 'ng-invalid'" />
+      	    <category-chooser resource-class="documents.document_node" categories="categories">Wybierz kategorie</category-chooser>
       		<p class="hint">
       			Wybierz kategorię, która będzie definiowała regułę linku kanonicznego.
       		</p>
-            <div class="error" ng:messages="edit.category.$error">
-              <div ng:message="pattern">Nieprawidłowy format</div>
-            </div>
+            	<div class="error" ng:messages="edit.category.$error">
+              		<div ng:message="required">Wartość wymagana</div>
+              		<div ng:message="tooMany">Można wybrać tylko jedną kategorię</div>
+            	</div>
       	</td>
       </tr>
       <tr>
       	<td><label>Wzorzec linku kanonicznego</label></td>
       	<td>
-      		<input type="text" name="linkPattern" ng:model="rule.linkPattern" />
+      		<input type="text" name="linkPattern" ng:model="rule.linkPattern" required pattern="{{ linkPatternString }}" />
       		<p class="hint">
-				Wzorzec linku kanonicznego dla dokumnetów. Prawidłowy wzorzec powinien zawierać
-				zmieną %id pod którą będzie wprowadzony id dokumentu.  
+		   Wzorzec linku kanonicznego dla dokumnetów. 
+		   Wymagane podanie linku bezwzględnego. 
+		   Oznacz miejsce identyfikatora dokumentu jako {id}.  
       		</p>
-          <div class="error" ng:messages="edit.category.$error">
-            <div ng:message="pattern">Nieprawidłowy format</div>
-          </div>          
+          	<div class="error" ng:messages="edit.linkPattern.$error">
+            	     <div ng:message="required">Wartość wymagana</div>
+            	     <div ng:message="pattern">Nieprawidłowy format</div>
+          	</div>          
       	</td>
       </tr>        
+      <tr>
+      	<td><label>Priorytet</label></td>
+      	<td>
+      		<select type="text" name="priority" ng:model="rule.priority" required >
+			<option ng-repeat="i in priorityRange | orderBy:$index:true" value="{{ i }}">{{ i }}</option>
+		</select>
+      		<p class="hint">
+		   Priorytet. Jeśli dokument ma dwie kategorie kanoniczne priorytet określa który link zostanie nadany. 
+      		</p>
+          	<div class="error" ng:messages="edit.priority.$error">
+            	     <div ng:message="required">Wartość wymagana</div>
+          	</div>          
+      	</td>
+      </tr> 
+     </tbody>
     </table>
   </div>
   <div class="modal-footer">
@@ -56,6 +83,6 @@ $viewEnclosureTool.top()##
       </div>
     </div>
     <a href="" ng:disabled="edit.$invalid" ng:click="save($close)"><i class="fa fa-floppy-o"></i>Zapisz</a>
-    <a href="" ng:click="$dismiss()"><i class="fa fa-times"></i>Anuluj</a>
+    <a href="" ng:click="list()"><i class="fa fa-times"></i>Anuluj</a>
   </div>
 </form>

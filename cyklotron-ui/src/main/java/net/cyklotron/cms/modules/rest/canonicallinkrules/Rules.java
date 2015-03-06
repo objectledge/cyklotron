@@ -23,6 +23,8 @@ import javax.ws.rs.core.UriInfo;
 import net.cyklotron.cms.canonical.LinkCanonicalRuleResource;
 import net.cyklotron.cms.canonical.LinkCanonicalRuleResourceImpl;
 import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryResourceImpl;
+import net.cyklotron.cms.modules.rest.category.CategoryDto;
 
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
@@ -89,9 +91,11 @@ public class Rules
                 CANONICAL_LINK_RULES_ROOT);
             synchronized(ACTION_NAME_LOCK)
             {
+                CategoryResource category = CategoryResourceImpl.getCategoryResource(coralSession,
+                    Long.parseLong(rule.category.getId()));
                 LinkCanonicalRuleResource linkRuleRes = LinkCanonicalRuleResourceImpl
                     .createLinkCanonicalRuleResource(coralSession, rule.getName(), parent,
-                        rule.getCategory(), rule.getLinkPattern());
+                        category, rule.getLinkPattern());
                 linkRuleRes.setPriority(rule.getPriority());
                 linkRuleRes.update();
                 return Response.created(uriInfo.getRequestUri().resolve(linkRuleRes.getIdString()))
@@ -115,7 +119,9 @@ public class Rules
             LinkCanonicalRuleResource current = LinkCanonicalRuleResourceImpl
                 .getLinkCanonicalRuleResource(coralSession, id);
             current.setPriority(rule.getPriority());
-            current.setCategory(rule.getCategory());
+            CategoryResource category = CategoryResourceImpl.getCategoryResource(coralSession,
+                Long.parseLong(rule.category.getId()));
+            current.setCategory(category);
             current.setLinkPattern(rule.getLinkPattern());
             current.update();
             return Response.noContent().build();
@@ -160,7 +166,7 @@ public class Rules
 
         private String name;
 
-        private CategoryResource category;
+        private CategoryDto category;
 
         private int priority;
 
@@ -174,7 +180,7 @@ public class Rules
         {
             id = link.getId();
             name = link.getName();
-            category = (CategoryResource)link.getCategory();
+            category = CategoryDto.create((CategoryResource)link.getCategory());
             linkPattern = link.getLinkPattern();
             priority = link.getPriority(0);
         }
@@ -199,12 +205,12 @@ public class Rules
             this.name = name;
         }
 
-        public CategoryResource getCategory()
+        public CategoryDto getCategory()
         {
             return category;
         }
 
-        public void setCategory(CategoryResource category)
+        public void setCategory(CategoryDto category)
         {
             this.category = category;
         }

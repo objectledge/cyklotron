@@ -1,20 +1,41 @@
 $viewEnclosureTool.top()##
 #genericScreenHeader('Reguły generowania linków katonicznych')
+
+#macro(th $title $attrs $sortableFieldName)
+ <th $!attrs>
+   #if($sortableFieldName)
+      <span>
+      <a ng-click="orderDirection = orderFieldName == '$sortableFieldName' ? !orderDirection : false; orderFieldName = '$sortableFieldName'"  href="">$!title</a>
+      <img ng-show="orderDirection && orderFieldName == '$sortableFieldName'" src="/content/images/tree/down.gif" border="0">
+      <img ng-show="!orderDirection && orderFieldName == '$sortableFieldName'" src="/content/images/tree/up.gif" border="0">
+      </span>
+   #else
+      <span>$!title</span> 
+   #end
+ </th>
+#end
+
 <table width="100%" class="genericItemList" cellspacing="0">
   <tr>
-    <th width="20%">kategoria</th>
-    <th width="70%">Reguły</th>
-    <th width="10%">Operacje</th>
+    #th("Nazwa" "width='20%'" "name")      
+    #th("Kategoria" "width='20%'" "category.name")      
+    #th("Reguła" "width='45%'" "linkPattern")
+    #th("Priorytet" "width='5%'" "priority")      
+    #th("Operacje" "width='10%'")
   </tr>
-  <tr ng:repeat="rule in rules track by rule.priority">
+  <tr ng:repeat="rule in rules | orderBy:orderFieldName:orderDirection">
+    <td>{{rule.name}}</td>
     <td>{{rule.category.name}}</td>
     <td>{{rule.linkPattern}}</td>
+    <td>{{rule.priority}}</td>
     <td class="operations">
       <a href="" ng:click="edit(rule)"><i class="fa fa-pencil"></i>Edytuj</a>
       <a href="" ng:click="askRemove(rule)"><i class="fa fa-trash"></i>Usuń</a>
     </td>
   </tr>
   <tr>
+    <td colspan="1">&nbsp;</td>  
+    <td colspan="1">&nbsp;</td>  
     <td colspan="1">&nbsp;</td>  
     <td colspan="1">&nbsp;</td>
     <td class="operations">
