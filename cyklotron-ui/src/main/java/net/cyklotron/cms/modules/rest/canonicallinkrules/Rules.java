@@ -91,15 +91,21 @@ public class Rules
                 CANONICAL_LINK_RULES_ROOT);
             synchronized(ACTION_NAME_LOCK)
             {
-                CategoryResource category = CategoryResourceImpl.getCategoryResource(coralSession,
-                    Long.parseLong(rule.category.getId()));
-                LinkCanonicalRuleResource linkRuleRes = LinkCanonicalRuleResourceImpl
-                    .createLinkCanonicalRuleResource(coralSession, rule.getName(), parent,
-                        category, rule.getLinkPattern());
-                linkRuleRes.setPriority(rule.getPriority());
-                linkRuleRes.update();
-                return Response.created(uriInfo.getRequestUri().resolve(linkRuleRes.getIdString()))
-                    .header("X-Rule-Id", linkRuleRes.getIdString()).build();
+                Status errorStatus = ruleExists(rule, parent.getChildren());
+                if(Status.OK.equals(errorStatus))
+                {
+                    CategoryResource category = CategoryResourceImpl.getCategoryResource(
+                        coralSession, Long.parseLong(rule.category.getId()));
+                    LinkCanonicalRuleResource linkRuleRes = LinkCanonicalRuleResourceImpl
+                        .createLinkCanonicalRuleResource(coralSession, rule.getName(), parent,
+                            category, rule.getLinkPattern());
+                    linkRuleRes.setPriority(rule.getPriority());
+                    linkRuleRes.update();
+                    return Response
+                        .created(uriInfo.getRequestUri().resolve(linkRuleRes.getIdString()))
+                        .header("X-Rule-Id", linkRuleRes.getIdString()).build();
+                }
+                return Response.status(errorStatus).build();
             }
         }
         catch(InvalidResourceNameException | EntityDoesNotExistException
@@ -108,7 +114,7 @@ public class Rules
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getStackTrace()).build();
         }
     }
-
+    
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -116,26 +122,71 @@ public class Rules
     {
         try
         {
-            LinkCanonicalRuleResource current = LinkCanonicalRuleResourceImpl
-                .getLinkCanonicalRuleResource(coralSession, id);
-            current.setPriority(rule.getPriority());
-            CategoryResource category = CategoryResourceImpl.getCategoryResource(coralSession,
-                Long.parseLong(rule.category.getId()));
-            current.setCategory(category);
-            current.setLinkPattern(rule.getLinkPattern());
-            current.update();
-            return Response.noContent().build();
+            Resource parent = coralSession.getStore().getUniqueResourceByPath(
+                CANONICAL_LINK_RULES_ROOT);
+            
+            synchronized(ACTION_NAME_LOCK)
+            {
+                Status errorStatus = ruleExists(rule, parent.getChildren());
+                if(Status.OK.equals(errorStatus))
+                {
+                    LinkCanonicalRuleResource current = LinkCanonicalRuleResourceImpl
+                        .getLinkCanonicalRuleResource(coralSession, id);
+                    current.setPriority(rule.getPriority());
+                    CategoryResource category = CategoryResourceImpl.getCategoryResource(
+                        coralSession, Long.parseLong(rule.category.getId()));
+                    current.setCategory(category);
+                    current.setLinkPattern(rule.getLinkPattern());
+                    current.update();
+                    return Response.noContent().build();
+                }
+                return Response.status(errorStatus).build();
+            }
         }
         catch(EntityDoesNotExistException e)
         {
             return Response.status(Status.NOT_FOUND).build();
         }
-        catch(ClassCastException | ValueRequiredException e)
+        catch(AmbigousEntityNameException | ValueRequiredException e)
         {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getStackTrace()).build();
         }
     }
 
+    /***
+     * check if rule exist
+     * 
+     * @param rule
+     * @param children
+     * @param error type
+     * @return boolean
+     */
+    private Status ruleExists(LinkCanonicalRuleDto rule, Resource[] children)
+    {
+        if(rule != null)
+        {
+            for(Resource child : children)
+            {
+                if(child instanceof LinkCanonicalRuleResource)
+                {
+                    LinkCanonicalRuleResource ruleResource = (LinkCanonicalRuleResource)child;
+                    if(ruleResource.getId() != rule.getId())
+                    {
+                        if(ruleResource.getName().equals(rule.getName()))
+                        {
+                            return Status.CONFLICT;
+                        }
+                        if(ruleResource.getCategory().getIdString().equals(rule.category.getId()))
+                        {
+                            return Status.PRECONDITION_FAILED;
+                        }
+                    }
+                }
+            }
+        }
+        return Status.OK;
+    }
+    
     @DELETE
     @Path("{id}")
     public Response deleteAction(@PathParam("id") long id)

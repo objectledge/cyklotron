@@ -106,6 +106,7 @@ configModule
 
                 $scope.$watch('categories', function(categories) {
                     if (categories && categories.length > 1) {
+                        $scope.rule.category = null;
                         $scope.edit.category.$error = {
                             'tooMany' : true
                         };
@@ -122,6 +123,7 @@ configModule
                             };
                         }
                     } else {
+                        $scope.rule.category = null;
                         $scope.edit.category.$error = {
                             'required' : true
                         };
