@@ -64,9 +64,8 @@ ADD PERMISSIONS (
 CREATE RESOURCE CLASS 'cms.canonical.link_canonical_rule'
 JAVA CLASS 'net.cyklotron.cms.canonical.LinkCanonicalRuleResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
-SUPERCLASSES ( 'node' )
+SUPERCLASSES ( 'node', 'prioritized' )
 ATTRIBUTES (
-integer priority,
 REQUIRED resource category,
 REQUIRED string linkPattern
 );

@@ -32,6 +32,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsNodeResource;
+import net.cyklotron.cms.PrioritizedResource;
 
 /**
  * Defines the accessor methods of <code>cms.canonical.link_canonical_rule</code> Coral resource class.
@@ -39,7 +40,7 @@ import net.cyklotron.cms.CmsNodeResource;
  * @author Coral Maven plugin
  */
 public interface LinkCanonicalRuleResource
-    extends Resource, CmsNodeResource
+    extends Resource, CmsNodeResource, PrioritizedResource
 {
     // constants /////////////////////////////////////////////////////////////
 
@@ -81,43 +82,6 @@ public interface LinkCanonicalRuleResource
      */
     public void setLinkPattern(String value)
         throws ValueRequiredException;
-   	
-    /**
-     * Returns the value of the <code>priority</code> attribute.
-     *
-     * @return the value of the the <code>priority</code> attribute.
-     * @throws IllegalStateException if the value of the attribute is 
-     *         undefined.
-     */
-    public int getPriority()
-		throws IllegalStateException;
-
-	/**
-     * Returns the value of the <code>priority</code> attribute.
-     *
-     * @param defaultValue the value to return if the attribute is undefined.
-     * @return the value of the <code>priority</code> attribute.
-     */
-    public int getPriority(int defaultValue);
-
-    /**
-     * Sets the value of the <code>priority</code> attribute.
-     *
-     * @param value the value of the <code>priority</code> attribute.
-     */
-    public void setPriority(int value);
-
-	/**
-     * Removes the value of the <code>priority</code> attribute.
-     */
-    public void unsetPriority();
-   
-	/**
-	 * Checks if the value of the <code>priority</code> attribute is defined.
-	 *
-	 * @return <code>true</code> if the value of the <code>priority</code> attribute is defined.
-	 */
-    public boolean isPriorityDefined();
-  
+     
     // @custom methods ///////////////////////////////////////////////////////
 }
