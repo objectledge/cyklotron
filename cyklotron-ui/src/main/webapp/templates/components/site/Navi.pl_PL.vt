@@ -25,8 +25,8 @@
 	  #end
 	  #if(!$site)
 		#linkCell('' 'MAPY SERWISÓW' $link.view('site.SitemapSettings'))
+	  	#linkCell('' 'REGUŁY LINKÓW KANONICZNYCH' $link.view('canonicallinkrules.Config'))		
 	  #end
-	  #linkCell('' 'REGUŁY LINKÓW KANONICZNYCH' $link.view('canonicallinkrules.Config'))
     #genericNaviTrailer()
   
 
