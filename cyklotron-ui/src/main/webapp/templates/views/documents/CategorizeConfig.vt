@@ -1,0 +1,39 @@
+##
+## author: <a href="mailto:pablo@caltha.pl">Paweł Potempski</a>
+##
+## $Id: AddFooter.vt,v 1.1 2006-05-08 12:51:43 pablo Exp $
+##
+<style>
+ textarea[readonly] { background-color: #eee; }
+ p.result_message { color: #00ff00; }
+ p.result_message.error { color: #ff0000; }
+</style>
+
+#genericScreenHeader("Kategoryzacja dokumentów")
+
+<form name="categorize" method="post" action="$link.action("documents.CategorizeDocuments")#input">
+#if($!result)
+<div>
+ <P class="result_message #if($!trace) error#end">
+ #if($!trace) $!trace #else Akcja wykonana pomyślnie. #end<br/>##
+ Ilość prawidłowo wykonanych akcji $!actions_done.<br/>## 
+ Ilość wszystkich akcji $!actions_total.
+ </P>
+</div>
+#end
+<div>
+  <textarea cols="" rows="25" style="width: 100%;" name="command_xml" #if($uploaded) readonly="readonly" #end>$!uploaded</textarea>
+</div>
+<div>
+  <input type="submit" value="&nbsp;Execute&nbsp;">
+</div>
+</form>
+
+<form name="upload" method="post" enctype="multipart/form-data" action="$link.action("documents.UploadCategorizeScript")#input" class="defaultForm">
+<a name="upload"></a>
+<div>
+  <input type="hidden" name="padding">
+  <input type="submit" value="&nbsp;Pobierz&nbsp;"> skrypt
+  <input type="file" name="script">
+</div>
+</form>

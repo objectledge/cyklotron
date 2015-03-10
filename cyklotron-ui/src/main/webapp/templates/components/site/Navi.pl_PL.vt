@@ -26,6 +26,7 @@
 	  #if(!$site)
 		#linkCell('' 'MAPY SERWISÓW' $link.view('site.SitemapSettings'))
 	  	#linkCell('' 'REGUŁY LINKÓW KANONICZNYCH' $link.view('canonicallinkrules.Config'))		
+	  	#linkCell('' 'KATEGORYZACJA DOKUMENTÓW' $link.view('documents.CategorizeConfig'))
 	  #end
     #genericNaviTrailer()
   
