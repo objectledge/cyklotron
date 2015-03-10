@@ -58,8 +58,6 @@ ADD PERMISSIONS (
   'cms.link.links.administer',
   'cms.link.links.system'
 );
-<<<<<<< HEAD
-=======
 
 # canonical link rules
 
@@ -71,4 +69,3 @@ ATTRIBUTES (
 REQUIRED resource category,
 REQUIRED string linkPattern
 );
->>>>>>> feature_link_canonical
