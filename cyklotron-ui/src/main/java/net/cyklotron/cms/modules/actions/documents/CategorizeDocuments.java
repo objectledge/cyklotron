@@ -27,6 +27,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.relation.MalformedRelationQueryException;
 import org.objectledge.coral.relation.Relation;
 import org.objectledge.coral.relation.RelationModification;
+import org.objectledge.coral.security.Role;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
@@ -205,7 +206,7 @@ public class CategorizeDocuments
         throws ProcessingException
     {
         CoralSession coralSession = (CoralSession)context.getAttribute(CoralSession.class);
-        // "cms.category.classify"
-        return true;
+        Role role = coralSession.getSecurity().getUniqueRole("cms.administrator");
+        return coralSession.getUserSubject().hasRole(role);
     }
 }
