@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -17,6 +18,7 @@ import net.cyklotron.cms.category.query.CategoryQueryResource;
 import net.cyklotron.cms.category.query.CategoryQueryResourceImpl;
 import net.cyklotron.cms.category.query.CategoryQueryService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
+import net.cyklotron.cms.documents.DocumentNodeResourceImpl;
 import net.cyklotron.cms.integration.IntegrationService;
 import net.cyklotron.cms.modules.actions.category.BaseCategorizationAction;
 import net.cyklotron.cms.structure.StructureService;
@@ -82,46 +84,19 @@ public class CategorizeDocuments
                     RelationModification diff = new RelationModification();
                     Element action = (Element)actions.item(i);
 
-                    String[] from_ids = null;
-                    String from_query = null;
-                    long from_query_id = 0;
-                    NodeList fromCategories = ((Element)action.getElementsByTagName("from").item(0))
-                        .getElementsByTagName("category");
-                    NodeList fromQuery = ((Element)action.getElementsByTagName("from").item(0))
-                        .getElementsByTagName("query");
-                    NodeList fromQueryId = ((Element)action.getElementsByTagName("from").item(0))
-                                    .getElementsByTagName("query_id");
-                    if(fromCategories.getLength() > 0)
+                    if(action.getElementsByTagName("select").getLength() > 0)
                     {
-                        from_ids = new String[fromCategories.getLength()];
-                        for(int f = 0; f < fromCategories.getLength(); f++)
-                        {
-                            Element element = (Element)fromCategories.item(f);
-                            from_ids[f] = element.getTextContent();
-                        }
+                        documents = getDocuments(((Element)action
+                            .getElementsByTagName("select").item(0)), coralSession);
                     }
-                    else if(fromQuery.getLength() > 0)
+                    if(action.getElementsByTagName("exclude").getLength() > 0)
                     {
-                        from_query = ((Element)fromQuery.item(0)).getTextContent();
+                        List<Resource> exclude = getDocuments(((Element)action
+                            .getElementsByTagName("exclude").item(0)), coralSession);
+                        documents = new LinkedList<Resource>(documents);
+                        documents.removeAll(exclude);
                     }
-                    else if(fromQueryId.getLength() > 0)
-                    {
-                        from_query_id = Long.parseLong(((Element)fromQueryId.item(0)).getTextContent());
-                    }
-                    if(from_ids != null && from_ids.length > 0)
-                    {
-                        documents = getDocumentsByCategoryIds(from_ids, coralSession);
-                    }
-                    else if(from_query != null)
-                    {
-                        documents = getDocumentsByCategoryQuery(from_query, coralSession);
-                    }
-                    else if(from_query_id > 0) {
-                        CategoryQueryResource categoryQueryResource = CategoryQueryResourceImpl
-                                        .getCategoryQueryResource(coralSession, from_query_id);
-                        documents = getDocumentsByCategoryQuery(categoryQueryResource.getQuery(), coralSession);
-                    }
-                    
+
                     NodeList add = action.getElementsByTagName("empty");
                     if(action.getElementsByTagName("add").getLength() > 0)
                     {
@@ -138,27 +113,30 @@ public class CategorizeDocuments
                     {
                         if(doc instanceof DocumentNodeResource)
                         {
-                            for(int t = 0; t < add.getLength(); t++)
+                            synchronized(doc)
                             {
-                                Element element = (Element)add.item(t);
-                                long catId = Long.parseLong(element.getTextContent());
-                                Resource category = coralSession.getStore().getResource(catId);
-                                if(category instanceof CategoryResource)
+                                for(int t = 0; t < add.getLength(); t++)
                                 {
-                                    diff.add((CategoryResource)category, doc);
+                                    Element element = (Element)add.item(t);
+                                    long catId = Long.parseLong(element.getTextContent());
+                                    Resource category = coralSession.getStore().getResource(catId);
+                                    if(category instanceof CategoryResource)
+                                    {
+                                        diff.add((CategoryResource)category, doc);
+                                    }
                                 }
-                            }
-                            for(int t = 0; t < remove.getLength(); t++)
-                            {
-                                Element element = (Element)remove.item(t);
-                                long catId = Long.parseLong(element.getTextContent());
-                                Resource category = coralSession.getStore().getResource(catId);
-                                if(category instanceof CategoryResource)
+                                for(int t = 0; t < remove.getLength(); t++)
                                 {
-                                    diff.remove((CategoryResource)category, doc);
+                                    Element element = (Element)remove.item(t);
+                                    long catId = Long.parseLong(element.getTextContent());
+                                    Resource category = coralSession.getStore().getResource(catId);
+                                    if(category instanceof CategoryResource)
+                                    {
+                                        diff.remove((CategoryResource)category, doc);
+                                    }
                                 }
+                                coralSession.getRelationManager().updateRelation(refs, diff);
                             }
-                            coralSession.getRelationManager().updateRelation(refs, diff);
                         }
                     }
                     actions_done++;
@@ -177,6 +155,61 @@ public class CategorizeDocuments
         templatingContext.put("actions_done", actions_done);
         templatingContext.put("uploaded", command_xml);
         templatingContext.put("result", "success");
+    }
+
+    private List<Resource> getDocuments(Element action, CoralSession coralSession)
+        throws MalformedRelationQueryException, EntityDoesNotExistException
+    {
+        String[] categories = null;
+        long query = 0;
+        String query_string = null;
+        NodeList nodeDocuments = action.getElementsByTagName("document");
+        NodeList nodeCategories = action.getElementsByTagName("category");
+        NodeList nodeQuery = action.getElementsByTagName("query");
+        NodeList nodeQueryString = action.getElementsByTagName("query_string");
+        List<Resource> documents = new ArrayList<Resource>();
+
+        if(nodeDocuments.getLength() > 0)
+        {
+            for(int f = 0; f < nodeDocuments.getLength(); f++)
+            {
+                Element element = (Element)nodeDocuments.item(f);
+                long docId = Long.parseLong(element.getTextContent());
+                documents.add(DocumentNodeResourceImpl.getDocumentNodeResource(coralSession, docId));
+            }
+        }
+        if(nodeCategories.getLength() > 0)
+        {
+            categories = new String[nodeCategories.getLength()];
+            for(int f = 0; f < nodeCategories.getLength(); f++)
+            {
+                Element element = (Element)nodeCategories.item(f);
+                categories[f] = element.getTextContent();
+            }
+        }
+        else if(nodeQueryString.getLength() > 0)
+        {
+            query_string = ((Element)nodeQueryString.item(0)).getTextContent();
+        }
+        else if(nodeQuery.getLength() > 0)
+        {
+            query = Long.parseLong(((Element)nodeQuery.item(0)).getTextContent());
+        }
+        if(categories != null && categories.length > 0)
+        {
+            documents = getDocumentsByCategoryIds(categories, coralSession);
+        }
+        else if(query_string != null)
+        {
+            documents = getDocumentsByCategoryQuery(query_string, coralSession);
+        }
+        else if(query > 0)
+        {
+            CategoryQueryResource categoryQueryResource = CategoryQueryResourceImpl
+                .getCategoryQueryResource(coralSession, query);
+            documents = getDocumentsByCategoryQuery(categoryQueryResource.getQuery(), coralSession);
+        }
+        return documents;
     }
 
     private List<Resource> getDocumentsByCategoryIds(String[] categoryIds, CoralSession coralSession)
