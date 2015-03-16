@@ -6,6 +6,8 @@
  */
 package net.cyklotron.cms;
 
+import net.cyklotron.cms.category.CategoryService;
+
 import org.jcontainer.dna.Configuration;
 import org.jcontainer.dna.ConfigurationException;
 import org.objectledge.context.Context;
@@ -16,35 +18,37 @@ import org.objectledge.web.mvc.tools.PageTool;
 import org.objectledge.web.mvc.tools.PageToolFactory;
 
 /**
- * @author pablo
- *
- * To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * @author pablo To change the template for this generated type comment go to Window - Preferences -
+ *         Java - Code Style - Code Templates
  */
 public class CmsPageToolFactory extends PageToolFactory
 {
-    public CmsPageToolFactory(Configuration config, LinkToolFactory linkToolFactory, Context context)
+    private final CategoryService categoryService;
+
+    public CmsPageToolFactory(Configuration config, LinkToolFactory linkToolFactory,
+        Context context, CategoryService categoryService)
         throws ConfigurationException
     {
         super(config, linkToolFactory, context);
-        
+        this.categoryService = categoryService;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     public Object getTool()
         throws ProcessingException
     {
-        return new CmsPageTool((CmsLinkTool) linkToolFactory.getTool(), HttpContext.getHttpContext(context), pageToolConfiguration);
+        return new CmsPageTool((CmsLinkTool)linkToolFactory.getTool(),
+            HttpContext.getHttpContext(context), pageToolConfiguration, categoryService, context);
     }
-    
+
     /**
      * {@inheritDoc}
      */
     public void recycleTool(Object tool)
         throws ProcessingException
     {
-        linkToolFactory.recycleTool( ((PageTool) tool).getLinkTool() );
+        linkToolFactory.recycleTool(((PageTool)tool).getLinkTool());
     }
 }
