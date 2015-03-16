@@ -102,8 +102,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
-    <versions.ledge>1.0.20-SNAPSHOT</versions.ledge>
-    <versions.coral>1.0.20-SNAPSHOT</versions.coral>
+    <versions.ledge>1.1.0-SNAPSHOT</versions.ledge>
+    <versions.coral>1.1.0-SNAPSHOT</versions.coral>
     <versions.lucene>4.1.0</versions.lucene>
   </properties>
   <dependencyManagement>
