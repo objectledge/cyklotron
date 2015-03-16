@@ -1,0 +1,17 @@
+# canonical link rules
+
+CREATE RESOURCE 'canonicalLinkRules'
+RESOURCE CLASS 'node'
+PARENT '/cms'
+ATTRIBUTES (
+  description = 'Parent node of documents canonical links.'
+);
+
+CREATE RESOURCE CLASS 'cms.canonical.link_canonical_rule'
+JAVA CLASS 'net.cyklotron.cms.canonical.LinkCanonicalRuleResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
+SUPERCLASSES ( 'node', 'prioritized' )
+ATTRIBUTES (
+REQUIRED resource category,
+REQUIRED string linkPattern
+);
