@@ -25,6 +25,11 @@ public interface FilesService
      * messages.
      */
     public static final String LOGGING_FACILITY = "cms_files";
+    
+    /**
+     * Allowed output image extensions
+     */
+    public static final String[] IMAGE_EXTENSIONS = new String[]{"jpg", "png", "gif"};
 
     /**
      * return the files root node.
@@ -267,7 +272,7 @@ public interface FilesService
      * @throws IOException when both dimensions are negative, file is not an image or an IO error
      *         occurs.
      */
-    public String resizeImage(FileResource file, int w, int h)
+    public String resizeImage(FileResource file, int w, int h, String formatName)
         throws IOException;
 
     /**
@@ -290,6 +295,6 @@ public interface FilesService
      *         occurs.
      */
     public String resizeImage(FileResource file, int w, int h, String rm, boolean crop, int crop_w,
-        int crop_h)
+        int crop_h, String formatName)
         throws IOException;
 }

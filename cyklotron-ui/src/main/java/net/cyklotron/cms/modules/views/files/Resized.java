@@ -2,6 +2,7 @@ package net.cyklotron.cms.modules.views.files;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -53,12 +54,12 @@ public class Resized
                 path = filesService.resizeImage(file, parameters.getInt("w", -1),
                     parameters.getInt("h", -1), parameters.get("rm", "f"),
                     parameters.getBoolean("c", false), parameters.getInt("c_x", -1),
-                    parameters.getInt("c_y", -1));
+                    parameters.getInt("c_y", -1), parameters.get("f_ext", "jpg"));
             }
             else
             {
                 path = filesService.resizeImage(file, parameters.getInt("w", -1),
-                    parameters.getInt("h", -1));
+                    parameters.getInt("h", -1), parameters.get("f_ext", "jpg"));
             }
             long lastModified = fileSystem.lastModified(path);
             long ims = httpContext.getRequest().getDateHeader("If-Modified-Since");
@@ -71,7 +72,12 @@ public class Resized
             {
                 InputStream is = fileSystem.getInputStream(path);
                 long size = fileSystem.length(path);
-                String contentType = "image/png";
+                String contentType = "image/jpg";
+                if(Arrays.asList(filesService.IMAGE_EXTENSIONS).contains(
+                    parameters.get("f_ext", "jpg").toLowerCase()))
+                {
+                    contentType = "image/" + parameters.get("f_ext", "jpg").toLowerCase();
+                }
                 fileDownload.dumpData(is, contentType, lastModified, (int)size, null);
             }
             return "";

@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -796,12 +797,16 @@ public class FilesServiceImpl
     }
 
     @Override
-    public String resizeImage(FileResource file, int w, int h)
+    public String resizeImage(FileResource file, int w, int h, String formatName)
         throws IOException
     {
         if(w == -1 && h == -1)
         {
             throw new IOException("at least one of w and h parameters must be positive");
+        }
+        
+        if(formatName == null || !Arrays.asList(IMAGE_EXTENSIONS).contains(formatName.toLowerCase())) {
+            formatName = IMAGE_EXTENSIONS[0];
         }
 
         InputStream is = getInputStream(file);
@@ -825,7 +830,7 @@ public class FilesServiceImpl
                 w = (int)(srcImage.getWidth() * ((float)h / srcImage.getHeight()));
             }
             String path = cacheDirectory(file) + "/" + file.getIdString()
-                + String.format("_%d_%d.png", w, h);
+                + String.format("_%d_%d."+formatName, w, h);
             if(!fileSystem.exists(path)
                 || fileSystem.lastModified(path) < fileSystem.lastModified(getPath(file)))
             {
@@ -835,7 +840,7 @@ public class FilesServiceImpl
                 try
                 {
                     OutputStream os = fileSystem.getOutputStream(tempPath);
-                    ImageIO.write(targetImage, "png", os);
+                    ImageIO.write(targetImage, formatName, os);
                     os.close();
                     fileSystem.rename(tempPath, path);
                 }
@@ -853,12 +858,16 @@ public class FilesServiceImpl
     }
     
     @Override
-    public String resizeImage(FileResource file, int w, int h, String rm, boolean crop, int crop_x, int crop_y)
+    public String resizeImage(FileResource file, int w, int h, String rm, boolean crop, int crop_x, int crop_y, String formatName)
         throws IOException
     {
         if(w == -1 && h == -1)
         {
             throw new IOException("at least one of w and h parameters must be positive");
+        }
+        
+        if(formatName == null || !Arrays.asList(IMAGE_EXTENSIONS).contains(formatName.toLowerCase())) {
+            formatName = IMAGE_EXTENSIONS[0];
         }
 
         InputStream is = getInputStream(file);
@@ -882,7 +891,7 @@ public class FilesServiceImpl
                 w = (int)(srcImage.getWidth() * ((float)h / srcImage.getHeight()));
             }
             String path = cacheDirectory(file) + "/" + file.getIdString()
-                + String.format("_%d_%d_%s_%b_%d_%d.png", w, h, rm, crop, crop_x, crop_y);
+                + String.format("_%d_%d_%s_%b_%d_%d."+formatName, w, h, rm, crop, crop_x, crop_y);
             if(!fileSystem.exists(path)
                 || fileSystem.lastModified(path) < fileSystem.lastModified(getPath(file)))
             {
@@ -914,7 +923,7 @@ public class FilesServiceImpl
                 try
                 {
                     OutputStream os = fileSystem.getOutputStream(tempPath);
-                    ImageIO.write(targetImage, "png", os);
+                    ImageIO.write(targetImage, formatName, os);
                     os.close();
                     fileSystem.rename(tempPath, path);
                 }

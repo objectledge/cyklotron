@@ -335,7 +335,7 @@ public class FilesTool
      * @throws IOException when both dimensions are negative, file is not an image or an IO error
      *         occurs.
      */
-    public String getResized(Resource resource, int w, int h, String rm, boolean crop, int crop_x, int crop_y)
+    public String getResized(Resource resource, int w, int h, String rm, boolean crop, int crop_x, int crop_y, String file_ext)
         throws FilesException
     {
         if(!(resource instanceof FileResource))
@@ -370,6 +370,10 @@ public class FilesTool
         {
             link = link.add("c_y", crop_y);
         }
+        if(file_ext != null)
+        {
+            link = link.add("f_ext", file_ext);
+        }
         return link.toString();
     }
 
@@ -388,7 +392,7 @@ public class FilesTool
     public String getFixedToWidth(Resource resource, int maxW, int maxH)
         throws FilesException
     {
-        return getResized(resource, maxW, maxH, "w", true, -1, -1);
+        return getResized(resource, maxW, maxH, "w", true, -1, -1, null);
     }
 
     /**
@@ -406,7 +410,7 @@ public class FilesTool
     public String getFixedToHeight(Resource resource, int maxW, int maxH)
         throws FilesException
     {
-        return getResized(resource, maxW, maxH, "h", true, -1, -1);
+        return getResized(resource, maxW, maxH, "h", true, -1, -1, null);
     }
     
     private CoralSession getCoralSession(Context context)
