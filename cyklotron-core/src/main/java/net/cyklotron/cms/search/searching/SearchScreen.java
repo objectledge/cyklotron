@@ -191,6 +191,7 @@ public class SearchScreen
             templatingContext.put("selected_required_queries", requiredQueries);
 
             long[] optionalQueriesIds = parameters.getLongs("optional_queries");
+            List<Set<CategoryQueryResource>> optionalQueriesList = new ArrayList<Set<CategoryQueryResource>>();
             Set<CategoryQueryResource> optionalQueries = new HashSet<CategoryQueryResource>();
             for(int i = 0; i < optionalQueriesIds.length; i++)
             {
@@ -207,11 +208,45 @@ public class SearchScreen
                     break;
                 }
             }
+            if(optionalQueries.size() > 0)
+            {
+                optionalQueriesList.add(optionalQueries);
+            }
+
             templatingContext.put("selected_optional_queries", optionalQueries);
             
-            if(!requiredQueries.isEmpty() || !optionalQueries.isEmpty() )
+            Integer i = 0;
+            String additional_queries_name = "additional_queries_" + (i++).toString();
+            while(parameters.isDefined(additional_queries_name))
             {
-                queryBuilder = new CategoryQueryBuilder(requiredQueries, optionalQueries);
+                long[] additionalQueriesIds = parameters.getLongs(additional_queries_name);
+                Set<CategoryQueryResource> additionalQueries = new HashSet<CategoryQueryResource>();
+                for(int j = 0; j < additionalQueriesIds.length; j++)
+                {
+                    long queryId = additionalQueriesIds[j];
+                    if(queryId != -1)
+                    {
+                        CategoryQueryResource categoryQueryResource = CategoryQueryResourceImpl
+                            .getCategoryQueryResource(coralSession, queryId);
+                        additionalQueries.add(categoryQueryResource);
+                    }
+                    else
+                    {
+                        additionalQueries.clear();
+                        break;
+                    }
+                }
+                if(optionalQueries.size() > 0)
+                {
+                    optionalQueriesList.add(additionalQueries);
+                }
+                templatingContext.put("selected_additional_queries_" + i.toString(), additionalQueries);
+                additional_queries_name = "additional_queries_" + (++i).toString();
+            }
+            
+            if(!requiredQueries.isEmpty() || !optionalQueriesList.isEmpty() )
+            {
+                queryBuilder = new CategoryQueryBuilder(requiredQueries, optionalQueriesList);
                 LongSet docIds = categoryQueryService.forwardQueryIds(coralSession, queryBuilder.getQuery(), null);
                 ((AdvancedSearchMethod)method).setDocIds(docIds);
             }
