@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.FilteredQuery;
 import org.apache.lucene.search.Query;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -40,7 +43,6 @@ import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
 import net.cyklotron.cms.site.SiteResource;
-
 import bak.pcj.set.LongOpenHashSet;
 import bak.pcj.set.LongSet;
 
@@ -210,6 +212,8 @@ public class SearchScreen
             if(!requiredQueries.isEmpty() || !optionalQueries.isEmpty() )
             {
                 queryBuilder = new CategoryQueryBuilder(requiredQueries, optionalQueries);
+                LongSet docIds = categoryQueryService.forwardQueryIds(coralSession, queryBuilder.getQuery(), null);
+                ((AdvancedSearchMethod)method).setDocIds(docIds);
             }
         }
         catch(Exception e)
@@ -256,7 +260,7 @@ public class SearchScreen
             filters.add(filter);
 
             TableModel hitsTableModel = searchHandler.search(coralSession, pools, method, state, parameters, i18nContext);
-            hitsTable = getHitsTable(coralSession, method, state, filters, hitsTableModel, searchHandler, queryBuilder);
+            hitsTable = new TableTool<LuceneSearchHit>(state, filters, hitsTableModel);
         }
         catch(Exception e1)
         {

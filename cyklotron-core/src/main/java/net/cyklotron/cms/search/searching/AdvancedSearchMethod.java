@@ -6,17 +6,22 @@ import java.util.Locale;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.DateTools;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.queries.TermsFilter;
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.FilteredQuery;
+import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermRangeQuery;
-import org.apache.lucene.util.Version;
+import org.apache.lucene.util.BytesRef;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.parameters.Parameters;
 import org.objectledge.templating.TemplatingContext;
 
+import bak.pcj.LongIterator;
+import bak.pcj.set.LongSet;
 import net.cyklotron.cms.search.SearchConstants;
 import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.SearchUtil;
@@ -33,6 +38,8 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
      * Maximum number of clauses in a query. Date range queries use quite a few.
      */
     private static final int MAX_CALUSE_COUNT = 10240;
+    
+    private LongSet docIds;
 
     public AdvancedSearchMethod(
         SearchService searchService,
@@ -40,6 +47,17 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         Locale locale)
     {
         super(searchService, parameters, locale);
+        docIds = null;
+    }
+    
+    public LongSet getDocIds()
+    {
+        return docIds;
+    }
+
+    public void setDocIds(LongSet docIds)
+    {
+        this.docIds = docIds;
     }
 
     @Override
@@ -137,7 +155,9 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         }
         
         BooleanQuery outQuery = new BooleanQuery();
-        outQuery.add(aQuery, BooleanClause.Occur.MUST);
+        if(aQuery.clauses().size() > 0) {
+            outQuery.add(aQuery, BooleanClause.Occur.MUST);
+        }
         
         String qTime = parameters.get("q_time","all");
         BooleanClause clause = getDateRangeClause(SearchConstants.FIELD_MODIFICATION_TIME, qTime);
@@ -157,6 +177,12 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         String startTime = parameters.get("s_time", "");
         String endTime = parameters.get("e_time", "");
         clause = getDateRangeClause(fiendTime, startTime, endTime);
+        if(clause != null)
+        {
+            outQuery.add(clause);
+        }
+
+        clause = getDocIdsFilterQuery(docIds);
         if(clause != null)
         {
             outQuery.add(clause);
@@ -219,6 +245,25 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
             TermRangeQuery dateRange = TermRangeQuery.newStringRange(fieldName, lowerDateToText,
                 upperDateToText, lowerDateToText != null, upperDateToText != null);
             clause = new BooleanClause(dateRange, BooleanClause.Occur.MUST);
+        }
+        return clause;
+    }
+    
+    private BooleanClause getDocIdsFilterQuery(LongSet docIds)
+    {
+        BooleanClause clause = null;
+        if(docIds != null)
+        {
+            BytesRef[] terms = new BytesRef[docIds.size()];
+            LongIterator id = docIds.iterator();
+            int i = 0;
+            while(id.hasNext())
+            {
+                terms[i++] = new BytesRef(((Long)id.next()).toString().getBytes());
+            }
+            TermsFilter tf = new TermsFilter(SearchConstants.FIELD_ID, terms);
+            FilteredQuery filteredQuery = new FilteredQuery(new MatchAllDocsQuery(), tf);
+            clause = new BooleanClause(filteredQuery, BooleanClause.Occur.MUST);
         }
         return clause;
     }
