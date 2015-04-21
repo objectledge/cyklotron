@@ -236,7 +236,7 @@ public class SearchScreen
                         break;
                     }
                 }
-                if(optionalQueries.size() > 0)
+                if(additionalQueries.size() > 0)
                 {
                     optionalQueriesList.add(additionalQueries);
                 }
