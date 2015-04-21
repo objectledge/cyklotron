@@ -129,6 +129,25 @@
 </td>
 </tr>
 
+#if($additional_query_pools_count > 0)
+#foreach($i in [1..$additional_query_pools_count])
+   #set($additional_query_pool = $templatingContext.get("additional_query_pool_$i"))
+   <tr>
+    <td align="left">Query pool for alternative categories selection:</td>
+    <td>
+     <a href="#select_category_query_pool('name id' 'searchConf' "additional_query_pool_${i}_name additional_query_pool_${i}_id")">wybierz</a>
+     <input type="text" name="additional_query_pool_${i}_name" style="width:100%;" value="$!additional_query_pool.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="additional_query_pool_${i}_id" value="$!additional_query_pool.id"/>
+    </td>
+   </tr>
+   <script type="text/javascript">
+   <!--
+     fieldNames.push("additional_query_pool_$i_id");
+   // -->
+   </script>
+#end
+#end
+
 <tr>
 <td>Sort results according to</td>
 <td>

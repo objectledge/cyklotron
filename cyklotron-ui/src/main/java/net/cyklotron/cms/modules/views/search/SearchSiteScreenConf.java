@@ -60,6 +60,16 @@ public class SearchSiteScreenConf extends PoolList
                 templatingContext.put("optional_query_pool",
                     coralSession.getStore().getResource(optionalQueryPool));
             }
+            long additionalQueryPoolsCount = config.getLong("additional_query_pools_count", 0);
+            templatingContext.put("additional_query_pools_count", additionalQueryPoolsCount);
+            for(int i = 1; i <= additionalQueryPoolsCount; i++)
+            {
+                long additionalQueryPool = config.getLong("additional_query_pool_" + i + "_id", -1);
+                if(additionalQueryPool != -1)
+                {
+                    templatingContext.put("additional_query_pool_" + i, coralSession.getStore().getResource(additionalQueryPool));
+                }                
+            }
         }
         catch(EntityDoesNotExistException e)
         {

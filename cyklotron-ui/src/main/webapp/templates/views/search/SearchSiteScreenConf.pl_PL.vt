@@ -13,7 +13,37 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "poolNames", "required_query_pool_id", "optional_query_pool_id" );
+var fieldNames = new Array( "poolNames", "required_query_pool_id", "optional_query_pool_id", "additional_query_pools_count");
+
+function submitConfigAndReload(targetWindowName, sourceFormName, action, targetFormName, fieldNames)
+{
+    var srcForm = document.forms[sourceFormName];
+    var targetForm = document.forms[targetFormName];
+
+    var config = '';
+    for(var i=0; i<fieldNames.length; i++)
+    {
+        var name = fieldNames[i];
+        if(srcForm.elements[name] != null)
+        {
+            var value = Forms.getValue (sourceFormName, name);
+            config += name+'='+value+'\n';
+        }
+        else if(typeof(computeProperty) == 'function')
+        {
+            var prop = computeProperty(sourceFormName, name);
+            if(prop != null)
+            {
+                config += name+'='+prop+'\n';
+            }
+        }
+    }
+    targetForm.elements['config'].value = config;
+    window.opener.name = targetWindowName;
+   	targetForm.action = action + "#";
+    targetForm.submit();
+}
+
 // -->
 </script>
 
@@ -43,6 +73,32 @@ var fieldNames = new Array( "poolNames", "required_query_pool_id", "optional_que
      <input type="hidden" name="optional_query_pool_id" value="$!optional_query_pool.id"/>
     </td>
   </tr>
+  <tr>
+   <td>Wybierz liczbę dodatkowych zestawów po zapytaniach:</td>
+   <td>
+    <select size="1" name="additional_query_pools_count">
+     #set($opts = [["brak", "0"], ["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"]])
+     #options($opts "$additional_query_pools_count")
+    </select>
+   </td>
+  </tr>   
+  #if($additional_query_pools_count > 0)
+  #foreach($i in [1..$additional_query_pools_count])
+   #set($additional_query_pool = $templatingContext.get("additional_query_pool_$i"))
+   <tr>
+    <td align="left">Zestaw zapytań do wyboru kategorii alternatywnych:</td>
+    <td>
+     <input type="text" name="additional_query_pool_${i}_name" style="width:100%;" value="$!additional_query_pool.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="additional_query_pool_${i}_id" value="$!additional_query_pool.id"/>
+    </td>
+   </tr>
+   <script type="text/javascript">
+   <!--
+     fieldNames.push("additional_query_pool_${i}_id");
+   // -->
+   </script>
+  #end
+  #end
   <tr>
 	 <td colspan="2">Wyniki wyszukiwania pełnotekstowego zostaną ograniczone do sumy zbiorów wyników zapytań wybranych w tej tej sekcji.
 	 Jeśli nie zostaną wybrane żadne zapytania, organiczenie nie stosuje się. Jeśli zarówno w tej jaki w poprzedniej sekcji zostaną wskazane zapytania,

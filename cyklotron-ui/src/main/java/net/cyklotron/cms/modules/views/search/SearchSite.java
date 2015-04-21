@@ -181,6 +181,24 @@ public class SearchSite
                     templatingContext.put("optional_queries", queries);
                 }
             }
+            long additionalQueryPoolsCount = screenConfig.getLong("additional_query_pools_count", 0);
+            templatingContext.put("additional_query_pools_count", additionalQueryPoolsCount);
+            for(int i = 1; i <= additionalQueryPoolsCount; i++)
+            {
+                long additionalQueryPool = screenConfig.getLong("additional_query_pool_" + i
+                    + "_id", -1);
+                if(additionalQueryPool != -1)
+                {
+                    CategoryQueryPoolResource queryPool = CategoryQueryPoolResourceImpl
+                        .getCategoryQueryPoolResource(coralSession, additionalQueryPool);
+                    ResourceList queries = queryPool.getQueries();
+                    Collections.sort(queries, new NameComparator(i18nContext.getLocale()));
+                    if(queryPool != null)
+                    {
+                        templatingContext.put("additional_queries_" + i, queries);
+                    }
+                }
+            }
         }
         catch(EntityDoesNotExistException e)
         {

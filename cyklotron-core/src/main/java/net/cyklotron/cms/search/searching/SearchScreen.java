@@ -208,6 +208,7 @@ public class SearchScreen
                     break;
                 }
             }
+            
             if(optionalQueries.size() > 0)
             {
                 optionalQueriesList.add(optionalQueries);
@@ -215,11 +216,10 @@ public class SearchScreen
 
             templatingContext.put("selected_optional_queries", optionalQueries);
             
-            Integer i = 0;
-            String additional_queries_name = "additional_queries_" + (i++).toString();
-            while(parameters.isDefined(additional_queries_name))
+            Integer i = 1;
+            while(parameters.isDefined("additional_queries_" + i))
             {
-                long[] additionalQueriesIds = parameters.getLongs(additional_queries_name);
+                long[] additionalQueriesIds = parameters.getLongs("additional_queries_" + i);
                 Set<CategoryQueryResource> additionalQueries = new HashSet<CategoryQueryResource>();
                 for(int j = 0; j < additionalQueriesIds.length; j++)
                 {
@@ -239,9 +239,9 @@ public class SearchScreen
                 if(additionalQueries.size() > 0)
                 {
                     optionalQueriesList.add(additionalQueries);
+                    templatingContext.put("selected_additional_queries_" + i, additionalQueries);
                 }
-                templatingContext.put("selected_additional_queries_" + i.toString(), additionalQueries);
-                additional_queries_name = "additional_queries_" + (++i).toString();
+                i++;
             }
             
             if(!requiredQueries.isEmpty() || !optionalQueriesList.isEmpty() )

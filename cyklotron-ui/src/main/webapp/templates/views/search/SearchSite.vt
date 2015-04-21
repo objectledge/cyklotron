@@ -169,6 +169,24 @@ Search in
  #end
 </td>
 </tr>
+
+#if($additional_query_pools_count > 0)
+#foreach($i in [1..$additional_query_pools_count])
+<tr>
+<td>Restrict to union of selected category-based query results</td>
+<td>
+ #set($additional_queries = $templatingContext.get("additional_queries_${i}"))
+ #if($additional_queries && $additional_queries.size() > 0) 
+ #foreach($query in $additional_queries)  
+  #set($selected_additional_queries = $templatingContext.get("selected_additional_queries_${i}"))
+  <P><input type="checkbox" name="additional_queries_$i" value="$query.id"#if($selected_additional_queries && $selected_additional_queries.contains($query)) selected#end><label>$!query.name</label></P>
+ #end
+ #end
+</td>
+</tr>
+#end
+#end
+
 <tr>
 <td>Search results will be restricted to union of results of selected queries. If no query is selected, this restriction does not apply. If 
 queries are selected in this and previous section, both restriction apply, ie. union of the results of queries selected here is intersected with results
