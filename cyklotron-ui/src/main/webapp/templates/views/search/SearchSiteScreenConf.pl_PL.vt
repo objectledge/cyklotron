@@ -88,6 +88,7 @@ function submitConfigAndReload(targetWindowName, sourceFormName, action, targetF
    <tr>
     <td align="left">Zestaw zapytań do wyboru kategorii alternatywnych:</td>
     <td>
+     <a href="#select_category_query_pool('name id' 'searchConf' "additional_query_pool_${i}_name additional_query_pool_${i}_id")">wybierz</a>
      <input type="text" name="additional_query_pool_${i}_name" style="width:100%;" value="$!additional_query_pool.name" maxlength="150" readonly= "readonly" />
      <input type="hidden" name="additional_query_pool_${i}_id" value="$!additional_query_pool.id"/>
     </td>
