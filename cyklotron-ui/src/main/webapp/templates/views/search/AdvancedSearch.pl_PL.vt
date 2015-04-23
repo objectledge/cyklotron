@@ -129,6 +129,23 @@
 </td>
 </tr>
 
+#if($additional_query_pools_count > 0)
+#foreach($i in [1..$additional_query_pools_count])
+<tr>
+<td>Ogranicz do sumy wyników wybranych zapytań wg. kategorii </td>
+<td>
+ #set($additional_queries = $templatingContext.get("additional_queries_${i}"))
+ #if($additional_queries && $additional_queries.size() > 0) 
+ #foreach($query in $additional_queries)  
+  #set($selected_additional_queries = $templatingContext.get("selected_additional_queries_${i}"))
+  <P><input type="checkbox" name="additional_queries_$i" value="$query.id"#if($selected_additional_queries && $selected_additional_queries.contains($query)) selected#end><label>$!query.name</label></P>
+ #end
+ #end
+</td>
+</tr>
+#end
+#end
+
 <tr>
 <td>Sortowanie wyników</td>
 <td>

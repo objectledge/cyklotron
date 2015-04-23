@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.FilteredQuery;
 import org.apache.lucene.search.Query;
 import org.jcontainer.dna.Logger;
 import org.objectledge.context.Context;
@@ -40,7 +43,6 @@ import net.cyklotron.cms.search.SearchService;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHandler;
 import net.cyklotron.cms.search.searching.cms.LuceneSearchHit;
 import net.cyklotron.cms.site.SiteResource;
-
 import bak.pcj.set.LongOpenHashSet;
 import bak.pcj.set.LongSet;
 
@@ -189,6 +191,7 @@ public class SearchScreen
             templatingContext.put("selected_required_queries", requiredQueries);
 
             long[] optionalQueriesIds = parameters.getLongs("optional_queries");
+            List<Set<CategoryQueryResource>> optionalQueriesList = new ArrayList<Set<CategoryQueryResource>>();
             Set<CategoryQueryResource> optionalQueries = new HashSet<CategoryQueryResource>();
             for(int i = 0; i < optionalQueriesIds.length; i++)
             {
@@ -205,11 +208,47 @@ public class SearchScreen
                     break;
                 }
             }
+            
+            if(optionalQueries.size() > 0)
+            {
+                optionalQueriesList.add(optionalQueries);
+            }
+
             templatingContext.put("selected_optional_queries", optionalQueries);
             
-            if(!requiredQueries.isEmpty() || !optionalQueries.isEmpty() )
+            Integer i = 1;
+            while(parameters.isDefined("additional_queries_" + i))
             {
-                queryBuilder = new CategoryQueryBuilder(requiredQueries, optionalQueries);
+                long[] additionalQueriesIds = parameters.getLongs("additional_queries_" + i);
+                Set<CategoryQueryResource> additionalQueries = new HashSet<CategoryQueryResource>();
+                for(int j = 0; j < additionalQueriesIds.length; j++)
+                {
+                    long queryId = additionalQueriesIds[j];
+                    if(queryId != -1)
+                    {
+                        CategoryQueryResource categoryQueryResource = CategoryQueryResourceImpl
+                            .getCategoryQueryResource(coralSession, queryId);
+                        additionalQueries.add(categoryQueryResource);
+                    }
+                    else
+                    {
+                        additionalQueries.clear();
+                        break;
+                    }
+                }
+                if(additionalQueries.size() > 0)
+                {
+                    optionalQueriesList.add(additionalQueries);
+                    templatingContext.put("selected_additional_queries_" + i, additionalQueries);
+                }
+                i++;
+            }
+            
+            if(!requiredQueries.isEmpty() || !optionalQueriesList.isEmpty() )
+            {
+                queryBuilder = new CategoryQueryBuilder(requiredQueries, optionalQueriesList);
+                LongSet docIds = categoryQueryService.forwardQueryIds(coralSession, queryBuilder.getQuery(), null);
+                ((AdvancedSearchMethod)method).setDocIds(docIds);
             }
         }
         catch(Exception e)
@@ -256,7 +295,7 @@ public class SearchScreen
             filters.add(filter);
 
             TableModel hitsTableModel = searchHandler.search(coralSession, pools, method, state, parameters, i18nContext);
-            hitsTable = getHitsTable(coralSession, method, state, filters, hitsTableModel, searchHandler, queryBuilder);
+            hitsTable = new TableTool<LuceneSearchHit>(state, filters, hitsTableModel);
         }
         catch(Exception e1)
         {

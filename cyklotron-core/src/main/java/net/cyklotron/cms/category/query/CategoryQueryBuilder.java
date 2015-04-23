@@ -93,7 +93,7 @@ public class CategoryQueryBuilder
             query = optionalPart.getPart() + ";";
         }
     }
-
+    
     /**
      * Builds a category query from a CategoryQueryResource sets.
      * 
@@ -118,6 +118,44 @@ public class CategoryQueryBuilder
         else if(optionalPart.length() > 0)
         {
             query = optionalPart.getPart() + ";";
+        }
+    }
+    
+    public CategoryQueryBuilder(Set<CategoryQueryResource> required,
+        List<Set<CategoryQueryResource>> optional)
+        throws ProcessingException
+    {
+        requiredPart = new QueryPart(required, "*");
+        List<QueryPart> optionalParts = new ArrayList<QueryPart>();
+        for(Set<CategoryQueryResource> opt : optional)
+        {
+            optionalParts.add(new QueryPart(opt, "+"));
+        }
+        
+        if(requiredPart.length() > 0 && optionalParts.size() > 0)
+        {
+            query = requiredPart.getPart();
+            for(QueryPart optQueryPart : optionalParts)
+            {
+                query += " * " + optQueryPart.getPart();
+            }
+            query += ";";
+        }
+        else if(requiredPart.length() > 0)
+        {
+            query = requiredPart.getPart() + ";";
+        }
+        else if(optionalParts.size() > 0)
+        {
+            for(QueryPart optQueryPart : optionalParts)
+            {
+                if(query != "")
+                {
+                    query += " * ";
+                }
+                query += optQueryPart.getPart();
+            }
+            query += ";";
         }
     }
 

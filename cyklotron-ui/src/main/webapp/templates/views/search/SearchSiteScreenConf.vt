@@ -13,8 +13,8 @@
 $pageTool.addScriptLink('script/ComponentConfiguration.js')##
 <script type="text/javascript">
 <!--
-var fieldNames = new Array( "poolNames", "required_query_pool_id", "optional_query_pool_id" );
-// -->
+var fieldNames = new Array( "poolNames", "required_query_pool_id", "optional_query_pool_id", "additional_query_pools_count");
+// -->                                                                                        
 </script>
 
 
@@ -46,6 +46,49 @@ var fieldNames = new Array( "poolNames", "required_query_pool_id", "optional_que
      <a href="#select_category_query_pool('name id' 'searchConf' 'optional_query_pool_name optional_query_pool_id')">choose</a>
     </td>
   </tr>
+  <tr>
+    <td align="left">Query pool for alternative categories selection:</td>
+    <td>
+     <a href="#select_category_query_pool('name id' 'searchConf' 'additional_query_pool_1_name additional_query_pool_1_id')">wybierz</a>
+     <input type="text" name="additional_query_pool_1_name" style="width:100%;" value="$!additional_query_pool_1.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="additional_query_pool_1_id" value="$!additional_query_pool_1.id"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="left">Query pool for alternative categories selection:</td>
+    <td>
+     <a href="#select_category_query_pool('name id' 'searchConf' 'additional_query_pool_2_name additional_query_pool_2_id')">wybierz</a>
+     <input type="text" name="additional_query_pool_2_name" style="width:100%;" value="$!additional_query_pool_2.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="additional_query_pool_2_id" value="$!additional_query_pool_2.id"/>
+    </td>
+  </tr> 
+  <tr>
+   <td>Select additional queries pools count:</td>
+   <td>
+    <select size="1" name="additional_query_pools_count">
+     #set($opts = [["brak", "0"], ["1", "1"], ["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"]])
+     #options($opts "$additional_query_pools_count")
+    </select>
+   </td>
+  </tr>   
+  #if($additional_query_pools_count > 0)
+  #foreach($i in [1..$additional_query_pools_count])
+   #set($additional_query_pool = $templatingContext.get("additional_query_pool_$i"))
+   <tr>
+    <td align="left">Query pool for alternative categories selection:</td>
+    <td>
+     <a href="#select_category_query_pool('name id' 'searchConf' "additional_query_pool_${i}_name additional_query_pool_${i}_id")">wybierz</a>
+     <input type="text" name="additional_query_pool_${i}_name" style="width:100%;" value="$!additional_query_pool.name" maxlength="150" readonly= "readonly" />
+     <input type="hidden" name="additional_query_pool_${i}_id" value="$!additional_query_pool.id"/>
+    </td>
+   </tr>
+   <script type="text/javascript">
+   <!--
+     fieldNames.push("additional_query_pool_${i}_id");
+   // -->
+   </script>
+  #end
+  #end
   <tr>
 	 <td colspan="2">Search results will be restricted to union of results of selected queries. If no query is selected, this restriction does not apply. If 
 		queries are selected in this and previous section, both restriction apply, ie. union of the results of queries selected here is intersected with results

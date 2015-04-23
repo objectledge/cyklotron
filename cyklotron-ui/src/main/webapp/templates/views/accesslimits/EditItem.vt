@@ -41,21 +41,24 @@ $viewEnclosureTool.top()##
                 </td>
                 <td>
                   <div ng:show="editingRule &amp;&amp; $index == editIndex">
-                    <input type="text" name="editRuleDef" ng:model="curRule.ruleDefinition" ng:required="editingRule" cfg:valid-rule/>
+                    <input type="text" name="editRuleName" ng:model="curRule.ruleName" ng:required="editingRule" placeholder="nazwa"/>
+                    #cfg_validation('editRuleName' '-')
+                    <input type="text" name="editRuleDef" ng:model="curRule.ruleDefinition" ng:required="editingRule" placeholder="reguła" cfg:valid-rule/>
                     #cfg_validation('editRuleDef' 'rule')
                   </div>
                   <div ng:show="!editingRule || $index != editIndex">
-                    {{rule.ruleDefinition}}
+                    <div>{{rule.ruleName}}</div>
+                    <div>{{rule.ruleDefinition}}</div>
                   </div>
                 </td>
-                <td width="120">
+                <td width="70">
                   <div ng:show="editingRule &amp;&amp; $index == editIndex">
-                    <a href="" ng:click="updateRule()" ng:disabled="edit.editRuleDef.$invalid"><i class="fa fa-check"></i>Zatwierdź</a>
-                    <a href="" ng:click="revertRule()"><i class="fa fa-times"></i>Anuluj</a>
+                    <div><a href="" ng:click="updateRule()" ng:disabled="edit.editRuleDef.$invalid"><i class="fa fa-check"></i>Zatwierdź</a></div>
+                    <div><a href="" ng:click="revertRule()"><i class="fa fa-times"></i>Anuluj</a></div>
                   </div>
                   <div ng:show="!addingRule &amp;&amp; !editingRule">
-                    <a href="" ng:click="editRule(rule, $index)"><i class="fa fa-pencil"></i>Edytuj</a>
-                    <a href="" ng:click="removeRule($index)"><i class="fa fa-trash"></i>Usuń</a>
+                    <div><a href="" ng:click="editRule(rule, $index)"><i class="fa fa-pencil"></i>Edytuj</a></div>
+                    <div><a href="" ng:click="removeRule($index)"><i class="fa fa-trash"></i>Usuń</a></div>
                   </div>
                 </td>
               </tr>
@@ -67,20 +70,22 @@ $viewEnclosureTool.top()##
               </td>
               <td>
                 <div ng:show="addingRule">
-                  <input type="text" name="newRuleDef" ng:model="newRule.ruleDefinition" ng:required="addingRule" cfg:valid-rule/>
+                  <input type="text" name="newRuleName" ng:model="newRule.ruleName" ng:required="addingRule" placeholder="nazwa"/>
+                  #cfg_validation('newRuleName' '-')
+                  <input type="text" name="newRuleDef" ng:model="newRule.ruleDefinition" ng:required="addingRule" placeholder="reguła" cfg:valid-rule/>
                   #cfg_validation('newRuleDef' 'rule')
                 </div>
                 <div ng:show="!addingRule">
                   &nbsp;
                 </div>
               </td>
-              <td width="120">
+              <td width="70">
                 <div ng:show="!addingRule &amp;&amp; !editingRule">
                   <a href="" ng:click="addRule()"><i class="fa fa-plus"></i>Dodaj</a>
                 </div>
                 <div ng:show="addingRule">
-                  <a href="" ng:click="confirmAddRule()" ng:disabled="edit.newRuleDef.$invalid"><i class="fa fa-check"></i>Zatwierdź</a>
-                  <a href="" ng:click="cancelAddRule()"><i class="fa fa-times"></i>Anuluj</a>
+                  <div><a href="" ng:click="confirmAddRule()" ng:disabled="edit.newRuleDef.$invalid"><i class="fa fa-check"></i>Zatwierdź</a></div>
+                  <div><a href="" ng:click="cancelAddRule()"><i class="fa fa-times"></i>Anuluj</a></div>
                 </div>
               </td>
             </tr>

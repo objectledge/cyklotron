@@ -64,6 +64,9 @@ public class RuleResourceImpl
     /** The AttributeDefinition object for the <code>ruleDefinition</code> attribute. */
 	private static AttributeDefinition<String> ruleDefinitionDef;
 
+    /** The AttributeDefinition object for the <code>ruleName</code> attribute. */
+	private static AttributeDefinition<String> ruleNameDef;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
@@ -112,12 +115,13 @@ public class RuleResourceImpl
      * @param parent the parent resource.
      * @param priority the priority attribute
      * @param ruleDefinition the ruleDefinition attribute
+     * @param ruleName the ruleName attribute
      * @return a new RuleResource instance.
      * @throws ValueRequiredException if one of the required attribues is undefined.
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
     public static RuleResource createRuleResource(CoralSession session, String name, Resource
-        parent, int priority, String ruleDefinition)
+        parent, int priority, String ruleDefinition, String ruleName)
         throws ValueRequiredException, InvalidResourceNameException
     {
         try
@@ -126,6 +130,7 @@ public class RuleResourceImpl
 			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
             attrs.put(rc.getAttribute("priority"), Integer.valueOf(priority));
             attrs.put(rc.getAttribute("ruleDefinition"), ruleDefinition);
+            attrs.put(rc.getAttribute("ruleName"), ruleName);
             Resource res = session.getStore().createResource(name, parent, rc, attrs);
             if(!(res instanceof RuleResource))
             {
@@ -202,6 +207,44 @@ public class RuleResourceImpl
             else
             {
                 throw new ValueRequiredException("attribute ruleDefinition "+
+                                                 "is declared as REQUIRED");
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+    
+    /**
+     * Returns the value of the <code>ruleName</code> attribute.
+     *
+     * @return the value of the <code>ruleName</code> attribute.
+     */
+    public String getRuleName()
+    {
+        return get(ruleNameDef);
+    }
+ 
+    /**
+     * Sets the value of the <code>ruleName</code> attribute.
+     *
+     * @param value the value of the <code>ruleName</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
+     */
+    public void setRuleName(String value)
+        throws ValueRequiredException
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(ruleNameDef, value);
+            }
+            else
+            {
+                throw new ValueRequiredException("attribute ruleName "+
                                                  "is declared as REQUIRED");
             }
         }
