@@ -15,6 +15,7 @@ HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
 DB TABLE 'cms_ratelimit_rule'
 SUPERCLASSES ( 'node' )
 ATTRIBUTES (
+  REQUIRED string ruleName,
   REQUIRED text ruleDefinition,
   REQUIRED integer priority 
 );

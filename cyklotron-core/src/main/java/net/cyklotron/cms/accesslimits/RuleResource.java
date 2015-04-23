@@ -80,6 +80,23 @@ public interface RuleResource
      */
     public void setRuleDefinition(String value)
         throws ValueRequiredException;
+    
+    /**
+     * Returns the value of the <code>ruleName</code> attribute.
+     *
+     * @return the value of the the <code>ruleName</code> attribute.
+     */
+    public String getRuleName();
+ 
+    /**
+     * Sets the value of the <code>ruleName</code> attribute.
+     *
+     * @param value the value of the <code>ruleName</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
+     */
+    public void setRuleName(String value)
+        throws ValueRequiredException;
      
     // @custom methods ///////////////////////////////////////////////////////
     

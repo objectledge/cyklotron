@@ -96,7 +96,7 @@ public class Rules
             for(RuleDao rule : item.getRules())
             {
                 RuleResourceImpl.createRuleResource(coralSession, Integer.toString(n),
-                    itemResource, n, rule.getRuleDefinition());
+                    itemResource, n, rule.getRuleDefinition(), rule.getRuleName());
                 n++;
             }
             return Response.created(uriInfo.getRequestUri().resolve(itemResource.getIdString()))
@@ -176,7 +176,7 @@ public class Rules
                         {
                             RuleResourceImpl.createRuleResource(coralSession,
                                 Integer.toString(n++), res, rule.getPriority(),
-                                rule.getRuleDefinition());
+                                rule.getRuleDefinition(), rule.getRuleName());
                         }
                         else
                         {
@@ -453,6 +453,8 @@ public class Rules
         private Long id;
 
         private int priority;
+        
+        private String ruleName;
 
         private String ruleDefinition;
 
@@ -464,6 +466,7 @@ public class Rules
         {
             this.id = resource.getId();
             this.priority = resource.getPriority();
+            this.ruleName = resource.getRuleName();
             this.ruleDefinition = resource.getRuleDefinition();
         }
 
@@ -475,6 +478,16 @@ public class Rules
         public void setId(Long id)
         {
             this.id = id;
+        }
+        
+        public String getRuleName()
+        {
+            return ruleName;
+        }
+        
+        public void setRuleName(String ruleName)
+        {
+            this.ruleName = ruleName;
         }
 
         public int getPriority()
