@@ -176,21 +176,19 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         String fiendTime = parameters.get("f_time", "");
         String startTime = parameters.get("s_time", "");
         String endTime = parameters.get("e_time", "");
-        clause = getDateRangeClause(fiendTime, startTime, endTime);
-        if(clause != null)
-        {
-            outQuery.add(clause);
-        }
-        
-        String ongingTime = parameters.get("o_time", "");
-        if(ongingTime != "")
-        {
-            clause = getDateRangeClause(SearchConstants.FIELD_EVENT_START, "", ongingTime);
+        if(SearchConstants.FIELD_ABSTRACT_EVENT_ONGOING.equals(fiendTime)) {
+            clause = getDateRangeClause(SearchConstants.FIELD_EVENT_START, "", startTime);
             if(clause != null)
             {
                 outQuery.add(clause);
             }
-            clause = getDateRangeClause(SearchConstants.FIELD_EVENT_END, ongingTime, "");
+            clause = getDateRangeClause(SearchConstants.FIELD_EVENT_END, endTime, "");
+            if(clause != null)
+            {
+                outQuery.add(clause);
+            }
+        } else {
+            clause = getDateRangeClause(fiendTime, startTime, endTime);
             if(clause != null)
             {
                 outQuery.add(clause);
