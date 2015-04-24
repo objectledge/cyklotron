@@ -181,6 +181,21 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         {
             outQuery.add(clause);
         }
+        
+        String ongingTime = parameters.get("o_time", "");
+        if(ongingTime != "")
+        {
+            clause = getDateRangeClause(SearchConstants.FIELD_EVENT_START, "", ongingTime);
+            if(clause != null)
+            {
+                outQuery.add(clause);
+            }
+            clause = getDateRangeClause(SearchConstants.FIELD_EVENT_END, ongingTime, "");
+            if(clause != null)
+            {
+                outQuery.add(clause);
+            }
+        }
 
         clause = getDocIdsFilterQuery(docIds);
         if(clause != null)
