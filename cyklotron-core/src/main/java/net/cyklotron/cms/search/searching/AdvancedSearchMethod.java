@@ -254,13 +254,14 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         BooleanClause clause = null;
         if(docIds != null)
         {
-            BytesRef[] terms = new BytesRef[docIds.size()];
+            BytesRef[] terms = new BytesRef[docIds.size() + 1];
             LongIterator id = docIds.iterator();
             int i = 0;
             while(id.hasNext())
             {
                 terms[i++] = new BytesRef(((Long)id.next()).toString().getBytes());
             }
+            terms[i++] = new BytesRef("-1".toString().getBytes());
             TermsFilter tf = new TermsFilter(SearchConstants.FIELD_ID, terms);
             FilteredQuery filteredQuery = new FilteredQuery(new MatchAllDocsQuery(), tf);
             clause = new BooleanClause(filteredQuery, BooleanClause.Occur.MUST);
