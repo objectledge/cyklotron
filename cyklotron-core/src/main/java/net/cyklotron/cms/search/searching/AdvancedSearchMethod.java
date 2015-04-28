@@ -176,10 +176,23 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         String fiendTime = parameters.get("f_time", "");
         String startTime = parameters.get("s_time", "");
         String endTime = parameters.get("e_time", "");
-        clause = getDateRangeClause(fiendTime, startTime, endTime);
-        if(clause != null)
-        {
-            outQuery.add(clause);
+        if(SearchConstants.FIELD_ABSTRACT_EVENT_ONGOING.equals(fiendTime)) {
+            clause = getDateRangeClause(SearchConstants.FIELD_EVENT_START, "", startTime);
+            if(clause != null)
+            {
+                outQuery.add(clause);
+            }
+            clause = getDateRangeClause(SearchConstants.FIELD_EVENT_END, endTime, "");
+            if(clause != null)
+            {
+                outQuery.add(clause);
+            }
+        } else {
+            clause = getDateRangeClause(fiendTime, startTime, endTime);
+            if(clause != null)
+            {
+                outQuery.add(clause);
+            }
         }
 
         clause = getDocIdsFilterQuery(docIds);
@@ -254,13 +267,14 @@ public class AdvancedSearchMethod extends PageableResultsSearchMethod
         BooleanClause clause = null;
         if(docIds != null)
         {
-            BytesRef[] terms = new BytesRef[docIds.size()];
+            BytesRef[] terms = new BytesRef[docIds.size() + 1];
             LongIterator id = docIds.iterator();
             int i = 0;
             while(id.hasNext())
             {
                 terms[i++] = new BytesRef(((Long)id.next()).toString().getBytes());
             }
+            terms[i++] = new BytesRef("-1".toString().getBytes());
             TermsFilter tf = new TermsFilter(SearchConstants.FIELD_ID, terms);
             FilteredQuery filteredQuery = new FilteredQuery(new MatchAllDocsQuery(), tf);
             clause = new BooleanClause(filteredQuery, BooleanClause.Occur.MUST);

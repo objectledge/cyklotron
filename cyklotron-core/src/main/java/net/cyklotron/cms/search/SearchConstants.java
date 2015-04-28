@@ -28,6 +28,8 @@ public interface SearchConstants
     public static String FIELD_EVENT_START = "eventStart";
     /** event_end_time - IS, technical */
     public static String FIELD_EVENT_END = "eventEnd";
+    /** abstract field event ongoing between dates */
+    public static String FIELD_ABSTRACT_EVENT_ONGOING = "eventOngoing";
     /** path - I, technical */
     public static String FIELD_PATH = "path";
     /** site_name - IS, technical */

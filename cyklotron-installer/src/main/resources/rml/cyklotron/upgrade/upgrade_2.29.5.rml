@@ -1,0 +1,3 @@
+# BAZYNGO-1909
+ALTER RESOURCE CLASS 'cms.accesslimits.rule'
+ADD ATTRIBUTE REQUIRED string ruleName VALUE '...';
