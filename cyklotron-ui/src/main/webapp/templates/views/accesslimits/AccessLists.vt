@@ -1,0 +1,23 @@
+$viewEnclosureTool.top()##
+#set($strings = $i18n.usePrefix("cms.accesslimits.lists"))
+#genericScreenHeader($strings.header)
+<table width="100%" class="genericItemList" cellspacing="0">
+  <tr>
+    <th width="90%">Nazwa</th>
+    <th width="10%">Operacje</th>
+  </tr>
+  <tr ng:repeat="list in lists track by list.name">
+    <td>{{list.name}}</td>
+    <td class="operations">
+      <a href="" ng:click="edit(list)"><i class="fa fa-pencil"></i>Edytuj</a>
+      <a href="" ng:click="askRemove(list)"><i class="fa fa-trash"></i>Usuń</a>
+    </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td class="operations">
+      <a href="" ng:click="add()"><i class="fa fa-plus"></i>Dodaj</a>
+    </td>
+  </td>
+</table>
+#genericScreenTrailer()
