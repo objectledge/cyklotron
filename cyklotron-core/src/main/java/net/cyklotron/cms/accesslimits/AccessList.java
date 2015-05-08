@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jcontainer.dna.Logger;
+import org.objectledge.coral.store.Resource;
 import org.objectledge.net.CIDRBlock;
 import org.objectledge.net.IPAddressUtil;
 
@@ -13,26 +14,24 @@ public class AccessList
 {
     private final List<CIDRBlock> blocks;
 
-    public AccessList(AccessListResource resource, Logger log)
+    public AccessList(AccessListResource list, Logger log)
     {
-        final String[] lines = resource.getContents().split("\n");
-        blocks = new ArrayList<>(lines.length);
-        int i = 1;
-        for(String line : lines)
+        Resource[] children = list.getChildren();
+        blocks = new ArrayList<>(children.length);
+        for(Resource child : children)
         {
-            try
+            if(child instanceof AccessListItemResource)
             {
-                blocks.add(parseLine(line));
-            }
-            catch(UnknownHostException | IllegalArgumentException e)
-            {
-                log.error(
-                    "invalid address " + line + " at line " + i + " in list " + resource.getPath(),
-                    e);
-            }
-            finally
-            {
-                i++;
+                AccessListItemResource item = (AccessListItemResource)child;
+                try
+                {
+                    blocks.add(parse(item.getAddressBlock()));
+                }
+                catch(UnknownHostException | IllegalArgumentException e)
+                {
+                    log.error(
+                        "invalid address " + item.getAddressBlock() + " in " + item.toString(), e);
+                }
             }
         }
     }
@@ -49,33 +48,10 @@ public class AccessList
         return false;
     }
 
-    public static List<ValidationError> validate(String contents)
-    {
-        List<ValidationError> errors = new ArrayList<>();
-        final String[] lines = contents.split("\n");
-        int i = 1;
-        for(String line : lines)
-        {
-            try
-            {
-                parseLine(line);
-            }
-            catch(UnknownHostException | IllegalArgumentException e)
-            {
-                errors.add(new ValidationError(i, e.getMessage()));
-            }
-            finally
-            {
-                i++;
-            }
-        }
-        return errors;
-    }
-
-    private static CIDRBlock parseLine(String line)
+    private static CIDRBlock parse(String spec)
         throws UnknownHostException
     {
-        String[] tok = line.split("/");
+        String[] tok = spec.split("/");
         InetAddress addr = IPAddressUtil.byAddress(tok[0]);
         int length;
         if(tok.length == 2)
@@ -87,28 +63,5 @@ public class AccessList
             length = addr.getAddress().length * 8;
         }
         return new CIDRBlock(addr, length);
-    }
-
-    public static class ValidationError
-    {
-        private final int line;
-
-        private final String message;
-
-        public ValidationError(int line, String message)
-        {
-            this.line = line;
-            this.message = message;
-        }
-
-        public int getLine()
-        {
-            return line;
-        }
-
-        public String getMessage()
-        {
-            return message;
-        }
     }
 }

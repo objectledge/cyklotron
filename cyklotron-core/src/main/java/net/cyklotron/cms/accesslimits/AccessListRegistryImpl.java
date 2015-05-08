@@ -1,9 +1,7 @@
 package net.cyklotron.cms.accesslimits;
 
 import java.net.InetAddress;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.jcontainer.dna.Logger;
@@ -47,12 +45,24 @@ public class AccessListRegistryImpl
                     oldNames.put(listResource, listResource.getName());
                 }
             }
-            ResourceClass<?> actionRc = coralSession.getSchema().getResourceClass(
+            ResourceClass<?> listRc = coralSession.getSchema().getResourceClass(
                 AccessListResource.CLASS_NAME);
-            coralSession.getEvent().addResourceChangeListener(this, actionRc);
-            coralSession.getEvent().addResourceCreationListener(this, actionRc);
-            coralSession.getEvent().addResourceDeletionListener(this, actionRc);
+            coralSession.getEvent().addResourceChangeListener(this, listRc);
+            coralSession.getEvent().addResourceCreationListener(this, listRc);
+            coralSession.getEvent().addResourceDeletionListener(this, listRc);
+            ResourceClass<?> listItemRc = coralSession.getSchema().getResourceClass(
+                AccessListItemResource.CLASS_NAME);
+            coralSession.getEvent().addResourceChangeListener(this, listItemRc);
+            coralSession.getEvent().addResourceCreationListener(this, listItemRc);
+            coralSession.getEvent().addResourceDeletionListener(this, listItemRc);
         }
+    }
+
+    private AccessListResource rebuildList(Resource resource)
+    {
+        AccessListResource listResource = (AccessListResource)resource;
+        lists.put(listResource.getName(), new AccessList(listResource, log));
+        return listResource;
     }
 
     @Override
@@ -60,9 +70,12 @@ public class AccessListRegistryImpl
     {
         if(resource instanceof AccessListResource)
         {
-            AccessListResource listResource = (AccessListResource)resource;
-            lists.put(listResource.getName(), new AccessList(listResource, log));
+            AccessListResource listResource = rebuildList(resource);
             oldNames.put(listResource, listResource.getName());
+        }
+        if(resource instanceof AccessListItemResource)
+        {
+            rebuildList(resource.getParent());
         }
     }
 
@@ -71,8 +84,7 @@ public class AccessListRegistryImpl
     {
         if(resource instanceof AccessListResource)
         {
-            AccessListResource listResource = (AccessListResource)resource;
-            lists.put(listResource.getName(), new AccessList(listResource, log));
+            AccessListResource listResource = rebuildList(resource);
             final String oldName = oldNames.get(resource);
             if(!oldName.equals(resource.getName()))
             {
@@ -80,14 +92,25 @@ public class AccessListRegistryImpl
                 oldNames.put(listResource, listResource.getName());
             }
         }
+        if(resource instanceof AccessListItemResource)
+        {
+            rebuildList(resource.getParent());
+        }
     }
 
     @Override
     public void resourceDeleted(Resource resource)
         throws Exception
     {
-        lists.remove(resource.getName());
-        oldNames.remove(resource);
+        if(resource instanceof AccessListResource)
+        {
+            lists.remove(resource.getName());
+            oldNames.remove(resource);            
+        }
+        if(resource instanceof AccessListItemResource)
+        {
+            rebuildList(resource.getParent());
+        }
     }
 
     @Override

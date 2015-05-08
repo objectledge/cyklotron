@@ -29,21 +29,41 @@
 package net.cyklotron.cms.accesslimits;
 
 import org.objectledge.coral.store.Resource;
+import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsNodeResource;
 
 /**
- * Defines the accessor methods of <code>cms.accesslimits.list</code> Coral resource class.
+ * Defines the accessor methods of <code>cms.accesslimits.access_list_item</code> Coral resource class.
  *
  * @author Coral Maven plugin
  */
-public interface AccessListResource
+public interface AccessListItemResource
     extends Resource, CmsNodeResource
 {
     // constants /////////////////////////////////////////////////////////////
 
     /** The name of the Coral resource class. */    
-    public static final String CLASS_NAME = "cms.accesslimits.list";
+    public static final String CLASS_NAME = "cms.accesslimits.access_list_item";
+
+    // public interface //////////////////////////////////////////////////////
  
+    /**
+     * Returns the value of the <code>addressBlock</code> attribute.
+     *
+     * @return the value of the the <code>addressBlock</code> attribute.
+     */
+    public String getAddressBlock();
+ 
+    /**
+     * Sets the value of the <code>addressBlock</code> attribute.
+     *
+     * @param value the value of the <code>addressBlock</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
+     */
+    public void setAddressBlock(String value)
+        throws ValueRequiredException;
+     
     // @custom methods ///////////////////////////////////////////////////////
 }

@@ -28,25 +28,29 @@
  
 package net.cyklotron.cms.accesslimits;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.objectledge.coral.BackendException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.schema.AttributeDefinition;
 import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.InvalidResourceNameException;
+import org.objectledge.coral.store.ModificationNotPermitedException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
 
 /**
- * An implementation of <code>cms.accesslimits.list</code> Coral resource class.
+ * An implementation of <code>cms.accesslimits.access_list_item</code> Coral resource class.
  *
  * @author Coral Maven plugin
  */
-public class AccessListResourceImpl
+public class AccessListItemResourceImpl
     extends CmsNodeResourceImpl
-    implements AccessListResource
+    implements AccessListItemResource
 {
     // class variables /////////////////////////////////////////////////////////
 
@@ -54,24 +58,27 @@ public class AccessListResourceImpl
 	@SuppressWarnings("unused")
     private static boolean definitionsInitialized;
 	
+    /** The AttributeDefinition object for the <code>addressBlock</code> attribute. */
+	private static AttributeDefinition<String> addressBlockDef;
+
     // initialization /////////////////////////////////////////////////////////
 
     /**
-     * Creates a blank <code>cms.accesslimits.list</code> resource wrapper.
+     * Creates a blank <code>cms.accesslimits.access_list_item</code> resource wrapper.
      *
      * <p>This constructor should be used by the handler class only. Use 
      * <code>load()</code> and <code>create()</code> methods to create
      * instances of the wrapper in your application code.</p>
      *
      */
-    public AccessListResourceImpl()
+    public AccessListItemResourceImpl()
     {
     }
 
     // static methods ////////////////////////////////////////////////////////
 
     /**
-     * Retrieves a <code>cms.accesslimits.list</code> resource instance from the store.
+     * Retrieves a <code>cms.accesslimits.access_list_item</code> resource instance from the store.
      *
      * <p>This is a simple wrapper of StoreService.getResource() method plus
      * the typecast.</p>
@@ -81,53 +88,92 @@ public class AccessListResourceImpl
      * @return a resource instance.
      * @throws EntityDoesNotExistException if the resource with the given id does not exist.
      */
-    public static AccessListResource getAccessListResource(CoralSession session, long id)
+    public static AccessListItemResource getAccessListItemResource(CoralSession session, long id)
         throws EntityDoesNotExistException
     {
         Resource res = session.getStore().getResource(id);
-        if(!(res instanceof AccessListResource))
+        if(!(res instanceof AccessListItemResource))
         {
             throw new IllegalArgumentException("resource #"+id+" is "+
                                                res.getResourceClass().getName()+
-                                               " not cms.accesslimits.list");
+                                               " not cms.accesslimits.access_list_item");
         }
-        return (AccessListResource)res;
+        return (AccessListItemResource)res;
     }
 
     /**
-     * Creates a new <code>cms.accesslimits.list</code> resource instance.
+     * Creates a new <code>cms.accesslimits.access_list_item</code> resource instance.
      *
      * @param session the CoralSession
      * @param name the name of the new resource
      * @param parent the parent resource.
-     * @return a new AccessListResource instance.
+     * @param addressBlock the addressBlock attribute
+     * @return a new AccessListItemResource instance.
+     * @throws ValueRequiredException if one of the required attribues is undefined.
      * @throws InvalidResourceNameException if the name argument contains illegal characters.
      */
-    public static AccessListResource createAccessListResource(CoralSession session, String name,
-        Resource parent)
-        throws InvalidResourceNameException
+    public static AccessListItemResource createAccessListItemResource(CoralSession session,
+        String name, Resource parent, String addressBlock)
+        throws ValueRequiredException, InvalidResourceNameException
     {
         try
         {
-            ResourceClass<AccessListResource> rc = session.getSchema().getResourceClass("cms.accesslimits.list", AccessListResource.class);
-		    Resource res = session.getStore().createResource(name, parent, rc,
-                java.util.Collections.<AttributeDefinition<?>, Object> emptyMap());			
-            if(!(res instanceof AccessListResource))
+            ResourceClass<AccessListItemResource> rc = session.getSchema().getResourceClass("cms.accesslimits.access_list_item", AccessListItemResource.class);
+			Map<AttributeDefinition<?>, Object> attrs = new HashMap<AttributeDefinition<?>, Object>();
+            attrs.put(rc.getAttribute("addressBlock"), addressBlock);
+            Resource res = session.getStore().createResource(name, parent, rc, attrs);
+            if(!(res instanceof AccessListItemResource))
             {
                 throw new BackendException("incosistent schema: created object is "+
                                            res.getClass().getName());
             }
-            return (AccessListResource)res;
+            return (AccessListItemResource)res;
         }
         catch(EntityDoesNotExistException e)
         {
             throw new BackendException("incompatible schema change", e);
         }
-        catch(ValueRequiredException e)
-        {
-            throw new BackendException("incompatible schema change", e);
-        }
+    }
+
+    // public interface //////////////////////////////////////////////////////
+ 
+    /**
+     * Returns the value of the <code>addressBlock</code> attribute.
+     *
+     * @return the value of the <code>addressBlock</code> attribute.
+     */
+    public String getAddressBlock()
+    {
+        return get(addressBlockDef);
     }
  
+    /**
+     * Sets the value of the <code>addressBlock</code> attribute.
+     *
+     * @param value the value of the <code>addressBlock</code> attribute.
+     * @throws ValueRequiredException if you attempt to set a <code>null</code> 
+     *         value.
+     */
+    public void setAddressBlock(String value)
+        throws ValueRequiredException
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(addressBlockDef, value);
+            }
+            else
+            {
+                throw new ValueRequiredException("attribute addressBlock "+
+                                                 "is declared as REQUIRED");
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+     
     // @custom methods ///////////////////////////////////////////////////////
 }
