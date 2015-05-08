@@ -37,7 +37,7 @@ public class AccessList
         }
     }
 
-    public boolean matches(InetAddress addr)
+    public boolean contains(InetAddress addr)
     {
         for(CIDRBlock block : blocks)
         {

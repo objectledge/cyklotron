@@ -16,6 +16,7 @@ import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.session.CoralSessionFactory;
 import org.objectledge.coral.store.Resource;
+import org.objectledge.web.ratelimit.impl.AccessListRegistry;
 
 public class AccessListRegistryImpl
     implements ResourceChangeListener, ResourceCreationListener, ResourceDeletionListener,
@@ -90,16 +91,16 @@ public class AccessListRegistryImpl
     }
 
     @Override
-    public Set<String> getMatchingLists(InetAddress address)
+    public boolean contains(String listName, InetAddress address)
     {
-        Set<String> listNames = new HashSet<>();
-        for(Map.Entry<String, AccessList> entries : lists.entrySet())
+        AccessList list = lists.get(listName);
+        if(list != null)
         {
-            if(entries.getValue().matches(address))
-            {
-                listNames.add(entries.getKey());
-            }
+            return list.contains(address);
         }
-        return listNames;
+        else
+        {
+            return false;
+        }
     }
 }
