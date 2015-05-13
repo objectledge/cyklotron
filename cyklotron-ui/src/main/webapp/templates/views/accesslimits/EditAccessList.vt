@@ -6,31 +6,96 @@ $viewEnclosureTool.top()##
 <form name="edit">
   <div class="modal-body">
     <table class="form" cellspacing="0">
-      <tr ng:if="mode == 'add'">
+      <tr>
         <td width="20%"><label>Nazwa</label></td>
         <td>
-          <input type="text" name="name" ng:model="list.name" required pattern="^[a-z]*$"/>
+          <input type="text" name="listName" ng:model="list.name" required pattern="^[A-Za-z-]*$"/>
           <p class="hint">
-            Nazwa listy używana w treści reguł. Musi składać się z małych liter.
+            Nazwa listy używana w treści reguł.
           </p>
-          <div class="error" ng:messages="edit.name.$error">
+          #macro(cfg_validation $ctrl $type)
+          <div class="error" ng:messages="edit.$ctrl#**#.$error">
             <div ng:message="required">Wartość wymagana</div>
             <div ng:message="pattern">Nieprawidłowy format</div>
+            <div ng:message="$type">
+              <div ng:messages="edit.$ctrl#**#.validationStatus">
+                <div ng:message="200">
+                  Nieprawidłowy format
+                  <pre>{{edit.$ctrl#**#.validationError | wrap:72}}</pre>
+                </div>
+                <div ng:message="500">Błąd serwera</div>
+                <div ng:message="0">Brak połączenia z serwerem</div>
+              </div>
+            </div>
           </div>
+          #end
+          #cfg_validation('listName' '-')
+          <input type="text" name="listDescription" ng:model="list.description"/>
+          <p class="hint">
+          	Opis listy.
+          </p>
         </td>
       </tr>
       <tr>
-      	<td width="20%"><label>Treść</label></td>
-      	<td>
-      		<textarea name="contents" ng:model="list.contents" required rows="15"></textarea>
-      		<p class="hint">
-            Bloki adresów IP, po jednym w linii.
-          </p>
-          <div class="error" ng:messages="edit.contents.$error">
-            <div ng:message="required">Wartość wymagana</div>
-            <div ng:message="pattern">Nieprawidłowy format</div>
-          </div>
-      	</td>
+        <td><label>Bloki adresów</label></td>
+        <td>          
+          <table class="form" cellspacing="0" style="border-bottom: none;">
+              <tr ng:repeat="item in list.items track by $index">
+                <td width="14">
+                  <i class="fa fa-reorder"></i>
+                </td>
+                <td>
+                  <div ng:show="editingItem &amp;&amp; $index == editIndex">
+                    <input type="text" name="curDescription" ng:model="curItem.description" placeholder="opis"/>
+                    #cfg_validation('curDescription' '-')
+                    <input type="text" name="curAddressBlock" ng:model="curItem.addressBlock" ng:required="editingItem" placeholder="CIDR" cfg:valid-address-block/>
+                    #cfg_validation('curAddressBlock' 'addressBlock')
+                  </div>
+                  <div ng:show="!editingItem || $index != editIndex">
+                    <div>{{item.description}}</div>
+                    <div>{{item.addressBlock}}</div>
+                  </div>
+                </td>
+                <td width="70">
+                  <div ng:show="editingItem &amp;&amp; $index == editIndex">
+                    <div><a href="" ng:click="updateItem()" ng:disabled="edit.curAddressBlock.$invalid"><i class="fa fa-check"></i>Zatwierdź</a></div>
+                    <div><a href="" ng:click="revertItem()"><i class="fa fa-times"></i>Anuluj</a></div>
+                  </div>
+                  <div ng:show="!addingItem &amp;&amp; !editingItem">
+                    <div><a href="" ng:click="editItem(item, $index)"><i class="fa fa-pencil"></i>Edytuj</a></div>
+                    <div><a href="" ng:click="removeItem($index)"><i class="fa fa-trash"></i>Usuń</a></div>
+                  </div>
+                </td>
+              </tr>
+          </table>
+          <table class="form" cellspacing="0" style="border-top: none;">
+            <tr>
+              <td width="14">
+                <i class="fa fa-plus"></i>
+              </td>
+              <td>
+                <div ng:show="addingItem">
+                  <input type="text" name="newDescription" ng:model="newItem.description" placeholder="opis"/>
+                  #cfg_validation('newDescription' '-')
+                  <input type="text" name="newAddressBlock" ng:model="newItem.addressBlock" ng:required="addingItem" placeholder="CIDR" cfg:valid-address-block/>
+                  #cfg_validation('newAddressBlock' 'addressBlock')
+                </div>
+                <div ng:show="!addingItem">
+                  &nbsp;
+                </div>
+              </td>
+              <td width="70">
+                <div ng:show="!addingItem &amp;&amp; !editingItem">
+                  <a href="" ng:click="addItem()"><i class="fa fa-plus"></i>Dodaj</a>
+                </div>
+                <div ng:show="addingItem">
+                  <div><a href="" ng:click="confirmAddItem()" ng:disabled="edit.newAddressBlock.$invalid"><i class="fa fa-check"></i>Zatwierdź</a></div>
+                  <div><a href="" ng:click="cancelAddItem()"><i class="fa fa-times"></i>Anuluj</a></div>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
       </tr>
     </table>
   </div>

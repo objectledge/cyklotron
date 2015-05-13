@@ -48,7 +48,7 @@ public class AccessList
         return false;
     }
 
-    private static CIDRBlock parse(String spec)
+    public static CIDRBlock parse(String spec)
         throws UnknownHostException
     {
         String[] tok = spec.split("/");

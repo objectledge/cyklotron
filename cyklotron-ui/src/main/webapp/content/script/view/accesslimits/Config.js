@@ -28,20 +28,20 @@ configModule.factory("backend", [ "$window", "$resource",
 				lists : $resource(baseUrl + "/lists", {}, {
 					get : {
 						method : "GET",
-						url : baseUrl + "/lists/:name"
+						url : baseUrl + "/lists/:id"
 					},
 					update : {
 						method : "PUT",
-						url : baseUrl + "/lists/:listName",
+						url : baseUrl + "/lists/:id",
 						params : {
-							listName : "@name"
+							id : "@id"
 						}
 					},
 					remove : {
 						method : "DELETE",
-						url : baseUrl + "/lists/:listName",
+						url : baseUrl + "/lists/:id",
 						params : {
-							listName : "@name"
+							id : "@id"
 						}
 					},
 				}),
@@ -73,6 +73,10 @@ configModule.factory("backend", [ "$window", "$resource",
 					rule : {
 						method : "POST",
 						url : baseUrl + "/rules/validate/rule"
+					},
+					addressBlock : {
+						method : "POST",
+						url : baseUrl + "/lists/validate/addressBlock"
 					}
 				})
 			};
@@ -118,6 +122,7 @@ function customValidator(name, resource) {
 
 customValidator("cfgValidUrlPattern", "urlPattern");
 customValidator("cfgValidRule", "rule");
+customValidator("cfgValidAddressBlock", "addressBlock");
 
 configModule.filter("wrap", function() {
 	return function(input, width) {
@@ -277,12 +282,14 @@ configModule.controller("AccessListsCtrl", [
 					size : "lg",
 					scope : angular.extend($scope, {
 						mode : "add",
-						list : {},
+						list : {
+							items : []
+						},
 						save : function($close) {
 							runRequest($scope, _.bind(backend.lists.save, {},
-									$scope.list), function() {
+									$scope.list), function(resp, headers) {
 								backend.lists.get({
-									name : $scope.list.name
+									id : headers("X-Item-Id")
 								}).$promise.then(function(newList) {
 									lists.push(newList);
 									lists.sort(function(a, b) {
@@ -290,7 +297,6 @@ configModule.controller("AccessListsCtrl", [
 									});
 									$close();
 								}, function(resp) {
-									// TODO handle validation errors
 									$scope.reqError[resp.status] = true;
 								});
 							});
@@ -302,29 +308,30 @@ configModule.controller("AccessListsCtrl", [
 			$scope.edit = function(list) {
 				$scope.reqRunning = false;
 				$scope.reqError = {};
-				var editedList = _.clone(list);
-				$modal.open({
-					templateUrl : "accesslimits.EditList",
-					size : "lg",
-					scope : angular.extend($scope, {
-						mode : "edit",
-						list : editedList,
-						save : function($close) {
-							_.assign(list, editedList);
-							runRequest($scope, _.bind(list.$update, list),
-									function() {
-										$close();
-									}, function(resp) {
-										// TODO handle validation errors
-									});
-						}
-					})
+				backend.lists.get({
+					id : list.id
+				}).$promise.then(function(editedList) {
+					$modal.open({
+						templateUrl : "accesslimits.EditAccessList",
+						size : "lg",
+						scope : angular.extend($scope, {
+							mode : "edit",
+							list : editedList,
+							save : function($close) {
+								_.assign(list, editedList);
+								runRequest($scope, _.bind(list.$update, list),
+										function() {
+									$close();
+								});
+							}
+						})
+					});
 				});
 			};
 
 			$scope.askRemove = function(list) {
 				$modal.open({
-					templateUrl : "accesslimits.RemoveList",
+					templateUrl : "accesslimits.RemoveAccessList",
 					size : "lg",
 					scope : angular.extend($scope, {
 						list : list,
@@ -339,6 +346,44 @@ configModule.controller("AccessListsCtrl", [
 						}
 					})
 				});
+			};
+
+			$scope.editItem = function(rule, index) {
+				$scope.editingItem = true;
+				$scope.addingItem = false;
+				$scope.curItem = _.clone(rule);
+				$scope.editIndex = index;
+			};
+
+			$scope.updateItem = function() {
+				$scope.editingItem = false;
+				$scope.list.items.splice($scope.editIndex, 1, $scope.curItem);
+				delete $scope.curItem;
+				delete $scope.editIndex;
+			};
+
+			$scope.revertItem = function() {
+				$scope.editingItem = false;
+				delete $scope.curItem
+			};
+
+			$scope.addItem = function() {
+				$scope.addingItem = true;
+				$scope.editingItem = false;
+				$scope.newItem = {};
+			};
+
+			$scope.confirmAddItem = function() {
+				$scope.list.items.push($scope.newItem);
+				$scope.addingItem = false;
+			};
+
+			$scope.cancelAddItem = function() {
+				$scope.addingItem = false;
+			};
+
+			$scope.removeItem = function(index) {
+				$scope.list.items.splice(index, 1);
 			};
 		} ]);
 

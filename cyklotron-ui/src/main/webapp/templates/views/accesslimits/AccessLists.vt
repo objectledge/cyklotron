@@ -6,7 +6,7 @@ $viewEnclosureTool.top()##
     <th width="90%">Nazwa</th>
     <th width="10%">Operacje</th>
   </tr>
-  <tr ng:repeat="list in lists track by list.name">
+  <tr ng:repeat="list in lists track by list.id">
     <td>{{list.name}}</td>
     <td class="operations">
       <a href="" ng:click="edit(list)"><i class="fa fa-pencil"></i>Edytuj</a>
