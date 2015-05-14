@@ -11,6 +11,7 @@ import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.event.ResourceChangeListener;
 import org.objectledge.coral.event.ResourceCreationListener;
 import org.objectledge.coral.event.ResourceDeletionListener;
+import org.objectledge.coral.schema.ResourceClass;
 import org.objectledge.coral.security.Subject;
 import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
@@ -35,10 +36,13 @@ public class ProtectedItem
     {
         this.res = res;
         this.log = log;
-        initialize(res);
+        initialize(res, null);
         coralSession.getEvent().addResourceChangeListener(this, res);
-        coralSession.getEvent().addResourceChangeListener(this,
-            coralSession.getSchema().getResourceClass(RuleResource.CLASS_NAME));
+        final ResourceClass<?> ruleRc = coralSession.getSchema().getResourceClass(
+            RuleResource.CLASS_NAME);
+        coralSession.getEvent().addResourceChangeListener(this, ruleRc);
+        coralSession.getEvent().addResourceDeletionListener(this, ruleRc);
+        coralSession.getEvent().addResourceCreationListener(this, ruleRc);
     }
 
     @Override
@@ -47,7 +51,7 @@ public class ProtectedItem
         if(resource instanceof ProtectedItemResource || resource instanceof RuleResource
             && resource.getParent().equals(res))
         {
-            initialize(res);
+            initialize(res, null);
         }
     }
 
@@ -56,7 +60,7 @@ public class ProtectedItem
     {
         if(resource instanceof RuleResource && resource.getParent().equals(res))
         {
-            initialize(res);
+            initialize(res, null);
         }
     }
 
@@ -66,11 +70,11 @@ public class ProtectedItem
     {
         if(resource instanceof RuleResource && resource.getParent().equals(res))
         {
-            initialize(res);
+            initialize(res, (RuleResource)resource);
         }
     }
 
-    private void initialize(ProtectedItemResource res)
+    private void initialize(ProtectedItemResource res, RuleResource skip)
     {
         try
         {
@@ -79,7 +83,7 @@ public class ProtectedItem
             List<RuleResource> ruleDefs = new ArrayList<>();
             for(Resource child : children)
             {
-                if(child instanceof RuleResource)
+                if(child instanceof RuleResource && child != skip)
                 {
                     ruleDefs.add((RuleResource)child);
                 }
@@ -88,7 +92,8 @@ public class ProtectedItem
             List<Rule> newRules = new ArrayList<>(ruleDefs.size());
             for(RuleResource def : ruleDefs)
             {
-                newRules.add(RuleFactory.getInstance().newRule(def.getId(), def.getRuleDefinition()));
+                newRules.add(RuleFactory.getInstance()
+                    .newRule(def.getId(), def.getRuleDefinition()));
             }
             rules = Collections.unmodifiableList(newRules);
         }

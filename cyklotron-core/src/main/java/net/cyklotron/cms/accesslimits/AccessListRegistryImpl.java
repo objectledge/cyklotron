@@ -41,7 +41,7 @@ public class AccessListRegistryImpl
                 if(child instanceof AccessListResource)
                 {
                     AccessListResource listResource = (AccessListResource)child;
-                    lists.put(listResource.getName(), new AccessList(listResource, log));
+                    lists.put(listResource.getName(), new AccessList(listResource, null, log));
                     oldNames.put(listResource, listResource.getName());
                 }
             }
@@ -58,10 +58,10 @@ public class AccessListRegistryImpl
         }
     }
 
-    private AccessListResource rebuildList(Resource resource)
+    private AccessListResource rebuildList(Resource resource, Resource skip)
     {
         AccessListResource listResource = (AccessListResource)resource;
-        lists.put(listResource.getName(), new AccessList(listResource, log));
+        lists.put(listResource.getName(), new AccessList(listResource, skip, log));
         return listResource;
     }
 
@@ -70,12 +70,12 @@ public class AccessListRegistryImpl
     {
         if(resource instanceof AccessListResource)
         {
-            AccessListResource listResource = rebuildList(resource);
+            AccessListResource listResource = rebuildList(resource, null);
             oldNames.put(listResource, listResource.getName());
         }
         if(resource instanceof AccessListItemResource)
         {
-            rebuildList(resource.getParent());
+            rebuildList(resource.getParent(), null);
         }
     }
 
@@ -84,7 +84,7 @@ public class AccessListRegistryImpl
     {
         if(resource instanceof AccessListResource)
         {
-            AccessListResource listResource = rebuildList(resource);
+            AccessListResource listResource = rebuildList(resource, null);
             final String oldName = oldNames.get(resource);
             if(!oldName.equals(resource.getName()))
             {
@@ -94,7 +94,7 @@ public class AccessListRegistryImpl
         }
         if(resource instanceof AccessListItemResource)
         {
-            rebuildList(resource.getParent());
+            rebuildList(resource.getParent(), null);
         }
     }
 
@@ -109,7 +109,7 @@ public class AccessListRegistryImpl
         }
         if(resource instanceof AccessListItemResource)
         {
-            rebuildList(resource.getParent());
+            rebuildList(resource.getParent(), resource);
         }
     }
 

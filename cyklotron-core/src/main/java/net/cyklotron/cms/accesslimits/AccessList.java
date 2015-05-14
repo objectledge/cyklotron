@@ -14,13 +14,13 @@ public class AccessList
 {
     private final List<CIDRBlock> blocks;
 
-    public AccessList(AccessListResource list, Logger log)
+    public AccessList(AccessListResource list, Resource skip, Logger log)
     {
         Resource[] children = list.getChildren();
         blocks = new ArrayList<>(children.length);
         for(Resource child : children)
         {
-            if(child instanceof AccessListItemResource)
+            if(child instanceof AccessListItemResource && child != skip)
             {
                 AccessListItemResource item = (AccessListItemResource)child;
                 try
