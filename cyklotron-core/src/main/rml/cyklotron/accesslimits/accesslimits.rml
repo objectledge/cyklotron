@@ -29,3 +29,20 @@ ATTRIBUTES (
   string viewOverride,
   string paramsOverride
 );
+
+CREATE RESOURCE CLASS 'cms.accesslimits.list'
+JAVA CLASS 'net.cyklotron.cms.accesslimits.AccessListResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
+DB TABLE 'cms_ratelimit_list'
+SUPERCLASSES ( 'node' );
+
+CREATE RESOURCE CLASS 'cms.accesslimits.access_list_item'
+JAVA CLASS 'net.cyklotron.cms.accesslimits.AccessListItemResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
+DB TABLE 'cms_ratelimit_list_items'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED string addressBlock
+  # coral.Node.creation_time 
+  # node.description 
+);

@@ -11,3 +11,7 @@ PARENT '/cms/accesslimits';
 CREATE RESOURCE 'actions'
 RESOURCE CLASS 'node'
 PARENT '/cms/accesslimits';
+
+CREATE RESOURCE 'lists'
+RESOURCE CLASS 'node'
+PARENT '/cms/accesslimits';

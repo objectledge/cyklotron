@@ -2,11 +2,15 @@
   <prefix name="navigation">
     <item name="header">Access limits</item>
     <item name="actions">Actions</item>
+    <item name="lists">Listy</item>
     <item name="rules">Rules</item>
   </prefix>
   <prefix name="actions">
     <item name="header">Actions</item>
   </prefix>
+  <prefix name="lists">
+    <item name="header">Listy</item>
+  </prefix>  
   <prefix name="rules">
     <item name="header">Rules</item>
   </prefix>

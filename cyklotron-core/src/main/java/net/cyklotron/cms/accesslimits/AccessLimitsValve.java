@@ -7,6 +7,7 @@ import org.objectledge.context.Context;
 import org.objectledge.pipeline.ProcessingException;
 import org.objectledge.pipeline.Valve;
 import org.objectledge.web.HttpContext;
+import org.objectledge.web.ratelimit.impl.AccessListRegistry;
 import org.objectledge.web.ratelimit.impl.RequestInfo;
 import org.objectledge.web.ratelimit.impl.RuleEvaluator;
 
@@ -19,15 +20,19 @@ public class AccessLimitsValve
 
     private final ActionRegistry actionRegistry;
 
+    private final AccessListRegistry accessListRegistry;
+
     private final RuleEvaluator evaluator;
 
     private Logger log;
 
     public AccessLimitsValve(ProtectedItemRegistry protectedItemRegistry,
-        ActionRegistry actionRegistry, HitTableManager hitTableManger, Logger log)
+        ActionRegistry actionRegistry, AccessListRegistry accessListRegistry,
+        HitTableManager hitTableManger, Logger log)
     {
         this.protectedItemRegistry = protectedItemRegistry;
         this.actionRegistry = actionRegistry;
+        this.accessListRegistry = accessListRegistry;
         this.log = log;
         this.evaluator = new RuleEvaluator(hitTableManger.getHitTable(), null);
     }
@@ -42,7 +47,8 @@ public class AccessLimitsValve
         Optional<ProtectedItem> protRes = protectedItemRegistry.getProtectedItem(requestInfo);
         if(protRes.isPresent())
         {
-            String actionName = evaluator.action(requestInfo, protRes.get().getRules());
+            String actionName = evaluator.action(requestInfo, accessListRegistry, protRes.get()
+                .getRules());
             Optional<Action> action = actionRegistry.getAction(actionName);
             if(action.isPresent())
             {

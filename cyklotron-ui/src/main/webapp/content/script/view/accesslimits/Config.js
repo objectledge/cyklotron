@@ -25,6 +25,26 @@ configModule.factory("backend", [ "$window", "$resource",
 						}
 					},
 				}),
+				lists : $resource(baseUrl + "/lists", {}, {
+					get : {
+						method : "GET",
+						url : baseUrl + "/lists/:id"
+					},
+					update : {
+						method : "PUT",
+						url : baseUrl + "/lists/:id",
+						params : {
+							id : "@id"
+						}
+					},
+					remove : {
+						method : "DELETE",
+						url : baseUrl + "/lists/:id",
+						params : {
+							id : "@id"
+						}
+					},
+				}),
 				items : $resource(baseUrl + "/rules/items", {}, {
 					get : {
 						method : "GET",
@@ -53,6 +73,10 @@ configModule.factory("backend", [ "$window", "$resource",
 					rule : {
 						method : "POST",
 						url : baseUrl + "/rules/validate/rule"
+					},
+					addressBlock : {
+						method : "POST",
+						url : baseUrl + "/lists/validate/addressBlock"
 					}
 				})
 			};
@@ -98,13 +122,14 @@ function customValidator(name, resource) {
 
 customValidator("cfgValidUrlPattern", "urlPattern");
 customValidator("cfgValidRule", "rule");
+customValidator("cfgValidAddressBlock", "addressBlock");
 
 configModule.filter("wrap", function() {
 	return function(input, width) {
 		var lines = input.split("\n");
 		var out = "";
 		_.forEach(lines, function(line) {
-			while(line.length > width) {
+			while (line.length > width) {
 				out += line.substring(0, width) + "\n";
 				line = line.substring(width);
 			}
@@ -130,6 +155,15 @@ configModule.config([ "$routeProvider", function($routeProvider) {
 		resolve : {
 			actions : [ "backend", function(backend) {
 				return backend.actions.query().$promise;
+			} ]
+		}
+	});
+	$routeProvider.when("/lists", {
+		templateUrl : "accesslimits.AccessLists",
+		controller : "AccessListsCtrl",
+		resolve : {
+			lists : [ "backend", function(backend) {
+				return backend.lists.query().$promise;
 			} ]
 		}
 	});
@@ -229,6 +263,127 @@ configModule.controller("ActionsCtrl", [
 						}
 					})
 				});
+			};
+		} ]);
+
+configModule.controller("AccessListsCtrl", [
+		"$scope",
+		"$modal",
+		"backend",
+		"lists",
+		function($scope, $modal, backend, lists) {
+			$scope.lists = lists;
+
+			$scope.add = function() {
+				$scope.reqRunning = false;
+				$scope.reqError = {};
+				$modal.open({
+					templateUrl : "accesslimits.EditAccessList",
+					size : "lg",
+					scope : angular.extend($scope, {
+						mode : "add",
+						list : {
+							items : []
+						},
+						save : function($close) {
+							runRequest($scope, _.bind(backend.lists.save, {},
+									$scope.list), function(resp, headers) {
+								backend.lists.get({
+									id : headers("X-Item-Id")
+								}).$promise.then(function(newList) {
+									lists.push(newList);
+									lists.sort(function(a, b) {
+										return a.name.localeCompare(b.name);
+									});
+									$close();
+								}, function(resp) {
+									$scope.reqError[resp.status] = true;
+								});
+							});
+						}
+					})
+				});
+			};
+
+			$scope.edit = function(list) {
+				$scope.reqRunning = false;
+				$scope.reqError = {};
+				backend.lists.get({
+					id : list.id
+				}).$promise.then(function(editedList) {
+					$modal.open({
+						templateUrl : "accesslimits.EditAccessList",
+						size : "lg",
+						scope : angular.extend($scope, {
+							mode : "edit",
+							list : editedList,
+							save : function($close) {
+								_.assign(list, editedList);
+								runRequest($scope, _.bind(list.$update, list),
+										function() {
+									$close();
+								});
+							}
+						})
+					});
+				});
+			};
+
+			$scope.askRemove = function(list) {
+				$modal.open({
+					templateUrl : "accesslimits.RemoveAccessList",
+					size : "lg",
+					scope : angular.extend($scope, {
+						list : list,
+						remove : function(list, $close) {
+							runRequest($scope, _.bind(list.$remove, list),
+									function() {
+										lists.splice(_.findIndex(lists, {
+											name : list.name
+										}), 1);
+										$close();
+									});
+						}
+					})
+				});
+			};
+
+			$scope.editItem = function(rule, index) {
+				$scope.editingItem = true;
+				$scope.addingItem = false;
+				$scope.curItem = _.clone(rule);
+				$scope.editIndex = index;
+			};
+
+			$scope.updateItem = function() {
+				$scope.editingItem = false;
+				$scope.list.items.splice($scope.editIndex, 1, $scope.curItem);
+				delete $scope.curItem;
+				delete $scope.editIndex;
+			};
+
+			$scope.revertItem = function() {
+				$scope.editingItem = false;
+				delete $scope.curItem
+			};
+
+			$scope.addItem = function() {
+				$scope.addingItem = true;
+				$scope.editingItem = false;
+				$scope.newItem = {};
+			};
+
+			$scope.confirmAddItem = function() {
+				$scope.list.items.push($scope.newItem);
+				$scope.addingItem = false;
+			};
+
+			$scope.cancelAddItem = function() {
+				$scope.addingItem = false;
+			};
+
+			$scope.removeItem = function(index) {
+				$scope.list.items.splice(index, 1);
 			};
 		} ]);
 

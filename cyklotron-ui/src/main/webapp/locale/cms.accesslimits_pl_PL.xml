@@ -2,10 +2,14 @@
   <prefix name="navigation">
     <item name="header">Ograniczenia dostępu</item>
     <item name="actions">Akcje</item>
+    <item name="lists">Listy</item>
     <item name="rules">Reguły</item>
   </prefix>
   <prefix name="actions">
     <item name="header">Akcje</item>
+  </prefix>
+  <prefix name="lists">
+    <item name="header">Listy</item>
   </prefix>
   <prefix name="rules">
     <item name="header">Reguły</item>

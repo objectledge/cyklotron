@@ -1,8 +1,5 @@
 package net.cyklotron.cms.modules.rest.accesslimits;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -38,6 +35,11 @@ import net.cyklotron.cms.accesslimits.ProtectedItemResource;
 import net.cyklotron.cms.accesslimits.ProtectedItemResourceImpl;
 import net.cyklotron.cms.accesslimits.RuleResource;
 import net.cyklotron.cms.accesslimits.RuleResourceImpl;
+import net.cyklotron.cms.modules.rest.accesslimits.dto.ErrorDTO;
+import net.cyklotron.cms.modules.rest.accesslimits.dto.ProtectedItemDTO;
+import net.cyklotron.cms.modules.rest.accesslimits.dto.RuleDTO;
+import net.cyklotron.cms.modules.rest.accesslimits.dto.ValidationRequestDTO;
+import net.cyklotron.cms.modules.rest.accesslimits.dto.ValidationResponseDTO;
 
 @Path("/accesslimits/rules")
 @RequireCoralRole("cms.administrator")
@@ -64,13 +66,13 @@ public class Rules
     public Response retrieveProtectedItems()
     {
         Resource[] actions = coralSession.getStore().getResourceByPath(RULES_ROOT + "/*");
-        return Response.ok(ProtectedItemDao.create(actions)).build();
+        return Response.ok(ProtectedItemDTO.create(actions)).build();
     }
 
     @POST
     @Path("/items")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createProctectedItem(ProtectedItemDao item)
+    public Response createProctectedItem(ProtectedItemDTO item)
     {
         try
         {
@@ -78,7 +80,7 @@ public class Rules
         }
         catch(PatternSyntaxException | ParseException e)
         {
-            return Response.status(Status.BAD_REQUEST).entity(new ErrorDao(e)).build();
+            return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(e)).build();
         }
 
         try
@@ -93,7 +95,7 @@ public class Rules
                     name, parent, item.getUrlPattern());
             }
             int n = 1;
-            for(RuleDao rule : item.getRules())
+            for(RuleDTO rule : item.getRules())
             {
                 RuleResourceImpl.createRuleResource(coralSession, Integer.toString(n),
                     itemResource, n, rule.getRuleDefinition(), rule.getRuleName());
@@ -129,7 +131,7 @@ public class Rules
         try
         {
             Resource res = coralSession.getStore().getResource(id);
-            return Response.ok(new ProtectedItemDao((ProtectedItemResource)res)).build();
+            return Response.ok(new ProtectedItemDTO((ProtectedItemResource)res)).build();
         }
         catch(EntityDoesNotExistException | ClassCastException e)
         {
@@ -140,7 +142,7 @@ public class Rules
     @PUT
     @Path("/items/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateProtectedItem(@PathParam("id") long id, ProtectedItemDao item)
+    public Response updateProtectedItem(@PathParam("id") long id, ProtectedItemDTO item)
     {
         try
         {
@@ -148,7 +150,7 @@ public class Rules
         }
         catch(PatternSyntaxException | ParseException e)
         {
-            return Response.status(Status.BAD_REQUEST).entity(new ErrorDao(e)).build();
+            return Response.status(Status.BAD_REQUEST).entity(new ErrorDTO(e)).build();
         }
 
         try
@@ -163,12 +165,12 @@ public class Rules
                 if(item.getRules() != null && item.getRules().size() > 0)
                 {
                     int p = 1;
-                    for(RuleDao rule : item.getRules())
+                    for(RuleDTO rule : item.getRules())
                     {
                         rule.setPriority(p++);
                     }
                     int n = cur.length + 1;
-                    for(RuleDao rule : item.getRules())
+                    for(RuleDTO rule : item.getRules())
                     {
                         RuleResource curRule = rule.getId() != null ? getRuleResource(cur,
                             rule.getId()) : null;
@@ -227,9 +229,9 @@ public class Rules
         return null;
     }
 
-    private RuleDao getRuleDao(List<RuleDao> rules, long id)
+    private RuleDTO getRuleDao(List<RuleDTO> rules, long id)
     {
-        for(RuleDao rule : rules)
+        for(RuleDTO rule : rules)
         {
             if(rule.getId() != null && rule.getId() == id)
             {
@@ -270,16 +272,16 @@ public class Rules
     @Path("/validate/urlPattern")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response validateUrlPattern(ValidationRequest request)
+    public Response validateUrlPattern(ValidationRequestDTO request)
     {
         try
         {
             validateUrlPattern(request.getText());
-            return Response.ok(new ValidationResponse(true)).build();
+            return Response.ok(new ValidationResponseDTO(true)).build();
         }
         catch(PatternSyntaxException e)
         {
-            return Response.ok(new ValidationResponse(false, e.getMessage())).build();
+            return Response.ok(new ValidationResponseDTO(false, e.getMessage())).build();
         }
     }
 
@@ -287,16 +289,16 @@ public class Rules
     @Path("/validate/rule")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response validateRuleDefinition(ValidationRequest request)
+    public Response validateRuleDefinition(ValidationRequestDTO request)
     {
         try
         {
             validateRuleDefinition(request.getText());
-            return Response.ok(new ValidationResponse(true)).build();
+            return Response.ok(new ValidationResponseDTO(true)).build();
         }
         catch(ParseException e)
         {
-            return Response.ok(new ValidationResponse(false, e.getMessage())).build();
+            return Response.ok(new ValidationResponseDTO(false, e.getMessage())).build();
         }
     }
 
@@ -312,237 +314,16 @@ public class Rules
         RuleFactory.getInstance().validateRule(rule);
     }
 
-    private void validateProtectedItem(ProtectedItemDao item)
+    private void validateProtectedItem(ProtectedItemDTO item)
         throws PatternSyntaxException, ParseException
     {
         validateUrlPattern(item.getUrlPattern());
         if(item.getRules() != null)
         {
-            for(RuleDao rule : item.getRules())
+            for(RuleDTO rule : item.getRules())
             {
                 validateRuleDefinition(rule.getRuleDefinition());
             }
-        }
-    }
-
-    public static class ValidationRequest
-    {
-        private String text;
-
-        public String getText()
-        {
-            return text;
-        }
-
-        public void setText(String text)
-        {
-            this.text = text;
-        }
-    }
-
-    public static class ValidationResponse
-    {
-        private boolean valid;
-
-        private String error;
-
-        public ValidationResponse(boolean valid)
-        {
-            this.valid = valid;
-        }
-
-        public ValidationResponse(boolean valid, String error)
-        {
-            this.valid = valid;
-            this.error = error;
-        }
-
-        public boolean isValid()
-        {
-            return valid;
-        }
-
-        public void setValid(boolean valid)
-        {
-            this.valid = valid;
-        }
-
-        public String getError()
-        {
-            return error;
-        }
-
-        public void setError(String error)
-        {
-            this.error = error;
-        }
-    }
-
-    public static class ProtectedItemDao
-    {
-        private long id;
-
-        private String urlPattern;
-
-        private List<RuleDao> rules;
-
-        public ProtectedItemDao()
-        {
-        }
-
-        public ProtectedItemDao(ProtectedItemResource resource)
-        {
-            this.id = resource.getId();
-            this.urlPattern = resource.getUrlPattern();
-            this.rules = RuleDao.create(resource.getChildren());
-        }
-
-        public long getId()
-        {
-            return id;
-        }
-
-        public void setId(long id)
-        {
-            this.id = id;
-        }
-
-        public String getUrlPattern()
-        {
-            return urlPattern;
-        }
-
-        public void setUrlPattern(String urlPattern)
-        {
-            this.urlPattern = urlPattern;
-        }
-
-        public List<RuleDao> getRules()
-        {
-            return rules;
-        }
-
-        public void setRules(List<RuleDao> rules)
-        {
-            this.rules = rules;
-        }
-
-        private static final Comparator<ProtectedItemDao> BY_ID = new Comparator<ProtectedItemDao>()
-            {
-                @Override
-                public int compare(ProtectedItemDao o1, ProtectedItemDao o2)
-                {
-                    return o1.id > o2.id ? 1 : (o1.id < o2.id ? -1 : 0);
-                }
-            };
-
-        public static List<ProtectedItemDao> create(Resource[] items)
-        {
-            List<ProtectedItemDao> result = new ArrayList<ProtectedItemDao>(items.length);
-            for(Resource item : items)
-            {
-                result.add(new ProtectedItemDao((ProtectedItemResource)item));
-            }
-            Collections.sort(result, BY_ID);
-            return result;
-        }
-    }
-
-    public static class RuleDao
-    {
-        private Long id;
-
-        private int priority;
-        
-        private String ruleName;
-
-        private String ruleDefinition;
-
-        public RuleDao()
-        {
-        }
-
-        public RuleDao(RuleResource resource)
-        {
-            this.id = resource.getId();
-            this.priority = resource.getPriority();
-            this.ruleName = resource.getRuleName();
-            this.ruleDefinition = resource.getRuleDefinition();
-        }
-
-        public Long getId()
-        {
-            return id;
-        }
-
-        public void setId(Long id)
-        {
-            this.id = id;
-        }
-        
-        public String getRuleName()
-        {
-            return ruleName;
-        }
-        
-        public void setRuleName(String ruleName)
-        {
-            this.ruleName = ruleName;
-        }
-
-        public int getPriority()
-        {
-            return priority;
-        }
-
-        public void setPriority(int priority)
-        {
-            this.priority = priority;
-        }
-
-        public String getRuleDefinition()
-        {
-            return ruleDefinition;
-        }
-
-        public void setRuleDefinition(String ruleDefinition)
-        {
-            this.ruleDefinition = ruleDefinition;
-        }
-
-        private static final Comparator<RuleDao> BY_PRIORITY = new Comparator<RuleDao>()
-            {
-                @Override
-                public int compare(RuleDao o1, RuleDao o2)
-                {
-                    return o1.priority - o2.priority;
-                }
-            };
-
-        public static List<RuleDao> create(Resource[] rules)
-        {
-            List<RuleDao> result = new ArrayList<RuleDao>(rules.length);
-            for(Resource rule : rules)
-            {
-                result.add(new RuleDao((RuleResource)rule));
-            }
-            Collections.sort(result, BY_PRIORITY);
-            return result;
-        }
-    }
-    
-    public static class ErrorDao 
-    {
-        private final String message;
-        
-        public ErrorDao(Exception e)
-        {
-            this.message = e.getMessage();
-        }
-
-        public String getMessage()
-        {
-            return message;
         }
     }
 }
