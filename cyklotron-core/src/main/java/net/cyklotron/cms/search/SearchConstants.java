@@ -48,4 +48,6 @@ public interface SearchConstants
     public static String FIELD_CATEGORY = "category";
     /** organization name field - synthetic */
     public static String FIELD_ORGANIZATION_NAME = "organization_name";
+    /** sort field sufix */
+    public static String SORT_FIELD_SUFIX = "_collation_key";
 }
