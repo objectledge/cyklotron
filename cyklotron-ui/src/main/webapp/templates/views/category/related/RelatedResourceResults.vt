@@ -1,0 +1,14 @@
+<h1>$node.title</h1>
+<h2>resources related to document $document.title</h2>
+<h3>$header</h3>
+<ul>
+#foreach ($row in $table.rows)
+<li>
+<a href='$link.setNode($row.object)'>$row.object.title</a>
+<p>$!row.object.abstract</p>
+</li>
+#end
+</ul>
+
+#set($tableLink = $link.set('tableId',$table.id).set('x',$cms_data.node.id).set('doc_id',$document.id))
+#tableView_pager($table $tableLink)

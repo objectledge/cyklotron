@@ -108,9 +108,17 @@
           <value>Displays category query results.</value>
         </prefix>
         <prefix name="name">
-          <value>Category query results.</value>
+          <value>Category query results</value>
         </prefix>
       </prefix>
+      <prefix name="related_resource_results">
+        <prefix name="description">
+          <value>Displays resources related with defined document.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Document related resources</value>
+        </prefix>
+      </prefix>      
     </prefix>
   </prefix>
   <prefix name="components">

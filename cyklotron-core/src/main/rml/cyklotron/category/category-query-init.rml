@@ -57,6 +57,14 @@ ATTRIBUTES (
   configurationView = 'category.query.CategoryQueryResultsScreenConf'
 );
 
+CREATE RESOURCE 'related_resource_results'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/category/screens'
+ATTRIBUTES (
+  screenName = 'category.related.RelatedResourceResults',
+  configurationView = 'category.related.RelatedResourceResultsScreenConf'
+);
+
 CREATE RESOURCE 'category_query_persistent_list'
 RESOURCE CLASS 'integration.component'
 PARENT '/cms/applications/category/components'
