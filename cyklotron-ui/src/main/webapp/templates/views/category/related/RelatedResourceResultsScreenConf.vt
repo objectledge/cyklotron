@@ -1,0 +1,178 @@
+##
+
+#macro(category_tree $table $root_row_title)
+#if($table)
+#set($tableLink = $link.set('tableId',$table.id))
+#set($toggleExpandLink = $tableLink.action('table.ToggleExpanded'))
+##
+#foreach($row in $table.rows)
+#if($table.rootRow != $row)## WARN: rootRow is not a category
+<input type="hidden" name="category-visible" value="$row.id" />
+#end
+#end
+##
+<table width="100%" class="genericItemTree" cellspacing="0">
+#foreach($row in $table.rows)
+    <tr>
+
+#if($table.rootRow == $row)
+<td>&nbsp;</td>
+#else
+<td style="width: 80px;">
+<select size="1" name="category-$row.id">
+#options($category_sel_opts $conf.categorySelectionState.getValue($row.object))
+</select>
+</td>
+#end
+
+<td>
+#set($toggleExpandLink2 = $toggleExpandLink.set('rowId',$row.id))
+#set($toggleExpandLink2 = "javascript:fSub('$toggleExpandLink2')")
+#tableView_linesAndFoldersBase($table $row $toggleExpandLink2)
+#if($table.rootRow == $row) $root_row_title #else $row.object.name #end
+</td>
+
+</tr>
+#end
+</table>
+#end
+#end
+
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#set($from_component = true)
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+#genericScreenHeader('Related resource list configuration')
+#set($save_action = "$link.unsetView().action('structure.UpdateRelatedResourceScreenPreferences').set('x',$node.id)")
+
+#result_inline_message('results.category.related')
+
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+$pageTool.addScriptLink('script/ComponentConfiguration.js')##
+<script type="text/javascript">
+<!--
+var fieldNames = new Array( "header", "maxResNumber", "listSortColumn", "listSortDir",
+                            "resourceClasses", "cacheInterval");
+function sendConfig()
+{
+    document.form1.action = "$save_action";
+    document.form1.target = "cyklotron_related_resource_results_config_${cms_data.node.id}";
+    submitConfig(document.form1.target, 'form1', 'form1', fieldNames);
+}
+
+function fSub(action)
+{
+  document.form1.action = action;
+  document.form1.submit();
+}
+//-->
+</script>
+## - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+<form name="form1" method="post" action="">
+  <input type="hidden" name="node_id" value="$cms_data.node.id">
+  <input type="hidden" name="config" value="" />
+
+<table class="genericScreen" width="100%" cellpadding="0" cellspacing="0">
+<tbody>
+
+<tr>
+<td>
+Podaj tytuł nawigacji:
+</td>
+<td><input type="text" name="header" style="width: 100%;" value="$!conf.header" /></td>
+</tr>
+
+<tr>
+<td>
+Choose the number of resources shown in the component.
+</td>
+<td><select size="1" name="maxResNumber">
+#set($opts = [["unlimited", 0], ["1", 1], ["2", 2], ["3", 3], ["4", 4], ["5", 5], ["6", 6], ["7", 7], ["8", 8], ["9", 9], ["10", 10], ["11", 11], ["12", 12], ["13", 13], ["14", 14], ["15", 15]])
+#options($opts $conf.maxResNumber)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Choose sort order:
+</td>
+<td><select size="1" name="listSortColumn">
+#set($opts = [["document name", "index.title"], ["creation time", "creation.time"], ["validity start","validity.start"], ["modification time", "modification.time"], ["priorytet", "priority"]])
+#options($opts $conf.sortColumn)
+  </select>
+  <select size="1" name="listSortDir">
+#set($opts = [["ascending", true], ["descending", false]])
+#options($opts $conf.sortDir)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Choose caching time
+</td>
+<td>
+<select size="1" name="cacheInterval">
+#set($opts = [["30 min", 1800], ["5 min", 300], ["10 min", 600], ["2 min", 120], ["1 minuta", 60]])
+#options($opts $conf.cacheInterval)
+  </select></td>
+</tr>
+
+<tr>
+<td>
+Search only from documents in local service
+</td>
+<td>
+<input type="checkbox" name="siteFilter" value="true"#if($conf.isSiteFilterEnabled()) checked#end>
+</td>
+</tr>
+
+<tr>
+<td>
+Choose resource classes which will be shown in the list:
+</td>
+<td>
+#set($appinfos = $category_tool.getResourceClassesInfo())
+#foreach($appinfo in $appinfos)
+
+<p>Application $appinfo.application.name</p>
+#foreach($resclassinfo in $appinfo.resourceClassesInfos)
+<p>
+<input type="checkbox" name="resourceClasses" ##
+#if($conf.hasResourceClass($resclassinfo.resourceClass)) checked="checked" #end##
+id="res-class-$resclassinfo.resourceClass.id" value="$resclassinfo.resourceClass.name" />
+<label for="res-class-$resclassinfo.resourceClass.id" >$resclassinfo.resourceClass.name</label>
+</p>
+#end
+
+#end
+</td>
+
+#set($category_sel_opts = [["---", "unselected"], [" active: this and children", "active"]])
+<tr>
+<td colspan="2">
+Choose categories:
+</td>
+</tr>
+
+</tbody>
+</table>
+
+#category_tree($globaltable 'global categories')
+<br />
+#category_tree($sitetable 'site categories')
+
+## COMMAND BAR
+$pageTool.addStyleLink('style/action-buttons.css')##
+<div class="action-buttons">
+  <div class="additional">
+  </div>
+
+  <div class="modification">
+  <a href="javascript:sendConfig()">Save</a>
+  <a href="javascript:window.close();">Cancel</a>
+  </div>
+</div>
+
+</form>
+
+#genericScreenTrailer()

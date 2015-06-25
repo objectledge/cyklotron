@@ -6,7 +6,7 @@ HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
 DB TABLE 'cms_ratelimit_list'
 SUPERCLASSES ( 'node' );
 
-CREATE RESOURCE CLASS 'cms.accesslimits.list.item'
+CREATE RESOURCE CLASS 'cms.accesslimits.access_list_item'
 JAVA CLASS 'net.cyklotron.cms.accesslimits.AccessListItemResourceImpl'
 HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
 DB TABLE 'cms_ratelimit_list_items'

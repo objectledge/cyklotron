@@ -1,0 +1,8 @@
+#CYKLO-1032
+CREATE RESOURCE 'related_resource_results'
+RESOURCE CLASS 'integration.screen'
+PARENT '/cms/applications/category/screens'
+ATTRIBUTES (
+  screenName = 'category.related.RelatedResourceResults',
+  configurationView = 'category.related.RelatedResourceResultsScreenConf'
+);

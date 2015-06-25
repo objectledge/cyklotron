@@ -108,7 +108,15 @@
           <value>Wyświetla wyniki zapytania o zasoby z wykorzystaniem kategorii.</value>
         </prefix>
         <prefix name="name">
-          <value>Wyniki zapytania.</value>
+          <value>Wyniki zapytania</value>
+        </prefix>
+      </prefix>
+      <prefix name="related_resource_results">
+        <prefix name="description">
+          <value>Wyświetla listę zasobów powiązanych ze wskazanym dokumentem.</value>
+        </prefix>
+        <prefix name="name">
+          <value>Zasoby powiązane z dokumentem</value>
         </prefix>
       </prefix>
     </prefix>
