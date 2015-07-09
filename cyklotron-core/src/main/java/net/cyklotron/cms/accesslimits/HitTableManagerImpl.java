@@ -111,17 +111,25 @@ public class HitTableManagerImpl
         }
     }
     
-    public void clear()
+    public void clear(int threshold)
     {
-        hitTable.clear();
+        hitTable.clear(threshold);
     }
 
     private static class DBHitTable
         extends HitTable
     {
-        protected void clear()
+        protected void clear(int threshold)
         {
-            table.clear();
+            Iterator<Hit> i = table.values().iterator();
+            while(i.hasNext())
+            {
+                Hit h = i.next();
+                if(h.getHits() < threshold)
+                {
+                    i.remove();
+                }
+            }
         }
 
         protected void addHit(String address, int hits, Date lastHit, int matches, Date lastMatch,

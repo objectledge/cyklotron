@@ -17,6 +17,8 @@ public class ClearHitsTable
     @Override
     public void run(String[] arguments)
     {
-        hitTableManager.clear();
+        int threshold = arguments.length > 0 ? Integer.parseInt(arguments[0]) : Integer.MAX_VALUE;
+        hitTableManager.clear(threshold);
+        hitTableManager.save();
     }
 }
