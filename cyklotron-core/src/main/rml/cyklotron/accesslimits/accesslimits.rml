@@ -46,3 +46,15 @@ ATTRIBUTES (
   # coral.Node.creation_time 
   # node.description 
 );
+
+CREATE RESOURCE CLASS 'cms.accesslimits.notifications_config'
+JAVA CLASS 'net.cyklotron.cms.accesslimits.NotificationsConfigResourceImpl'
+HANDLER CLASS 'org.objectledge.coral.datatypes.PersistentResourceHandler'
+DB TABLE 'cms_ratelimit_notifications_config'
+SUPERCLASSES ( 'node' )
+ATTRIBUTES (
+  REQUIRED integer threshold,
+  REQUIRED string recipient,
+  REQUIRED string locale,
+  REQUIRED string baseURL
+);
