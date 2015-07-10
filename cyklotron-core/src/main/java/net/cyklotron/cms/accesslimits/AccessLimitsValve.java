@@ -10,6 +10,7 @@ import org.objectledge.web.HttpContext;
 import org.objectledge.web.ratelimit.impl.AccessListRegistry;
 import org.objectledge.web.ratelimit.impl.RequestInfo;
 import org.objectledge.web.ratelimit.impl.RuleEvaluator;
+import org.objectledge.web.ratelimit.impl.ThresholdChecker;
 
 import com.google.common.base.Optional;
 
@@ -22,17 +23,20 @@ public class AccessLimitsValve
 
     private final AccessListRegistry accessListRegistry;
 
+    private ThresholdChecker thresholdChecker;
+
     private final RuleEvaluator evaluator;
 
     private Logger log;
 
     public AccessLimitsValve(ProtectedItemRegistry protectedItemRegistry,
         ActionRegistry actionRegistry, AccessListRegistry accessListRegistry,
-        HitTableManager hitTableManger, Logger log)
+        HitTableManager hitTableManger, ThresholdChecker thresholdChecker, Logger log)
     {
         this.protectedItemRegistry = protectedItemRegistry;
         this.actionRegistry = actionRegistry;
         this.accessListRegistry = accessListRegistry;
+        this.thresholdChecker = thresholdChecker;
         this.log = log;
         this.evaluator = new RuleEvaluator(hitTableManger.getHitTable(), null);
     }
@@ -47,8 +51,8 @@ public class AccessLimitsValve
         Optional<ProtectedItem> protRes = protectedItemRegistry.getProtectedItem(requestInfo);
         if(protRes.isPresent())
         {
-            String actionName = evaluator.action(requestInfo, accessListRegistry, protRes.get()
-                .getRules());
+            String actionName = evaluator.action(requestInfo, accessListRegistry, thresholdChecker,
+                protRes.get().getRules());
             Optional<Action> action = actionRegistry.getAction(actionName);
             if(action.isPresent())
             {
