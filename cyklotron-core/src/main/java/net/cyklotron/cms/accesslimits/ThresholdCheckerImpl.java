@@ -38,6 +38,22 @@ public class ThresholdCheckerImpl
     @Override
     public boolean isThresholdExceeded(InetAddress address, Hit hit)
     {
-        return false;
+        if(hit.getHits() > config.getThreshold())
+        {
+            if(!accessListRegistry.anyContains(address))
+            {
+                sendNotification(address, hit);
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void sendNotification(InetAddress address, Hit hit)
+    {
+        // TODO
     }
 }
