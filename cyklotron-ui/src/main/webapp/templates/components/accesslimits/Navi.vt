@@ -3,4 +3,5 @@
 #linkCell('' $strings.rules $link.view('accesslimits.Config').fragment("/rules"))
 #linkCell('' $strings.actions $link.view('accesslimits.Config').fragment("/actions"))
 #linkCell('' $strings.lists $link.view('accesslimits.Config').fragment("/lists"))
+#linkCell('' $strings.notifications $link.view('accesslimits.Config').fragment("/notifications"))
 #genericNaviTrailer()

@@ -78,6 +78,11 @@ configModule.factory("backend", [ "$window", "$resource",
 						method : "POST",
 						url : baseUrl + "/lists/validate/addressBlock"
 					}
+				}),
+				notifications : $resource(baseUrl + "/notifications", {}, {
+					save : {
+						method : 'PUT'
+					}
 				})
 			};
 		} ]);
@@ -167,6 +172,15 @@ configModule.config([ "$routeProvider", function($routeProvider) {
 			} ]
 		}
 	});
+	$routeProvider.when("/notifications", {
+		templateUrl : "accesslimits.Notifications",
+		controller : "NotificationsCtrl",
+		resolve : {
+			config : [ "backend", function(backend) {
+				return backend.notifications.get().$promise;
+			} ]
+		}
+	})
 	$routeProvider.otherwise({
 		redirectTo : "/rules"
 	});
@@ -321,8 +335,8 @@ configModule.controller("AccessListsCtrl", [
 								_.assign(list, editedList);
 								runRequest($scope, _.bind(list.$update, list),
 										function() {
-									$close();
-								});
+											$close();
+										});
 							}
 						})
 					});
@@ -504,4 +518,14 @@ configModule.controller("RulesCtrl", [
 			$scope.removeRule = function(index) {
 				$scope.item.rules.splice(index, 1);
 			};
+		} ]);
+
+configModule.controller("NotificationsCtrl", [ "$scope", "backend", "config",
+		function($scope, backend, config) {
+			$scope.config = config;
+			$scope.save = function() {
+				runRequest($scope, _.bind(config.$save, config), function(data, headers) {
+				}, function(resp) {
+				});
+			}
 		} ]);

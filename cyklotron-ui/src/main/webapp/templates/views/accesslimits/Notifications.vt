@@ -1,0 +1,61 @@
+$viewEnclosureTool.top()##
+#set($strings = $i18n.usePrefix("cms.accesslimits.notifications"))
+#genericScreenHeader($strings.header)
+<table width="100%" class="genericItemList form" cellspacing="0" ng-form="form">
+  <tr>
+    <td width="120"><label>Próg ilości zapytań</label></td>
+    <td>
+      <input type="number" required name="threshold" ng-model="config.threshold" />
+      #macro(cfg_validation $ctrl)
+      <div class="error" ng-messages="edit.$ctrl#**#.$error">
+        <div ng:message="required">Wartość wymagana</div>
+        <div ng:message="number">Niepoprawna wartość liczbowa</div>
+        <div ng:message="pattern">Wartość niezgodna z wymaganym formatem</div>
+      </div>
+      #end
+      #cfg_validation('threshold')
+    </td>
+  </tr>
+  <tr>
+    <td width="120"><label>Adresat powiadomień</label></td>
+    <td>
+      <input type="email" required name="recipient" ng-model="config.recipient" />
+      #cfg_validation('recipient')
+    </td>
+  </tr>
+  <tr>
+    <td width="120"><label>Język powiadomień</label></td>
+    <td>
+      <select required name="locale" ng-model="config.locale">
+        <option value="pl_PL">Polski</option>
+        <option value="en_US">Angielski</option>
+      </select>
+      #cfg_validation('locale')
+    </td>
+  </tr>
+  <tr>
+    <td width="120"><label>Adres bazowy</label></td>
+    <td>
+      <input type="text" required name="baseURL" ng-model="config.baseURL"
+        ng-pattern="'^https?://[A-Za-z0-9-.]+(:[0-9]+)?[A-Za-z0-9-./]+$'" />
+      #cfg_validation('baseURL')
+    </td>
+  </tr>   
+</table>
+<table class="commandBarTable" border="0" width="100%" height="22">
+  <tr>
+    <td width="95%">
+      <div class="status">
+      <i ng:show="reqRunning" class="fa fa-spinner fa-spin"></i>
+      <div class="error" ng:messages="reqError">
+        <div ng:message="500">Błąd serwera</div>
+        <div ng:message="0">Brak połączenia z serwerem</div>
+      </div>
+    </div>
+    </td>
+    <td nowrap class="adminbutton">
+      <a href="" ng:disabled="form.$invalid" ng:click="save()"><i class="fa fa-floppy-o"></i>Zapisz</a>
+    </td>
+  </tr>
+</table>
+#genericScreenTrailer()
