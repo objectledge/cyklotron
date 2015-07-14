@@ -1,0 +1,8 @@
+#set($subject = 'Narusznie warunków użytkowania serwisu')
+<html>
+  <body>
+    <p>Użytkownik o adresie IP $address.hostAddress ($address.canonicalHostName) pobrał w dniu dzisiejszym $hit.hits zasobów objętych ograniczeniami dostępu.</p>
+    <p>Sprawdź adres w bazie <a href="http://www.dns.pl/cgi-bin/whois.pl">whois</a></p>
+    <p>Dodaj adres do czarnej / białej <a href="${baseURL}/view/accesslimits.Config#/lists/submit/${address.hostAddress}">listy</a></p>
+  </body>
+</html>
