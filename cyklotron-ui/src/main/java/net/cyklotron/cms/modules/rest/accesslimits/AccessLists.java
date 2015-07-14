@@ -1,5 +1,6 @@
 package net.cyklotron.cms.modules.rest.accesslimits;
 
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +10,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -29,6 +31,8 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.coral.web.rest.RequireCoralRole;
+import org.objectledge.net.CIDRBlock;
+import org.objectledge.net.IPAddressUtil;
 import org.objectledge.utils.StackTrace;
 
 import net.cyklotron.cms.accesslimits.AccessListItemResource;
@@ -37,6 +41,7 @@ import net.cyklotron.cms.accesslimits.AccessListResource;
 import net.cyklotron.cms.accesslimits.AccessListResourceImpl;
 import net.cyklotron.cms.modules.rest.accesslimits.dto.AccessListDTO;
 import net.cyklotron.cms.modules.rest.accesslimits.dto.AccessListItemDTO;
+import net.cyklotron.cms.modules.rest.accesslimits.dto.AccessListSubmissionDTO;
 import net.cyklotron.cms.modules.rest.accesslimits.dto.ErrorDTO;
 import net.cyklotron.cms.modules.rest.accesslimits.dto.ValidationRequestDTO;
 import net.cyklotron.cms.modules.rest.accesslimits.dto.ValidationResponseDTO;
@@ -302,6 +307,43 @@ public class AccessLists
         }
     }
 
+    @POST
+    @Path("/items")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response submitListItem(AccessListSubmissionDTO request)
+    {
+        try
+        {
+            InetAddress addr = IPAddressUtil.byAddress(request.getAddress());
+            byte[] addrBytes = addr.getAddress();
+            switch(request.getRange())
+            {
+            case 8:
+                addrBytes[1] = 0;
+            case 16:
+                addrBytes[2] = 0;
+            case 24:
+                addrBytes[3] = 0;
+            }
+            addr = InetAddress.getByAddress(addrBytes);
+            CIDRBlock cidr = new CIDRBlock(addr, request.getRange());
+            
+            AccessListResource res = (AccessListResource)coralSession.getStore().getResource(
+                request.getListId());
+
+            AccessListItemResource itemResource = AccessListItemResourceImpl
+                .createAccessListItemResource(coralSession, Integer.toString(res.getChildren().length), res, cidr.toString());
+            itemResource.setDescription(request.getDescription());
+            itemResource.update();
+            return Response.noContent().build();
+        }
+        catch(UnknownHostException | IllegalArgumentException | EntityDoesNotExistException
+                        | ValueRequiredException | InvalidResourceNameException e)
+        {
+            throw new InternalServerErrorException(e);
+        }
+    }
+    
     private void validateAddressBlock(String text)
         throws UnknownHostException
     {

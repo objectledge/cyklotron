@@ -45,6 +45,7 @@ configModule.factory("backend", [ "$window", "$resource",
 						}
 					},
 				}),
+				listItems : $resource(baseUrl + "/lists/items", {}, {}),
 				items : $resource(baseUrl + "/rules/items", {}, {
 					get : {
 						method : "GET",
@@ -166,6 +167,15 @@ configModule.config([ "$routeProvider", function($routeProvider) {
 	$routeProvider.when("/lists", {
 		templateUrl : "accesslimits.AccessLists",
 		controller : "AccessListsCtrl",
+		resolve : {
+			lists : [ "backend", function(backend) {
+				return backend.lists.query().$promise;
+			} ]
+		}
+	});
+	$routeProvider.when("/lists/submit/:address", {
+		templateUrl : "accesslimits.AccessListsSubmission",
+		controller : "AccessListsSubmissionCtrl",
 		resolve : {
 			lists : [ "backend", function(backend) {
 				return backend.lists.query().$promise;
@@ -398,6 +408,28 @@ configModule.controller("AccessListsCtrl", [
 
 			$scope.removeItem = function(index) {
 				$scope.list.items.splice(index, 1);
+			};
+		} ]);
+
+configModule.controller("AccessListsSubmissionCtrl", [ "$scope",
+		"$routeParams", "$location", "backend", "lists",
+		function($scope, $routeParams, $location, backend, lists) {
+			$scope.address = $routeParams.address;
+			$scope.lists = lists;
+			$scope.range = "32";
+			if (lists.length > 0) {
+				$scope.list = lists[0];
+			}
+			$scope.submit = function() {
+				runRequest($scope, _.bind(backend.listItems.save, {}, {
+					address : $routeParams.address,
+					range : parseInt($scope.range, 10),
+					description : $scope.description,
+					listId : $scope.list.id
+				}), function() {
+					$location.path("/lists");
+				}, function() {
+				});
 			};
 		} ]);
 
