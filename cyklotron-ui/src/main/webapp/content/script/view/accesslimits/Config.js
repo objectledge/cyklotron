@@ -45,6 +45,7 @@ configModule.factory("backend", [ "$window", "$resource",
 						}
 					},
 				}),
+				listItems : $resource(baseUrl + "/lists/items", {}, {}),
 				items : $resource(baseUrl + "/rules/items", {}, {
 					get : {
 						method : "GET",
@@ -77,6 +78,11 @@ configModule.factory("backend", [ "$window", "$resource",
 					addressBlock : {
 						method : "POST",
 						url : baseUrl + "/lists/validate/addressBlock"
+					}
+				}),
+				notifications : $resource(baseUrl + "/notifications", {}, {
+					save : {
+						method : 'PUT'
 					}
 				})
 			};
@@ -167,6 +173,24 @@ configModule.config([ "$routeProvider", function($routeProvider) {
 			} ]
 		}
 	});
+	$routeProvider.when("/lists/submit/:address", {
+		templateUrl : "accesslimits.AccessListsSubmission",
+		controller : "AccessListsSubmissionCtrl",
+		resolve : {
+			lists : [ "backend", function(backend) {
+				return backend.lists.query().$promise;
+			} ]
+		}
+	});
+	$routeProvider.when("/notifications", {
+		templateUrl : "accesslimits.Notifications",
+		controller : "NotificationsCtrl",
+		resolve : {
+			config : [ "backend", function(backend) {
+				return backend.notifications.get().$promise;
+			} ]
+		}
+	})
 	$routeProvider.otherwise({
 		redirectTo : "/rules"
 	});
@@ -321,8 +345,8 @@ configModule.controller("AccessListsCtrl", [
 								_.assign(list, editedList);
 								runRequest($scope, _.bind(list.$update, list),
 										function() {
-									$close();
-								});
+											$close();
+										});
 							}
 						})
 					});
@@ -384,6 +408,28 @@ configModule.controller("AccessListsCtrl", [
 
 			$scope.removeItem = function(index) {
 				$scope.list.items.splice(index, 1);
+			};
+		} ]);
+
+configModule.controller("AccessListsSubmissionCtrl", [ "$scope",
+		"$routeParams", "$location", "backend", "lists",
+		function($scope, $routeParams, $location, backend, lists) {
+			$scope.address = $routeParams.address;
+			$scope.lists = lists;
+			$scope.range = "32";
+			if (lists.length > 0) {
+				$scope.list = lists[0];
+			}
+			$scope.submit = function() {
+				runRequest($scope, _.bind(backend.listItems.save, {}, {
+					address : $routeParams.address,
+					range : parseInt($scope.range, 10),
+					description : $scope.description,
+					listId : $scope.list.id
+				}), function() {
+					$location.path("/lists");
+				}, function() {
+				});
 			};
 		} ]);
 
@@ -504,4 +550,14 @@ configModule.controller("RulesCtrl", [
 			$scope.removeRule = function(index) {
 				$scope.item.rules.splice(index, 1);
 			};
+		} ]);
+
+configModule.controller("NotificationsCtrl", [ "$scope", "backend", "config",
+		function($scope, backend, config) {
+			$scope.config = config;
+			$scope.save = function() {
+				runRequest($scope, _.bind(config.$save, config), function(data, headers) {
+				}, function(resp) {
+				});
+			}
 		} ]);

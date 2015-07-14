@@ -4,6 +4,7 @@
     <item name="actions">Actions</item>
     <item name="lists">Listy</item>
     <item name="rules">Rules</item>
+    <item name="notifications">Notifications</item>
   </prefix>
   <prefix name="actions">
     <item name="header">Actions</item>
@@ -14,4 +15,7 @@
   <prefix name="rules">
     <item name="header">Rules</item>
   </prefix>
+  <prefix name="notifications">
+    <item name="header">Notifications</item>
+  </prefix>  
 </strings>
