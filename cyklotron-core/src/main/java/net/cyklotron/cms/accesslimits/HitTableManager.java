@@ -8,5 +8,7 @@ public interface HitTableManager
 
     void save();
 
+    void archive();
+
     void clear(int threshold);
 }
