@@ -1,5 +1,7 @@
 package net.cyklotron.cms.accesslimits;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +15,7 @@ import java.util.Map;
 
 import org.jcontainer.dna.Logger;
 import org.objectledge.database.Database;
+import org.objectledge.net.IPAddressUtil;
 import org.objectledge.web.ratelimit.impl.HitTable;
 import org.picocontainer.Startable;
 
@@ -68,8 +71,17 @@ public class HitTableManagerImpl
         {
             while(rset.next())
             {
-                hitTable.addHit(rset.getString(1), rset.getInt(2), rset.getTimestamp(3),
-                    rset.getInt(4), rset.getTimestamp(5), rset.getLong(6));
+                final String strAddress = rset.getString(1);
+                try
+                {
+                    final InetAddress address = IPAddressUtil.byAddress(strAddress);
+                    hitTable.addHit(address, rset.getInt(2), rset.getTimestamp(3), rset.getInt(4),
+                        rset.getTimestamp(5), rset.getLong(6));
+                }
+                catch(UnknownHostException | IllegalArgumentException e)
+                {
+                    log.error("Invalid IP address in DB: " + strAddress);
+                }
             }
         }
         catch(SQLException e)
@@ -96,12 +108,12 @@ public class HitTableManagerImpl
                     .prepareStatement("INSERT INTO ledge_accesslimits_hits (day, address, hits, last_hit, matches, last_match, last_matching_rule_id) "
                         + "VALUES (NULL, ?, ?, ?, ?, ?, ?)"))
                 {
-                    Iterator<Map.Entry<String, HitTable.Hit>> i = hitTable.getAllHits();
+                    Iterator<Map.Entry<InetAddress, HitTable.Hit>> i = hitTable.getAllHits();
                     int cnt = 0;
                     while(i.hasNext())
                     {
-                        Map.Entry<String, HitTable.Hit> e = i.next();
-                        stmt.setString(1, e.getKey());
+                        Map.Entry<InetAddress, HitTable.Hit> e = i.next();
+                        stmt.setString(1, e.getKey().getHostAddress());
                         stmt.setInt(2, e.getValue().getHits());
                         stmt.setTimestamp(3, new Timestamp(e.getValue().getLastHit().getTime()));
                         stmt.setInt(4, e.getValue().getMatches());
@@ -148,21 +160,21 @@ public class HitTableManagerImpl
                     stmt.setDate(1, day);
                     stmt.execute();
                 }
-                Map<String, Integer> backup = new HashMap<>();
+                Map<InetAddress, Integer> backup = new HashMap<>();
                 try(PreparedStatement stmt = conn
                     .prepareStatement("INSERT INTO ledge_accesslimits_hits (day, address, hits, last_hit, matches, last_match, last_matching_rule_id) "
                         + "VALUES (?, ?, ?, ?, ?, ?, ?)"))
                 {
-                    Iterator<Map.Entry<String, HitTable.Hit>> i = hitTable.getAllHits();
+                    Iterator<Map.Entry<InetAddress, HitTable.Hit>> i = hitTable.getAllHits();
                     int cnt = 0;
                     while(i.hasNext())
                     {
-                        Map.Entry<String, HitTable.Hit> e = i.next();
-                        final String address = e.getKey();
+                        Map.Entry<InetAddress, HitTable.Hit> e = i.next();
+                        final InetAddress address = e.getKey();
                         final int hits = e.getValue().getAndClearHits();
                         backup.put(address, hits);
                         stmt.setDate(1, day);
-                        stmt.setString(2, address);
+                        stmt.setString(2, address.getHostAddress());
                         stmt.setInt(3, hits);
                         stmt.setTimestamp(4, new Timestamp(e.getValue().getLastHit().getTime()));
                         stmt.setInt(5, e.getValue().getMatches());
@@ -178,7 +190,7 @@ public class HitTableManagerImpl
                 }
                 catch(SQLException e)
                 {
-                    for(Map.Entry<String, Integer> entry : backup.entrySet())
+                    for(Map.Entry<InetAddress, Integer> entry : backup.entrySet())
                     {
                         hitTable.restoreHits(entry.getKey(), entry.getValue());
                     }
@@ -216,14 +228,14 @@ public class HitTableManagerImpl
     private static class DBHitTable
         extends HitTable
     {
-        protected void addHit(String address, int hits, Date lastHit, int matches, Date lastMatch,
-            long lastMatchingRuleId)
+        protected void addHit(InetAddress address, int hits, Date lastHit, int matches,
+            Date lastMatch, long lastMatchingRuleId)
         {
             table.put(address, new HitTable.Hit(hits, lastHit.getTime(), matches,
                 lastMatchingRuleId, lastMatch.getTime()));
         }
 
-        protected void restoreHits(String address, int hits)
+        protected void restoreHits(InetAddress address, int hits)
         {
             Hit hit = table.get(address);
             if(hit != null)
@@ -232,7 +244,7 @@ public class HitTableManagerImpl
             }
         }
 
-        protected Iterator<Map.Entry<String, Hit>> getAllHits()
+        protected Iterator<Map.Entry<InetAddress, Hit>> getAllHits()
         {
             return table.entrySet().iterator();
         }
