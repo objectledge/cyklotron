@@ -19,6 +19,5 @@ public class ClearHitsTable
     {
         int threshold = arguments.length > 0 ? Integer.parseInt(arguments[0]) : Integer.MAX_VALUE;
         hitTableManager.clear(threshold);
-        hitTableManager.save();
     }
 }

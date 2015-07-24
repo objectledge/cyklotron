@@ -200,25 +200,22 @@ public class HitTableManagerImpl
 
     public void clear(int threshold)
     {
-        hitTable.clear(threshold);
+        try(Connection conn = database.getConnection();
+            PreparedStatement stmt = conn
+                .prepareStatement("DELETE FROM ledge_accesslimits_hits WHERE day IS NOT NULL AND hits < ?"))
+        {
+            stmt.setInt(1, threshold);
+            stmt.execute();
+        }
+        catch(SQLException e)
+        {
+            log.error("failed to clear hits table", e);
+        }
     }
 
     private static class DBHitTable
         extends HitTable
     {
-        protected void clear(int threshold)
-        {
-            Iterator<Hit> i = table.values().iterator();
-            while(i.hasNext())
-            {
-                Hit h = i.next();
-                if(h.getHits() < threshold)
-                {
-                    i.remove();
-                }
-            }
-        }
-
         protected void addHit(String address, int hits, Date lastHit, int matches, Date lastMatch,
             long lastMatchingRuleId)
         {
