@@ -16,6 +16,7 @@ import java.util.Map;
 import org.jcontainer.dna.Logger;
 import org.objectledge.database.Database;
 import org.objectledge.net.IPAddressUtil;
+import org.objectledge.web.ratelimit.impl.AccessListRegistry;
 import org.objectledge.web.ratelimit.impl.HitTable;
 import org.picocontainer.Startable;
 
@@ -33,8 +34,12 @@ public class HitTableManagerImpl
 
     private Logger log;
 
-    public HitTableManagerImpl(Database database, Logger logger)
+    private AccessListRegistry accessListRegistry;
+
+    public HitTableManagerImpl(AccessListRegistry accessListRegistry, Database database,
+        Logger logger)
     {
+        this.accessListRegistry = accessListRegistry;
         this.database = database;
         this.log = logger;
         hitTable = new DBHitTable();
@@ -142,10 +147,16 @@ public class HitTableManagerImpl
     }
 
     /**
+     * <P>
      * Store counter values into DB, into rows with today's date. In-memory counters are cleared,
      * but care is taken to preserve the values in case of rollback caused by DB error.
+     * </P>
+     * <P>
+     * If a non-null whiteListName is provided, entries that match any of the address blocks in the
+     * given list are cleared, but NOT written to DB.
+     * </P>
      */
-    public void archive()
+    public void archive(String whiteListName)
     {
         try
         {
@@ -170,17 +181,26 @@ public class HitTableManagerImpl
                     while(i.hasNext())
                     {
                         Map.Entry<InetAddress, HitTable.Hit> e = i.next();
-                        final InetAddress address = e.getKey();
-                        final int hits = e.getValue().getAndClearHits();
-                        backup.put(address, hits);
-                        stmt.setDate(1, day);
-                        stmt.setString(2, address.getHostAddress());
-                        stmt.setInt(3, hits);
-                        stmt.setTimestamp(4, new Timestamp(e.getValue().getLastHit().getTime()));
-                        stmt.setInt(5, e.getValue().getMatches());
-                        stmt.setTimestamp(6, new Timestamp(e.getValue().getLastMatch().getTime()));
-                        stmt.setLong(7, e.getValue().getLastMatchingRuleId());
-                        stmt.addBatch();
+                        if(whiteListName == null
+                            || !accessListRegistry.contains(whiteListName, e.getKey()))
+                        {
+                            final InetAddress address = e.getKey();
+                            final int hits = e.getValue().getAndClearHits();
+                            backup.put(address, hits);
+                            stmt.setDate(1, day);
+                            stmt.setString(2, address.getHostAddress());
+                            stmt.setInt(3, hits);
+                            stmt.setTimestamp(4, new Timestamp(e.getValue().getLastHit().getTime()));
+                            stmt.setInt(5, e.getValue().getMatches());
+                            stmt.setTimestamp(6, new Timestamp(e.getValue().getLastMatch()
+                                .getTime()));
+                            stmt.setLong(7, e.getValue().getLastMatchingRuleId());
+                            stmt.addBatch();
+                        }
+                        else
+                        {
+                            e.getValue().getAndClearHits();
+                        }
                     }
                     if(cnt++ > BATCH_SIZE || !i.hasNext())
                     {

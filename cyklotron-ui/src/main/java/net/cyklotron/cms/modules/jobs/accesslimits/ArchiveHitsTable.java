@@ -17,7 +17,8 @@ public class ArchiveHitsTable
     @Override
     public void run(String[] arguments)
     {
-        hitTableManager.archive();
+        String whiteListName = arguments.length > 0 ? arguments[0] : null;
+        hitTableManager.archive(whiteListName);
         hitTableManager.save();
     }
 }
