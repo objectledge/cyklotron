@@ -8,7 +8,5 @@ public interface HitTableManager
 
     void save();
 
-    void archive(String whiteListName);
-
-    void clear(int threshold);
+    void archive(int threshold, String whiteListName);
 }

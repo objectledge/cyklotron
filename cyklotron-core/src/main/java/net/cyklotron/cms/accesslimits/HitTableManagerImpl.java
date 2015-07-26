@@ -18,6 +18,7 @@ import org.objectledge.database.Database;
 import org.objectledge.net.IPAddressUtil;
 import org.objectledge.web.ratelimit.impl.AccessListRegistry;
 import org.objectledge.web.ratelimit.impl.HitTable;
+import org.objectledge.web.ratelimit.impl.HitTable.Hit;
 import org.picocontainer.Startable;
 
 /**
@@ -151,12 +152,11 @@ public class HitTableManagerImpl
      * Store counter values into DB, into rows with today's date. In-memory counters are cleared,
      * but care is taken to preserve the values in case of rollback caused by DB error.
      * </P>
-     * <P>
-     * If a non-null whiteListName is provided, entries that match any of the address blocks in the
-     * given list are cleared, but NOT written to DB.
-     * </P>
+     * 
+     * @param threshold entries with number of hits below the threshold will not be archived.
+     * @param whiteListName when non-null value is given, entries with addresses contained in the given list will not be archived.
      */
-    public void archive(String whiteListName)
+    public void archive(int threshold, String whiteListName)
     {
         try
         {
@@ -181,25 +181,29 @@ public class HitTableManagerImpl
                     while(i.hasNext())
                     {
                         Map.Entry<InetAddress, HitTable.Hit> e = i.next();
-                        if(whiteListName == null
-                            || !accessListRegistry.contains(whiteListName, e.getKey()))
+                        final InetAddress address = e.getKey();
+                        final Hit hit = e.getValue();
+                        final boolean whitelisted = whiteListName != null
+                            && accessListRegistry.contains(whiteListName, address);
+                        if(!whitelisted)
                         {
-                            final InetAddress address = e.getKey();
-                            final int hits = e.getValue().getAndClearHits();
+                            final int hits = hit.getAndClearHits();
                             backup.put(address, hits);
-                            stmt.setDate(1, day);
-                            stmt.setString(2, address.getHostAddress());
-                            stmt.setInt(3, hits);
-                            stmt.setTimestamp(4, new Timestamp(e.getValue().getLastHit().getTime()));
-                            stmt.setInt(5, e.getValue().getMatches());
-                            stmt.setTimestamp(6, new Timestamp(e.getValue().getLastMatch()
-                                .getTime()));
-                            stmt.setLong(7, e.getValue().getLastMatchingRuleId());
-                            stmt.addBatch();
+                            if(hits > threshold)
+                            {
+                                stmt.setDate(1, day);
+                                stmt.setString(2, address.getHostAddress());
+                                stmt.setInt(3, hits);
+                                stmt.setTimestamp(4, new Timestamp(hit.getLastHit().getTime()));
+                                stmt.setInt(5, hit.getMatches());
+                                stmt.setTimestamp(6, new Timestamp(hit.getLastMatch().getTime()));
+                                stmt.setLong(7, hit.getLastMatchingRuleId());
+                                stmt.addBatch();
+                            }
                         }
                         else
                         {
-                            e.getValue().getAndClearHits();
+                            hit.getAndClearHits();
                         }
                     }
                     if(cnt++ > BATCH_SIZE || !i.hasNext())
@@ -227,21 +231,6 @@ public class HitTableManagerImpl
         catch(SQLException e)
         {
             log.error("failed to archive hits table", e);
-        }
-    }
-
-    public void clear(int threshold)
-    {
-        try(Connection conn = database.getConnection();
-            PreparedStatement stmt = conn
-                .prepareStatement("DELETE FROM ledge_accesslimits_hits WHERE day IS NOT NULL AND hits < ?"))
-        {
-            stmt.setInt(1, threshold);
-            stmt.execute();
-        }
-        catch(SQLException e)
-        {
-            log.error("failed to clear hits table", e);
         }
     }
 

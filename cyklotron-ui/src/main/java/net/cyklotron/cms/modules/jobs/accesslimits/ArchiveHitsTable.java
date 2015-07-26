@@ -15,10 +15,13 @@ public class ArchiveHitsTable
     }
 
     @Override
-    public void run(String[] arguments)
+    public void run(String[] in)
     {
-        String whiteListName = arguments.length > 0 ? arguments[0] : null;
-        hitTableManager.archive(whiteListName);
+        String[] args = in != null && in.length > 0 && in[0] != null ? in[0].split(" ")
+            : new String[0];
+        int threshold = args.length > 0 ? Integer.parseInt(args[0]) : Integer.MAX_VALUE;
+        String whiteListName = args.length > 1 ? args[1] : null;
+        hitTableManager.archive(threshold, whiteListName);
         hitTableManager.save();
     }
 }
