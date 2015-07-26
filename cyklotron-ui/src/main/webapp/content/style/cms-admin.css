@@ -447,7 +447,9 @@ table.genericLayoutTable td {
 
 /* table-based layout for forms */
 
-table.form input[type=text] {
+table.form input[type=text],
+table.form input[type=number],
+table.form input[type=email] {
 	width: 100%;	
 }
 
@@ -474,15 +476,20 @@ table.form label {
 
 /* validation */
 
-table.form input[type=text].ng-valid {
+table.form input[type=text].ng-valid,
+table.form input[type=number].ng-valid,
+table.form input[type=email].ng-valid {
 	border-color: green;
 }
 
-table.form input[type=text].ng-invalid {
+table.form input[type=text].ng-invalid,
+table.form input[type=number].ng-invalid,
+table.form input[type=email].ng-invalid {
 	border-color: red;
 }
 
-table.form .error {
+table.form .error,
+table.commandBarTable .error {
 	color: red;
 }
 

@@ -680,11 +680,10 @@ public class PeriodicalsServiceImpl
     }
     
     private Comparator<DocumentNodeResource> getComparator(PeriodicalResource periodical)
-    {
+    {                                                                                     
         String sortOrder = periodical.isSortOrderDefined() ? periodical.getSortOrder() : "priority.validity.start";
-        boolean sortDirectionAsc = periodical.isSortDirectionDefined() ? "asc".equals(periodical.getSortDirection()) : true;
-        Comparator<DocumentNodeResource> comp = new PriorityAndValidityStartComparator<DocumentNodeResource>(
-            sortDirectionAsc ? TimeComparator.Direction.ASC : TimeComparator.Direction.DESC);
+        boolean sortDirectionDesc = "desc".equals(periodical.getSortDirection());
+        Comparator<DocumentNodeResource> comp = new PriorityAndValidityStartComparator<DocumentNodeResource>(TimeComparator.Direction.ASC);
         if("sequence".equals(sortOrder)) 
         {
             comp = new SequenceComparator<DocumentNodeResource>();
@@ -707,24 +706,21 @@ public class PeriodicalsServiceImpl
         }        
         else if("validity.start".equals(sortOrder)) 
         {
-            comp = new ValidityStartComparator<DocumentNodeResource>(sortDirectionAsc ? TimeComparator.Direction.ASC
-                : TimeComparator.Direction.DESC);
+            comp = new ValidityStartComparator<DocumentNodeResource>(TimeComparator.Direction.ASC);
         }
         else if("event.start".equals(sortOrder)) 
         {
-            comp = new EventStartComparator(sortDirectionAsc ? TimeComparator.Direction.ASC
-                : TimeComparator.Direction.DESC);
+            comp = new EventStartComparator(TimeComparator.Direction.ASC);
         }
         else if("event.end".equals(sortOrder)) 
         {
-            comp = new EventEndComparator(sortDirectionAsc ? TimeComparator.Direction.ASC
-                : TimeComparator.Direction.DESC);
+            comp = new EventEndComparator(TimeComparator.Direction.ASC);
         }        
         else if("priority".equals(sortOrder)) 
         {
             comp = new PriorityComparator<DocumentNodeResource>();
         }
-        if(!sortDirectionAsc) {
+        if(sortDirectionDesc) {
             comp = Collections.reverseOrder(comp);
         }
         return comp;

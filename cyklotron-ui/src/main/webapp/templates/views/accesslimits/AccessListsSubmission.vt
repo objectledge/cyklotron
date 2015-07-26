@@ -1,0 +1,52 @@
+$viewEnclosureTool.top()##
+#genericScreenHeader('Listy - dodawanie nowego adresu')
+<table width="100%" class="genericItemList form" cellspacing="0" ng-form="form">
+  <tr>
+    <td width="120"><label>Adres IP</label></td>
+    <td>
+      {{address}}
+    </td>
+  </tr>
+  <tr>
+    <td width="120"><label>Zakres</label></td>
+    <td>
+      <select name="range" ng-model="range">
+      	<option value="32">Pojedynczy adres</option>
+      	<option value="24">Sieć kalsy C</option>
+      	<option value="16">Sieć kalsy B</option>
+      	<option value="8">Sieć kalsy A</option>
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="120"><label>Lista</label></td>
+    <td>
+      <select name="list" ng-model="list" ng-options="list as list.name for list in lists">
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="120"><label>Opis</label></td>
+    <td>
+      <textarea ng-model="description">
+      </textarea>
+    </td>
+  </tr>
+</table>
+<table class="commandBarTable" border="0" width="100%" height="22">
+  <tr>
+    <td width="95%">
+      <div class="status">
+      <i ng:show="reqRunning" class="fa fa-spinner fa-spin"></i>
+      <div class="error" ng:messages="reqError">
+        <div ng:message="500">Błąd serwera</div>
+        <div ng:message="401">Błąd autoryzacji</div>
+        <div ng:message="0">Brak połączenia z serwerem</div>
+      </div>
+    </div>
+    </td>
+    <td nowrap class="adminbutton">
+      <a href="" ng:click="submit()"><i class="fa fa-plus"></i>Dodaj</a>
+    </td>
+  </tr>
+</table>

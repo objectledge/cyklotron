@@ -15,3 +15,11 @@ PARENT '/cms/accesslimits';
 CREATE RESOURCE 'lists'
 RESOURCE CLASS 'node'
 PARENT '/cms/accesslimits';
+
+CREATE RESOURCE 'notifications'
+RESOURCE CLASS 'cms.accesslimits.notifications_config'
+PARENT '/cms/accesslimits'
+ATTRIBUTES (
+  threshold = 1000,
+  recipient = ''
+);

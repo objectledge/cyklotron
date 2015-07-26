@@ -126,4 +126,17 @@ public class AccessListRegistryImpl
             return false;
         }
     }
+
+    @Override
+    public boolean anyContains(InetAddress address)
+    {
+        for(AccessList list : lists.values())
+        {
+            if(list.contains(address))
+            {
+                return true;
+            }               
+        }
+        return false;
+    }
 }
