@@ -17,8 +17,9 @@ $viewEnclosureTool.top()##
 
 <table width="100%" class="genericItemList" cellspacing="0">
   <tr>
-    #th("Nazwa" "width='20%'" "name")      
+    #th("Nazwa" "width='10%'" "name")      
     #th("Kategoria" "width='20%'" "category.name")      
+    #th("Serwis" "width='10%'" "site")
     #th("Reguła" "width='45%'" "linkPattern")
     #th("Priorytet" "width='5%'" "priority")      
     #th("Operacje" "width='10%'")
@@ -26,6 +27,7 @@ $viewEnclosureTool.top()##
   <tr ng:repeat="rule in rules | orderBy:orderFieldName:orderDirection">
     <td>{{rule.name}}</td>
     <td>{{rule.category.name}}</td>
+    <td>{{rule.site}}</td>
     <td>{{rule.linkPattern}}</td>
     <td>{{rule.priority}}</td>
     <td class="operations">
@@ -37,6 +39,7 @@ $viewEnclosureTool.top()##
     <td colspan="1">&nbsp;</td>  
     <td colspan="1">&nbsp;</td>  
     <td colspan="1">&nbsp;</td>  
+    <td colspan="1">&nbsp;</td>
     <td colspan="1">&nbsp;</td>
     <td class="operations">
       <a href="" ng:click="add()"><i class="fa fa-plus"></i>Dodaj</a>
