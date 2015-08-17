@@ -1,0 +1,2 @@
+ALTER RESOURCE CLASS 'cms.canonical.link_canonical_rule'
+ADD ATTRIBUTE resource(site.site) site;
