@@ -35,18 +35,26 @@ public abstract class SitemapResourceIterator<T extends Resource>
     {
         while(rowIterator.hasNext())
         {
-            Resource res = rowIterator.next().get();
-            try
+            final Row nextRow = rowIterator.next();
+            if(nextRow != null)
             {
-                SitemapItem item = item(repr.cast(res));
-                if(item != null)
+                Resource res = nextRow.get();
+                try
                 {
-                    return item;
+                    SitemapItem item = item(repr.cast(res));
+                    if(item != null)
+                    {
+                        return item;
+                    }
                 }
-            }
-            catch(RetrievalException e)
-            {
-                log.error("failed to generate site map item for resource #" + res.getIdString());
+                catch(ClassCastException e)
+                {
+                    log.debug("unexpected resource type " + res.getResourceClass().getName());
+                }
+                catch(RetrievalException e)
+                {
+                    log.error("failed to generate site map item for resource #" + res.getIdString());
+                }
             }
         }
         done = true;
