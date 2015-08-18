@@ -18,4 +18,13 @@ public interface CanonicalLinksService
      *         to the given node.
      */
     String getCanonicalLink(NavigationNodeResource node, CoralSession coralSession);
+
+    /**
+     * Returns identifiers of navigation nodes with canonical links mapped to a given site.
+     * 
+     * @param site a site.
+     * @param coralSession Coral session. 
+     * @return set of node identifiers.
+     */
+    LongSet getCanonicalNodes(SiteResource site, CoralSession coralSession);
 }

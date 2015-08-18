@@ -55,4 +55,39 @@ public class CanonicalLinksServiceImpl
         }
         return null;
     }
+
+    @Override
+    public LongSet getCanonicalNodes(SiteResource site, CoralSession coralSession)
+    {
+        List<LinkCanonicalRuleResource> rules = new ArrayList<>();
+        for(Resource res : coralSession.getStore().getResourceByPath("/cms/canonicalLinkRules/*"))
+        {
+            if(res instanceof LinkCanonicalRuleResource)
+            {
+                rules.add((LinkCanonicalRuleResource)res);
+            }
+        }
+        LongSet result = new LongOpenHashSet();
+        Relation rel = categoryService.getResourcesRelation(coralSession);
+        // traverse the rules in increasing priority order
+        Collections.sort(rules, new PriorityComparator<LinkCanonicalRuleResource>());
+        for(LinkCanonicalRuleResource rule : rules)
+        {
+            Resource cat = rule.getCategory();
+            // find all resources tagged with the rule's category
+            // if the rule is associated with the rule of interest, include resource ids in the
+            // output, otherwise exclude them
+            if(site.equals(rule.getSite()))
+            {
+                LongSet resIds = rel.get(cat.getId());
+                result.addAll(resIds);
+            }
+            else if(!result.isEmpty())
+            {
+                LongSet resIds = rel.get(cat.getId());
+                result.removeAll(resIds);
+            }
+        }
+        return result;
+    }
 }
