@@ -148,10 +148,14 @@ public class Rules
                         coralSession, Long.parseLong(rule.category.getId()));
                     current.setCategory(category);
                     current.setLinkPattern(rule.getLinkPattern());
-                    if(rule.getSite() != null)
+                    if(rule.getSite() != null && rule.getSite().length() > 0)
                     {
                         SiteResource site = siteService.getSite(coralSession, rule.getSite());
                         current.setSite(site);
+                    }
+                    else
+                    {
+                        current.setSite(null);
                     }
                     current.update();
                     return Response.noContent().build();
