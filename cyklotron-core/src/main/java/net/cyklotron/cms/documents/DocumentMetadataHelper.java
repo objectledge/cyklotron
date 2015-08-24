@@ -163,8 +163,13 @@ public class DocumentMetadataHelper
         }
         else
         {
-            return FACTORY.createElement(name).addText(text);            
+            return FACTORY.createElement(name).addText(clearControlChars(text));            
         }
+    }
+    
+    private static String clearControlChars(String text)
+    {
+        return text.replaceAll("[\u0000-\u0008\u000B-\u000C\u000E-\u001F]", "");
     }
     
     /**
@@ -175,7 +180,7 @@ public class DocumentMetadataHelper
      */
     public static CDATA cdata(String text)
     {
-        return FACTORY.createCDATA(text);
+        return FACTORY.createCDATA(clearControlChars(text));
     }
     
     /**
@@ -186,7 +191,7 @@ public class DocumentMetadataHelper
      */
     public static Text text(String text)
     {
-        return FACTORY.createText(text);
+        return FACTORY.createText(clearControlChars(text));
     }
     
     public static Element attr(Element elm, String name, String value)
