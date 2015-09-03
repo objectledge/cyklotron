@@ -23,6 +23,8 @@ import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.spans.SpanNearQuery;
 import org.apache.lucene.search.spans.SpanQuery;
 import org.apache.lucene.search.spans.SpanTermQuery;
+import org.apache.lucene.util.BytesRef;
+import org.apache.lucene.util.NumericUtils;
 import org.jcontainer.dna.Logger;
 import org.objectledge.filesystem.FileSystem;
 import org.objectledge.utils.Timer;
@@ -132,7 +134,8 @@ public class LocationsIndex
         }
     }
 
-    public List<Location> getAreas(String areaName, String enclosingArea, int lmin, int lmax, int limit)
+    public List<Location> getAreas(String areaName, String enclosingArea, int lmin, int lmax,
+        int limit)
     {
         try
         {
@@ -286,10 +289,36 @@ public class LocationsIndex
 
     public Location getExactMatch(String field, String value)
     {
+        return search(new TermQuery(new Term(field, value)));
+    }
+
+    public Location getExactMatch(Map<String, String> fieldValues)
+    {
+        BooleanQuery booleanQuery = new BooleanQuery();
+        for(Entry<String, String> entry : fieldValues.entrySet())
+        {
+            final String field = entry.getKey();
+            Term term;
+            if(provider.getOptions(field).contains(FieldOptions.INTEGER))
+            {
+                BytesRef bytes = new BytesRef(4);
+                NumericUtils.intToPrefixCoded(Integer.parseInt(entry.getValue()), 0, bytes);
+                term = new Term(field, bytes);
+            }
+            else
+            {
+                term = new Term(field, entry.getValue());
+            }
+            booleanQuery.add(new BooleanClause(new TermQuery(term), Occur.MUST));
+        }
+        return search(booleanQuery);
+    }
+
+    private Location search(Query query)
+    {
         try
         {
-            List<Location> locs = results(getSearcher().search(
-                new TermQuery(new Term(field, value)), 2));
+            List<Location> locs = results(getSearcher().search(query, 2));
             return locs.size() == 1 ? locs.get(0) : null;
         }
         catch(Exception e)

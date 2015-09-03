@@ -137,6 +137,14 @@ public class LocationDatabaseServiceImpl
     {
         return index.getExactMatch(field, value);
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public Location getExactMatch(Map<String, String> fieldValues)
+    {
+        return index.getExactMatch(fieldValues);
+    }
 
     public Location merge(Location location1, Location location2)
     {
