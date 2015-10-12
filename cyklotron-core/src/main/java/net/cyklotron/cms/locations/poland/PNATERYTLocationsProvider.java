@@ -176,25 +176,16 @@ public class PNATERYTLocationsProvider
                 int i = 0;
                 while(rs.next())
                 {
-                    String terc = rs.getString("woj") != null ? (rs.getString("woj")
-                        + rs.getString("pow") + rs.getString("gmi").trim() + rs
-                        .getString("rodz_gmi")) : "";
-                    String area = rs.getString("miejscowość") == rs.getString("nazwa") ? rs
-                        .getString("nazwa_rm") != null ? rs.getString("nazwa_rm") : "" : rs
-                        .getString("nazwa");
-                    String street = rs.getString("ulica") != null ? rs.getString("ulica") : "";
-                    String sym = rs.getString("sym") != null ? rs.getString("sym") : "";
-
                     // create a new map, Location objects store the reference internally
                     Map<String, String> fieldValues = new HashMap<>();
                     fieldValues.put("province", rs.getString("województwo"));
                     fieldValues.put("district", rs.getString("powiat"));
                     fieldValues.put("commune", rs.getString("gmina"));
                     fieldValues.put("city", rs.getString("miejscowość"));
-                    fieldValues.put("area", area);
-                    fieldValues.put("street", street);
-                    fieldValues.put("terc", terc);
-                    fieldValues.put("sym", sym);
+                    fieldValues.put("street", rs.getString("ulica") != null ? rs.getString("ulica")
+                        : "");
+                    fieldValues.put("terc", rs.getString("terc"));
+                    fieldValues.put("sym", rs.getString("sym"));
                     fieldValues.put("postCode", rs.getString("pna"));
                     fieldValues.put("areaType", "okręg pocztowy");
                     locations.add(new Location(FIELDS, fieldValues));
@@ -220,7 +211,6 @@ public class PNATERYTLocationsProvider
                     fieldValues.put("terc", terc);
                     fieldValues.put("sym", sym);
                     fieldValues.put("areaType", rs.getString("typ"));
-                    fieldValues.put("areaRank", rs.getString("rm"));
                     fieldValues.put("areaLevel", Integer.toString(level));
                     locations.add(new Location(FIELDS, fieldValues));
                     i++;
