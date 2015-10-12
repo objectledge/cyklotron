@@ -134,7 +134,7 @@ public class PNATERYTLocationsProvider
                         else if(area.matches("^[a-z].+$"))
                         {
                             pstmt.setString(8, city);
-                            pstmt.setString(9, null);
+                            pstmt.setString(9, city);
                             pstmt.setString(10, area);
                         }
                         // workaround for apparent error in PNA 2013-01
