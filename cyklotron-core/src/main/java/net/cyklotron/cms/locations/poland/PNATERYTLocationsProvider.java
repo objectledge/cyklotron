@@ -188,6 +188,7 @@ public class PNATERYTLocationsProvider
                     fieldValues.put("sym", rs.getString("sym"));
                     fieldValues.put("postCode", rs.getString("pna"));
                     fieldValues.put("areaType", "okręg pocztowy");
+                    fieldValues.put("areaLevel", "10");
                     locations.add(new Location(FIELDS, fieldValues));
                     i++;
                 }
@@ -207,7 +208,7 @@ public class PNATERYTLocationsProvider
                     fieldValues.put("city", rs.getString("miejscowość"));
                     final String terc = rs.getString("terc");
                     final String sym = rs.getString("sym");
-                    final int level = terc.length() + (sym != null ? 1 : 0);
+                    final int level = terc.length() + (sym != null ? 2 : 0);
                     fieldValues.put("terc", terc);
                     fieldValues.put("sym", sym);
                     fieldValues.put("areaType", rs.getString("typ"));
