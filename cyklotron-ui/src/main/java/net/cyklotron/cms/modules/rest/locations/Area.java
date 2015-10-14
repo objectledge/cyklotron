@@ -31,7 +31,7 @@ public class Area
         int level = Integer.parseInt(loc.get("areaLevel"));
         this.province = (level > 2) ? loc.get("province") : null;
         this.district = (level > 4) ? loc.get("district") : null;
-        this.commune = (level > 7) ? loc.get("commune") : null;
+        this.commune = (level > 6) ? loc.get("commune") : null;
     }
 
     public String getAreaName()

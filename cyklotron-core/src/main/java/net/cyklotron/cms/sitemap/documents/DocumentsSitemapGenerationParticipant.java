@@ -15,6 +15,7 @@ import org.objectledge.coral.session.CoralSession;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.parameters.Parameters;
 
+import net.cyklotron.cms.canonical.CanonicalLinksService;
 import net.cyklotron.cms.documents.DocumentNodeResource;
 import net.cyklotron.cms.files.FileResource;
 import net.cyklotron.cms.related.RelatedService;
@@ -25,6 +26,8 @@ import net.cyklotron.cms.sitemap.SitemapImage;
 import net.cyklotron.cms.sitemap.SitemapItem;
 import net.cyklotron.cms.sitemap.SitemapResourceIterator;
 import net.cyklotron.cms.util.OfflineLinkRenderingService;
+
+import bak.pcj.set.LongSet;
 
 public class DocumentsSitemapGenerationParticipant
     implements SitemapGenerationParticipant
@@ -37,10 +40,14 @@ public class DocumentsSitemapGenerationParticipant
 
     private final Logger log;
 
+    private CanonicalLinksService canonicalLinksService;
+
     public DocumentsSitemapGenerationParticipant(RelatedService relatedService,
-        OfflineLinkRenderingService linkRenderer, Logger log)
+        CanonicalLinksService canonicalLinksService, OfflineLinkRenderingService linkRenderer,
+        Logger log)
     {
         this.relatedService = relatedService;
+        this.canonicalLinksService = canonicalLinksService;
         this.linkRenderer = linkRenderer;
         this.log = log;
     }
@@ -66,14 +73,20 @@ public class DocumentsSitemapGenerationParticipant
             QueryResults results = coralSession.getQuery().executeQuery(
                 "FIND RESOURCE FROM documents.document_node WHERE site = " + site.getIdString());
 
-            final Subject anon = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
+            final Iterator<QueryResults.Row> rmlQueryResultsIterator = results.iterator();
 
-            final Iterator<QueryResults.Row> rowIterator = results.iterator();
+            final LongSet categoryQueryResults = canonicalLinksService.getCanonicalNodes(site,
+                coralSession);
+
+            final Iterator<QueryResults.Row> resultsIterator = new DocumentSetIterator(
+                rmlQueryResultsIterator, categoryQueryResults, coralSession);            
+
+            final Subject anon = coralSession.getSecurity().getSubject(Subject.ANONYMOUS);
 
             final String uriPattern = parameters.get(site.getName(), "/x/{id}").replace("{id}",
                 "%d");
 
-            return new SitemapResourceIterator<DocumentNodeResource>(rowIterator,
+            return new SitemapResourceIterator<DocumentNodeResource>(resultsIterator,
                             DocumentNodeResource.class, log)
                 {
                     protected SitemapItem item(DocumentNodeResource doc)

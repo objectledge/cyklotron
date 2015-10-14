@@ -33,6 +33,7 @@ import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsNodeResource;
 import net.cyklotron.cms.PrioritizedResource;
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  * Defines the accessor methods of <code>cms.canonical.link_canonical_rule</code> Coral resource class.
@@ -82,6 +83,36 @@ public interface LinkCanonicalRuleResource
      */
     public void setLinkPattern(String value)
         throws ValueRequiredException;
-     
+    
+    /**
+     * Returns the value of the <code>site</code> attribute.
+     *
+     * @return the value of the the <code>site</code> attribute.
+     */
+    public SiteResource getSite();
+    
+    /**
+     * Returns the value of the <code>site</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>site</code> attribute.
+     */
+    public SiteResource getSite(SiteResource defaultValue);
+
+    /**
+     * Sets the value of the <code>site</code> attribute.
+     *
+     * @param value the value of the <code>site</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setSite(SiteResource value);   
+   
+	/**
+	 * Checks if the value of the <code>site</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>site</code> attribute is defined.
+	 */
+    public boolean isSiteDefined();
+  
     // @custom methods ///////////////////////////////////////////////////////
 }

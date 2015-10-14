@@ -2,29 +2,30 @@ var configModule = angular.module("ConfigApp", [ "cyklo", "ngResource", "ngRoute
     "ui.bootstrap", "ui.sortable" ]);
 
 configModule.factory("backend", [ "$window", "$resource", function($window, $resource) {
-    var baseUrl = $window.appBaseUri + "/rest/canonicallinkrules";
+    var baseUrl = $window.appBaseUri + "/rest";
 
     return {
-        rules : $resource(baseUrl + "/rules", {}, {
+        rules : $resource(baseUrl + "/canonicallinkrules/rules", {}, {
             get : {
                 method : "GET",
-                url : baseUrl + "/rules/:ruleId",
+                url : baseUrl + "/canonicallinkrules/rules/:ruleId",
             },
             update : {
                 method : "PUT",
-                url : baseUrl + "/rules/:ruleId",
+                url : baseUrl + "/canonicallinkrules/rules/:ruleId",
                 params : {
                     ruleId : "@id"
                 }
             },
             remove : {
                 method : "DELETE",
-                url : baseUrl + "/rules/:ruleId",
+                url : baseUrl + "/canonicallinkrules/rules/:ruleId",
                 params : {
                     ruleId : "@id"
                 }
             },
-        })
+        }),
+        sites : $resource(baseUrl + "/sites", {}, {})
     };
 } ]);
 
@@ -50,7 +51,12 @@ configModule.config([ "$routeProvider", function($routeProvider) {
         controller : "AddRulesCtrl"
     }).when("/edit/:ruleId", {
         templateUrl : "canonicallinkrules.EditRule",
-        controller : "EditRulesCtrl"
+        controller : "EditRulesCtrl",
+        resolve : {
+        	sites : [ "backend", function(backend) {
+        		return backend.sites.query().$promise;
+        	}]
+        }
     });
 
     $routeProvider.otherwise({
@@ -139,8 +145,9 @@ configModule
             "$scope",
             "$location",
             "backend",
+            "sites",
             "$routeParams",
-            function($scope, $location, backend, $routeParams) {
+            function($scope, $location, backend, sites, $routeParams) {
 
                 $scope.reqRunning = true;
                 $scope.reqError = {};
@@ -148,6 +155,7 @@ configModule
                 $scope.categories = [];
                 $scope.rule = {};
                 $scope.priorityRange = [];
+                $scope.sites = sites;
                 $scope.linkPatternString = '((http|https)://(([a-zA-Z0-9\.\-_]+(:[a-zA-Z0-9\.\-_]+)?@)?[a-zA-Z0-9\.\-_]+\.[a-zA-Z]{2,4}(:[0-9]{2,6})?(/.*)?)?)?';
                 backend.rules.query().$promise.then(function(rules) {
                     $scope.priorityRange = _.range(0, _.size(rules) + 1);
@@ -159,7 +167,7 @@ configModule
                     $scope.rule = rule;
                     $scope.categories.push(rule.category);
                     $scope.reqRunning = false;
-                }, function(error) {
+                }, function(resp) {
                     $scope.reqError[resp.status] = true;
                     $scope.reqRunning = false;
                 });

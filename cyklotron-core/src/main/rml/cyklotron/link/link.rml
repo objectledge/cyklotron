@@ -67,5 +67,6 @@ HANDLER CLASS 'org.objectledge.coral.datatypes.GenericResourceHandler'
 SUPERCLASSES ( 'node', 'prioritized' )
 ATTRIBUTES (
 REQUIRED resource category,
-REQUIRED string linkPattern
+REQUIRED string linkPattern,
+resource(site.site) site
 );

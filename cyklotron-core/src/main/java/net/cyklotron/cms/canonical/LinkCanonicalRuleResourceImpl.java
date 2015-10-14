@@ -42,6 +42,7 @@ import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 
 import net.cyklotron.cms.CmsNodeResourceImpl;
+import net.cyklotron.cms.site.SiteResource;
 
 /**
  * An implementation of <code>cms.canonical.link_canonical_rule</code> Coral resource class.
@@ -66,6 +67,9 @@ public class LinkCanonicalRuleResourceImpl
 
     /** The AttributeDefinition object for the <code>priority</code> attribute. */
     private static AttributeDefinition<Integer> priorityDef;
+
+    /** The AttributeDefinition object for the <code>site</code> attribute. */
+	private static AttributeDefinition<SiteResource> siteDef;
 
     // initialization /////////////////////////////////////////////////////////
 
@@ -298,6 +302,66 @@ public class LinkCanonicalRuleResourceImpl
     public boolean isPriorityDefined()
 	{
 	    return isDefined(priorityDef);
+	}
+ 
+    /**
+     * Returns the value of the <code>site</code> attribute.
+     *
+     * @return the value of the <code>site</code> attribute.
+     */
+    public SiteResource getSite()
+    {
+        return get(siteDef);
+    }
+    
+    /**
+     * Returns the value of the <code>site</code> attribute.
+     *
+     * @param defaultValue the value to return if the attribute is undefined.
+     * @return the value of the <code>site</code> attribute.
+     */
+    public SiteResource getSite(SiteResource defaultValue)
+    {
+        return get(siteDef, defaultValue);
+    }    
+
+    /**
+     * Sets the value of the <code>site</code> attribute.
+     *
+     * @param value the value of the <code>site</code> attribute,
+     *        or <code>null</code> to remove value.
+     */
+    public void setSite(SiteResource value)
+    {
+        try
+        {
+            if(value != null)
+            {
+                set(siteDef, value);
+            }
+            else
+            {
+                unset(siteDef);
+            }
+        }
+        catch(ModificationNotPermitedException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+        catch(ValueRequiredException e)
+        {
+            throw new BackendException("incompatible schema change",e);
+        }
+    }
+   
+	/**
+	 * Checks if the value of the <code>site</code> attribute is defined.
+	 *
+	 * @return <code>true</code> if the value of the <code>site</code> attribute is defined.
+	 */
+    public boolean isSiteDefined()
+	{
+	    return isDefined(siteDef);
 	}
   
     // @custom methods ///////////////////////////////////////////////////////

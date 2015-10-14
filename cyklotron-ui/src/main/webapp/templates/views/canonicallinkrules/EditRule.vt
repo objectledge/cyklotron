@@ -55,7 +55,18 @@ $viewEnclosureTool.top()##
             	     <div ng:message="pattern">Nieprawidłowy format</div>
           	</div>          
       	</td>
-      </tr>        
+      </tr>
+      <tr>
+        <td><label>Serwis</label></td>
+        <td>
+          <select ng:options="site.name as site.name for site in sites | orderBy:'name'" ng:model="rule.site">
+            <option value="">-- brak --</optoin>
+          </select>
+          <p class="hint">
+            Jeżeli dla reguły wskazano serwis, dokumenty pasujące do tej reguły pojawią się w mapie tego serwisu.
+          </p>
+        </td>
+      </tr>
       <tr>
       	<td><label>Priorytet</label></td>
       	<td>

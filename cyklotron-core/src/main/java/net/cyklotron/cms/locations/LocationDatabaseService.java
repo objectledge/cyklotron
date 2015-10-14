@@ -73,6 +73,15 @@ public interface LocationDatabaseService
      * @return a Location object when single exact match exists.
      */
     public Location getExactMatch(String field, String value);
+    
+    /**
+     * Returns the exact match for given field values, or {@code null} when none or multiple matches
+     * exist.
+     * 
+     * @param fieldValues field name to value mappings
+     * @return a Location object when single exact match exists.
+     */
+    public Location getExactMatch(Map<String, String> fieldValues);
 
     /**
      * Returns most specific location enclosing both given locations.

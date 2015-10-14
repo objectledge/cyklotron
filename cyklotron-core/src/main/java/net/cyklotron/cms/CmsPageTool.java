@@ -1,20 +1,12 @@
 package net.cyklotron.cms;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import net.cyklotron.cms.canonical.LinkCanonicalRuleResource;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.CategoryService;
-import net.cyklotron.cms.structure.NavigationNodeResource;
-import net.cyklotron.cms.util.PriorityComparator;
-
 import org.objectledge.context.Context;
 import org.objectledge.coral.session.CoralSession;
-import org.objectledge.coral.store.Resource;
 import org.objectledge.web.HttpContext;
 import org.objectledge.web.mvc.tools.PageTool;
+
+import net.cyklotron.cms.canonical.CanonicalLinksService;
+import net.cyklotron.cms.structure.NavigationNodeResource;
 
 /**
  * A context tool used for CMS applications using JavaScript and CSS files, provides support for
@@ -28,7 +20,7 @@ public class CmsPageTool
 {
     private final Context context;
     
-    private final CategoryService categoryService;
+    private final CanonicalLinksService canonicalLinksService;
 
     /**
      * Component constructor.
@@ -36,10 +28,10 @@ public class CmsPageTool
      * @param parentLinkTool the link tool used to generate links to page content resources.
      */
     public CmsPageTool(CmsLinkTool parentLinkTool, HttpContext httpContext,
-        PageTool.Configuration config, CategoryService categoryService, Context context)
+        PageTool.Configuration config, CanonicalLinksService canonicalLinksService, Context context)
     {
         super(parentLinkTool, httpContext, config);        
-        this.categoryService = categoryService;
+        this.canonicalLinksService = canonicalLinksService;
         this.context = context;
     }
 
@@ -77,28 +69,7 @@ public class CmsPageTool
         }
         else
         {
-            CoralSession coralSession = getCoralSession();
-            List<CategoryResource> categories = Arrays.asList(categoryService.getCategories(
-                coralSession, node, true));
-            List<Resource> rules = Arrays.asList(coralSession.getStore().getResourceByPath(
-                "/cms/canonicalLinkRules/*"));
-            if(categories.size() > 0 && rules.size() > 0)
-            {
-                Collections.sort(rules, Collections.reverseOrder(new PriorityComparator()));
-                for(Resource rule : rules)
-                {
-                    if(rule instanceof LinkCanonicalRuleResource)
-                    {
-                        LinkCanonicalRuleResource linkCanonicalRule = (LinkCanonicalRuleResource)rule;
-                        if(categories.contains(linkCanonicalRule.getCategory()))
-                        {
-                            link = linkCanonicalRule.getLinkPattern().replace("{id}",
-                                node.getIdString());
-                            break;
-                        }
-                    }
-                }
-            }
+            link = canonicalLinksService.getCanonicalLink(node, getCoralSession());
             if(link == null)
             {
                 link = ((CmsLinkTool)linkTool).setNode(node).absolute().toString();

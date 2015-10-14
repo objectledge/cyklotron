@@ -20,12 +20,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import net.cyklotron.cms.canonical.LinkCanonicalRuleResource;
-import net.cyklotron.cms.canonical.LinkCanonicalRuleResourceImpl;
-import net.cyklotron.cms.category.CategoryResource;
-import net.cyklotron.cms.category.CategoryResourceImpl;
-import net.cyklotron.cms.modules.rest.category.CategoryDto;
-
 import org.objectledge.coral.entity.AmbigousEntityNameException;
 import org.objectledge.coral.entity.EntityDoesNotExistException;
 import org.objectledge.coral.entity.EntityInUseException;
@@ -35,6 +29,15 @@ import org.objectledge.coral.store.InvalidResourceNameException;
 import org.objectledge.coral.store.Resource;
 import org.objectledge.coral.store.ValueRequiredException;
 import org.objectledge.coral.web.rest.RequireCoralRole;
+
+import net.cyklotron.cms.canonical.LinkCanonicalRuleResource;
+import net.cyklotron.cms.canonical.LinkCanonicalRuleResourceImpl;
+import net.cyklotron.cms.category.CategoryResource;
+import net.cyklotron.cms.category.CategoryResourceImpl;
+import net.cyklotron.cms.modules.rest.category.CategoryDto;
+import net.cyklotron.cms.site.SiteException;
+import net.cyklotron.cms.site.SiteResource;
+import net.cyklotron.cms.site.SiteService;
 
 @Path("/canonicallinkrules/rules")
 @RequireCoralRole("cms.administrator")
@@ -48,9 +51,12 @@ public class Rules
 
     private static final Object ACTION_NAME_LOCK = new Object();
 
+    private SiteService siteService;
+
     @Inject
-    public Rules(CoralSessionFactory coralSessionFactory, UriInfo uriInfo)
+    public Rules(CoralSessionFactory coralSessionFactory, SiteService siteService, UriInfo uriInfo)
     {
+        this.siteService = siteService;
         this.uriInfo = uriInfo;
         this.coralSession = coralSessionFactory.getCurrentSession();
     }
@@ -100,6 +106,11 @@ public class Rules
                         .createLinkCanonicalRuleResource(coralSession, rule.getName(), parent,
                             category, rule.getLinkPattern());
                     linkRuleRes.setPriority(rule.getPriority());
+                    if(rule.getSite() != null)
+                    {
+                        SiteResource site = siteService.getSite(coralSession, rule.getSite());
+                        linkRuleRes.setSite(site);
+                    }
                     linkRuleRes.update();
                     return Response
                         .created(uriInfo.getRequestUri().resolve(linkRuleRes.getIdString()))
@@ -109,12 +120,12 @@ public class Rules
             }
         }
         catch(InvalidResourceNameException | EntityDoesNotExistException
-                        | AmbigousEntityNameException | ValueRequiredException e)
+                        | AmbigousEntityNameException | ValueRequiredException | SiteException e)
         {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getStackTrace()).build();
         }
     }
-    
+
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -124,7 +135,7 @@ public class Rules
         {
             Resource parent = coralSession.getStore().getUniqueResourceByPath(
                 CANONICAL_LINK_RULES_ROOT);
-            
+
             synchronized(ACTION_NAME_LOCK)
             {
                 Status errorStatus = ruleExists(rule, parent.getChildren());
@@ -137,6 +148,15 @@ public class Rules
                         coralSession, Long.parseLong(rule.category.getId()));
                     current.setCategory(category);
                     current.setLinkPattern(rule.getLinkPattern());
+                    if(rule.getSite() != null && rule.getSite().length() > 0)
+                    {
+                        SiteResource site = siteService.getSite(coralSession, rule.getSite());
+                        current.setSite(site);
+                    }
+                    else
+                    {
+                        current.setSite(null);
+                    }
                     current.update();
                     return Response.noContent().build();
                 }
@@ -147,7 +167,7 @@ public class Rules
         {
             return Response.status(Status.NOT_FOUND).build();
         }
-        catch(AmbigousEntityNameException | ValueRequiredException e)
+        catch(AmbigousEntityNameException | ValueRequiredException | SiteException e)
         {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.getStackTrace()).build();
         }
@@ -186,7 +206,7 @@ public class Rules
         }
         return Status.OK;
     }
-    
+
     @DELETE
     @Path("{id}")
     public Response deleteAction(@PathParam("id") long id)
@@ -219,6 +239,8 @@ public class Rules
 
         private CategoryDto category;
 
+        private String site;
+
         private int priority;
 
         private String linkPattern;
@@ -232,6 +254,10 @@ public class Rules
             id = link.getId();
             name = link.getName();
             category = CategoryDto.create((CategoryResource)link.getCategory());
+            if(link.isSiteDefined())
+            {
+                site = link.getSite().getName();
+            }
             linkPattern = link.getLinkPattern();
             priority = link.getPriority(0);
         }
@@ -274,6 +300,16 @@ public class Rules
         public void setLinkPattern(String linkPattern)
         {
             this.linkPattern = linkPattern;
+        }
+
+        public String getSite()
+        {
+            return site;
+        }
+
+        public void setSite(String site)
+        {
+            this.site = site;
         }
 
         public int getPriority()
