@@ -161,15 +161,8 @@ public class OfflineLinkRenderingService
                     }
                 }
             }
-            
-            StringBuilder sb = new StringBuilder();
-            sb.append(getContextURL(coralSession, site));
-            sb.append("/files/");
-            sb.append(site.getName());
-            sb.append("/");
-            sb.append(rootDirectory.getName());
-            sb.append(path);
-            return sb.toString();
+            return buildPath(getContextURL(coralSession, site), "files", site.getName(),
+                rootDirectory.getName(), path);
         }
         else
         {
@@ -182,39 +175,34 @@ public class OfflineLinkRenderingService
                 }
                 else
                 {
-                    path = ","+parent.getName()+path;
+                    path = "," + parent.getName() + path;
                 }
             }
-            path = "/"+rootDirectory.getName()+path;
-
-            StringBuilder sb = new StringBuilder();
-            sb.append(getApplicationURL(coralSession, site));
-            sb.append("/view/files.Download?");
-            sb.append("path=").append(path).append('&');
-            sb.append("file_id=").append(file.getIdString());
-            return sb.toString();
+            path = "/" + rootDirectory.getName() + path;
+            return buildPath(getApplicationURL(coralSession, site), "view/files.Download?path="
+                + path + "&file_id=" + file.getIdString());
         }
     }
     
     public String getAbsoluteURL(CoralSession coralSession, SiteResource site, String path) 
     {
-        return getContextURL(coralSession, site) + path;
+        return buildPath(getContextURL(coralSession, site), path);
     }
     
     public String getCommonResourceURL(CoralSession coralSession, SiteResource site, String path)
     {
-        return getContextURL(coralSession, site) + "/content/default/" + path;
+        return buildPath(getContextURL(coralSession, site), "content/default", path);
     }
     
     public String getNodeURL(CoralSession coralSession, NavigationNodeResource node)
     {
         if(node.getQuickPath() == null)
         {
-            return getApplicationURL(coralSession, node.getSite()) + "/x/" + node.getIdString();
+            return buildPath(getApplicationURL(coralSession, node.getSite()), "x", node.getIdString());
         }
         else
         {
-            return getContextURL(coralSession, node.getSite()) + node.getQuickPath();
+            return buildPath(getContextURL(coralSession, node.getSite()), node.getQuickPath());
         }
     }
 
@@ -238,11 +226,13 @@ public class OfflineLinkRenderingService
     
     public String getApplicationURL(CoralSession coralSession, SiteResource site)
     {
-        StringBuilder buff = new StringBuilder();
-        buff.append(getContextURL(coralSession, site));
-        buff.append(servletAndApp);
-        return buff.toString();
+        return buildPath(getContextURL(coralSession, site), servletAndApp);
     }    
+    
+    public String getApplicationURL(CoralSession coralSession, SiteResource site, String suffix)
+    {
+        return buildPath(getContextURL(coralSession, site), servletAndApp, suffix);
+    }
 
     protected String getServer(CoralSession coralSession, SiteResource site)
     {
@@ -336,6 +326,44 @@ public class OfflineLinkRenderingService
                 if(i<queryParameterNames.size()-1)
                 {
                     buff.append(queryStringSep);
+                }
+            }
+        }
+        return buff.toString();
+    }
+    
+    private String buildPath(String ... elements)
+    {
+        StringBuilder buff = new StringBuilder();
+        for(String element : elements)
+        {
+            if(buff.length() == 0)
+            {
+                buff.append(element);
+            }
+            else if(element.length() > 0)
+            {
+                if(buff.charAt(buff.length() - 1) == '/')
+                {
+                    if(element.charAt(0) == '/')
+                    {
+                        buff.append(element.substring(1));
+                    }
+                    else
+                    {
+                        buff.append(element);
+                    }
+                }
+                else
+                {
+                    if(element.charAt(0) == '/')
+                    {
+                        buff.append(element);
+                    }
+                    else
+                    {
+                        buff.append('/').append(element);
+                    }
                 }
             }
         }
