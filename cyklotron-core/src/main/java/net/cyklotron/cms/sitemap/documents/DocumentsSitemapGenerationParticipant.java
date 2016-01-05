@@ -112,8 +112,8 @@ public class DocumentsSitemapGenerationParticipant
                             }
                             else
                             {
-                                return new URI(linkRenderer.getApplicationURL(coralSession, site)
-                                    + String.format(uriPattern, doc.getId()));
+                                return new URI(linkRenderer.getApplicationURL(coralSession, site,
+                                    String.format(uriPattern, doc.getId())));
                             }
                         }
                         catch(URISyntaxException e)

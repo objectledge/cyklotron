@@ -203,16 +203,22 @@ public class PNATERYTLocationsProvider
                     Map<String, String> fieldValues = new HashMap<>();
                     fieldValues.put("areaName", rs.getString("nazwa"));
                     fieldValues.put("province", rs.getString("województwo"));
-                    fieldValues.put("district", rs.getString("powiat"));
-                    fieldValues.put("commune", rs.getString("gmina"));
-                    fieldValues.put("city", rs.getString("miejscowość"));
+                    final String district = rs.getString("powiat");
+                    final String commune = rs.getString("gmina");
+                    final String city = rs.getString("miejscowość");
                     final String terc = rs.getString("terc");
                     final String sym = rs.getString("sym");
                     final int level = terc.length() + (sym != null ? 2 : 0);
+                    final int rank = (city == null || district == null || commune == null) ? 0
+                        : (city.equals(district) ? 1 : (city.equals(commune) ? 2 : 3));
+                    fieldValues.put("district", district);
+                    fieldValues.put("commune", commune);
+                    fieldValues.put("city", city);
                     fieldValues.put("terc", terc);
                     fieldValues.put("sym", sym);
                     fieldValues.put("areaType", rs.getString("typ"));
                     fieldValues.put("areaLevel", Integer.toString(level));
+                    fieldValues.put("areaRank", Integer.toString(rank));
                     locations.add(new Location(FIELDS, fieldValues));
                     i++;
                 }
@@ -307,6 +313,7 @@ public class PNATERYTLocationsProvider
     {
         return new Sort(new SortField[] { SortField.FIELD_SCORE,
                         new SortField("areaLevel", SortField.Type.INT),
+                        new SortField("areaRank", SortField.Type.INT),
                         new SortField("terc", SortField.Type.STRING) });
     }
 
